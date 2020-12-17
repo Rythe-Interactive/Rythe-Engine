@@ -116,6 +116,8 @@ namespace legion::application
 #pragma endregion
 
     public:
+        static bool windowStillExists(GLFWwindow* win);
+
         static void requestIconChange(id_type entityId, image_handle icon);
         static void requestIconChange(id_type entityId, const std::string& iconName);
 

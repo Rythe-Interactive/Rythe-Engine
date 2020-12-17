@@ -102,11 +102,11 @@ namespace legion::rendering
             for (auto& pass : effect->renderPasses)
             {
                 fbo->attach(textures[!index], GL_COLOR_ATTACHMENT0);
-                fbo->bind();
+                
               
-                pass.invoke(textures[index], depthTexture);
+                pass.invoke(*fbo, textures[index], depthTexture);
 
-                fbo->release();
+                
                 index = !index;
             }
         }

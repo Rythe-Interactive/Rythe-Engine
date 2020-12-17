@@ -136,6 +136,8 @@ namespace legion::rendering
         RenderStageBase::m_scheduler = m_scheduler;
         RenderStageBase::m_eventBus = m_eventBus;
 
+        bindToEvent<events::exit, &Renderer::onExit>();
+
         createProcess<&Renderer::render>("Rendering");
 
         m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [&](void* param)
@@ -154,17 +156,28 @@ namespace legion::rendering
 
                 {
                     app::context_guard guard(window);
+                    if (!guard.contextIsValid())
+                    {
+                        log::error("Failed to initialize context.");
+                        m_initialized.store(false, std::memory_order_release);
+                        return;
+                    }
                     result = initContext(window);
                 }
 
                 if (!result)
                     log::error("Failed to initialize context.");
 
-                initialized.store(result, std::memory_order_release);
+                m_initialized.store(result, std::memory_order_release);
             }, this);
 
-        while (!initialized.load(std::memory_order_acquire))
+        while (!m_initialized.load(std::memory_order_relaxed))
             std::this_thread::sleep_for(std::chrono::microseconds(1));
+    }
+
+    void Renderer::onExit(events::exit* event)
+    {
+        m_exiting.store(true, std::memory_order_release);
     }
 
     void Renderer::render(time::span deltatime)
@@ -200,7 +213,8 @@ namespace legion::rendering
 
             camera::camera_input cam_input_data(view, projection, camPos, 0, camRot.forward());
 
-            m_pipelineProvider(win)->render(win, cam, cam_input_data, deltatime);
+            if (!m_exiting.load(std::memory_order_relaxed))
+                m_pipelineProvider(win)->render(win, cam, cam_input_data, deltatime);
         }
     }
 

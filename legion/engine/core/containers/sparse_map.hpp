@@ -141,7 +141,7 @@ namespace legion::core
          */
         L_NODISCARD bool contains(key_const_reference key)
         {
-            return m_sparse[key] >= 0 && m_sparse[key] < m_dense_key.size() && m_dense_key[m_sparse[key]] == key;
+            return m_sparse[key] >= 0 && m_sparse[key] < m_dense_key.size() && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
         }
 
         /**@brief Checks whether a certain key is contained in the sparse_map.
@@ -150,7 +150,7 @@ namespace legion::core
          */
         L_NODISCARD bool contains(key_type&& key)
         {
-            return m_sparse[key] >= 0 && m_sparse[key] < m_dense_key.size() && m_dense_key[m_sparse[key]] == key;
+            return m_sparse[key] >= 0 && m_sparse[key] < m_dense_key.size() && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
         }
 
         /**@brief Checks whether a certain key is contained in the sparse_map.
@@ -159,7 +159,7 @@ namespace legion::core
          */
         L_NODISCARD bool contains(key_const_reference key) const
         {
-            return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_dense_key.size() && m_dense_key[m_sparse.at(key)] == key;
+            return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_dense_key.size() && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
         }
 
         /**@brief Checks whether a certain key is contained in the sparse_map.
@@ -168,7 +168,7 @@ namespace legion::core
          */
         L_NODISCARD bool contains(key_type&& key) const
         {
-            return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_dense_key.size() && m_dense_key[m_sparse.at(key)] == key;
+            return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_dense_key.size() && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
         }
 
         /**@brief Checks if all keys in sparse_map are inside this map as well.
