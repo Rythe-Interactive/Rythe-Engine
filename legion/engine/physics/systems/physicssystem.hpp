@@ -211,6 +211,9 @@ namespace legion::physics
                 }
             }
 
+            //------------------------------------------------ Pre Colliison Solve Event --------------------------------------------//
+
+
             //-------------------------------------------------- Collision Solver ---------------------------------------------------//
             //for both contact and friction resolution, an iterative algorithm is used.
             //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
