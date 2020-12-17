@@ -2066,8 +2066,8 @@ public:
                             physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
                             currentEdge = currentEdge->nextEdge;
 
-                            math::vec3 worldStart = localTransform * math::vec4(*(edgeToExecuteOn->edgePositionPtr), 1);
-                            math::vec3 worldEnd = localTransform * math::vec4(*(edgeToExecuteOn->nextEdge->edgePositionPtr), 1);
+                            math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
+                            math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
 
                             debug::drawLine(worldStart, worldEnd, usedColor, 2.0f, 0.0f, useDepth);
 

@@ -2,6 +2,8 @@
 #include <core/core.hpp>
 #include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
+
+#include "../systems/testsystemconvexhull.hpp"
 //#include "../systems/testsystem2.hpp"
 //#include"../systems/pointcloudtestsystem2.hpp"
 #include "../systems/simplecameracontroller.hpp"
@@ -17,6 +19,13 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
+        addProcessChain("TestChain");
+
+        //reportComponentType<sah>();
+        //reportSystem<TestSystem>();
+        //reportSystem<TestSystem2>();
+        //reportSystem<TestSystemConvexHull>();
+
         reportComponentType<sah>();
         reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
