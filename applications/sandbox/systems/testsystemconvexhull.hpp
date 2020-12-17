@@ -59,7 +59,7 @@ public:
             app::ContextHelper::makeContextCurrent(window);
 
             cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            model = rendering::ModelCache::create_model("model", "assets://models/convexhulltest_0.obj"_view);
+            model = rendering::ModelCache::create_model("model", "assets://models/sphere.obj"_view);
             wireFrameH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
             vertexColor = rendering::MaterialCache::create_material("vertexColor", "assets://shaders/vertexcolor.shs"_view);
 
@@ -71,22 +71,22 @@ public:
                 meshH = model.get_mesh();
 
                 physicsEnt.add_component<physics::physicsComponent>();
-               /* auto rbH = ent.add_component<physics::rigidbody>();
+                auto rbH = physicsEnt.add_component<physics::rigidbody>();
                 auto rb = rbH.read();
                 rb.setMass(1.0f);
-                rbH.write(rb);*/
+                rbH.write(rb);
             }
             // Create physics entity
-            /*{
+            {
                 auto ent = createEntity();
                 ent.add_components<rendering::renderable>({ cube, wireFrameH });
-                ent.add_components<transform>(position(0, -5, 0), rotation(), scale(2));
+                ent.add_components<transform>(position(0, -2.0f, 0), rotation(), scale(2));
                 auto pcH = ent.add_component<physics::physicsComponent>();
                 auto pc = pcH.read();
 
                 pc.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 pcH.write(pc);
-            }*/
+            }
             // Create entity for reference
             {
                 auto ent = createEntity();
@@ -238,11 +238,7 @@ public:
     {
         if (action->value)
         {
-            auto faces = collider->GetHalfEdgeFaces();
-            for (int i = 0; i < faces.size(); ++i)
-            {
-                log::debug("Face {}: {} {} {}", i, faces.at(i)->startEdge->edgePosition, faces.at(i)->startEdge->nextEdge->edgePosition, faces.at(i)->startEdge->prevEdge->edgePosition);
-            }
+            physics::PhysicsSystem::IsPaused = false;
         }
     }
 };

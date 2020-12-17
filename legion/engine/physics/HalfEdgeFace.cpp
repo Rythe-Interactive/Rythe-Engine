@@ -71,6 +71,7 @@ namespace legion::physics
         HalfEdgeEdge* initialEdge = startEdge;
         HalfEdgeEdge* currentEdge = startEdge;
 
+        if (!currentEdge) return;
 
         //the HalfEdgeEdge* 'startEdge' creates a ring buffer.
         //This means that initialEdge will eventually go back to "startEdge", ending the loop.

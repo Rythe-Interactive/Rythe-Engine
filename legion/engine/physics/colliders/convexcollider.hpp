@@ -215,6 +215,7 @@ namespace legion::physics
             // Step 1 and up, add a vert to the hull
             if (step == 0) return;
             while (looped < step)
+            //while(true)
             {
                 // Section here is return condition
                 if (toBeSorted.size() == 0)
@@ -366,7 +367,8 @@ namespace legion::physics
                     halfEdgeFaces.erase(std::remove(halfEdgeFaces.begin(), halfEdgeFaces.end(), face), halfEdgeFaces.end());
                     // Remove face from our face to face index map
                     faceIndexMap.erase(faceIndexMap.find(face));
-                    delete face;
+                    face->startEdge = nullptr;
+                    //delete face;
                 }
 
                 // Some of the created faces may be coplanar to other faces, these faces will be merged
@@ -850,12 +852,14 @@ namespace legion::physics
          * @param originEdge The edge where the previous iteration came from, pass nullptr, only used for recursive calling
          * @param originFace The face where the origin started, pass nullptr, only used for recursive calling
          */
-        void convexHullConstructHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge = nullptr, HalfEdgeFace* originFace = nullptr)
+        void convexHullConstructHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge = nullptr, std::shared_ptr<std::unordered_set<HalfEdgeFace*>> visited = nullptr)
         {
+            if (!visited) visited = std::make_shared<std::unordered_set<HalfEdgeFace*>>();
+
             // Make sure we do not call recursively on faces we came from
-            if (&face == originFace) return;
-            // Set origin face for 1st iteration
-            if (originFace == nullptr) originFace = &face;
+            if (visited->find(&face) != visited->end()) return;
+            // Mark face as "visited"
+            visited->emplace(&face);
             HalfEdgeEdge* start = face.startEdge->prevEdge;
             HalfEdgeEdge* edge = face.startEdge->prevEdge;
 
@@ -863,19 +867,22 @@ namespace legion::physics
             do
             {
                 // Makr sure we do not keep jumping between 2 faces (over 2 edges)
-                if (originEdge == edge)
+                if (originEdge == edge || !edge->pairingEdge )
                 {
                     edge = edge->nextEdge;
                     continue;
                 }
                 // Cross the edge -> check next face
+
+
                 HalfEdgeFace* crossedFace = edge->pairingEdge->face;
+                if(!crossedFace->startEdge) return;
 
                 // If the vertex is above the face (The face can see the vertex), the face is part of the horizon
                 if (math::pointToPlane(vert, crossedFace->startEdge->edgePosition, crossedFace->normal) > 0.0f)
                 {
                     // Plane is part of horizon -> find horizon edges recursively
-                    convexHullConstructHorizon(vert, *crossedFace, edges, edge->pairingEdge, originFace);
+                    convexHullConstructHorizon(vert, *crossedFace, edges, edge->pairingEdge, visited);
                 }
                 else
                 {
