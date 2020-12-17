@@ -60,7 +60,6 @@ namespace legion::rendering
 
         void set_value(const T& value) { m_value = value; }
         T get_value() const { return m_value; }
-        //std::string serialize() const { return std::string(m_value); }
     };
 
     /**@class material
@@ -262,6 +261,11 @@ namespace legion::rendering
          * @return material_handle Handle to a material attached to the given name, may be invalid if there is no material attached to that name yet.
          */
         static material_handle get_material(const std::string& name);
+
+        /**@brief Get all materials that are currently loaded.
+         * @return std::vector<material> List of all materials currently loaded.
+         */
+        static std::vector<material> get_all_materials();
     };
 
 #pragma region implementations

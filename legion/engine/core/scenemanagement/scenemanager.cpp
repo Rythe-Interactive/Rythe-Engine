@@ -12,7 +12,13 @@ namespace legion::core::scenemanagement
 
     bool SceneManager::createScene(const std::string& name)
     {
+        auto testEntity = m_ecs->createEntity();
+        serialization::cache stuff;
+        stuff.data = std::vector<std::string>{ "Hello","World","I","Am","Rowan Ramsey" };
+        testEntity.add_component<serialization::cache>(stuff);
+        
         auto sceneEntity = m_ecs->createEntity();
+        testEntity.set_parent(sceneEntity);
         std::vector<ecs::entity_handle> children;
         for (size_type i = 0; i < m_ecs->world.child_count(); i++)
         {
@@ -82,5 +88,7 @@ namespace legion::core::scenemanagement
     {
         return SceneManager::sceneList[nameHash(name)].entity;
     }
+
+
 
 }

@@ -39,6 +39,7 @@ namespace legion::core::scenemanagement
                         if (file.get_extension().decay() == ".cornflake")
                         {
                             auto fileName = file.get_filename().decay();
+                            log::debug("Added {}",fileName);
                             sceneNames.emplace(nameHash(fileName), fileName);
                         }
                     }
@@ -93,5 +94,6 @@ namespace legion::core::scenemanagement
          */
         static ecs::entity_handle getSceneEntity(std::string name);
 
+       
     };
 }

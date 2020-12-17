@@ -8,6 +8,7 @@
 
 #include <core/compute/context.hpp>
 #include <core/scenemanagement/scene.hpp>
+#include <core/serialization/serializationUtil.hpp>
 
 namespace legion::core
 {
@@ -35,6 +36,7 @@ namespace legion::core
             reportComponentType<scale>();
             reportComponentType<velocity>();
             reportComponentType<mesh_filter>();
+            reportComponentType<serialization::cache>();
             reportComponentType<scenemanagement::scene>();
             reportSystem <scenemanagement::SceneManager>();
         }

@@ -88,20 +88,21 @@ namespace legion::core::ecs
             {
                 async::readonly_guard guard(m_lock);
                 std::string componentType = std::string(typeName<component_type>());
-                if (componentType._Equal("struct legion::core::mesh_filter"))
-                {
-                    std::string filePath;
-                    iarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())), cereal::make_nvp("Filename", filePath));
-                }
-                //else if (componentType._Equal("struct legion::rendering::mesh_renderer"))
+                //if (componentType._Equal("struct legion::core::mesh_filter"))
                 //{
                 //    std::string filePath;
-                //    oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())/*, cereal::make_nvp("Filename", filePath)*/));
+                //    iarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())), cereal::make_nvp("Filename", filePath));
                 //}
-                else
-                {
-                    iarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
-                }
+                ////else if (componentType._Equal("struct legion::rendering::mesh_renderer"))
+                ////{
+                ////    std::string filePath;
+                ////    oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())/*, cereal::make_nvp("Filename", filePath)*/));
+                ////}
+                //else
+                //{
+                //    iarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                //}
+                iarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
                 m_components[entityId].serialize(iarchive);
             }
             else

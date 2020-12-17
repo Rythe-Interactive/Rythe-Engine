@@ -4173,7 +4173,7 @@ static void ShowExampleMenuFile()
     if (ImGui::MenuItem("Open", "Ctrl+O")) {}
     if (ImGui::BeginMenu("Open Recent"))
     {
-        ImGui::MenuItem("fish_hat.c");
+        if (ImGui::MenuItem("fish_hat.c")) {}
         ImGui::MenuItem("fish_hat.inl");
         ImGui::MenuItem("fish_hat.h");
         if (ImGui::BeginMenu("More.."))
