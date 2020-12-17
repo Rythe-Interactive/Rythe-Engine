@@ -109,6 +109,8 @@
     <ClInclude Include="systems\scenetestsystem1.hpp" />
     <ClInclude Include="systems\simplecameracontroller.hpp" />
     <ClInclude Include="systems\testsystem2.hpp" />
+    <ClInclude Include="systems\testsystemconvexhull.hpp" />
+    <ClInclude Include="test_filesystem.hpp" />
     <ClInclude Include="module\testmodule.hpp" />
     <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>

@@ -409,6 +409,8 @@
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
+    <ClInclude Include="math\geometry.hpp" />
+    <ClInclude Include="math\close_enough.hpp" />
     <ClInclude Include="common\managed_resource.hpp" />
   </ItemGroup>
   <ItemGroup>

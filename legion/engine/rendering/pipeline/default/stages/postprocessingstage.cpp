@@ -3,7 +3,7 @@
 namespace legion::rendering
 {
 
-    std::multimap<priority_type, std::unique_ptr<PostProcessingEffectBase>> PostProcessingStage::m_effects;
+    std::multimap<priority_type, std::unique_ptr<PostProcessingEffectBase>, std::greater<>> PostProcessingStage::m_effects;
 
 
     void PostProcessingStage::setup(app::window& context)
@@ -102,11 +102,11 @@ namespace legion::rendering
             for (auto& pass : effect->renderPasses)
             {
                 fbo->attach(textures[!index], GL_COLOR_ATTACHMENT0);
-                fbo->bind();
+                
               
-                pass.invoke(textures[index], depthTexture);
+                pass.invoke(*fbo, textures[index], depthTexture);
 
-                fbo->release();
+                
                 index = !index;
             }
         }
