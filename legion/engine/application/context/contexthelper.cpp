@@ -218,10 +218,14 @@ namespace legion::application
         glfwPollEvents();
     }
 
-    void ContextHelper::makeContextCurrent(GLFWwindow* window)
+    bool ContextHelper::makeContextCurrent(GLFWwindow* window)
     {
-        if (initialized())
+        if (m_initialized.load(std::memory_order_acquire))
+        {
             glfwMakeContextCurrent(window);
+            return true;
+        }
+        return false;
     }
 
     GLFWwindow* ContextHelper::getCurrentContext()

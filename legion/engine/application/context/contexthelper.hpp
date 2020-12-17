@@ -72,7 +72,7 @@ namespace legion::application
         static void swapBuffers(GLFWwindow* window);
         static void swapInterval(int interval);
         static void pollEvents();
-        static void makeContextCurrent(GLFWwindow* window);
+        static bool makeContextCurrent(GLFWwindow* window);
         static GLFWwindow* getCurrentContext();
         static GLFWkeyfun setKeyCallback(GLFWwindow* window, GLFWkeyfun callback);
         static GLFWcharfun setCharCallback(GLFWwindow* window, GLFWcharfun callback);
