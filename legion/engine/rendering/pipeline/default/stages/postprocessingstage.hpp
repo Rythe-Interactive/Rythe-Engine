@@ -17,7 +17,7 @@ namespace legion::rendering
         /**
          * @brief A multimap with priority as key and postprocessing effect as value.
          */
-        static std::multimap<priority_type, std::unique_ptr<PostProcessingEffectBase>> m_effects;
+        static std::multimap<priority_type, std::unique_ptr<PostProcessingEffectBase>,std::greater<>> m_effects;
         vertexarray m_quadVAO;
         buffer m_quadVBO;
 

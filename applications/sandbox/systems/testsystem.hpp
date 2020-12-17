@@ -240,8 +240,10 @@ public:
             std::lock_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
+
+            priority_type prio = 10;
             rendering::PostProcessingStage::addEffect<rendering::PostProcessingEdgeDetect>();
-            rendering::PostProcessingStage::addEffect<rendering::PostProcessingBlur>();
+            rendering::PostProcessingStage::addEffect<rendering::PostProcessingBlur>(prio);
 
             directionalLightH = rendering::ModelCache::create_model("directional light", "assets://models/directional-light.obj"_view);
             spotLightH = rendering::ModelCache::create_model("spot light", "assets://models/spot-light.obj"_view);
