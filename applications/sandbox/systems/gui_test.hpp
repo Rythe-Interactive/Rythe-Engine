@@ -10,6 +10,7 @@ using namespace legion::rendering;
 class GuiTestSystem : public System<GuiTestSystem>
 {
     ecs::EntityQuery cameraQuery = createQuery<rendering::camera, position, rotation, scale>();
+    ecs::EntityQuery entityQuery = createQuery<transform>();
 
 
     rendering::material_handle vertexColorMaterial;
@@ -30,13 +31,13 @@ class GuiTestSystem : public System<GuiTestSystem>
         static_cast<rendering::DefaultPipeline*>(rendering::Renderer::getMainPipeline())->attachStage<rendering::ImGuiStage>();
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
-
+    
         {
             application::context_guard guard(window);
-
             cubeModel = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
             vertexColorMaterial = rendering::MaterialCache::create_material("color shader", "assets://shaders/texture.shs"_view);
         }
+
 
 
         cubeEntity = createEntity();
@@ -44,9 +45,9 @@ class GuiTestSystem : public System<GuiTestSystem>
         cubeEntity.add_components<transform>(position(), rotation(), scale());
         cubeEntity.add_components<rendering::mesh_renderable>(mesh_filter(cubeModel.get_mesh()), rendering::mesh_renderer(vertexColorMaterial));
 
-
+        entityQuery.queryEntities();
         //gui code goes here
-        rendering::ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
+        rendering::ImGuiStage::addGuiRender<GuiTestSystem, &GuiTestSystem::onGUI>(this);
         createProcess<&GuiTestSystem::update>("Update");
     }
 
@@ -54,7 +55,7 @@ class GuiTestSystem : public System<GuiTestSystem>
     {
         ImGuiIO& io = ImGui::GetIO();
 
-        setProjectionAndView(io.DisplaySize.x/io.DisplaySize.y);
+        setProjectionAndView(io.DisplaySize.x / io.DisplaySize.y);
 
 
         using namespace imgui;
@@ -79,18 +80,17 @@ class GuiTestSystem : public System<GuiTestSystem>
 
     void update(time::span dt)
     {
-
-        if (cubeEntity.valid())
+        if (cubeEntity.valid() && !cubeEntity.has_component<camera>())
         {
             auto [mposh, mroth, mscaleh] = cubeEntity.get_component_handles<transform>();
-            math::vec3 mpos, mscale;
-            math::quat mrot;
+            math::vec3 mpos = mposh.read();
+            math::vec3 mscale = mscaleh.read();
+            math::quat mrot = mroth.read();
             decompose(model, mscale, mrot, mpos);
             mposh.write(mpos);
             mroth.write(mrot);
             mscaleh.write(mscale);
         }
-
     }
 
     void setProjectionAndView(float aspect)
@@ -104,8 +104,8 @@ class GuiTestSystem : public System<GuiTestSystem>
         view = inverse(temp);
 
         const auto cam = cam_ent.get_component_handle<rendering::camera>().read();
-        const float ratio = 16.0f/9.0f;
-        projection = math::perspective(math::deg2rad(cam.fov*aspect),aspect,cam.nearz,cam.farz);
+        const float ratio = 16.0f / 9.0f;
+        projection = math::perspective(math::deg2rad(cam.fov * aspect), aspect, cam.nearz, cam.farz);
     }
 };
 

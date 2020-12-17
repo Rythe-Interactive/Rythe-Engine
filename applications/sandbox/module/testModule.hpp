@@ -4,7 +4,7 @@
 #include "../systems/testsystem.hpp"
 #include "../systems/simplecameracontroller.hpp"
 #include "../systems/gui_test.hpp"
-//#include "../systems/testsystem2.hpp"
+#include "../systems/testsystem2.hpp"
 //#include"../systems/pointcloudtestsystem2.hpp"
 #include "../systems/simplecameracontroller.hpp"
 #include "../systems/scenetestsystem1.hpp"
@@ -19,8 +19,9 @@ public:
     {
 
         
-        //reportSystem<TestSystem2>();
-        reportSystem<SceneTestSystem1>();
+        reportSystem<TestSystem>();
+        reportComponentType<sah>();
+        //reportSystem<SceneTestSystem1>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
     }

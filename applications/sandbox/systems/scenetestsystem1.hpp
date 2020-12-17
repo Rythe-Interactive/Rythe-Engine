@@ -62,8 +62,10 @@ public:
 #pragma endregion
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         {
-            async::readwrite_guard guard(*window.lock);
-            app::ContextHelper::makeContextCurrent(window);
+            app::context_guard guard(window);
+           /* async::readwrite_guard guard(*window.lock);
+            app::ContextHelper::makeContextCurrent(window);*/
+            //app::context_guard guard2(nullptr);
 
             auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/pbr.shs"_view);
 
@@ -73,9 +75,11 @@ public:
             cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
 
             color = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
+            color.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/test-albedo.png"_view));
+
             //rendering::apply_material_conf(color,"PBR", "assets://textures/color.ini"_view);
            
-            color.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/test-albedo.png"_view));
+
 
             vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
 
