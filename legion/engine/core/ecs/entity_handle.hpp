@@ -456,9 +456,6 @@ namespace legion::core::ecs
          */
         bool valid() const;
     };
-
-
-    using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 }
 
 #if !defined(DOXY_EXCLUDE)
@@ -473,3 +470,8 @@ namespace std
     };
 }
 #endif
+
+namespace legion::core::ecs
+{
+    using entity_set = hashed_sparse_set<entity_handle>;
+}

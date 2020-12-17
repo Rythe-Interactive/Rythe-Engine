@@ -127,24 +127,6 @@ namespace legion::core
 		 * @param val Value to check for.
 		 * @returns bool True if the value was found, otherwise false.
 		 */
-		L_NODISCARD bool contains(value_const_reference val)
-		{
-			return m_sparse[val] >= 0 && m_sparse[val] < m_size && m_sparse[val] < m_dense.size() && m_dense[m_sparse[val]] == val;
-		}
-
-		/**@brief Checks whether a certain value is contained in the sparse_map.
-		 * @param val Value to check for.
-		 * @returns bool True if the value was found, otherwise false.
-		 */
-		L_NODISCARD bool contains(value_type&& val)
-		{
-			return m_sparse[val] >= 0 && m_sparse[val] < m_size && m_sparse[val] < m_dense.size() && m_dense[m_sparse[val]] == val;
-		}
-
-		/**@brief Checks whether a certain value is contained in the sparse_map.
-		 * @param val Value to check for.
-		 * @returns bool True if the value was found, otherwise false.
-		 */
 		L_NODISCARD bool contains(value_const_reference val) const
 		{
 			return m_sparse.count(val) && m_sparse.at(val) >= 0 && m_sparse.at(val) < m_size && m_sparse.at(val) < m_dense.size() && m_dense[m_sparse.at(val)] == val;

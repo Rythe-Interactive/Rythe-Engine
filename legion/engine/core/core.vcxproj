@@ -495,7 +495,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
+    <ClCompile Include="async\rw_spinlock.cpp" />
+    <ClCompile Include="async\spinlock.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\high_level\function.cpp" />
