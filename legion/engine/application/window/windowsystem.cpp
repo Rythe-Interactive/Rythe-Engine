@@ -29,7 +29,7 @@ namespace legion::application
             {
                 m_eventBus->raiseEvent<window_close>(m_windowComponents[window]); // Trigger any callbacks that want to know about any windows closing.
 
-                if (!ContextHelper::windowShouldClose(window)) // If a callback cancelled the window destruction then we should cancel.
+                if (!ContextHelper::windowShouldClose(window)) // If a callback canceled the window destruction then we should cancel.
                     return;
 
                 {

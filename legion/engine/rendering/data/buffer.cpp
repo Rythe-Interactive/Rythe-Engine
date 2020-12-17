@@ -4,11 +4,13 @@ namespace legion::rendering
 {
     buffer::buffer(GLenum target, size_type size, void* data, GLenum usage)
         : m_id([](app::gl_id& value) { // Assign logic for buffer deletion to managed resource.
+            if (!app::ContextHelper::initialized())
+                return;
+
 #if defined(LEGION_DEBUG)
             if (!app::ContextHelper::getCurrentContext())
             {
-                if (app::ContextHelper::initialized())
-                    log::error("No current context to delete buffer with.");
+                log::error("No current context to delete buffer with.");
                 return;
             }
 #endif
@@ -34,11 +36,13 @@ namespace legion::rendering
 
     buffer::buffer(GLenum target, GLenum usage)
         : m_id([](app::gl_id& value) { // Assign logic for buffer deletion to managed resource.
+            if (!app::ContextHelper::initialized())
+                return;
+
 #if defined(LEGION_DEBUG)
             if (!app::ContextHelper::getCurrentContext())
             {
-                if(app::ContextHelper::initialized())
-                    log::error("No current context to delete buffer with.");
+                log::error("No current context to delete buffer with.");
                 return;
             }
 #endif

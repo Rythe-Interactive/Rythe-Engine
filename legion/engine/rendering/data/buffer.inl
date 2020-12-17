@@ -6,6 +6,9 @@ namespace legion::rendering
     template<typename T>
     buffer::buffer(GLenum target, const std::vector<T>& data, GLenum usage)
         : m_id([](app::gl_id& value) { // Assign logic for buffer deletion to managed resource.
+            if (!app::ContextHelper::initialized())
+                return;
+
 #if defined(LEGION_DEBUG)
             if (!app::ContextHelper::getCurrentContext())
             {

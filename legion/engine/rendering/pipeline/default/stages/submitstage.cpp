@@ -47,6 +47,11 @@ namespace legion::rendering
         }
 
         app::context_guard guard(context);
+        if (!guard.contextIsValid())
+        {
+            abort();
+            return;
+        }
 
         auto viewportSize = context.framebufferSize();
 
