@@ -610,8 +610,6 @@ namespace legion::physics
             }
         }
 
-
-
         std::tuple<math::vec3,math::vec2,math::vec3,math::vec2> GetFirstAndLastEdgeIntersectionInfo(const math::vec3& cutNormal,const math::vec3& cutPosition
             ,const math::mat4 transform,
             meshHalfEdgePtr firstEdge, meshHalfEdgePtr secondEdge)

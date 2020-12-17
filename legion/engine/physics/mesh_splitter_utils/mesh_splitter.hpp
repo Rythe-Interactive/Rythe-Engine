@@ -249,8 +249,6 @@ namespace legion::physics
                 std::vector<SplittablePolygonPtr> splitMesh;
                 std::vector<SplittablePolygonPtr> nonSplitMesh;
 
-               
-
                 //------------------------ BFS search polygons that are in the same island -------------------------------------------//
                 //------------------------ and  divide them into a list of split and nonsplit polygons--------------------------//
                 initialFound->isVisited = false;

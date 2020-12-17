@@ -231,9 +231,17 @@ namespace legion::physics
                     contact.preCalculateEffectiveMass();
 
                     contact.ApplyWarmStarting();
-                    //log::debug("contact {}" , contact.totalLambda);
+
                 }
             }
+
+            for (auto& manifold : manifoldsToSolve)
+            {
+                log::debug("----> InitialVelocity");
+                //manifold.contacts.at(0).logRigidbodyState();
+            }
+
+
 
             //resolve contact constraint
             for (size_t i = 0; i < constants::contactSolverIterationCount; i++)
@@ -248,7 +256,14 @@ namespace legion::physics
             }
 
             
+            for (auto& manifold : manifoldsToSolve)
+            {
+                log::debug("----> Final Velocity");
+                //manifold.contacts.at(0).logRigidbodyState();
+            }
+            
             //resolve friction constraint
+           
             for (size_t i = 0; i < constants::frictionSolverIterationCount; i++)
             {
                 for (auto& manifold : manifoldsToSolve)
@@ -260,6 +275,7 @@ namespace legion::physics
                 }
             }
 
+           
             //reset convergance identifiers for all colliders
             for (auto& manifold : manifoldsToSolve)
             {
@@ -273,7 +289,7 @@ namespace legion::physics
                 }
             }
 
-            //log::debug("*END IMPULSE");
+            log::debug("*END IMPULSE");
             //using the known lambdas of this time step, add it as a convergance identifier
             for (auto& manifold : manifoldsToSolve)
             {

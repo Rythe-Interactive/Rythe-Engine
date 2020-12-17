@@ -14,7 +14,7 @@ namespace legion::physics::constants
 
 	static constexpr float faceToEdgePenetrationBias = 0.01f;
 
-	static constexpr float baumgarteCoefficient = 0.2f;
+	static constexpr float baumgarteCoefficient = 0.50f;
 
     static constexpr float baumgarteSlop = 0.01f;
 

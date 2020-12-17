@@ -698,6 +698,7 @@ public:
         //setupPhysicsStackingUnitTest(cubeH,uvH,textureH);
 
         setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH,texture2H);
+        setupPhysicsCompositeTest(cubeH, texture2H);
 
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 1.0f;
@@ -730,6 +731,7 @@ public:
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
         //physicsUpdate(time::span deltaTime)
         createProcess<&TestSystem::update>("Update" );
+        createProcess<&TestSystem::drawInterval>("Update");
         createProcess<&TestSystem::physicsUpdate>("Physics" , 0.02f);
     }
 
@@ -1817,6 +1819,77 @@ public:
     }
     //20,0,15
 
+    void setupPhysicsCompositeTest(rendering::model_handle cubeH, rendering::material_handle textureH)
+    {
+        float testPos = 20.f;
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.width = 1.0f;
+        cubeParams.height = 1.0f;
+
+        physics::cube_collider_params staticBlockParams;
+        staticBlockParams.breadth = 1.0f;
+        staticBlockParams.width = 1.0f;
+        staticBlockParams.height = 1.0f;
+
+        //BLOCK
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "STATIC_BLOCK";
+            idHandle.write(id);
+
+            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(textureH));
+        }
+
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -1.0f, 15.0f));
+            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(textureH));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "NON_STATIC";
+            idHandle.write(id);
+
+            auto rbHandle = ent.add_component<physics::rigidbody>();
+        }
+
+
+
+
+
+    }
+
 
 #pragma region input stuff
     void onLightSwitch(light_switch* action)
@@ -2387,6 +2460,7 @@ public:
         physics::PhysicsSystem::bPoint.clear();
 
         physicsQuery.queryEntities();
+        auto size = physicsQuery.size();
         //this is called so that i can draw stuff
         for (auto entity : physicsQuery)
         {
@@ -2436,7 +2510,7 @@ public:
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
 
-                        debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
+                        //debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
 
                         if (!currentEdge) { return; }
 
@@ -2448,7 +2522,7 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(*(edgeToExecuteOn->edgePositionPtr), 1);
                             math::vec3 worldEnd = localTransform * math::vec4(*(edgeToExecuteOn->nextEdge->edgePositionPtr), 1);
 
-                            //debug::drawLine(worldStart, worldEnd, usedColor, 2.0f,0.0f, useDepth);
+                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f,0.0f, useDepth);
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
