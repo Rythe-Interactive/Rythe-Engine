@@ -58,10 +58,10 @@ namespace legion::rendering
             return iterator->second.get();
         }
 
-        static ParticleSystemHandle createParticleSystemImpl(std::string name, ParticleSystemBase* ptr);
+        static ParticleSystemHandle createParticleSystemImpl(const std::string& name, ParticleSystemBase* ptr);
 
         static std::unordered_map<id_type, std::unique_ptr<const ParticleSystemBase>> m_cache;
-        static async::readonly_rw_spinlock m_particleSystemLock;
+        static async::rw_spinlock m_particleSystemLock;
     };
 
     inline const ParticleSystemBase* ParticleSystemHandle::get() const

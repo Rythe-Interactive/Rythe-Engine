@@ -3,6 +3,7 @@
 #include <core/containers/containers.hpp>
 #include <core/types/primitives.hpp>
 #include <core/ecs/entityquery.hpp>
+#include <core/ecs/archetype.hpp>
 
 /**
  * @file queryregistry.hpp
@@ -23,11 +24,11 @@ namespace legion::core::ecs
         friend class EntityQuery;
     private:
         EcsRegistry& m_registry;
-        async::readonly_rw_spinlock m_entityLock;
+        async::rw_spinlock m_entityLock;
         sparse_map<id_type, std::unique_ptr<entity_set>> m_entityLists;
-        async::readonly_rw_spinlock m_referenceLock;
+        async::rw_spinlock m_referenceLock;
         sparse_map<id_type, size_type> m_references;
-        async::readonly_rw_spinlock m_componentLock;
+        async::rw_spinlock m_componentLock;
         sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
 
         id_type m_lastQueryId = 1;
@@ -99,10 +100,29 @@ namespace legion::core::ecs
         EntityQuery createQuery()
         {
             hashed_sparse_set<id_type> componentTypeIds;
-            (componentTypeIds.insert(typeHash<component_types>()), ...);
+            (createQuerySingle<component_types>(componentTypeIds), ...);
             return createQuery(componentTypeIds);
         }
+    private:
+        template <typename T>
+        void createQuerySingle(hashed_sparse_set<id_type>& h)
+        {
+            if constexpr (std::is_base_of_v<archetype_base,std::remove_all_extents_t<std::decay_t<T>>>)
+            {
+                createQueryArchetype<T>(h,std::make_index_sequence<std::tuple_size<typename T::handleGroup>::value>{});
+            } else
+            {
+                h.insert(typeHash<T>());
+            }
+        }
 
+        template <typename T,size_t ... I>
+        void createQueryArchetype(hashed_sparse_set<id_type>& h,std::index_sequence<I...>)
+        {
+            (h.insert(typeHash<typename ch_yield_type<std::tuple_element_t<I,typename T::handleGroup>>::type>()),...);
+        }
+
+    public:
         /**@brief Creates an entity query for a certain component combination.
          * @note Will not always create a new query id. If another query exists with the same component type the query handle will get the same id as that one.
          * @param componentTypes Sparse map with type ids of components that need to be queried by the new query.
@@ -119,7 +139,7 @@ namespace legion::core::ecs
          * @param queryId Id of the query to get the entities from.
          * @return sparse_map<id_type, entity_handle>& Sparse map with the ids as the key and the handles as the value.
          */
-        const entity_set& getEntities(id_type queryId);
+        entity_set getEntities(id_type queryId);
 
         /**@brief Add to reference count of a query.
          * @param queryId Id of query to increase reference count of.

@@ -47,6 +47,7 @@ namespace legion::core::math
         const color cyan        { 0.f, 1.f, 1.f, 1.f };
         const color magenta     { 1.f, 0.f, 1.f, 1.f };
         const color orange      { 1.0f, 0.584f, 0.f, 1.f }; // (255, 149, 0, 1)
+        const color cornflower  { 0.392f, 0.584f, 0.929f, 1.0f };
     }
 }
 

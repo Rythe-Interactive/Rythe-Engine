@@ -547,6 +547,18 @@ class ObjReader {
                        const ObjReaderConfig &config = ObjReaderConfig());
 
   ///
+  /// Parse .obj from a text string.
+  /// Need to supply .mtl text string by `mtl_text`.
+  /// This function ignores `mtllib` line in .obj text.
+  ///
+  /// @param[in] obj_text wavefront .obj filename
+  /// @param[in] mtl_text wavefront .mtl filename
+  /// @param[in] config Reader configuration
+  ///
+  bool ParseFromString(const std::string& obj_text, MaterialReader& readMatFn,
+      const ObjReaderConfig& config = ObjReaderConfig());
+
+  ///
   /// .obj was loaded or parsed correctly.
   ///
   bool Valid() const { return valid_; }
@@ -3070,6 +3082,19 @@ bool ObjReader::ParseFromString(const std::string &obj_text,
 
   valid_ = LoadObj(&attrib_, &shapes_, &materials_, &warning_, &error_,
                    &obj_ifs, &mtl_ss, config.triangulate, config.vertex_color);
+
+  return valid_;
+}
+
+bool ObjReader::ParseFromString(const std::string &obj_text,
+                                MaterialReader& readMatFn,
+                                const ObjReaderConfig &config) {
+  std::stringbuf obj_buf(obj_text);
+
+  std::istream obj_ifs(&obj_buf);
+
+  valid_ = LoadObj(&attrib_, &shapes_, &materials_, &warning_, &error_,
+                   &obj_ifs, &readMatFn, config.triangulate, config.vertex_color);
 
   return valid_;
 }

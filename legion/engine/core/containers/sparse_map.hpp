@@ -55,8 +55,8 @@ namespace legion::core
         size_type m_capacity = 0;
 
     public:
-        L_NODISCARD dense_value_container& dense() { return m_dense_value; }
-        L_NODISCARD const dense_value_container& dense() const { return m_dense_value; }
+        L_NODISCARD dense_value_container& values() { return m_dense_value; }
+        L_NODISCARD const dense_value_container& values() const { return m_dense_value; }
 
         L_NODISCARD dense_key_container& keys() { return m_dense_key; }
         L_NODISCARD const dense_key_container& keys() const { return m_dense_key; }
@@ -141,7 +141,7 @@ namespace legion::core
          */
         L_NODISCARD bool contains(key_const_reference key)
         {
-            return m_sparse[key] >= 0 && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
+            return m_sparse[key] >= 0 && m_sparse[key] < m_dense_key.size() && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
         }
 
         /**@brief Checks whether a certain key is contained in the sparse_map.
@@ -150,7 +150,7 @@ namespace legion::core
          */
         L_NODISCARD bool contains(key_type&& key)
         {
-            return m_sparse[key] >= 0 && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
+            return m_sparse[key] >= 0 && m_sparse[key] < m_dense_key.size() && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
         }
 
         /**@brief Checks whether a certain key is contained in the sparse_map.
@@ -159,7 +159,7 @@ namespace legion::core
          */
         L_NODISCARD bool contains(key_const_reference key) const
         {
-            return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
+            return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_dense_key.size() && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
         }
 
         /**@brief Checks whether a certain key is contained in the sparse_map.
@@ -168,7 +168,7 @@ namespace legion::core
          */
         L_NODISCARD bool contains(key_type&& key) const
         {
-            return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
+            return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_dense_key.size() && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;
         }
 
         /**@brief Checks if all keys in sparse_map are inside this map as well.
@@ -443,9 +443,6 @@ namespace legion::core
                 if (m_size >= m_capacity)
                     reserve(m_size + 1);
 
-                auto itr_value = m_dense_value.begin() + m_size;
-                *itr_value = value_type();
-
                 auto itr_key = m_dense_key.begin() + m_size;
                 *itr_key = key;
 
@@ -539,6 +536,8 @@ namespace legion::core
                     m_sparse[m_dense_key[m_size - 1]] = std::move(m_sparse[key]);
                 }
                 --m_size;
+                m_dense_value.resize(m_size);
+                m_dense_key.resize(m_size);
                 return true;
             }
             return false;

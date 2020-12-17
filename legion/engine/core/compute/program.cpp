@@ -63,7 +63,7 @@ namespace legion::core::compute {
         //check if we are running in debug and adjust build command accordingly
         if constexpr (LEGION_CONFIGURATION == LEGION_DEBUG_VALUE) {
             //DEBUG
-            ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DLEGION_LIBRARY -DDEBUG", nullptr, nullptr);
+            ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DLEGION_LIBRARY -DDEBUG ", nullptr, nullptr);
         } else {
             //NDEBUG
             ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DLEGION_LIBRARY -DNDEBUG", nullptr, nullptr);
@@ -75,7 +75,7 @@ namespace legion::core::compute {
             log::error("clBuildProgram failed");
 
             size_t length;
-            char buffer[8192];
+            char buffer[8192*4];
 
             clGetProgramBuildInfo(m_program,device,CL_PROGRAM_BUILD_LOG,sizeof(buffer),buffer,&length);
             buffer[length] = NULL;

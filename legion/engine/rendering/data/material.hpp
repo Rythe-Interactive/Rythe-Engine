@@ -77,7 +77,7 @@ namespace legion::rendering
             for (auto& [name, location, type] : m_shader.get_uniform_info())
             {
                 id_type hash = nameHash(name);
-                m_parameters.emplace(std::make_pair(hash, material_parameter_base::create_param(name, location, type)));
+                m_parameters.emplace(hash, material_parameter_base::create_param(name, location, type));
                 m_idOfLocation[location] = hash;
             }
         }
@@ -212,7 +212,7 @@ namespace legion::rendering
     {
         friend struct material_handle;
     private:
-        static async::readonly_rw_spinlock m_materialLock;
+        static async::rw_spinlock m_materialLock;
         static std::unordered_map<id_type, material> m_materials;
 
     public:

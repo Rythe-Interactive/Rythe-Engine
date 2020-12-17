@@ -22,7 +22,7 @@ namespace legion::rendering
         texture texture{};
         texture.channels = settings.components;
         texture.type = settings.type;
-
+        math::ivec2 texSize;
         // Throwaway temporary storage for the original components in the texture that we're loading. (Everything gets converted to the components specified in the settings anyways.)
         texture_components components = texture_components::grey;
 
@@ -35,17 +35,17 @@ namespace legion::rendering
             default: [[fallthrough]];
             case channel_format::eight_bit:
             {
-                imageData = stbi_load_from_memory(data.data(), data.size(), &texture.size.x, &texture.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+                imageData = stbi_load_from_memory(data.data(), data.size(), &texSize.x, &texSize.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
                 break;
             }
             case channel_format::sixteen_bit:
             {
-                imageData = stbi_load_16_from_memory(data.data(), data.size(), &texture.size.x, &texture.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+                imageData = stbi_load_16_from_memory(data.data(), data.size(), &texSize.x, &texSize.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
                 break;
             }
             case channel_format::float_hdr:
             {
-                imageData = stbi_loadf_from_memory(data.data(), data.size(), &texture.size.x, &texture.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+                imageData = stbi_loadf_from_memory(data.data(), data.size(), &texSize.x, &texSize.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
                 break;
             }
         }
@@ -71,8 +71,8 @@ namespace legion::rendering
             static_cast<GLenum>(settings.type),
             0,							
             static_cast<GLint>(settings.intendedFormat),
-            texture.size.x,
-            texture.size.y,
+            texSize.x,
+            texSize.y,
             0,							
             components_to_format[static_cast<int>(settings.components)],
             channels_to_glenum[static_cast<uint>(settings.fileFormat)],

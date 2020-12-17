@@ -40,7 +40,8 @@ namespace legion::core::events
             else
                 eventptr = &event;
 
-            force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(eventptr); // Notify.            
+            if (m_eventCallbacks.contains(event_type::id))
+                force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(eventptr); // Notify.            
         }
 
         void raiseEvent(std::unique_ptr<event_base>&& value)
