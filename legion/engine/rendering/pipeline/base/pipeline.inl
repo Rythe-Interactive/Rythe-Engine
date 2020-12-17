@@ -88,7 +88,7 @@ namespace legion::rendering
     {
         setup(context);
         for (auto& [_, stage] : m_stages)
-            stage->setup(context);
+            stage->init(context);
     }
 
     template<typename Self>
@@ -99,6 +99,9 @@ namespace legion::rendering
         {
             if (m_exiting.load(std::memory_order_acquire))
                 return;
+
+            if (!stage->isInitialized())
+                stage->init(context);
 
             stage->render(context, cam, camInput, deltaTime);
             if (m_abort)

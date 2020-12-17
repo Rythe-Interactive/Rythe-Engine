@@ -52,6 +52,11 @@ namespace legion::rendering
         }
 
         app::context_guard guard(context);
+        if (!guard.contextIsValid())
+        {
+            abort();
+            return;
+        }
 
         auto [valid, message] = fbo->verify();
         if (!valid)
