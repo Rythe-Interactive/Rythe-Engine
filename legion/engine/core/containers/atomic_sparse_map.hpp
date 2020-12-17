@@ -4,7 +4,7 @@
 #include <type_traits>
 #include <algorithm>
 #include <stdexcept>
-#include <core/async/readonly_rw_spinlock.hpp>
+#include <core/async/rw_spinlock.hpp>
 #include <core/platform/platform.hpp>
 #include <core/types/primitives.hpp>
 #include <core/containers/iterator_tricks.hpp>
@@ -17,7 +17,7 @@ namespace legion::core
 {
     /**@class atomic_sparse_map
      * @brief Atomic quick lookup contiguous map.
-     *		  A specialized version of sparse_map that uses legion::core::async::transferable_atomic and legion::core::async::readonly_rw_spinlock.
+     *		  A specialized version of sparse_map that uses legion::core::async::transferable_atomic and legion::core::async::rw_spinlock.
      * @tparam key_type The type to be used as the key.
      * @tparam value_type The type to be used as the value.
      * @tparam dense_type Container to be used to store the values.
@@ -49,7 +49,7 @@ namespace legion::core
         using const_iterator = core::iterator::key_value_pair_iterator<typename dense_key_container::const_iterator, typename dense_value_container::const_iterator>;
 
     private:
-        mutable async::readonly_rw_spinlock m_container_lock;
+        mutable async::rw_spinlock m_container_lock;
 
         dense_value_container m_dense_value;
         dense_key_container m_dense_key;
@@ -59,9 +59,9 @@ namespace legion::core
         std::atomic<size_type> m_capacity = 0;
 
     public:
-        L_NODISCARD async::readonly_rw_spinlock& get_lock() const { return m_container_lock; }
-        L_NODISCARD dense_value_container& dense() { return m_dense_value; }
-        L_NODISCARD const dense_value_container& dense() const { return m_dense_value; }
+        L_NODISCARD async::rw_spinlock& get_lock() const { return m_container_lock; }
+        L_NODISCARD dense_value_container& values() { return m_dense_value; }
+        L_NODISCARD const dense_value_container& values() const { return m_dense_value; }
 
         L_NODISCARD dense_key_container& keys() { return m_dense_key; }
         L_NODISCARD const dense_key_container& keys() const { return m_dense_key; }

@@ -59,7 +59,7 @@ namespace legion::physics
         math::vec3 worldFaceNormalB = manifold.transformB * math::vec4(BRefFace.ptr->normal, 0);
 
     
-        math::vec3 worldEdgeAPosition = edgeRef.ptr? manifold.transformB * math::vec4(*edgeRef.ptr->edgePositionPtr, 1) : math::vec3();
+        math::vec3 worldEdgeAPosition = edgeRef.ptr? manifold.transformB * math::vec4(edgeRef.ptr->edgePosition, 1) : math::vec3();
         math::vec3 worldEdgeNormal = edgeNormal;
 
         auto abPenetrationQuery =

@@ -3,7 +3,7 @@
 #include <core/math/math.hpp>
 #include <core/filesystem/resource.hpp>
 #include <core/filesystem/view.hpp>
-#include <core/async/readonly_rw_spinlock.hpp>
+#include <core/async/rw_spinlock.hpp>
 
 #include <utility>
 #include <vector>
@@ -64,7 +64,7 @@ namespace legion::core
 
         /**@brief Get the mesh and the attached lock.
          */
-        std::pair<async::readonly_rw_spinlock&, mesh&> get();
+        std::pair<async::rw_spinlock&, mesh&> get();
 
         bool operator==(const mesh_handle& other) const { return id == other.id; }
         operator id_type() { return id; }
@@ -95,8 +95,8 @@ namespace legion::core
     {
         friend struct mesh_handle;
     private:
-        static std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, mesh>>> m_meshes;
-        static async::readonly_rw_spinlock m_meshesLock;
+        static std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>> m_meshes;
+        static async::rw_spinlock m_meshesLock;
 
     public:
         /**@brief Create a new mesh and load it from a file if a mesh with the same name doesn't exist yet.

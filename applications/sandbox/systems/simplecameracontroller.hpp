@@ -45,7 +45,7 @@ public:
 
         app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
         app::InputSystem::createBinding<fullscreen_action>(app::inputmap::method::F11);
-        app::InputSystem::createBinding<escape_cursor_action>(app::inputmap::method::TAB);
+        app::InputSystem::createBinding<escape_cursor_action>(app::inputmap::method::MOUSE_RIGHT);
         app::InputSystem::createBinding<vsync_action>(app::inputmap::method::F1);
 
         bindToEvent<player_move, &SimpleCameraController::onPlayerMove>();
@@ -66,7 +66,7 @@ public:
         window.show();
 
         {
-            async::readwrite_guard guard(*window.lock);
+            std::lock_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
             setupCameraEntity();
             app::ContextHelper::makeContextCurrent(nullptr);
@@ -78,13 +78,13 @@ public:
         groundplane = createEntity();
         auto groundmat = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
         groundmat.set_param("heightMap", rendering::TextureCache::create_texture("heightMap", "assets://textures/mississippi.png"_view));
-        groundplane.add_components<rendering::renderable>(rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view).get_mesh(), rendering::mesh_renderer(groundmat));
+        groundplane.add_component<rendering::renderable>({ rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view), groundmat });
         groundplane.add_components<transform>();
 
         skybox = createEntity();
         auto skyboxMat = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
         skyboxMat.set_param("skycolor", math::color(0.2f, 0.4f, 1.0f));
-        skybox.add_components<rendering::renderable>(rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view).get_mesh(), rendering::mesh_renderer(skyboxMat));
+        skybox.add_components<rendering::mesh_renderable>(mesh_filter(rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view).get_mesh()), rendering::mesh_renderer(skyboxMat));
         skybox.add_components<transform>(position(), rotation(), scale(1000.f));
 
         camera = createEntity();
@@ -92,7 +92,7 @@ public:
         camera.add_component<audio::audio_listener>();
 
         rendering::camera cam;
-        cam.set_projection(90.0f / 4.0f, 0.1f, 1000.f);
+        cam.set_projection(22.5f, 0.001f, 1000.f);
         camera.add_component<rendering::camera>(cam);
     }
 
@@ -118,12 +118,17 @@ public:
 
     void onEscapeCursor(escape_cursor_action* action)
     {
-        if (action->released())
+        if (action->released() && !escaped)
         {
             app::window window = m_ecs->world.get_component_handle<app::window>().read();
-            escaped = !escaped;
-            window.enableCursor(escaped);
-            window.show();
+            escaped = true;
+            window.enableCursor(true);
+        }
+        else if (action->pressed() && escaped)
+        {
+            app::window window = m_ecs->world.get_component_handle<app::window>().read();
+            escaped = false;
+            window.enableCursor(false);
         }
     }
 
@@ -190,9 +195,8 @@ public:
 
         auto rotH = camera.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(0, 1, 0)));
-        rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
+        rotH.read_modify_write([](rotation& src)
             {
-                (void)dummy;
                 math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
                 if (fwd.y < -0.95f)
                     fwd.y = -0.95f;
@@ -200,7 +204,7 @@ public:
                     fwd.y = 0.95f;
                 fwd = math::normalize(fwd);
                 math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
-                return (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
+                src = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
             });
     }
 
@@ -211,9 +215,8 @@ public:
 
         auto rotH = camera.get_component_handle<rotation>();
         rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(1, 0, 0)));
-        rotH.read_modify_write(rotation(), [](const rotation& src, rotation&& dummy)
+        rotH.read_modify_write([](rotation& src)
             {
-                (void)dummy;
                 math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
                 if (fwd.y < -0.95f)
                     fwd.y = -0.95f;
@@ -221,7 +224,7 @@ public:
                     fwd.y = 0.95f;
                 fwd = math::normalize(fwd);
                 math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
-                return (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
+                src = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
             });
     }
 #pragma endregion

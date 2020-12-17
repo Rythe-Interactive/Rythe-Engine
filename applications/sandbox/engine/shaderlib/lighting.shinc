@@ -28,6 +28,7 @@ struct Light
 struct Material
 {
     mat3 tbn;
+    float height;
     vec4 albedo;
  	vec3 normal;
  	float metallic;
@@ -35,8 +36,8 @@ struct Material
     float roughness;
     float dielectric;
  	float ambientOcclusion;
-    vec3 F0;
     vec2 texcoords;
+    vec3 F0;
 };
 
 #include <math_ext.shinc>

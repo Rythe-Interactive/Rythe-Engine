@@ -1,9 +1,11 @@
 #pragma once
 #include <rendering/data/importers/texture_importers.hpp>
 #include <rendering/systems/renderer.hpp>
+#include <rendering/components/renderable.hpp>
+#include <rendering/components/light.hpp>
 #include <rendering/systems/particle_system_manager.hpp>
-
-
+#include <rendering/components/point_cloud.hpp>
+#include <rendering/systems/pointcloudgeneration.hpp>
 namespace legion::rendering
 {
     class RenderingModule : public Module
@@ -22,6 +24,10 @@ namespace legion::rendering
             reportComponentType<particle>();
             reportComponentType<particle_emitter>();
             reportSystem<ParticleSystemManager>();
+
+            reportComponentType<point_cloud>();
+            reportSystem<PointCloudGeneration>();
+
         }
 
         virtual priority_type priority() override
