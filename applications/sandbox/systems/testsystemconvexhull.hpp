@@ -10,7 +10,6 @@
 #include <physics/components/physics_component.hpp>
 
 
-#include "pointcloud_particlesystem.hpp"
 #include <rendering/components/particle_emitter.hpp>
 
 using namespace legion;
@@ -55,8 +54,7 @@ public:
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         {
-            async::readwrite_guard guard(*window.lock);
-            app::ContextHelper::makeContextCurrent(window);
+            app::context_guard guard(window);
 
             cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
             model = rendering::ModelCache::create_model("model", "assets://models/sphere.obj"_view);
@@ -66,7 +64,7 @@ public:
             // Create physics entity
             {
                 physicsEnt = createEntity();
-                physicsEnt.add_components<rendering::renderable>({ model, wireFrameH });
+                physicsEnt.add_components<rendering::mesh_renderable>(mesh_filter(model.get_mesh()), gfx::mesh_renderer(wireFrameH));
                 physicsEnt.add_components<transform>(position(0, 0, 0), rotation(), scale(1));
                 meshH = model.get_mesh();
 
@@ -79,7 +77,7 @@ public:
             // Create physics entity
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::renderable>({ cube, wireFrameH });
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), gfx::mesh_renderer(wireFrameH));
                 ent.add_components<transform>(position(0, -2.0f, 0), rotation(), scale(2));
                 auto pcH = ent.add_component<physics::physicsComponent>();
                 auto pc = pcH.read();
@@ -90,19 +88,19 @@ public:
             // Create entity for reference
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::renderable>({ cube, vertexColor });
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), gfx::mesh_renderer(vertexColor));
                 ent.add_components<transform>(position(5.0f, 0, 0), rotation(), scale(1));
             }
             // Create entity for reference
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::renderable>({ cube, wireFrameH });
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), gfx::mesh_renderer(wireFrameH));
                 ent.add_components<transform>(position(0, 0, -5.0f), rotation(), scale(1));
             }
             {
                 math::vec3 p = math::vec3(11, 4, 5);
                 std::vector<math::vec3> points{ math::vec3(0,0,0), math::vec3(2, 5, 5), math::vec3(12, 5, 5), math::vec3(10, 0, 0) };
-                math::mat4 planeMat = math::planeMatrix(points.at(0), points.at(1), points.at(3), math::vec3(0,0,0));
+                math::mat4 planeMat = math::planeMatrix(points.at(0), points.at(1), points.at(3), math::vec3(0, 0, 0));
                 std::vector<math::vec3> newPoints{
                     math::vec3(math::inverse(planeMat) * math::vec4(points.at(0),1)),
                     math::vec3(math::inverse(planeMat) * math::vec4(points.at(1),1)),
