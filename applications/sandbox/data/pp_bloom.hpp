@@ -13,8 +13,6 @@ namespace legion::rendering
         texture_handle m_brightTexture;
         framebuffer m_pingpongFrameBuffers[2];
         texture_handle m_pingpongTextureBuffers[2];
-        unsigned int m_pingpongFBO[2];
-        unsigned int m_pingpongBuffers[2];
 
         texture_import_settings settings{
               texture_type::two_dimensional,
@@ -42,27 +40,9 @@ namespace legion::rendering
             for(int i = 0; i < 2;i++)
             {
                 m_pingpongFrameBuffers[i] = framebuffer(GL_FRAMEBUFFER);
-                m_pingpongTextureBuffers[i] = rendering::TextureCache::create_texture("blurTexture{}"+ i, math::ivec2(context.size().x,context.size().y), settings);
+                m_pingpongTextureBuffers[i] = rendering::TextureCache::create_texture("blurTexture"+ i, context.size(), settings);
                 m_pingpongFrameBuffers[i].attach(m_pingpongTextureBuffers[i],GL_COLOR_ATTACHMENT0);
             }
-
-            //glGenFramebuffers(2, m_pingpongFBO);
-            //glGenTextures(2, m_pingpongBuffers);
-            //for (unsigned int i = 0; i < 2; i++)
-           /* {
-                glBindFramebuffer(GL_FRAMEBUFFER, m_pingpongFBO[i]);
-                glBindTexture(GL_TEXTURE_2D, m_pingpongBuffers[i]);
-                glTexImage2D(
-                    GL_TEXTURE_2D, 0, GL_RGBA16F, context.size().x, context.size().y, 0, GL_RGBA, GL_FLOAT, NULL
-                );
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                glFramebufferTexture2D(
-                    GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_pingpongBuffers[i], 0
-                );
-            }*/
 
             addRenderPass<&PostProcessingBloom::renderPass>();
         }
@@ -73,18 +53,23 @@ namespace legion::rendering
             {
                 m_brightTexture = TextureCache::create_texture("brightTexture", colortexture.get_texture().size(), settings);
             }
+
             m_brightTexture.get_texture().resize(colortexture.get_texture().size());
 
             fbo.attach(m_brightTexture, GL_COLOR_ATTACHMENT1);
 
             fbo.bind();
-            unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+            uint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
             glDrawBuffers(2, attachments);
 
             m_brightnessThresholdShader.bind();
             m_brightnessThresholdShader.get_uniform<texture_handle>("screenTexture").set_value(colortexture);
             renderQuad();
             m_brightnessThresholdShader.release();
+
+            uint attachment = GL_COLOR_ATTACHMENT0;
+            glDrawBuffers(1, &attachment);
+
             fbo.release();
             fbo.detach(GL_COLOR_ATTACHMENT1);
 
@@ -96,20 +81,17 @@ namespace legion::rendering
             m_pingpongTextureBuffers[0].get_texture().resize(colortexture.get_texture().size());
             m_pingpongTextureBuffers[1].get_texture().resize(colortexture.get_texture().size());
 
-            for(unsigned int i = 0; i < amount; i++)
+            for(uint i = 0; i < amount; i++)
             {
                 m_gaussianBlurShader.get_uniform<bool>("horizontal").set_value(horizontal);
-                
 
                 if (first_iteration)
                 {
-                    m_pingpongFrameBuffers[horizontal].attach(m_brightTexture, GL_COLOR_ATTACHMENT0);
                     m_gaussianBlurShader.get_uniform<texture_handle>("image").set_value(m_brightTexture);
                 }
                 else
                 {
-                    m_pingpongFrameBuffers[horizontal].attach(m_pingpongTextureBuffers[!horizontal], GL_COLOR_ATTACHMENT0);
-                    m_gaussianBlurShader.get_uniform<texture_handle>("image").set_value(m_pingpongTextureBuffers[horizontal]);
+                    m_gaussianBlurShader.get_uniform<texture_handle>("image").set_value(m_pingpongTextureBuffers[!horizontal]);
                 }
 
                 m_pingpongFrameBuffers[horizontal].bind();
@@ -121,29 +103,7 @@ namespace legion::rendering
             m_pingpongFrameBuffers[horizontal].release();
             m_gaussianBlurShader.release();
 
-            /*for (unsigned int i = 0; i < amount; i++)
-            {
-                glBindFramebuffer(GL_FRAMEBUFFER, m_pingpongFBO[horizontal]);
-                m_gaussianBlurShader.get_uniform<int>("horizontal").set_value(horizontal);
-                glBindTexture(
-                    GL_TEXTURE_2D, first_iteration ? m_brightTexture : m_pingpongBuffers[!horizontal]
-                );
-                renderQuad();
-                horizontal = !horizontal;
-                if (first_iteration)
-                    first_iteration = false;
-            }
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            m_gaussianBlurShader.release();*/
-
-            
-            //Add m_brightTexture to colorTexture
-            //Render to GL_COLOR_ATTACHMENT0
-
             fbo.bind();
-
-            unsigned int attachment = GL_COLOR_ATTACHMENT0;
-            glDrawBuffers(1, &attachment);
 
             auto scrnshader = rendering::ShaderCache::get_handle("screen shader");
             scrnshader.bind();
