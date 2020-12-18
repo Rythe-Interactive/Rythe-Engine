@@ -58,6 +58,7 @@ namespace legion::rendering
 
             fbo.attach(m_brightTexture, GL_COLOR_ATTACHMENT1);
 
+            //Brightness threshold stage
             fbo.bind();
             uint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
             glDrawBuffers(2, attachments);
@@ -73,7 +74,7 @@ namespace legion::rendering
             fbo.release();
             fbo.detach(GL_COLOR_ATTACHMENT1);
 
-
+            //Gaussian blur stage
             bool horizontal = true, first_iteration = true;
             int amount = 10;
             m_gaussianBlurShader.bind();
@@ -102,9 +103,11 @@ namespace legion::rendering
             }
             m_pingpongFrameBuffers[horizontal].release();
             m_gaussianBlurShader.release();
+            
+            //Add m_brightTexture to colorTexture
+            //Render to GL_COLOR_ATTACHMENT0
 
             fbo.bind();
-
             auto scrnshader = rendering::ShaderCache::get_handle("screen shader");
             scrnshader.bind();
             scrnshader.get_uniform<texture_handle>("screenTexture").set_value(m_pingpongTextureBuffers[horizontal]);
