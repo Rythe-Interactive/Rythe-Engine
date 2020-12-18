@@ -25,7 +25,7 @@ namespace legion::rendering
         app::context_guard guard(context);
 
         m_colorTexture = TextureCache::create_texture("color_image", m_framebufferSize, {
-        texture_type::two_dimensional, channel_format::float_hdr, texture_format::rgb,
+        texture_type::two_dimensional, channel_format::float_hdr, texture_format::rgba_hdr,
         texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
 

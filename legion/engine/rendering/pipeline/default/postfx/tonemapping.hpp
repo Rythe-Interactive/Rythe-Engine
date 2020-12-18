@@ -13,7 +13,7 @@ namespace legion::rendering
     {
     private:
         static std::atomic<id_type> m_currentShader;
-        float gamma;
+        float exposure;
 
     public:
         static void setAlgorithm(tonemapping_type type);

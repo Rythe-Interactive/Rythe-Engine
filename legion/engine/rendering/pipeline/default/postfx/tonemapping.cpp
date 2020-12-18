@@ -44,18 +44,21 @@ namespace legion::rendering
         rendering::ShaderCache::create_shader("legion tonemapping", "engine://shaders/legiontonemap.shs"_view);
         rendering::ShaderCache::create_shader("unreal3 tonemapping", "engine://shaders/unreal3.shs"_view);
         addRenderPass<&Tonemapping::renderPass>();
-        gamma = 2.2f;
+        exposure = 0.5f;
     }
 
     void Tonemapping::renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime)
     {
         static id_type gammaId = nameHash("gamma");
+        static id_type exposureId = nameHash("exposure");
 
         auto shader = ShaderCache::get_handle(m_currentShader.load(std::memory_order_relaxed));
 
         fbo.bind();
         shader.bind();
-        shader.get_uniform<float>(gammaId).set_value(gamma);
+
+        shader.get_uniform<float>(exposureId).set_value(exposure);
+
         shader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(colortexture);
         renderQuad();
         shader.release();
@@ -75,10 +78,13 @@ namespace legion::rendering
         glGetTexImage(static_cast<GLenum>(tex.type), maxMip, components_to_format[static_cast<int>(tex.channels)], GL_FLOAT, colors.data());
         glBindTexture(static_cast<GLenum>(tex.type), 0);
 
-        float luminance = math::dot(math::vec3(colors[0].rgb), math::vec3(0.2126f, 0.7152f, 0.0722f));
+        float luminance = math::dot(math::vec3(colors[0].r, colors[0].g, colors[0].b), math::vec3(0.2126f, 0.7152f, 0.0722f));
 
-        float newGamma = math::clamp(math::lerp(4.5f, -1.f, math::clamp(1.f - math::pow(1.f - luminance, 5.f), 0.f, 1.f)), 0.1f, 4.5f);
-        gamma = math::lerp(gamma, newGamma, deltaTime.seconds());
+        float newExposure = math::clamp(math::pow(math::max((1.0f - luminance) - 0.45f, 0.f), 3.f) * 100.f, 0.f, 10.f);
+        if (newExposure < exposure)
+            exposure = math::lerp(exposure, newExposure, deltaTime.seconds());
+        else
+            exposure = math::lerp(exposure, newExposure, deltaTime.seconds() * 0.5f);
     }
 
 }

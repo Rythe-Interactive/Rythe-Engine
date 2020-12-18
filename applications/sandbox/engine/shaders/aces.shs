@@ -17,10 +17,13 @@ shader(fragment)
 {
     #include <color_correction.shinc>
 
-    uniform float gamma;
+    uniform float exposure;
 
     void main(void)
     {
-        fragment_color = vec4(GammaCorrect(ACESToneMapFitted(SceneColor(stdin(uv))), gamma), 1.0);
+        vec3 premapped = ACESToneMapFitted(SceneColor(stdin(uv)));
+        vec3 exposureMapped = vec3(1.0) - exp(-premapped * exposure);
+
+        fragment_color = vec4(GammaCorrect(exposureMapped), 1.0);
     }
 }
