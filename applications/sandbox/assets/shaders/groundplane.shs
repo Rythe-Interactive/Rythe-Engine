@@ -17,8 +17,6 @@ shader(vertex)
 
 shader(fragment)
 {
-    out vec4 fragment_color;
-
     void main(void)
     {
         vec2 grid = mod(GetWorldPosition().xz, 1.0);
