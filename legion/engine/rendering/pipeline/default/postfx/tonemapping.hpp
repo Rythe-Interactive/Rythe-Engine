@@ -4,31 +4,23 @@
 
 namespace legion::rendering
 {
+    enum struct tonemapping_type
+    {
+        aces, reinhard, reinhard_jodie, legion, unreal3
+    };
+
     class Tonemapping : public PostProcessingEffect<Tonemapping>
     {
     private:
-        shader_handle m_aces;
+        static std::atomic<id_type> m_currentShader;
+        float gamma;
 
     public:
+        static void setAlgorithm(tonemapping_type type);
 
-        void setup(app::window& context) override
-        {
-            using namespace legion::core::fs::literals;
-            m_aces = rendering::ShaderCache::create_shader("aces tonemapping", "engine://shaders/aces.shs"_view);
-            addRenderPass<&Tonemapping::renderPass>();
-        }
+        void setup(app::window& context) override;
 
-        void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture)
-        {
-            static id_type gammaId = nameHash("gamma");
-            fbo.bind();
-            m_aces.bind();
-            m_aces.get_uniform<float>(gammaId).set_value(2.2f);
-            m_aces.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(colortexture);
-            renderQuad();
-            m_aces.release();
-            fbo.release();
-        }
+        void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime);
 
     };
 

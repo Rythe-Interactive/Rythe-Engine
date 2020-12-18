@@ -17,7 +17,7 @@ namespace legion::rendering
         m_drawFBO = framebuffer(GL_FRAMEBUFFER);
 
         m_swapTexture = TextureCache::create_texture("color_swap_image", math::ivec2(1, 1), {
-        texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
+        texture_type::two_dimensional, channel_format::float_hdr, texture_format::rgb,
         texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
 
@@ -96,7 +96,7 @@ namespace legion::rendering
                 fbo->attach(textures[!index], GL_COLOR_ATTACHMENT0);
                 
               
-                pass.invoke(*fbo, textures[index], depthTexture);
+                pass.invoke(*fbo, textures[index], depthTexture, deltaTime);
 
                 
                 index = !index;

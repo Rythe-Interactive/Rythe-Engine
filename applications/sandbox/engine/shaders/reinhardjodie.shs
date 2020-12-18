@@ -1,0 +1,26 @@
+#version 450
+
+generate(vertex, fragment)
+
+#include<stdio.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = vec4(stdin(position), 1.0);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    #include <color_correction.shinc>
+
+    uniform float gamma;
+
+    void main(void)
+    {
+        fragment_color = vec4(GammaCorrect(ReinhardJodie(SceneColor(stdin(uv))), gamma), 1.0);
+    }
+}

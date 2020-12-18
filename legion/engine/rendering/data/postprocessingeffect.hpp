@@ -13,7 +13,7 @@ namespace legion::rendering
     class PostProcessingEffectBase
     {
     public:
-        std::vector<delegate<void(framebuffer&, texture_handle, texture_handle)>> renderPasses;
+        std::vector<delegate<void(framebuffer&, texture_handle, texture_handle, time::span)>> renderPasses;
         virtual id_type getId() const LEGION_PURE;
         void init(app::window& context)
         {
@@ -49,10 +49,10 @@ namespace legion::rendering
         static const id_type m_id;
 
     protected:
-        template<void(Self::* func_type)(framebuffer&, texture_handle, texture_handle)>
+        template<void(Self::* func_type)(framebuffer&, texture_handle, texture_handle, time::span)>
         void addRenderPass()
         {
-            renderPasses.push_back(delegate<void(framebuffer&, texture_handle, texture_handle)>::create<Self, func_type>(reinterpret_cast<Self*>(this)));
+            renderPasses.push_back(delegate<void(framebuffer&, texture_handle, texture_handle, time::span)>::create<Self, func_type>(reinterpret_cast<Self*>(this)));
         }
     };
 

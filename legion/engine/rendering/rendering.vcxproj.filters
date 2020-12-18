@@ -40,6 +40,7 @@
     <ClCompile Include="pipeline\gui\stages\imguirenderstage.cpp" />
     <ClCompile Include="data\postprocessingeffect.cpp" />
     <ClCompile Include="pipeline\default\stages\postprocessingstage.cpp" />
+    <ClCompile Include="pipeline\default\postfx\tonemapping.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />

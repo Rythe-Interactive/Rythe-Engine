@@ -1752,39 +1752,43 @@ public:
 
     void onTonemapSwitch(tonemap_switch* action)
     {
-        static bool on = false;
+        static gfx::tonemapping_type algorithm = gfx::tonemapping_type::aces;
 
         if (!action->value)
         {
-            if (on)
+            switch (algorithm)
             {
-                pbrH.set_param("tonemap", false);
-                copperH.set_param("tonemap", false);
-                aluminumH.set_param("tonemap", false);
-                ironH.set_param("tonemap", false);
-                slateH.set_param("tonemap", false);
-                rockH.set_param("tonemap", false);
-                rock2H.set_param("tonemap", false);
-                fabricH.set_param("tonemap", false);
-                bogH.set_param("tonemap", false);
-                paintH.set_param("tonemap", false);
-                skyboxH.set_param("tonemap", false);
+            case gfx::tonemapping_type::aces:
+                gfx::Tonemapping::setAlgorithm(gfx::tonemapping_type::reinhard);
+                algorithm = gfx::tonemapping_type::reinhard;
+                log::debug("Reinhard tonemapping");
+                break;
+            case gfx::tonemapping_type::reinhard:
+                gfx::Tonemapping::setAlgorithm(gfx::tonemapping_type::reinhard_jodie);
+                algorithm = gfx::tonemapping_type::reinhard_jodie;
+                log::debug("Reinhard Jodie tonemapping");
+                break;
+            case gfx::tonemapping_type::reinhard_jodie:
+                gfx::Tonemapping::setAlgorithm(gfx::tonemapping_type::legion);
+                algorithm = gfx::tonemapping_type::legion;
+                log::debug("Legion tonemapping");
+                break;
+            case gfx::tonemapping_type::legion:
+                gfx::Tonemapping::setAlgorithm(gfx::tonemapping_type::unreal3);
+                algorithm = gfx::tonemapping_type::unreal3;
+                log::debug("Unreal3 tonemapping");
+                break;
+            case gfx::tonemapping_type::unreal3:
+                gfx::Tonemapping::setAlgorithm(gfx::tonemapping_type::aces);
+                algorithm = gfx::tonemapping_type::aces;
+                log::debug("ACES tonemapping");
+                break;
+            default:
+                gfx::Tonemapping::setAlgorithm(gfx::tonemapping_type::legion);
+                algorithm = gfx::tonemapping_type::legion;
+                log::debug("Legion tonemapping");
+                break;
             }
-            else
-            {
-                pbrH.set_param("tonemap", true);
-                copperH.set_param("tonemap", true);
-                aluminumH.set_param("tonemap", true);
-                ironH.set_param("tonemap", true);
-                slateH.set_param("tonemap", true);
-                rockH.set_param("tonemap", true);
-                rock2H.set_param("tonemap", true);
-                fabricH.set_param("tonemap", true);
-                bogH.set_param("tonemap", true);
-                paintH.set_param("tonemap", true);
-                skyboxH.set_param("tonemap", true);
-            }
-            on = !on;
         }
     }
 

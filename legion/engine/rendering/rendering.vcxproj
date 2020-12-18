@@ -38,6 +38,7 @@
     <ClCompile Include="pipeline\base\pipelinebase.cpp" />
     <ClCompile Include="pipeline\base\renderstage.cpp" />
     <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
+    <ClCompile Include="pipeline\default\postfx\tonemapping.cpp" />
     <ClCompile Include="pipeline\default\stages\clearstage.cpp" />
     <ClCompile Include="pipeline\default\stages\framebufferresizestage.cpp" />
     <ClCompile Include="pipeline\default\stages\lightbufferstage.cpp" />
