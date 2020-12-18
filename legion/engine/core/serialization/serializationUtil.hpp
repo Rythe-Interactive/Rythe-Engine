@@ -7,7 +7,6 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 #include <core/filesystem/filesystem.hpp>
-#include <application/application.hpp> 
 
 #include <sstream>
 #include <fstream>
