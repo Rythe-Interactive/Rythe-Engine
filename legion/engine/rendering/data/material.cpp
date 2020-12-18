@@ -63,9 +63,16 @@ namespace legion::rendering
 
     async::rw_spinlock MaterialCache::m_materialLock;
     std::unordered_map<id_type, material> MaterialCache::m_materials;
+    material_handle MaterialCache::m_invalid_material;
 
     material_handle MaterialCache::create_material(const std::string& name, const shader_handle& shader)
     {
+        if (!m_materials.count(invalid_id))
+        {
+            m_materials[invalid_id].init(ShaderCache::get_handle("invalid"));
+            m_materials[invalid_id].m_name = "invalid";
+        }
+
         id_type id = nameHash(name);
         if (m_materials.count(id))
             return { id };
@@ -88,6 +95,12 @@ namespace legion::rendering
 
     material_handle MaterialCache::create_material(const std::string& name, const filesystem::view& shaderFile, shader_import_settings settings)
     {
+        if (!m_materials.count(invalid_id))
+        {
+            m_materials[invalid_id].init(ShaderCache::get_handle("invalid"));
+            m_materials[invalid_id].m_name = "invalid";
+        }
+
         id_type id = nameHash(name);
         if (m_materials.count(id))
             return { id };
@@ -112,6 +125,12 @@ namespace legion::rendering
 
     material_handle MaterialCache::get_material(const std::string& name)
     {
+        if (!m_materials.count(invalid_id))
+        {
+            m_materials[invalid_id].init(ShaderCache::get_handle("invalid"));
+            m_materials[invalid_id].m_name = "invalid";
+        }
+
         id_type id = nameHash(name);
         async::readonly_guard guard(m_materialLock);
         if (m_materials.count(id))

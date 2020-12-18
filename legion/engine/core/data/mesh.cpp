@@ -167,7 +167,7 @@ namespace legion::core
             async::readwrite_guard guard(m_meshesLock);
             auto* pair_ptr = new std::pair<async::rw_spinlock, mesh>();
             pair_ptr->second = std::move(data);
-            m_meshes.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>(pair_ptr)));
+            m_meshes.emplace(id, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>(pair_ptr));
         }
 
         return { id };

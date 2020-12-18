@@ -64,7 +64,7 @@ public:
             // Create physics entity
             {
                 physicsEnt = createEntity();
-                physicsEnt.add_components<rendering::mesh_renderable>(mesh_filter(model.get_mesh()), gfx::mesh_renderer(wireFrameH));
+                physicsEnt.add_components<rendering::mesh_renderable>(mesh_filter(model.get_mesh()), rendering::mesh_renderer(wireFrameH));
                 physicsEnt.add_components<transform>(position(0, 0, 0), rotation(), scale(1));
                 meshH = model.get_mesh();
 
@@ -77,7 +77,7 @@ public:
             // Create physics entity
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), gfx::mesh_renderer(wireFrameH));
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(wireFrameH));
                 ent.add_components<transform>(position(0, -2.0f, 0), rotation(), scale(2));
                 auto pcH = ent.add_component<physics::physicsComponent>();
                 auto pc = pcH.read();
@@ -88,13 +88,13 @@ public:
             // Create entity for reference
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), gfx::mesh_renderer(vertexColor));
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(vertexColor));
                 ent.add_components<transform>(position(5.0f, 0, 0), rotation(), scale(1));
             }
             // Create entity for reference
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), gfx::mesh_renderer(wireFrameH));
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(wireFrameH));
                 ent.add_components<transform>(position(0, 0, -5.0f), rotation(), scale(1));
             }
             {

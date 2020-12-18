@@ -139,24 +139,6 @@ namespace legion::core
          * @param key Key to check for.
          * @returns bool true if the key was found, otherwise false.
          */
-        L_NODISCARD bool contains(key_const_reference key)
-        {
-            return m_sparse[key] >= 0 && m_sparse[key] < m_dense_key.size() && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
-        }
-
-        /**@brief Checks whether a certain key is contained in the sparse_map.
-         * @param key Key to check for.
-         * @returns bool true if the key was found, otherwise false.
-         */
-        L_NODISCARD bool contains(key_type&& key)
-        {
-            return m_sparse[key] >= 0 && m_sparse[key] < m_dense_key.size() && m_sparse[key] < m_size && m_dense_key[m_sparse[key]] == key;
-        }
-
-        /**@brief Checks whether a certain key is contained in the sparse_map.
-         * @param key Key to check for.
-         * @returns bool true if the key was found, otherwise false.
-         */
         L_NODISCARD bool contains(key_const_reference key) const
         {
             return m_sparse.count(key) && m_sparse.at(key) >= 0 && m_sparse.at(key) < m_dense_key.size() && m_sparse.at(key) < m_size && m_dense_key[m_sparse.at(key)] == key;

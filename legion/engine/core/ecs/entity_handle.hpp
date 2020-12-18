@@ -102,6 +102,13 @@ namespace legion::core::ecs
          */
         operator id_type() const { return get_id(); }
 
+        bool operator==(const entity_handle& other) const
+        {
+            return m_id == other.m_id;
+        }
+
+        operator bool() const { return valid(); }
+
         /**@brief Returns the id of the entity this handle references.
          * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.
          */
@@ -449,9 +456,6 @@ namespace legion::core::ecs
          */
         bool valid() const;
     };
-
-
-    using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
 }
 
 #if !defined(DOXY_EXCLUDE)
@@ -466,3 +470,8 @@ namespace std
     };
 }
 #endif
+
+namespace legion::core::ecs
+{
+    using entity_set = hashed_sparse_set<entity_handle>;
+}

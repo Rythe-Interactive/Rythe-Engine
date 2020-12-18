@@ -9,6 +9,13 @@ namespace legion::rendering
     {
         sparse_map<ecs::entity_handle, std::pair<material_handle, model_handle>> m_instances;
 
+        async::spinlock m_insertionLock;
+        ecs::entity_set m_toInsert;
+        async::spinlock m_erasureLock;
+        ecs::entity_set m_toErase;
+        async::spinlock m_reinsertionLock;
+        ecs::entity_set m_toReinsert;
+
         void eraseInstance(ecs::entity_handle entity);
         void insertInstance(ecs::entity_handle entity);
         void reinsertInstance(ecs::entity_handle entity);

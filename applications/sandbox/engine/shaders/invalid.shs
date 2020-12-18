@@ -1,24 +1,22 @@
 #version 450
+#state CULL OFF
 
 generate(vertex, fragment)
 
 #include <stdio.shinc>
-
 
 shader(vertex)
 {
     void main(void)
     {
         gl_Position = ModelToScreenSpacePosition(position);
-        PropagateStdIO();
     }
 }
 
 shader(fragment)
 {
-    uniform sampler2D _texture;
     void main(void)
     {
-        fragment_color = texture(_texture, stdio(uv));
+        fragment_color = vec4(1.0, 0.0, 1.0, 1.0);
     }
 }

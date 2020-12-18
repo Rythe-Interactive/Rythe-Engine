@@ -10,10 +10,10 @@ namespace legion::rendering
         void render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime) override;
         priority_type priority() override;
 
-        template <class T,void(T::*Func)()>
+        template <class T,void(T::*Func)(app::window&, camera&, const camera::camera_input&, time::span)>
         static void addGuiRender(T* ptr)
         {
-            m_onGuiRender += delegate<void()>::create<T,Func>(ptr);
+            m_onGuiRender += delegate<void(app::window&, camera&, const camera::camera_input&, time::span)>::create<T,Func>(ptr);
         }
 
 
@@ -21,6 +21,6 @@ namespace legion::rendering
 
         /** @brief to render imgui things add a function here
          */
-        static multicast_delegate<void()> m_onGuiRender;
+        static multicast_delegate<void(app::window&, camera&, const camera::camera_input&, time::span)> m_onGuiRender;
     };
 }

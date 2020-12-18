@@ -8,15 +8,15 @@ namespace legion::rendering
     void SubmitStage::setup(app::window& context)
     {
         app::context_guard guard(context);
-        float quadVertices[24] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-          // positions   // texCoords
-          -1.0f,  1.0f,  0.0f, 1.0f,
-          -1.0f, -1.0f,  0.0f, 0.0f,
-           1.0f, -1.0f,  1.0f, 0.0f,
+        float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+          // positions         // texCoords
+          -1.0f,  1.0f,  1.0,  0.0f, 1.0f,
+          -1.0f, -1.0f,  1.0,  0.0f, 0.0f,
+           1.0f, -1.0f,  1.0,  1.0f, 0.0f,
 
-          -1.0f,  1.0f,  0.0f, 1.0f,
-           1.0f, -1.0f,  1.0f, 0.0f,
-           1.0f,  1.0f,  1.0f, 1.0f
+          -1.0f,  1.0f,  1.0,  0.0f, 1.0f,
+           1.0f, -1.0f,  1.0,  1.0f, 0.0f,
+           1.0f,  1.0f,  1.0,  1.0f, 1.0f
         };
 
         glGenVertexArrays(1, &m_quadVAO);
@@ -24,10 +24,10 @@ namespace legion::rendering
         glBindVertexArray(m_quadVAO);
         glBindBuffer(GL_ARRAY_BUFFER, m_quadVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+        glEnableVertexAttribArray(SV_POSITION);
+        glVertexAttribPointer(SV_POSITION, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(SV_TEXCOORD0);
+        glVertexAttribPointer(SV_TEXCOORD0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         m_screenShader = ShaderCache::create_shader("screen shader", "engine://shaders/screenshader.shs"_view);
     }
 
@@ -81,7 +81,7 @@ namespace legion::rendering
         glClear(GL_COLOR_BUFFER_BIT);
 
         m_screenShader.bind();
-        m_screenShader.get_uniform<texture_handle>("screenTexture").set_value(screenTexture);
+        m_screenShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(screenTexture);
         glBindVertexArray(m_quadVAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
