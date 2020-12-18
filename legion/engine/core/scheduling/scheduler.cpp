@@ -4,7 +4,7 @@
 
 namespace legion::core::scheduling
 {
-    constexpr size_type reserved_threads = 4;
+    constexpr size_type reserved_threads = 4; // OS, this, OpenAL, Drivers
          
     async::rw_spinlock Scheduler::m_threadsLock;
     sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;

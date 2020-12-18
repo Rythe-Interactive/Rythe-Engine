@@ -2,42 +2,33 @@
 
 generate(vertex, fragment)
 
+#include <color_correction.shinc>
 #include <stdio.shinc>
 
 
 shader(vertex)
 {
-
-    layout (location = 0) in vec2 aPos;
-    layout (location = 1) in vec2 aTexCoords;
-
-    out vec2 TexCoords;
     void main(void)
     {
-        TexCoords = aTexCoords;
-        gl_Position = vec4(aPos.x, aPos.y, 1.0, 1.0);
+        gl_Position = vec4(stdin(position), 1.0);
+        PropagateStdIO();
     }
 }
 
 
 shader(fragment)
 {
-    layout (location = 0) out vec4 FragColor;
-    layout (location = 1) out vec4 BrightColor;
-
-    in vec2 TexCoords;
-
-    uniform sampler2D screenTexture;
+    out vec4 BrightColor : SV_HDROVERDRAWOUT;
 
 
     void main(void)
     {
         //getting color from texture
-        vec3 col = texture(screenTexture, TexCoords).rgb;
-        FragColor = vec4(col, 1.0);
+        vec3 col = vec3(SceneColor(stdin(uv)));
+        fragment_color = vec4(col, 1.0);
 
         //check if fragment output is higher than threshold. If it is, set it as brightness color output.
-        float brightness = dot(col.rgb, vec3(0.2126, 0.7152, 0.0722));
+        float brightness = Luminance(col);
         if(brightness >= 0.7)
             BrightColor = vec4(col.rgb, 1.0);
         else

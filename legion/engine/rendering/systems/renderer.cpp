@@ -211,7 +211,7 @@ namespace legion::rendering
 
             math::mat4 projection = cam.get_projection(((float)viewportSize.x) / viewportSize.y);
 
-            camera::camera_input cam_input_data(view, projection, camPos, 0, camRot.forward());
+            camera::camera_input cam_input_data(view, projection, camPos, camRot.forward(), cam.nearz, cam.farz, viewportSize);
 
             if (!m_exiting.load(std::memory_order_relaxed))
                 m_pipelineProvider(win)->render(win, cam, cam_input_data, deltatime);

@@ -38,6 +38,7 @@
     <ClCompile Include="pipeline\base\pipelinebase.cpp" />
     <ClCompile Include="pipeline\base\renderstage.cpp" />
     <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
+    <ClCompile Include="pipeline\default\postfx\tonemapping.cpp" />
     <ClCompile Include="pipeline\default\stages\clearstage.cpp" />
     <ClCompile Include="pipeline\default\stages\framebufferresizestage.cpp" />
     <ClCompile Include="pipeline\default\stages\lightbufferstage.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="data\postprocessingeffect.hpp" />
     <ClInclude Include="data\screen_quad.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
+    <ClInclude Include="pipeline\default\postfx\tonemapping.hpp" />
     <ClInclude Include="pipeline\default\stages\postprocessingstage.hpp" />
     <ClInclude Include="pipeline\gui\stages\imguirenderstage.hpp" />
     <ClInclude Include="systems\pointcloudgeneration.hpp" />

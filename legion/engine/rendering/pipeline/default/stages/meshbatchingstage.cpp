@@ -4,87 +4,20 @@ namespace  legion::rendering
 {
     void MeshBatchingStage::eraseInstance(ecs::entity_handle entity)
     {
-        if (!m_instances.contains(entity))
-            return;
-
-        static id_type batchesId = nameHash("mesh batches");
-        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
-
-        if (!batches)
-            return;
-
-        auto& [material, model] = m_instances[entity];
-
-        (*batches)[material][model].erase(entity);
+        std::lock_guard guard(m_erasureLock);
+        m_toErase.insert(entity);
     }
 
     void MeshBatchingStage::insertInstance(ecs::entity_handle entity)
     {
-        static id_type batchesId = nameHash("mesh batches");
-        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
-
-        if (!batches)
-            return;
-
-        mesh_renderable renderable = entity.get_component_handles<mesh_renderable>();
-
-        if (!renderable)
-            return;
-
-        if (renderable.get_material() == invalid_material_handle)
-        {
-            log::warn("Entity {} has an invalid material.", entity.get_id());
-            return;
-        }
-        if (renderable.get_model() == invalid_model_handle)
-        {
-            log::warn("Entity {} has an invalid model.", entity.get_id());
-            return;
-        }
-
-        auto material = renderable.get_material();
-        auto model = renderable.get_model();
-
-        m_instances[entity] = std::make_pair(material, model);
-        (*batches)[material][model].insert(entity);
+        std::lock_guard guard(m_insertionLock);
+        m_toInsert.insert(entity);
     }
 
     void MeshBatchingStage::reinsertInstance(ecs::entity_handle entity)
     {
-        if (!m_instances.contains(entity))
-            return;
-
-        static id_type batchesId = nameHash("mesh batches");
-        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
-
-        if (!batches)
-            return;
-
-        auto& [material, model] = m_instances[entity];
-
-        (*batches)[material][model].erase(entity);
-
-        mesh_renderable renderable = entity.get_component_handles<mesh_renderable>();
-
-        if (!renderable)
-            return;
-
-        if (renderable.get_material() == invalid_material_handle)
-        {
-            log::warn("Entity {} has an invalid material.", entity.get_id());
-            return;
-        }
-        if (renderable.get_model() == invalid_model_handle)
-        {
-            log::warn("Entity {} has an invalid model.", entity.get_id());
-            return;
-        }
-
-        material = renderable.get_material();
-        model = renderable.get_model();
-
-        m_instances[entity] = std::make_pair(material, model);
-        (*batches)[material][model].insert(entity);
+        std::lock_guard guard(m_reinsertionLock);
+        m_toReinsert.insert(entity);
     }
 
     void MeshBatchingStage::onRendererCreate(events::component_creation<mesh_renderer>* event)
@@ -141,6 +74,88 @@ namespace  legion::rendering
         (void)camInput;
         (void)cam;
         (void)context;
+
+        static id_type batchesId = nameHash("mesh batches");
+        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
+
+        if (!batches)
+            return;
+        {
+            std::lock_guard guard(m_erasureLock);
+            for (auto& entity : m_toErase)
+            {
+                if (!m_instances.contains(entity))
+                    continue;
+
+                auto& [material, model] = m_instances[entity];
+
+                (*batches)[material][model].erase(entity);
+            }
+            m_toErase.clear();
+        }
+
+        {
+            std::lock_guard guard(m_insertionLock);
+            for (auto& entity : m_toInsert)
+            {
+                mesh_renderable renderable = entity.get_component_handles<mesh_renderable>();
+
+                if (!renderable)
+                    continue;
+
+                if (renderable.get_material() == invalid_material_handle)
+                {
+                    log::warn("Entity {} has an invalid material.", entity.get_id());
+                }
+                if (renderable.get_model() == invalid_model_handle)
+                {
+                    log::warn("Entity {} has an invalid model.", entity.get_id());
+                    continue;
+                }
+
+                auto material = renderable.get_material();
+                auto model = renderable.get_model();
+
+                m_instances[entity] = std::make_pair(material, model);
+                (*batches)[material][model].insert(entity);
+            }
+            m_toInsert.clear();
+        }
+
+        {
+            std::lock_guard guard(m_reinsertionLock);
+            for (auto& entity : m_toReinsert)
+            {
+                if (!m_instances.contains(entity))
+                    continue;
+
+                auto& [material, model] = m_instances[entity];
+
+                (*batches)[material][model].erase(entity);
+
+                mesh_renderable renderable = entity.get_component_handles<mesh_renderable>();
+
+                if (!renderable)
+                    continue;
+
+                if (renderable.get_material() == invalid_material_handle)
+                {
+                    log::warn("Entity {} has an invalid material.", entity.get_id());
+                }
+                if (renderable.get_model() == invalid_model_handle)
+                {
+                    log::warn("Entity {} has an invalid model.", entity.get_id());
+                    continue;
+                }
+
+                material = renderable.get_material();
+                model = renderable.get_model();
+
+                m_instances[entity] = std::make_pair(material, model);
+                (*batches)[material][model].insert(entity);
+            }
+            m_toReinsert.clear();
+        }
     }
 
     priority_type MeshBatchingStage::priority()

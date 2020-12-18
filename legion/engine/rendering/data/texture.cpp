@@ -88,7 +88,9 @@ namespace legion::rendering
         data.size.y = texSize.y;
         data.type = texture.type;
         data.pixels.resize(data.size.x * data.size.y);
-        glGetTexImage(static_cast<GLenum>(data.type), 0, components_to_format[static_cast<int>(texture.channels)], GL_RGBA, data.pixels.data());
+        glBindTexture(static_cast<GLenum>(data.type), texture.textureId);
+        glGetTexImage(static_cast<GLenum>(data.type), 0, components_to_format[static_cast<int>(texture.channels)], GL_FLOAT, data.pixels.data());
+        glBindTexture(static_cast<GLenum>(data.type), 0);
         return data;
     }
 

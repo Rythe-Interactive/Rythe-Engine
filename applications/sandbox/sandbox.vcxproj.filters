@@ -47,13 +47,13 @@
     <ClInclude Include="systems\gui_test.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="data\pp_blur.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\pp_edgedetect.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\pp_bloom.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\testsystemconvexhull.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test_filesystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

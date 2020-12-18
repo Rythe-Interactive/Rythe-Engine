@@ -186,6 +186,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="filesystem\view.hpp" />
     <ClInclude Include="compute\program.hpp" />
     <ClInclude Include="logging\logging.hpp" />
+    <ClInclude Include="math\close_enough.hpp" />
     <ClInclude Include="math\color.hpp" />
     <ClInclude Include="math\constants.hpp" />
     <ClInclude Include="math\glm\common.hpp" />
@@ -472,6 +473,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="math\glm\vec4.hpp" />
     <ClInclude Include="math\glm\vector_relational.hpp" />
     <ClInclude Include="math\math.hpp" />
+    <ClInclude Include="math\geometry.hpp" />
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />

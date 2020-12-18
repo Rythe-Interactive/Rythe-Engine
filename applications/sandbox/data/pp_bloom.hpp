@@ -49,7 +49,7 @@ namespace legion::rendering
             addRenderPass<&PostProcessingBloom::renderPass>();
         }
 
-        void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture)
+        void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime)
         {
             if (!m_brightTexture)
             {
@@ -68,7 +68,7 @@ namespace legion::rendering
             glDrawBuffers(2, attachments);
 
             m_brightnessThresholdShader.bind();
-            m_brightnessThresholdShader.get_uniform<texture_handle>("screenTexture").set_value(colortexture);
+            m_brightnessThresholdShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(colortexture);
             renderQuad();
             m_brightnessThresholdShader.release();
 
@@ -91,19 +91,20 @@ namespace legion::rendering
 
             for (uint i = 0; i < amount; i++)
             {
+                m_pingpongFrameBuffers[horizontal].bind();
+                m_gaussianBlurShader.bind();
                 m_gaussianBlurShader.get_uniform<bool>("horizontal").set_value(horizontal);
 
                 if (first_iteration)
                 {
                     first_iteration = false;
-                    m_gaussianBlurShader.get_uniform<texture_handle>("image").set_value(m_brightTexture);
+                    m_gaussianBlurShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(m_brightTexture);
                 }
                 else
                 {
-                    m_gaussianBlurShader.get_uniform<texture_handle>("image").set_value(m_pingpongTextureBuffers[!horizontal]);
+                    m_gaussianBlurShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(m_pingpongTextureBuffers[!horizontal]);
                 }
 
-                m_pingpongFrameBuffers[horizontal].bind();
                 renderQuad();
                 horizontal = !horizontal;
             }
@@ -115,8 +116,8 @@ namespace legion::rendering
 
             fbo.bind();
             m_combineShader.bind();
-            m_combineShader.get_uniform<texture_handle>("screenTexture").set_value(colortexture);
-            m_combineShader.get_uniform<texture_handle>("brightTexture").set_value(m_pingpongTextureBuffers[!horizontal]);
+            m_combineShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(colortexture);
+            m_combineShader.get_uniform_with_location<texture_handle>(SV_HDROVERDRAW).set_value(m_pingpongTextureBuffers[!horizontal]);
             renderQuad();
             m_combineShader.release();
             fbo.release();

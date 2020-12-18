@@ -145,12 +145,12 @@ namespace legion::physics
                             if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
                             {
                                 //get world edge direction
-                                math::vec3 edgeADirection= transformA * math::vec4(*edgeA->nextEdge->edgePositionPtr, 1) - 
-                                    transformA * math::vec4(*edgeA->edgePositionPtr, 1);
+                                math::vec3 edgeADirection= transformA * math::vec4(edgeA->nextEdge->edgePosition, 1) - 
+                                    transformA * math::vec4(edgeA->edgePosition, 1);
 
 
-                                math::vec3 edgeBDirection = transformB * math::vec4(*edgeB->nextEdge->edgePositionPtr, 1) -
-                                    transformB * math::vec4(*edgeB->edgePositionPtr, 1);
+                                math::vec3 edgeBDirection = transformB * math::vec4(edgeB->nextEdge->edgePosition, 1) -
+                                    transformB * math::vec4(edgeB->edgePosition, 1);
 
                                 edgeADirection = math::normalize(edgeADirection);
                                 edgeBDirection = math::normalize(edgeBDirection);
@@ -166,8 +166,8 @@ namespace legion::physics
                                 seperatingAxis = math::normalize(seperatingAxis);
 
                                 //get world edge position
-                                math::vec3 edgeAtransformedPosition = transformA * math::vec4(*edgeA->edgePositionPtr, 1);
-                                math::vec3 edgeBtransformedPosition = transformB * math::vec4(*edgeB->edgePositionPtr, 1);
+                                math::vec3 edgeAtransformedPosition = transformA * math::vec4(edgeA->edgePosition, 1);
+                                math::vec3 edgeBtransformedPosition = transformB * math::vec4(edgeB->edgePosition, 1);
 
                                 //check if its pointing in the right direction 
                                 if (math::dot(seperatingAxis, edgeAtransformedPosition - positionA) < 0)
@@ -376,6 +376,7 @@ namespace legion::physics
         }
 
         /**@brief Finds the distance of a point given a 3D plane
+        * Assumes the plane normal is normalized
         */
         static float PointDistanceToPlane(const math::vec3& planeNormal, const math::vec3& planePosition, const math::vec3& point)
         {
