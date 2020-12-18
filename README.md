@@ -21,8 +21,8 @@ The Legion-Core is built on an async compute minded design to take care of the l
 - GLTF & OBJ support
 
 ### Physics
-- Convex Hull Generation
-- Diviner Physics Engine
+- Convex quick hull generation
+- Diviner physics engine
 
 ### ECS
 - Data oriented
