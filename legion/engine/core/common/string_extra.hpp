@@ -72,10 +72,12 @@ namespace legion::core::common {
         static mask const* get_table()
         {
             //create const and normal rc
-            static const mask* const_rc = classic_table();
+            static const mask* const_rc = std::use_facet<std::ctype<char>>(std::locale()).table();
             static mask rc[table_size];
             static auto memory = memcpy(rc, const_rc, table_size * sizeof(mask));
-            static bool memory2 = str_tokens_helper<token, tokens...>(rc);
+            static char memory1 = rc[' '] = std::ctype<char>::digit;
+            static char memory2 = rc['\t'] = std::ctype<char>::digit;
+            static bool memory3 = str_tokens_helper<token, tokens...>(rc);
             //set spaces
 
             return rc;

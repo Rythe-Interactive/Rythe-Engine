@@ -57,13 +57,13 @@ namespace legion::core::scheduling
         };
 
         ProcessChain m_localChain;
-        async::readonly_rw_spinlock m_processChainsLock;
+        async::rw_spinlock m_processChainsLock;
         sparse_map<id_type, ProcessChain> m_processChains;
         sparse_map<id_type, std::thread::id> m_chainThreads;
-        async::readonly_rw_spinlock m_errorsLock;
+        async::rw_spinlock m_errorsLock;
         std::vector<thread_error> m_errors;
 
-        async::readonly_rw_spinlock m_exitsLock;
+        async::rw_spinlock m_exitsLock;
         std::vector<std::thread::id> m_exits;
 
         std::atomic_bool m_requestSync;
@@ -77,16 +77,16 @@ namespace legion::core::scheduling
         bool m_threadsShouldStart = false;
         bool m_lowPower;
 
-        static async::readonly_rw_spinlock m_threadsLock;
+        static async::rw_spinlock m_threadsLock;
         static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
         static std::queue<std::thread::id> m_unreservedThreads;
         static const uint m_maxThreadCount;
-        static async::readonly_rw_spinlock m_availabilityLock;
+        static async::rw_spinlock m_availabilityLock;
         static uint m_availableThreads;
 
-        static async::readonly_rw_spinlock m_jobQueueLock;
+        static async::rw_spinlock m_jobQueueLock;
         static std::queue<runnable> m_jobs;
-        static sparse_map<std::thread::id, async::readonly_rw_spinlock> m_commandLocks;
+        static sparse_map<std::thread::id, async::rw_spinlock> m_commandLocks;
         static sparse_map<std::thread::id, std::queue<Scheduler::runnable>> m_commands;
 
         static void threadMain(bool* exit, bool* start, bool lowPower);

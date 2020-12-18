@@ -2,7 +2,7 @@
 
 namespace legion::audio
 {
-    async::readonly_rw_spinlock AudioSystem::contextLock;
+    async::spinlock AudioSystem::contextLock;
     ALCdevice* AudioSystem::alDevice = nullptr;
     ALCcontext* AudioSystem::alcContext = nullptr;
     unsigned int AudioSystem::sourceCount = 0;

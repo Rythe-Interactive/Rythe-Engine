@@ -33,6 +33,8 @@ namespace legion::rendering
         GLenum m_type;
         GLint m_location;
 
+        shader_parameter_base(std::nullptr_t t): m_shaderId(invalid_id), m_name(""), m_type(0), m_location(-1){};
+
         shader_parameter_base(id_type shaderId, std::string_view name, GLenum type, GLint location) : m_shaderId(shaderId), m_name(name), m_type(type), m_location(location) {};
 
     public:
@@ -40,7 +42,7 @@ namespace legion::rendering
          */
         virtual bool is_valid() const
         {
-            return m_location != -1 && m_shaderId != invalid_id;
+            return m_location != -1;
         }
 
         /**@brief Returns the GLenum of the data type of the parameter.
@@ -72,7 +74,7 @@ namespace legion::rendering
     {
     public:
         uniform(id_type shaderId, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shaderId, name, type, location) {}
-
+        uniform(std::nullptr_t t) : shader_parameter_base(t){};
         /**@brief Set the value of the uniform.
          */
         void set_value(const T& value);
@@ -263,6 +265,7 @@ namespace legion::rendering
         GLint programId;
         std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
         std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
+        std::unordered_map<GLint, id_type> idOfLocation;
         std::string name;
         shader_state state;
 
@@ -284,13 +287,50 @@ namespace legion::rendering
         template<typename T>
         uniform<T> get_uniform(const std::string& name)
         {
-            return *dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
+            auto* ptr = dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
+            if (ptr)
+                return *ptr;
+            log::error("Uniform of type {} does not exist with name {}.", typeName<T>(), name);
+            return uniform<T>(nullptr);
+        }
+
+        template<typename T>
+        bool has_uniform(const std::string& name)
+        {
+            auto id = nameHash(name);
+            return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
         }
 
         template<typename T>
         uniform<T> get_uniform(id_type id)
         {
-            return *dynamic_cast<uniform<T>*>(uniforms[id].get());
+            auto* ptr = dynamic_cast<uniform<T>*>(uniforms[id].get());
+            if (ptr)
+                return *ptr;
+            log::error("Uniform of type {} does not exist with id {}.", typeName<T>(), id);
+            return uniform<T>(nullptr);
+        }
+
+        template<typename T>
+        bool has_uniform(id_type id)
+        {
+            return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
+        }
+
+        template<typename T>
+        uniform<T> get_uniform_with_location(GLint location)
+        {
+            auto* ptr = dynamic_cast<uniform<T>*>(uniforms[idOfLocation[location]].get());
+            if (ptr)
+                return *ptr;
+            log::error("Uniform of type {} does not exist with location {}.", typeName<T>(), location);
+            return uniform<T>(nullptr);
+        }
+
+        template<typename T>
+        bool has_uniform_with_location(GLint location)
+        {
+            return uniforms.count(idOfLocation[location]) && dynamic_cast<uniform<T>*>(uniforms[idOfLocation[location]].get()) != nullptr;
         }
 
         attribute get_attribute(const std::string& name)
@@ -335,7 +375,19 @@ namespace legion::rendering
         uniform<T> get_uniform(const std::string& name);
 
         template<typename T>
+        bool has_uniform(const std::string& name);
+
+        template<typename T>
         uniform<T> get_uniform(id_type uniformId);
+
+        template<typename T>
+        bool has_uniform(id_type uniformId);
+
+        template<typename T>
+        uniform<T> get_uniform_with_location(GLint location);
+
+        template<typename T>
+        bool has_uniform_with_location(GLint location);
 
         attribute get_attribute(const std::string& name);
 
@@ -358,15 +410,18 @@ namespace legion::rendering
     private:
 
         static sparse_map<id_type, shader> m_shaders;
-        static async::readonly_rw_spinlock m_shaderLock;
+        static async::rw_spinlock m_shaderLock;
 
         static shader* get_shader(id_type id);
 
         static void process_io(shader& shader, id_type id);
         static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);
 
-        static bool load_precompiled(const std::string& name, const fs::view& file, shader_ilo& ilo, shader_state& state);
+        static bool load_precompiled(const fs::view& file, shader_ilo& ilo, shader_state& state);
         static void store_precompiled(const fs::view& file, const shader_ilo& ilo, const shader_state& state);
+
+        static shader_handle create_invalid_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);
+
     public:
         static shader_handle create_shader(const std::string& name, const fs::view& file, shader_import_settings settings = default_shader_settings);
         static shader_handle create_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);
@@ -381,8 +436,33 @@ namespace legion::rendering
     }
 
     template<typename T>
+    inline bool shader_handle::has_uniform(const std::string& name)
+    {
+        return ShaderCache::get_shader(id)->has_uniform<T>(name);
+    }
+
+    template<typename T>
     uniform<T> shader_handle::get_uniform(id_type uniformId)
     {
         return ShaderCache::get_shader(id)->get_uniform<T>(uniformId);
     }
+
+    template<typename T>
+    inline bool shader_handle::has_uniform(id_type uniformId)
+    {
+        return ShaderCache::get_shader(id)->has_uniform<T>(uniformId);
+    }
+
+    template<typename T>
+    inline uniform<T> shader_handle::get_uniform_with_location(GLint location)
+    {
+        return ShaderCache::get_shader(id)->get_uniform_with_location<T>(location);
+    }
+
+    template<typename T>
+    inline bool shader_handle::has_uniform_with_location(GLint location)
+    {
+        return ShaderCache::get_shader(id)->has_uniform_with_location<T>(location);
+    }
+
 }

@@ -81,17 +81,33 @@ namespace legion::core::ecs
          */
         entity_handle& operator=(const entity_handle& other);
 
+        /**
+         * @brief Clones an entity.
+         * @param keep_parent If true sets the parent of the cloned entity to the same parent as the source [default: true]
+         * @param clone_children  If true copies all the children of the entity as well. [default: true]
+         * @param clone_components  If true copies all the components of the entity. [default: true]
+         * @return entity_handle A handle to the copied entity.
+        */
+        L_NODISCARD entity_handle clone(bool keep_parent = true, bool clone_children = true, bool clone_components = true) const;
+
         /**@brief Returns the type id's of the components this entity contains.
          * @returns hashed_sparse_set<id_type>& Sparse map with component type id as both the key as well as the value. (behaves as sparse_set with hash table)
          * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
          * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
          */
-        L_NODISCARD const hashed_sparse_set<id_type>& component_composition() const;
+        L_NODISCARD hashed_sparse_set<id_type> component_composition() const;
 
         /**@brief Cast to id_type returns the id of the entity this handle references.
          * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.
          */
         operator id_type() const { return get_id(); }
+
+        bool operator==(const entity_handle& other) const
+        {
+            return m_id == other.m_id;
+        }
+
+        operator bool() const { return valid(); }
 
         /**@brief Returns the id of the entity this handle references.
          * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.
@@ -440,7 +456,22 @@ namespace legion::core::ecs
          */
         bool valid() const;
     };
+}
 
+#if !defined(DOXY_EXCLUDE)
+namespace std
+{
+    template<> struct hash<legion::core::ecs::entity_handle>
+    {
+        std::size_t operator()(legion::core::ecs::entity_handle const& handle) const noexcept
+        {
+            return std::hash<legion::core::id_type>{}(handle.get_id());
+        }
+    };
+}
+#endif
 
-    using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
+namespace legion::core::ecs
+{
+    using entity_set = hashed_sparse_set<entity_handle>;
 }

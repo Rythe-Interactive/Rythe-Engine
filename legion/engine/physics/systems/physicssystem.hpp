@@ -6,8 +6,9 @@
 #include <physics/physics_contact.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/data/identifier.hpp>
-#include <physics/events/trigger_event.hpp>
+#include <physics/events/events.hpp>
 #include <memory>
+
 
 namespace legion::physics
 {
@@ -47,6 +48,7 @@ namespace legion::physics
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
+            rigidbodyIntegrationQuery.queryEntities();
             if (!IsPaused)
             {
                 integrateRigidbodies(deltaTime);
@@ -308,18 +310,13 @@ namespace legion::physics
                     if (isRigidbodyInvolved && !isTriggerInvolved)
                     {
                         manifoldsToSolve.push_back(m);
+                        raiseEvent<collision_event>(m,m_timeStep);
                     }
 
                     if (isTriggerInvolved)
                     {
-
-                        //TODO:(algo-ryth-mix,Developer-The-Great):
-                        //TODO:(cont.) The second paramenter here is supposed to be the delta-time of the physics-system
-                        //TODO:(cont.) A: do we need that? and B: it currently is not.
-                        //
-
                         //notify the event-bus
-                        raiseEvent<TriggerEvent>(m,1.0f);
+                        raiseEvent<trigger_event>(m,m_timeStep);
                         //notify both the trigger and triggerer
                         //TODO:(Developer-The-Great): the triggerer and trigger should probably received this event
                         //TODO:(cont.) through the event bus, we should probably create a filterable system here to

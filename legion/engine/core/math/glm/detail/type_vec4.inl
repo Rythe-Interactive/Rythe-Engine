@@ -5,6 +5,8 @@
 namespace legion::core::math{
 namespace detail
 {
+
+
 	template<typename T, qualifier Q, bool Aligned>
 	struct compute_vec4_add
 	{
@@ -128,6 +130,7 @@ namespace detail
 }//namespace detail
 
 	// -- Implicit basic constructors --
+
 
 #	if GLM_CONFIG_DEFAULTED_FUNCTIONS == GLM_DISABLE
 		template<typename T, qualifier Q>
@@ -308,6 +311,13 @@ namespace detail
 	{}
 
 	// -- Conversion vector constructors --
+
+	template<typename T, qualifier Q>
+	template<typename Archive>
+	inline void vec<4, T, Q>::serialize(Archive& archive)
+	{
+		archive(CEREAL_NVP(x), CEREAL_NVP(y), CEREAL_NVP(z), CEREAL_NVP(w));
+	}
 
 	template<typename T, qualifier Q>
 	template<typename A, typename B, typename C, qualifier P>

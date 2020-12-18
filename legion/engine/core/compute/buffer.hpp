@@ -5,7 +5,7 @@
 
 #include <string> // string
 
-/** 
+/**
  * @file buffer.hpp
  */
 
@@ -22,13 +22,13 @@ namespace legion::core::compute {
     enum class buffer_type : int
     {
         WRITE_BUFFER = 1,
-        READ_BUFFER = 2
+        READ_BUFFER = 2,
     };
 
     /**
      * @brief Bitwise or operator for type: buffer_type
      */
-    inline buffer_type operator|(const buffer_type& lhs,const buffer_type& rhs)
+    inline buffer_type operator|(const buffer_type& lhs, const buffer_type& rhs)
     {
         return static_cast<buffer_type>(static_cast<int>(lhs) | static_cast<int>(rhs));
     }
@@ -36,7 +36,7 @@ namespace legion::core::compute {
     /**
      * @brief Bitwise or assignment operator for type: buffer_type
      */
-    inline buffer_type& operator|=(buffer_type& lhs,const buffer_type& rhs)
+    inline buffer_type& operator|=(buffer_type& lhs, const buffer_type& rhs)
     {
         return lhs = lhs | rhs;
     }
@@ -51,7 +51,12 @@ namespace legion::core::compute {
     class Buffer
     {
     public:
-        Buffer(cl_context,byte*,size_t,buffer_type,std::string);
+
+        Buffer(cl_context, void*, size_type, size_type, size_type, cl_mem_object_type, cl_image_format*, buffer_type, std::string);
+        Buffer(cl_context, cl_uint, buffer_type, bool, std::string);
+        Buffer(cl_context, cl_uint, cl_uint, cl_uint, buffer_type, std::string);
+    
+        Buffer(cl_context, byte*, size_type, buffer_type, std::string);
 
         Buffer(Buffer&& b) noexcept;
         Buffer(const Buffer& b);
@@ -72,18 +77,19 @@ namespace legion::core::compute {
          */
         bool hasName() const
         {
-            return !m_name.empty(); 
+            return !m_name.empty();
         }
 
         /**
-         * @brief Checks if OpenCL can read from this buffer. 
+         * @brief Checks if OpenCL can read from this buffer.
          */
         bool isReadBuffer() const { return m_type == CL_MEM_READ_ONLY || m_type == CL_MEM_READ_WRITE; }
 
         /**
          * @brief Checks if OpenCL can write to this buffer.
          */
-        bool isWriteBuffer()const  { return m_type == CL_MEM_WRITE_ONLY || m_type == CL_MEM_READ_WRITE; }
+        bool isWriteBuffer()const { return m_type == CL_MEM_WRITE_ONLY || m_type == CL_MEM_READ_WRITE; }
+        bool isValid() const { return m_data != nullptr; };
     private:
         friend class Program;
         friend class Kernel;
@@ -92,7 +98,7 @@ namespace legion::core::compute {
         cl_mem m_memory_object;
         size_type* m_ref_count;
         cl_mem_flags m_type;
-        byte*  m_data;
+        byte* m_data;
         size_type m_size;
     };
 }

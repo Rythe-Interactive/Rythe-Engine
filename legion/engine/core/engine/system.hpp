@@ -21,6 +21,8 @@ namespace legion::core
 
         sparse_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
 
+        static ecs::entity_handle world;
+
     public:
         const id_type id;
         const std::string name;
@@ -91,6 +93,16 @@ namespace legion::core
         void raiseEvent(Args... arguments)
         {
             m_eventBus->raiseEvent<event_type>(arguments...);
+        }
+
+        void raiseEvent(std::unique_ptr<events::event_base>&& value)
+        {
+            m_eventBus->raiseEvent(std::move(value));
+        }
+
+        void raiseEventUnsafe(std::unique_ptr<events::event_base>&& value, id_type id)
+        {
+            m_eventBus->raiseEventUnsafe(std::move(value), id);
         }
 
         template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>

@@ -65,6 +65,7 @@ class MySystem final : public legion::System<MySystem>
     {
         // Do stuff every frame on the update thread
         static auto myQuery = createQuery<my_component, position>();
+        mQuery.queryEntities();
         for(auto entity : myQuery)
         {
             // Runs for every entity that has both my_component and a position component.
@@ -102,5 +103,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 See also the list of [contributors](AUTHORS.md) who participated in this project.
 
 ## License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+
+

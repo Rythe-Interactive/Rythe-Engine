@@ -4,34 +4,39 @@
 
 #define SV_START 0
 
-/* 0  */  #define SV_TEXCOORD0      SV_START   
-/* 1  */  #define SV_TEXCOORD1      SV_TEXCOORD0 + 1     
-/* 2  */  #define SV_TEXCOORD2      SV_TEXCOORD1 + 1     
-/* 3  */  #define SV_TEXCOORD3      SV_TEXCOORD2 + 1     
+/* in 0  */  #define SV_TEXCOORD0      SV_START   
+/* in 1  */  #define SV_TEXCOORD1      SV_TEXCOORD0 + 1     
+/* in 2  */  #define SV_TEXCOORD2      SV_TEXCOORD1 + 1     
+/* in 3  */  #define SV_TEXCOORD3      SV_TEXCOORD2 + 1     
+   
+/* in 4  */  #define SV_POSITION       SV_TEXCOORD3 + 1
+/* in 5  */  #define SV_COLOR          SV_POSITION + 1
+/* in 6  */  #define SV_NORMAL         SV_COLOR + 1     
+/* in 7  */  #define SV_TANGENT        SV_NORMAL + 1      
+/* in 8  */  #define SV_MODELMATRIX    SV_TANGENT + 1 
 
-/* 4  */  #define SV_POSITION       SV_TEXCOORD3 + 1          
-/* 5  */  #define SV_NORMAL         SV_POSITION + 1     
-/* 6  */  #define SV_TANGENT        SV_NORMAL + 1      
-/* 7  */  #define SV_MODELMATRIX    SV_TANGENT + 1 
+/* uniform 0  */  #define SV_VIEW           SV_START
+/* uniform 1  */  #define SV_PROJECT        SV_VIEW + 1
+/* uniform 2  */  #define SV_CAMPOS         SV_PROJECT + 1
+/* uniform 3  */  #define SV_VIEWDIR        SV_CAMPOS + 1
+/* uniform 4  */  #define SV_VIEWPORT       SV_VIEWDIR + 1
 
-/* 11 */  #define SV_ALBEDO         SV_MODELMATRIX + 4      
-/* 12 */  #define SV_NORMALHEIGHT   SV_ALBEDO + 1   
-/* 13 */  #define SV_MRDAO          SV_NORMALHEIGHT + 1    
-/* 14 */  #define SV_EMISSIVE       SV_MRDAO + 1        
-/* 15 */  #define SV_HEIGHTSCALE    SV_EMISSIVE + 1  
+/* uniform 0  */  #define SV_CAMERA         SV_VIEW
 
-/* 11 */  #define SV_MATERIAL       SV_ALBEDO
+/* uniform 5  */  #define SV_LIGHTCOUNT    SV_VIEWPORT + 1
+/* buffer 0  */   #define SV_LIGHTS         SV_START
 
-/* 0  */  #define SV_VIEW           SV_START
-/* 1  */  #define SV_PROJECT        SV_VIEW + 1
-/* 2  */  #define SV_CAMPOS         SV_PROJECT + 1
-/* 3  */  #define SV_VIEWDIR        SV_CAMPOS + 1
-/* 4  */  #define SV_CAMIDX         SV_VIEWDIR + 1
+/* uniform 6  */  #define SV_SCENECOLOR     SV_LIGHTCOUNT + 1
+/* uniform 7  */  #define SV_SCENEDEPTH     SV_SCENECOLOR + 1
+/* uniform 8  */  #define SV_HDROVERDRAW    SV_SCENEDEPTH + 1
 
-/* 0  */  #define SV_CAMERA         SV_VIEW
+/* uniform 12 */  #define SV_ALBEDO         SV_HDROVERDRAW + 4   
+/* uniform 13 */  #define SV_NORMALHEIGHT   SV_ALBEDO + 1   
+/* uniform 14 */  #define SV_MRDAO          SV_NORMALHEIGHT + 1    
+/* uniform 15 */  #define SV_EMISSIVE       SV_MRDAO + 1        
+/* uniform 16 */  #define SV_HEIGHTSCALE    SV_EMISSIVE + 1
 
-/* 5  */  #define SV_LIGHT_COUNT    SV_CAMIDX + 1
-/* 0  */  #define SV_LIGHTS         SV_START
+/* uniform 12 */  #define SV_MATERIAL       SV_ALBEDO
 
 namespace legion::rendering::detail
 {
@@ -44,10 +49,27 @@ namespace legion::rendering::detail
             defines.push_back("SV_TEXCOORD1=" +    std::to_string(SV_TEXCOORD1));
             defines.push_back("SV_TEXCOORD2=" +    std::to_string(SV_TEXCOORD2));
             defines.push_back("SV_TEXCOORD3=" +    std::to_string(SV_TEXCOORD3));
+
             defines.push_back("SV_POSITION=" +     std::to_string(SV_POSITION));
+            defines.push_back("SV_COLOR=" +        std::to_string(SV_COLOR));
             defines.push_back("SV_NORMAL=" +       std::to_string(SV_NORMAL));
             defines.push_back("SV_TANGENT=" +      std::to_string(SV_TANGENT));
             defines.push_back("SV_MODELMATRIX=" +  std::to_string(SV_MODELMATRIX));
+
+            defines.push_back("SV_VIEW=" +         std::to_string(SV_VIEW));
+            defines.push_back("SV_PROJECT=" +      std::to_string(SV_PROJECT));
+            defines.push_back("SV_CAMPOS=" +       std::to_string(SV_CAMPOS));
+            defines.push_back("SV_VIEWDIR=" +      std::to_string(SV_VIEWDIR));
+            defines.push_back("SV_VIEWPORT=" +     std::to_string(SV_VIEWPORT));
+
+            defines.push_back("SV_CAMERA=" +       std::to_string(SV_CAMERA));
+
+            defines.push_back("SV_LIGHTCOUNT=" +   std::to_string(SV_LIGHTCOUNT));
+            defines.push_back("SV_LIGHTS=" +       std::to_string(SV_LIGHTS));
+
+            defines.push_back("SV_SCENECOLOR=" +   std::to_string(SV_SCENECOLOR));
+            defines.push_back("SV_SCENEDEPTH=" +   std::to_string(SV_SCENEDEPTH));
+            defines.push_back("SV_HDROVERDRAW=" +  std::to_string(SV_HDROVERDRAW));
 
             defines.push_back("SV_ALBEDO=" +       std::to_string(SV_ALBEDO));
             defines.push_back("SV_NORMALHEIGHT=" + std::to_string(SV_NORMALHEIGHT));
@@ -56,16 +78,6 @@ namespace legion::rendering::detail
             defines.push_back("SV_HEIGHTSCALE=" +  std::to_string(SV_HEIGHTSCALE));
 
             defines.push_back("SV_MATERIAL=" +     std::to_string(SV_MATERIAL));
-
-            defines.push_back("SV_VIEW=" +         std::to_string(SV_VIEW));
-            defines.push_back("SV_PROJECT=" +      std::to_string(SV_PROJECT));
-            defines.push_back("SV_CAMPOS=" +       std::to_string(SV_CAMPOS));
-            defines.push_back("SV_VIEWDIR=" +      std::to_string(SV_VIEWDIR));
-            defines.push_back("SV_CAMIDX=" +       std::to_string(SV_CAMIDX));
-
-            defines.push_back("SV_CAMERA=" +       std::to_string(SV_CAMERA));
-            defines.push_back("SV_LIGHTS=" +       std::to_string(SV_LIGHTS));
-            defines.push_back("SV_LIGHT_COUNT=" +  std::to_string(SV_LIGHT_COUNT));
         }
 
         return defines;

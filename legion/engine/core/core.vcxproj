@@ -118,8 +118,10 @@ del ".\xcopyexclude"</Command>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
     <ClInclude Include="async\ring_sync_lock.hpp" />
-    <ClInclude Include="async\readonly_rw_spinlock.hpp" />
+    <ClInclude Include="async\rw_spinlock.hpp" />
+    <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
+    <ClInclude Include="common\managed_resource.hpp" />
     <ClInclude Include="compute\buffer.hpp" />
     <ClInclude Include="compute\context.hpp" />
     <ClInclude Include="common\common.hpp" />
@@ -184,6 +186,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="filesystem\view.hpp" />
     <ClInclude Include="compute\program.hpp" />
     <ClInclude Include="logging\logging.hpp" />
+    <ClInclude Include="math\close_enough.hpp" />
     <ClInclude Include="math\color.hpp" />
     <ClInclude Include="math\constants.hpp" />
     <ClInclude Include="math\glm\common.hpp" />
@@ -470,6 +473,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="math\glm\vec4.hpp" />
     <ClInclude Include="math\glm\vector_relational.hpp" />
     <ClInclude Include="math\math.hpp" />
+    <ClInclude Include="math\geometry.hpp" />
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />
@@ -491,7 +495,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="async\readonly_rw_spinlock.cpp"/>
+    <ClCompile Include="async\rw_spinlock.cpp" />
+    <ClCompile Include="async\spinlock.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\high_level\function.cpp" />

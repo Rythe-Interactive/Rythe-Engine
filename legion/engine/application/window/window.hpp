@@ -16,53 +16,71 @@ namespace legion::application
         window() = default;
 
         GLFWwindow* handle;
-        async::readonly_rw_spinlock* lock;
+        async::spinlock* lock;
 
         operator GLFWwindow* () const { return handle; }
         window& operator=(GLFWwindow* ptr) { handle = ptr; return *this; }
 
-        inline void enableCursor(bool enabled) const
-        {
-            async::readwrite_guard guard(*lock);
-            ContextHelper::makeContextCurrent(handle);
-            ContextHelper::setInputMode(handle, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
-            ContextHelper::makeContextCurrent(nullptr);
-        }
+        void enableCursor(bool enabled) const;
 
-        inline void setSwapInterval(uint interval)
-        {
-            async::readwrite_guard guard(*lock);
-            ContextHelper::makeContextCurrent(handle);
-            ContextHelper::swapInterval(interval);
-            m_swapInterval = interval;
-            ContextHelper::makeContextCurrent(nullptr);
-        }
+        void setSwapInterval(uint interval);
 
-        inline void show() const
-        {
-            ContextHelper::showWindow(handle);
-        }
+        void show() const;
 
-        inline int swapInterval() const
-        {
-            return m_swapInterval;
-        }
+        int swapInterval() const;
 
-        inline bool isFullscreen() const
-        {
-            return m_isFullscreen;
-        }
+        bool isFullscreen() const;
 
-        inline const std::string& title() const
-        {
-            return m_title;
-        }
+        math::ivec2 size() const;
+
+        math::ivec2 framebufferSize() const;
+
+        const std::string& title() const;
 
     private:
         std::string m_title;
         bool m_isFullscreen;
         int m_swapInterval;
+        math::ivec2 m_size;
     };
 
     const window invalid_window = {};
+
+    struct context_guard
+    {
+    private:
+        bool m_contextIsValid = false;
+
+    public:
+        context_guard(window win);
+        bool contextIsValid() { return m_contextIsValid; }
+
+        context_guard() = delete;
+        context_guard(const context_guard&) = delete;
+        context_guard(context_guard&&) = delete;
+
+        ~context_guard();
+
+    private:
+        window m_win;
+    };
+
 }
+
+
+#if !defined(DOXY_EXCLUDE)
+namespace std
+{
+    template<>
+    struct hash<legion::application::window>
+    {
+        std::size_t operator()(legion::application::window const& win) const noexcept
+        {
+            std::size_t hash;
+            std::size_t h1 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.handle));
+            std::size_t h2 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.lock));
+            return h1 ^ (h2 << 1);
+        }
+    };
+}
+#endif

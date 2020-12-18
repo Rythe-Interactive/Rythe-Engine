@@ -64,7 +64,7 @@ namespace legion::core::compute
     Kernel& Kernel::setBuffer(Buffer buffer, cl_uint index)
     {
         //set kernel argument
-        const cl_int ret = clSetKernelArg(m_func, index, sizeof(cl_mem), &buffer.m_memory_object);
+        const cl_int ret = clSetKernelArg(m_func, index, buffer.m_data ? sizeof(cl_mem) : sizeof(cl_sampler), &buffer.m_memory_object);
 
         //check clSetKernelArg
         if (ret != CL_SUCCESS)
@@ -102,6 +102,11 @@ namespace legion::core::compute
             but we still need to read it
 
         */
+
+        //first check if the buffer has data
+        if (!buffer.m_data)
+            return *this;
+
         cl_int ret;
         switch (buffer.m_type)
         {
@@ -145,26 +150,26 @@ namespace legion::core::compute
         return *this;
     }
 
-    Kernel& Kernel::setAndEnqueBuffer(Buffer buffer, block_mode blocking)
+    Kernel& Kernel::setAndEnqueueBuffer(Buffer buffer, block_mode blocking)
     {
         //get name from buffer
         if (buffer.m_name.empty())
             log::warn("Encountered unnamed buffer! binding to a Kernel-location will fail!");
-        return setAndEnqueBuffer(buffer, buffer.m_name, blocking);
+        return setAndEnqueueBuffer(buffer, buffer.m_name, blocking);
     }
 
 
-    Kernel& Kernel::setAndEnqueBuffer(Buffer buffer, const std::string& name, block_mode blocking)
+    Kernel& Kernel::setAndEnqueueBuffer(Buffer buffer, const std::string& name, block_mode blocking)
     {
         //translate name to index
         param_find([this, b = std::forward<Buffer>(buffer), blocking](cl_uint index)
         {
-            setAndEnqueBuffer(b, index, blocking);
+            setAndEnqueueBuffer(b, index, blocking);
         }, name);
         return *this;
     }
 
-    Kernel& Kernel::setAndEnqueBuffer(Buffer buffer, cl_uint index, block_mode blocking)
+    Kernel& Kernel::setAndEnqueueBuffer(Buffer buffer, cl_uint index, block_mode blocking)
     {
         //set and ... enqueue_buffer
         //nothing fun to see here
@@ -175,14 +180,15 @@ namespace legion::core::compute
 
     Kernel& Kernel::dispatch()
     {
+        auto [globals, locals, size] = parse_dimensions();
         //enqueue the Kernel in the command queue
         cl_int ret = clEnqueueNDRangeKernel(
             m_queue,
             m_func,
-            1,
+            size,
             nullptr,
-            &m_global_size,
-            &m_local_size,
+            globals.data(),
+            locals.data(),
             0,
             nullptr,
             nullptr
@@ -201,11 +207,8 @@ namespace legion::core::compute
         //execute all commands in the queue
         clFlush(m_queue);
 
-        //probably not necessarily necessary
+        //waits for all tasks
         clFinish(m_queue);
-
-        //neccessary 
-        clReleaseCommandQueue(m_queue);
     }
 
     size_t Kernel::getMaxWorkSize() const
@@ -224,13 +227,14 @@ namespace legion::core::compute
         m_default_mode(buffer_type::READ_BUFFER),
         m_prog(program),
         m_func(kernel),
-        m_global_size(0),
+        m_global_size(size_type(0)),
         m_local_size(64)
     {
+        m_refcounter = new size_t(1);
         m_queue = program->make_cq();
     }
-
-    Kernel& Kernel::local(size_t s)
+  
+    Kernel& Kernel::local(size_type s)
     {
 
         //TODO(algo-ryth-mix) This should cap at CL_KERNEL_WORK_GROUP_SIZE 
@@ -238,9 +242,38 @@ namespace legion::core::compute
         return *this;
     }
 
-    Kernel& Kernel::global(size_t s)
+    Kernel& Kernel::global(dimension s)
     {
         m_global_size = s;
+        return *this;
+    }
+    Kernel& Kernel::global(size_type s0, size_type s1)
+    {
+        m_global_size = d2{ s0,s1 };
+        return *this;
+    }
+    Kernel& Kernel::global(size_type s0, size_type s1, size_type s2)
+    {
+        m_global_size = d3{ s0,s1,s2 };
+        return *this;
+    }
+
+    Kernel& Kernel::setKernelArg(void* value, size_type size, const std::string& name)
+    {
+        //translate name to index
+        param_find([this, size, v = std::forward<void*>(value)](cl_uint index)
+        {
+            this->setKernelArg(v, size, index);
+        }, name);
+        return *this;
+    }
+
+    Kernel& Kernel::setKernelArg(void* value, size_type size, cl_uint index)
+    {
+        if (clSetKernelArg(m_func, index, size, value) != CL_SUCCESS)
+        {
+            log::warn("clSetKernelArg failed for Arg at index {}", index);
+        }
         return *this;
     }
 }

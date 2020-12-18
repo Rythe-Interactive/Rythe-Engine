@@ -23,7 +23,7 @@ namespace legion::physics
 
         auto sendToInitialOutput = [&outputContactPoints,&incTransform](HalfEdgeEdge* edge)
         {
-            math::vec3 localVertexPosition = *edge->edgePositionPtr;
+            math::vec3 localVertexPosition = edge->edgePosition;
             math::vec3 worldVertex = incTransform * math::vec4(localVertexPosition, 1);
 
             outputContactPoints.push_back(ContactVertex(worldVertex,edge->label));

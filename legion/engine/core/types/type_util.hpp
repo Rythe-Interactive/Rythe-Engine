@@ -25,9 +25,21 @@ namespace legion::core
     }
 
     template<typename T, typename U>
-    constexpr T* force_cast(U value)
+    constexpr T* force_cast(const U& value)
     {
         return reinterpret_cast<T*>(&value);
+    }
+
+    template<typename T, typename U>
+    constexpr T* force_cast(U&& value)
+    {
+        return reinterpret_cast<T*>(&value);
+    }
+
+    template<typename T, typename U>
+    constexpr T* force_cast(U* value)
+    {
+        return reinterpret_cast<T*>(value);
     }
 
     /**@brief Returns typeid(T).name().
@@ -36,30 +48,24 @@ namespace legion::core
     template<typename T>
     cstring typeName()
     {
-        static cstring name = nullptr;
-        if (!name)
-            name = typeid(T).name();
+        static cstring name = typeid(T).name();
         return name;
     }
 
     template<typename T>
     cstring undecoratedTypeName()
     {
-        static char* name = nullptr;
-        if (!name)
+        static std::string name;
+        if (name.empty())
         {
-            std::string typeName = typeid(T).name();
+            name = std::string(typeid(T).name());
             size_type token;
-            if ((token = typeName.find("struct ")) != std::string::npos)
-                typeName = typeName.substr(token + 6);
-            else if ((token = typeName.find("class ")) != std::string::npos)
-                typeName = typeName.substr(token + 5);
-
-            name = (char*)malloc(typeName.size());
-            typeName.copy(name, std::string::npos);
-            name[typeName.size()] = '\0';
+            if ((token = name.find("struct ")) != std::string::npos)
+                name = name.substr(token + 6);
+            else if ((token = name.find("class ")) != std::string::npos)
+                name = name.substr(token + 5);
         }
-        return name;
+        return name.c_str();
     }
 
     /**@brief Returns typeid(T).name().

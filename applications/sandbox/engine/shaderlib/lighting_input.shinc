@@ -25,6 +25,8 @@ struct Light
 
 struct Material
 {
+    mat3 tbn;
+    float height;
     vec4 albedo;
  	vec3 normal;
  	float metallic;
@@ -32,8 +34,8 @@ struct Material
     float roughness;
     float dielectric;
  	float ambientOcclusion;
-    vec3 F0;
     vec2 texcoords;
+    vec3 F0;
 };
 
 vec3 Fresnel0(vec4 albedo, float metallic, float dielectric)
@@ -47,7 +49,7 @@ layout(std140, binding = SV_LIGHTS) readonly buffer LightsBuffer
 	Light lights[];
 };
 
-uniform uint light_count : SV_LIGHT_COUNT;
+uniform uint _L_light_count : SV_LIGHTCOUNT;
 
 struct MaterialInput
 {
@@ -63,29 +65,29 @@ uniform MaterialInput material_input : SV_MATERIAL;
 
 Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTangent)
 {
-    mat3 tbn = GetTBNMatrix(worldNormal, worldTangent);
-
     Material material;
-    material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, tbn);
+    material.tbn = GetTBNMatrix(worldNormal, worldTangent);
+    material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn, material.height);
     material.albedo = AlbedoMap(material_input.albedo, material.texcoords);
-    material.normal = NormalMap(material_input.normalHeight, material.texcoords, tbn);
+    material.normal = NormalMap(material_input.normalHeight, material.texcoords, material.tbn);
     vec4 MRDAo = LightingData(material_input.MRDAo, material.texcoords);
     material.metallic = min(MRDAo.r, 1.0 - epsilon);
     material.roughness = MRDAo.g;
     material.dielectric = MRDAo.b;
     material.ambientOcclusion = MRDAo.a;
- 	material.emissive = EmissiveMap(material_input.emissive, material.texcoords);
     material.F0 = Fresnel0(material.albedo, material.metallic, material.dielectric);
+ 	material.emissive = EmissiveMap(material_input.emissive, material.texcoords);
 
     return material;
 }
+
 
 #if defined(LIGHTING_INCL)
 vec3 GetAllLighting(Material material, Camera camera, vec3 worldPosition)
 {
     vec3 lighting = vec3(0.0);
 
-    for(int i = 0; i < light_count; i++)
+    for(int i = 0; i < _L_light_count; i++)
         lighting += CalculateLight(lights[i], camera, material, worldPosition);
 
     return lighting + GetAmbientLight(material.ambientOcclusion, material.albedo.rgb) + material.emissive;

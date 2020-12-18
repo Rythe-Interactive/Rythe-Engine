@@ -21,6 +21,7 @@
 #include <memory>
 #include <stdexcept>
 #include <utility>
+#include <functional>
 
 #include <core/platform/platform.hpp>
 
@@ -279,6 +280,25 @@ namespace legion::core::common {
             return get();
         }
 
+        template <class Func,class... Args>
+        auto except(Func&& f,Args&&... args) -> decltype(auto)
+        {
+            if(has_err())
+            {
+                return std::invoke(f,get_error(),std::forward<Args>(args)...);
+            }
+            return get();
+        }
+        template <class Func,class... Args>
+        auto except(const Func& f,Args&&... args) -> decltype(auto)
+        {
+            if(has_err())
+            {
+                return std::invoke(f,get_error(),std::forward<Args>(args)...);
+            }
+            return get();
+        }
+
         L_NODISCARD bool valid() const noexcept
         {
             return m_ok != nullptr;
@@ -396,6 +416,19 @@ namespace legion::core::common {
         {
             return m_r.get();
         }
+
+        template <class Func,class... Args>
+        auto except(Func&& f,Args&&... args) -> decltype(auto)
+        {
+            m_r.except(std::forward<Func>(f),std::forward<Args>(args)...);
+        }
+
+        template <class Func,class... Args>
+        auto except(const Func& f,Args&&... args) -> decltype(auto)
+        {
+            m_r.except(f,std::forward<Args>(args)...);
+        }
+
 
         err_type get_error()
         {
