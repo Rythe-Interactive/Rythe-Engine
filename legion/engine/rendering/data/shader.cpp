@@ -104,7 +104,9 @@ namespace legion::rendering
             }
 
             // Insert uniform into the uniform list.
-            shader.uniforms[nameHash(std::string(name).c_str())] = std::unique_ptr<shader_parameter_base>(uniform);
+            auto hashid = nameHash(std::string(name));
+            shader.uniforms[hashid] = std::unique_ptr<shader_parameter_base>(uniform);
+            shader.idOfLocation[location] = hashid;
         }
 
         delete[] uniformNameBuffer; // Delete name buffer
@@ -339,6 +341,7 @@ namespace legion::rendering
                     }
                 }
             }
+            L_FALLTHROUGH;
             default:
             {
                 ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
@@ -621,6 +624,7 @@ namespace legion::rendering
                     }
                 }
             }
+            L_FALLTHROUGH;
             default:
             {
                 ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)

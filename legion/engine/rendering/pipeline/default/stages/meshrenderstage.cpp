@@ -61,12 +61,9 @@ namespace legion::rendering
 
         for (auto [material, instancesPerMaterial] : *batches)
         {
-            if (material.id == invalid_id)
-                log::debug("got em boys");
-
             camInput.bind(material);
-            if (material.has_param<uint>(SV_LIGHT_COUNT))
-                material.set_param<uint>(SV_LIGHT_COUNT, *lightCount);
+            if (material.has_param<uint>(SV_LIGHTCOUNT))
+                material.set_param<uint>(SV_LIGHTCOUNT, *lightCount);
 
             material.bind();
 

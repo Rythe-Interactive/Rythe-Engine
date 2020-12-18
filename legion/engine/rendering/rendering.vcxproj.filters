@@ -38,6 +38,8 @@
     <ClCompile Include="systems\renderer.cpp" />
     <ClCompile Include="util\ini.c" />
     <ClCompile Include="pipeline\gui\stages\imguirenderstage.cpp" />
+    <ClCompile Include="data\postprocessingeffect.cpp" />
+    <ClCompile Include="pipeline\default\stages\postprocessingstage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
@@ -82,6 +84,10 @@
     <ClInclude Include="util\settings.hpp" />
     <ClInclude Include="pipeline\gui\stages\imguirenderstage.hpp" />
     <ClInclude Include="util\gui.hpp" />
+    <ClInclude Include="data\postprocessingeffect.hpp" />
+    <ClInclude Include="data\screen_quad.hpp" />
+    <ClInclude Include="pipeline\default\stages\postprocessingstage.hpp" />
+    <ClInclude Include="pipeline\default\postfx\tonemapping.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\buffer.inl" />

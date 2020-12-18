@@ -10,22 +10,9 @@ namespace legion::rendering
     {
         using namespace legion::core::fs::literals;
 
-        float quadVertices[24] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-          // positions   // texCoords
-          -1.0f,  1.0f,  0.0f, 1.0f,
-          -1.0f, -1.0f,  0.0f, 0.0f,
-           1.0f, -1.0f,  1.0f, 0.0f,
-
-          -1.0f,  1.0f,  0.0f, 1.0f,
-           1.0f, -1.0f,  1.0f, 0.0f,
-           1.0f,  1.0f,  1.0f, 1.0f
-        };
         app::context_guard guard(context);
 
-        m_quadVAO = vertexarray::generate();
-        m_quadVBO = buffer(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-        m_quadVAO.setAttribPointer(m_quadVBO, 0, 2, GL_FLOAT, false, 4 * sizeof(float), 0);
-        m_quadVAO.setAttribPointer(m_quadVBO, 1, 2, GL_FLOAT, false, 4 * sizeof(float), 2 * sizeof(float));
+        m_screenQuad = screen_quad::generate();
 
         m_drawFBO = framebuffer(GL_FRAMEBUFFER);
 
@@ -120,11 +107,9 @@ namespace legion::rendering
         {
             fbo->attach(textures[0], GL_COLOR_ATTACHMENT0);
             fbo->bind();
-            m_quadVAO.bind();
             m_screenShader.bind();
-            m_screenShader.get_uniform<texture_handle>(screenId).set_value(textures[1]);
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-            m_quadVAO.release();
+            m_screenShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(textures[1]);
+            m_screenQuad.render();
             fbo->release();
         }
 
