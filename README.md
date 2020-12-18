@@ -35,11 +35,11 @@ The Legion-Core is built on an async compute minded design to take care of the l
 - easy extensebility
 
 ### Audio
-- Full 3D audio
+- Spatial audio
 - Non-spatial audio
 - Dopplereffect
 - MP3 & WAV support
-- Mono-Stereo conversion
+- Stereo->Mono conversion
 
 ### Compute 
 - OpenCL frontend with support for buffers & textures
