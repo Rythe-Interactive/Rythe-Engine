@@ -24,10 +24,10 @@ public:
         //reportSystem<TestSystemConvexHull>();
 
         
-        //reportSystem<TestSystem>();
+        reportSystem<TestSystem>();
 
         reportComponentType<sah>();
-        reportSystem<SceneTestSystem1>();
+        //reportSystem<SceneTestSystem1>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
     }

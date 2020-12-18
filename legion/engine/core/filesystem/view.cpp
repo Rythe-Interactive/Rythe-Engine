@@ -244,7 +244,6 @@ namespace legion::core::filesystem
             for (auto entry : resolver->ls())
             {
                 results.emplace_back(entry);
-                log::debug(entry);
             }
             return decay(Ok(results));
         }

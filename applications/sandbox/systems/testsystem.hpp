@@ -561,8 +561,8 @@ public:
             ent.add_components<transform>();
         }
 
-        position positions[1000];
-        for (int i = 0; i < 1000; i++)
+        position positions[5000];
+        for (int i = 0; i < 5000; i++)
         {
             positions[i] = position(math::linearRand(math::vec3(-10, -10, -10), math::vec3(10, 10, 10)));
         }
@@ -570,7 +570,7 @@ public:
         time::timer clock;
         time::timer entityClock;
         time::time_span<time64> entityTime;
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 5000; i++)
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(pbrH));
