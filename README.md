@@ -8,6 +8,55 @@
 Legion-Engine is a data oriented C++17 OpenGL game engine built to make optimal use of modern hardware.<br><br>
 The Legion-Core is built on an async compute minded design to take care of the logic and an ECS to take care of the data. This allows the engine and editor to utilize all the power they can find and to be extremely modular.
 
+## Features
+### Rendering
+- Post-processing stack
+- Particle system
+- PBR
+- Imgui
+- Automatic exposure
+- Modular rendering pipeline
+- Custom shader support & shader standard library
+- shader precompiler [lgnspre](https://github.com/Legion-Engine/LegionShaderPreprocess)
+- GLTF & OBJ support
+
+### Physics
+- Convex quick hull generation
+- Diviner physics engine
+
+### ECS
+- Data oriented
+- Thread-safe
+- "Archetype" support
+
+### Eventsystem
+- Thread-safe eventbus
+- Unique & Persistent events
+- easy extensebility
+
+### Audio
+- Spatial audio
+- Non-spatial audio
+- Dopplereffect
+- MP3 & WAV support
+- Stereo->Mono conversion
+
+### Compute 
+- OpenCL frontend with support for buffers & textures
+- High level abstractions
+
+### Misc
+- Virtual filesystem
+- Serialization & Scenes(Alpha)
+- Job scheduling
+- Pipeline scheduling for multiple main threads
+- Modular Processchains
+- Custom logging support
+- Custom input system
+- Extended standard library
+- Modular Architecture
+- Math extensions to GLM
+
 ## Getting Started
 ### Prerequisites
 The engine is by default build using Visual Studio 19 using the Clang++ compiler and C++17.
