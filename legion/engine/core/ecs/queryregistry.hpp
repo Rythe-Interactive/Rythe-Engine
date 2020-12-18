@@ -14,7 +14,7 @@ namespace legion::core::ecs
     class EcsRegistry;
     class entity_handle;
 
-    using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
+    using entity_set = hashed_sparse_set<entity_handle>;
 
     /**@class QueryRegistry
      * @brief Main manager and owner of all queries and query related objects.

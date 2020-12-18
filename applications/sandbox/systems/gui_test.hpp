@@ -49,11 +49,11 @@ class GuiTestSystem : public System<GuiTestSystem>
         createProcess<&GuiTestSystem::update>("Update");
     }
 
-    void onGUI()
+    void onGUI(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
         ImGuiIO& io = ImGui::GetIO();
 
-        setProjectionAndView(io.DisplaySize.x/io.DisplaySize.y);
+        setProjectionAndView(io.DisplaySize.x/io.DisplaySize.y, cam, camInput);
 
 
         using namespace imgui;
@@ -92,18 +92,9 @@ class GuiTestSystem : public System<GuiTestSystem>
 
     }
 
-    void setProjectionAndView(float aspect)
+    void setProjectionAndView(float aspect, const camera& cam, const camera::camera_input& camInput)
     {
-        cameraQuery.queryEntities();
-        ecs::entity_handle cam_ent = cameraQuery[0];
-        auto [cposh, croth, cscaleh] = cam_ent.get_component_handles<transform>();
-
-        math::mat4 temp(1.0f);
-        math::compose(temp, cscaleh.read(), croth.read(), cposh.read());
-        view = inverse(temp);
-
-        const auto cam = cam_ent.get_component_handle<camera>().read();
-        const float ratio = 16.0f/9.0f;
+        view = camInput.view;
         projection = math::perspective(math::deg2rad(cam.fov*aspect),aspect,cam.nearz,cam.farz);
     }
 };

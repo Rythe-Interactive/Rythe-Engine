@@ -5,10 +5,12 @@
 
 #define setup_priority 64
 #define opaque_priority 32
-#define transparent_priority 16
 //      default_priority 0
-#define post_fx_priority -32
-#define submit_priority -64
+#define transparent_priority -16
+#define volumetric_priority -32
+#define post_fx_priority -48
+#define ui_priority -64
+#define submit_priority -96
 
 namespace legion::rendering
 {
@@ -17,15 +19,27 @@ namespace legion::rendering
     class RenderStageBase
     {
         friend class Renderer;
+    private:
+        bool m_isInitialized = false;
+
     protected:
         static ecs::EcsRegistry* m_ecs;
         static schd::Scheduler* m_scheduler;
         static events::EventBus* m_eventBus;
 
+        virtual void setup(app::window& context) LEGION_PURE;
+
     public:
         static RenderPipelineBase* m_pipeline;
 
-        virtual void setup(app::window& context) LEGION_PURE;
+        inline bool isInitialized() { return m_isInitialized; }
+
+        inline void init(app::window& context)
+        {
+            m_isInitialized = true;
+            setup(context);
+        }
+
         virtual void render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime) LEGION_PURE;
         virtual priority_type priority() LEGION_IMPURE_RETURN(default_priority);
 

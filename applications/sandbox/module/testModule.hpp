@@ -19,7 +19,8 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
-        reportSystem<TestSystemConvexHull>();
+        reportComponentType<sah>();
+        reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
     }
