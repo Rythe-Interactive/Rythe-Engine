@@ -80,7 +80,8 @@ namespace legion::rendering
 
         float luminance = math::dot(math::vec3(colors[0].r, colors[0].g, colors[0].b), math::vec3(0.2126f, 0.7152f, 0.0722f));
 
-        float newExposure = math::clamp(math::pow(math::max((1.0f - luminance) - 0.45f, 0.f), 3.f) * 100.f, 0.f, 10.f);
+        float newExposure = math::clamp(math::pow(math::max((1.0f - luminance), 0.f), 2.2f) * 10.f, 0.f, 10.f);
+
         if (newExposure < exposure)
             exposure = math::lerp(exposure, newExposure, deltaTime.seconds());
         else

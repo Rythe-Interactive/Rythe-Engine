@@ -7,6 +7,7 @@
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 #include <rendering/pipeline/default/stages/submitstage.hpp>
 #include <rendering/pipeline/default/postfx/tonemapping.hpp>
+#include <rendering/pipeline/default/postfx/fxaa.hpp>
 #include <rendering/data/buffer.hpp>
 
 
@@ -23,6 +24,7 @@ namespace legion::rendering
         attachStage<SubmitStage>();
 
         PostProcessingStage::addEffect<Tonemapping>(-64);
+        PostProcessingStage::addEffect<FXAA>(-100);
 
         buffer modelMatrixBuffer;
 

@@ -78,7 +78,6 @@ namespace legion::rendering
 
         glViewport(0, 0, viewportSize.x, viewportSize.y);
         glDisable(GL_DEPTH_TEST);
-        glClear(GL_COLOR_BUFFER_BIT);
 
         m_screenShader.bind();
         m_screenShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(screenTexture);
