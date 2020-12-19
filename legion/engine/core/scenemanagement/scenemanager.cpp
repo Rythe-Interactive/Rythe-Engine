@@ -26,10 +26,9 @@ namespace legion::core::scenemanagement
         }
         for (auto child : children)
         {
-            if (child != sceneEntity)
-            {
-                child.set_parent(sceneEntity);
-            }
+            if (child == sceneEntity)
+                continue;
+            child.set_parent(sceneEntity);
         }
 
         if (!SceneManager::getScene(name))
