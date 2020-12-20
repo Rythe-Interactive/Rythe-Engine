@@ -74,8 +74,9 @@ namespace  legion::rendering
         static auto renderablesQuery = createQuery<mesh_filter, mesh_renderer>();
         renderablesQuery.queryEntities();
 
+        std::lock_guard guard(m_insertionLock);
         for (auto ent : renderablesQuery)
-            insertInstance(ent);
+            m_toInsert.insert(ent);
     }
 
     void MeshBatchingStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)

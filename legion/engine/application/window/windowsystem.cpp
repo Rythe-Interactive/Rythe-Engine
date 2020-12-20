@@ -386,7 +386,7 @@ namespace legion::application
             };
 
             ecs::component_handle<window> handle(request.entityId);
-            if (!m_ecs->getEntityData(request.entityId).components.contains(typeHash<window>()))
+            if (!m_ecs->hasComponent<window>(request.entityId))
             {
                 win.lock = new async::spinlock();
 

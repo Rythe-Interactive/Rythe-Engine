@@ -136,7 +136,7 @@ namespace legion::core
 		{
             OPTICK_EVENT();
             if (!m_sparse.count(val))
-                return;
+                return false;
 
             const size_type& sparseVal = m_sparse.at(val);
 			return sparseVal >= 0 && sparseVal < m_size && sparseVal < m_dense.size() && m_dense.at(sparseVal) == val;
@@ -150,7 +150,7 @@ namespace legion::core
 		{
             OPTICK_EVENT();
             if (!m_sparse.count(val))
-                return;
+                return false;
 
             const size_type& sparseVal = m_sparse.at(val);
             return sparseVal >= 0 && sparseVal < m_size&& sparseVal < m_dense.size() && m_dense.at(sparseVal) == val;

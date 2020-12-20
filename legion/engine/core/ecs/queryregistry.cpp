@@ -168,15 +168,15 @@ namespace legion::core::ecs
 
             m_references.emplace(queryId); // Create a new reference count.
 
-            m_componentTypes.insert(queryId, componentTypes); // Insert component type list for query.
+            m_componentTypes.emplace(queryId, componentTypes); // Insert component type list for query.
         }
 
         { // Next we need to filter through all the entities to get all the new ones that apply to the new query.
             auto [entities, entitiesLock] = m_registry.getEntities(); // getEntities returns a pair of both the container as well as the lock that should be locked by you when operating on it.
-            async::mixed_multiguard mguard(entitiesLock, async::read, m_componentLock, async::read, m_entityLock, async::write); // Lock locks.
+            async::mixed_multiguard mguard(entitiesLock, async::read, m_entityLock, async::write); // Lock locks.
 
             for (entity_handle entity : entities) // Iterate over all entities.
-                if (m_registry.getEntityData(entity).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
+                if (m_registry.getEntityData(entity).components.contains(componentTypes)) // Check if the queried components completely overlaps the components in the entity.
                     m_entityLists[queryId]->insert(entity); // Insert entity into tracking list.
         }
 

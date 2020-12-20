@@ -95,6 +95,12 @@ namespace legion::core
             return m_ecs->createQuery<component_types...>();
         }
 
+        L_NODISCARD ecs::EntityQuery createQuery(const hashed_sparse_set<id_type>& componentTypes)
+        {
+            OPTICK_EVENT();
+            return m_ecs->createQuery(componentTypes);
+        }
+
         template<typename event_type, typename... Args, inherits_from<event_type, events::event<event_type>> = 0>
         void raiseEvent(Args... arguments)
         {

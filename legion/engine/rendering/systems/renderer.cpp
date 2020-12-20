@@ -204,7 +204,16 @@ namespace legion::rendering
             if (!win)
                 continue;
 
-            auto viewportSize = win.framebufferSize();
+            math::ivec2 viewportSize;
+            {
+                if (!app::WindowSystem::windowStillExists(win.handle))
+                    continue;
+                app::context_guard guard(win);
+                if (!guard.contextIsValid())
+                    continue;
+
+                viewportSize = win.framebufferSize();
+            }
 
             if (viewportSize.x == 0 || viewportSize.y == 0)
                 continue;
