@@ -47,6 +47,7 @@ namespace legion::core
             m_scheduler(&m_eventbus, false, LEGION_MIN_THREADS)
 #endif
         {
+            log::setup();
             Module::m_eventBus = &m_eventbus;
             Module::m_ecs = &m_ecs;
             Module::m_scheduler = &m_scheduler;
@@ -90,9 +91,6 @@ namespace legion::core
          */
         void init()
         {
-
-            log::setup();
-
             for (const auto& [priority, moduleList] : m_modules)
                 for (auto& module : moduleList)
                     module->setup();
