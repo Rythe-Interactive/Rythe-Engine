@@ -156,6 +156,8 @@ namespace legion::rendering
             shader_handle::release();
         }
 
+        std::string get_name();
+
         /**@brief Set the value of a parameter by name.
          */
         template<typename T>
@@ -214,7 +216,9 @@ namespace legion::rendering
     private:
         static async::rw_spinlock m_materialLock;
         static std::unordered_map<id_type, material> m_materials;
+
         static material_handle m_invalid_material;
+
     public:
         /**@brief Create a new material with a certain name and shader.
          *        If a material already exists with that name it'll return a handle to the already existing material.

@@ -13,6 +13,8 @@
 #include <core/detail/internals.hpp>
 #include <core/filesystem/resource.hpp>
 
+#include <Optick/optick.h>
+
 namespace legion::core::compute {
 
     struct in_ident {};
@@ -146,6 +148,7 @@ namespace legion::core::compute {
          */
         size_type setLocalSize(size_type locals)
         {
+            OPTICK_EVENT();
             const size_type max = m_kernel->getMaxWorkSize();
 
             if (locals == 0)
@@ -211,6 +214,7 @@ namespace legion::core::compute {
         template <typename... Args>
         common::result<void, void> operator()(std::variant<size_type, math::ivec2, math::ivec3> dispatch_size, Args&&... args)
         {
+            OPTICK_EVENT();
             dvar dim;
 
             if (std::holds_alternative<size_type>(dispatch_size))
@@ -261,6 +265,7 @@ namespace legion::core::compute {
         template <class T>
         static std::pair<detail::buffer_base*, buffer_type>  transform_to_pairs(T& buffer_container)
         {
+            OPTICK_EVENT();
             using detail::buffer_base;
 
             if constexpr (std::is_base_of_v<in_ident, T>)
@@ -282,6 +287,7 @@ namespace legion::core::compute {
         template <class T>
         static karg transform_to_karg(T& buffer_container)
         {
+            OPTICK_EVENT();
             if constexpr (std::is_same_v<karg, std::remove_reference_t<T>>)
                 return buffer_container;
             else
@@ -294,6 +300,7 @@ namespace legion::core::compute {
         template <class T>
         static Buffer transform_to_buffer(T& buffer_container)
         {
+            OPTICK_EVENT();
             if constexpr (std::is_same_v<Buffer, T>)
                 return buffer_container;
             else return Buffer(nullptr, nullptr, 0, buffer_type::WRITE_BUFFER, "broken buffer");
@@ -304,7 +311,7 @@ namespace legion::core::compute {
         template <typename... Args>
         common::result<void, void> invoke_helper_raw(dvar dispatch_size, Args&& ... args)
         {
-
+            OPTICK_EVENT();
             //do some sanity checking args either need to be in(vector) out(vector) inout(vector) vector or karg
             static_assert(((
                 std::is_same_v<karg, Args> ||
@@ -336,6 +343,7 @@ namespace legion::core::compute {
         template <typename... Args>
         common::result<void, void> invoke_helper_buffers(dvar dispatch_size, Args&&... args)
         {
+            OPTICK_EVENT();
             static_assert(((std::is_same_v<compute::Buffer, std::remove_reference_t<Args>> || std::is_same_v<karg, std::remove_reference_t<Args>> ) && ...),
                 "Types passed to operator must be Buffer");
 

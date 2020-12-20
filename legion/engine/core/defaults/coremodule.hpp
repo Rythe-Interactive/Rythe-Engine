@@ -16,6 +16,7 @@ namespace legion::core
     public:
         virtual void setup() override
         {
+            OPTICK_EVENT();
             filesystem::provider_registry::domain_create_resolver<filesystem::basic_resolver>("assets://", "./assets");
             filesystem::provider_registry::domain_create_resolver<filesystem::basic_resolver>("engine://", "./engine");
 

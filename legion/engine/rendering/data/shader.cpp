@@ -909,6 +909,7 @@ namespace legion::rendering
 
     std::vector<std::tuple<std::string, GLint, GLenum>> shader_handle::get_uniform_info() const
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->get_uniform_info();
     }
 

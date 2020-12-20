@@ -8,6 +8,8 @@
 #include <string>
 #include <cstring>
 
+#include <Optick/optick.h>
+
 /**
  * @file string_extra.hpp
  */
@@ -19,6 +21,7 @@ namespace legion::core::common {
     template<typename StringType>
     inline size_t replace_items(StringType& source, const std::string& item, const std::string& value)
     {
+        OPTICK_EVENT();
         size_t count = 0;
         auto it = source.begin();
 
@@ -38,6 +41,7 @@ namespace legion::core::common {
 
         bool operator()(char c) const
         {
+            OPTICK_EVENT();
             for (auto testChar = _chars; *testChar != 0; ++testChar)
                 if (*testChar == c) return true;
             return false;
@@ -56,6 +60,7 @@ namespace legion::core::common {
     template <char token, char... tokens>
     bool str_tokens_helper(std::ctype<char>::mask* rc)
     {
+        OPTICK_EVENT();
         rc[token] = std::ctype<char>::space;
         if constexpr (sizeof...(tokens) != 0) str_tokens_helper<tokens...>(rc);
         return true;
@@ -88,6 +93,7 @@ namespace legion::core::common {
     template <char token_1, char... token>
     std::vector<std::string> split_string_at(const std::string& string)
     {
+        OPTICK_EVENT();
         //copy string into stringstream
         std::stringstream ss(string);
 
@@ -106,6 +112,7 @@ namespace legion::core::common {
 
     template <const char* const delim, typename Range, typename Value = typename Range::value_type>
     std::string join_strings_with(Range const& elements) {
+        OPTICK_EVENT();
         std::ostringstream os;
         auto b = begin(elements), e = end(elements);
 
@@ -119,8 +126,10 @@ namespace legion::core::common {
 
         return os.str();
     }
+
     template <typename Range, typename Value = typename Range::value_type>
     std::string join_strings_with(Range const& elements, const char* const delim) {
+        OPTICK_EVENT();
         std::ostringstream os;
         auto b = begin(elements), e = end(elements);
 
@@ -137,6 +146,7 @@ namespace legion::core::common {
 
     template <const char delim, typename Range, typename Value = typename Range::value_type>
     std::string join_strings_with(Range const& elements) {
+        OPTICK_EVENT();
         std::ostringstream os;
         auto b = begin(elements), e = end(elements);
 
@@ -154,6 +164,7 @@ namespace legion::core::common {
     }
     template <typename Range, typename Value = typename Range::value_type>
     std::string join_strings_with(Range const& elements, char delim) {
+        OPTICK_EVENT();
         std::ostringstream os;
         auto b = begin(elements), e = end(elements);
 
@@ -173,6 +184,7 @@ namespace legion::core::common {
     //remove given word from string at offset and return true if success and false on fail
     inline bool find_and_remove_at(std::string& src, const std::string& search, size_t offset = 0)
     {
+        OPTICK_EVENT();
         //create temporary
         size_t loc;
 
@@ -188,6 +200,7 @@ namespace legion::core::common {
     //remove given word from string at offset and return the position
     inline size_t locate_and_delete_at(std::string& src, const std::string& search, size_t offset = 0)
     {
+        OPTICK_EVENT();
         //create temporary
         size_t loc;
 
@@ -204,6 +217,7 @@ namespace legion::core::common {
     template <char token_1, char... tokens>
     inline size_t nearest_of_any_at(std::string string, size_t offset = 0)
     {
+        OPTICK_EVENT();
         //create tokens using variadic unfolding
         std::vector<char> tokensVector = { token_1 , tokens... };
 
@@ -227,12 +241,14 @@ namespace legion::core::common {
     template <>
     inline std::vector<std::string> data_from_string_<std::vector<std::string>>(std::string str)
     {
+        OPTICK_EVENT();
         return split_string_at<',', ' '>(str);
     }
 
     template <typename T>
     inline T data_from_string_(std::string str)
     {
+        OPTICK_EVENT();
         std::stringstream temp(str);
         T value;
         temp >> value;
@@ -249,6 +265,7 @@ namespace legion::core::common {
     template <>
     inline std::string string_from_data<std::vector<std::string>>(std::vector<std::string> data)
     {
+        OPTICK_EVENT();
         std::string ret;
         for (const std::string& str : data)
             ret += str;
@@ -259,6 +276,7 @@ namespace legion::core::common {
     template <typename t>
     inline std::string string_from_data(t data)
     {
+        OPTICK_EVENT();
         std::stringstream temp;
         temp << data;
         return temp.str();

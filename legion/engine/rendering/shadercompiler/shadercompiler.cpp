@@ -10,6 +10,7 @@ namespace legion::rendering
 
     std::string ShaderCompiler::get_view_path(const fs::view& view, bool mustBeFile)
     {
+        OPTICK_EVENT();
         using severity = log::severity;
 
         fs::navigator navigator(view.get_virtual_path());
@@ -53,6 +54,7 @@ namespace legion::rendering
 
     const std::string& ShaderCompiler::get_shaderlib_path()
     {
+        OPTICK_EVENT();
         static std::string libPath;
         if (libPath.empty())
             libPath = get_view_path(fs::view("engine://shaderlib"), false);
@@ -61,6 +63,7 @@ namespace legion::rendering
 
     const std::string& ShaderCompiler::get_compiler_path()
     {
+        OPTICK_EVENT();
         static std::string compPath;
         if (compPath.empty())
             compPath = get_view_path(fs::view("engine://tools"), false) + fs::strpath_manip::separator() + "lgnspre";
@@ -69,6 +72,7 @@ namespace legion::rendering
 
     void ShaderCompiler::extract_state(std::string_view source, shader_state& state)
     {
+        OPTICK_EVENT();
         std::string_view rest = source;
         std::vector<std::pair<std::string, std::string>> stateInput;
         while (!rest.empty())
@@ -229,6 +233,7 @@ namespace legion::rendering
 
     bool ShaderCompiler::extract_ilo(std::string_view source, uint64 shaderType, shader_ilo& ilo)
     {
+        OPTICK_EVENT();
         using severity = log::severity;
 
         GLuint glShaderType = detail::get_gl_type(shaderType);
@@ -271,6 +276,7 @@ namespace legion::rendering
 
     std::string ShaderCompiler::invoke_compiler(const fs::view& file, bitfield8 compilerSettings, const std::vector<std::string>& defines, const std::vector<std::string>& additionalIncludes)
     {
+        OPTICK_EVENT();
         using severity = log::severity;
 
         std::string filepath = get_view_path(file, true);
@@ -362,7 +368,8 @@ namespace legion::rendering
 
     bool ShaderCompiler::process(const fs::view& file, bitfield8 compilerSettings, shader_ilo& ilo, shader_state& state, const std::vector<std::string>& defines, const std::vector<std::string>& additionalIncludes)
     {
-        using severity = log::severity;                
+        OPTICK_EVENT();
+        using severity = log::severity;
 
         log::info("Compiling shader: {}", file.get_virtual_path());
 

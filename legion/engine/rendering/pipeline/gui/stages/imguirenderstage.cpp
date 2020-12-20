@@ -7,7 +7,7 @@ namespace legion::rendering
 {
     void ImGuiStage::setup(app::window& context)
     {
-
+        OPTICK_EVENT();
         //make context current
         application::context_guard guard(context);
 
@@ -24,6 +24,7 @@ namespace legion::rendering
     void ImGuiStage::render(app::window& context, camera& cam, const camera::camera_input& camInput,
         time::span deltaTime)
     {
+        OPTICK_EVENT();
         static id_type mainId = nameHash("main");
 
         auto fbo = getFramebuffer(mainId);

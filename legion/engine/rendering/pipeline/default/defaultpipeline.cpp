@@ -14,6 +14,7 @@ namespace legion::rendering
 {
     void DefaultPipeline::setup(app::window& context)
     {
+        OPTICK_EVENT();
         attachStage<ClearStage>();
         attachStage<FramebufferResizeStage>();
         attachStage<LightBufferStage>();
