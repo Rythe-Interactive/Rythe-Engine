@@ -287,6 +287,7 @@ namespace legion::rendering
         template<typename T>
         uniform<T> get_uniform(const std::string& name)
         {
+            OPTICK_EVENT();
             auto* ptr = dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
             if (ptr)
                 return *ptr;
@@ -297,6 +298,7 @@ namespace legion::rendering
         template<typename T>
         bool has_uniform(const std::string& name)
         {
+            OPTICK_EVENT();
             auto id = nameHash(name);
             return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
         }
@@ -304,6 +306,7 @@ namespace legion::rendering
         template<typename T>
         uniform<T> get_uniform(id_type id)
         {
+            OPTICK_EVENT();
             auto* ptr = dynamic_cast<uniform<T>*>(uniforms[id].get());
             if (ptr)
                 return *ptr;
@@ -314,12 +317,14 @@ namespace legion::rendering
         template<typename T>
         bool has_uniform(id_type id)
         {
+            OPTICK_EVENT();
             return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
         }
 
         template<typename T>
         uniform<T> get_uniform_with_location(GLint location)
         {
+            OPTICK_EVENT();
             auto* ptr = dynamic_cast<uniform<T>*>(uniforms[idOfLocation[location]].get());
             if (ptr)
                 return *ptr;
@@ -330,11 +335,13 @@ namespace legion::rendering
         template<typename T>
         bool has_uniform_with_location(GLint location)
         {
+            OPTICK_EVENT();
             return uniforms.count(idOfLocation[location]) && dynamic_cast<uniform<T>*>(uniforms[idOfLocation[location]].get()) != nullptr;
         }
 
         attribute get_attribute(const std::string& name)
         {
+            OPTICK_EVENT();
             id_type id = nameHash(name);
             if (attributes.count(id))
                 return *(attributes[id].get());
@@ -345,6 +352,7 @@ namespace legion::rendering
 
         attribute get_attribute(id_type id)
         {
+            OPTICK_EVENT();
             if (attributes.count(id))
                 return *(attributes[id].get());
             log::error("Shader {} does not contain attribute with id {}", this->name, id);
@@ -353,6 +361,7 @@ namespace legion::rendering
 
         std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info()
         {
+            OPTICK_EVENT();
             std::vector<std::tuple<std::string, GLint, GLenum>> info;
             for (auto& [_, uniform] : uniforms)
                 info.push_back(std::make_tuple(uniform->get_name(), uniform->get_location(), uniform->get_type()));
@@ -432,36 +441,42 @@ namespace legion::rendering
     template<typename T>
     uniform<T> shader_handle::get_uniform(const std::string& name)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->get_uniform<T>(name);
     }
 
     template<typename T>
     inline bool shader_handle::has_uniform(const std::string& name)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->has_uniform<T>(name);
     }
 
     template<typename T>
     uniform<T> shader_handle::get_uniform(id_type uniformId)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->get_uniform<T>(uniformId);
     }
 
     template<typename T>
     inline bool shader_handle::has_uniform(id_type uniformId)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->has_uniform<T>(uniformId);
     }
 
     template<typename T>
     inline uniform<T> shader_handle::get_uniform_with_location(GLint location)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->get_uniform_with_location<T>(location);
     }
 
     template<typename T>
     inline bool shader_handle::has_uniform_with_location(GLint location)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->has_uniform_with_location<T>(location);
     }
 

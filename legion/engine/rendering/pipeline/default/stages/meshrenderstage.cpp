@@ -10,6 +10,7 @@ namespace legion::rendering
 
     void MeshRenderStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        OPTICK_EVENT();
         (void)deltaTime;
         (void)cam;
         static id_type mainId = nameHash("main");
@@ -61,6 +62,10 @@ namespace legion::rendering
 
         for (auto [material, instancesPerMaterial] : *batches)
         {
+            OPTICK_EVENT("Rendering material");
+            auto materialName = material.get_name();
+            OPTICK_TAG("Material name", materialName.c_str());
+
             camInput.bind(material);
             if (material.has_param<uint>(SV_LIGHTCOUNT))
                 material.set_param<uint>(SV_LIGHTCOUNT, *lightCount);
@@ -69,6 +74,10 @@ namespace legion::rendering
 
             for (auto [modelHandle, instances] : instancesPerMaterial)
             {
+                OPTICK_EVENT("Rendering instances");
+                auto modelName = ModelCache::get_model_name(modelHandle.id);
+                OPTICK_TAG("Model name", modelName.c_str());
+
                 if (!modelHandle.is_buffered())
                     modelHandle.buffer_data(*modelMatrixBuffer);
 
@@ -79,14 +88,16 @@ namespace legion::rendering
                     continue;
                 }
 
-                m_matrices.resize(instances.size());
-                int i = 0;
-                for (auto& ent : instances)
                 {
-                    m_matrices[i] = transform(ent.get_component_handles<transform>()).get_local_to_world_matrix();
-                    i++;
+                    OPTICK_EVENT("Calculating matrices");
+                    m_matrices.resize(instances.size());
+                    int i = 0;
+                    for (auto& ent : instances)
+                    {
+                        m_matrices[i] = transform(ent.get_component_handles<transform>()).get_local_to_world_matrix();
+                        i++;
+                    }
                 }
-
                 modelMatrixBuffer->bufferData(m_matrices);
 
                 mesh.vertexArray.bind();

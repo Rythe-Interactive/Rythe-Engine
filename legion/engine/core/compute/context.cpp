@@ -14,6 +14,7 @@ namespace legion::core::compute {
 
     void Context::init()
     {
+        OPTICK_EVENT();
         if(m_initialized) return; // if the context already exists do not initialize
 
         cl_uint ret_num_devices;
@@ -87,6 +88,7 @@ namespace legion::core::compute {
 
     Program Context::createProgram(const filesystem::basic_resource& data)
     {
+        OPTICK_EVENT();
         return Program(m_context,m_device_id,data);
     }
 }

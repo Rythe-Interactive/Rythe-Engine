@@ -7,6 +7,8 @@
 #include <string_view>
 #include <cstring>
 
+#include <Optick/optick.h>
+
 /**
  * @file type_util.hpp
  */
@@ -48,6 +50,7 @@ namespace legion::core
     template<typename T>
     cstring typeName()
     {
+        OPTICK_EVENT();
         static cstring name = typeid(T).name();
         return name;
     }
@@ -55,6 +58,7 @@ namespace legion::core
     template<typename T>
     cstring undecoratedTypeName()
     {
+        OPTICK_EVENT();
         static std::string name;
         if (name.empty())
         {
@@ -75,7 +79,8 @@ namespace legion::core
     template<typename T>
     cstring typeName(T expr)
     {
-        return typeName<T>();
+        OPTICK_EVENT();
+        return typeid(expr).name();
     }
 
     /**@brief Returns hash of a certain string
@@ -85,8 +90,9 @@ namespace legion::core
      *		 Because it takes in a const char[] this function is able to be constexpr and thus have minimal overhead.
      */
     template<size_type N>
-    constexpr id_type nameHash(const char(&name)[N])
+    id_type nameHash(const char(&name)[N])
     {
+        OPTICK_EVENT();
         id_type hash = 0xcbf29ce484222325;
         uint64 prime = 0x00000100000001b3;
         for (int i = 0; i < N - 1; i++)
@@ -120,6 +126,7 @@ namespace legion::core
     template<typename T>
     id_type typeHash()
     {
+        OPTICK_EVENT();
         static id_type hash = 0;
 
         if (hash == 0)
@@ -143,8 +150,9 @@ namespace legion::core
      * @param expr Variable of which you wish to auto deduct type.
      */
     template<typename T>
-    constexpr id_type typeHash(T expr)
+    id_type typeHash(T expr)
     {
+        OPTICK_EVENT();
         return typeHash<T>();
     }
 
@@ -154,6 +162,7 @@ namespace legion::core
     template<typename T>
     void appendBinaryData(T* value, byte_vec& data)
     {
+        OPTICK_EVENT();
         if constexpr (has_resize<std::remove_const_t<T>, void(const std::size_t)>::value)
         {
             auto first = value->begin();
@@ -177,6 +186,7 @@ namespace legion::core
     template<typename Iterator>
     void appendBinaryData(Iterator first, Iterator last, byte_vec& data)
     {
+        OPTICK_EVENT();
         uint64 arrSize = std::distance(first, last) * sizeof(typename Iterator::value_type);
         appendBinaryData(&arrSize, data);
 
@@ -193,6 +203,7 @@ namespace legion::core
     template<typename T>
     uint64 retrieveArraySize(byte_vec::const_iterator start)
     {
+        OPTICK_EVENT();
         uint64 arrSize;
         retrieveBinaryData(arrSize, start);
         if (arrSize % sizeof(T) == 0)
@@ -203,6 +214,7 @@ namespace legion::core
     template<typename T>
     void retrieveBinaryData(T& value, byte_vec::const_iterator& start)
     {
+        OPTICK_EVENT();
         if constexpr (has_resize<T, void(std::size_t)>::value)
         {
             uint64 arrSize = retrieveArraySize<typename T::value_type>(start);
@@ -221,6 +233,7 @@ namespace legion::core
     template<typename Iterator>
     void retrieveBinaryData(Iterator first, Iterator last, byte_vec::const_iterator& start)
     {
+        OPTICK_EVENT();
         uint64 arrSize;
         retrieveBinaryData(arrSize, start);
 

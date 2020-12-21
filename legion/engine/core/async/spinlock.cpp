@@ -1,4 +1,5 @@
 #include <core/async/spinlock.hpp>
+#include <Optick/optick.h>
 
 namespace legion::core::async
 {
@@ -31,6 +32,7 @@ namespace legion::core::async
 
     void spinlock::lock() noexcept
     {
+        OPTICK_EVENT();
         if (m_forceRelease)
             return;
 
@@ -54,6 +56,7 @@ namespace legion::core::async
 
     L_NODISCARD bool spinlock::try_lock() noexcept
     {
+        OPTICK_EVENT();
         if (m_forceRelease)
             return true;
 
@@ -74,6 +77,7 @@ namespace legion::core::async
 
     void spinlock::unlock() noexcept
     {
+        OPTICK_EVENT();
         if (m_forceRelease)
             return;
 

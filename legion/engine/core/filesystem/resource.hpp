@@ -4,6 +4,8 @@
 
 #include <string_view>                // std::string_view
 
+#include <Optick/optick.h>
+
 #include "detail/resource_meta.hpp"   //has_to_resource<T,Sig>, has_from_resource<T,Sig>
 
 
@@ -31,14 +33,17 @@ class Test {
 		/**@brief Constructs a basic resource from a legion::core::byte_vec.
 		 * @param [in] v The resource from which the resource is created (copy operation/move).
 		 */
-		explicit basic_resource(byte_vec v) : m_container(std::move(v)) {}
+		explicit basic_resource(byte_vec v) : m_container(std::move(v)) {
+            OPTICK_EVENT();
+        }
 
 		/**@brief Constructs a basic resource from a std::string
 		 * @param [in] v The resource from which the resource is created (copy-assign operation)
 		 */
 		explicit basic_resource(const std::string_view& v) : basic_resource(nullptr)
 		{
-			m_container.assign(v.begin(), v.end());
+            OPTICK_EVENT();
+            m_container.assign(v.begin(), v.end());
 		}
 
 		//copy & move operations
@@ -193,14 +198,16 @@ class Test {
 			 typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
 	void to_resource(basic_resource* resource,const T& value)
 	{
-		T::to_resource(resource,value);
+        OPTICK_EVENT();
+        T::to_resource(resource,value);
 	}
 
 	template<typename T,
 			 typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
 	basic_resource to_resource(const T& value)
 	{
-		basic_resource res(nullptr);
+        OPTICK_EVENT();
+        basic_resource res(nullptr);
 		T::to_resource(&res,value);
 		return res;
 	}
@@ -209,7 +216,8 @@ class Test {
 			 typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>>
 	void from_resource(T* value, const basic_resource& resource)
 	{
-		T::from_resource(value, resource);
+        OPTICK_EVENT();
+        T::from_resource(value, resource);
 	}
 	
    template<typename T,
@@ -218,7 +226,8 @@ class Test {
 			typename C3 = std::enable_if<std::is_move_constructible<T>::value>>
 	T from_resource(const basic_resource& resource)
 	{
-		T value;
+       OPTICK_EVENT();
+       T value;
 		T::from_resource(&value,resource);
 		return std::move(value);
 	}
@@ -229,7 +238,8 @@ class Test {
 			class ... Args>
 	T from_resource(const basic_resource& resource,Args&&... args)
 	{
-		T value(std::forward<Args>(args)...);
+       OPTICK_EVENT();
+       T value(std::forward<Args>(args)...);
 		T::from_resource(&value,resource);
 		return std::move(value);
 	}
@@ -238,13 +248,15 @@ class Test {
 	template <class T,class... Args>
 	L_NODISCARD T basic_resource::to(Args&&...args) const
 	{
-		return std::move(from_resource<T>(*this, std::forward<Args>(args)...));
+        OPTICK_EVENT();
+        return std::move(from_resource<T>(*this, std::forward<Args>(args)...));
 	}
 
 	template <class T>
 	void basic_resource::from(const T& v)
 	{
-		to_resource(this,v);
+        OPTICK_EVENT();
+        to_resource(this,v);
 	}
 	/**
 	 * //cond

@@ -7,6 +7,7 @@ namespace legion::rendering
 
     void SubmitStage::setup(app::window& context)
     {
+        OPTICK_EVENT();
         app::context_guard guard(context);
         float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
           // positions         // texCoords
@@ -33,6 +34,7 @@ namespace legion::rendering
 
     void SubmitStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        OPTICK_EVENT();
         (void)deltaTime;
         (void)camInput;
 

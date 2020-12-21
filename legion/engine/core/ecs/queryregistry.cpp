@@ -10,6 +10,7 @@ namespace legion::core::ecs
 
     void QueryRegistry::addComponentType(id_type queryId, id_type componentTypeId)
     {
+        OPTICK_EVENT();
         {
             async::readwrite_guard guard(m_componentLock); // In this case the lock handles both the sparse_map and the contained hashed_sparse_sets
             m_componentTypes[queryId].insert(componentTypeId); // We insert the new component type we wish to track.
@@ -52,6 +53,7 @@ namespace legion::core::ecs
 
     void QueryRegistry::removeComponentType(id_type queryId, id_type componentTypeId)
     {
+        OPTICK_EVENT();
         {
             async::readwrite_guard guard(m_componentLock);
             m_componentTypes[queryId].erase(componentTypeId); // Remove component from query list.
@@ -79,6 +81,7 @@ namespace legion::core::ecs
 
     void QueryRegistry::evaluateEntityChange(id_type entityId, id_type componentTypeId, bool removal)
     {
+        OPTICK_EVENT();
         entity_handle entity(entityId);
 
         async::mixed_multiguard mmguard(m_entityLock, async::write, m_componentLock, async::read); // We lock now so that we don't need to reacquire the locks every iteration.
@@ -106,6 +109,7 @@ namespace legion::core::ecs
 
     void QueryRegistry::markEntityDestruction(id_type entityId)
     {
+        OPTICK_EVENT();
         entity_handle entity(entityId);
 
         async::readwrite_guard guard(m_entityLock);
@@ -119,6 +123,7 @@ namespace legion::core::ecs
 
     id_type QueryRegistry::getQueryId(const hashed_sparse_set<id_type>& componentTypes)
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(m_componentLock);
 
         for (auto [id, types] : m_componentTypes)
@@ -132,6 +137,7 @@ namespace legion::core::ecs
 
     EntityQuery QueryRegistry::createQuery(const hashed_sparse_set<id_type>& componentTypes)
     {
+        OPTICK_EVENT();
         id_type queryId = getQueryId(componentTypes); // Check if a query already exists with the requested component types. 
 
         if (!queryId)
@@ -144,12 +150,14 @@ namespace legion::core::ecs
 
     const hashed_sparse_set<id_type>& QueryRegistry::getComponentTypes(id_type queryId)
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(m_componentLock);
         return m_componentTypes[queryId];
     }
 
     id_type QueryRegistry::addQuery(const hashed_sparse_set<id_type>& componentTypes)
     {
+        OPTICK_EVENT();
         id_type queryId;
 
         { // Write permitted critical section for m_entityLists
@@ -160,15 +168,15 @@ namespace legion::core::ecs
 
             m_references.emplace(queryId); // Create a new reference count.
 
-            m_componentTypes.insert(queryId, componentTypes); // Insert component type list for query.
+            m_componentTypes.emplace(queryId, componentTypes); // Insert component type list for query.
         }
 
         { // Next we need to filter through all the entities to get all the new ones that apply to the new query.
             auto [entities, entitiesLock] = m_registry.getEntities(); // getEntities returns a pair of both the container as well as the lock that should be locked by you when operating on it.
-            async::mixed_multiguard mguard(entitiesLock, async::read, m_componentLock, async::read, m_entityLock, async::write); // Lock locks.
+            async::mixed_multiguard mguard(entitiesLock, async::read, m_entityLock, async::write); // Lock locks.
 
             for (entity_handle entity : entities) // Iterate over all entities.
-                if (m_registry.getEntityData(entity).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
+                if (m_registry.getEntityData(entity).components.contains(componentTypes)) // Check if the queried components completely overlaps the components in the entity.
                     m_entityLists[queryId]->insert(entity); // Insert entity into tracking list.
         }
 
@@ -177,6 +185,7 @@ namespace legion::core::ecs
 
     entity_set QueryRegistry::getEntities(id_type queryId)
     {
+        OPTICK_EVENT();
         async::readonly_guard entguard(m_entityLock);
         entity_set copy = *m_entityLists.get(queryId);
         return copy;
@@ -184,6 +193,7 @@ namespace legion::core::ecs
 
     void QueryRegistry::addReference(id_type queryId)
     {
+        OPTICK_EVENT();
         async::readonly_guard refguard(m_referenceLock);
 
         m_references.get(queryId)++;
@@ -191,6 +201,7 @@ namespace legion::core::ecs
 
     void QueryRegistry::removeReference(id_type queryId)
     {
+        OPTICK_EVENT();
         if (queryId == invalid_id)
             return;
 
@@ -214,6 +225,7 @@ namespace legion::core::ecs
 
     size_type QueryRegistry::getReferenceCount(id_type queryId)
     {
+        OPTICK_EVENT();
         async::readonly_guard refguard(m_referenceLock);
         if (m_references.contains(queryId))
             return m_references[queryId];

@@ -181,6 +181,7 @@ namespace legion::rendering
 
     void framebuffer::attach(renderbuffer rbo, GLenum attachment)
     {
+        OPTICK_EVENT();
 #if defined(LEGION_DEBUG)
         if (!app::ContextHelper::getCurrentContext())
         {
@@ -202,6 +203,7 @@ namespace legion::rendering
 
     void framebuffer::attach(texture_handle texture, GLenum attachment)
     {
+        OPTICK_EVENT();
 #if defined(LEGION_DEBUG)
         if (!app::ContextHelper::getCurrentContext())
         {
@@ -223,6 +225,7 @@ namespace legion::rendering
 
     void framebuffer::attach(attachment att, GLenum attachment)
     {
+        OPTICK_EVENT();
 #if defined(LEGION_DEBUG)
         if (!app::ContextHelper::getCurrentContext())
         {
@@ -255,6 +258,7 @@ namespace legion::rendering
 
     L_NODISCARD const attachment& framebuffer::getAttachment(GLenum attachment) const
     {
+        OPTICK_EVENT();
         if (m_id.value == 0)
         {
             log::error("Attempting to attach render targets to default framebuffer.");

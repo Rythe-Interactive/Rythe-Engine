@@ -64,9 +64,14 @@ namespace legion::rendering
         static sparse_map<id_type, model> m_models;
         static async::rw_spinlock m_modelLock;
 
+        static async::rw_spinlock m_modelNameLock;
+        static std::unordered_map<id_type, std::string> m_modelNames;
+
         static const model& get_model(id_type id);
 
     public:
+        static std::string get_model_name(id_type id);
+
         static void buffer_model(id_type id, const buffer& matrixBuffer);
         static model_handle create_model(const std::string& name, const fs::view& file, mesh_import_settings settings = default_mesh_settings);
         static model_handle create_model(const std::string& name);

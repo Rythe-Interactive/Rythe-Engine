@@ -16,6 +16,7 @@ namespace legion::core::filesystem
 
     bool view::is_valid(bool deep_check) const
     {
+        OPTICK_EVENT();
         //check if path is non empty & if 
         if (m_path.empty()) return false;
         if (!provider_registry::has_domain(get_domain())) return false;
@@ -33,6 +34,7 @@ namespace legion::core::filesystem
 
     file_traits view::file_info() const
     {
+        OPTICK_EVENT();
         //get solution
         auto result = make_solution();
 
@@ -51,6 +53,7 @@ namespace legion::core::filesystem
 
     filesystem_traits view::filesystem_info() const
     {
+        OPTICK_EVENT();
         //get solution
         auto result = make_solution();
 
@@ -68,6 +71,7 @@ namespace legion::core::filesystem
 
     std::string view::get_domain() const
     {
+        OPTICK_EVENT();
         //string magic to find the first : & substr
         const auto idx = m_path.find_first_of(':');
         return m_path.substr(0, idx + 1) + strpath_manip::separator() + strpath_manip::separator();
@@ -75,11 +79,13 @@ namespace legion::core::filesystem
 
     L_NODISCARD const std::string& view::get_virtual_path() const
     {
+        OPTICK_EVENT();
         return m_path;
     }
 
     L_NODISCARD common::result_decay_more<std::string, fs_error> view::get_extension() const
     {
+        OPTICK_EVENT();
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
         using decay = common::result_decay_more<std::string, fs_error>;
@@ -94,6 +100,7 @@ namespace legion::core::filesystem
 
     L_NODISCARD common::result_decay_more<std::string, fs_error> view::get_filename() const
     {
+        OPTICK_EVENT();
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
         using decay = common::result_decay_more<std::string, fs_error>;
@@ -108,6 +115,7 @@ namespace legion::core::filesystem
 
     L_NODISCARD common::result_decay_more<std::string, fs_error> view::get_filestem() const
     {
+        OPTICK_EVENT();
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
         using decay = common::result_decay_more<std::string, fs_error>;
@@ -122,6 +130,7 @@ namespace legion::core::filesystem
 
     common::result_decay_more<basic_resource, fs_error> view::get()
     {
+        OPTICK_EVENT();
         using common::Err, common::Ok;
 
         //decay overloads the operator of ok_type and operator== for valid_t
@@ -147,6 +156,7 @@ namespace legion::core::filesystem
 
     L_NODISCARD common::result_decay_more<const basic_resource, fs_error> view::get() const
     {
+        OPTICK_EVENT();
         using common::Err, common::Ok;
 
         //decay overloads the operator of ok_type and operator== for valid_t
@@ -172,6 +182,7 @@ namespace legion::core::filesystem
 
     common::result<void, fs_error> view::set(const basic_resource& resource)
     {
+        OPTICK_EVENT();
         using common::Ok, common::Err;
 
         //get solution
@@ -194,6 +205,7 @@ namespace legion::core::filesystem
 
     view view::parent() const
     {
+        OPTICK_EVENT();
         //get parent path
         const auto p_path = strpath_manip::parent(m_path);
         return view(p_path);
@@ -201,6 +213,7 @@ namespace legion::core::filesystem
 
     view view::find(std::string_view identifier) const
     {
+        OPTICK_EVENT();
         //probably not necessarily necessary
         std::string sanitized = strpath_manip::sanitize(std::string(identifier));
 
@@ -222,6 +235,7 @@ namespace legion::core::filesystem
 
     std::string view::create_identifier(const navigator::solution::iterator& e) const
     {
+        OPTICK_EVENT();
         //iterate through path and create the ident for the provider
         std::string result;
         for (auto iter = m_foundSolution.begin(); iter != e; ++iter)
@@ -235,6 +249,7 @@ namespace legion::core::filesystem
     //TODO(cont.)          representation to begin with
     std::shared_ptr<filesystem_resolver> view::build() const
     {
+        OPTICK_EVENT();
         //first check if a solution even exists
         if (m_foundSolution.size() == 0)
         {
@@ -287,7 +302,7 @@ namespace legion::core::filesystem
 
     void view::make_inheritance() const
     {
-
+        OPTICK_EVENT();
         //make all higher level fs inherit the traits from the lower level
         for (std::size_t i = 0; i < m_foundSolution.size() - 1; ++i)
         {
@@ -297,6 +312,7 @@ namespace legion::core::filesystem
 
     std::shared_ptr<view::create_chain> view::translate_solution() const
     {
+        OPTICK_EVENT();
         //this is a more approachable representation
          //of the solution
         std::shared_ptr<create_chain> chain = nullptr;
@@ -363,6 +379,7 @@ namespace legion::core::filesystem
 
     common::result<void, fs_error> view::make_solution() const
     {
+        OPTICK_EVENT();
         using common::Ok;
 
         //check if a solution already exists

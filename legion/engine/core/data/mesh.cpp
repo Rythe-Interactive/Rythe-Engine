@@ -8,6 +8,7 @@ namespace legion::core
 
     void mesh::to_resource(filesystem::basic_resource* resource, const mesh& value)
     {
+        OPTICK_EVENT();
         // Erase all previous data.
         resource->clear();
 
@@ -35,6 +36,7 @@ namespace legion::core
 
     void mesh::from_resource(mesh* value, const filesystem::basic_resource& resource)
     {
+        OPTICK_EVENT();
         *value = mesh{};
 
         // Get point from which to start reading.
@@ -66,6 +68,7 @@ namespace legion::core
 
     void mesh::calculate_tangents(mesh* data)
     {
+        OPTICK_EVENT();
         // https://learnopengl.com/Advanced-Lighting/Normal-Mapping
         data->tangents.resize(data->normals.size());
 
@@ -132,6 +135,7 @@ namespace legion::core
 
     std::pair<async::rw_spinlock&, mesh&> mesh_handle::get()
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(MeshCache::m_meshesLock);
         auto& [lock, mesh] = *(MeshCache::m_meshes[id].get());
         return std::make_pair(std::ref(lock), std::ref(mesh));
@@ -139,6 +143,7 @@ namespace legion::core
 
     mesh_handle MeshCache::create_mesh(const std::string& name, const filesystem::view& file, mesh_import_settings settings)
     {
+        OPTICK_EVENT();
         // Get ID.
         id_type id = nameHash(name);
 
@@ -175,6 +180,7 @@ namespace legion::core
 
     mesh_handle MeshCache::copy_mesh(const std::string& name, const std::string& newName)
     {
+        OPTICK_EVENT();
         id_type id = nameHash(name); // Get the id of the original mesh.
         id_type newId = nameHash(newName); // Get the new id.
 
@@ -200,6 +206,7 @@ namespace legion::core
 
     mesh_handle MeshCache::copy_mesh(id_type id, const std::string& newName)
     {
+        OPTICK_EVENT();
         id_type newId = nameHash(newName); // Get the new id.
 
         {
@@ -224,6 +231,7 @@ namespace legion::core
 
     mesh_handle MeshCache::get_handle(const std::string& name)
     {
+        OPTICK_EVENT();
         id_type id = nameHash(name);
         async::readonly_guard guard(MeshCache::m_meshesLock);
         if (MeshCache::m_meshes.count(id))
@@ -233,6 +241,7 @@ namespace legion::core
 
     mesh_handle MeshCache::get_handle(id_type id)
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(MeshCache::m_meshesLock);
         if (MeshCache::m_meshes.count(id))
             return { id };
