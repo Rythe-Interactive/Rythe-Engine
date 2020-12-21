@@ -1,4 +1,5 @@
 #include <application/window/windowsystem.hpp>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::application
 {
@@ -537,6 +538,8 @@ namespace legion::application
 
     void WindowSystem::handleWindowEvents(time::time_span<fast_time> deltaTime)
     {
+        debug::drawLine(math::vec3(), math::vec3(), math::colors::white, 500);
+
         createWindows();
         updateWindowIcons();
         fullscreenWindows();

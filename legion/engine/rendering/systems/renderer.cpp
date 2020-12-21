@@ -1,4 +1,5 @@
 #include <rendering/systems/renderer.hpp>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::rendering
 {
@@ -138,6 +139,8 @@ namespace legion::rendering
 
         bindToEvent<events::exit, &Renderer::onExit>();
 
+        m_eventBus->bindToEventUnsafe(nameHash("debug_line"), delegate<void(events::event_base*)>::template create<Renderer, &Renderer::onDebugLine>(this));
+
         createProcess<&Renderer::render>("Rendering");
 
         m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [&](void* param)
@@ -173,6 +176,13 @@ namespace legion::rendering
 
         while (!m_initialized.load(std::memory_order_relaxed))
             std::this_thread::sleep_for(std::chrono::microseconds(1));
+    }
+
+    void Renderer::onDebugLine(events::event_base* event)
+    {
+        debug::debug_line_event* line = reinterpret_cast<debug::debug_line_event*>(event);
+        if(line->width == 500)
+        log::debug("got em");
     }
 
     void Renderer::onExit(events::exit* event)
