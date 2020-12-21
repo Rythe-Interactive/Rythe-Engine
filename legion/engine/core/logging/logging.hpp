@@ -225,9 +225,7 @@ namespace legion::core::log
     struct impl {
         static cstring log_file;
         static std::shared_ptr<spdlog::logger> logger;
-        static cstring file_file;
         static std::shared_ptr<spdlog::logger> file_logger;
-        static cstring console_file;
         static std::shared_ptr<spdlog::logger> console_logger;
         static std::unordered_map<std::thread::id, std::string> thread_names;
     };
@@ -297,7 +295,6 @@ namespace legion::core::log
     };
 
 
-#define LOG_FILE impl::log_file
 #define logger impl::logger
 
 
@@ -305,11 +302,9 @@ namespace legion::core::log
     inline void setup()
     {
 #if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
-        LOG_FILE = impl::console_file;
         logger = impl::console_logger;
 #else
-        LOG_FILE = impl::file_file;
-        impl::file_logger = spdlog::rotating_logger_mt(LOG_FILE, LOG_FILE, 1'048'576, 5);
+        impl::file_logger = spdlog::rotating_logger_mt(impl::log_file, impl::log_file, 1'048'576, 5);
         logger = impl::file_logger;
 #endif
         auto f = std::make_unique<spdlog::pattern_formatter>();
