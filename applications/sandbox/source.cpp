@@ -1,6 +1,6 @@
 #define LEGION_ENTRY
 #if defined(NDEBUG)
-#define LEGION_KEEP_CONSOLE
+    #define LEGION_KEEP_CONSOLE
 #endif
 //#define LEGION_LOW_POWER
 #define LEGION_MIN_THREADS 5 // Update, Rendering, Input, Audio, Physics
