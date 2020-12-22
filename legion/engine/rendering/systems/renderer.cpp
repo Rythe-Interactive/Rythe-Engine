@@ -1,5 +1,6 @@
 #include <rendering/systems/renderer.hpp>
 #include <rendering/debugrendering.hpp>
+#include <Optick/optick.h>
 
 namespace legion::rendering
 {
@@ -7,6 +8,7 @@ namespace legion::rendering
 
     void Renderer::debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
     {
+        OPTICK_EVENT();
         if (!log::impl::thread_names.count(std::this_thread::get_id()))
             log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
 
@@ -91,6 +93,7 @@ namespace legion::rendering
 
     bool Renderer::initContext(const app::window& window)
     {
+        OPTICK_EVENT();
         if (!gladLoadGLLoader((GLADloadproc)app::ContextHelper::getProcAddress))
         {
             log::error("Failed to load OpenGL");
@@ -129,6 +132,7 @@ namespace legion::rendering
 
     void Renderer::setup()
     {
+        OPTICK_EVENT();
         RenderPipelineBase::m_ecs = m_ecs;
         RenderPipelineBase::m_scheduler = m_scheduler;
         RenderPipelineBase::m_eventBus = m_eventBus;
@@ -143,6 +147,7 @@ namespace legion::rendering
 
         m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [&](void* param)
             {
+                OPTICK_EVENT("Initialization");
                 (void)param;
                 log::trace("Waiting on main window.");
 
@@ -178,11 +183,14 @@ namespace legion::rendering
 
     void Renderer::onExit(events::exit* event)
     {
+        OPTICK_EVENT();
         m_exiting.store(true, std::memory_order_release);
     }
 
     void Renderer::render(time::span deltatime)
     {
+        OPTICK_FRAME("Rendering");
+        OPTICK_EVENT();
         if (m_pipelineProvider.isNull())
             return;
 
@@ -197,7 +205,16 @@ namespace legion::rendering
             if (!win)
                 continue;
 
-            auto viewportSize = win.framebufferSize();
+            math::ivec2 viewportSize;
+            {
+                if (!app::WindowSystem::windowStillExists(win.handle))
+                    continue;
+                app::context_guard guard(win);
+                if (!guard.contextIsValid())
+                    continue;
+
+                viewportSize = win.framebufferSize();
+            }
 
             if (viewportSize.x == 0 || viewportSize.y == 0)
                 continue;
@@ -221,6 +238,7 @@ namespace legion::rendering
 
     L_NODISCARD RenderPipelineBase* Renderer::getPipeline(app::window& context)
     {
+        OPTICK_EVENT();
         if (m_pipelineProvider.isNull())
             return nullptr;
 
@@ -232,6 +250,7 @@ namespace legion::rendering
 
     L_NODISCARD RenderPipelineBase* Renderer::getMainPipeline()
     {
+        OPTICK_EVENT();
         if (m_pipelineProvider.isNull())
             return nullptr;
 

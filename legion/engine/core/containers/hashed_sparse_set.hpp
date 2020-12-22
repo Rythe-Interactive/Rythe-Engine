@@ -7,6 +7,8 @@
 #include <core/platform/platform.hpp>
 #include <core/types/primitives.hpp>
 
+#include <Optick/optick.h>
+
 /**
  * @file hashed_sparse_set.hpp
  */
@@ -91,7 +93,8 @@ namespace legion::core
 		 */
 		void reserve(size_type size)
 		{
-			if (size > m_capacity)
+            OPTICK_EVENT();
+            if (size > m_capacity)
 			{
 				m_dense.resize(size);
 				m_capacity = size;
@@ -107,7 +110,8 @@ namespace legion::core
 		 */
 		L_NODISCARD size_type count(value_const_reference val) const
 		{
-			return contains(val);
+            OPTICK_EVENT();
+            return contains(val);
 		}
 
 		/**@brief Returns the amount of items of a certain value.
@@ -118,7 +122,8 @@ namespace legion::core
 		 */
 		L_NODISCARD size_type count(value_type&& val) const
 		{
-			return contains(val);
+            OPTICK_EVENT();
+            return contains(val);
 		}
 #pragma endregion
 
@@ -129,7 +134,12 @@ namespace legion::core
 		 */
 		L_NODISCARD bool contains(value_const_reference val) const
 		{
-			return m_sparse.count(val) && m_sparse.at(val) >= 0 && m_sparse.at(val) < m_size && m_sparse.at(val) < m_dense.size() && m_dense[m_sparse.at(val)] == val;
+            OPTICK_EVENT();
+            if (!m_sparse.count(val))
+                return false;
+
+            const size_type& sparseVal = m_sparse.at(val);
+			return sparseVal >= 0 && sparseVal < m_size && sparseVal < m_dense.size() && m_dense.at(sparseVal) == val;
 		}
 
 		/**@brief Checks whether a certain value is contained in the sparse_map.
@@ -138,8 +148,13 @@ namespace legion::core
 		 */
 		L_NODISCARD bool contains(value_type&& val) const
 		{
-			return m_sparse.count(val) && m_sparse.at(val) >= 0 && m_sparse.at(val) < m_size && m_sparse.at(val) < m_dense.size() && m_dense[m_sparse.at(val)] == val;
-		}
+            OPTICK_EVENT();
+            if (!m_sparse.count(val))
+                return false;
+
+            const size_type& sparseVal = m_sparse.at(val);
+            return sparseVal >= 0 && sparseVal < m_size&& sparseVal < m_dense.size() && m_dense.at(sparseVal) == val;
+        }
 
 		/**@brief Checks if all items in hashed_sparse_set are inside this set as well.
 		 * @param other Other hashed_sparse_set to check against.
@@ -147,7 +162,8 @@ namespace legion::core
 		 */
 		L_NODISCARD bool contains(const hashed_sparse_set<value_type>& other) const
 		{
-			if (other.m_size == 0)
+            OPTICK_EVENT();
+            if (other.m_size == 0)
 				return true;
 
 			if (m_size == 0 || m_size < other.m_size)
@@ -167,7 +183,8 @@ namespace legion::core
 		 */
 		L_NODISCARD bool equals(self_const_reference other) const
 		{
-			if (m_size == other.m_size)
+            OPTICK_EVENT();
+            if (m_size == other.m_size)
 			{
 				for (int i = 0; i < m_size; i++)
 					if (!other.contains(m_dense[i]))
@@ -185,7 +202,8 @@ namespace legion::core
 		 */
 		L_NODISCARD bool operator==(self_const_reference other) const
 		{
-			if (m_size == other.m_size)
+            OPTICK_EVENT();
+            if (m_size == other.m_size)
 			{
 				for (int i = 0; i < m_size; i++)
 					if (!other.contains(m_dense[i]))
@@ -204,7 +222,8 @@ namespace legion::core
 		 */
 		L_NODISCARD iterator find(value_const_reference val)
 		{
-			if (contains(val))
+            OPTICK_EVENT();
+            if (contains(val))
 				return begin() + m_sparse[val];
 			return end();
 		}
@@ -215,7 +234,8 @@ namespace legion::core
 		 */
 		L_NODISCARD const_iterator find(value_const_reference val) const
 		{
-			if (contains(val))
+            OPTICK_EVENT();
+            if (contains(val))
 				return begin() + m_sparse[val];
 			return end();
 		}
@@ -228,7 +248,8 @@ namespace legion::core
 		 */
 		std::pair<iterator, bool> insert(value_const_reference val)
 		{
-			if (!contains(val))
+            OPTICK_EVENT();
+            if (!contains(val))
 			{
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
@@ -249,7 +270,8 @@ namespace legion::core
 		 */
 		std::pair<iterator, bool> insert(value_type&& val)
 		{
-			if (!contains(val))
+            OPTICK_EVENT();
+            if (!contains(val))
 			{
 				if (m_size >= m_capacity)
 					reserve(m_size + 1);
@@ -272,7 +294,8 @@ namespace legion::core
 		template<typename... Arguments>
 		std::pair<iterator, bool> emplace(Arguments&&... arguments)
 		{
-			return insert(std::forward<value_type>(value_type(arguments...)));
+            OPTICK_EVENT();
+            return insert(std::forward<value_type>(value_type(arguments...)));
 		}
 #pragma endregion
 
@@ -282,7 +305,8 @@ namespace legion::core
 		 */
 		L_NODISCARD value_reference operator[](size_type&& index)
 		{
-			if (index < 0 || index > m_size)
+            OPTICK_EVENT();
+            if (index < 0 || index > m_size)
 				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
@@ -292,7 +316,8 @@ namespace legion::core
 		 */
 		L_NODISCARD value_reference operator[](const size_type& index)
 		{
-			if (index < 0 || index > m_size)
+            OPTICK_EVENT();
+            if (index < 0 || index > m_size)
 				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
@@ -302,7 +327,8 @@ namespace legion::core
 		 */
 		L_NODISCARD value_const_reference operator[](size_type&& index) const
 		{
-			if (index < 0 || index > m_size)
+            OPTICK_EVENT();
+            if (index < 0 || index > m_size)
 				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
@@ -312,7 +338,8 @@ namespace legion::core
 		 */
 		L_NODISCARD value_const_reference operator[](const size_type& index) const
 		{
-			if (index < 0 || index > m_size)
+            OPTICK_EVENT();
+            if (index < 0 || index > m_size)
 				throw std::out_of_range("hashed_sparse_set subscript out of range");
 			return m_dense[index];
 		}
@@ -324,6 +351,7 @@ namespace legion::core
          */
         L_NODISCARD value_reference at(size_type&& index)
         {
+            OPTICK_EVENT();
             if (index < 0 || index > m_size)
                 throw std::out_of_range("hashed_sparse_set subscript out of range");
             return m_dense[index];
@@ -334,6 +362,7 @@ namespace legion::core
          */
         L_NODISCARD value_reference at(const size_type& index)
         {
+            OPTICK_EVENT();
             if (index < 0 || index > m_size)
                 throw std::out_of_range("hashed_sparse_set subscript out of range");
             return m_dense[index];
@@ -344,6 +373,7 @@ namespace legion::core
          */
         L_NODISCARD value_const_reference at(size_type&& index) const
         {
+            OPTICK_EVENT();
             if (index < 0 || index > m_size)
                 throw std::out_of_range("hashed_sparse_set subscript out of range");
             return m_dense[index];
@@ -354,6 +384,7 @@ namespace legion::core
          */
         L_NODISCARD value_const_reference at(const size_type& index) const
         {
+            OPTICK_EVENT();
             if (index < 0 || index > m_size)
                 throw std::out_of_range("hashed_sparse_set subscript out of range");
             return m_dense[index];
@@ -365,7 +396,8 @@ namespace legion::core
 		 */
 		size_type erase(value_const_reference val)
 		{
-			if (contains(val))
+            OPTICK_EVENT();
+            if (contains(val))
 			{
                 if (m_size - 1 != m_sparse[val])
                 {

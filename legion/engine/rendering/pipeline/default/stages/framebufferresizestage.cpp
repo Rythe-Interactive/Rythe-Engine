@@ -17,6 +17,7 @@ namespace legion::rendering
 
     void FramebufferResizeStage::setup(app::window& context)
     {
+        OPTICK_EVENT();
         float renderScale = m_renderScale.load(std::memory_order_acquire);
         m_framebufferSize = context.framebufferSize();
         m_framebufferSize.x = math::max((int)(m_framebufferSize.x * renderScale), 1);
@@ -50,6 +51,7 @@ namespace legion::rendering
 
     void FramebufferResizeStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        OPTICK_EVENT();
         float renderScale = m_renderScale.load(std::memory_order_acquire);
         math::ivec2 framebufferSize = context.framebufferSize();
         framebufferSize.x *= renderScale;

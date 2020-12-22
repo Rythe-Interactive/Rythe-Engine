@@ -17,23 +17,21 @@ shader(vertex)
 
 shader(fragment)
 {
+    uniform sampler2D floorTile;
+
     void main(void)
     {
         vec2 grid = mod(GetWorldPosition().xz, 1.0);
-        vec2 invgrid = 1.0 - grid;
-        grid = grid * grid;
-        grid = grid * grid;
-        invgrid = invgrid * invgrid;
-        invgrid = invgrid * invgrid;
-        grid = clamp01(grid + invgrid);
 
-        if(max(grid.x, grid.y) < 0.9)
-            discard;
+        float alpha = mix(1, 0, 1.0-pow(1.0-clamp01(length(stdio(position))), 5.0));
 
-        float alpha = mix(1, 0, clamp01(length(stdio(position))/250.0));
-        if(alpha <= 0.0)
-            discard;
+        ivec2 texSize = textureSize(floorTile, 0);
+        float maxmip = floor(log2(max(texSize.x, texSize.y)));
 
-        fragment_color = vec4(vec3(0.3), alpha);
+        float mip = 1.0-alpha * maxmip;
+
+        vec4 col = textureLod(floorTile, grid, mip);
+        col.a *= alpha;
+        fragment_color = col;
     }
 }

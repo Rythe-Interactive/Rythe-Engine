@@ -9,6 +9,9 @@ namespace legion::rendering
     sparse_map<id_type, model> ModelCache::m_models;
     async::rw_spinlock ModelCache::m_modelLock;
 
+    async::rw_spinlock ModelCache::m_modelNameLock;
+    std::unordered_map<id_type, std::string> ModelCache::m_modelNames;
+
     bool model_handle::is_buffered() const
     {
         return ModelCache::get_model(id).buffered;
@@ -33,6 +36,12 @@ namespace legion::rendering
     {
         async::readonly_guard guard(m_modelLock);
         return m_models[id];
+    }
+
+    std::string ModelCache::get_model_name(id_type id)
+    {
+        async::readonly_guard guard(m_modelNameLock);
+        return m_modelNames[id];
     }
 
     void ModelCache::buffer_model(id_type id, const buffer& matrixBuffer)
@@ -183,6 +192,11 @@ namespace legion::rendering
             m_models.insert(id, model);
         }
 
+        {
+            async::readwrite_guard guard(m_modelNameLock);
+            m_modelNames[id] = name;
+        }
+
         log::debug("Created model {} with mesh: {}", name, meshName);
 
         return { id };
@@ -224,6 +238,11 @@ namespace legion::rendering
         { // Insert the model into the model list.
             async::readwrite_guard guard(m_modelLock);
             m_models.insert(id, model);
+        }
+
+        {
+            async::readwrite_guard guard(m_modelNameLock);
+            m_modelNames[id] = name;
         }
 
         log::trace("Created model {} with mesh: {}", name, meshName);
@@ -269,6 +288,11 @@ namespace legion::rendering
             m_models.insert(id, model);
         }
 
+        {
+            async::readwrite_guard guard(m_modelNameLock);
+            m_modelNames[id] = name;
+        }
+
         log::trace("Created model {} with mesh: {}", name, meshName);
 
         return { id };
@@ -308,6 +332,11 @@ namespace legion::rendering
         { // Insert the model into the model list.
             async::readwrite_guard guard(m_modelLock);
             m_models.insert(id, model);
+        }
+
+        {
+            async::readwrite_guard guard(m_modelNameLock);
+            m_modelNames[id] = std::to_string(id);
         }
 
         log::trace("Created model {} with mesh: {}", id, meshName);
@@ -352,6 +381,11 @@ namespace legion::rendering
             m_models.insert(id, model);
         }
 
+        {
+            async::readwrite_guard guard(m_modelNameLock);
+            m_modelNames[id] = name;
+        }
+
         log::trace("Created model {} with mesh: {}", name, meshName);
 
         return { id };
@@ -392,6 +426,12 @@ namespace legion::rendering
         { // Insert the model into the model list.
             async::readwrite_guard guard(m_modelLock);
             m_models.insert(id, model);
+        }
+
+        {
+            auto [lock, rawmesh] = mesh.get();
+            async::mixed_multiguard guard(m_modelNameLock, async::read, lock, async::write);
+            m_modelNames[id] = rawmesh.fileName;
         }
 
         log::trace("Created model {} with mesh: {}", id, meshName);

@@ -8,6 +8,8 @@
 #include <core/common/exception.hpp>
 #include <core/events/events.hpp>
 
+#include <Optick/optick.h>
+
 #include <memory>
 #include <thread>
 #include <atomic>
@@ -55,6 +57,11 @@ namespace legion::core::scheduling
             std::string message;
             std::thread::id threadId;
         };
+
+#if USE_OPTICK
+        async::spinlock m_threadScopesLock;
+        std::vector<std::unique_ptr<Optick::ThreadScope>> m_threadScopes;
+#endif
 
         ProcessChain m_localChain;
         async::rw_spinlock m_processChainsLock;
@@ -231,12 +238,23 @@ namespace legion::core::scheduling
             m_chainThreads[id] = chainThreadId;
 
             log::impl::thread_names[chainThreadId] = std::string(name);
+#if USE_OPTICK
+            sendCommand(chainThreadId, [&](void* param)
+                {
+                    (void)param;
+                    log::info("Thread {} assigned.", std::this_thread::get_id());
+
+                    std::lock_guard guard(m_threadScopesLock);
+                    m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
+                    OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
+                });
+#else
             sendCommand(chainThreadId, [](void* param)
                 {
                     (void)param;
                     log::info("Thread {} assigned.", std::this_thread::get_id());
                 });
-
+#endif
             async::readwrite_guard guard(m_processChainsLock);
             return &m_processChains.emplace(id, name, this).first.value();
         }

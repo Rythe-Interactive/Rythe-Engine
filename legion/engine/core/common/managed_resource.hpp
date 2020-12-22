@@ -3,6 +3,8 @@
 #include <core/async/rw_spinlock.hpp>
 #include <unordered_map>
 
+#include <Optick/optick.h>
+
 namespace legion::core::common
 {
     template<typename T>
@@ -25,6 +27,7 @@ namespace legion::core::common
         managed_resource(delegate<void(T&)> destroyFunc, Args&&... args)
             : m_id(m_lastId.fetch_add(1, std::memory_order_acq_rel) + 1), m_destroyFunc(destroyFunc), value(std::forward<Args>(args)...)
         {
+            OPTICK_EVENT();
             async::readwrite_guard guard(m_referenceLock);
             m_references[m_id]++;
         }
@@ -32,6 +35,7 @@ namespace legion::core::common
         managed_resource(const managed_resource<T>& src)
             : m_id(src.m_id), m_destroyFunc(src.m_destroyFunc), value(src.value)
         {
+            OPTICK_EVENT();
             async::readwrite_guard guard(m_referenceLock);
             m_references[m_id]++;
         }
@@ -39,12 +43,14 @@ namespace legion::core::common
         managed_resource(managed_resource<T>&& src)
             : m_id(src.m_id), m_destroyFunc(std::move(src.m_destroyFunc)), value(std::move(src.value))
         {
+            OPTICK_EVENT();
             async::readwrite_guard guard(m_referenceLock);
             m_references[m_id]++;
         }
 
         managed_resource<T>& operator=(const managed_resource<T>& src)
         {
+            OPTICK_EVENT();
             m_id = src.m_id;
             m_destroyFunc = src.m_destroyFunc;
             value = src.value;
@@ -55,6 +61,7 @@ namespace legion::core::common
 
         managed_resource<T>& operator=(managed_resource<T>&& src)
         {
+            OPTICK_EVENT();
             m_id = src.m_id;
             m_destroyFunc = std::move(src.m_destroyFunc);
             value = std::move(src.value);
@@ -80,6 +87,7 @@ namespace legion::core::common
 
         ~managed_resource()
         {
+            OPTICK_EVENT();
             if (!m_id)
                 return;
 

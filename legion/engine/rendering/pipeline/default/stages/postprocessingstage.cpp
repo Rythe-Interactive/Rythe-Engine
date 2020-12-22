@@ -8,6 +8,7 @@ namespace legion::rendering
 
     void PostProcessingStage::setup(app::window& context)
     {
+        OPTICK_EVENT();
         using namespace legion::core::fs::literals;
 
         app::context_guard guard(context);
@@ -26,9 +27,8 @@ namespace legion::rendering
 
     void PostProcessingStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        OPTICK_EVENT();
         static id_type mainId = nameHash("main");
-        static id_type screenId = nameHash("screenTexture");
-        static id_type depthId = nameHash("depthTexture");
 
         auto fbo = getFramebuffer(mainId);
         if (!fbo)
@@ -90,15 +90,17 @@ namespace legion::rendering
 
         for (auto& [_, effect] : m_effects)
         {
+            OPTICK_EVENT("Rendering effect");
+            OPTICK_TAG("Effect name", effect->getName().c_str());
+
             if (!effect->isInitialized()) effect->init(context);
             for (auto& pass : effect->renderPasses)
             {
+                OPTICK_EVENT("Effect pass");
                 fbo->attach(textures[!index], GL_COLOR_ATTACHMENT0);
                 
-              
                 pass.invoke(*fbo, textures[index], depthTexture, deltaTime);
-
-                
+                                
                 index = !index;
             }
         }

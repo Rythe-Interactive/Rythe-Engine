@@ -6,7 +6,7 @@
 #include <variant>
 #include <map>
 
-
+#include <Optick/optick.h>
 
 namespace legion::core::compute
 {
@@ -70,6 +70,7 @@ namespace legion::core::compute
 
         Kernel& operator=(const Kernel& other)
         {
+            OPTICK_EVENT();
             if (this == &other)
                 return *this;
             m_refcounter = other.m_refcounter;
@@ -86,6 +87,7 @@ namespace legion::core::compute
 
         Kernel& operator=(Kernel&& other) noexcept
         {
+            OPTICK_EVENT();
             if (this == &other)
                 return *this;
             m_refcounter = other.m_refcounter;
@@ -101,6 +103,7 @@ namespace legion::core::compute
         }
         ~Kernel()
         {
+            OPTICK_EVENT();
             if(m_refcounter)--*m_refcounter;
             if(m_refcounter && *m_refcounter == 0)
             {
@@ -189,6 +192,7 @@ namespace legion::core::compute
         template <class T>
         Kernel& setKernelArg(T* value, const std::string& name)
         {
+            OPTICK_EVENT();
             return setKernelArg(value,sizeof(T),name);
         }
 
@@ -201,6 +205,7 @@ namespace legion::core::compute
         template <class T>
         Kernel& setKernelArg(T* value, cl_uint index)
         {
+            OPTICK_EVENT();
             return setKernelArg(value,sizeof(T),index);
         }
         
@@ -271,6 +276,7 @@ namespace legion::core::compute
 
         std::tuple<std::vector<size_type>,std::vector<size_type>,size_type> parse_dimensions()
         {
+            OPTICK_EVENT();
             size_type dim = 1;
             size_type* v;
             if((v = reinterpret_cast<size_type*>(std::get_if<d3>(&m_global_size))))
@@ -303,6 +309,7 @@ namespace legion::core::compute
         template <class F,class... Args>
         void param_find(F && func,std::string name)
         {
+            OPTICK_EVENT();
             // lazy build buffer names
             if (m_paramsMap.empty())
             {

@@ -6,6 +6,8 @@
 #include <core/ecs/entity_handle.hpp>
 #include <core/platform/platform.hpp>
 
+#include <Optick/optick.h>
+
 /**
  * @file component_handle.hpp
  */
@@ -92,15 +94,10 @@ namespace legion::core::ecs
          */
         L_NODISCARD component_type read() const
         {
-            if (!entity)
-                return component_type();
-
+            OPTICK_EVENT();
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
             async::readonly_guard rguard(family->get_lock());
-
-            if (!family->has_component(entity))
-                return component_type();
 
             return family->get_component(entity);
         }
@@ -111,8 +108,7 @@ namespace legion::core::ecs
          */
         component_type write(component_type&& value)
         {
-            if (!entity)
-                return component_type();
+            OPTICK_EVENT();
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
@@ -134,8 +130,7 @@ namespace legion::core::ecs
          */
         component_type write(const component_type& value)
         {
-            if (!entity)
-                return component_type();
+            OPTICK_EVENT();
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
@@ -158,8 +153,7 @@ namespace legion::core::ecs
         template<typename Func>
         component_type read_modify_write(Func&& modifier)
         {
-            if (!entity)
-                return component_type();
+            OPTICK_EVENT();
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
@@ -181,8 +175,7 @@ namespace legion::core::ecs
         template<typename Func>
         component_type read_modify_write(const Func& modifier)
         {
-            if (!entity)
-                return component_type();
+            OPTICK_EVENT();
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
@@ -207,8 +200,7 @@ namespace legion::core::ecs
          */
         component_type fetch_add(component_type&& value)
         {
-            if (!entity)
-                return component_type();
+            OPTICK_EVENT();
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
@@ -233,8 +225,7 @@ namespace legion::core::ecs
          */
         component_type fetch_add(const component_type& value)
         {
-            if (!entity)
-                return component_type();
+            OPTICK_EVENT();
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
@@ -259,8 +250,7 @@ namespace legion::core::ecs
          */
         component_type fetch_multiply(component_type&& value)
         {
-            if (!entity)
-                return component_type();
+            OPTICK_EVENT();
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
@@ -285,8 +275,7 @@ namespace legion::core::ecs
          */
         component_type fetch_multiply(const component_type& value)
         {
-            if (!entity)
-                return component_type();
+            OPTICK_EVENT();
 
             component_container<component_type>* family = m_registry->getFamily<component_type>();
 
@@ -310,9 +299,7 @@ namespace legion::core::ecs
          */
         void destroy()
         {
-            if (!entity)
-                return;
-
+            OPTICK_EVENT();
             m_registry->destroyComponent(entity, typeHash<component_type>());
         }
 
@@ -320,7 +307,8 @@ namespace legion::core::ecs
          */
         virtual bool valid() const override
         {
-            return entity.valid() && m_registry->getFamily<component_type>()->has_component(entity);
+            OPTICK_EVENT();
+            return m_registry->getFamily<component_type>()->has_component(entity);
         }
     };
 
@@ -328,6 +316,7 @@ namespace legion::core::ecs
     template<typename component_type>
     inline component_handle<component_type> component_handle_base::cast()
     {
+        OPTICK_EVENT();
         if (typeHash<component_type>() == m_typeId)
         {
             return component_handle<component_type>(entity);
@@ -341,6 +330,7 @@ namespace legion::core::ecs
     template<typename component_type>
     inline const component_handle<component_type> component_handle_base::cast() const
     {
+        OPTICK_EVENT();
         if (typeHash<component_type>() == m_typeId)
         {
             return component_handle<component_type>(entity);
@@ -359,6 +349,7 @@ namespace std
     {
         std::size_t operator()(legion::core::ecs::component_handle<component_type> const& handle) const noexcept
         {
+            OPTICK_EVENT();
             std::size_t hash;
             std::size_t h1 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(handle.m_registry));
             std::size_t h2 = std::hash<legion::core::id_type>{}(handle.entity);

@@ -4,54 +4,64 @@ namespace  legion::rendering
 {
     void MeshBatchingStage::eraseInstance(ecs::entity_handle entity)
     {
+        OPTICK_EVENT();
         std::lock_guard guard(m_erasureLock);
         m_toErase.insert(entity);
     }
 
     void MeshBatchingStage::insertInstance(ecs::entity_handle entity)
     {
+        OPTICK_EVENT();
         std::lock_guard guard(m_insertionLock);
         m_toInsert.insert(entity);
     }
 
     void MeshBatchingStage::reinsertInstance(ecs::entity_handle entity)
     {
+        OPTICK_EVENT();
         std::lock_guard guard(m_reinsertionLock);
         m_toReinsert.insert(entity);
     }
 
     void MeshBatchingStage::onRendererCreate(events::component_creation<mesh_renderer>* event)
     {
+        OPTICK_EVENT();
         insertInstance(event->entity);
     }
 
     void MeshBatchingStage::onRendererDestroy(events::component_destruction<mesh_renderer>* event)
     {
+        OPTICK_EVENT();
         eraseInstance(event->entity);
     }
 
     void MeshBatchingStage::onRendererModified(events::component_modification<mesh_renderer>* event)
     {
+        OPTICK_EVENT();
         reinsertInstance(event->entity);
     }
 
     void MeshBatchingStage::onFilterCreate(events::component_creation<mesh_filter>* event)
     {
+        OPTICK_EVENT();
         insertInstance(event->entity);
     }
 
     void MeshBatchingStage::onFilterDestroy(events::component_destruction<mesh_filter>* event)
     {
+        OPTICK_EVENT();
         eraseInstance(event->entity);
     }
 
     void MeshBatchingStage::onFilterModified(events::component_modification<mesh_filter>* event)
     {
+        OPTICK_EVENT();
         reinsertInstance(event->entity);
     }
 
     void MeshBatchingStage::setup(app::window& context)
     {
+        OPTICK_EVENT();
         create_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>("mesh batches");
 
         bindToEvent<events::component_creation<mesh_renderer>, &MeshBatchingStage::onRendererCreate>();
@@ -64,12 +74,14 @@ namespace  legion::rendering
         static auto renderablesQuery = createQuery<mesh_filter, mesh_renderer>();
         renderablesQuery.queryEntities();
 
+        std::lock_guard guard(m_insertionLock);
         for (auto ent : renderablesQuery)
-            insertInstance(ent);
+            m_toInsert.insert(ent);
     }
 
     void MeshBatchingStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        OPTICK_EVENT();
         (void)deltaTime;
         (void)camInput;
         (void)cam;

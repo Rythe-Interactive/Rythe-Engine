@@ -1,4 +1,5 @@
 #include <core/async/rw_spinlock.hpp>
+#include <Optick/optick.h>
 
 namespace legion::core::async
 {
@@ -11,6 +12,7 @@ namespace legion::core::async
 
     void rw_spinlock::read_lock()
     {
+        OPTICK_EVENT();
         if (m_forceRelease)
             return;
 
@@ -41,6 +43,7 @@ namespace legion::core::async
 
     bool rw_spinlock::read_try_lock()
     {
+        OPTICK_EVENT();
         if (m_forceRelease)
             return true;
 
@@ -66,6 +69,7 @@ namespace legion::core::async
 
     void rw_spinlock::write_lock()
     {
+        OPTICK_EVENT();
         if (m_forceRelease)
             return;
 
@@ -99,6 +103,7 @@ namespace legion::core::async
 
     bool rw_spinlock::write_try_lock()
     {
+        OPTICK_EVENT();
         if (m_forceRelease)
             return true;
 
@@ -136,6 +141,7 @@ namespace legion::core::async
 
     void rw_spinlock::read_unlock()
     {
+        OPTICK_EVENT();
         if (m_forceRelease)
             return;
 
@@ -153,6 +159,7 @@ namespace legion::core::async
 
     void rw_spinlock::write_unlock()
     {
+        OPTICK_EVENT();
         if (m_forceRelease)
             return;
 

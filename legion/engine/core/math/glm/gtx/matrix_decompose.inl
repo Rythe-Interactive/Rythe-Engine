@@ -3,6 +3,8 @@
 #include "../gtc/constants.hpp"
 #include "../gtc/epsilon.hpp"
 
+#include <Optick/optick.h>
+
 namespace legion::core::math{
 namespace detail
 {
@@ -31,7 +33,8 @@ namespace detail
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER bool decompose(mat<4, 4, T, Q> const& ModelMatrix, vec<3, T, Q> & Scale, qua<T, Q> & Orientation, vec<3, T, Q> & Translation, vec<3, T, Q> & Skew, vec<4, T, Q> & Perspective)
 	{
-		mat<4, 4, T, Q> LocalMatrix(ModelMatrix);
+        OPTICK_EVENT();
+        mat<4, 4, T, Q> LocalMatrix(ModelMatrix);
 
 		// Normalize the matrix.
 		if(epsilonEqual(LocalMatrix[3][3], static_cast<T>(0), epsilon<T>()))
@@ -187,18 +190,21 @@ namespace detail
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER void compose(mat<4, 4, T, Q>& ModelMatrix, const vec<3, T, Q>& Scale, const qua<T, Q>& Orientation, const vec<3, T, Q>& Translation)
 	{
-		ModelMatrix = translate(Translation) * toMat4(Orientation) * scale(Scale);
+        OPTICK_EVENT();
+        ModelMatrix = translate(Translation) * toMat4(Orientation) * scale(Scale);
 	}
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL mat<4, 4, T, Q> compose(vec<3, T, Q> const& Scale, qua<T, Q> const& Orientation, vec<3, T, Q> const& Translation)
 	{
-		return translate(Translation) * toMat4(Orientation) * scale(Scale);
+        OPTICK_EVENT();
+        return translate(Translation) * toMat4(Orientation) * scale(Scale);
 	}
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER bool decompose(mat<4, 4, T, Q> const& ModelMatrix, vec<3, T, Q>& Scale, qua<T, Q>& Orientation, vec<3, T, Q>& Translation)
 	{
+        OPTICK_EVENT();
         mat<4, 4, T, Q> LocalMatrix(ModelMatrix);
 
         // Normalize the matrix.

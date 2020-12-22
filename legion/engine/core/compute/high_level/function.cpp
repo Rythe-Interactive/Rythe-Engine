@@ -6,6 +6,7 @@ namespace legion::core::compute
 {
     common::result<void, void> function_base::invoke(dvar global, invoke_buffer_container& parameters, std::vector<karg> kargs) const
     {
+        OPTICK_EVENT();
         std::vector<Buffer> buffers;
         buffers.reserve(parameters.size());
 
@@ -19,7 +20,7 @@ namespace legion::core::compute
 
     common::result<void, void> function_base::invoke2(dvar global, std::vector<Buffer> buffers, std::vector<karg> kargs) const
     {
-
+        OPTICK_EVENT();
         if (std::holds_alternative<std::tuple<size_type, size_type, size_type>>(global))
         {
             auto& [s0, s1, s2] = std::get<2>(global);
