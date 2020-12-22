@@ -4,6 +4,7 @@
 #include <rendering/pipeline/default/stages/lightbufferstage.hpp>
 #include <rendering/pipeline/default/stages/meshbatchingstage.hpp>
 #include <rendering/pipeline/default/stages/meshrenderstage.hpp>
+#include <rendering/pipeline/default/stages/debugrenderstage.hpp>
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 #include <rendering/pipeline/default/stages/submitstage.hpp>
 #include <rendering/pipeline/default/postfx/tonemapping.hpp>
@@ -19,6 +20,7 @@ namespace legion::rendering
         attachStage<LightBufferStage>();
         attachStage<MeshBatchingStage>();
         attachStage<MeshRenderStage>();
+        attachStage<DebugRenderStage>();
         attachStage<PostProcessingStage>();
         attachStage<SubmitStage>();
 

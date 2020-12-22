@@ -42,7 +42,7 @@ namespace legion::debug
 
 #define drawLine CONCAT_DEFINE(PROJECT_NAME, drawLine)
 
-    void drawLine (math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
+    inline void drawLine (math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
     {
         Engine::eventbus->raiseEvent(std::unique_ptr<events::event_base>(new debug_line_event(start, end, color, width, time, ignoreDepth)));
     }

@@ -538,7 +538,7 @@ namespace legion::application
 
     void WindowSystem::handleWindowEvents(time::time_span<fast_time> deltaTime)
     {
-        debug::drawLine(math::vec3(), math::vec3(), math::colors::white, 500);
+        debug::drawLine(math::vec3(), math::vec3::up*2);
 
         createWindows();
         updateWindowIcons();
