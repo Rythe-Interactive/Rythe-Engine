@@ -24,6 +24,8 @@ namespace legion::rendering
 
         virtual void setup();
 
+        void onDebugLine(events::event_base* event);
+
         void onExit(events::exit* event);
 
         void render(time::span deltatime);

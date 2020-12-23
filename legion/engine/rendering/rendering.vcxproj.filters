@@ -42,6 +42,7 @@
     <ClCompile Include="pipeline\default\stages\postprocessingstage.cpp" />
     <ClCompile Include="pipeline\default\postfx\tonemapping.cpp" />
     <ClCompile Include="pipeline\default\postfx\fxaa.cpp" />
+    <ClCompile Include="pipeline\default\stages\debugrenderstage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="pipeline\default\stages\postprocessingstage.hpp" />
     <ClInclude Include="pipeline\default\postfx\tonemapping.hpp" />
     <ClInclude Include="pipeline\default\postfx\fxaa.hpp" />
+    <ClInclude Include="pipeline\default\stages\debugrenderstage.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\buffer.inl" />

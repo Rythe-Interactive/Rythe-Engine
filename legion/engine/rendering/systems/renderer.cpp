@@ -1,4 +1,5 @@
 #include <rendering/systems/renderer.hpp>
+#include <rendering/debugrendering.hpp>
 #include <Optick/optick.h>
 
 namespace legion::rendering

@@ -159,9 +159,17 @@ namespace legion::rendering
             // Create message buffer and fetch message.
             GLint infoLogLength;
             glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
-            char* errorMessage = new char[infoLogLength + 1];
-            glGetShaderInfoLog(shaderId, infoLogLength, nullptr, errorMessage);
-
+            char* errorMessage;
+            if (infoLogLength > 0)
+            {
+                errorMessage = new char[infoLogLength + 1];
+                glGetShaderInfoLog(shaderId, infoLogLength, nullptr, errorMessage);
+                errorMessage[infoLogLength] = '\0';
+            }
+            else
+            {
+                errorMessage = "Unknown error OpenGL context might not have been made current?";
+            }
             cstring shaderTypename;
             switch (shaderType)
             {
@@ -189,7 +197,8 @@ namespace legion::rendering
             }
 
             log::error("Error compiling {} shader:\n\t{}", shaderTypename, errorMessage);
-            delete[] errorMessage; // Delete message.
+            if (infoLogLength > 0)
+                delete[] errorMessage; // Delete message.
 
             glDeleteShader(shaderId); // Delete shader.
             return -1;

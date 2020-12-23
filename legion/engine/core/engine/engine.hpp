@@ -40,6 +40,9 @@ namespace legion::core
         scheduling::Scheduler m_scheduler;
 
     public:
+
+        inline static events::EventBus* eventbus;
+
         Engine(int argc, char** argv) : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_cliargs(argv, argv + argc),
 #if defined(LEGION_LOW_POWER)
             m_scheduler(&m_eventbus, true, LEGION_MIN_THREADS)
@@ -48,6 +51,7 @@ namespace legion::core
 #endif
         {
             log::setup();
+            eventbus = &m_eventbus;
             Module::m_eventBus = &m_eventbus;
             Module::m_ecs = &m_ecs;
             Module::m_scheduler = &m_scheduler;

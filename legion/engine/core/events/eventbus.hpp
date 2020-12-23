@@ -185,5 +185,10 @@ namespace legion::core::events
             OPTICK_EVENT();
             m_eventCallbacks[event_type::id] += force_value_cast<delegate<void(event_base*)>>(callback);
         }
+
+        void bindToEventUnsafe(id_type id, delegate<void(event_base*)> callback)
+        {
+            m_eventCallbacks[id] += callback;
+        }
     };
 }
