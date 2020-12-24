@@ -19,6 +19,7 @@
     <ClCompile Include="mesh_splitter_utils\primitive_mesh.cpp" />
     <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp" />
     <ClCompile Include="systems\physicssystem.cpp" />
+    <ClCompile Include="systems\physics_fracture_test_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -56,6 +57,7 @@
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.hpp" />
     <ClInclude Include="physics_contact.hpp" />
+    <ClInclude Include="systems\physics_fracture_test_system.hpp" />
     <ClInclude Include="systems\physicssystem.hpp" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="data\physics_manifold.hpp" />

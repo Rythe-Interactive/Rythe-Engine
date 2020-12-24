@@ -78,7 +78,11 @@ public:
         groundplane = createEntity();
         auto groundmat = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
         groundmat.set_param("heightMap", rendering::TextureCache::create_texture("heightMap", "assets://textures/mississippi.png"_view));
-        groundplane.add_component<rendering::renderable>({ rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view), groundmat });
+
+        groundplane.add_component<rendering::mesh_renderer>
+            ({ groundmat,
+                rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view) });
+
         groundplane.add_components<transform>();
 
         skybox = createEntity();

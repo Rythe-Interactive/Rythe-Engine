@@ -48,6 +48,9 @@
     <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="systems\physics_fracture_test_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -156,6 +159,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mesh_splitter_utils\intersection_edge_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\physics_fracture_test_system.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

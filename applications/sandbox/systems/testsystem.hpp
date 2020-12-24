@@ -12,8 +12,7 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/halfedgeface.hpp>
 #include <physics/data/penetrationquery.h>
-#include <physics/mesh_splitter_utils/mesh_splitter.hpp>
-#include <physics/mesh_splitter_utils/splittable_polygon.h>
+
 
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
@@ -78,15 +77,15 @@ struct physics_test_move : public app::input_axis<physics_test_move> {};
 
 struct light_switch : public app::input_action<light_switch> {};
 struct tonemap_switch : public app::input_action<tonemap_switch> {};
-struct physics_split_test : public app::input_action<physics_split_test> {};
+
 
 struct activate_CRtest2 : public app::input_action<activate_CRtest2> {};
 struct activate_CRtest3 : public app::input_action<activate_CRtest3> {};
 
 struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
-
-struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
-struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
+//
+//struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
+//struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
 using namespace legion::core::filesystem::literals;
 
@@ -175,10 +174,8 @@ public:
         app::InputSystem::createBinding<light_switch>(app::inputmap::method::F);
         app::InputSystem::createBinding<tonemap_switch>(app::inputmap::method::G);
 
-        app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
-        app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
-
-        app::InputSystem::createBinding<physics_split_test>(app::inputmap::method::ENTER);
+        //app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
+        //app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
 
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
@@ -199,7 +196,7 @@ public:
 
         bindToEvent<audio_test_input, &TestSystem::audioTestInput>();
 
-        bindToEvent<physics_split_test, &TestSystem::OnSplit>();
+        //bindToEvent<physics_split_test, &TestSystem::OnSplit>();
 
         //collision resolution test
         bindToEvent< activate_CRtest2, &TestSystem::onActivateUnitTest2>();
@@ -211,8 +208,8 @@ public:
         bindToEvent< nextEdge_action, &TestSystem::OnNextEdge>();
         bindToEvent<nextPairing_action, &TestSystem::OnNextPair>();
 
-        bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
-        bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
+        //bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
+        //bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
 
 #pragma endregion
 
@@ -798,7 +795,7 @@ public:
 
             entPhyHande.write(physicsComponent2);
 
-            splitter.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
+            splitter.add_components<rendering::mesh_renderable>(mesh_filter( planeH.get_mesh()), rendering::mesh_renderer(TextureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
             positionH.write(math::vec3(36, 1.0f, 10.0f));
@@ -826,7 +823,7 @@ public:
 
             entPhyHande.write(physicsComponent2);
 
-            splitter.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
+            splitter.add_components<rendering::mesh_renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
             positionH.write(math::vec3(37, 1.5f, 10.0f));
@@ -858,7 +855,7 @@ public:
 
             entPhyHande.write(physicsComponent2);
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(TextureH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter( cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
             //renderableHandle.write({ cubeH,TextureH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
@@ -888,7 +885,7 @@ public:
 
             ////auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
             ////auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-            //splitterCylinder.add_components<rendering::renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
+            //splitterCylinder.add_components<rendering::mesh_renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
 
             //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitterCylinder);
             //positionH.write(math::vec3(37, 1.5f, 15.0f));
@@ -913,7 +910,7 @@ public:
             ////auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
             ////auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(ent);
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(ent);
             //renderableHandle.write({ cylinderH,TextureH });
 
             //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
@@ -950,7 +947,7 @@ public:
 
             //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
             //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-            ent.add_components<rendering::renderable>(complexH.get_mesh(), rendering::mesh_renderer(TextureH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter( complexH.get_mesh()), rendering::mesh_renderer(TextureH));
 
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
@@ -1269,7 +1266,7 @@ public:
             positionH.write(math::vec3(testPos, -3.0f, 15.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
         }
 
@@ -1476,10 +1473,10 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::renderable>(staticToOBBEnt);
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(staticToOBBEnt);
             //renderableHandle.write({ cubeH, wireframeH });
-            staticToOBBEnt.add_components<rendering::renderable>
-                (cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+            staticToOBBEnt.add_components<rendering::mesh_renderable>
+                (mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
             positionH.write(math::vec3(testPos, -0.0f, 2.0f));
@@ -1901,7 +1898,7 @@ public:
             id.id = "STATIC_BLOCK";
             idHandle.write(id);
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(textureH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
         }
 
         {
@@ -1926,7 +1923,7 @@ public:
             id.id = "STATIC_BLOCK";
             idHandle.write(id);
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(textureH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
         }
 
         {
@@ -1945,7 +1942,7 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(textureH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto id = idHandle.read();
@@ -1997,7 +1994,10 @@ public:
                 if (!sun)
                 {
                     sun = createEntity();
-                    sun.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle("directional light")), rendering::mesh_renderer(rendering::MaterialCache::get_material("directional light")));
+                    sun.add_components<rendering::mesh_renderable>(
+                        mesh_filter(MeshCache::get_handle("directional light")),
+                        rendering::mesh_renderer( rendering::MaterialCache::get_material("directional light")));
+
                     sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
                     sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
                 }
@@ -2659,29 +2659,29 @@ public:
         }
     }
 
-    void onExtendedPhysicsContinueRequest(extendedPhysicsContinue* action)
-    {
-        if (action->value)
-        {
-            physics::PhysicsSystem::IsPaused = false;
-        }
-        else
-        {
-            physics::PhysicsSystem::IsPaused = true;
-        }
+    //void onExtendedPhysicsContinueRequest(extendedPhysicsContinue* action)
+    //{
+    //    if (action->value)
+    //    {
+    //        physics::PhysicsSystem::IsPaused = false;
+    //    }
+    //    else
+    //    {
+    //        physics::PhysicsSystem::IsPaused = true;
+    //    }
 
-    }
+    //}
 
-    void onNextPhysicsTimeStepRequest(nextPhysicsTimeStepContinue* action)
-    {
-        if (!(action->value))
-        {
-            physics::PhysicsSystem::IsPaused = true;
-            physics::PhysicsSystem::oneTimeRunActive = true;
-            log::debug(" onNextPhysicsTimeStepRequest");
-        }
+    //void onNextPhysicsTimeStepRequest(nextPhysicsTimeStepContinue* action)
+    //{
+    //    if (!(action->value))
+    //    {
+    //        physics::PhysicsSystem::IsPaused = true;
+    //        physics::PhysicsSystem::oneTimeRunActive = true;
+    //        log::debug(" onNextPhysicsTimeStepRequest");
+    //    }
 
-    }
+    //}
 
 
     /*void FrictionTestActivate(activateFrictionTest* action)
@@ -2747,9 +2747,9 @@ public:
 
                     auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-                    //auto renderableHandle = m_ecs->createComponents<rendering::renderable>(ent);
+                    //auto renderableHandle = m_ecs->createComponents<rendering::mesh_renderable>(ent);
                     //renderableHandle.write({ cubeH, wireframeH });
-                    ent.add_components<rendering::renderable>(cubeH.get_mesh(), rendering::mesh_renderer(wireframeH));
+                    ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
                     physics::physicsComponent physicsComponent;
                     physics::physicsComponent::init(physicsComponent);
@@ -2833,24 +2833,8 @@ public:
       
     }
 
-    void OnSplit(physics_split_test * action)
-    {
-        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
-
-        if (action->value)
-        {
-            halfEdgeQuery.queryEntities();
-            for (auto entity : halfEdgeQuery)
-            {
-                auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
-                auto edgeFinder = edgeFinderH.read();
-                edgeFinder.TestSplit();
-                edgeFinderH.write(edgeFinder);
-                edgeFinder.DestroyTestSplitter(m_ecs);
-
-            }
-        }
+   
         
-    }
+    
 
 };

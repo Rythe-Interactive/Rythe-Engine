@@ -177,8 +177,10 @@ namespace legion::core
     {
         id_type newId = nameHash(name); // Get the new id.
 
-        auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, mesh>(std::make_pair(async::readonly_rw_spinlock(), meshData));
-        m_meshes.emplace(std::make_pair(newId, pair_ptr));
+        async::readwrite_guard guard(m_meshesLock);
+        auto* pair_ptr = new std::pair<async::rw_spinlock, mesh>();
+        pair_ptr->second = std::move(meshData);
+        m_meshes.emplace(newId, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>(pair_ptr));
 
         return { newId };
     }

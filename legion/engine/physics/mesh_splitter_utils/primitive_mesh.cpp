@@ -32,15 +32,18 @@ namespace legion::physics
         auto modelH = rendering::ModelCache::create_model(meshH);
 
         //create renderable
-        auto [meshFilterH, meshRendererH] = ent.add_components< rendering::renderable>();
+        //auto [meshFilterH, meshRendererH] = ent.add_components< rendering::mesh_renderable>();
+        //
 
-        auto meshRenderer = meshRendererH.read();
-        meshRenderer.material = originalMaterial;
-        meshRendererH.write(meshRenderer);
+        //auto meshRenderer = meshRendererH.read();
+        //meshRenderer.material = originalMaterial;
+        //meshRendererH.write(meshRenderer);
 
-        mesh_filter meshFilter = meshFilterH.read();
-        meshFilter = meshH;
-        meshFilterH.write(meshFilter);
+        //mesh_filter meshFilter = meshFilterH.read();
+        mesh_filter meshFilter = mesh_filter( meshH );
+        //meshFilterH.write(meshFilter);
+
+        ent.add_components<rendering::mesh_renderable>(meshFilter,rendering::mesh_renderer( originalMaterial));
 
         //create transform
         auto [originalPosH, originalRotH, originalScaleH] = originalEntity.get_component_handles<transform>();

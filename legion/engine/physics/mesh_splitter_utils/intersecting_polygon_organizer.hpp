@@ -7,6 +7,9 @@
 
 namespace legion::physics
 {
+    /** @struct IntersectingPolygonOrganizer
+    * @brief Contains the necessary operations to split the edges of a given polygon
+    */
     struct IntersectingPolygonOrganizer
     {
         MeshSplitterDebugHelper* debugHelper = nullptr;
@@ -16,7 +19,9 @@ namespace legion::physics
 
         }
 
-        void categorizeEdges(SplittablePolygonPtr splitPolygon
+        //------------------------------------------------------ Related to Edge Categorization  ----------------------------------------------------------------//
+
+        void SplitPolygon(SplittablePolygonPtr splitPolygon
             , const math::mat4& transform, const math::vec3 cutPosition
             , const math::vec3 cutNormal, SplitState requestedState
             , std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges)
@@ -26,21 +31,279 @@ namespace legion::physics
             bool keepAbove = requestedState == SplitState::Above ? true : false;
             //For now assume no islands in one polygon
 
-            std::vector<meshHalfEdgePtr> unEffectedUsedEdges;
-            std::vector<meshHalfEdgePtr> effectedUsedEdges;
-
-            //[1] Get Triangles Effected by the split
-
             splitPolygon->ResetEdgeVisited();
 
             if (splitPolygon->GetMeshEdges().size() < 3) { return; }
 
+            //---------------------------- [1] Get Triangles Effected by the split------------------------------------------------------------------//
+
+            std::vector<meshHalfEdgePtr> unEffectedUsedEdges;
+            std::vector<meshHalfEdgePtr> effectedUsedEdges;
+
+            BFSIdentifyEffectedEdges(transform, splitPolygon, unEffectedUsedEdges, effectedUsedEdges, cutPosition, cutNormal, keepAbove);
+
+            //---------------------------- [2] Get used boundary Effected ----------------------------------------------------------------------------//
+
+            //set 'effectedUsedEdges' to be unvisited in order to differentiate it from 'unEffectedUsedEdges'
+            for (auto edge : effectedUsedEdges)
+            {
+                edge->isVisited = false;
+            }
+
+            IdentifyBoundaryEffectedEdges(effectedUsedEdges,
+                transform, cutPosition
+                , cutNormal, keepAbove);
+
+
+            //----------------------------- [3] Sort Edges ---------------------------------------------------------------------------------------//
+
+            //find edges in effectedUsedEdges that are split by plane and store them in a std::vector
+            std::vector<meshHalfEdgePtr> splitEdges;
+
+            for (auto edge : effectedUsedEdges)
+            {
+                if (edge->IsSplitByPlane(transform, cutPosition, cutNormal))
+                {
+                    splitEdges.push_back(edge);
+                }
+            }
+
+            //sort them based on support point created by cross product of normal and split normal
+
+            math::vec3 worldCentroid = transform * math::vec4(splitPolygon->localCentroid, 1);
+            math::vec3 worldPolygonNormal = transform * math::vec4(splitPolygon->localNormal, 0);
+            polygonDebugInfo.worldNormal = worldPolygonNormal;
+
+            math::vec3 polygonNormalCrossCutNormal = math::normalize(math::cross(worldPolygonNormal, cutNormal));
+
+            //SortingCriterium splittingPlaneSorter(worldCentroid,polygonNormalCrossCutNormal,transform);
+
+            auto initialSorter = [&transform, &worldCentroid, &polygonNormalCrossCutNormal]
+            (const std::shared_ptr<MeshHalfEdge>& lhs, std::shared_ptr<MeshHalfEdge>& rhs)
+            {
+                math::vec3 aWorldCentroid = lhs->GetWorldCentroid(transform);
+                math::vec3 bWorldCentroid = rhs->GetWorldCentroid(transform);
+
+                math::vec3 AtoPolygonCentroid = aWorldCentroid - worldCentroid;
+                math::vec3 BtoPolygonCentroid = bWorldCentroid - worldCentroid;
+
+                return
+                    math::dot(AtoPolygonCentroid, polygonNormalCrossCutNormal) <
+                    math::dot(BtoPolygonCentroid, polygonNormalCrossCutNormal);
+
+
+            };
+
+
+            std::sort(splitEdges.begin(), splitEdges.end(), initialSorter);
+
+            //clear the polygon's edge list because we are going to start regenerating it
+            auto& meshEdges = splitPolygon->GetMeshEdges();
+            meshEdges.clear();
+
+            int edgesUsed = effectedUsedEdges.size();
+            static int numberOfEdgesToMakeATriangle = 2;
+
+            //Check for the special case where there are only 2 splitEdges, this will create 1 triangle
+            if (edgesUsed == numberOfEdgesToMakeATriangle)
+            {
+                HandleTriangleSplit(splitPolygon,
+                    splitEdges, generatedIntersectionEdges,
+                    transform, cutNormal, cutPosition, keepAbove);
+
+                return;
+            }
+            else if(edgesUsed < numberOfEdgesToMakeATriangle)
+            {
+                //there exist a number of edges that is on the splitting plane
+                assert(false);
+                return;
+            }
+
+            //previous sorting direction is dependent on cut tangent.
+            //use centroids of first and last split edge as the new sorting direction
+
+            math::vec3 worldFirstEdge = splitEdges.at(0)->GetWorldCentroid(transform);
+            math::vec3 worldSecondEdge = splitEdges.at(splitEdges.size() - 1)->GetWorldCentroid(transform);
+
+            //sort effectedUsedEdges based on sorting direction
+
+            math::vec3 sortingCentroid = (worldFirstEdge + worldSecondEdge) / 2.0f;
+            math::vec3 sortingDirection = worldSecondEdge - worldFirstEdge;
+
+            auto boundarySorter = [&transform, &sortingCentroid, &sortingDirection]
+            (const std::shared_ptr<MeshHalfEdge>& lhs, std::shared_ptr<MeshHalfEdge>& rhs)
+            {
+                math::vec3 aWorldCentroid = lhs->GetWorldCentroid(transform);
+                math::vec3 bWorldCentroid = rhs->GetWorldCentroid(transform);
+
+                math::vec3 AtoPolygonCentroid = aWorldCentroid - sortingCentroid;
+                math::vec3 BtoPolygonCentroid = bWorldCentroid - sortingCentroid;
+
+                return
+                    math::dot(AtoPolygonCentroid, sortingDirection) <
+                    math::dot(BtoPolygonCentroid, sortingDirection);
+
+            };
+
+            std::sort(effectedUsedEdges.begin(), effectedUsedEdges.end(), boundarySorter);
+
+            meshHalfEdgePtr firstEdge = effectedUsedEdges.at(0);
+            meshHalfEdgePtr secondEdge = effectedUsedEdges.at(effectedUsedEdges.size() - 1);
+
+
+            //------------------------------------- [5] Regenerate Edges ----------------------------------------------------------------------------------------------------------//
+
+
+            //get start and end intersection points
+            auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->GetEdgeWorldPositions(transform);
+
+            //check if position of first edge is outside intersection, this is important because it will determine how the edges will be regenerated
+            bool startFromOutsideIntersection =
+                keepAbove == PhysicsStatics::IsPointAbovePlane(cutNormal, cutPosition, firstEdgeCurrent);
+
+            auto [firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV]
+                = GetFirstAndLastEdgeIntersectionInfo(cutNormal, cutPosition, transform,
+                firstEdge, secondEdge);
+
+            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
+            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
+
+            meshHalfEdgePtr supportEdge = nullptr;
+            //generated half edges using
+            std::vector<meshHalfEdgePtr> generatedHalfEdges;
+
+            SplitterIntersectionInfo vertexIntersectionInfo(
+                firstEdgeIntersection,
+                startToEndIntersection,
+                firstInterpolantUV,
+                startToEndUV);
+
+            for (int i = 1; i < effectedUsedEdges.size() - 1; i++)
+            {
+                if (startFromOutsideIntersection)
+                {
+                    InsideIntersectionMeshRegeneration(
+                        transform, effectedUsedEdges,
+                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges,splitPolygon);
+                }
+                else
+                {
+                    OutsideIntersectionMeshRegeneration(
+                        transform, effectedUsedEdges,
+                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges, splitPolygon);
+                }
+            }
+
+            polygonDebugInfo.intersectionPoints.first = firstEdgeIntersection;
+            polygonDebugInfo.intersectionPoints.second = secondEdgeIntersection;
+
+            polygonDebugInfo.finalSortingDirection.first = sortingCentroid;
+            polygonDebugInfo.finalSortingDirection.second = sortingDirection;
+
+            polygonDebugInfo.drawColor = splitPolygon->debugColor;
+
+            //--------------DEBUG STUFF----------------//
+            polygonDebugInfo.boundaryEdges.insert(
+                polygonDebugInfo.boundaryEdges.begin(),
+                effectedUsedEdges.begin(),
+                effectedUsedEdges.end());
+
+            polygonDebugInfo.boundaryEdges.insert(
+                polygonDebugInfo.boundaryEdges.end(),
+                generatedHalfEdges.begin(),
+                generatedHalfEdges.end());
+            //-------------------------------------//
+
+            debugHelper->boundaryEdgesForPolygon.push_back(polygonDebugInfo);
+
+            //------------------------------------- [6] Add regenerated edges to the polygon -----------------------------------------------------------------------------------//
+
+            meshEdges.insert(meshEdges.end(), unEffectedUsedEdges.begin(), unEffectedUsedEdges.end());
+            meshEdges.insert(meshEdges.end(), effectedUsedEdges.begin(), effectedUsedEdges.end());
+            meshEdges.insert(meshEdges.end(), generatedHalfEdges.begin(), generatedHalfEdges.end());
+
+            splitPolygon->CalculateLocalCentroid();
+            splitPolygon->AssignEdgeOwnership();
+            debugHelper->polygonCount++;
+        }
+
+        //------------------------------------------------------ Edge Categorization Helper Functions ----------------------------------------------------------------//
+
+        std::tuple<math::vec3, math::vec2, math::vec3, math::vec2> GetFirstAndLastEdgeIntersectionInfo(const math::vec3& cutNormal, const math::vec3& cutPosition
+            , const math::mat4 transform,
+            meshHalfEdgePtr firstEdge, meshHalfEdgePtr secondEdge)
+        {
+            auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->GetEdgeWorldPositions(transform);
+            auto [secondEdgeCurrent, secondEdgeNext] = secondEdge->GetEdgeWorldPositions(transform);
+
+            math::vec3 firstEdgeIntersection;
+            float firstEdgeInterpolant;
+            PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
+                firstEdgeCurrent, firstEdgeNext, firstEdgeIntersection, firstEdgeInterpolant);
+
+            math::vec2 firstInterpolantUV = math::lerp(firstEdge->uv, firstEdge->nextEdge->uv, firstEdgeInterpolant);
+
+            math::vec3 secondEdgeIntersection;
+            float secondEdgeInterpolant;
+            PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
+                secondEdgeCurrent, secondEdgeNext, secondEdgeIntersection, secondEdgeInterpolant);
+
+            math::vec2 secondInterpolantUV = math::lerp(secondEdge->uv, secondEdge->nextEdge->uv, secondEdgeInterpolant);
+
+            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
+            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
+
+            return std::make_tuple(firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV);
+        }
+
+        void RegenerateTriangleSplit(bool startFromOutsideIntersection
+            , meshHalfEdgePtr firstSplitEdge, meshHalfEdgePtr secondSplitEdge
+            , meshHalfEdgePtr& intersectionEdge, const math::vec3& cutNormal, const math::vec3& cutPosition,
+            const math::mat4& transform)
+        {
+            auto [firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV]
+                = GetFirstAndLastEdgeIntersectionInfo(cutNormal, cutPosition, transform,
+                    firstSplitEdge, secondSplitEdge);
+
+            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
+            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
+
+            const math::mat4 inverseTrans{ math::inverse(transform) };
+
+            if (!startFromOutsideIntersection)
+            {
+                firstSplitEdge->position = inverseTrans * math::vec4(firstEdgeIntersection, 1);
+                firstSplitEdge->uv = firstInterpolantUV;
+
+                intersectionEdge = std::make_shared<MeshHalfEdge>
+                    (inverseTrans * math::vec4(secondEdgeIntersection, 1), secondInterpolantUV);
+
+                MeshHalfEdge::ConnectIntoTriangle(firstSplitEdge, secondSplitEdge, intersectionEdge);
+            }
+            else
+            {
+                intersectionEdge = std::make_shared<MeshHalfEdge>
+                    (inverseTrans * math::vec4(firstEdgeIntersection, 1), firstInterpolantUV);
+
+                secondSplitEdge->position = inverseTrans * math::vec4(secondEdgeIntersection, 1);
+                secondSplitEdge->uv = secondInterpolantUV;
+
+                MeshHalfEdge::ConnectIntoTriangle(firstSplitEdge, intersectionEdge, secondSplitEdge);
+            }
+        }
+
+        void BFSIdentifyEffectedEdges(const math::mat4& transform, SplittablePolygonPtr splitPolygon,
+            std::vector<meshHalfEdgePtr>& unEffectedUsedEdges
+            , std::vector<meshHalfEdgePtr>& effectedUsedEdges
+            , const math::vec3 cutPosition,const math::vec3 cutNormal,bool keepAbove)
+        {
             meshHalfEdgePtr initalEdge = splitPolygon->GetMeshEdges().at(0);
             //intialize unvisited queue
             std::queue<meshHalfEdgePtr> unvisitedEdges;
             unvisitedEdges.push(initalEdge);
 
-            //BFS Find edges effected and uneffected by the split that are at the requested side of the split
+
             while (!unvisitedEdges.empty())
             {
                 auto currentEdge = unvisitedEdges.front();
@@ -91,255 +354,70 @@ namespace legion::physics
                 }
             }
 
+        }
 
+        void IdentifyBoundaryEffectedEdges( std::vector<meshHalfEdgePtr>& effectedUsedEdges,
+            const math::mat4 transform, const math::vec3 cutPosition
+            , const math::vec3 cutNormal, bool keepAbove)
+        {
+            std::vector<meshHalfEdgePtr> tempEdges{ std::move(effectedUsedEdges) };
+            effectedUsedEdges.clear();
 
-            //[2] Get used boundary Effected
-
-            for (auto edge : effectedUsedEdges)
+            for (auto edge : tempEdges)
             {
-                edge->isVisited = false;
-            }
+                bool isAtLeastPartiallyAtRequestedSpot = keepAbove ?
+                    edge->isEdgePartlyAbovePlane(transform, cutPosition, cutNormal)
+                    : edge->isEdgePartlyBelowPlane(transform, cutPosition, cutNormal);
 
-            {
-                std::vector<meshHalfEdgePtr> tempEdges{ std::move(effectedUsedEdges) };
-                effectedUsedEdges.clear();
+                bool isBoundaryEffectedOrPolygonBoundary = edge->isBoundary || edge->pairingEdge->isVisited;
 
-                //for each effectedUsedEdges
-                for (auto edge : tempEdges)
+                if (isAtLeastPartiallyAtRequestedSpot && isBoundaryEffectedOrPolygonBoundary)
                 {
-                    bool isAtLeastPartiallyAtRequestedSpot = keepAbove ?
-                        edge->isEdgePartlyAbovePlane(transform, cutPosition, cutNormal)
-                        : edge->isEdgePartlyBelowPlane(transform, cutPosition, cutNormal);
-
-                    bool isBoundaryEffectedOrPolygonBoundary = edge->isBoundary || edge->pairingEdge->isVisited;
-
-                    if (isAtLeastPartiallyAtRequestedSpot && isBoundaryEffectedOrPolygonBoundary)
-                    {
-                        effectedUsedEdges.push_back(edge);
-                    }
-
+                    effectedUsedEdges.push_back(std::move(edge));
                 }
 
-
             }
 
+            //tempEdges gets destroyed at end of scope
+        }
 
-
-            //[4] Sort Edges
-
-            //find edges in effectedUsedEdges that are split by plane and store them in a std::vector
-            std::vector<meshHalfEdgePtr> splitEdges;
-
-            for (auto edge : effectedUsedEdges)
-            {
-                if (edge->IsSplitByPlane(transform, cutPosition, cutNormal))
-                {
-                    splitEdges.push_back(edge);
-                }
-            }
-
-            //sort them based on support point created by cross product of normal and split normal
-
-            math::vec3 worldCentroid = transform * math::vec4(splitPolygon->localCentroid, 1);
-            math::vec3 worldPolygonNormal = transform * math::vec4(splitPolygon->localNormal, 0);
-            polygonDebugInfo.worldNormal = worldPolygonNormal;
-
-            math::vec3 polygonNormalCrossCutNormal = math::normalize(math::cross(worldPolygonNormal, cutNormal));
-
-            //SortingCriterium splittingPlaneSorter(worldCentroid,polygonNormalCrossCutNormal,transform);
-
-            auto initialSorter = [&transform, &worldCentroid, &polygonNormalCrossCutNormal]
-            (const std::shared_ptr<MeshHalfEdge>& lhs, std::shared_ptr<MeshHalfEdge>& rhs)
-            {
-                math::vec3 aWorldCentroid = lhs->GetWorldCentroid(transform);
-                math::vec3 bWorldCentroid = rhs->GetWorldCentroid(transform);
-
-                math::vec3 AtoPolygonCentroid = aWorldCentroid - worldCentroid;
-                math::vec3 BtoPolygonCentroid = bWorldCentroid - worldCentroid;
-
-                return
-                    math::dot(AtoPolygonCentroid, polygonNormalCrossCutNormal) <
-                    math::dot(BtoPolygonCentroid, polygonNormalCrossCutNormal);
-
-
-            };
-
-            std::sort(splitEdges.begin(), splitEdges.end(), initialSorter);
-
-            //Check for the special case where there are only 2 splitEdges and 1 
-            int edgesUsed = effectedUsedEdges.size();
-            static int numberOfEdgesToMakeATriangle = 2;
-
-            if (edgesUsed == numberOfEdgesToMakeATriangle)
-            {
-                //DebugBreak();
-                //get first and last edge
-                meshHalfEdgePtr firstEdge = splitEdges.at(0);
-                meshHalfEdgePtr secondEdge = splitEdges.at(1);
-
-                math::vec3 edgeWorldPosition = firstEdge->GetEdgeWorldPosition(transform);
-
-                bool startFromOutsideIntersection =
-                    keepAbove == PhysicsStatics::IsPointAbovePlane(cutNormal, cutPosition, edgeWorldPosition);
-
-                //handle triangle split
-                meshHalfEdgePtr intersectionEdge = nullptr;
-
-                HandleTriangleSplit(startFromOutsideIntersection
-                    , firstEdge, secondEdge,
-                     intersectionEdge,cutNormal,cutPosition,
-                    transform);
-
-                IntersectionEdgeInfo intersectionEdgeInfo(intersectionEdge);
-
-                generatedIntersectionEdges.push_back(intersectionEdgeInfo);
-
-                auto& meshEdges = splitPolygon->GetMeshEdges();
-                meshEdges.clear();
-
-                meshEdges.push_back(firstEdge);
-                meshEdges.push_back(secondEdge);
-                meshEdges.push_back(intersectionEdge);
-
-                splitPolygon->CalculateLocalCentroid();
-                splitPolygon->AssignEdgeOwnership();
-
-                return;
-            }
-            else if(edgesUsed < numberOfEdgesToMakeATriangle)
-            {
-                //there exist a number of edges that is on the splitting plane
-                return;
-            }
-
-            math::vec3 worldFirstEdge = splitEdges.at(0)->GetWorldCentroid(transform);
-            math::vec3 worldSecondEdge = splitEdges.at(splitEdges.size() - 1)->GetWorldCentroid(transform);
-
-            //use min max edges as new sorting direction
-
-            //sort effectedUsedEdges based on sorting direction
-
-            math::vec3 sortingCentroid = (worldFirstEdge + worldSecondEdge) / 2.0f;
-            math::vec3 sortingDirection = worldSecondEdge - worldFirstEdge;
-
-            auto boundarySorter = [&transform, &sortingCentroid, &sortingDirection]
-            (const std::shared_ptr<MeshHalfEdge>& lhs, std::shared_ptr<MeshHalfEdge>& rhs)
-            {
-                math::vec3 aWorldCentroid = lhs->GetWorldCentroid(transform);
-                math::vec3 bWorldCentroid = rhs->GetWorldCentroid(transform);
-
-                math::vec3 AtoPolygonCentroid = aWorldCentroid - sortingCentroid;
-                math::vec3 BtoPolygonCentroid = bWorldCentroid - sortingCentroid;
-
-                return
-                    math::dot(AtoPolygonCentroid, sortingDirection) <
-                    math::dot(BtoPolygonCentroid, sortingDirection);
-
-            };
-
-            std::sort(effectedUsedEdges.begin(), effectedUsedEdges.end(), boundarySorter);
-
-
-            meshHalfEdgePtr firstEdge = effectedUsedEdges.at(0);
-            meshHalfEdgePtr secondEdge = effectedUsedEdges.at(effectedUsedEdges.size() - 1);
-
-
-            //[5] Regenerate Edges
-            //check if current polygon point is above splitting plane
-
-            //get start and end intersection points
-            auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->GetEdgeWorldPositions(transform);
-            //auto [secondEdgeCurrent, secondEdgeNext] = secondEdge->GetEdgeWorldPositions(transform);
-
-            bool startFromOutsideIntersection =
-                keepAbove == PhysicsStatics::IsPointAbovePlane(cutNormal, cutPosition, firstEdgeCurrent);
-
-            //Find the intersection points of both edges toward the plane
-
-    /*        math::vec3 firstEdgeIntersection;
-            float firstEdgeInterpolant;
-            PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
-                firstEdgeCurrent, firstEdgeNext, firstEdgeIntersection, firstEdgeInterpolant);
-
-            math::vec2 firstInterpolantUV = math::lerp(firstEdge->uv, firstEdge->nextEdge->uv, firstEdgeInterpolant);
-
-            math::vec3 secondEdgeIntersection;
-            float secondEdgeInterpolant;
-            PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
-                secondEdgeCurrent, secondEdgeNext, secondEdgeIntersection, secondEdgeInterpolant);
-
-            math::vec2 secondInterpolantUV = math::lerp(secondEdge->uv, secondEdge->nextEdge->uv, secondEdgeInterpolant);*/
-
-            auto [firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV]
-                = GetFirstAndLastEdgeIntersectionInfo(cutNormal, cutPosition, transform,
-                firstEdge, secondEdge);
-
-            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
-            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
-
-            meshHalfEdgePtr supportEdge = nullptr;
-            //generated half edges using
-            std::vector<meshHalfEdgePtr> generatedHalfEdges;
-
-            SplitterIntersectionInfo vertexIntersectionInfo(
-                firstEdgeIntersection,
-                startToEndIntersection,
-                firstInterpolantUV,
-                startToEndUV);
-
-
-
-            for (int i = 1; i < effectedUsedEdges.size() - 1; i++)
-            {
-                if (startFromOutsideIntersection)
-                {
-                    InsideIntersectionMeshRegeneration(
-                        transform, effectedUsedEdges,
-                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges,splitPolygon);
-                }
-                else
-                {
-                    OutsideIntersectionMeshRegeneration(
-                        transform, effectedUsedEdges,
-                        generatedHalfEdges, i, supportEdge, vertexIntersectionInfo, polygonDebugInfo, generatedIntersectionEdges, splitPolygon);
-                }
-
-
-            }
-
-
-            polygonDebugInfo.intersectionPoints.first = firstEdgeIntersection;
-            polygonDebugInfo.intersectionPoints.second = secondEdgeIntersection;
-
-            polygonDebugInfo.finalSortingDirection.first = sortingCentroid;
-            polygonDebugInfo.finalSortingDirection.second = sortingDirection;
-
-            polygonDebugInfo.drawColor = splitPolygon->debugColor;
-
-            polygonDebugInfo.boundaryEdges.insert(
-                polygonDebugInfo.boundaryEdges.begin(),
-                effectedUsedEdges.begin(),
-                effectedUsedEdges.end());
-
-            polygonDebugInfo.boundaryEdges.insert(
-                polygonDebugInfo.boundaryEdges.end(),
-                generatedHalfEdges.begin(),
-                generatedHalfEdges.end());
-
-            debugHelper->boundaryEdgesForPolygon.push_back(polygonDebugInfo);
-
+        void HandleTriangleSplit(SplittablePolygonPtr splitPolygon,
+            std::vector<meshHalfEdgePtr>& splitEdges, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges,
+            const math::mat4& transform, const math::vec3& cutNormal,const math::vec3& cutPosition, bool keepAbove)
+        {
             auto& meshEdges = splitPolygon->GetMeshEdges();
 
-            meshEdges.clear();
+            meshHalfEdgePtr firstEdge = splitEdges.at(0);
+            meshHalfEdgePtr secondEdge = splitEdges.at(1);
 
-            meshEdges.insert(meshEdges.end(), unEffectedUsedEdges.begin(), unEffectedUsedEdges.end());
-            meshEdges.insert(meshEdges.end(), effectedUsedEdges.begin(), effectedUsedEdges.end());
-            meshEdges.insert(meshEdges.end(), generatedHalfEdges.begin(), generatedHalfEdges.end());
+            math::vec3 edgeWorldPosition = firstEdge->GetEdgeWorldPosition(transform);
+
+            bool startFromOutsideIntersection =
+                keepAbove == PhysicsStatics::IsPointAbovePlane(cutNormal, cutPosition, edgeWorldPosition);
+
+            //handle triangle split
+            meshHalfEdgePtr intersectionEdge = nullptr;
+
+            RegenerateTriangleSplit(startFromOutsideIntersection
+                , firstEdge, secondEdge,
+                intersectionEdge, cutNormal, cutPosition,
+                transform);
+
+            IntersectionEdgeInfo intersectionEdgeInfo(intersectionEdge);
+
+            generatedIntersectionEdges.push_back(intersectionEdgeInfo);
+
+
+            meshEdges.push_back(firstEdge);
+            meshEdges.push_back(secondEdge);
+            meshEdges.push_back(intersectionEdge);
 
             splitPolygon->CalculateLocalCentroid();
             splitPolygon->AssignEdgeOwnership();
-            debugHelper->polygonCount++;
         }
+
+
+        //------------------------------------------------------ Related to Quad Organization ----------------------------------------------------------------//
 
         void InsideIntersectionMeshRegeneration(const math::mat4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
             std::vector<meshHalfEdgePtr>& generatedEdges, int i
@@ -558,7 +636,6 @@ namespace legion::physics
             //create new supporttriangle located at next support
             meshHalfEdgePtr supportTriangle = std::make_shared<MeshHalfEdge>(nextSupport->position, nextSupport->uv, owner);
 
-
             //currentSupport-intersection-supporttriangle
             MeshHalfEdge::ConnectIntoTriangle(currentSupport, supportTriangle, intersectionEdge);
 
@@ -573,73 +650,6 @@ namespace legion::physics
             generatedEdges.push_back(supportTriangle);
             generatedEdges.push_back(nextSupportTriangle);
         }
-
-        void HandleTriangleSplit(bool startFromOutsideIntersection
-            ,meshHalfEdgePtr firstSplitEdge, meshHalfEdgePtr secondSplitEdge
-            , meshHalfEdgePtr& intersectionEdge,const math::vec3& cutNormal, const math::vec3& cutPosition,
-            const math::mat4& transform)
-        {
-            auto [firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV]
-                = GetFirstAndLastEdgeIntersectionInfo(cutNormal, cutPosition, transform,
-                    firstSplitEdge, secondSplitEdge);
-
-            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
-            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
-
-            const math::mat4 inverseTrans{ math::inverse(transform) };
-
-            if (!startFromOutsideIntersection)
-            {
-                firstSplitEdge->position = inverseTrans * math::vec4(firstEdgeIntersection,1);
-                firstSplitEdge->uv = firstInterpolantUV;
-
-                intersectionEdge = std::make_shared<MeshHalfEdge>
-                (inverseTrans * math::vec4(secondEdgeIntersection,1),secondInterpolantUV);
-
-                MeshHalfEdge::ConnectIntoTriangle(firstSplitEdge, secondSplitEdge, intersectionEdge);
-            }
-            else
-            {
-                intersectionEdge = std::make_shared<MeshHalfEdge>
-                (inverseTrans * math::vec4(firstEdgeIntersection,1),firstInterpolantUV);
-
-                secondSplitEdge->position = inverseTrans *  math::vec4(secondEdgeIntersection,1);
-                secondSplitEdge->uv = secondInterpolantUV;
-
-                MeshHalfEdge::ConnectIntoTriangle(firstSplitEdge, intersectionEdge, secondSplitEdge);
-            }
-        }
-
-        std::tuple<math::vec3,math::vec2,math::vec3,math::vec2> GetFirstAndLastEdgeIntersectionInfo(const math::vec3& cutNormal,const math::vec3& cutPosition
-            ,const math::mat4 transform,
-            meshHalfEdgePtr firstEdge, meshHalfEdgePtr secondEdge)
-        {
-           
-
-            auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->GetEdgeWorldPositions(transform);
-            auto [secondEdgeCurrent, secondEdgeNext] = secondEdge->GetEdgeWorldPositions(transform);
-
-            math::vec3 firstEdgeIntersection;
-            float firstEdgeInterpolant;
-            PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
-                firstEdgeCurrent, firstEdgeNext, firstEdgeIntersection, firstEdgeInterpolant);
-
-            math::vec2 firstInterpolantUV = math::lerp(firstEdge->uv, firstEdge->nextEdge->uv, firstEdgeInterpolant);
-
-            math::vec3 secondEdgeIntersection;
-            float secondEdgeInterpolant;
-            PhysicsStatics::FindLineToPlaneIntersectionPoint(cutNormal, cutPosition,
-                secondEdgeCurrent, secondEdgeNext, secondEdgeIntersection, secondEdgeInterpolant);
-
-            math::vec2 secondInterpolantUV = math::lerp(secondEdge->uv, secondEdge->nextEdge->uv, secondEdgeInterpolant);
-
-            math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
-            math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
-
-            return std::make_tuple(firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV);
-        }
-
-
 
     };
 
