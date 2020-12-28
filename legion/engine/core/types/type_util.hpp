@@ -47,7 +47,7 @@ namespace legion::core
 
 
     // Credits to Tristeon engine by Leon and Tristan: https://github.com/Tristeon/Tristeon2D/blob/master/src/Serialization/Type.h
-#ifdef _MSC_VER
+#if defined(LEGION_MSVC) || defined(LEGION_CLANG_MSVC)
     namespace detail
     {
         template<typename T>
@@ -74,7 +74,7 @@ namespace legion::core
             return result;
         }
     }
-#elif defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
+#elif defined(LEGION_GCC) || defined(LEGION_CLANG_GCC)
 #include <cxxabi.h>
     namespace detail
     {
