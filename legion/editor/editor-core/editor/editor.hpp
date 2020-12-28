@@ -8,19 +8,34 @@
 
 namespace legion::editor
 {
+    namespace detail
+    {
+        class EditorEngineModule;
+    }
+
 	/**@class Editor
 	 * @brief The editors main object that handles editor modules.
 	 * @ref legion::editor::EditorModule
 	 */
 	class Editor
 	{
+        friend class legion::editor::detail::EditorEngineModule;
+    private:
+        static Engine* m_engine;
+
+        std::vector<std::unique_ptr<EditorModuleBase>> m_modules;
+
     public:
+        void setEngine(Engine* engine);
+
+        static Engine* getEngine();
+
 		/**@brief Reports an editor module
 		 * @tparam ModuleType the module you want to report
 		 * @param args the arguments you want to pass
 		 * @ref legion::editor::EditorModule
 		 */
-		template <class ModuleType, class... Args, inherits_from<ModuleType, EditorModule> = 0>
+		template <class ModuleType, class... Args, inherits_from<ModuleType, EditorModuleBase> = 0>
 		void reportModule(Args&&...args)
 		{
 
@@ -53,9 +68,11 @@ namespace legion::editor::detail
 
 void LEGION_CCONV reportModules(legion::Engine* engine)
 {
+    using namespace legion::editor;
     using namespace legion::editor::detail;
-
+    editor.setEngine(engine);
     reportEditorModules(&editor);
+    editor.reportModule<CoreEditorModule>();
     engine->reportModule<EditorEngineModule>(&editor);
 }
 #endif
