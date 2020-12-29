@@ -96,6 +96,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="data\menu_option.hpp" />
+    <ClInclude Include="systems\surfacerenderer.hpp" />
     <ClInclude Include="tooling\base\editorgizmo.hpp" />
     <ClInclude Include="tooling\base\editorsurface.hpp" />
     <ClInclude Include="core.hpp" />
@@ -104,9 +106,11 @@
     <ClInclude Include="tooling\base\editortool.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="systems\surfacerenderer.cpp" />
     <ClCompile Include="tooling\base\editorsurface.cpp" />
     <ClCompile Include="editor\editor.cpp" />
     <ClCompile Include="editor\editormodule.cpp" />
+    <ClCompile Include="tooling\base\editortool.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

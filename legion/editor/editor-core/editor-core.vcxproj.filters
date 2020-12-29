@@ -33,6 +33,12 @@
     <ClInclude Include="tooling\base\editorgizmo.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data\menu_option.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\surfacerenderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="editor\editor.cpp">
@@ -42,6 +48,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tooling\base\editorsurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tooling\base\editortool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\surfacerenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

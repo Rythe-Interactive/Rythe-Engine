@@ -2,27 +2,30 @@
 
 namespace legion::editor
 {
-    id_type EditorSurface::m_unnamedSurfaces = 0;
+    id_type EditorSurfaceBase::m_surfaceTypes = 0;
 
-    EditorSurface::EditorSurface() : m_name("unnamed surface " + std::to_string(m_unnamedSurfaces++))
+    EditorSurfaceBase::EditorSurfaceBase(const std::string& name) : m_name(name), m_id(nameHash(m_name))
     {
+        setup(m_name);
     }
 
-    EditorSurface::EditorSurface(const std::string& name) : m_name(name)
+    id_type EditorSurfaceBase::getId()
     {
+        return m_id;
     }
 
-    void EditorSurface::setName(const std::string& name)
+    void EditorSurfaceBase::setName(const std::string& name)
     {
         m_name = name;
+        m_id = nameHash(name);
     }
 
-    const std::string& EditorSurface::getName()
+    const std::string& EditorSurfaceBase::getName()
     {
         return m_name;
     }
 
-    void EditorSurface::drawSurface(app::window& context, gfx::camera& cam, const gfx::camera::camera_input& camInput, time::span deltaTime)
+    void EditorSurfaceBase::drawSurface(app::window& context, gfx::camera& cam, const gfx::camera::camera_input& camInput, time::span deltaTime)
     {
         imgui::base::Begin(m_name.c_str());
         onGUI(context, cam, camInput, deltaTime);
