@@ -24,12 +24,21 @@
     <ClInclude Include="editor\editormodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="systems\editorwindowsystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\editorwindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="editor\editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="editor\editormodule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\editorwindowsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
