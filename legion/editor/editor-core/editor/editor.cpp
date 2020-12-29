@@ -1,4 +1,5 @@
 #include <editor-core/editor/editor.hpp>
+#include <rendering/rendering.hpp>
 
 /**
  * @file editor.cpp
@@ -22,6 +23,7 @@ namespace legion::editor
     {
         EditorEngineModule::EditorEngineModule(Editor* editor)
         {
+            Renderer::getMainPipeline()->attachStage<ImGuiStage>();
             for (auto& module : editor->m_modules)
             {
                 editor->m_engine->reportModule(std::unique_ptr<Module>(module->getEngineModule()));

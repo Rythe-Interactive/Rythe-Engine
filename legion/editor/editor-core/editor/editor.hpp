@@ -13,12 +13,12 @@ namespace legion::editor
         class EditorEngineModule;
     }
 
-	/**@class Editor
-	 * @brief The editors main object that handles editor modules.
-	 * @ref legion::editor::EditorModule
-	 */
-	class Editor
-	{
+    /**@class Editor
+     * @brief The editors main object that handles editor modules.
+     * @ref legion::editor::EditorModule
+     */
+    class Editor
+    {
         friend class legion::editor::detail::EditorEngineModule;
     private:
         static Engine* m_engine;
@@ -30,17 +30,17 @@ namespace legion::editor
 
         static Engine* getEngine();
 
-		/**@brief Reports an editor module
-		 * @tparam ModuleType the module you want to report
-		 * @param args the arguments you want to pass
-		 * @ref legion::editor::EditorModule
-		 */
-		template <class ModuleType, class... Args, inherits_from<ModuleType, EditorModuleBase> = 0>
-		void reportModule(Args&&...args)
-		{
+        /**@brief Reports an editor module
+         * @tparam ModuleType the module you want to report
+         * @param args the arguments you want to pass
+         * @ref legion::editor::EditorModule
+         */
+        template <class ModuleType, class... Args, inherits_from<ModuleType, EditorModuleBase> = 0>
+        void reportModule(Args&&...args)
+        {
 
-		}
-	};
+        }
+    };
 
     namespace detail
     {

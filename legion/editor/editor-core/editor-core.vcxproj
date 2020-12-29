@@ -96,16 +96,17 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="components\editorwindow.h" />
+    <ClInclude Include="tooling\base\editorgizmo.hpp" />
+    <ClInclude Include="tooling\base\editorsurface.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="editor\editor.hpp" />
     <ClInclude Include="editor\editormodule.hpp" />
-    <ClInclude Include="systems\editorwindowsystem.hpp" />
+    <ClInclude Include="tooling\base\editortool.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="tooling\base\editorsurface.cpp" />
     <ClCompile Include="editor\editor.cpp" />
     <ClCompile Include="editor\editormodule.cpp" />
-    <ClCompile Include="systems\editorwindowsystem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

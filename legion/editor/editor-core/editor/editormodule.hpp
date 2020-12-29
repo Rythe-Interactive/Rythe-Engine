@@ -23,13 +23,13 @@ namespace legion::editor
         virtual void setup() LEGION_PURE;
     };
 
-	/**@class EditorModule
-	 * @brief interface for editor-modules, must be implemented
-	 * @ref legion::editor::Editor::reportModule<T,...>()
-	 */
+    /**@class EditorModule
+     * @brief interface for editor-modules, must be implemented
+     * @ref legion::editor::Editor::reportModule<T,...>()
+     */
     template<typename EngineModule>
-	class EditorModule : public EditorModuleBase
-	{
+    class EditorModule : public EditorModuleBase
+    {
         friend class Editor;
         friend class legion::editor::detail::EditorEngineModule;
     private:
@@ -40,7 +40,7 @@ namespace legion::editor
 
         template<typename... Args>
         void parameteriseEngineModule(Args&&... args);
-	};
+    };
 
     class CoreEditorModule : public EditorModule<CoreModule>
     {

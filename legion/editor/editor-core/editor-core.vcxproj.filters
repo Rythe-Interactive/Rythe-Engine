@@ -24,10 +24,13 @@
     <ClInclude Include="editor\editormodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\editorwindowsystem.hpp">
+    <ClInclude Include="tooling\base\editorsurface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\editorwindow.h">
+    <ClInclude Include="tooling\base\editortool.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tooling\base\editorgizmo.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,7 +41,7 @@
     <ClCompile Include="editor\editormodule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="systems\editorwindowsystem.cpp">
+    <ClCompile Include="tooling\base\editorsurface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
