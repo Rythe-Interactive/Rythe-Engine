@@ -96,6 +96,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="data\menu_folder.hpp" />
     <ClInclude Include="data\menu_option.hpp" />
     <ClInclude Include="systems\surfacerenderer.hpp" />
     <ClInclude Include="tooling\base\editorgizmo.hpp" />

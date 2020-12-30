@@ -6,8 +6,10 @@ namespace legion::editor
     struct menu_option_base
     {
         const std::string name;
+        std::string tooltip;
+        bool enabled = true;
 
-        menu_option_base(const std::string& menuName) : name(menuName) {}
+        menu_option_base(const std::string& menuName, const std::string& tooltip) : name(menuName), tooltip(tooltip) {}
 
         virtual void execute() LEGION_PURE;
     };
@@ -19,8 +21,8 @@ namespace legion::editor
         executable m_exec;
 
     public:
-        menu_option(const std::string& name, executable&& exec) : menu_option_base(name), m_exec(exec) {}
-        menu_option(const std::string& name, const executable& exec) : menu_option_base(name), m_exec(exec) {}
+        menu_option(const std::string& name, executable&& exec, const std::string& tooltip = "") : menu_option_base(name, tooltip), m_exec(exec) {}
+        menu_option(const std::string& name, const executable& exec, const std::string& tooltip = "") : menu_option_base(name, tooltip), m_exec(exec) {}
 
         virtual void execute() override
         {

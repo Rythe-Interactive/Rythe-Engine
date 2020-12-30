@@ -39,6 +39,9 @@
     <ClInclude Include="systems\surfacerenderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data\menu_folder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="editor\editor.cpp">
