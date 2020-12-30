@@ -7,6 +7,8 @@
 #include <functional>
 #include <string>
 
+#include <Optick/optick.h>
+
 /**
  * @file program.hpp
  */
@@ -50,6 +52,7 @@ namespace legion::core::compute {
          */
         cl_command_queue make_cq() const
         {
+            OPTICK_EVENT();
             return make_command_queue();
         }
 

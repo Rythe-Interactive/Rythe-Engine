@@ -15,8 +15,6 @@ shader(vertex)
 
 shader(fragment)
 {
-    out vec4 fragment_color;
-
     void main(void)
     {
         vec3 normal = GetWorldNormal();

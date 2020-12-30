@@ -40,6 +40,7 @@ namespace legion::core::filesystem{
                   typename = typename std::enable_if<std::is_base_of<filesystem_resolver_common_base,Resolver>::value>::type>
         static void domain_create_resolver(domain d,Args&&... args)
         {
+            OPTICK_EVENT();
             return domain_add_resolver(d,new Resolver(std::forward<Args>(args)...));
         }
 

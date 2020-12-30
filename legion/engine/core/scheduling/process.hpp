@@ -4,6 +4,8 @@
 #include <core/containers/containers.hpp>
 #include <core/time/time.hpp>
 
+#include <Optick/optick.h>
+
 /**@file process.hpp
  */
 
@@ -81,6 +83,8 @@ namespace legion::core::scheduling
 
             if (!m_fixedTimeStep)
             {
+                OPTICK_EVENT("Execute process");
+                OPTICK_TAG("Process name", m_name.c_str());
                 m_operation.invoke(deltaTime);
                 return true;
             }
@@ -89,6 +93,8 @@ namespace legion::core::scheduling
 
             if (m_timeBuffer >= m_interval)
             {
+                OPTICK_EVENT("Execute process");
+                OPTICK_TAG("Process name", m_name.c_str());
                 m_timeBuffer -= m_interval;
                 m_operation.invoke(m_interval);
             }

@@ -17,23 +17,12 @@ shader(vertex)
 
 shader(fragment)
 {
-    uniform bool tonemap;
-
-    out vec4 fragment_color;
-
     uniform vec4 skycolor;
 
     void main(void)
     {
         vec3 unitDir = normalize(stdin(position));
 
-        if(tonemap)
-        {
-            fragment_color = vec4(LegionToneMapOld(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9))), 1.f);
-        }
-        else
-        {
-            fragment_color = vec4(LegionToneMap(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9))), 1.f);
-        }
+        fragment_color = vec4(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), 1.f);
     }
 }

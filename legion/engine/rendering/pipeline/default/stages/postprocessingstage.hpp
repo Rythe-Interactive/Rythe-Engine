@@ -1,8 +1,7 @@
 #pragma once
 #include <rendering/pipeline/base/renderstage.hpp>
 #include <rendering/pipeline/base/pipeline.hpp>
-#include <rendering/data/vertexarray.hpp>
-#include <rendering/data/buffer.hpp>
+#include <rendering/data/screen_quad.hpp>
 #include <rendering/data/postprocessingeffect.hpp>
 
 namespace legion::rendering
@@ -18,8 +17,7 @@ namespace legion::rendering
          * @brief A multimap with priority as key and postprocessing effect as value.
          */
         static std::multimap<priority_type, std::unique_ptr<PostProcessingEffectBase>,std::greater<>> m_effects;
-        vertexarray m_quadVAO;
-        buffer m_quadVBO;
+        screen_quad m_screenQuad;
 
         framebuffer m_drawFBO;
 

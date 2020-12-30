@@ -24,8 +24,8 @@ namespace legion::rendering
         math::color clearColor = math::colors::cornflower;
         struct camera_input
         {
-            camera_input(math::mat4 view, math::mat4 proj, math::vec3 pos, uint idx, math::vec3 vdir) :
-                view(view), proj(proj), pos(pos), meta1(0), vdir(vdir), meta2(0), idx(idx)
+            camera_input(math::mat4 view, math::mat4 proj, math::vec3 pos, math::vec3 vdir, float nearz, float farz, math::ivec2 viewportSize) :
+                view(view), proj(proj), pos(pos), nearz(nearz), vdir(vdir), farz(farz), viewportSize(viewportSize)
             {
             }
 
@@ -36,11 +36,9 @@ namespace legion::rendering
                 if (materialHandle.has_param<math::mat4>(SV_PROJECT))
                     materialHandle.set_param(SV_PROJECT, proj);
                 if (materialHandle.has_param<math::vec4>(SV_CAMPOS))
-                    materialHandle.set_param(SV_CAMPOS, posmeta);
+                    materialHandle.set_param(SV_CAMPOS, posnearz);
                 if (materialHandle.has_param<math::vec4>(SV_VIEWDIR))
-                    materialHandle.set_param(SV_VIEWDIR, vdirmeta);
-                if (materialHandle.has_param<uint>(SV_CAMIDX))
-                    materialHandle.set_param(SV_CAMIDX, idx);
+                    materialHandle.set_param(SV_VIEWDIR, vdirfarz);
             }
 
             union
@@ -55,20 +53,20 @@ namespace legion::rendering
                         struct
                         {
                             math::vec3 pos;
-                            float meta1;
+                            float nearz;
                         };
-                        math::vec4 posmeta;
+                        math::vec4 posnearz;
                     };
                     union
                     {
                         struct
                         {
                             math::vec3 vdir;
-                            float meta2;
+                            float farz;
                         };
-                        math::vec4 vdirmeta;
+                        math::vec4 vdirfarz;
                     };
-                    uint idx;
+                    math::ivec2 viewportSize;
                 };
             };
         };

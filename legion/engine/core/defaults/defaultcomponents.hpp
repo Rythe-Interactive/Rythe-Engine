@@ -66,21 +66,25 @@ namespace legion::core
 
         L_NODISCARD math::vec3 right()
         {
+            OPTICK_EVENT();
             return math::toMat3(*this) * math::vec3::right;
         }
 
         L_NODISCARD math::vec3 up()
         {
+            OPTICK_EVENT();
             return math::toMat3(*this) * math::vec3::up;
         }
 
         L_NODISCARD math::vec3 forward()
         {
+            OPTICK_EVENT();
             return math::toMat3(*this) * math::vec3::forward;
         }
 
         L_NODISCARD math::mat3 matrix()
         {
+            OPTICK_EVENT();
             return math::toMat3(*this);
         }
 
@@ -89,6 +93,7 @@ namespace legion::core
 
     L_NODISCARD inline rotation rotation::lookat(math::vec3 position, math::vec3 center, math::vec3 up)
     {
+        OPTICK_EVENT();
         return math::conjugate(math::normalize(math::toQuat(math::lookAt(position, center, up))));
     }
 
@@ -130,6 +135,7 @@ namespace legion::core
 
         L_NODISCARD std::tuple<position, rotation, scale> get_world_components()
         {
+            OPTICK_EVENT();
             math::mat4 worldMatrix = get_world_to_local_matrix();
             math::vec3 p;
             math::quat r;
@@ -142,25 +148,27 @@ namespace legion::core
 
         L_NODISCARD math::mat4 get_world_to_local_matrix()
         {
+            OPTICK_EVENT();
             return math::inverse(get_local_to_world_matrix());
         }
 
         L_NODISCARD math::mat4 get_local_to_world_matrix()
         {
+            OPTICK_EVENT();
             auto& [positionH, rotationH, scaleH] = handles;
             auto parent = positionH.entity.get_parent();
 
-            if (parent && parent.has_components<transform>())
-            {
-                transform transf = parent.get_component_handles<transform>();
+
+            transform transf = parent.get_component_handles<transform>();
+            if (transf)
                 return transf.get_local_to_world_matrix() * math::compose(scaleH.read(), rotationH.read(), positionH.read());
-            }
 
             return math::compose(scaleH.read(), rotationH.read(), positionH.read());
         }
 
         L_NODISCARD math::mat4 get_local_to_parent_matrix()
         {
+            OPTICK_EVENT();
             auto& [positionH, rotationH, scaleH] = handles;
             return math::compose(scaleH.read(), rotationH.read(), positionH.read());
         }

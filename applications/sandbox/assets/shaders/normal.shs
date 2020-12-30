@@ -16,8 +16,6 @@ shader(vertex)
 
 shader(fragment)
 {
-    out vec4 fragment_color;
-
     void main(void)
     {
         vec3 normal = NormalMap(material_input.normalHeight, stdio(uv), GetTBNMatrix());

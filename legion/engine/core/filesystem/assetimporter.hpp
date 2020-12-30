@@ -4,6 +4,8 @@
 #include <core/filesystem/view.hpp>
 #include <core/logging/logging.hpp>
 
+#include <Optick/optick.h>
+
 /**
  * @file assetimporter.hpp
  */
@@ -68,6 +70,7 @@ namespace legion::core::filesystem
         template<typename T>
         static void reportConverter(cstring extension)
         {
+            OPTICK_EVENT();
             m_converters[nameHash(extension)].push_back(new T());
         }
 
@@ -80,6 +83,7 @@ namespace legion::core::filesystem
         template<typename T, typename... Settings>
         static common::result_decay_more<T, fs_error> tryLoad(const view& view, Settings&&... settings)
         {
+            OPTICK_EVENT();
             using common::Err, common::Ok;
             // Decay overloads the operator of ok_type and operator== for valid_t.
             using decay = common::result_decay_more<T, fs_error>;

@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <core/async/transferable_atomic.hpp>
 
+#include <Optick/optick.h>
+
 /**
  * @file ring_sync_lock.hpp
  */
@@ -34,7 +36,8 @@ namespace legion::core::async
 
 		void sync()
 		{
-			uint rank = m_rank.load(std::memory_order_acquire); // Fetch the current rank at which the lock should be.
+            OPTICK_EVENT();
+            uint rank = m_rank.load(std::memory_order_acquire); // Fetch the current rank at which the lock should be.
 			uint nextRank = (rank + 1) % m_maxRank; // Calculate the next rank at which the lock should be.
 
 			if (std::this_thread::get_id() == owningThread) // Check if we're here to wait or to free.

@@ -28,6 +28,7 @@ namespace legion::rendering
         depth = GL_DEPTH_COMPONENT,
         stencil = GL_STENCIL_INDEX,
         depth_stencil = GL_DEPTH24_STENCIL8,
+        rgba_hdr = GL_RGBA32F,
         red = GL_RED,
         rg = GL_RG,
         rgb = GL_RGB,

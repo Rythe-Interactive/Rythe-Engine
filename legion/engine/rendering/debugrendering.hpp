@@ -4,7 +4,11 @@
 
 namespace legion::debug
 {
-    struct debug_line final : public events::event<debug_line>
+#if !defined drawLine
+
+#define debug_line_event CONCAT_DEFINE(PROJECT_NAME, debug_line)
+
+    struct debug_line_event final : public events::event_base
     {
         math::vec3 start;
         math::vec3 end;
@@ -14,44 +18,35 @@ namespace legion::debug
         mutable float timeBuffer = 0;
         bool ignoreDepth = false;
 
-        debug_line(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false) : start(start), end(end), color(color), width(width), time(time), ignoreDepth(ignoreDepth) {}
-        debug_line() = default;
-        debug_line(const debug_line&) = default;
-        debug_line(debug_line&&) = default;
+        debug_line_event(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false) : start(start), end(end), color(color), width(width), time(time), ignoreDepth(ignoreDepth) {}
+        debug_line_event() = default;
+        debug_line_event(const debug_line_event &) = default;
+        debug_line_event(debug_line_event&&) = default;
 
-        debug_line& operator=(const debug_line&) = default;
-        debug_line& operator=(debug_line&&) = default;
+        debug_line_event& operator=(const debug_line_event&) = default;
+        debug_line_event& operator=(debug_line_event&&) = default;
 
-        bool operator==(const debug_line& other) const
+        bool operator==(const debug_line_event& other) const
         {
             return start == other.start && end == other.end && color == other.color && width == other.width && ignoreDepth == other.ignoreDepth;
         }
 
         virtual bool unique() override { return false; }
+
+        virtual id_type get_id()
+        {
+            static id_type id = nameHash("debug_line");
+            return id;
+        }
     };
 
-#if defined(LEGION_ENTRY)
-    namespace detail
+#define drawLine CONCAT_DEFINE(PROJECT_NAME, drawLine)
+
+    inline void drawLine (math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
     {
-        events::EventBus* eventBus = nullptr;
+        Engine::eventbus->raiseEvent(std::unique_ptr<events::event_base>(new debug_line_event(start, end, color, width, time, ignoreDepth)));
     }
 
-    void drawLine(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
-    {
-        if (!detail::eventBus)
-            return;
-
-        detail::eventBus->raiseEvent<debug_line>(start, end, color, width, time, ignoreDepth);
-    }
-
-    void setEventBus(events::EventBus* eventBus)
-    {
-        detail::eventBus = eventBus;
-    }
-#else
-    extern void drawLine(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false);
-
-    extern void setEventBus(events::EventBus* eventBus);
 #endif
 }
 
@@ -59,9 +54,9 @@ namespace legion::debug
 namespace std
 {
     template<>
-    struct hash<legion::debug::debug_line>
+    struct hash<legion::debug::debug_line_event>
     {
-        std::size_t operator()(legion::debug::debug_line const& line) const noexcept
+        std::size_t operator()(legion::debug::debug_line_event const& line) const noexcept
         {
             std::hash<legion::core::math::vec3> vecHasher;
             std::hash<legion::core::math::color> colHasher;

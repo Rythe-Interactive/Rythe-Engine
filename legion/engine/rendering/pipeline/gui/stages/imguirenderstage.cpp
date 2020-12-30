@@ -5,10 +5,9 @@
 
 namespace legion::rendering
 {
-    static bool initialized = false;
     void ImGuiStage::setup(app::window& context)
     {
-
+        OPTICK_EVENT();
         //make context current
         application::context_guard guard(context);
 
@@ -16,31 +15,26 @@ namespace legion::rendering
         auto* ctx = ImGui::CreateContext();
         ImGui::SetCurrentContext(ctx);
         ImGui_ImplGlfw_InitForOpenGL(context, true);
-        ImGui_ImplOpenGL3_Init("#version 330");
+        ImGui_ImplOpenGL3_Init("#version 460");
 
         //init imnodes
         imgui::nodes::Initialize();
-        initialized = true;
     }
 
     void ImGuiStage::render(app::window& context, camera& cam, const camera::camera_input& camInput,
         time::span deltaTime)
     {
-        if (!initialized) //FIXME(algorythmix): Workaround for #243 
+        OPTICK_EVENT();
+        static id_type mainId = nameHash("main");
+
+        auto fbo = getFramebuffer(mainId);
+        if (!fbo)
         {
-            //make context current
-            application::context_guard guard(context);
-
-            //init imgui
-            auto* ctx = ImGui::CreateContext();
-            ImGui::SetCurrentContext(ctx);
-            ImGui_ImplGlfw_InitForOpenGL(context, true);
-            ImGui_ImplOpenGL3_Init("#version 330");
-
-            //init imnodes
-            imgui::nodes::Initialize();
-            initialized = true;
+            log::error("Main frame buffer is missing.");
+            abort();
+            return;
         }
+
         //make context current
         application::context_guard guard(context);
         if (!guard.contextIsValid())
@@ -48,6 +42,16 @@ namespace legion::rendering
             abort();
             return;
         }
+
+        auto [valid, message] = fbo->verify();
+        if (!valid)
+        {
+            log::error("Main frame buffer isn't complete: {}", message);
+            abort();
+            return;
+        }
+
+        fbo->bind();
 
         //start imgui frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -57,19 +61,21 @@ namespace legion::rendering
         //call gui callback
         if (!m_onGuiRender.isNull())
         {
-            m_onGuiRender();
+            m_onGuiRender(context, cam, camInput, deltaTime);
         }
 
         //render gui
         ImGui::Render();
         auto* draw_data = ImGui::GetDrawData();
         ImGui_ImplOpenGL3_RenderDrawData(draw_data);
+
+        fbo->release();
     }
 
     priority_type ImGuiStage::priority()
     {
-        return -100;
+        return ui_priority;
     }
 
-    multicast_delegate<void()> ImGuiStage::m_onGuiRender;
+    multicast_delegate<void(app::window&, camera&, const camera::camera_input&, time::span)> ImGuiStage::m_onGuiRender;
 }

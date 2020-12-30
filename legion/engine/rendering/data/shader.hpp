@@ -33,7 +33,7 @@ namespace legion::rendering
         GLenum m_type;
         GLint m_location;
 
-        shader_parameter_base(std::nullptr_t t): m_shaderId(invalid_id), m_name(""), m_type(0), m_location(0){};
+        shader_parameter_base(std::nullptr_t t): m_shaderId(invalid_id), m_name(""), m_type(0), m_location(-1){};
 
         shader_parameter_base(id_type shaderId, std::string_view name, GLenum type, GLint location) : m_shaderId(shaderId), m_name(name), m_type(type), m_location(location) {};
 
@@ -42,7 +42,7 @@ namespace legion::rendering
          */
         virtual bool is_valid() const
         {
-            return m_location != -1 && m_shaderId != invalid_id;
+            return m_location != -1;
         }
 
         /**@brief Returns the GLenum of the data type of the parameter.
@@ -265,6 +265,7 @@ namespace legion::rendering
         GLint programId;
         std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
         std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
+        std::unordered_map<GLint, id_type> idOfLocation;
         std::string name;
         shader_state state;
 
@@ -286,6 +287,7 @@ namespace legion::rendering
         template<typename T>
         uniform<T> get_uniform(const std::string& name)
         {
+            OPTICK_EVENT();
             auto* ptr = dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
             if (ptr)
                 return *ptr;
@@ -296,6 +298,7 @@ namespace legion::rendering
         template<typename T>
         bool has_uniform(const std::string& name)
         {
+            OPTICK_EVENT();
             auto id = nameHash(name);
             return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
         }
@@ -303,6 +306,7 @@ namespace legion::rendering
         template<typename T>
         uniform<T> get_uniform(id_type id)
         {
+            OPTICK_EVENT();
             auto* ptr = dynamic_cast<uniform<T>*>(uniforms[id].get());
             if (ptr)
                 return *ptr;
@@ -313,11 +317,31 @@ namespace legion::rendering
         template<typename T>
         bool has_uniform(id_type id)
         {
+            OPTICK_EVENT();
             return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
+        }
+
+        template<typename T>
+        uniform<T> get_uniform_with_location(GLint location)
+        {
+            OPTICK_EVENT();
+            auto* ptr = dynamic_cast<uniform<T>*>(uniforms[idOfLocation[location]].get());
+            if (ptr)
+                return *ptr;
+            log::error("Uniform of type {} does not exist with location {}.", typeName<T>(), location);
+            return uniform<T>(nullptr);
+        }
+
+        template<typename T>
+        bool has_uniform_with_location(GLint location)
+        {
+            OPTICK_EVENT();
+            return uniforms.count(idOfLocation[location]) && dynamic_cast<uniform<T>*>(uniforms[idOfLocation[location]].get()) != nullptr;
         }
 
         attribute get_attribute(const std::string& name)
         {
+            OPTICK_EVENT();
             id_type id = nameHash(name);
             if (attributes.count(id))
                 return *(attributes[id].get());
@@ -328,6 +352,7 @@ namespace legion::rendering
 
         attribute get_attribute(id_type id)
         {
+            OPTICK_EVENT();
             if (attributes.count(id))
                 return *(attributes[id].get());
             log::error("Shader {} does not contain attribute with id {}", this->name, id);
@@ -336,6 +361,7 @@ namespace legion::rendering
 
         std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info()
         {
+            OPTICK_EVENT();
             std::vector<std::tuple<std::string, GLint, GLenum>> info;
             for (auto& [_, uniform] : uniforms)
                 info.push_back(std::make_tuple(uniform->get_name(), uniform->get_location(), uniform->get_type()));
@@ -366,6 +392,12 @@ namespace legion::rendering
         template<typename T>
         bool has_uniform(id_type uniformId);
 
+        template<typename T>
+        uniform<T> get_uniform_with_location(GLint location);
+
+        template<typename T>
+        bool has_uniform_with_location(GLint location);
+
         attribute get_attribute(const std::string& name);
 
         attribute get_attribute(id_type attributeId);
@@ -394,8 +426,11 @@ namespace legion::rendering
         static void process_io(shader& shader, id_type id);
         static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);
 
-        static bool load_precompiled(const std::string& name, const fs::view& file, shader_ilo& ilo, shader_state& state);
+        static bool load_precompiled(const fs::view& file, shader_ilo& ilo, shader_state& state);
         static void store_precompiled(const fs::view& file, const shader_ilo& ilo, const shader_state& state);
+
+        static shader_handle create_invalid_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);
+
     public:
         static shader_handle create_shader(const std::string& name, const fs::view& file, shader_import_settings settings = default_shader_settings);
         static shader_handle create_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);
@@ -406,24 +441,43 @@ namespace legion::rendering
     template<typename T>
     uniform<T> shader_handle::get_uniform(const std::string& name)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->get_uniform<T>(name);
     }
 
     template<typename T>
     inline bool shader_handle::has_uniform(const std::string& name)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->has_uniform<T>(name);
     }
 
     template<typename T>
     uniform<T> shader_handle::get_uniform(id_type uniformId)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->get_uniform<T>(uniformId);
     }
 
     template<typename T>
     inline bool shader_handle::has_uniform(id_type uniformId)
     {
+        OPTICK_EVENT();
         return ShaderCache::get_shader(id)->has_uniform<T>(uniformId);
     }
+
+    template<typename T>
+    inline uniform<T> shader_handle::get_uniform_with_location(GLint location)
+    {
+        OPTICK_EVENT();
+        return ShaderCache::get_shader(id)->get_uniform_with_location<T>(location);
+    }
+
+    template<typename T>
+    inline bool shader_handle::has_uniform_with_location(GLint location)
+    {
+        OPTICK_EVENT();
+        return ShaderCache::get_shader(id)->has_uniform_with_location<T>(location);
+    }
+
 }

@@ -2,21 +2,27 @@
 
 namespace legion::rendering
 {
+   async::spinlock LightBufferStage::m_lightEntitiesLock;
    std::unordered_set<ecs::entity_handle> LightBufferStage::m_lightEntities;
    std::vector<detail::light_data> LightBufferStage::m_lights;
 
     void LightBufferStage::onLightCreate(events::component_creation<light>* event)
     {
+        OPTICK_EVENT();
+        std::lock_guard guard(m_lightEntitiesLock);
         m_lightEntities.insert(event->entity);
     }
 
     void LightBufferStage::onLightDestroy(events::component_destruction<light>* event)
     {
+        OPTICK_EVENT();
+        std::lock_guard guard(m_lightEntitiesLock);
         m_lightEntities.erase(event->entity);
     }
 
     void LightBufferStage::setup(app::window& context)
     {
+        OPTICK_EVENT();
         buffer lightsBuffer;
 
         {
@@ -35,12 +41,14 @@ namespace legion::rendering
         static auto lightsQuery = createQuery<light>();
         lightsQuery.queryEntities();
 
+        std::lock_guard guard(m_lightEntitiesLock);
         for (auto ent : lightsQuery)
             m_lightEntities.insert(ent);
     }
 
     void LightBufferStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        OPTICK_EVENT();
         (void)deltaTime;
         (void)camInput;
         (void)cam;
@@ -48,15 +56,19 @@ namespace legion::rendering
         static id_type lightsbufferId = nameHash("light buffer");
         static id_type lightCountId = nameHash("light count");
         buffer* lightsBuffer = get_meta<buffer>(lightsbufferId);
-        *get_meta<id_type>(lightCountId) = m_lightEntities.size();
 
-        m_lights.resize(m_lightEntities.size());
-        int i = 0;
-        for (auto ent : m_lightEntities)
         {
-            light lght = ent.read_component<light>();
-            m_lights[i] = lght.get_light_data(ent.get_component_handle<position>(), ent.get_component_handle<rotation>());
-            i++;
+            std::lock_guard guard(m_lightEntitiesLock);
+            *get_meta<id_type>(lightCountId) = m_lightEntities.size();
+
+            m_lights.resize(m_lightEntities.size());
+            int i = 0;
+            for (auto ent : m_lightEntities)
+            {
+                light lght = ent.read_component<light>();
+                m_lights[i] = lght.get_light_data(ent.get_component_handle<position>(), ent.get_component_handle<rotation>());
+                i++;
+            }
         }
 
         app::context_guard guard(context);

@@ -1,4 +1,5 @@
 #include <application/window/windowsystem.hpp>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::application
 {
@@ -386,7 +387,7 @@ namespace legion::application
             };
 
             ecs::component_handle<window> handle(request.entityId);
-            if (!m_ecs->getEntityData(request.entityId).components.contains(typeHash<window>()))
+            if (!m_ecs->hasComponent<window>(request.entityId))
             {
                 win.lock = new async::spinlock();
 
@@ -537,6 +538,8 @@ namespace legion::application
 
     void WindowSystem::handleWindowEvents(time::time_span<fast_time> deltaTime)
     {
+        debug::drawLine(math::vec3(), math::vec3::up*2);
+
         createWindows();
         updateWindowIcons();
         fullscreenWindows();

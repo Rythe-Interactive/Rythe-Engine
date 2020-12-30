@@ -187,6 +187,7 @@ namespace legion::core
 {
     common::result_decay_more<mesh, fs_error> obj_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
+        OPTICK_EVENT();
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
         using decay = common::result_decay_more<mesh, fs_error>;
@@ -326,6 +327,7 @@ namespace legion::core
 
     common::result_decay_more<mesh, fs_error> gltf_binary_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
+        OPTICK_EVENT();
         using common::Err, common::Ok;
         // decay overloads the operator of ok_type and operator== for valid_t.
         using decay = common::result_decay_more<mesh, fs_error>;

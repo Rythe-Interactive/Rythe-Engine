@@ -3,6 +3,13 @@
  * @file platform.hpp
  */
 
+#if !defined(PROJECT_NAME)
+#define PROJECT_NAME user_project
+#endif
+
+#define CONCAT(A, B) A ## B
+
+#define CONCAT_DEFINE(A, B) CONCAT(A, B)
 
 /**@def LEGION_CPP17V
  * @brief the version number of c++17 as long

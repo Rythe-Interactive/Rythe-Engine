@@ -16,6 +16,7 @@ namespace legion::core
 
     void image::apply_raw(bool lazyApply)
     {
+        OPTICK_EVENT();
         {
             async::readwrite_guard guard(ImageCache::m_colorsLock);
             ImageCache::m_colors.erase(m_id);
@@ -26,16 +27,19 @@ namespace legion::core
 
     const std::vector<math::color>& image::read_colors()
     {
+        OPTICK_EVENT();
         return ImageCache::read_colors(m_id);
     }
 
     size_type image::data_size()
     {
+        OPTICK_EVENT();
         return m_dataSize;
     }
 
     math::ivec2 image_handle::size()
     {
+        OPTICK_EVENT();
         auto [lock, image] = ImageCache::get_raw_image(id);
         async::readonly_guard guard(lock);
         return image.size;
@@ -43,21 +47,25 @@ namespace legion::core
 
     const std::vector<math::color>& image_handle::read_colors()
     {
+        OPTICK_EVENT();
         return ImageCache::read_colors(id);
     }
 
     std::pair<async::rw_spinlock&, image&> image_handle::get_raw_image()
     {
+        OPTICK_EVENT();
         return ImageCache::get_raw_image(id);
     }
 
     void image_handle::destroy()
     {
+        OPTICK_EVENT();
         ImageCache::destroy_image(id);
     }
 
     const std::vector<math::color>& ImageCache::process_raw(id_type id)
     {
+        OPTICK_EVENT();
         {
             async::readonly_guard guard(m_imagesLock);
             if (!m_images.count(id))
@@ -242,6 +250,7 @@ namespace legion::core
 
     const std::vector<math::color>& ImageCache::read_colors(id_type id)
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(m_colorsLock);
         if (!m_colors.count(id))
             return process_raw(id);
@@ -250,6 +259,7 @@ namespace legion::core
 
     std::pair<async::rw_spinlock&, image&> ImageCache::get_raw_image(id_type id)
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(m_colorsLock);
         auto& [lock, image] = *m_images[id];
         return std::make_pair(std::ref(lock), std::ref(image));
@@ -257,6 +267,7 @@ namespace legion::core
 
     image_handle ImageCache::create_image(const std::string& name, const filesystem::view& file, image_import_settings settings)
     {
+        OPTICK_EVENT();
         id_type id = nameHash(name);
 
         {
@@ -286,6 +297,7 @@ namespace legion::core
 
     image_handle ImageCache::get_handle(const std::string& name)
     {
+        OPTICK_EVENT();
         id_type id = nameHash(name);
         async::readonly_guard guard(m_imagesLock);
         if (m_images.count(id))
@@ -295,6 +307,7 @@ namespace legion::core
 
     image_handle ImageCache::get_handle(id_type id)
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(m_imagesLock);
         if (m_images.count(id))
             return { id };
@@ -303,6 +316,7 @@ namespace legion::core
 
     void ImageCache::destroy_image(const std::string& name)
     {
+        OPTICK_EVENT();
         id_type id = nameHash(name);
 
         {
@@ -322,6 +336,7 @@ namespace legion::core
 
     void ImageCache::destroy_image(id_type id)
     {
+        OPTICK_EVENT();
         {
             async::readwrite_guard guard(m_imagesLock);
             if (m_images.count(id))

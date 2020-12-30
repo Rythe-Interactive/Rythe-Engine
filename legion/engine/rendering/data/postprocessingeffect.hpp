@@ -13,8 +13,9 @@ namespace legion::rendering
     class PostProcessingEffectBase
     {
     public:
-        std::vector<delegate<void(framebuffer&, texture_handle, texture_handle)>> renderPasses;
+        std::vector<delegate<void(framebuffer&, texture_handle, texture_handle, time::span)>> renderPasses;
         virtual id_type getId() const LEGION_PURE;
+        virtual const std::string& getName() const LEGION_PURE;
         void init(app::window& context)
         {
             m_initialized = true;
@@ -28,6 +29,7 @@ namespace legion::rendering
         virtual void setup(app::window& context) LEGION_PURE;
         void renderQuad()
         {
+            OPTICK_EVENT();
             m_quad.render();
         }
     private:
@@ -45,18 +47,23 @@ namespace legion::rendering
     class PostProcessingEffect : public PostProcessingEffectBase
     {
     public:
-        virtual id_type getId() const override { return m_id; }
-        static const id_type m_id;
+        virtual id_type getId() const override { return id; }
+        virtual const std::string& getName() const override { return name; }
+        static const id_type id;
+        static const std::string name;
 
     protected:
-        template<void(Self::* func_type)(framebuffer&, texture_handle, texture_handle)>
+        template<void(Self::* func_type)(framebuffer&, texture_handle, texture_handle, time::span)>
         void addRenderPass()
         {
-            renderPasses.push_back(delegate<void(framebuffer&, texture_handle, texture_handle)>::create<Self, func_type>(reinterpret_cast<Self*>(this)));
+            renderPasses.push_back(delegate<void(framebuffer&, texture_handle, texture_handle, time::span)>::create<Self, func_type>(reinterpret_cast<Self*>(this)));
         }
     };
 
     template<typename Self>
-    const id_type PostProcessingEffect<Self>::m_id = typeHash<Self>();
+    const id_type PostProcessingEffect<Self>::id = typeHash<Self>();
+
+    template<typename Self>
+    const std::string PostProcessingEffect<Self>::name = typeName<Self>();
 
 }

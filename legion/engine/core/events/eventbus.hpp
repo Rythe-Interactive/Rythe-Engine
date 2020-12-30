@@ -5,6 +5,8 @@
 #include <core/types/types.hpp>
 #include <core/events/event.hpp>
 
+#include <Optick/optick.h>
+
 #include <memory>
 
 /**@file eventbus.hpp
@@ -29,6 +31,7 @@ namespace legion::core::events
         template<typename event_type, typename... Args, typename = inherits_from<event_type, event<event_type>>>
         void raiseEvent(Args&&... arguments)
         {
+            OPTICK_EVENT();
             event_type* eventptr;
 
             event_type event(arguments...); // Create new event.
@@ -41,25 +44,57 @@ namespace legion::core::events
                 eventptr = &event;
 
             if (m_eventCallbacks.contains(event_type::id))
-                force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(eventptr); // Notify.            
+            {
+                OPTICK_EVENT(typeName<event_type>());
+                force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(eventptr); // Notify.
+            }
         }
 
         void raiseEvent(std::unique_ptr<event_base>&& value)
         {
+            OPTICK_EVENT();
             if (value->persistent() && !(value->unique() && m_events[value->get_id()].size()))
             {
                 m_events[value->get_id()].emplace(value.release()); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
             }
-            m_eventCallbacks[value->get_id()].invoke(value.get());
+
+            if (m_eventCallbacks.contains(value->get_id()))
+            {
+#if USE_OPTICK
+                static ::Optick::EventDescription* raiseEventDescription = nullptr;
+                if (raiseEventDescription == nullptr)
+                {
+                    async::readonly_guard guard(detail::eventNameLock);
+                    raiseEventDescription = ::Optick::CreateDescription(OPTICK_FUNC, __FILE__, __LINE__, detail::eventNames[value->get_id()].c_str());
+                }
+                ::Optick::Event raiseEventEvent(*(raiseEventDescription));
+#endif
+                m_eventCallbacks[value->get_id()].invoke(value.get());
+            }
         }
 
         void raiseEventUnsafe(std::unique_ptr<event_base>&& value, id_type id)
         {
+            OPTICK_EVENT();
+
             if (value->persistent() && !(value->unique() && m_events[id].size()))
             {
                 m_events[id].emplace(value.release()); // If it's persistent keep the event stored. (Or at least keep it somewhere fetch able.)
             }
-            m_eventCallbacks[id].invoke(value.get());
+
+            if (m_eventCallbacks.contains(id))
+            {
+#if USE_OPTICK
+                static ::Optick::EventDescription* raiseEventUnsafeDescription = nullptr;
+                if (raiseEventUnsafeDescription == nullptr)
+                {
+                    async::readonly_guard guard(detail::eventNameLock);
+                    raiseEventUnsafeDescription = ::Optick::CreateDescription(OPTICK_FUNC, __FILE__, __LINE__, detail::eventNames[id].c_str());
+                }
+                ::Optick::Event raiseEventUnsafeEvent(*(raiseEventUnsafeDescription));
+#endif
+                m_eventCallbacks[id].invoke(value.get());
+            }
         }
 
         /**@brief Check if an event is active.
@@ -68,6 +103,7 @@ namespace legion::core::events
         template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         bool checkEvent() const
         {
+            OPTICK_EVENT();
             return m_events.contains(event_type::id) && m_events[event_type::id].size();
         }
 
@@ -77,6 +113,7 @@ namespace legion::core::events
         template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         size_type getEventCount() const
         {
+            OPTICK_EVENT();
             if (m_events.contains(event_type::id))
                 return m_events[event_type::id].size();
             return 0;
@@ -88,6 +125,7 @@ namespace legion::core::events
         template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         const event_type& getEvent(index_type index = 0) const
         {
+            OPTICK_EVENT();
             if (checkEvent<event_type>())
                 return *static_cast<event_type*>(m_events[event_type::id][index]); // Static cast because we already know that the types are the same.
             return nullptr;
@@ -99,6 +137,7 @@ namespace legion::core::events
         template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         const event_type& getLastEvent() const
         {
+            OPTICK_EVENT();
             if (checkEvent<event_type>())
             {
                 size_type size = m_events[event_type::id].size();
@@ -113,6 +152,7 @@ namespace legion::core::events
         template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         void clearEvent(index_type index = 0)
         {
+            OPTICK_EVENT();
             if (checkEvent<event_type>())
             {
                 auto* event = m_events[event_type::id][index];
@@ -127,6 +167,7 @@ namespace legion::core::events
         template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         void clearLastEvent()
         {
+            OPTICK_EVENT();
             if (checkEvent<event_type>())
             {
                 auto* event = m_events[event_type::id][m_events[event_type::id].size() - 1];
@@ -141,7 +182,13 @@ namespace legion::core::events
         template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         void bindToEvent(delegate<void(event_type*)> callback)
         {
+            OPTICK_EVENT();
             m_eventCallbacks[event_type::id] += force_value_cast<delegate<void(event_base*)>>(callback);
+        }
+
+        void bindToEventUnsafe(id_type id, delegate<void(event_base*)> callback)
+        {
+            m_eventCallbacks[id] += callback;
         }
     };
 }

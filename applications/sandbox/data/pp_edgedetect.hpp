@@ -17,7 +17,7 @@ namespace legion::rendering
             addRenderPass<&PostProcessingEdgeDetect::renderPass>();
         }
 
-        void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture)
+        void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime)
         {
             fbo.bind();
             m_blurShader.bind();

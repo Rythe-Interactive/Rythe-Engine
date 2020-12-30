@@ -17,6 +17,7 @@ namespace legion::rendering
 
     void FramebufferResizeStage::setup(app::window& context)
     {
+        OPTICK_EVENT();
         float renderScale = m_renderScale.load(std::memory_order_acquire);
         m_framebufferSize = context.framebufferSize();
         m_framebufferSize.x = math::max((int)(m_framebufferSize.x * renderScale), 1);
@@ -25,7 +26,7 @@ namespace legion::rendering
         app::context_guard guard(context);
 
         m_colorTexture = TextureCache::create_texture("color_image", m_framebufferSize, {
-        texture_type::two_dimensional, channel_format::eight_bit, texture_format::rgb,
+        texture_type::two_dimensional, channel_format::float_hdr, texture_format::rgba_hdr,
         texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
         texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
 
@@ -50,6 +51,7 @@ namespace legion::rendering
 
     void FramebufferResizeStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        OPTICK_EVENT();
         float renderScale = m_renderScale.load(std::memory_order_acquire);
         math::ivec2 framebufferSize = context.framebufferSize();
         framebufferSize.x *= renderScale;
