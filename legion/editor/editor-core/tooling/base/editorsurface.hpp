@@ -14,7 +14,7 @@ namespace legion::editor
         EditorSurfaceBase() = default;
         explicit EditorSurfaceBase(const std::string& name);
 
-        virtual void setup(const std::string& name) LEGION_PURE;
+        virtual void setup(std::string& name) LEGION_PURE;
 
         id_type getId();
         virtual id_type getTypeId() LEGION_PURE;
@@ -29,17 +29,16 @@ namespace legion::editor
     template<typename SelfType>
     class EditorSurface : public EditorSurfaceBase
     {
+    protected:
+        inline static size_type m_surfaceCount = 0;
     public:
-        static const id_type surfaceType;
-        EditorSurface() : EditorSurfaceBase("unnamed surface " + std::to_string(surfaceType)) {}
-        explicit EditorSurface(const std::string& name) : EditorSurfaceBase(name) {}
+        inline static const id_type surfaceType = typeHash<SelfType>();
+        EditorSurface() : EditorSurfaceBase(std::to_string(typeName<SelfType>()) + (m_surfaceCount ? " " + std::to_string(m_surfaceCount + 1) : "")) { m_surfaceCount++; }
+        explicit EditorSurface(const std::string& name) : EditorSurfaceBase(name) { m_surfaceCount++; }
 
         virtual id_type getTypeId()
         {
             return m_surfaceType;
         }
     };
-
-    template<typename SelfType>
-    const id_type EditorSurface<SelfType>::surfaceType = typeHash<SelfType>();
 }

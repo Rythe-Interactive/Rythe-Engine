@@ -98,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="data\menu_folder.hpp" />
     <ClInclude Include="data\menu_option.hpp" />
+    <ClInclude Include="systems\menurenderer.hpp" />
     <ClInclude Include="systems\surfacerenderer.hpp" />
     <ClInclude Include="tooling\base\editorgizmo.hpp" />
     <ClInclude Include="tooling\base\editorsurface.hpp" />
@@ -105,13 +106,21 @@
     <ClInclude Include="editor\editor.hpp" />
     <ClInclude Include="editor\editormodule.hpp" />
     <ClInclude Include="tooling\base\editortool.hpp" />
+    <ClInclude Include="tooling\default\viewport\viewportsurface.hpp" />
+    <ClInclude Include="tooling\default\viewport\viewporttool.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="systems\menurenderer.cpp" />
     <ClCompile Include="systems\surfacerenderer.cpp" />
     <ClCompile Include="tooling\base\editorsurface.cpp" />
     <ClCompile Include="editor\editor.cpp" />
     <ClCompile Include="editor\editormodule.cpp" />
     <ClCompile Include="tooling\base\editortool.cpp" />
+    <ClCompile Include="tooling\default\viewport\viewportsurface.cpp" />
+    <ClCompile Include="tooling\default\viewport\viewporttool.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="systems\menurenderer.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

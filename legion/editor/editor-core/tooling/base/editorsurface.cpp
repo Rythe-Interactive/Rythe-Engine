@@ -2,11 +2,10 @@
 
 namespace legion::editor
 {
-    id_type EditorSurfaceBase::m_surfaceTypes = 0;
-
-    EditorSurfaceBase::EditorSurfaceBase(const std::string& name) : m_name(name), m_id(nameHash(m_name))
+    EditorSurfaceBase::EditorSurfaceBase(const std::string& name) : m_name(name)
     {
         setup(m_name);
+        m_id = nameHash(m_name);
     }
 
     id_type EditorSurfaceBase::getId()
