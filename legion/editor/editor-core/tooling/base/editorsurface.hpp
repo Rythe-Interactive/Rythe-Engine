@@ -22,7 +22,7 @@ namespace legion::editor
         void setName(const std::string& name);
         const std::string& getName();
 
-        void drawSurface(app::window& context, gfx::camera& cam, const gfx::camera::camera_input& camInput, time::span deltaTime);
+        bool drawSurface(app::window& context, gfx::camera& cam, const gfx::camera::camera_input& camInput, time::span deltaTime);
         virtual void onGUI(app::window& context, gfx::camera& cam, const gfx::camera::camera_input& camInput, time::span deltaTime) LEGION_PURE;
     };
 

@@ -40,7 +40,7 @@ namespace legion::debug
         }
     };
 
-#define drawLine CONCAT_DEFINE(PROJECT_NAME, drawLine)
+#define drawLine CONCAT_DEFINE(PROJECT_NAME, DrawLine)
 
     inline void drawLine (math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
     {

@@ -10,6 +10,8 @@ namespace legion::editor
 
     class EditorToolBase
     {
+        /*template<typename SelfType>
+        friend class EditorTool<SelfType>;*/
     public:
         virtual void setup() LEGION_PURE;
 
@@ -40,7 +42,7 @@ namespace legion::editor
             SurfaceRenderer::openSurface<SurfaceType>(std::forward<Args>(args)...);
         }
 
-    private:
+    //private:
         std::unordered_map<id_type, std::unique_ptr<menu_option_base>> m_menuOptions;
     };
 

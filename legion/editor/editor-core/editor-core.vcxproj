@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="systems\menurenderer.inl" />
+    <None Include="systems\surfacerenderer.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

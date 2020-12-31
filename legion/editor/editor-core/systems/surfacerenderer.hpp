@@ -17,29 +17,17 @@ namespace legion::editor
         static std::pair<id_type, const std::string&> openSurface(std::unique_ptr<EditorSurfaceBase>&& surface);
 
         template<typename SurfaceType, typename... Args, inherits_from<SurfaceType, EditorSurface<SurfaceType>> = 0>
-        static std::pair<id_type, const std::string&> openSurface(Args&&... args)
-        {
-            SurfaceType* surface = new SurfaceType(std::forward<Args>(args)...);
-
-            size_type surfaceCount = ++m_surfaceCounts[SurfaceType::surfaceType];
-            if (surfaceCount > 1)
-                surface->setName(surface->getName() + " " + std::to_string(surfaceCount));
-
-            id_type id = surface->getId();
-            m_surfaces.emplace(id, std::unique_ptr<EditorSurfaceBase>(surface));
-            return std::make_pair(id, std::ref(surface->getName()));
-        }
+        static std::pair<id_type, const std::string&> openSurface(Args&&... args);
 
         static size_type closeAllSurfacesOfType(id_type typeId);
         static size_type closeSurface(id_type id);
         static size_type closeSurface(const std::string& name);
 
         template<typename SurfaceType, inherits_from<SurfaceType, EditorSurface<SurfaceType>> = 0>
-        static size_type closeAllSurfacesOfType()
-        {
-            closeAllSurfacesOfType(SurfaceType::surfaceType);
-        }
+        static size_type closeAllSurfacesOfType();
 
         void render(app::window& context, gfx::camera& cam, const gfx::camera::camera_input& camInput, time::span deltaTime);
     };
 }
+
+#include <editor-core/systems/surfacerenderer.inl>

@@ -72,6 +72,17 @@ namespace legion::editor
 
     void SurfaceRenderer::render(app::window& context, gfx::camera& cam, const gfx::camera::camera_input& camInput, time::span deltaTime)
     {
+        static std::unordered_set<id_type> toErase;
+        for (auto [id, surf] : m_surfaces)
+        {
+            if (!surf->drawSurface(context, cam, camInput, deltaTime))
+                toErase.insert(id);
+        }
+
+        for (auto id : toErase)
+            closeSurface(id);
+
+        toErase.clear();
     }
 
 }

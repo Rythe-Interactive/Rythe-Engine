@@ -82,5 +82,8 @@
     <None Include="systems\menurenderer.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="systems\surfacerenderer.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

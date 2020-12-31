@@ -38,11 +38,11 @@ namespace legion::editor
 
             ImGui::EndMenu();
         }
-
     }
 
     void MenuRenderer::setup()
     {
+        gfx::ImGuiStage::addGuiRender<MenuRenderer, &MenuRenderer::renderMainMenu>(this);
     }
 
     void MenuRenderer::addMenuOption(const std::string& name, delegate<void()>&& func, const std::string& tooltip)
@@ -93,6 +93,24 @@ namespace legion::editor
 
     void MenuRenderer::renderMainMenu(app::window& context, gfx::camera& cam, const gfx::camera::camera_input& camInput, time::span deltaTime)
     {
+        auto& folder = m_menus["main"];
+        if (ImGui::BeginMenuBar())
+        {
+            for (auto& [_, subfolder] : folder.subfolders)
+                renderFolder(&subfolder);
+
+            for (auto& [optionName, option] : folder.menuOptions)
+            {
+                if (ImGui::MenuItem(optionName.c_str(), nullptr, nullptr, option->enabled))
+                {
+                    option->execute();
+                }
+                else if (!option->tooltip.empty() && ImGui::IsItemHovered())
+                    ImGui::SetTooltip(option->tooltip.c_str());
+            }
+
+            ImGui::EndMenuBar();
+        }
     }
 
 }

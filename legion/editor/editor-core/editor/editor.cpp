@@ -23,7 +23,7 @@ namespace legion::editor
     {
         EditorEngineModule::EditorEngineModule(Editor* editor)
         {
-            Renderer::getMainPipeline()->attachStage<ImGuiStage>();
+            gfx::Renderer::getMainPipeline()->injectStage<gfx::ImGuiStage>();
             for (auto& module : editor->m_modules)
             {
                 editor->m_engine->reportModule(std::unique_ptr<Module>(module->getEngineModule()));
