@@ -1,5 +1,4 @@
 #pragma once
-#include <core/core.hpp>
 #include <rendering/rendering.hpp>
 
 namespace legion::editor

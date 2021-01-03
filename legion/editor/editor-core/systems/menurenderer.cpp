@@ -33,7 +33,11 @@ namespace legion::editor
                     option->execute();
                 }
                 else if (!option->tooltip.empty() && ImGui::IsItemHovered())
-                    ImGui::SetTooltip(option->tooltip.c_str());
+                {
+                    ImGui::BeginTooltip();
+                    ImGui::TextUnformatted(option->tooltip.c_str());
+                    ImGui::EndTooltip();
+                }
             }
 
             ImGui::EndMenu();
@@ -84,7 +88,11 @@ namespace legion::editor
                     option->execute();
                 }
                 else if (!option->tooltip.empty() && ImGui::IsItemHovered())
-                    ImGui::SetTooltip(option->tooltip.c_str());
+                {
+                    ImGui::BeginTooltip();
+                    ImGui::TextUnformatted(option->tooltip.c_str());
+                    ImGui::EndTooltip();
+                }
             }
 
             ImGui::EndMenuBar();
@@ -106,7 +114,11 @@ namespace legion::editor
                     option->execute();
                 }
                 else if (!option->tooltip.empty() && ImGui::IsItemHovered())
-                    ImGui::SetTooltip(option->tooltip.c_str());
+                {
+                    ImGui::BeginTooltip();
+                    ImGui::TextUnformatted(option->tooltip.c_str());
+                    ImGui::EndTooltip();
+                }
             }
 
             ImGui::EndMenuBar();

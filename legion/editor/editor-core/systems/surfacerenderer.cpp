@@ -14,13 +14,14 @@ namespace legion::editor
 
     std::pair<id_type, const std::string&> SurfaceRenderer::openSurface(std::unique_ptr<EditorSurfaceBase>&& surface)
     {
+        surface->setup();
         size_type surfaceCount = ++m_surfaceCounts[surface->getTypeId()];
         if (surfaceCount > 1)
             surface->setName(surface->getName() + " " + std::to_string(surfaceCount));
 
         const std::string& name = surface->getName();
         id_type id = surface->getId();
-        m_surfaces.emplace(id, std::move(surface));
+        m_surfaces.emplace(id, surface.release());
         return std::make_pair(id, std::ref(name));
     }
 

@@ -33,7 +33,7 @@ namespace legion::rendering
         void abort();
 
         template<typename StageType, typename... Args>
-        void injectStage(Args&&... args) { injectStageImpl(std::unique_ptr<RenderStageBase>(new StageType(std::forward<Args>(args)...)); }
+        void injectStage(Args&&... args) { injectStageImpl(std::unique_ptr<RenderStageBase>(new StageType(std::forward<Args>(args)...))); }
         void injectStage(std::unique_ptr<RenderStageBase>&& stage) { injectStageImpl(std::forward<std::unique_ptr<RenderStageBase>&&>(stage)); }
 
         template<typename T>
