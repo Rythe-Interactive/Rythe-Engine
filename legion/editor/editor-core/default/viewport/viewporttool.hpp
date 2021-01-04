@@ -1,5 +1,5 @@
 #pragma once
-#include <editor-core/tooling/base/editortool.hpp>
+#include <editor-core/tooling/editortool.hpp>
 
 namespace legion::editor
 {

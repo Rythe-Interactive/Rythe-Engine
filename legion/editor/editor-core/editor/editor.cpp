@@ -9,7 +9,7 @@ namespace legion::editor
 {
     Engine* Editor::m_engine;
 
-    void Editor::setEngine(Engine* engine)
+    Editor::Editor(Engine* engine)
     {
         m_engine = engine;
     }
@@ -17,21 +17,5 @@ namespace legion::editor
     Engine* Editor::getEngine()
     {
         return m_engine;
-    }
-
-    namespace detail
-    {
-        EditorEngineModule::EditorEngineModule(Editor* editor)
-        {
-            gfx::Renderer::getMainPipeline()->injectStage<gfx::ImGuiStage>();
-            for (auto& module : editor->m_modules)
-            {
-                editor->m_engine->reportModule(std::unique_ptr<Module>(module->getEngineModule()));
-            }
-        }
-
-        void EditorEngineModule::setup()
-        {
-        }
     }
 }

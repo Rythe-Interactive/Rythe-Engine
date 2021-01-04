@@ -1,5 +1,5 @@
 #pragma once
-#include <core/core.hpp>
+#include <rendering/rendering.hpp>
 #include <editor-core/editor/editormodule.hpp>
 
 /**
@@ -26,7 +26,8 @@ namespace legion::editor
         std::vector<std::unique_ptr<EditorModuleBase>> m_modules;
 
     public:
-        void setEngine(Engine* engine);
+        Editor() = default;
+        explicit Editor(Engine* engine);
 
         static Engine* getEngine();
 
@@ -38,20 +39,17 @@ namespace legion::editor
         template <class ModuleType, class... Args, inherits_from<ModuleType, EditorModuleBase> = 0>
         void reportModule(Args&&...args)
         {
+            ModuleType* module = new ModuleType(std::forward<Args>(args)...);
 
+            if constexpr (!std::is_same_v<typename ModuleType::EngineModuleType, std::nullptr_t>)
+            {
+                if (!module->m_engineModule)
+                    module->m_engineModule = new ModuleType::EngineModuleType();
+                m_engine->reportModule(std::unique_ptr<Module>(module->m_engineModule));
+            }
+            m_modules.push_back(std::unique_ptr<EditorModuleBase>(module));
         }
     };
-
-    namespace detail
-    {
-        class EditorEngineModule : public Module
-        {
-        public:
-            EditorEngineModule(Editor* editor);
-
-            virtual void setup();
-        };
-    }
 }
 
 /**@brief Reports editor modules to the editor, must be implemented by you.
@@ -60,7 +58,7 @@ namespace legion::editor
  */
 extern void reportEditorModules(legion::editor::Editor* editor);
 
-#if defined(LEGION_ENTRY)
+#if defined(LEGION_ENTRY) && !defined(DISABLE_EDITOR_ENTRY)
 namespace legion::editor::detail
 {
     Editor editor;
@@ -69,10 +67,9 @@ namespace legion::editor::detail
 void LEGION_CCONV reportModules(legion::Engine* engine)
 {
     using namespace legion::editor;
-    using namespace legion::editor::detail;
-    editor.setEngine(engine);
-    reportEditorModules(&editor);
-    editor.reportModule<CoreEditorModule>();
-    engine->reportModule<EditorEngineModule>(&editor);
+    detail::editor = Editor(engine);
+    engine->reportModule<app::ApplicationModule>();
+    engine->reportModule<rendering::RenderingModule>();
+    reportEditorModules(&detail::editor);
 }
 #endif

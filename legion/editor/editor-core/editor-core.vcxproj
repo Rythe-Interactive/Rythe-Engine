@@ -98,26 +98,27 @@
   <ItemGroup>
     <ClInclude Include="data\menu_folder.hpp" />
     <ClInclude Include="data\menu_option.hpp" />
+    <ClInclude Include="default\coremodule.hpp" />
     <ClInclude Include="systems\menurenderer.hpp" />
     <ClInclude Include="systems\surfacerenderer.hpp" />
-    <ClInclude Include="tooling\base\editorgizmo.hpp" />
-    <ClInclude Include="tooling\base\editorsurface.hpp" />
+    <ClInclude Include="tooling\editorgizmo.hpp" />
+    <ClInclude Include="tooling\editorsurface.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="editor\editor.hpp" />
     <ClInclude Include="editor\editormodule.hpp" />
-    <ClInclude Include="tooling\base\editortool.hpp" />
-    <ClInclude Include="tooling\default\viewport\viewportsurface.hpp" />
-    <ClInclude Include="tooling\default\viewport\viewporttool.hpp" />
+    <ClInclude Include="tooling\editortool.hpp" />
+    <ClInclude Include="default\viewport\viewportsurface.hpp" />
+    <ClInclude Include="default\viewport\viewporttool.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="default\coremodule.cpp" />
     <ClCompile Include="systems\menurenderer.cpp" />
     <ClCompile Include="systems\surfacerenderer.cpp" />
-    <ClCompile Include="tooling\base\editorsurface.cpp" />
+    <ClCompile Include="tooling\editorsurface.cpp" />
     <ClCompile Include="editor\editor.cpp" />
-    <ClCompile Include="editor\editormodule.cpp" />
-    <ClCompile Include="tooling\base\editortool.cpp" />
-    <ClCompile Include="tooling\default\viewport\viewportsurface.cpp" />
-    <ClCompile Include="tooling\default\viewport\viewporttool.cpp" />
+    <ClCompile Include="tooling\editortool.cpp" />
+    <ClCompile Include="default\viewport\viewportsurface.cpp" />
+    <ClCompile Include="default\viewport\viewporttool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="systems\menurenderer.inl" />

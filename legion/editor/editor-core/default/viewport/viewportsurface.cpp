@@ -1,4 +1,4 @@
-#include <editor-core/tooling/default/viewport/viewportsurface.hpp>
+#include <editor-core/default/viewport/viewportsurface.hpp>
 
 namespace legion::editor
 {

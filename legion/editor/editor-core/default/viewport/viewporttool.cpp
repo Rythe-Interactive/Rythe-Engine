@@ -1,5 +1,5 @@
-#include <editor-core/tooling/default/viewport/viewporttool.hpp>
-#include <editor-core/tooling/default/viewport/viewportsurface.hpp>
+#include <editor-core/default/viewport/viewporttool.hpp>
+#include <editor-core/default/viewport/viewportsurface.hpp>
 
 void legion::editor::ViewportTool::setup()
 {

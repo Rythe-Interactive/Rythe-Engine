@@ -12,15 +12,14 @@ namespace legion::editor
         class EditorEngineModule;
     }
 
-    class EditorModuleBase
+    class EditorModuleBase : private Module
     {
-        friend class Editor;
-        friend class legion::editor::detail::EditorEngineModule;
     protected:
-        virtual Module* getEngineModule() LEGION_PURE;
-
-    public:
-        virtual void setup() LEGION_PURE;
+        template<typename ToolType, typename... Args, inherits_from<ToolType, System<ToolType>> = 0>
+        void reportTool(Args&&... args)
+        {
+            reportSystem<ToolType>(std::forward<Args>(args)...);
+        }
     };
 
     /**@class EditorModule
@@ -33,57 +32,40 @@ namespace legion::editor
         friend class Editor;
         friend class legion::editor::detail::EditorEngineModule;
     private:
-        Module* m_engineModule;
+        EngineModule* m_engineModule;
+
+        using EngineModuleType = EngineModule;
 
     protected:
-        virtual Module* getEngineModule() override;
+        EngineModule* getEngineModule()
+        {
+            return m_engineModule;
+        }
 
         template<typename... Args>
-        void parameteriseEngineModule(Args&&... args);
+        void parameteriseEngineModule(Args&&... args)
+        {
+            m_engineModule = new EngineModule(std::forward<Args>(args)...);
+        }
     };
 
-    class CoreEditorModule : public EditorModule<CoreModule>
+    using PureEditorModule = EditorModule<void>;
+
+    template<>
+    class EditorModule<void> : public EditorModuleBase
     {
-    public:
-        virtual void setup();
+        friend class Editor;
+        friend class legion::editor::detail::EditorEngineModule;
+    private:
+        using EngineModuleType = std::nullptr_t;
     };
 
-    template<typename T>
-    Module* EditorModule<T>::getEngineModule()
-    {
-        if (!m_engineModule)
-            m_engineModule = new EngineModule();
-        return m_engineModule;
-    }
-
     template<>
-    inline Module* EditorModule<void>::getEngineModule()
+    class EditorModule<std::nullptr_t> : public EditorModuleBase
     {
-        return nullptr;
-    }
-
-    template<>
-    inline Module* EditorModule<std::nullptr_t>::getEngineModule()
-    {
-        return nullptr;
-    }
-
-    template<typename T>
-    template<typename... Args>
-    void EditorModule<T>::parameteriseEngineModule(Args&&... args)
-    {
-        m_engineModule = new EngineModule(std::forward<Args>(args)...);
-    }
-
-    template<>
-    template<typename... Args>
-    void EditorModule<void>::parameteriseEngineModule(Args&&... args)
-    {
-    }
-
-    template<>
-    template<typename... Args>
-    void EditorModule<std::nullptr_t>::parameteriseEngineModule(Args&&... args)
-    {
-    }
+        friend class Editor;
+        friend class legion::editor::detail::EditorEngineModule;
+    private:
+        using EngineModuleType = std::nullptr_t;
+    };
 }

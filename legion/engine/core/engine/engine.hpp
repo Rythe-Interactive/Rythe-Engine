@@ -79,9 +79,6 @@ namespace legion::core
         void reportModule(Args&&...args)
         {
             std::unique_ptr<Module> module = std::make_unique<ModuleType>(std::forward<Args>(args)...);
-            module->m_ecs = &m_ecs;
-            module->m_scheduler = &m_scheduler;
-            module->m_eventBus = &m_eventbus;
 
             const priority_type priority = module->priority();
             m_modules[priority].emplace_back(std::move(module));
@@ -89,10 +86,6 @@ namespace legion::core
 
         void reportModule(std::unique_ptr<Module>&& module)
         {
-            module->m_ecs = &m_ecs;
-            module->m_scheduler = &m_scheduler;
-            module->m_eventBus = &m_eventbus;
-
             const priority_type priority = module->priority();
             m_modules[priority].emplace_back(std::move(module));
         }

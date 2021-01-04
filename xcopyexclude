@@ -7,3 +7,6 @@ delete_this
 .obj
 .tlog
 .recipe
+.idb
+.log
+.pdb

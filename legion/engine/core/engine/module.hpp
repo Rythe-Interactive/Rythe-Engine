@@ -48,6 +48,12 @@ namespace legion::core
             m_systems.insert(typeHash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...));
         }
 
+        void reportSystem(std::unique_ptr<SystemBase>&& system)
+        {
+            OPTICK_EVENT();
+            m_systems.insert(system->id, std::forward<std::unique_ptr<SystemBase>&&>(system));
+        }
+
         template<typename component_type>
         void reportComponentType()
         {

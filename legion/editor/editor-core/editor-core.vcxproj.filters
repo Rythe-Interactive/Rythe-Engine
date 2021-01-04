@@ -24,15 +24,6 @@
     <ClInclude Include="editor\editormodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tooling\base\editorsurface.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tooling\base\editortool.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tooling\base\editorgizmo.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\menu_option.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -45,24 +36,27 @@
     <ClInclude Include="systems\menurenderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tooling\default\viewport\viewporttool.hpp">
+    <ClInclude Include="default\viewport\viewportsurface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tooling\default\viewport\viewportsurface.hpp">
+    <ClInclude Include="default\viewport\viewporttool.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tooling\editorgizmo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tooling\editorsurface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tooling\editortool.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="default\coremodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="editor\editor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="editor\editormodule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tooling\base\editorsurface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tooling\base\editortool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="systems\surfacerenderer.cpp">
@@ -71,10 +65,19 @@
     <ClCompile Include="systems\menurenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tooling\default\viewport\viewporttool.cpp">
+    <ClCompile Include="default\viewport\viewportsurface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tooling\default\viewport\viewportsurface.cpp">
+    <ClCompile Include="default\viewport\viewporttool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tooling\editorsurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tooling\editortool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="default\coremodule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

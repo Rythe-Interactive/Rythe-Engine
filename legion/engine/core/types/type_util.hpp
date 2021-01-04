@@ -6,6 +6,7 @@
 #include <string>
 #include <string_view>
 #include <cstring>
+#include <type_traits>
 
 #include <Optick/optick.h>
 

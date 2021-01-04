@@ -1,6 +1,6 @@
 #pragma once
 #include <rendering/rendering.hpp>
-#include <editor-core/tooling/base/editorsurface.hpp>
+#include <editor-core/tooling/editorsurface.hpp>
 
 namespace legion::editor
 {
