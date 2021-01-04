@@ -35,6 +35,7 @@ namespace legion::physics
         rendering::material_handle textureH;
 
         rendering::model_handle cubeH;
+        rendering::model_handle concaveTestObject;
         rendering::model_handle planeH;
         rendering::model_handle cylinderH;
         rendering::model_handle complexH;

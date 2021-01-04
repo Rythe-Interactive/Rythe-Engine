@@ -32,6 +32,8 @@ namespace legion::physics
 
 		static ecs::EcsRegistry* m_ecs;
 
+        static int count;
+
 	};
 }
 

@@ -19,6 +19,8 @@ namespace legion::physics
 
     };
 
+    //struct 
+
     struct MeshSplitterDebugHelper
     {
         std::pair<math::vec3, math::vec3> cuttingSetting;
@@ -36,6 +38,8 @@ namespace legion::physics
             math::colors::magenta,
             math::colors::yellow
         };
+
+        //std::vector
 
         int polygonCount;
 

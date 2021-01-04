@@ -4,6 +4,7 @@
 namespace legion::physics
 {
     ecs::EcsRegistry* PrimitiveMesh::m_ecs = nullptr;
+    int PrimitiveMesh::count = 0;
 
     PrimitiveMesh::PrimitiveMesh
     (ecs::entity_handle pOriginalEntity, std::vector<std::shared_ptr<SplittablePolygon>>& pPolygons, rendering::material_handle pOriginalMaterial)
@@ -28,8 +29,9 @@ namespace legion::physics
         newMesh.submeshes.push_back(newSubMesh);
 
         //creaate modelH
-        mesh_handle meshH = core::MeshCache::create_mesh("newMesh", newMesh);
+        mesh_handle meshH = core::MeshCache::create_mesh("newMesh" + std::to_string(count), newMesh);
         auto modelH = rendering::ModelCache::create_model(meshH);
+        count++;
 
         //create renderable
         //auto [meshFilterH, meshRendererH] = ent.add_components< rendering::mesh_renderable>();

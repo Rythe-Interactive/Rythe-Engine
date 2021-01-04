@@ -114,8 +114,6 @@ namespace legion::physics
                 return false;
             }
 
-            assert(nextEdge);
-            assert(prevEdge);
 
             edgesInPolygon.push_back(startEdge);
             edgesInPolygon.push_back(nextEdge);

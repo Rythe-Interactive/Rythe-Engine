@@ -3,7 +3,7 @@
 #include <physics/mesh_splitter_utils/splittable_polygon.h>
 #include <physics/components/physics_component.hpp>
 #include <physics/systems/physicssystem.hpp>
-
+#include <rendering/debugrendering.hpp>
 namespace legion::physics
 {
     void PhysicsFractureTestSystem::setup()
@@ -24,6 +24,8 @@ namespace legion::physics
         #pragma region Model Setup
         cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
         planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
+        cylinderH = rendering::ModelCache::create_model("cylinder", "assets://models/cylinder.obj"_view);
+        concaveTestObject = rendering::ModelCache::create_model("concaveTestObject", "assets://models/polygonTest.obj"_view);
         #pragma endregion
 
         #pragma region Input binding
@@ -52,16 +54,74 @@ namespace legion::physics
     void PhysicsFractureTestSystem::colliderDraw(time::span dt)
     {
 
+        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter,transform>();
+        halfEdgeQuery.queryEntities();
+
+        for (auto entity : halfEdgeQuery)
+        {
+            auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
+            auto edgeFinder = edgeFinderH.read();
+       
+            auto transH = entity.get_component_handles<transform>();
+            
+            auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
+            const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+
+            for (auto pol : edgeFinder.meshPolygons)
+            {
+                const math::vec3& worldCentroid = transform * math::vec4(pol->localCentroid, 1);
+                const math::vec3& worldNormal = transform * math::vec4(pol->localNormal, 0);
+
+                for (auto edge : pol->GetMeshEdges())
+                {
+                    if (edge->isBoundary)
+                    {
+                        auto [start, end] = edge->GetEdgeWorldPositions(transform);
+                        auto startOffset = (worldCentroid - start) * 0.1f + worldNormal * 0.01f;
+                        auto endOffset = (worldCentroid - end) * 0.1f + worldNormal * 0.01f;
+
+                        debug::user_projectdrawLine(start + startOffset, end + endOffset, pol->debugColor, 5.0f);
+                    }
+                    
+                }
+            }
+
+           
+
+            for (auto pol : edgeFinder.meshPolygons)
+            {
+                int boundaryCount = pol->CountBoundary();
+
+
+                if (boundaryCount == 16)
+                {
+                    math::vec3 worldCentroid = transform * math::vec4(pol->localCentroid, 1);
+
+                    //
+                    debug::user_projectdrawLine(worldCentroid, worldCentroid  + math::vec3(0, 0.1, 0), math::colors::red, 5.0f, 30.0f);
+                }
+
+                log::debug(" polygon had {} boundary edges ", boundaryCount);
+            }
+
+        }
+
+
     }
 
     void PhysicsFractureTestSystem::meshSplittingTest(rendering::model_handle planeH, rendering::model_handle cubeH
         , rendering::model_handle cylinderH, rendering::model_handle complexH, rendering::material_handle TextureH)
     {
+       
+
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 2.0f;
         cubeParams.width = 2.0f;
         cubeParams.height = 2.0f;
 
+        //-------------------------------------------------------------------------------------------------------------------------------//
+                                                     //CUBE TEST 
+        //-------------------------------------------------------------------------------------------------------------------------------//
         ecs::entity_handle cubeSplit2;
         {
             auto splitter = m_ecs->createEntity();
@@ -156,96 +216,99 @@ namespace legion::physics
 
         }
 
-      
+        //-------------------------------------------------------------------------------------------------------------------------------//
+                                                    //CYLINDER TEST 
+        //-------------------------------------------------------------------------------------------------------------------------------//
         
         //Split plane
         ecs::entity_handle cylinderSplit;
         {
-            //auto splitterCylinder = m_ecs->createEntity();
-            //cylinderSplit = splitterCylinder;
+            cylinderSplit = m_ecs->createEntity();
+           
 
-            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-            //splitterCylinder.add_components<rendering::mesh_renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
+            cylinderSplit.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(TextureH));
 
-            //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitterCylinder);
-            //positionH.write(math::vec3(37, 1.5f, 15.0f));
-            //scaleH.write(math::vec3(0.02f));
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(cylinderSplit);
+            positionH.write(math::vec3(37, 1.3f, 15.0f));
+            scaleH.write(math::vec3(2.0f));
 
         }
 
         //Cylinder
         {
-            //auto ent = m_ecs->createEntity();
+            auto ent = m_ecs->createEntity();
 
-            //auto entPhyHande = ent.add_component<physics::physicsComponent>();
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-            //physics::physicsComponent physicsComponent;
-            //physics::physicsComponent::init(physicsComponent);
+            physics::physicsComponent physicsComponent;
+            physics::physicsComponent::init(physicsComponent);
 
-            //physicsComponent.AddBox(cubeParams);
-            //entPhyHande.write(physicsComponent);
+            physicsComponent.AddBox(cubeParams);
+            entPhyHande.write(physicsComponent);
 
-            //
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cylinderH.get_mesh()), rendering::mesh_renderer(TextureH));
 
-            ////auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            ////auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(37, 1.5f, 15.0f));
+            scaleH.write(math::vec3(1.0f));
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(ent);
-            //renderableHandle.write({ cylinderH,TextureH });
-
-            //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            //positionH.write(math::vec3(37, 1.5f, 15.0f));
-            //scaleH.write(math::vec3(1.0f));
-
-            //auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            //auto id = idHandle.read();
-            //id.id = "AABBRbStable";
-            //idHandle.write(id);
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "AABBRbStable";
+            idHandle.write(id);
 
 
-            //auto finderH = ent.add_component<physics::MeshSplitter>();
+            auto finderH = ent.add_component<physics::MeshSplitter>();
 
-            //auto finder = finderH.read();
-            //finder.splitTester = cylinderSplit;
-            //finder.InitializePolygons(ent);
-            //finderH.write(finder);
+            auto finder = finderH.read();
+            finder.splitTester.push_back( cylinderSplit);
+            finder.InitializePolygons(ent);
+            finderH.write(finder);
         }
+
+        //-------------------------------------------------------------------------------------------------------------------------------//
+                                                   //CONCAVE TEST 
+        //-------------------------------------------------------------------------------------------------------------------------------//
+
 
         //Complex Mesh
         {
-            //auto ent = m_ecs->createEntity();
+            auto ent = m_ecs->createEntity();
 
-            //auto entPhyHande = ent.add_component<physics::physicsComponent>();
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-            //physics::physicsComponent physicsComponent2;
-            //physics::physicsComponent::init(physicsComponent2);
-
-
-            //physicsComponent2.AddBox(cubeParams);
-
-            //entPhyHande.write(physicsComponent2);
-
-            ////auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            ////auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-            //ent.add_components<rendering::mesh_renderable>(mesh_filter(complexH.get_mesh()), rendering::mesh_renderer(TextureH));
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
 
 
-            //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            //positionH.write(math::vec3(37, 1.5f, 20.0f));
-            //scaleH.write(math::vec3(5.0f));
+            physicsComponent2.AddBox(cubeParams);
 
-            //auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            //auto id = idHandle.read();
-            //id.id = "AABBRbStable";
-            //idHandle.write(id);
+            entPhyHande.write(physicsComponent2);
+
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(concaveTestObject.get_mesh()), rendering::mesh_renderer(TextureH));
 
 
-            /*auto finderH = ent.add_component<physics::HalfEdgeFinder>();
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(37, 2.5f, 22.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "AABBRbStable";
+            idHandle.write(id);
+
+            auto finderH = ent.add_component<physics::MeshSplitter>();
 
             auto finder = finderH.read();
+            //finder.splitTester.push_back(cylinderSplit);
             finder.InitializePolygons(ent);
-            finderH.write(finder);*/
+            finderH.write(finder);
+            log::debug("test");
+
+            log::debug("finder size {} " , finder.meshPolygons.size());
+
+           
+
         }
     }
 
@@ -603,11 +666,14 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::OnSplit(physics_split_test* action)
     {
+  
+
         static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
 
         if (action->value)
         {
             halfEdgeQuery.queryEntities();
+
             for (auto entity : halfEdgeQuery)
             {
                 auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();

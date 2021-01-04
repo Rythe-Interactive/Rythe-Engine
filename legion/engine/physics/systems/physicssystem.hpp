@@ -223,10 +223,8 @@ namespace legion::physics
             //the effective mass remains the same for every iteration of the solver. This means that we can precalculate it before
             //we start the solver
 
-            //log::debug("");
             //log::debug("--------------Logging contacts for manifold -------------------");
-            //log::debug("");
-            //log::debug("*START IMPULSE");
+  
             for (auto& manifold : manifoldsToSolve)
             {
                 for (auto& contact : manifold.contacts)

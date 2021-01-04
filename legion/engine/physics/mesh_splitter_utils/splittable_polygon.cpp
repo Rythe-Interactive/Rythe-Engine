@@ -19,6 +19,23 @@ namespace legion::physics
         return edgesInPolygon;
     }
 
+    int SplittablePolygon::CountBoundary()
+    {
+        int res = 0;
+        for (auto edge : edgesInPolygon)
+        {
+            if (edge->isBoundary)
+            {
+                res++;
+            }
+            
+        }
+
+        return res;
+    }
+
+    
+
     void SplittablePolygon::CalculateLocalCentroid()
     {
         for (auto edge : edgesInPolygon)

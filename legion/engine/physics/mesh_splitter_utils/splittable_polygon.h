@@ -21,13 +21,14 @@ namespace legion::physics
 
 		std::vector<std::shared_ptr<MeshHalfEdge>>& GetMeshEdges();
 
+        int CountBoundary();
+
 		void CalculateLocalCentroid();
 
 		void AssignEdgeOwnership();
 
 		void ResetEdgeVisited();
 		
-
 		void CalculatePolygonSplit(const math::mat4& transform
 			, math::vec3 planePosition, math::vec3 planeNormal);
 
