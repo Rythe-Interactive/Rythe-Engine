@@ -38,9 +38,9 @@ namespace legion::rendering
         red_int = GL_RED_INTEGER,
         rg_int = GL_RG_INTEGER,
         rgb_int = GL_RGB_INTEGER,
-        rgba_int = GL_RGBL_INTEGER,
+        rgba_int = GL_RGBA_INTEGER,
         bgr_int = GL_BGR_INTEGER,
-        bgra_int = GL_BGRL_INTEGER,
+        bgra_int = GL_BGRA_INTEGER,
     };
 
     /**@brief Internal channel layout of the colors.

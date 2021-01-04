@@ -193,7 +193,7 @@ namespace legion::rendering
                     params["ONE_MINUS_CONSTANT_COLOR"] = GL_ONE_MINUS_CONSTANT_COLOR;
                     params["CONSTANT_ALPHA"] = GL_CONSTANT_ALPHA;
                     params["ONE_MINUS_CONSTANT_ALPHA"] = GL_ONE_MINUS_CONSTANT_ALPHA;
-                    params["SRC_ALPHL_SATURATE"] = GL_SRC_ALPHL_SATURATE;
+                    params["SRC_ALPHA_SATURATE"] = GL_SRC_ALPHA_SATURATE;
                     params["OFF"] = GL_FALSE;
                 }
 
