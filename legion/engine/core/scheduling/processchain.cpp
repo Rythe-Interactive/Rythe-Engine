@@ -26,10 +26,8 @@ namespace legion::core::scheduling
                 if (chain->m_scheduler->syncRequested()) // Sync if requested.
                     chain->m_scheduler->waitForProcessSync();
 
-                if (chain->m_low_power)
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-                else
                 {
+                    OPTICK_CATEGORY("Relieve LSU contention", Optick::Category::Wait);
                     L_PAUSE_INSTRUCTION();
                     std::this_thread::yield();
                 }
@@ -73,7 +71,7 @@ namespace legion::core::scheduling
     void ProcessChain::runInCurrentThread()
     {
         OPTICK_EVENT("Run process chain");
-        OPTICK_TAG("Process chain name", m_name.c_str());
+        OPTICK_TAG("Process chain", m_name.c_str());
 
         {
             async::readonly_guard guard(m_callbackLock);
