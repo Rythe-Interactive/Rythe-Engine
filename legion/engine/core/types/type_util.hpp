@@ -75,7 +75,10 @@ namespace legion::core
         }
     }
 #elif defined(LEGION_GCC)
+}
 #include <cxxabi.h>
+namespace legion::core
+{
     namespace detail
     {
         template<typename T>
@@ -91,8 +94,11 @@ namespace legion::core
         }
     }
 #elif defined(LEGION_CLANG_GCC)
+}
 #include <cxxabi.h>
-        namespace detail
+namespace legion::core
+{
+    namespace detail
     {
         template<typename T>
         std::string getTypeNameImpl()
@@ -105,7 +111,7 @@ namespace legion::core
             free(realName);
             return result;
         }
-}
+    }
 #endif
 
     /**@brief Returns type name with namespaces other than that it's undecorated.
