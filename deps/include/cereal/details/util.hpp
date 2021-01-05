@@ -32,7 +32,6 @@
 
 #include <typeinfo>
 #include <string>
-#include <cxxabi.h>
 
 #ifdef _MSC_VER
 namespace cereal
