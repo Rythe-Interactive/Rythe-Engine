@@ -159,12 +159,13 @@ namespace legion::rendering
             // Create message buffer and fetch message.
             GLint infoLogLength;
             glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
-            char* errorMessage;
+            const char* errorMessage;
             if (infoLogLength > 0)
             {
-                errorMessage = new char[infoLogLength + 1];
-                glGetShaderInfoLog(shaderId, infoLogLength, nullptr, errorMessage);
-                errorMessage[infoLogLength] = '\0';
+                char* temp = new char[infoLogLength + 1];
+                glGetShaderInfoLog(shaderId, infoLogLength, nullptr, temp);
+                temp[infoLogLength] = '\0';
+                errorMessage = temp;
             }
             else
             {

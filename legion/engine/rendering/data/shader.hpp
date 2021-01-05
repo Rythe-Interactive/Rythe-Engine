@@ -97,6 +97,7 @@ namespace legion::rendering
         glActiveTexture(GL_TEXTURE0 + m_location);
         glBindTexture(GL_TEXTURE_2D, tex.textureId);
         glUniform1i(m_location, m_location);
+        glActiveTexture(GL_TEXTURE0);
     }
 
     template<>
