@@ -23,7 +23,7 @@ namespace legion::rendering
 
 #pragma region shader parameters
     /**@class shader_parameter_base
-     * @brief Common base of all shader parameter types. 
+     * @brief Common base of all shader parameter types.
      */
     struct shader_parameter_base
     {
@@ -33,7 +33,7 @@ namespace legion::rendering
         GLenum m_type;
         GLint m_location;
 
-        shader_parameter_base(std::nullptr_t t): m_shaderId(invalid_id), m_name(""), m_type(0), m_location(-1){};
+        shader_parameter_base(std::nullptr_t t) : m_shaderId(invalid_id), m_name(""), m_type(0), m_location(-1) {};
 
         shader_parameter_base(id_type shaderId, std::string_view name, GLenum type, GLint location) : m_shaderId(shaderId), m_name(name), m_type(type), m_location(location) {};
 
@@ -74,7 +74,7 @@ namespace legion::rendering
     {
     public:
         uniform(id_type shaderId, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shaderId, name, type, location) {}
-        uniform(std::nullptr_t t) : shader_parameter_base(t){};
+        uniform(std::nullptr_t t) : shader_parameter_base(t) {};
         /**@brief Set the value of the uniform.
          */
         void set_value(const T& value);
@@ -86,18 +86,28 @@ namespace legion::rendering
     }
 
     template<>
-    inline void uniform<texture_handle>::set_value(const texture_handle& value)
+    struct uniform<texture_handle> : public shader_parameter_base
     {
-        texture tex;
-        if (is_valid())
-            tex = value.get_texture();
-        else
-            tex = invalid_texture_handle.get_texture();
+        uint m_textureUnit;
+    public:
+        uniform(id_type shaderId, std::string_view name, GLenum type, GLint location, uint textureUnit) : shader_parameter_base(shaderId, name, type, location), m_textureUnit(textureUnit) {}
+        uniform(std::nullptr_t t) : shader_parameter_base(t) {};
+        /**@brief Set the value of the uniform.
+         */
+        void set_value(const texture_handle& value)
+        {
+            texture tex;
+            if (is_valid())
+                tex = value.get_texture();
+            else
+                tex = invalid_texture_handle.get_texture();
 
-        glActiveTexture(GL_TEXTURE0 + m_location);
-        glBindTexture(GL_TEXTURE_2D, tex.textureId);
-        glUniform1i(m_location, m_location);
-    }
+            glActiveTexture(GL_TEXTURE0 + m_textureUnit);
+            glBindTexture(GL_TEXTURE_2D, tex.textureId);
+            glUniform1i(m_location, m_textureUnit);
+            glActiveTexture(GL_TEXTURE0);
+        }
+    };
 
     template<>
     inline void uniform<uint>::set_value(const uint& value)
@@ -224,7 +234,7 @@ namespace legion::rendering
          * @param type Data type of the components in the tensor.
          * @param normalized Normalize the tensors before sending to VRAM.
          * @param stride Amount of bytes in-between valid data chunks.
-         * @param pointer Amount of bytes until the first valid data chunk. 
+         * @param pointer Amount of bytes until the first valid data chunk.
          */
         void set_attribute_pointer(GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLsizei pointer)
         {

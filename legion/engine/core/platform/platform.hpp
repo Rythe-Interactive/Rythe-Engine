@@ -146,6 +146,18 @@
 #define L_NODISCARD
 #endif
 
+#if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(maybe_unused) || defined(DOXY_INCLUDE)
+
+/**@def L_NODISCARD
+ * @brief Marks a function as "nodiscard" meaning that result must be captured and should not be discarded.
+ */
+#define L_MAYBEUNUSED [[maybe_unused]]
+#else
+#define L_MAYBEUNUSED
+#endif
+
+
+
 #if __cplusplus > LEGION_CPP17V || L_HASCPPATTRIB(noreturn) || defined(DOXY_INCLUDE)
 /**@def L_NORETURN
  * @brief Marks a function as "noreturn" meaning that the function will never finish, or terminate the application

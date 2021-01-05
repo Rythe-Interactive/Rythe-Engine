@@ -346,6 +346,8 @@ namespace legion::application
             if (icon == invalid_image_handle)
                 icon = m_defaultIcon;
 
+            ContextHelper::windowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+
             window win = ContextHelper::createWindow(request.size, request.name.c_str(), request.monitor, request.share);
 
             auto [lock, image] = icon.get_raw_image();
