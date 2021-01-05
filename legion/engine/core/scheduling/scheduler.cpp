@@ -80,11 +80,11 @@ namespace legion::core::scheduling
     {
         legion::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
 
-        if (m_availableThreads < minThreads)
-        {
+        if (std::thread::hardware_concurrency() < minThreads)
             m_lowPower = true;
+
+        if (m_availableThreads < minThreads)
             m_availableThreads = minThreads;
-        }
 
         async::rw_spinlock::force_release(false);
         async::spinlock::force_release(false);
