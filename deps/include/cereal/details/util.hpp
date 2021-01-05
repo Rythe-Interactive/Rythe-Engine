@@ -32,6 +32,7 @@
 
 #include <typeinfo>
 #include <string>
+#include <cxxabi.h>
 
 #ifdef _MSC_VER
 namespace cereal
@@ -50,7 +51,37 @@ namespace cereal
     { return typeid( T ).name(); }
   } // namespace util
 } // namespace cereal
-#else // clang or gcc
+#elif defined(__clang__) // clang
+#include <cxxabi.h>
+#include <cstdlib>
+namespace cereal
+{
+  namespace util
+  {
+    //! Demangles the type encoded in a string
+    /*! @internal */
+    inline std::string demangle(std::string mangledName)
+    {
+      int status = 0;
+      char *demangledName = nullptr;
+      std::size_t len;
+
+      demangledName = __cxxabiv1::__cxa_demangle(mangledName.c_str(), 0, &len, &status);
+
+      std::string retName(demangledName);
+      free(demangledName);
+
+      return retName;
+    }
+
+    //! Gets the demangled name of a type
+    /*! @internal */
+    template<class T> inline
+    std::string demangledName()
+    { return demangle(typeid(T).name()); }
+  }
+} // namespace cereal
+#else // gcc
 #include <cxxabi.h>
 #include <cstdlib>
 namespace cereal
