@@ -2,6 +2,10 @@
 //  Default Input  //
 /////////////////////
 
+#if !defined(STDIO_INCL)
+#define STDIO_INCL
+#endif
+
 #if defined(VERTEX_SHADER)
 in vec3 position : SV_POSITION;
 in vec3 normal : SV_NORMAL;
@@ -102,8 +106,8 @@ uniform sampler2D lgn_sceneDepth : SV_SCENEDEPTH;
 uniform sampler2D lgn_sceneColor : SV_SCENECOLOR;
 uniform sampler2D lgn_hdrOverdraw : SV_HDROVERDRAW;
 
-#define ViewMatrix lgn_cmr_in.view;
-#define ProjectionMatrix lgn_cmr_in.proj;
+#define ViewMatrix lgn_cmr_in.view
+#define ProjectionMatrix lgn_cmr_in.proj
 #define ViewProjectionMatrix (lgn_cmr_in.proj * lgn_cmr_in.view)
 
 vec4 WorldToScreenSpacePosition(vec3 pos)
@@ -136,6 +140,11 @@ Camera GetCamera()
     return camera;
 }
 
+float FrustumDepth()
+{
+    return lgn_cmr_in.vdirfarz.w - lgn_cmr_in.posnearz.w;
+}
+
 vec4 ModelToScreenSpacePosition(vec3 pos)
 {
     #if defined(GEOMETRY_SHADER)
@@ -157,7 +166,7 @@ vec3 SceneDepth(vec2 uv)
 
 float LinearDepth(float depth)
 {
-   return 0.0;// return lgn_cmr_in.nearz * lgn_cmr_in.farz / (lgn_cmr_in.farz + depth * (lgn_cmr_in.nearz - lgn_cmr_in.farz));
+    return lgn_cmr_in.posnearz.w * lgn_cmr_in.vdirfarz.w / (lgn_cmr_in.vdirfarz.w + depth * (lgn_cmr_in.posnearz.w - lgn_cmr_in.vdirfarz.w));
 }
 
 #if defined(FRAGMENT_SHADER)
@@ -194,10 +203,7 @@ vec3 SceneDepth()
 
 float LinearDepth()
 {
-    return 0.0;
-    //float depth = texture(lgn_sceneDepth, gl_FragCoord.xy / lgn_cmr_in.viewportSize).r;
-
-    //return lgn_cmr_in.nearz * lgn_cmr_in.farz / (lgn_cmr_in.farz + depth * (lgn_cmr_in.nearz - lgn_cmr_in.farz));
+       return lgn_cmr_in.posnearz.w * lgn_cmr_in.vdirfarz.w / (lgn_cmr_in.vdirfarz.w - gl_FragCoord.z * (lgn_cmr_in.posnearz.w - lgn_cmr_in.vdirfarz.w));
 }
 
 bool DepthCull(float depth)

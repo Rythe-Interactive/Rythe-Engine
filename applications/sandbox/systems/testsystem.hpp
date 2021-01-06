@@ -88,12 +88,6 @@ using namespace legion::core::filesystem::literals;
 class TestSystem final : public System<TestSystem>
 {
 public:
-    TestSystem() : System<TestSystem>()
-    {
-        log::filter(log::severity::debug);
-        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1920, 1080), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
-    }
-
     ecs::entity_handle audioSphereLeft;
     ecs::entity_handle audioSphereRight;
 
@@ -221,6 +215,7 @@ public:
         rendering::model_handle axesH;
         rendering::model_handle submeshtestH;
         rendering::model_handle planeH;
+        rendering::model_handle billboardH;
         //rendering::model_handle cylinderH;
 
         rendering::material_handle wireframeH;
@@ -233,6 +228,10 @@ public:
         rendering::material_handle pointLightMH;
         rendering::material_handle gizmoMH;
         rendering::material_handle normalH;
+        rendering::material_handle billboardMH;
+        rendering::material_handle particleMH;
+        rendering::material_handle fixedSizeBillboardMH;
+        rendering::material_handle fixedSizeParticleMH;
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
@@ -257,6 +256,7 @@ public:
             axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view);
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
             planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
+            billboardH = rendering::ModelCache::create_model("billboard", "assets://models/billboard.obj"_view);
             //cylinderH = rendering::ModelCache::create_model("cylinder","assets://models/cylinder.obj"_view);
 
             wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
@@ -278,6 +278,20 @@ public:
 
             textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
             textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+
+            billboardMH = rendering::MaterialCache::create_material("billboard", "assets://shaders/billboard.shs"_view);
+            billboardMH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            billboardMH.set_param("fixedSize", false);
+
+            particleMH = rendering::MaterialCache::create_material("particle", "assets://shaders/particle.shs"_view);
+            particleMH.set_param("fixedSize", false);
+
+            fixedSizeBillboardMH = rendering::MaterialCache::create_material("fixed size billboard", "assets://shaders/billboard.shs"_view);
+            fixedSizeBillboardMH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            fixedSizeBillboardMH.set_param("fixedSize", true);
+
+            fixedSizeParticleMH = rendering::MaterialCache::create_material("fixed size particle", "assets://shaders/particle.shs"_view);
+            fixedSizeParticleMH.set_param("fixedSize", true);
 
             auto pbrShader = rendering::ShaderCache::create_shader("pbr", "assets://shaders/pbr.shs"_view);
             pbrH = rendering::MaterialCache::create_material("pbr", pbrShader);
@@ -452,6 +466,54 @@ public:
             sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
         }
 
+        {
+            auto ent = createEntity();
+            ent.add_component(gfx::mesh_renderer(billboardMH, billboardH));
+            ent.add_components<transform>(position(-10, 0, 10), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component(gfx::mesh_renderer(fixedSizeBillboardMH, billboardH));
+            ent.add_components<transform>(position(-10, 0, 8), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component(gfx::mesh_renderer(particleMH, billboardH));
+            ent.add_components<transform>(position(-8, 0, 10), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component(gfx::mesh_renderer(fixedSizeParticleMH, billboardH));
+            ent.add_components<transform>(position(-8, 0, 8), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component(gfx::mesh_renderer(billboardMH, billboardH));
+            ent.add_components<transform>(position(-11, 0.5, 10), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component(gfx::mesh_renderer(fixedSizeBillboardMH, billboardH));
+            ent.add_components<transform>(position(-11, 0.5, 8), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component(gfx::mesh_renderer(particleMH, billboardH));
+            ent.add_components<transform>(position(-9, 0.5, 10), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_component(gfx::mesh_renderer(fixedSizeParticleMH, billboardH));
+            ent.add_components<transform>(position(-9, 0.5, 8), rotation(), scale());
+        }
+        
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
