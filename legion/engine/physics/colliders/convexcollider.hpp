@@ -15,6 +15,8 @@ namespace legion::physics
     {
     public:
 
+        std::vector<math::vec3> vertices;
+
         ConvexCollider() = default;
 
         ~ConvexCollider()
@@ -83,6 +85,7 @@ namespace legion::physics
         */
         void ConstructConvexHullWithMesh(legion::core::mesh_handle& meshHandle)
         {
+            
             // Step 0 - Create inital hull
             if (step == 0)
             {
@@ -940,7 +943,7 @@ namespace legion::physics
             }
         }
 
-        std::vector<math::vec3> vertices;
+        
         std::vector<HalfEdgeFace*> halfEdgeFaces;
 
         // Convex hull generation debug stuffs

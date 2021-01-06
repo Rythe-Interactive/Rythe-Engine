@@ -23,6 +23,7 @@ namespace legion::physics
 		HalfEdgeEdge* startEdge;
 		math::vec3 normal;
 		math::vec3 centroid;
+        math::color DEBUG_color;
         
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
@@ -96,7 +97,9 @@ namespace legion::physics
             if (relation == face_angle_relation::convex) return "convex";
             if (relation == face_angle_relation::concave) return "concave";
         }
-		
+
+        void DEBUG_DrawFace(const math::mat4& transform, const math::color& debugColor,  float time = 20.0f);
+
 		~HalfEdgeFace();
 	};
 }

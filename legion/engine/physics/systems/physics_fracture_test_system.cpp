@@ -45,8 +45,8 @@ namespace legion::physics
 
         #pragma endregion
 
-        meshSplittingTest(planeH, cubeH
-            , cylinderH, complexH, textureH);
+       /* meshSplittingTest(planeH, cubeH
+            , cylinderH, complexH, textureH);*/
 
         createProcess<&PhysicsFractureTestSystem::colliderDraw>("Update");
     }
@@ -79,7 +79,7 @@ namespace legion::physics
                         auto [start, end] = edge->GetEdgeWorldPositions(transform);
                         auto startOffset = (worldCentroid - start) * 0.1f + worldNormal * 0.01f;
                         auto endOffset = (worldCentroid - end) * 0.1f + worldNormal * 0.01f;
-
+                        
                         debug::user_projectdrawLine(start + startOffset, end + endOffset, pol->debugColor, 5.0f);
                     }
                     
@@ -101,7 +101,7 @@ namespace legion::physics
                     debug::user_projectdrawLine(worldCentroid, worldCentroid  + math::vec3(0, 0.1, 0), math::colors::red, 5.0f, 30.0f);
                 }
 
-                log::debug(" polygon had {} boundary edges ", boundaryCount);
+                //log::debug(" polygon had {} boundary edges ", boundaryCount);
             }
 
         }
@@ -634,6 +634,8 @@ namespace legion::physics
             auto id = idHandle.read();
             id.id = "OBBRb";
             idHandle.write(id);
+
+            
 
 
             //log::debug("rb.angularVelocity {}", rb.angularVelocity);

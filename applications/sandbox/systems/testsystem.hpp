@@ -2385,8 +2385,8 @@ public:
 
             auto& boundaryInfoList = splitter.debugHelper.boundaryEdgesForPolygon;
 
-            debug::drawLine(splitter.debugHelper.cuttingSetting.first
-                , splitter.debugHelper.cuttingSetting.first + (splitter.debugHelper.cuttingSetting.second) * 2.0f, math::colors::cyan, 5.0f, 0.0f, false);
+           /* debug::drawLine(splitter.debugHelper.cuttingSetting.first
+                , splitter.debugHelper.cuttingSetting.first + (splitter.debugHelper.cuttingSetting.second) * 2.0f, math::colors::cyan, 5.0f, 0.0f, false);*/
 
             
 

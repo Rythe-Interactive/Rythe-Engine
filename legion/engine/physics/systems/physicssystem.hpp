@@ -8,7 +8,7 @@
 #include <physics/data/identifier.hpp>
 #include <physics/events/events.hpp>
 #include <memory>
-
+#include <rendering/debugrendering.hpp>
 
 namespace legion::physics
 {
@@ -224,7 +224,7 @@ namespace legion::physics
             //we start the solver
 
             //log::debug("--------------Logging contacts for manifold -------------------");
-  
+
             for (auto& manifold : manifoldsToSolve)
             {
                 for (auto& contact : manifold.contacts)
@@ -235,6 +235,22 @@ namespace legion::physics
 
                 }
             }
+
+            /*for (auto& manifold : manifoldsToSolve)
+            {
+                for (auto& contact : manifold.contacts)
+                {
+                    debug::user_projectdrawLine
+                    (contact.RefWorldContact, contact.RefWorldContact + math::vec3(0,0.1f,0),math::colors::red,2.0f,5.0f,true);
+
+                    debug::user_projectdrawLine
+                    (contact.IncWorldContact, contact.IncWorldContact + math::vec3(0, 0.1f, 0), math::colors::blue, 2.0f, 5.0f, true);
+
+                    debug::user_projectdrawLine
+                    (contact.IncWorldContact, contact.RefWorldContact , math::colors::magenta, 2.0f, 5.0f, true);
+                }
+            }*/
+
 
             for (auto& manifold : manifoldsToSolve)
             {

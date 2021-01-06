@@ -59,7 +59,6 @@ namespace legion::physics
 
                 log::debug("Mesh vertices {}, Mesh indices {}", mesh.vertices.size(), mesh.indices.size());
 
-
             }
             else
             {

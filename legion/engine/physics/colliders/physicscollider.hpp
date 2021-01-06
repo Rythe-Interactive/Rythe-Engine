@@ -16,7 +16,7 @@ namespace legion::physics
     class PhysicsCollider
     {
     public:
-
+        bool shouldBeDrawn = true;
         std::vector<std::unique_ptr<ConverganceIdentifier>> converganceIdentifiers;
 
         PhysicsCollider()
