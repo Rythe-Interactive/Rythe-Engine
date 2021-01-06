@@ -31,6 +31,8 @@ namespace legion::rendering
 
         GLchar* uniformNameBuffer = new GLchar[maxUniformNameLength]; // Create buffer with the right length.
 
+        uint textureUnit = 1;
+
         for (int uniformId = 0; uniformId < numActiveUniforms; uniformId++)
         {
             GLint arraySize = 0; // Use this later for uniform arrays.
@@ -49,7 +51,8 @@ namespace legion::rendering
             switch (type)
             {
             case GL_SAMPLER_2D:
-                uniform = new rendering::uniform<texture_handle>(id, name, type, location);
+                uniform = new rendering::uniform<texture_handle>(id, name, type, location, textureUnit);
+                textureUnit++;
                 break;
             case GL_UNSIGNED_INT:
                 uniform = new rendering::uniform<uint>(id, name, type, location);
@@ -159,16 +162,17 @@ namespace legion::rendering
             // Create message buffer and fetch message.
             GLint infoLogLength;
             glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
-            char* errorMessage;
+            const char* errorMessage;
             if (infoLogLength > 0)
             {
-                errorMessage = new char[infoLogLength + 1];
-                glGetShaderInfoLog(shaderId, infoLogLength, nullptr, errorMessage);
-                errorMessage[infoLogLength] = '\0';
+                char* temp = new char[infoLogLength + 1];
+                glGetShaderInfoLog(shaderId, infoLogLength, nullptr, temp);
+                temp[infoLogLength] = '\0';
+                errorMessage = temp;
             }
             else
             {
-                errorMessage = "Unknown error OpenGL context might not have been made current?";
+                errorMessage = "Unknown error, OpenGL context might not have been made current?";
             }
             cstring shaderTypename;
             switch (shaderType)

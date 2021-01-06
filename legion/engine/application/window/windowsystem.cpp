@@ -296,6 +296,7 @@ namespace legion::application
 
     void WindowSystem::createWindows()
     {
+        OPTICK_EVENT();
         if (m_exit) // If the engine is exiting then we can't create new windows.
             return;
 
@@ -344,6 +345,8 @@ namespace legion::application
             image_handle icon = request.icon;
             if (icon == invalid_image_handle)
                 icon = m_defaultIcon;
+
+            ContextHelper::windowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
             window win = ContextHelper::createWindow(request.size, request.name.c_str(), request.monitor, request.share);
 
@@ -429,6 +432,7 @@ namespace legion::application
 
     void WindowSystem::fullscreenWindows()
     {
+        OPTICK_EVENT();
         if (m_exit) // If the engine is exiting then we can't change any windows.
             return;
 
@@ -481,7 +485,7 @@ namespace legion::application
 
     void WindowSystem::updateWindowIcons()
     {
-
+        OPTICK_EVENT();
         if (m_exit) // If the engine is exiting then we can't change any windows.
             return;
 
@@ -519,6 +523,7 @@ namespace legion::application
 
     void WindowSystem::refreshWindows(time::time_span<fast_time> deltaTime)
     {
+        OPTICK_EVENT();
         if (!ContextHelper::initialized())
             return;
 
@@ -538,8 +543,7 @@ namespace legion::application
 
     void WindowSystem::handleWindowEvents(time::time_span<fast_time> deltaTime)
     {
-        debug::drawLine(math::vec3(), math::vec3::up*2);
-
+        OPTICK_EVENT();
         createWindows();
         updateWindowIcons();
         fullscreenWindows();

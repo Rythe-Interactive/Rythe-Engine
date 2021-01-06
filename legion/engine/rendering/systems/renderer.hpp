@@ -13,8 +13,12 @@ namespace legion::rendering
         std::atomic_bool m_initialized = false;
         std::atomic_bool m_exiting = false;
 
-        static void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
+        static void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED const void* userParam);
+        static void debugCallbackARB(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED const void* userParam);
+        static void debugCallbackAMD(GLuint id, GLenum category, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED void* userParam);
         bool initContext(const app::window& window);
+
+        void setThreadPriority();
 
     public:
         Renderer() : System<Renderer>()

@@ -2,6 +2,10 @@
 //  Default Input  //
 /////////////////////
 
+#if !defined(STDIO_INCL)
+#define STDIO_INCL
+#endif
+
 #if defined(VERTEX_SHADER)
 in vec3 position : SV_POSITION;
 in vec3 normal : SV_NORMAL;
@@ -18,15 +22,15 @@ in mat4 modelMatrix : SV_MODELMATRIX;
 #endif
 
 #if defined(GEOMETRY_SHADER)
-in _L_STDVTXGEOM
+in LGN_STDVTXGEOM
 #elif defined(GEOMETRY_SHADER_ACTIVE)
 #if defined(VERTEX_SHADER)
-out _L_STDVTXGEOM
+out LGN_STDVTXGEOM
 #elif defined(FRAGMENT_SHADER)
-in _L_STDGEOMFRAG
+in LGN_STDGEOMFRAG
 #endif
 #else
-io _L_STDIO
+io LGN_STDIO
 #endif
 {
     vec3 position;
@@ -40,12 +44,12 @@ io _L_STDIO
     mat4 modelMatrix;
 }
 #if defined(GEOMETRY_SHADER)
-_L_stdin[_L_geom_vtxc];
+lgn_stdin[LGN_geom_vtxc];
 #else
-_L_stdio;
+lgn_stdio;
 #endif
 #if defined(GEOMETRY_SHADER)
-out _L_STDGEOMFRAG
+out LGN_STDGEOMFRAG
 {
     vec3 position;
     vec3 wvertex;
@@ -56,20 +60,20 @@ out _L_STDGEOMFRAG
     vec3 wtangent;
     vec2 uv;
     mat4 modelMatrix;
-} _L_stdout;
+} lgn_stdout;
 #endif
 
 
 #if defined(VERTEX_SHADER)
 #define stdio(param) param
 #define stdin(param) param
-#define stdout(param) _L_stdio.param
+#define stdout(param) lgn_stdio.param
 #elif defined(FRAGMENT_SHADER)
-#define stdio(param) _L_stdio.param
-#define stdin(param) _L_stdio.param
+#define stdio(param) lgn_stdio.param
+#define stdin(param) lgn_stdio.param
 #elif defined(GEOMETRY_SHADER)
-#define stdin(index, param) _L_stdin[index].param
-#define stdout(param) _L_stdout.param
+#define stdin(index, param) lgn_stdin[index].param
+#define stdout(param) lgn_stdout.param
 #endif
 
 struct Camera
@@ -81,7 +85,7 @@ struct Camera
     vec3 viewDirection;
     float nearz;
     #if defined(GEOMETRY_SHADER)
-    vec3 toView[_L_geom_vtxc];
+    vec3 toView[LGN_geom_vtxc];
     #else
     vec3 toView;
     #endif
@@ -96,15 +100,15 @@ struct CameraInput
     ivec2 viewportSize;
 };
 
-uniform CameraInput _L_cmr_in : SV_CAMERA;
+uniform CameraInput lgn_cmr_in : SV_CAMERA;
 
-uniform sampler2D _L_sceneDepth : SV_SCENEDEPTH;
-uniform sampler2D _L_sceneColor : SV_SCENECOLOR;
-uniform sampler2D _L_hdrOverdraw : SV_HDROVERDRAW;
+uniform sampler2D lgn_sceneDepth : SV_SCENEDEPTH;
+uniform sampler2D lgn_sceneColor : SV_SCENECOLOR;
+uniform sampler2D lgn_hdrOverdraw : SV_HDROVERDRAW;
 
-#define ViewMatrix _L_cmr_in.view;
-#define ProjectionMatrix _L_cmr_in.proj;
-#define ViewProjectionMatrix (_L_cmr_in.proj * _L_cmr_in.view)
+#define ViewMatrix lgn_cmr_in.view
+#define ProjectionMatrix lgn_cmr_in.proj
+#define ViewProjectionMatrix (lgn_cmr_in.proj * lgn_cmr_in.view)
 
 vec4 WorldToScreenSpacePosition(vec3 pos)
 {
@@ -119,21 +123,26 @@ vec4 WorldToScreenSpacePosition(vec4 pos)
 Camera GetCamera()
 {
     Camera camera;
-    camera.viewMatrix = _L_cmr_in.view;
-    camera.projectionMatrix = _L_cmr_in.proj;
-    camera.position = _L_cmr_in.posnearz.xyz;
-    camera.nearz = _L_cmr_in.posnearz.w;
-    camera.viewDirection = _L_cmr_in.vdirfarz.xyz;
-    camera.farz = _L_cmr_in.vdirfarz.w;
+    camera.viewMatrix = lgn_cmr_in.view;
+    camera.projectionMatrix = lgn_cmr_in.proj;
+    camera.position = lgn_cmr_in.posnearz.xyz;
+    camera.nearz = lgn_cmr_in.posnearz.w;
+    camera.viewDirection = lgn_cmr_in.vdirfarz.xyz;
+    camera.farz = lgn_cmr_in.vdirfarz.w;
     #if defined(VERTEX_SHADER)
     camera.toView = camera.position - (modelMatrix * vec4(position, 1.0)).xyz;
     #elif defined(FRAGMENT_SHADER)
-    camera.toView = camera.position - _L_stdio.wvertex;
+    camera.toView = camera.position - lgn_stdio.wvertex;
     #elif defined(GEOMETRY_SHADER)
-    for(int i = 0; i < _L_geom_vtxc; i++)
-        camera.toView[i] = camera.position - _L_stdin[i].wvertex;
+    for(int i = 0; i < LGN_geom_vtxc; i++)
+        camera.toView[i] = camera.position - lgn_stdin[i].wvertex;
     #endif
     return camera;
+}
+
+float FrustumDepth()
+{
+    return lgn_cmr_in.vdirfarz.w - lgn_cmr_in.posnearz.w;
 }
 
 vec4 ModelToScreenSpacePosition(vec3 pos)
@@ -147,17 +156,17 @@ vec4 ModelToScreenSpacePosition(vec3 pos)
 
 vec3 SceneColor(vec2 uv)
 {
-    return texture(_L_sceneColor, uv).rgb;
+    return texture(lgn_sceneColor, uv).rgb;
 }
 
 vec3 SceneDepth(vec2 uv)
 {
-    return texture(_L_sceneDepth, uv).rgb;
+    return texture(lgn_sceneDepth, uv).rgb;
 }
 
 float LinearDepth(float depth)
 {
-   return 0.0;// return _L_cmr_in.nearz * _L_cmr_in.farz / (_L_cmr_in.farz + depth * (_L_cmr_in.nearz - _L_cmr_in.farz));
+    return lgn_cmr_in.posnearz.w * lgn_cmr_in.vdirfarz.w / (lgn_cmr_in.vdirfarz.w + depth * (lgn_cmr_in.posnearz.w - lgn_cmr_in.vdirfarz.w));
 }
 
 #if defined(FRAGMENT_SHADER)
@@ -179,25 +188,22 @@ in vec4 gl_FragCoord;
 
 vec2 ScreenUV()
 {
-    return gl_FragCoord.xy / _L_cmr_in.viewportSize;
+    return gl_FragCoord.xy / lgn_cmr_in.viewportSize;
 }
 
 vec3 SceneColor()
 {
-    return texture(_L_sceneColor, gl_FragCoord.xy / _L_cmr_in.viewportSize).rgb;
+    return texture(lgn_sceneColor, gl_FragCoord.xy / lgn_cmr_in.viewportSize).rgb;
 }
 
 vec3 SceneDepth()
 {
-    return texture(_L_sceneDepth, gl_FragCoord.xy / _L_cmr_in.viewportSize).rgb;
+    return texture(lgn_sceneDepth, gl_FragCoord.xy / lgn_cmr_in.viewportSize).rgb;
 }
 
 float LinearDepth()
 {
-    return 0.0;
-    //float depth = texture(_L_sceneDepth, gl_FragCoord.xy / _L_cmr_in.viewportSize).r;
-
-    //return _L_cmr_in.nearz * _L_cmr_in.farz / (_L_cmr_in.farz + depth * (_L_cmr_in.nearz - _L_cmr_in.farz));
+       return lgn_cmr_in.posnearz.w * lgn_cmr_in.vdirfarz.w / (lgn_cmr_in.vdirfarz.w - gl_FragCoord.z * (lgn_cmr_in.posnearz.w - lgn_cmr_in.vdirfarz.w));
 }
 
 bool DepthCull(float depth)
@@ -280,7 +286,7 @@ mat3 GetTBNMatrix(vec3 worldNormal, vec3 worldTangent)
 vec3 GetWorldPosition()
 {
 #if defined(FRAGMENT_SHADER)
-    return _L_stdio.wvertex;
+    return lgn_stdio.wvertex;
 #elif defined(VERTEX_SHADER)
     return (stdio(modelMatrix) * vec4(stdio(position), 1.0)).xyz;
 #endif
@@ -289,7 +295,7 @@ vec3 GetWorldPosition()
 vec3 GetWorldNormal()
 {
 #if defined(FRAGMENT_SHADER)
-    return normalize(_L_stdio.wnormal);
+    return normalize(lgn_stdio.wnormal);
 #elif defined(VERTEX_SHADER)
     return normalize((stdio(modelMatrix) * vec4(stdio(normal), 0.0)).xyz);
 #endif
@@ -299,7 +305,7 @@ vec3 GetWorldTangent()
 {
     vec3 worldNormal = GetWorldNormal();
 #if defined(FRAGMENT_SHADER)
-    return normalize(_L_stdio.wtangent - dot(_L_stdio.wtangent, worldNormal) *worldNormal);
+    return normalize(lgn_stdio.wtangent - dot(lgn_stdio.wtangent, worldNormal) *worldNormal);
 #elif defined(VERTEX_SHADER)
     vec3 worldTangent = normalize((stdio(modelMatrix) * vec4(tangent, 0.0)).xyz);
     return normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
@@ -309,7 +315,7 @@ vec3 GetWorldTangent()
 vec3 GetWorldTangent(vec3 worldNormal)
 {
 #if defined(FRAGMENT_SHADER)
-    return normalize(_L_stdio.wtangent - dot(_L_stdio.wtangent, worldNormal) *worldNormal);
+    return normalize(lgn_stdio.wtangent - dot(lgn_stdio.wtangent, worldNormal) *worldNormal);
 #elif defined(VERTEX_SHADER)
     vec3 worldTangent = normalize((stdio(modelMatrix) * vec4(tangent, 0.0)).xyz);
     return normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
@@ -363,15 +369,15 @@ mat3 GetTBNMatrix(vec3 worldNormal, vec3 worldTangent)
 #if defined(VERTEX_SHADER)
 void PropagateStdIO()
 {
-    _L_stdio.position = position;
-    _L_stdio.wvertex = GetWorldPosition();
-    _L_stdio.vertexcolor = vertexcolor;
-    _L_stdio.normal = normal;
-    _L_stdio.wnormal = GetWorldNormal();
-    _L_stdio.tangent = tangent;
-    _L_stdio.wtangent = GetWorldTangent(_L_stdio.wnormal);
-    _L_stdio.uv = uv;
-    _L_stdio.modelMatrix = modelMatrix;
+    lgn_stdio.position = position;
+    lgn_stdio.wvertex = GetWorldPosition();
+    lgn_stdio.vertexcolor = vertexcolor;
+    lgn_stdio.normal = normal;
+    lgn_stdio.wnormal = GetWorldNormal();
+    lgn_stdio.tangent = tangent;
+    lgn_stdio.wtangent = GetWorldTangent(lgn_stdio.wnormal);
+    lgn_stdio.uv = uv;
+    lgn_stdio.modelMatrix = modelMatrix;
 }
 #elif defined(GEOMETRY_SHADER)
 void PropagateStdIO(int index)
