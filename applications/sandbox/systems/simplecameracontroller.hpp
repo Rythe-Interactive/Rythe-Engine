@@ -26,7 +26,7 @@ public:
     ecs::entity_handle skybox;
     ecs::entity_handle groundplane;
 
-    bool escaped = false;
+    bool escaped = true;
     float movementspeed = 5.f;
 
     virtual void setup()
@@ -61,15 +61,13 @@ public:
 
 #pragma endregion
 
-        app::window window = m_ecs->world.get_component_handle<app::window>().read();
-        window.enableCursor(false);
+        app::window window = world.read_component<app::window>();
+        window.enableCursor(true);
         window.show();
 
         {
-            std::lock_guard guard(*window.lock);
-            app::ContextHelper::makeContextCurrent(window);
+            app::context_guard guard(window);
             setupCameraEntity();
-            app::ContextHelper::makeContextCurrent(nullptr);
         }
     }
 
