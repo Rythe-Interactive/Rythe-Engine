@@ -80,7 +80,7 @@ namespace legion::physics
                         auto startOffset = (worldCentroid - start) * 0.1f + worldNormal * 0.01f;
                         auto endOffset = (worldCentroid - end) * 0.1f + worldNormal * 0.01f;
                         
-                        debug::user_projectdrawLine(start + startOffset, end + endOffset, pol->debugColor, 5.0f);
+                        debug::user_projectDrawLine(start + startOffset, end + endOffset, pol->debugColor, 5.0f);
                     }
                     
                 }
@@ -98,7 +98,7 @@ namespace legion::physics
                     math::vec3 worldCentroid = transform * math::vec4(pol->localCentroid, 1);
 
                     //
-                    debug::user_projectdrawLine(worldCentroid, worldCentroid  + math::vec3(0, 0.1, 0), math::colors::red, 5.0f, 30.0f);
+                    debug::user_projectDrawLine(worldCentroid, worldCentroid  + math::vec3(0, 0.1, 0), math::colors::red, 5.0f, 30.0f);
                 }
 
                 //log::debug(" polygon had {} boundary edges ", boundaryCount);

@@ -61,7 +61,7 @@ namespace legion::physics
             math::vec3 worldStart = transform * math::vec4(edgePosition, 1);
             math::vec3 worldEnd = transform * math::vec4(nextEdge->edgePosition, 1);
 
-            debug::user_projectdrawLine(worldStart, worldEnd, debugColor, width, time, true);
+            debug::user_projectDrawLine(worldStart, worldEnd, debugColor, width, time, true);
         }
 
 	};
