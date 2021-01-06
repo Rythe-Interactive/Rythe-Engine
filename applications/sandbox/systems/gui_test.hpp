@@ -49,6 +49,10 @@ class GuiTestSystem : public System<GuiTestSystem>
         createProcess<&GuiTestSystem::update>("Update");
     }
 
+
+    bool offsetMode = false;
+    float offset[3]{0};
+
     void onGUI(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
         ImGuiIO& io = ImGui::GetIO();
@@ -60,13 +64,37 @@ class GuiTestSystem : public System<GuiTestSystem>
         base::ShowDemoWindow();
         gizmo::SetOrthographic(false);
         gizmo::BeginFrame();
-        base::Begin("Hello World");
+        base::Begin("Edit Cube Transform");
         gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::End();
 
-        base::Begin("Window");
-        base::Text("Hello World!");
+        base::Begin("Edit Camera Transform");
 
+        if(base::RadioButton("offset",offsetMode)) {offsetMode = true;}
+        base::SameLine();
+        if(base::RadioButton("set",  !offsetMode)) {offsetMode = false;}
+
+        base::InputFloat3("Modifier",offset);
+        if(base::Button("Change"))
+        {
+            cameraQuery.queryEntities();
+            auto handle = cameraQuery[0].get_component_handle<position>();
+
+            if(offsetMode)
+            {
+                position p = handle.read();
+                p.x += offset[0];
+                p.y += offset[1];
+                p.z += offset[2];
+                handle.write(p);    
+            } else {
+                position p;
+                p.x = offset[0];
+                p.y = offset[1];
+                p.z = offset[2];
+                handle.write(p);    
+            }
+        }
 
         base::End();
 

@@ -27,6 +27,8 @@
 
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 
+
+#include "../data/animation.hpp"
 #include "../data/pp_blur.hpp"
 #include "../data/pp_edgedetect.hpp"
 
@@ -451,6 +453,12 @@ public:
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(rockH));
             ent.add_components<transform>(position(0, 0.01f, -10), rotation(), scale(10));
+
+            ext::animation animation{true};
+            fs::view v("assets://test.anim");
+            deserialize_animation(v,animation);
+
+            ent.add_component<ext::animation>(animation);
         }
 
         {

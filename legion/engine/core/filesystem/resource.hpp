@@ -40,7 +40,7 @@ class Test {
 		/**@brief Constructs a basic resource from a std::string
 		 * @param [in] v The resource from which the resource is created (copy-assign operation)
 		 */
-		explicit basic_resource(const std::string_view& v) : basic_resource(nullptr)
+		explicit basic_resource(std::string_view v) : basic_resource(nullptr)
 		{
             OPTICK_EVENT();
             m_container.assign(v.begin(), v.end());
