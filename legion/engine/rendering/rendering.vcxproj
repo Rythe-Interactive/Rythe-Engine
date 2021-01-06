@@ -60,6 +60,7 @@
     <ClInclude Include="components\particle.hpp" />
     <ClInclude Include="components\particle_emitter.hpp" />
     <ClInclude Include="components\point_cloud.hpp" />
+    <ClInclude Include="data\Octree.hpp" />
     <ClInclude Include="data\postprocessingeffect.hpp" />
     <ClInclude Include="data\screen_quad.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />

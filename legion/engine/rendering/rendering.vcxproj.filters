@@ -93,6 +93,7 @@
     <ClInclude Include="pipeline\default\postfx\tonemapping.hpp" />
     <ClInclude Include="pipeline\default\postfx\fxaa.hpp" />
     <ClInclude Include="pipeline\default\stages\debugrenderstage.hpp" />
+    <ClInclude Include="data\Octree.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\buffer.inl" />

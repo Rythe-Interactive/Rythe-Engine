@@ -5,7 +5,7 @@
 
 #include "../systems/testsystemconvexhull.hpp"
 //#include "../systems/testsystem2.hpp"
-//#include"../systems/pointcloudtestsystem2.hpp"
+#include"../systems/pointcloudtestsystem2.hpp"
 #include "../systems/simplecameracontroller.hpp"
 #include "../systems/gui_test.hpp"
 
@@ -21,9 +21,10 @@ public:
     {
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1920, 1080), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
         reportComponentType<sah>();
-        reportSystem<TestSystem>();
+      //  reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
+        reportSystem<pointcloudtestsystem2>();
     }
 
     virtual priority_type priority() override

@@ -20,7 +20,7 @@ namespace legion::debug
 
         debug_line_event(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false) : start(start), end(end), color(color), width(width), time(time), ignoreDepth(ignoreDepth) {}
         debug_line_event() = default;
-        debug_line_event(const debug_line_event &) = default;
+        debug_line_event(const debug_line_event&) = default;
         debug_line_event(debug_line_event&&) = default;
 
         debug_line_event& operator=(const debug_line_event&) = default;
@@ -42,12 +42,33 @@ namespace legion::debug
 
 #define drawLine CONCAT_DEFINE(PROJECT_NAME, DrawLine)
 
-    inline void drawLine (math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
+    inline void drawLine(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
     {
         Engine::eventbus->raiseEvent(std::unique_ptr<events::event_base>(new debug_line_event(start, end, color, width, time, ignoreDepth)));
     }
 
+#define drawCube CONCAT_DEFINE(PROJECT_NAME, DrawCube)
+
+    inline void drawCube(math::vec3 min, math::vec3 max, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
+    {
+        //draws all 12 cube edges 
+        drawLine(min, math::vec3(max.x, min.y, min.z), color, width, time, ignoreDepth);
+        drawLine(min, math::vec3(min.x, max.y, min.z), color, width, time, ignoreDepth);
+        drawLine(min, math::vec3(min.x, min.y, max.z), color, width, time, ignoreDepth);
+        drawLine(math::vec3(min.x, max.y, max.z), max, color, width, time, ignoreDepth);
+        drawLine(math::vec3(max.x, max.y, min.z), max, color, width, time, ignoreDepth);
+        drawLine(math::vec3(max.x, min.y, max.z), max, color, width, time, ignoreDepth);
+        drawLine(math::vec3(max.x, min.y, min.z), math::vec3(max.x, max.y, min.z), color, width, time, ignoreDepth);
+        drawLine(math::vec3(max.x, min.y, min.z), math::vec3(max.x, min.y, max.z), color, width, time, ignoreDepth);
+        drawLine(math::vec3(min.x, max.y, min.z), math::vec3(max.x, max.y, min.z), color, width, time, ignoreDepth);
+        drawLine(math::vec3(min.x, max.y, min.z), math::vec3(min.x, max.y, max.z), color, width, time, ignoreDepth);
+        drawLine(math::vec3(min.x, min.y, max.z), math::vec3(max.x, min.y, max.z), color, width, time, ignoreDepth);
+        drawLine(math::vec3(min.x, min.y, max.z), math::vec3(min.x, max.y, max.z), color, width, time, ignoreDepth);
+    }
+
 #endif
+
+
 }
 
 #if !defined(DOXY_EXCLUDE)

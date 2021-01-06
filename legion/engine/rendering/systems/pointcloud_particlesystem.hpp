@@ -1,6 +1,8 @@
 #pragma once
 #include <rendering/data/particle_system_base.hpp>
-
+#include <rendering/debugrendering.hpp>
+#include<core/core.hpp>
+#include <rendering/data/Octree.hpp>
 using namespace legion;
 /**
  * @struct pointCloudParameters
@@ -53,6 +55,16 @@ public:
     {
         //Reads emitter.
         rendering::particle_emitter emitter = emitter_handle.read();
+
+        float minX = std::numeric_limits<float>().max();
+        float maxX = std::numeric_limits<float>().min();
+
+        float minY = std::numeric_limits<float>().max();
+        float maxY = std::numeric_limits<float>().min();
+
+        float minZ = std::numeric_limits<float>().max();
+        float maxZ = std::numeric_limits<float>().min();
+
         for (auto position : m_positions)
         {
             //Checks the emitter if it has a recycled particle to use, if not it creates a new one.
@@ -64,20 +76,46 @@ public:
 
             //Gets position, rotation and scale of entity.
             auto trans = ent.get_component_handles<transform>();
-            auto& [pos, _ , scale] = trans;
+            auto& [pos, _, scale] = trans;
+            //auto currentPos = pos.read();
+            if (position.x < minX) minX = position.x;
+            if (position.x > maxX) maxX = position.x;
+            if (position.y < minY) minY = position.y;
+            if (position.y > maxY) maxY = position.y;
+            if (position.z < minZ) minZ = position.z;
+            if (position.z > maxZ) maxZ = position.z;
 
             //Sets the particle scale to the right scale.
             pos.write(position);
             scale.write(math::vec3(m_startingSize));
-            
+
             //Populates the particle with the appropriate stuffs.
             createParticle(particleComponent, trans);
         }
+        math::vec3 A = math::vec3(minX, minY, minZ);
+        math::vec3 B = math::vec3(minX, minY, maxZ);
+        //   debug::drawCube(math::vec3(minX, minY, minZ), math::vec3(maxX, maxY, maxZ), math::colors::red, 1.0f);
+        auto tree = rendering::Octree<uint8>(8, math::vec3(0, 0, 0), math::vec3(3, 3, 3));
+
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 2.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
+
+
+        tree.DrawTree();
     }
 
     void update(std::vector<ecs::entity_handle>, ecs::component_handle<rendering::particle_emitter>, time::span) const override
     {
-        
+
     }
 
 private:

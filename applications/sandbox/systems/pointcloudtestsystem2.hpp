@@ -14,7 +14,7 @@
 using namespace legion;
 using namespace rendering;
 //system to test the point cloud generation system and the point cloud component
-class pointcloudtestsystem2 final : public legion::core::System<pointcloudtestsystem2 >
+class pointcloudtestsystem2 final : public legion::core::System<pointcloudtestsystem2>
 {
 public:
     ecs::entity_handle player;
@@ -47,8 +47,7 @@ public:
         image_handle image;
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
         {
-            async::readwrite_guard guard(*window.lock);
-            app::ContextHelper::makeContextCurrent(window);
+            app::context_guard guard(window);
             auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
             particleMaterial = rendering::MaterialCache::create_material("directional light", colorshader);
             particleMaterial.set_param("color", math::colors::blue);
@@ -64,7 +63,7 @@ public:
 
         auto ent2 = createEntity();
         auto trans2 = ent2.add_components<transform>(position(5, 0, 0), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(cubeMesh, trans2, particleMaterial, image, 6000, 0.015f));
+        ent2.add_component<point_cloud>(point_cloud(cubeMesh, trans2, particleMaterial, image, 1500, 0.015f));
     }
 };
 
