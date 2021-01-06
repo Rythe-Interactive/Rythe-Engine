@@ -15,6 +15,7 @@
 
 #include <core/serialization/serializationmeta.hpp>
 
+#include <Optick/optick.h>
 
 /**
  * @file component_container.hpp
@@ -66,6 +67,7 @@ namespace legion::core::ecs
 
         virtual void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) override
         {
+            OPTICK_EVENT();
             if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
             {
                 async::readonly_guard guard(m_lock);
@@ -80,10 +82,12 @@ namespace legion::core::ecs
         }
         virtual void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) override
         {
+            OPTICK_EVENT();
             oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
         }
         virtual void serialize(cereal::JSONInputArchive& iarchive, id_type entityId) override
         {
+            OPTICK_EVENT();
             if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
             {
                 async::readonly_guard guard(m_lock);
@@ -112,6 +116,7 @@ namespace legion::core::ecs
         }
         virtual void serialize(cereal::BinaryInputArchive& oarchive, id_type entityId) override
         {
+            OPTICK_EVENT();
             oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
         }
 
@@ -127,6 +132,7 @@ namespace legion::core::ecs
          */
         L_NODISCARD virtual bool has_component(id_type entityId) const override
         {
+            OPTICK_EVENT();
             async::readonly_guard guard(m_lock);
             return m_components.contains(entityId);
         }
@@ -138,8 +144,9 @@ namespace legion::core::ecs
          */
         L_NODISCARD component_type& get_component(id_type entityId)
         {
+            OPTICK_EVENT();
             if (m_components.contains(entityId))
-                return m_components[entityId];
+                return m_components.get(entityId);
             return m_nullComp;
         }
 
@@ -150,8 +157,9 @@ namespace legion::core::ecs
          */
         L_NODISCARD const component_type& get_component(id_type entityId) const
         {
+            OPTICK_EVENT();
             if (m_components.contains(entityId))
-                return m_components[entityId];
+                return m_components.get(entityId);
             return m_nullComp;
         }
 
@@ -162,6 +170,7 @@ namespace legion::core::ecs
          */
         virtual void create_component(id_type entityId) override
         {
+            OPTICK_EVENT();
             {
                 async::readwrite_guard guard(m_lock);
                 m_components.emplace(entityId);
@@ -182,6 +191,7 @@ namespace legion::core::ecs
          */
         virtual void create_component(id_type entityId, void* value) override
         {
+            OPTICK_EVENT();
             {
                 async::readwrite_guard guard(m_lock);
                 m_components[entityId] = *reinterpret_cast<component_type*>(value);
@@ -202,6 +212,7 @@ namespace legion::core::ecs
          */
         virtual void destroy_component(id_type entityId) override
         {
+            OPTICK_EVENT();
             m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId));
 
             if constexpr (detail::has_destroy<component_type, void(component_type&)>::value)
@@ -219,6 +230,7 @@ namespace legion::core::ecs
          */
         void clone_component(id_type dst, id_type src) override
         {
+            OPTICK_EVENT();
             static_assert(std::is_copy_constructible<component_type>::value,
                 "cannot copy component, therefore component cannot be cloned onto new entity!");
 

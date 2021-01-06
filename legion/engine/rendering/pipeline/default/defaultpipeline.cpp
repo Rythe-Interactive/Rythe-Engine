@@ -4,9 +4,11 @@
 #include <rendering/pipeline/default/stages/lightbufferstage.hpp>
 #include <rendering/pipeline/default/stages/meshbatchingstage.hpp>
 #include <rendering/pipeline/default/stages/meshrenderstage.hpp>
+#include <rendering/pipeline/default/stages/debugrenderstage.hpp>
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 #include <rendering/pipeline/default/stages/submitstage.hpp>
 #include <rendering/pipeline/default/postfx/tonemapping.hpp>
+#include <rendering/pipeline/default/postfx/fxaa.hpp>
 #include <rendering/data/buffer.hpp>
 
 
@@ -14,15 +16,18 @@ namespace legion::rendering
 {
     void DefaultPipeline::setup(app::window& context)
     {
+        OPTICK_EVENT();
         attachStage<ClearStage>();
         attachStage<FramebufferResizeStage>();
         attachStage<LightBufferStage>();
         attachStage<MeshBatchingStage>();
         attachStage<MeshRenderStage>();
+        attachStage<DebugRenderStage>();
         attachStage<PostProcessingStage>();
         attachStage<SubmitStage>();
 
         PostProcessingStage::addEffect<Tonemapping>(-64);
+        PostProcessingStage::addEffect<FXAA>(-100);
 
         buffer modelMatrixBuffer;
 

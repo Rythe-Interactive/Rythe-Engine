@@ -71,7 +71,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-physics.lib;legion-rendering.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-physics.lib;legion-rendering.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;OptickCore.lib;Voro++D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <!--
       <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-networking.lib;legion-physics.lib;legion-rendering.lib;legion-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies);mono-2.0-sgen.lib;OptickCore.lib</AdditionalDependencies>
       -->
@@ -94,7 +94,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-physics.lib;legion-rendering.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-physics.lib;legion-rendering.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;OptickCore.lib;Voro++.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <!--
       <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-networking.lib;legion-physics.lib;legion-rendering.lib;legion-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies);mono-2.0-sgen.lib;OptickCore.lib</AdditionalDependencies>
       -->

@@ -78,6 +78,7 @@ namespace legion::core::ecs
         template<typename component_type>
         void reportComponentType()
         {
+            OPTICK_EVENT();
             async::readwrite_guard guard(m_familyLock);
             if (!m_families.count(typeHash<component_type>()))
                 m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>(this, m_eventBus);
@@ -321,6 +322,8 @@ namespace legion::core::ecs
          */
         L_NODISCARD entity_data getEntityData(id_type entityId);
         void setEntityData(id_type entityId, const entity_data& data);
+
+        L_NODISCARD entity_handle getEntityParent(id_type entityId);
 
         /**@brief Get a container with ALL entities.
          * @returns sparse_map<id_type, entity_handle>& Container that keeps both the id's and corresponding entity handles for easy use.

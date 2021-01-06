@@ -2,7 +2,7 @@
 
 namespace legion::rendering
 {
-    material_parameter_base* material_parameter_base::create_param(const std::string& name,const GLint& location, const GLenum& type)
+    material_parameter_base* material_parameter_base::create_param(const std::string& name, const GLint& location, const GLenum& type)
     {
         switch (type)
         {
@@ -169,6 +169,7 @@ namespace legion::rendering
 
     attribute material_handle::get_attribute(const std::string& name)
     {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
         return MaterialCache::m_materials[id].m_shader.get_attribute(name);
     }
 

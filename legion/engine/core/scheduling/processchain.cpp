@@ -20,15 +20,14 @@ namespace legion::core::scheduling
         {*/
             while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
             {
+                OPTICK_EVENT();
                 chain->runInCurrentThread(); // Execute all processes.
 
                 if (chain->m_scheduler->syncRequested()) // Sync if requested.
                     chain->m_scheduler->waitForProcessSync();
 
-                if (chain->m_low_power)
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-                else
                 {
+                    OPTICK_CATEGORY("Relieve LSU contention", Optick::Category::Wait);
                     L_PAUSE_INSTRUCTION();
                     std::this_thread::yield();
                 }
@@ -71,6 +70,9 @@ namespace legion::core::scheduling
 
     void ProcessChain::runInCurrentThread()
     {
+        OPTICK_EVENT("Run process chain");
+        OPTICK_TAG("Process chain", m_name.c_str());
+
         {
             async::readonly_guard guard(m_callbackLock);
             m_onFrameStart();
@@ -95,6 +97,7 @@ namespace legion::core::scheduling
 
     void ProcessChain::addProcess(Process* process)
     {
+        OPTICK_EVENT();
         async::readwrite_guard guard(m_processesLock);
         if (m_processes.insert(process->id(), process).second)
             process->m_hooks.insert(m_nameHash);
@@ -102,6 +105,7 @@ namespace legion::core::scheduling
 
     void ProcessChain::removeProcess(Process* process)
     {
+        OPTICK_EVENT();
         async::readwrite_guard guard(m_processesLock);
         if (m_processes.erase(process->id()))
             process->m_hooks.erase(m_nameHash);

@@ -14,6 +14,7 @@ namespace legion::rendering
         mesh_renderer(const material_handle& src, const model_handle& model) { material = src; m_tempHandle = model; }
         static void init(mesh_renderer& src, ecs::entity_handle owner)
         {
+            OPTICK_EVENT();
             if (!owner.has_component<mesh_filter>())
             {
                 owner.add_component<mesh_filter>(mesh_filter(src.m_tempHandle.get_mesh()));
@@ -51,6 +52,8 @@ namespace legion::rendering
     template<typename Archive>
     void mesh_renderable::serialize(Archive& archive)
     {
+        OPTICK_EVENT();
+        archive(get_model(), get_material());
         model_handle modelH;
         material_handle materialH;
         if (typeid(archive) == typeid(cereal::JSONInputArchive))

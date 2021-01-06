@@ -8,18 +8,21 @@ namespace legion::rendering
 
     void LightBufferStage::onLightCreate(events::component_creation<light>* event)
     {
+        OPTICK_EVENT();
         std::lock_guard guard(m_lightEntitiesLock);
         m_lightEntities.insert(event->entity);
     }
 
     void LightBufferStage::onLightDestroy(events::component_destruction<light>* event)
     {
+        OPTICK_EVENT();
         std::lock_guard guard(m_lightEntitiesLock);
         m_lightEntities.erase(event->entity);
     }
 
     void LightBufferStage::setup(app::window& context)
     {
+        OPTICK_EVENT();
         buffer lightsBuffer;
 
         {
@@ -45,6 +48,7 @@ namespace legion::rendering
 
     void LightBufferStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        OPTICK_EVENT();
         (void)deltaTime;
         (void)camInput;
         (void)cam;

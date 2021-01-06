@@ -39,6 +39,8 @@ namespace legion::rendering
                     materialHandle.set_param(SV_CAMPOS, posnearz);
                 if (materialHandle.has_param<math::vec4>(SV_VIEWDIR))
                     materialHandle.set_param(SV_VIEWDIR, vdirfarz);
+                if (materialHandle.has_param<math::ivec2>(SV_VIEWPORT))
+                    materialHandle.set_param(SV_VIEWPORT, viewportSize);
             }
 
             union

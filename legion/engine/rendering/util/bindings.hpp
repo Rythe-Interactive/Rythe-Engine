@@ -15,28 +15,28 @@
 /* in 7  */  #define SV_TANGENT        SV_NORMAL + 1      
 /* in 8  */  #define SV_MODELMATRIX    SV_TANGENT + 1 
 
-/* uniform 0  */  #define SV_VIEW           SV_START
-/* uniform 1  */  #define SV_PROJECT        SV_VIEW + 1
-/* uniform 2  */  #define SV_CAMPOS         SV_PROJECT + 1
-/* uniform 3  */  #define SV_VIEWDIR        SV_CAMPOS + 1
-/* uniform 4  */  #define SV_VIEWPORT       SV_VIEWDIR + 1
+/* uniform 9  */  #define SV_VIEW           SV_MODELMATRIX + 1
+/* uniform 10 */  #define SV_PROJECT        SV_VIEW + 1
+/* uniform 11 */  #define SV_CAMPOS         SV_PROJECT + 1
+/* uniform 12 */  #define SV_VIEWDIR        SV_CAMPOS + 1
+/* uniform 13 */  #define SV_VIEWPORT       SV_VIEWDIR + 1
 
-/* uniform 0  */  #define SV_CAMERA         SV_VIEW
+/* uniform 9  */  #define SV_CAMERA         SV_VIEW
 
-/* uniform 5  */  #define SV_LIGHTCOUNT    SV_VIEWPORT + 1
-/* buffer 0  */   #define SV_LIGHTS         SV_START
+/* uniform 14 */  #define SV_LIGHTCOUNT     SV_VIEWPORT + 1
+/* buffer  0  */  #define SV_LIGHTS         SV_START
 
-/* uniform 6  */  #define SV_SCENECOLOR     SV_LIGHTCOUNT + 1
-/* uniform 7  */  #define SV_SCENEDEPTH     SV_SCENECOLOR + 1
-/* uniform 8  */  #define SV_HDROVERDRAW    SV_SCENEDEPTH + 1
+/* uniform 15 */  #define SV_SCENECOLOR     SV_LIGHTCOUNT + 1
+/* uniform 16 */  #define SV_SCENEDEPTH     SV_SCENECOLOR + 1
+/* uniform 17 */  #define SV_HDROVERDRAW    SV_SCENEDEPTH + 1
 
-/* uniform 12 */  #define SV_ALBEDO         SV_HDROVERDRAW + 4   
-/* uniform 13 */  #define SV_NORMALHEIGHT   SV_ALBEDO + 1   
-/* uniform 14 */  #define SV_MRDAO          SV_NORMALHEIGHT + 1    
-/* uniform 15 */  #define SV_EMISSIVE       SV_MRDAO + 1        
-/* uniform 16 */  #define SV_HEIGHTSCALE    SV_EMISSIVE + 1
+/* uniform 21 */  #define SV_ALBEDO         SV_HDROVERDRAW + 4   
+/* uniform 22 */  #define SV_NORMALHEIGHT   SV_ALBEDO + 1   
+/* uniform 23 */  #define SV_MRDAO          SV_NORMALHEIGHT + 1    
+/* uniform 24 */  #define SV_EMISSIVE       SV_MRDAO + 1        
+/* uniform 25 */  #define SV_HEIGHTSCALE    SV_EMISSIVE + 1
 
-/* uniform 12 */  #define SV_MATERIAL       SV_ALBEDO
+/* uniform 21 */  #define SV_MATERIAL       SV_ALBEDO
 
 namespace legion::rendering::detail
 {

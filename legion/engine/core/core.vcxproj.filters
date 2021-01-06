@@ -33,7 +33,6 @@
     <ClCompile Include="events\defaultevents.cpp" />
     <ClCompile Include="ecs\component_handle.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
-    <ClCompile Include="async\readonly_rw_spinlock.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
     <ClCompile Include="async\spinlock.cpp" />
   </ItemGroup>

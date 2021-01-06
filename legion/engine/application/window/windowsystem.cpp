@@ -1,4 +1,5 @@
 #include <application/window/windowsystem.hpp>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::application
 {
@@ -295,6 +296,7 @@ namespace legion::application
 
     void WindowSystem::createWindows()
     {
+        OPTICK_EVENT();
         if (m_exit) // If the engine is exiting then we can't create new windows.
             return;
 
@@ -344,6 +346,8 @@ namespace legion::application
             if (icon == invalid_image_handle)
                 icon = m_defaultIcon;
 
+            ContextHelper::windowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+
             window win = ContextHelper::createWindow(request.size, request.name.c_str(), request.monitor, request.share);
 
             auto [lock, image] = icon.get_raw_image();
@@ -386,7 +390,7 @@ namespace legion::application
             };
 
             ecs::component_handle<window> handle(request.entityId);
-            if (!m_ecs->getEntityData(request.entityId).components.contains(typeHash<window>()))
+            if (!m_ecs->hasComponent<window>(request.entityId))
             {
                 win.lock = new async::spinlock();
 
@@ -428,6 +432,7 @@ namespace legion::application
 
     void WindowSystem::fullscreenWindows()
     {
+        OPTICK_EVENT();
         if (m_exit) // If the engine is exiting then we can't change any windows.
             return;
 
@@ -480,7 +485,7 @@ namespace legion::application
 
     void WindowSystem::updateWindowIcons()
     {
-
+        OPTICK_EVENT();
         if (m_exit) // If the engine is exiting then we can't change any windows.
             return;
 
@@ -518,6 +523,7 @@ namespace legion::application
 
     void WindowSystem::refreshWindows(time::time_span<fast_time> deltaTime)
     {
+        OPTICK_EVENT();
         if (!ContextHelper::initialized())
             return;
 
@@ -537,6 +543,7 @@ namespace legion::application
 
     void WindowSystem::handleWindowEvents(time::time_span<fast_time> deltaTime)
     {
+        OPTICK_EVENT();
         createWindows();
         updateWindowIcons();
         fullscreenWindows();
