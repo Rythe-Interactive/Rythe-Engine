@@ -148,7 +148,7 @@ namespace legion::core::filesystem
     {
         /**@brief. creates a view from a string literal
          */
-       inline view operator""_view(const char* str,unsigned long long len)
+       inline view operator""_view(const char* str,std::size_t len)
        {
            return view(std::string_view(str,len));
        }
