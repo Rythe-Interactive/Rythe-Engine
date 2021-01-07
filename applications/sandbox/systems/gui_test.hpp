@@ -55,7 +55,6 @@ class GuiTestSystem : public System<GuiTestSystem>
 
     void onGUI(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
-        return;
         ImGuiIO& io = ImGui::GetIO();
 
         setProjectionAndView(io.DisplaySize.x/io.DisplaySize.y, cam, camInput);
@@ -65,7 +64,8 @@ class GuiTestSystem : public System<GuiTestSystem>
         base::ShowDemoWindow();
         gizmo::SetOrthographic(false);
         base::Begin("Edit Cube Transform");
-        gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
+        //cannot render more than one gizmo at once (and animator also uses one)
+        //gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::End();
 
         base::Begin("Edit Camera Transform");
