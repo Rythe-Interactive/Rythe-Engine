@@ -3,7 +3,6 @@
 #include <audio/audio.hpp>
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
-#include <tinygltf/json.hpp>
 
 using namespace legion;
 
@@ -96,8 +95,6 @@ public:
     }
 
 #pragma region input stuff
-
-
     void onExit(exit_action* action)
     {
         if (action->released())
