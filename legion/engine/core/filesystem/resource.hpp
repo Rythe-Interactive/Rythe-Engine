@@ -172,7 +172,7 @@ class Test {
 		 *         
 		 * @return T Created from this resources data.
 		 */
-		template <class T,class... Args>
+		template <typename T,class... Args>
 		L_NODISCARD T to(Args&&...args) const;
 
 		/**@brief Generic conversion from T.
@@ -245,7 +245,7 @@ class Test {
 	}
 
 
-	template <class T,class... Args>
+	template <typename T,class... Args>
 	L_NODISCARD T basic_resource::to(Args&&...args) const
 	{
         OPTICK_EVENT();

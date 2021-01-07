@@ -101,12 +101,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="data\animation.cpp" />
     <ClCompile Include="source.cpp" />
+    <ClCompile Include="systems\animation_editor.cpp" />
+    <ClCompile Include="systems\animator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\animation.hpp" />
     <ClInclude Include="data\pp_edgedetect.hpp" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="systems\animation_editor.hpp" />
     <ClInclude Include="systems\animator.hpp" />
     <ClInclude Include="systems\gui_test.hpp" />
     <ClInclude Include="systems\pointcloudtestsystem2.hpp" />

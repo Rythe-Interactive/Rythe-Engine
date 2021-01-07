@@ -12,6 +12,7 @@
 #include <rendering/systems/pointcloudgeneration.hpp>
 
 #include "../data/animation.hpp"
+#include "../systems/animation_editor.hpp"
 #include "../systems/animator.hpp"
 
 
@@ -26,6 +27,7 @@ public:
         reportComponentType<sah>();
         reportComponentType<ext::animation>();
         reportSystem<ext::Animator>();
+        reportSystem<ext::AnimationEditor>();
         reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
