@@ -20,9 +20,9 @@ namespace ext
         index_type r_index = 0;
         index_type s_index = 0;
 
-        float p_accumulator;
-        float r_accumulator;
-        float s_accumulator;
+        float p_accumulator = 0.0f;
+        float r_accumulator = 0.0f;
+        float s_accumulator = 0.0f;
 
     };
 
