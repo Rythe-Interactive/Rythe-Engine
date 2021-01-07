@@ -76,6 +76,82 @@ namespace legion::rendering
                 }
             }
         };
+        math::vec3 GetAverage()
+        {
+            return m_averagePos;
+        }
+
+        std::unique_ptr<std::array<Octree, 8>>  m_children;
+        std::vector<math::vec3> GetData(int depth)
+        {
+            std::vector<math::vec3> Data;
+            //check if this tree has children
+            if (m_children)
+            {
+                //if depth 0 has not been reached go deeper and decrease depth
+                if (depth > 0)
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        std::vector<math::vec3> newData = m_children->at(i).GetData(depth - 1);
+
+                        Data.insert(Data.end(), newData.begin(), newData.end());
+                    }
+                }
+                //if depth 0 has been reached get the average of all the left children
+                else
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        Data.push_back(std::get<0>(m_items.at(i)));
+                    }
+                }
+            }
+            //if there are no children get all data items
+            else
+            {
+                for (auto& [itemPos, item] : m_items)
+                {
+                    Data.push_back(itemPos);
+                }
+            }
+            return Data;
+        }
+        void GenerateAverage()
+        {
+            //check if the octant has more child octants
+            if (m_children)
+            {
+                //iterate child octants and generate their average
+                for (int i = 0; i < 8; i++)
+                {
+                    m_children->at(i).GenerateAverage();
+                }
+                //accumulate child values
+                math::vec3 cummulatedPos = math::vec3(0, 0, 0);
+                int weight = 0;
+                for (int i = 0; i < 8; i++)
+                {
+                    cummulatedPos += m_children->at(i).GetAverage();
+                    //increment weight if position is not (0,0,0) -> empty
+                    if (math::length(m_children->at(i).GetAverage()) >= math::epsilon<float>())
+                        weight++;
+
+                }
+                if (weight == 0) m_averagePos = math::vec3(0, 0, 0);
+                else m_averagePos = cummulatedPos / (float)weight;
+            }
+            else
+            {
+                //if there are no child octants get average all stored items together
+                math::vec3 cummulatedPos = math::vec3(0, 0, 0);
+                for (auto& [itemPos, item] : m_items)
+                {
+                    cummulatedPos += itemPos;
+                }
+                m_averagePos = cummulatedPos / m_items.capacity();
+            }
+        }
     private:
         int GetChildIndex(const math::vec3& pos)
         {
@@ -128,12 +204,12 @@ namespace legion::rendering
                     );
         }
 
-        std::unique_ptr<std::array<Octree, 8>>  m_children;
         std::vector <std::pair<math::vec3, ValueType>>m_items;
         size_type m_capacity;
 
         math::vec3 m_min;
         math::vec3 m_max;
         math::vec3 m_position;
+        math::vec3 m_averagePos;
     };
 }

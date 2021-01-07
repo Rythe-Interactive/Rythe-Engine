@@ -68,6 +68,53 @@ public:
         for (auto position : m_positions)
         {
             //Checks the emitter if it has a recycled particle to use, if not it creates a new one.
+            //ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter_handle);
+            //auto ent = particleComponent.entity;
+            ////Checks if the entity has a transform, if not it adds one.
+            //if (!ent.has_components<transform>())
+            //    ent.add_components<transform>();
+
+            ////  Gets position, rotatio nand scale of entity.
+            //auto trans = ent.get_component_handles<transform>();
+            //auto& [pos, _, scale] = trans;
+            //auto currentPos = pos.read();
+            if (position.x < minX) minX = position.x;
+            if (position.x > maxX) maxX = position.x;
+            if (position.y < minY) minY = position.y;
+            if (position.y > maxY) maxY = position.y;
+            if (position.z < minZ) minZ = position.z;
+            if (position.z > maxZ) maxZ = position.z;
+
+            //////Sets the particle scale to the right scale.
+            //pos.write(position);
+            //scale.write(math::vec3(m_startingSize));
+
+            ////Populates the particle with the appropriate stuffs.
+            //createParticle(particleComponent, trans);
+        }
+        float universalMin = math::min(minX, math::min(minY, minX));
+        float universalMax = math::max(maxX, math::max(maxY, maxX));
+
+        math::vec3 min = math::vec3(universalMin, universalMin, universalMin);
+        math::vec3 max = math::vec3(universalMax, universalMax, universalMax);
+        auto tree = rendering::Octree<uint8>(8, min, max);
+
+        tree.GenerateAverage();
+        for (auto position : m_positions)
+        {
+            tree.insertNode(0, position);
+        }
+        tree.GetAverage();
+
+        int depth = 3;
+        auto data = tree.GetData(depth);
+        float treeSize = (universalMax - universalMin);
+        float pointSizeModifier = treeSize / (float)((depth + 1) * 8);
+        log::debug("tree depth :" + std::to_string(depth));
+        log::debug("point items :" + std::to_string(data.size()));
+        for (auto item : data)
+        {
+            //  log::debug(item);
             ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter_handle);
             auto ent = particleComponent.entity;
             //Checks if the entity has a transform, if not it adds one.
@@ -77,40 +124,15 @@ public:
             //Gets position, rotation and scale of entity.
             auto trans = ent.get_component_handles<transform>();
             auto& [pos, _, scale] = trans;
-            //auto currentPos = pos.read();
-            if (position.x < minX) minX = position.x;
-            if (position.x > maxX) maxX = position.x;
-            if (position.y < minY) minY = position.y;
-            if (position.y > maxY) maxY = position.y;
-            if (position.z < minZ) minZ = position.z;
-            if (position.z > maxZ) maxZ = position.z;
+
 
             //Sets the particle scale to the right scale.
-            pos.write(position);
-            scale.write(math::vec3(m_startingSize));
+            pos.write(item);
+            scale.write(math::vec3(m_startingSize * pointSizeModifier));
 
             //Populates the particle with the appropriate stuffs.
             createParticle(particleComponent, trans);
         }
-        math::vec3 A = math::vec3(minX, minY, minZ);
-        math::vec3 B = math::vec3(minX, minY, maxZ);
-        //   debug::drawCube(math::vec3(minX, minY, minZ), math::vec3(maxX, maxY, maxZ), math::colors::red, 1.0f);
-        auto tree = rendering::Octree<uint8>(8, math::vec3(0, 0, 0), math::vec3(3, 3, 3));
-
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 2.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-        tree.insertNode(0, math::vec3(0.0f, 2.5f, 0.5f));
-
-
-        tree.DrawTree();
     }
 
     void update(std::vector<ecs::entity_handle>, ecs::component_handle<rendering::particle_emitter>, time::span) const override

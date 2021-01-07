@@ -63,7 +63,7 @@ public:
 
         auto ent2 = createEntity();
         auto trans2 = ent2.add_components<transform>(position(5, 0, 0), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(cubeMesh, trans2, particleMaterial, image, 1500, 0.015f));
+        ent2.add_component<point_cloud>(point_cloud(cubeMesh, trans2, particleMaterial, image, 3000, 1.0f));
     }
 };
 
