@@ -304,97 +304,97 @@ public:
             pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             copperH = rendering::MaterialCache::create_material("copper", pbrShader);
-            copperH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo-512.png"_view));
-            copperH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight-512.png"_view));
-            copperH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo-512.png"_view));
-            copperH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive-512.png"_view));
-            copperH.set_param("material_input.heightScale", 0.1f);
+            copperH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo-512.png"_view));
+            copperH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight-512.png"_view));
+            copperH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo-512.png"_view));
+            copperH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive-512.png"_view));
+            copperH.set_param(SV_HEIGHTSCALE, 1.f);
             copperH.set_param("discardExcess", false);
             copperH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);
-            aluminumH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-albedo-512.png"_view));
-            aluminumH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-normalHeight-512.png"_view));
-            aluminumH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-MRDAo-512.png"_view));
-            aluminumH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-emissive-512.png"_view));
-            aluminumH.set_param("material_input.heightScale", 0.f);
+            aluminumH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-albedo-512.png"_view));
+            aluminumH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-normalHeight-512.png"_view));
+            aluminumH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-MRDAo-512.png"_view));
+            aluminumH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/aluminum/aluminum-emissive-512.png"_view));
+            aluminumH.set_param(SV_HEIGHTSCALE, 1.f);
             aluminumH.set_param("discardExcess", false);
             aluminumH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             ironH = rendering::MaterialCache::create_material("iron", pbrShader);
-            ironH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-albedo-512.png"_view));
-            ironH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-normalHeight-512.png"_view));
-            ironH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-MRDAo-512.png"_view));
-            ironH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/iron/rustediron-emissive-512.png"_view));
-            ironH.set_param("material_input.heightScale", 0.1f);
+            ironH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/iron/rustediron-albedo-512.png"_view));
+            ironH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/iron/rustediron-normalHeight-512.png"_view));
+            ironH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/iron/rustediron-MRDAo-512.png"_view));
+            ironH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/iron/rustediron-emissive-512.png"_view));
+            ironH.set_param(SV_HEIGHTSCALE, 1.f);
             ironH.set_param("discardExcess", false);
             ironH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             slateH = rendering::MaterialCache::create_material("slate", pbrShader);
-            slateH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/slate/slate-albedo-512.png"_view));
-            slateH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/slate/slate-normalHeight-512.png"_view));
-            slateH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/slate/slate-MRDAo-512.png"_view));
-            slateH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive-512.png"_view));
-            slateH.set_param("material_input.heightScale", 1.f);
+            slateH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/slate/slate-albedo-512.png"_view));
+            slateH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/slate/slate-normalHeight-512.png"_view));
+            slateH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/slate/slate-MRDAo-512.png"_view));
+            slateH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive-512.png"_view));
+            slateH.set_param(SV_HEIGHTSCALE, 1.f);
             slateH.set_param("discardExcess", true);
             slateH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             rockH = rendering::MaterialCache::create_material("rock", pbrShader);
-            rockH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/rock/rock-albedo-512.png"_view));
-            rockH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/rock/rock-normalHeight-512.png"_view));
-            rockH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/rock/rock-MRDAo-512.png"_view));
-            rockH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/rock/rock-emissive-512.png"_view));
-            rockH.set_param("material_input.heightScale", 1.f);
+            rockH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/rock/rock-albedo-512.png"_view));
+            rockH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/rock/rock-normalHeight-512.png"_view));
+            rockH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/rock/rock-MRDAo-512.png"_view));
+            rockH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/rock/rock-emissive-512.png"_view));
+            rockH.set_param(SV_HEIGHTSCALE, 1.f);
             rockH.set_param("discardExcess", true);
             rockH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             rock2H = rendering::MaterialCache::create_material("rock 2", pbrShader);
-            rock2H.set_param("material_input.albedo", rendering::TextureCache::get_handle("rock-albedo-512.png"));
-            rock2H.set_param("material_input.normalHeight", rendering::TextureCache::get_handle("rock-normalHeight-512.png"));
-            rock2H.set_param("material_input.MRDAo", rendering::TextureCache::get_handle("rock-MRDAo-512.png"));
-            rock2H.set_param("material_input.emissive", rendering::TextureCache::get_handle("rock-emissive-512.png"));
-            rock2H.set_param("material_input.heightScale", 0.5f);
+            rock2H.set_param(SV_ALBEDO, rendering::TextureCache::get_handle("rock-albedo-512.png"));
+            rock2H.set_param(SV_NORMALHEIGHT, rendering::TextureCache::get_handle("rock-normalHeight-512.png"));
+            rock2H.set_param(SV_MRDAO, rendering::TextureCache::get_handle("rock-MRDAo-512.png"));
+            rock2H.set_param(SV_EMISSIVE, rendering::TextureCache::get_handle("rock-emissive-512.png"));
+            rock2H.set_param(SV_HEIGHTSCALE, 1.f);
             rock2H.set_param("discardExcess", false);
             rock2H.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             fabricH = rendering::MaterialCache::create_material("fabric", pbrShader);
-            fabricH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-albedo-512.png"_view));
-            fabricH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-normalHeight-512.png"_view));
-            fabricH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-MRDAo-512.png"_view));
-            fabricH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-emissive-512.png"_view));
-            fabricH.set_param("material_input.heightScale", 0.1f);
+            fabricH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-albedo-512.png"_view));
+            fabricH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-normalHeight-512.png"_view));
+            fabricH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-MRDAo-512.png"_view));
+            fabricH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/fabric/fabric-lowres-emissive-512.png"_view));
+            fabricH.set_param(SV_HEIGHTSCALE, 1.f);
             fabricH.set_param("discardExcess", false);
             fabricH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             bogH = rendering::MaterialCache::create_material("bog", pbrShader);
-            bogH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/bog/bog-albedo-512.png"_view));
-            bogH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/bog/bog-normalHeight-512.png"_view));
-            bogH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/bog/bog-MRDAo-512.png"_view));
-            bogH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/bog/bog-emissive-512.png"_view));
-            bogH.set_param("material_input.heightScale", 0.5f);
+            bogH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/bog/bog-albedo-512.png"_view));
+            bogH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/bog/bog-normalHeight-512.png"_view));
+            bogH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/bog/bog-MRDAo-512.png"_view));
+            bogH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/bog/bog-emissive-512.png"_view));
+            bogH.set_param(SV_HEIGHTSCALE, 1.f);
             bogH.set_param("discardExcess", true);
             bogH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             paintH = rendering::MaterialCache::create_material("paint", pbrShader);
-            paintH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-albedo-512.png"_view));
-            paintH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-normalHeight-512.png"_view));
-            paintH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-MRDAo-512.png"_view));
-            paintH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-emissive-512.png"_view));
-            paintH.set_param("material_input.heightScale", 0.1f);
+            paintH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-albedo-512.png"_view));
+            paintH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-normalHeight-512.png"_view));
+            paintH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-MRDAo-512.png"_view));
+            paintH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/paint/paint-peeling-emissive-512.png"_view));
+            paintH.set_param(SV_HEIGHTSCALE, 1.f);
             paintH.set_param("discardExcess", false);
             paintH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             gnomeMH = rendering::MaterialCache::create_material("gnome", pbrShader);
-            gnomeMH.set_param("material_input.albedo", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-albedo-512.png"_view));
-            gnomeMH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-normalHeight-512.png"_view));
-            gnomeMH.set_param("material_input.MRDAo", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-MRDAo-512.png"_view));
-            gnomeMH.set_param("material_input.emissive", rendering::TextureCache::create_texture("assets://textures/warlock/warlock-emissive-512.png"_view));
-            gnomeMH.set_param("material_input.heightScale", 0.f);
+            gnomeMH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/warlock/warlock-albedo-512.png"_view));
+            gnomeMH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/warlock/warlock-normalHeight-512.png"_view));
+            gnomeMH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/warlock/warlock-MRDAo-512.png"_view));
+            gnomeMH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/warlock/warlock-emissive-512.png"_view));
+            gnomeMH.set_param(SV_HEIGHTSCALE, 1.f);
             gnomeMH.set_param("discardExcess", false);
             gnomeMH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             normalH = rendering::MaterialCache::create_material("normal", "assets://shaders/normal.shs"_view);
-            normalH.set_param("material_input.normalHeight", rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
+            normalH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
 
             skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
             skyboxH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
@@ -585,7 +585,7 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(gnomeH.get_mesh()), rendering::mesh_renderer(gnomeMH));
             ent.add_component<sah>({});
 
-            ent.add_components<transform>(position(0, 3, 2.1f), rotation(), scale());
+            ent.add_components<transform>(position(), rotation(), scale());
         }
 
         /*   {

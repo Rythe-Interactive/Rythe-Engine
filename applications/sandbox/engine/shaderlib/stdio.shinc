@@ -168,7 +168,7 @@ vec3 SceneDepth(vec2 uv)
 
 float LinearDepth(float depth)
 {
-    return lgn_cmr_in.posnearz.w * lgn_cmr_in.vdirfarz.w / (lgn_cmr_in.vdirfarz.w + depth * (lgn_cmr_in.posnearz.w - lgn_cmr_in.vdirfarz.w));
+    return (lgn_cmr_in.posnearz.w * lgn_cmr_in.vdirfarz.w) / (lgn_cmr_in.vdirfarz.w + depth * (lgn_cmr_in.posnearz.w - lgn_cmr_in.vdirfarz.w));
 }
 
 #if defined(FRAGMENT_SHADER)
