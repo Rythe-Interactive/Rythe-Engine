@@ -440,6 +440,11 @@ namespace legion::physics
             vertices.push_back(maxVertexMinusWidthMinusBreadth);
             vertices.push_back(maxVertexMinusBreadth);
 
+            for (auto& vertex : vertices)
+            {
+                vertex += cubeParams.offset;
+            }
+
             math::vec3 a = vertices.at(0);
             math::vec3 b = vertices.at(1);
             math::vec3 c = vertices.at(2);
@@ -449,10 +454,7 @@ namespace legion::physics
             math::vec3 g = vertices.at(6);
             math::vec3 h = vertices.at(7);
 
-            for (auto& vertex : vertices)
-            {
-                vertex += cubeParams.offset;
-            }
+            
 
             //note: each edge carries adjacency information. (for example, an edge 'eg' must know its edge pair 'ge').
             //This is why each edge must be declared explicitly.

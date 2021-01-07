@@ -403,355 +403,355 @@ public:
         }
 #pragma endregion
 
-#pragma region Entities
-        {
-            auto ent = createEntity();
-            ent.add_component(rendering::mesh_renderer(slateH, planeH));
-            ent.add_components<transform>(position(0, 0.01f, 0), rotation(), scale(10));
-
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(copperH));
-            ent.add_components<transform>(position(10, 0.01f, 0), rotation(), scale(10));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(aluminumH));
-            ent.add_components<transform>(position(10, 0.01f, 10), rotation(), scale(10));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(ironH));
-            ent.add_components<transform>(position(10, 0.01f, -10), rotation(), scale(10));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(fabricH));
-            ent.add_components<transform>(position(-10, 0.01f, 0), rotation(), scale(10));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(bogH));
-            ent.add_components<transform>(position(-10, 0.01f, 10), rotation(), scale(10));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(pbrH));
-            ent.add_components<transform>(position(0, 0.01f, 10), rotation(), scale(10));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(rockH));
-            ent.add_components<transform>(position(0, 0.01f, -10), rotation(), scale(10));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(paintH));
-            ent.add_components<transform>(position(-10, 0.01f, -10), rotation(), scale(10));
-        }
-
-        {
-            sun = createEntity();
-            sun.add_components<rendering::mesh_renderable>(mesh_filter(directionalLightH.get_mesh()), rendering::mesh_renderer(directionalLightMH));
-            sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
-            sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component(gfx::mesh_renderer(billboardMH, billboardH));
-            ent.add_components<transform>(position(-10, 0, 10), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component(gfx::mesh_renderer(fixedSizeBillboardMH, billboardH));
-            ent.add_components<transform>(position(-10, 0, 8), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component(gfx::mesh_renderer(particleMH, billboardH));
-            ent.add_components<transform>(position(-8, 0, 10), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component(gfx::mesh_renderer(fixedSizeParticleMH, billboardH));
-            ent.add_components<transform>(position(-8, 0, 8), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component(gfx::mesh_renderer(billboardMH, billboardH));
-            ent.add_components<transform>(position(-11, 0.5, 10), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component(gfx::mesh_renderer(fixedSizeBillboardMH, billboardH));
-            ent.add_components<transform>(position(-11, 0.5, 8), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component(gfx::mesh_renderer(particleMH, billboardH));
-            ent.add_components<transform>(position(-9, 0.5, 10), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component(gfx::mesh_renderer(fixedSizeParticleMH, billboardH));
-            ent.add_components<transform>(position(-9, 0.5, 8), rotation(), scale());
-        }
-        
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
-            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
-            ent.add_components<transform>(position(-10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
-            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
-            ent.add_components<transform>(position(0, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
-            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
-            ent.add_components<transform>(position(10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
-            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
-            ent.add_components<transform>(position(0, 1, 0), rotation(), scale());
-        }
-
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
-            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
-            ent.add_components<transform>(position(-10, 1, 0), rotation(), scale());
-        }
-
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
-            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
-            ent.add_components<transform>(position(10, 1, 0), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(normalH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(wireframeH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 3, 8.1f), rotation(), scale());
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(copperH));
-            ent.add_component<sah>({});
-
-            ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(gnomeH.get_mesh()), rendering::mesh_renderer(gnomeMH));
-            ent.add_component<sah>({});
-
-            ent.add_components<transform>(position(0, 3, 2.1f), rotation(), scale());
-        }
-
-        /*   {
-               auto ent = m_ecs->createEntity();
-               ent.add_component<sah>();
-               m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent), { gnomeH, normalH });
-
-               auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
-               positionH.write(math::vec3(0, 2, 15.1f));
-               scaleH.write(math::vec3(1.f));
-           }*/
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(submeshtestH.get_mesh()), rendering::mesh_renderer(pbrH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(axesH.get_mesh()), rendering::mesh_renderer(vertexColorH));
-            ent.add_components<transform>();
-        }
-
-        //position positions[1000];
-        //for (int i = 0; i < 1000; i++)
-        //{
-        //    positions[i] = position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10)));
-        //}
-
-        //time::timer clock;
-        //time::timer entityClock;
-        //time::time_span<time64> entityTime;
-        //for (int i = 0; i < 00; i++)
+        #pragma region Entities
         //{
         //    auto ent = createEntity();
-        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(pbrH));
-        //    ent.add_component<sah>({});
-        //    entityClock.start();
-        //    ent.add_components<transform>(position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10))), rotation(), scale());
-        //    entityTime += entityClock.end();
+        //    ent.add_component(rendering::mesh_renderer(slateH, planeH));
+        //    ent.add_components<transform>(position(0, 0.01f, 0), rotation(), scale(10));
+
         //}
-        //auto elapsed = clock.elapsedTime();
-        //log::debug("Making entities took {}ms", elapsed.milliseconds());
-        //log::debug("Creating transforms took {}ms", entityTime.milliseconds());
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(pbrH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(5.1f, 9, 0), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(copperH));
+        //    ent.add_components<transform>(position(10, 0.01f, 0), rotation(), scale(10));
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(copperH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(aluminumH));
+        //    ent.add_components<transform>(position(10, 0.01f, 10), rotation(), scale(10));
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 3, -8.f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(ironH));
+        //    ent.add_components<transform>(position(10, 0.01f, -10), rotation(), scale(10));
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(ironH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 3, -2.2f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(fabricH));
+        //    ent.add_components<transform>(position(-10, 0.01f, 0), rotation(), scale(10));
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(rock2H));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(4, 3, -8.f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(bogH));
+        //    ent.add_components<transform>(position(-10, 0.01f, 10), rotation(), scale(10));
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(fabricH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(4, 3, -5.1f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(pbrH));
+        //    ent.add_components<transform>(position(0, 0.01f, 10), rotation(), scale(10));
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(paintH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(4, 3, -2.2f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(rockH));
+        //    ent.add_components<transform>(position(0, 0.01f, -10), rotation(), scale(10));
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(copperH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 3, -3.6f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(paintH));
+        //    ent.add_components<transform>(position(-10, 0.01f, -10), rotation(), scale(10));
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 3, -6.5f), rotation(), scale());
-        }
+        //{
+        //    sun = createEntity();
+        //    sun.add_components<rendering::mesh_renderable>(mesh_filter(directionalLightH.get_mesh()), rendering::mesh_renderer(directionalLightMH));
+        //    sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
+        //    sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(ironH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 3, -0.7f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_component(gfx::mesh_renderer(billboardMH, billboardH));
+        //    ent.add_components<transform>(position(-10, 0, 10), rotation(), scale());
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(rock2H));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(4, 3, -6.5f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_component(gfx::mesh_renderer(fixedSizeBillboardMH, billboardH));
+        //    ent.add_components<transform>(position(-10, 0, 8), rotation(), scale());
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(fabricH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(4, 3, -3.6f), rotation(), scale());
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_component(gfx::mesh_renderer(particleMH, billboardH));
+        //    ent.add_components<transform>(position(-8, 0, 10), rotation(), scale());
+        //}
 
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(paintH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(4, 3, -0.7f), rotation(), scale());
-            auto ent2 = ent.clone();
-            auto pos = ent2.get_component_handle<position>().read();
-            pos.y = 6;
-            ent2.get_component_handle<position>().write(pos);
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_component(gfx::mesh_renderer(fixedSizeParticleMH, billboardH));
+        //    ent.add_components<transform>(position(-8, 0, 8), rotation(), scale());
+        //}
 
-        //audioSphereLeft setup
-        {
-            audioSphereLeft = createEntity();
-            audioSphereLeft.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
-            audioSphereLeft.add_components<transform>(position(-5, 1, 10), rotation(), scale(0.5));
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_component(gfx::mesh_renderer(billboardMH, billboardH));
+        //    ent.add_components<transform>(position(-11, 0.5, 10), rotation(), scale());
+        //}
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_component(gfx::mesh_renderer(fixedSizeBillboardMH, billboardH));
+        //    ent.add_components<transform>(position(-11, 0.5, 8), rotation(), scale());
+        //}
 
-            audio::audio_source source;
-            source.setAudioHandle(segment);
-            audioSphereLeft.add_component<audio::audio_source>(source);
-        }
-        //audioSphereRight setup
-        {
-            audioSphereRight = createEntity();
-            audioSphereRight.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
-            audioSphereRight.add_components<transform>(position(5, 1, 10), rotation(), scale(0.5));
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_component(gfx::mesh_renderer(particleMH, billboardH));
+        //    ent.add_components<transform>(position(-9, 0.5, 10), rotation(), scale());
+        //}
 
-            auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_component(gfx::mesh_renderer(fixedSizeParticleMH, billboardH));
+        //    ent.add_components<transform>(position(-9, 0.5, 8), rotation(), scale());
+        //}
+        //
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
+        //    ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
+        //    ent.add_components<transform>(position(-10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
+        //}
 
-            audio::audio_source source;
-            source.setAudioHandle(segment);
-            audioSphereRight.add_component<audio::audio_source>(source);
-        }
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
+        //    ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
+        //    ent.add_components<transform>(position(0, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
+        //    ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
+        //    ent.add_components<transform>(position(10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
+        //    ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
+        //    ent.add_components<transform>(position(0, 1, 0), rotation(), scale());
+        //}
+
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
+        //    ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
+        //    ent.add_components<transform>(position(-10, 1, 0), rotation(), scale());
+        //}
+
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
+        //    ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
+        //    ent.add_components<transform>(position(10, 1, 0), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(normalH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(wireframeH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(0, 3, 8.1f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = m_ecs->createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(copperH));
+        //    ent.add_component<sah>({});
+
+        //    ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = m_ecs->createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(gnomeH.get_mesh()), rendering::mesh_renderer(gnomeMH));
+        //    ent.add_component<sah>({});
+
+        //    ent.add_components<transform>(position(0, 3, 2.1f), rotation(), scale());
+        //}
+
+        ///*   {
+        //       auto ent = m_ecs->createEntity();
+        //       ent.add_component<sah>();
+        //       m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent), { gnomeH, normalH });
+
+        //       auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+        //       positionH.write(math::vec3(0, 2, 15.1f));
+        //       scaleH.write(math::vec3(1.f));
+        //   }*/
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(submeshtestH.get_mesh()), rendering::mesh_renderer(pbrH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(axesH.get_mesh()), rendering::mesh_renderer(vertexColorH));
+        //    ent.add_components<transform>();
+        //}
+
+        ////position positions[1000];
+        ////for (int i = 0; i < 1000; i++)
+        ////{
+        ////    positions[i] = position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10)));
+        ////}
+
+        ////time::timer clock;
+        ////time::timer entityClock;
+        ////time::time_span<time64> entityTime;
+        ////for (int i = 0; i < 00; i++)
+        ////{
+        ////    auto ent = createEntity();
+        ////    ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(pbrH));
+        ////    ent.add_component<sah>({});
+        ////    entityClock.start();
+        ////    ent.add_components<transform>(position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10))), rotation(), scale());
+        ////    entityTime += entityClock.end();
+        ////}
+        ////auto elapsed = clock.elapsedTime();
+        ////log::debug("Making entities took {}ms", elapsed.milliseconds());
+        ////log::debug("Creating transforms took {}ms", entityTime.milliseconds());
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(pbrH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(5.1f, 9, 0), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(copperH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(0, 3, -5.1f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(0, 3, -8.f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(ironH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(0, 3, -2.2f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(rock2H));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(4, 3, -8.f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(fabricH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(4, 3, -5.1f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(sphereH.get_mesh()), rendering::mesh_renderer(paintH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(4, 3, -2.2f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(copperH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(0, 3, -3.6f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(0, 3, -6.5f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(ironH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(0, 3, -0.7f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(rock2H));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(4, 3, -6.5f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(fabricH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(4, 3, -3.6f), rotation(), scale());
+        //}
+
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(paintH));
+        //    ent.add_component<sah>({});
+        //    ent.add_components<transform>(position(4, 3, -0.7f), rotation(), scale());
+        //    auto ent2 = ent.clone();
+        //    auto pos = ent2.get_component_handle<position>().read();
+        //    pos.y = 6;
+        //    ent2.get_component_handle<position>().write(pos);
+        //}
+
+        ////audioSphereLeft setup
+        //{
+        //    audioSphereLeft = createEntity();
+        //    audioSphereLeft.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
+        //    audioSphereLeft.add_components<transform>(position(-5, 1, 10), rotation(), scale(0.5));
+
+        //    auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
+
+        //    audio::audio_source source;
+        //    source.setAudioHandle(segment);
+        //    audioSphereLeft.add_component<audio::audio_source>(source);
+        //}
+        ////audioSphereRight setup
+        //{
+        //    audioSphereRight = createEntity();
+        //    audioSphereRight.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
+        //    audioSphereRight.add_components<transform>(position(5, 1, 10), rotation(), scale(0.5));
+
+        //    auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
+
+        //    audio::audio_source source;
+        //    source.setAudioHandle(segment);
+        //    audioSphereRight.add_component<audio::audio_source>(source);
+        //}
 #pragma endregion
 
 
@@ -771,7 +771,7 @@ public:
         cubeParams.breadth = 1.0f;
         cubeParams.width = 1.0f;
         cubeParams.height = 1.0f;
-        //setupPhysicsCRUnitTest(cubeH, uvH);
+        setupPhysicsCRUnitTest(cubeH, uvH);
 
 
         //auto sceneEntity = createEntity();
@@ -798,7 +798,8 @@ public:
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
 
         createProcess<&TestSystem::update>("Update");
-        //createProcess<&TestSystem::drawInterval>("TestChain");
+        //createProcess<&TestSystem::drawInterval>("Update");
+        createProcess<&TestSystem::drawInterval>("Update");
     }
 
     void testPhysicsEvent(physics::trigger_event* evnt)
@@ -1079,10 +1080,13 @@ public:
         cubeParams.width = 1.0f;
         cubeParams.height = 1.0f;
 
+        physics::cube_collider_params cubeParams2(1.0f,1.0f,1.0f,math::vec3(2,0,0));
+
+
         physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 5.0f;
-        staticBlockParams.width = 5.0f;
-        staticBlockParams.height = 2.0f;
+        staticBlockParams.breadth = 2.5f;
+        staticBlockParams.width = 2.5f;
+        staticBlockParams.height = 1.0f;
 
         float testPos = 10.0f;
         //----------- Static Block To AABB Body Stability Test ------------//
@@ -1090,7 +1094,7 @@ public:
             auto ent = m_ecs->createEntity();
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            positionH.write(math::vec3(testPos, 3.0f, 15.0f));
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
             ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
@@ -1113,7 +1117,7 @@ public:
             //renderableHandle.write({ cubeH), wireframeH });
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            positionH.write(math::vec3(testPos, 3.0f, 15.0f));
             scaleH.write(math::vec3(1.0f));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
@@ -1134,22 +1138,23 @@ public:
 
 
             physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.AddBox(cubeParams2);
             entPhyHande.write(physicsComponent2);
 
-            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
+            auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEntLinear);
+            auto rbHandle = staticToAABBEntLinear.add_component<physics::rigidbody>();
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToAABBEnt);
-            //renderableHandle.write({ cubeH), wireframeH });
+            auto renderableHandle =
+                staticToAABBEntLinear.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntLinear);
-            positionH.write(math::vec3(testPos, -0.0f, 15.0f));
+            positionH.write(math::vec3(testPos, 6.0f, 15.0f));
             scaleH.write(math::vec3(1.0f));
 
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntLinear);
+            /*auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntLinear);
             auto id = idHandle.read();
             id.id = "AABBRbStable";
-            idHandle.write(id);
+            idHandle.write(id);*/
         }
 
         //{
@@ -1182,221 +1187,221 @@ public:
 
         //----------- Static Block To AABB Body Rotation Test------------//
 
-        {
-            auto ent = m_ecs->createEntity();
+        //{
+        //    auto ent = m_ecs->createEntity();
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+        //    positionH.write(math::vec3(testPos, -3.0f, 8.0f));
+        //    scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
+        //}
 
-        {
-            auto ent = m_ecs->createEntity();
+        //{
+        //    auto ent = m_ecs->createEntity();
 
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto idComp = idHandle.read();
-            idComp.id = "AABBStatic";
-            idHandle.write(idComp);
+        //    physics::physicsComponent physicsComponent2;
+        //    physics::physicsComponent::init(physicsComponent2);
 
 
-        }
+        //    physicsComponent2.AddBox(staticBlockParams);
+        //    physicsComponent2.isTrigger = false;
+        //    entPhyHande.write(physicsComponent2);
 
-        {
-            staticToAABBEntRotation = m_ecs->createEntity();
-            physicsUnitTestCD.push_back(staticToAABBEntRotation);
-            auto entPhyHande = staticToAABBEntRotation.add_component<physics::physicsComponent>();
+        //    //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+        //    //renderableHandle.write({ cubeH), wireframeH });
 
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+        //    positionH.write(math::vec3(testPos, -3.0f, 8.0f));
+        //    scaleH.write(math::vec3(1.0f));
 
-            physicsComponent2.AddBox(cubeParams);
-            entPhyHande.write(physicsComponent2);
+        //    auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+        //    auto idComp = idHandle.read();
+        //    idComp.id = "AABBStatic";
+        //    idHandle.write(idComp);
 
-            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToAABBEnt);
-            //renderableHandle.write({ cubeH), wireframeH });
+        //}
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntRotation);
-            positionH.write(math::vec3(testPos - 2.7f, -0.0f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
+        //{
+        //    staticToAABBEntRotation = m_ecs->createEntity();
+        //    physicsUnitTestCD.push_back(staticToAABBEntRotation);
+        //    auto entPhyHande = staticToAABBEntRotation.add_component<physics::physicsComponent>();
 
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntRotation);
-            auto id = idHandle.read();
-            id.id = "AABBRb";
-            idHandle.write(id);
-        }
+        //    physics::physicsComponent physicsComponent2;
+        //    physics::physicsComponent::init(physicsComponent2);
+
+        //    physicsComponent2.AddBox(cubeParams);
+        //    entPhyHande.write(physicsComponent2);
+
+        //    //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+        //    //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
+
+        //    //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToAABBEnt);
+        //    //renderableHandle.write({ cubeH), wireframeH });
+
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntRotation);
+        //    positionH.write(math::vec3(testPos - 2.7f, -0.0f, 8.0f));
+        //    scaleH.write(math::vec3(1.0f));
+
+        //    auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntRotation);
+        //    auto id = idHandle.read();
+        //    id.id = "AABBRb";
+        //    idHandle.write(id);
+        //}
 
         //----------- Static Block To Rotated Body ------------//
 
-        {
-            auto ent = m_ecs->createEntity();
+        //{
+        //    auto ent = m_ecs->createEntity();
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 2.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+        //    positionH.write(math::vec3(testPos, -3.0f, 2.0f));
+        //    scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
+        //}
 
-        {
-            auto ent = m_ecs->createEntity();
+        //{
+        //    auto ent = m_ecs->createEntity();
 
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 2.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "OBBStatic";
-            idHandle.write(id);
-        }
-
-        {
-            staticToOBBEnt = m_ecs->createEntity();
-
-            auto entPhyHande = staticToOBBEnt.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+        //    physics::physicsComponent physicsComponent2;
+        //    physics::physicsComponent::init(physicsComponent2);
 
 
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
+
+        //    physicsComponent2.AddBox(staticBlockParams);
+        //    physicsComponent2.isTrigger = false;
+        //    entPhyHande.write(physicsComponent2);
+
+        //    //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+        //    //renderableHandle.write({ cubeH), wireframeH });
+
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+        //    positionH.write(math::vec3(testPos, -3.0f, 2.0f));
+        //    scaleH.write(math::vec3(1.0f));
+
+        //    auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+        //    auto id = idHandle.read();
+        //    id.id = "OBBStatic";
+        //    idHandle.write(id);
+        //}
+
+        //{
+        //    staticToOBBEnt = m_ecs->createEntity();
+
+        //    auto entPhyHande = staticToOBBEnt.add_component<physics::physicsComponent>();
+
+        //    physics::physicsComponent physicsComponent2;
+        //    physics::physicsComponent::init(physicsComponent2);
 
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToOBBEnt);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
-            positionH.write(math::vec3(testPos, -0.0f, 2.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto rot = rotationH.read();
-            rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
-            rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));
-            rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));
-            //rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-            rotationH.write(rot);
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToOBBEnt);
-            auto id = idHandle.read();
-            id.id = "OBBRb";
-            idHandle.write(id);
+        //    physicsComponent2.AddBox(cubeParams);
+        //    physicsComponent2.isTrigger = false;
+        //    entPhyHande.write(physicsComponent2);
 
 
-            //log::debug("rb.angularVelocity {}", rb.angularVelocity);
+        //    //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToOBBEnt);
+        //    //renderableHandle.write({ cubeH), wireframeH });
 
-        }
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
+        //    positionH.write(math::vec3(testPos, -0.0f, 2.0f));
+        //    scaleH.write(math::vec3(1.0f));
+
+        //    auto rot = rotationH.read();
+        //    rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
+        //    rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));
+        //    rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));
+        //    //rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+        //    rotationH.write(rot);
+
+        //    auto idHandle = m_ecs->createComponent<physics::identifier>(staticToOBBEnt);
+        //    auto id = idHandle.read();
+        //    id.id = "OBBRb";
+        //    idHandle.write(id);
+
+
+        //    //log::debug("rb.angularVelocity {}", rb.angularVelocity);
+
+        //}
 
         //----------- Static Block To Rotated Body Edge ------------//
 
-        {
-            auto ent = m_ecs->createEntity();
+        //{
+        //    auto ent = m_ecs->createEntity();
 
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, -4.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+        //    positionH.write(math::vec3(testPos, -3.0f, -4.0f));
+        //    scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
+        //}
 
-        {
-            auto ent = m_ecs->createEntity();
+        //{
+        //    auto ent = m_ecs->createEntity();
 
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, -4.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "OBBFoundationStaticEdge";
-            idHandle.write(id);
-        }
-
-        {
-            staticToEdgeEnt = m_ecs->createEntity();
-
-            auto entPhyHande = staticToEdgeEnt.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+        //    physics::physicsComponent physicsComponent2;
+        //    physics::physicsComponent::init(physicsComponent2);
 
 
-            physicsComponent2.AddBox(cubeParams);
-            entPhyHande.write(physicsComponent2);
+
+        //    physicsComponent2.AddBox(staticBlockParams);
+        //    physicsComponent2.isTrigger = false;
+        //    entPhyHande.write(physicsComponent2);
+
+        //    //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
+        //    //renderableHandle.write({ cubeH), wireframeH });
+
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+        //    positionH.write(math::vec3(testPos, -3.0f, -4.0f));
+        //    scaleH.write(math::vec3(1.0f));
+
+        //    auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+        //    auto id = idHandle.read();
+        //    id.id = "OBBFoundationStaticEdge";
+        //    idHandle.write(id);
+        //}
+
+        //{
+        //    staticToEdgeEnt = m_ecs->createEntity();
+
+        //    auto entPhyHande = staticToEdgeEnt.add_component<physics::physicsComponent>();
+
+        //    physics::physicsComponent physicsComponent2;
+        //    physics::physicsComponent::init(physicsComponent2);
 
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToEdgeEnt);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToEdgeEnt);
-            positionH.write(math::vec3(testPos + 3.0f, 2.0f, -4.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto rot = rotationH.read();
-            rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
-            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-            rotationH.write(rot);
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToEdgeEnt);
-            auto id = idHandle.read();
-            id.id = "OBBRb";
-            idHandle.write(id);
+        //    physicsComponent2.AddBox(cubeParams);
+        //    entPhyHande.write(physicsComponent2);
 
 
-            //log::debug("rb.angularVelocity {}", rb.angularVelocity);
+        //    //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToEdgeEnt);
+        //    //renderableHandle.write({ cubeH), wireframeH });
 
-        }
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToEdgeEnt);
+        //    positionH.write(math::vec3(testPos + 3.0f, 2.0f, -4.0f));
+        //    scaleH.write(math::vec3(1.0f));
+
+        //    auto rot = rotationH.read();
+        //    rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
+        //    rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+        //    rotationH.write(rot);
+
+        //    auto idHandle = m_ecs->createComponent<physics::identifier>(staticToEdgeEnt);
+        //    auto id = idHandle.read();
+        //    id.id = "OBBRb";
+        //    idHandle.write(id);
+
+
+        //    //log::debug("rb.angularVelocity {}", rb.angularVelocity);
+
+        //}
 
 
     }
@@ -1969,7 +1974,7 @@ public:
 
     void update(time::span deltaTime)
     {
-        static float timer = 0;
+        /*static float timer = 0;
         static id_type sphereId = nameHash("sphere");
 
         auto [entities, lock] = m_ecs->getEntities();
@@ -2019,7 +2024,7 @@ public:
 
                 entity.write_component(rot);
             }
-        }
+        }*/
     }
 
     void drawInterval(time::span deltaTime)
@@ -2114,13 +2119,14 @@ public:
                     useDepth = true;
                 }
 
-
+                
                 //assemble the local transform matrix of the entity
                 math::mat4 localTransform;
                 math::compose(localTransform, scale, rot, pos);
 
                 auto physicsComponent = physicsComponentHandle.read();
 
+                //if (physicsComponent.colliders->size() == 2) { DebugBreak(); }
                 i = 0;
                 for (auto physCollider : *physicsComponent.colliders)
                 {
@@ -2135,7 +2141,7 @@ public:
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
 
-                        debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
+                        debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 5.0f);
 
                         if (!currentEdge) { return; }
 
@@ -2147,7 +2153,7 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
                             math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
 
-                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f, 0.0f, useDepth);
+                            debug::user_projectDrawLine(worldStart, worldEnd, usedColor, 2.0f, 0.0f, useDepth);
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
@@ -2319,11 +2325,11 @@ public:
 
                     }
 
-                    auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+                    /*auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
                     auto idComp = idHandle.read();
                     idComp.id = "Stack" + std::to_string(l);
                     l++;
-                    idHandle.write(idComp);
+                    idHandle.write(idComp);*/
 
                 }
             }
