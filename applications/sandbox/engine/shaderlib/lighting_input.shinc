@@ -49,7 +49,7 @@ layout(std140, binding = SV_LIGHTS) readonly buffer LightsBuffer
 	Light lights[];
 };
 
-uniform uint _L_light_count : SV_LIGHTCOUNT;
+uniform uint lgn_light_count : SV_LIGHTCOUNT;
 
 struct MaterialInput
 {
@@ -87,7 +87,7 @@ vec3 GetAllLighting(Material material, Camera camera, vec3 worldPosition)
 {
     vec3 lighting = vec3(0.0);
 
-    for(int i = 0; i < _L_light_count; i++)
+    for(int i = 0; i < lgn_light_count; i++)
         lighting += CalculateLight(lights[i], camera, material, worldPosition);
 
     return lighting + GetAmbientLight(material.ambientOcclusion, material.albedo.rgb) + material.emissive;

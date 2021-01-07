@@ -11,6 +11,7 @@ namespace legion::core
 {
     common::result_decay_more<image, fs_error> stb_image_loader::load(const filesystem::basic_resource& resource, image_import_settings&& settings)
     {
+        OPTICK_EVENT();
         using common::Err, common::Ok;
         // Decay overloads the operator of ok_type and operator== for valid_t.
         using decay = common::result_decay_more<image, fs_error>;

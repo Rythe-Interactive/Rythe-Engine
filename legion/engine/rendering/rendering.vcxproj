@@ -38,8 +38,10 @@
     <ClCompile Include="pipeline\base\pipelinebase.cpp" />
     <ClCompile Include="pipeline\base\renderstage.cpp" />
     <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
+    <ClCompile Include="pipeline\default\postfx\fxaa.cpp" />
     <ClCompile Include="pipeline\default\postfx\tonemapping.cpp" />
     <ClCompile Include="pipeline\default\stages\clearstage.cpp" />
+    <ClCompile Include="pipeline\default\stages\debugrenderstage.cpp" />
     <ClCompile Include="pipeline\default\stages\framebufferresizestage.cpp" />
     <ClCompile Include="pipeline\default\stages\lightbufferstage.cpp" />
     <ClCompile Include="pipeline\default\stages\meshbatchingstage.cpp" />
@@ -61,7 +63,9 @@
     <ClInclude Include="data\postprocessingeffect.hpp" />
     <ClInclude Include="data\screen_quad.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
+    <ClInclude Include="pipeline\default\postfx\fxaa.hpp" />
     <ClInclude Include="pipeline\default\postfx\tonemapping.hpp" />
+    <ClInclude Include="pipeline\default\stages\debugrenderstage.hpp" />
     <ClInclude Include="pipeline\default\stages\postprocessingstage.hpp" />
     <ClInclude Include="pipeline\gui\stages\imguirenderstage.hpp" />
     <ClInclude Include="systems\pointcloudgeneration.hpp" />
@@ -159,7 +163,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LEGION_INTERNAL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LEGION_INTERNAL;PROJECT_NAME=$(ProjectName);_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -192,7 +196,7 @@ del ".\xcopyexclude"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LEGION_INTERNAL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LEGION_INTERNAL;PROJECT_NAME=$(ProjectName);NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

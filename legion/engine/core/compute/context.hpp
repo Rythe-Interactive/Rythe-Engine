@@ -5,6 +5,8 @@
 #include <utility>
 #include <core/data/image.hpp>
 
+#include <Optick/optick.h>
+
 /**
  * @file context.hpp
  */
@@ -53,6 +55,7 @@ public:
     template <class T>
     static Buffer createBuffer(std::vector<T>& container,buffer_type type,std::string name = "")
     {
+        OPTICK_EVENT();
         return Buffer(
             m_context,
             reinterpret_cast<byte*>(container.data()), // data as void-ptr
@@ -64,11 +67,13 @@ public:
 
     static Buffer createBuffer(byte* data, size_type size, buffer_type type, std::string name = "")
     {
+        OPTICK_EVENT();
         return Buffer(m_context,data,size,type,std::forward<std::string>(name));
     }
 
     static Buffer createImage(image& img,buffer_type type, std::string name ="")
     {
+        OPTICK_EVENT();
         size_type width = img.size.x;
         size_type height = img.size.y;
         size_type depth = 0;
@@ -104,15 +109,18 @@ public:
 
     static Buffer createImageFromOpenGLImage(uint target,uint texture,buffer_type type, std::string name ="",uint mip_level = 0)
     {
+        OPTICK_EVENT();
         return Buffer(m_context,target,texture,mip_level,type, std::move(name));
     }
 
     static Buffer createImageFromOpenGLBuffer(uint bufferid,buffer_type type, std::string name ="")
     {
+        OPTICK_EVENT();
         return Buffer(m_context,bufferid,type,false, std::move(name));
     }
     static Buffer createImageFromOpenGLRenderBuffer(uint bufferid,buffer_type type, std::string name ="")
     {
+        OPTICK_EVENT();
         return Buffer(m_context,bufferid,type,true, std::move(name));
     }
 

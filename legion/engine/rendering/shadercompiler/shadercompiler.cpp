@@ -10,6 +10,7 @@ namespace legion::rendering
 
     std::string ShaderCompiler::get_view_path(const fs::view& view, bool mustBeFile)
     {
+        OPTICK_EVENT();
         using severity = log::severity;
 
         fs::navigator navigator(view.get_virtual_path());
@@ -53,6 +54,7 @@ namespace legion::rendering
 
     const std::string& ShaderCompiler::get_shaderlib_path()
     {
+        OPTICK_EVENT();
         static std::string libPath;
         if (libPath.empty())
             libPath = get_view_path(fs::view("engine://shaderlib"), false);
@@ -61,6 +63,7 @@ namespace legion::rendering
 
     const std::string& ShaderCompiler::get_compiler_path()
     {
+        OPTICK_EVENT();
         static std::string compPath;
         if (compPath.empty())
             compPath = get_view_path(fs::view("engine://tools"), false) + fs::strpath_manip::separator() + "lgnspre";
@@ -69,14 +72,15 @@ namespace legion::rendering
 
     void ShaderCompiler::extract_state(std::string_view source, shader_state& state)
     {
+        OPTICK_EVENT();
         std::string_view rest = source;
         std::vector<std::pair<std::string, std::string>> stateInput;
         while (!rest.empty())
         {
             auto seperator = rest.find_first_not_of('\n');
-            seperator = rest.find_first_of('\n', seperator) + 1;
+            seperator = rest.find_first_of('\n', seperator);
 
-            if (seperator == 0)
+            if (seperator == std::string::npos)
                 seperator = rest.size();
 
             auto line = rest.substr(0, seperator);
@@ -90,6 +94,8 @@ namespace legion::rendering
             seperator = rest.find_first_not_of('\n');
             if (seperator == std::string::npos)
                 break;
+            else
+                rest = rest.substr(seperator);
         }
 
         // Create lookup table for the OpenGL function types that can be changed by the shader state.
@@ -105,13 +111,6 @@ namespace legion::rendering
             funcTypes["ALPHA"] = GL_BLEND;
             funcTypes["DITHER"] = GL_DITHER;
         }
-
-        // Default shader state in case nothing was specified by the shader.
-        state[GL_DEPTH_TEST] = GL_GREATER;
-        state[GL_CULL_FACE] = GL_BACK;
-        state[GL_BLEND_SRC] = GL_SRC_ALPHA;
-        state[GL_BLEND_DST] = GL_ONE_MINUS_SRC_ALPHA;
-        state[GL_DITHER] = GL_FALSE;
 
         for (auto& [func, par] : stateInput)
         {
@@ -189,7 +188,7 @@ namespace legion::rendering
                     params["ONE_MINUS_CONSTANT_COLOR"] = GL_ONE_MINUS_CONSTANT_COLOR;
                     params["CONSTANT_ALPHA"] = GL_CONSTANT_ALPHA;
                     params["ONE_MINUS_CONSTANT_ALPHA"] = GL_ONE_MINUS_CONSTANT_ALPHA;
-                    params["SRC_ALPHL_SATURATE"] = GL_SRC_ALPHL_SATURATE;
+                    params["SRC_ALPHA_SATURATE"] = GL_SRC_ALPHA_SATURATE;
                     params["OFF"] = GL_FALSE;
                 }
 
@@ -229,6 +228,7 @@ namespace legion::rendering
 
     bool ShaderCompiler::extract_ilo(std::string_view source, uint64 shaderType, shader_ilo& ilo)
     {
+        OPTICK_EVENT();
         using severity = log::severity;
 
         GLuint glShaderType = detail::get_gl_type(shaderType);
@@ -271,6 +271,7 @@ namespace legion::rendering
 
     std::string ShaderCompiler::invoke_compiler(const fs::view& file, bitfield8 compilerSettings, const std::vector<std::string>& defines, const std::vector<std::string>& additionalIncludes)
     {
+        OPTICK_EVENT();
         using severity = log::severity;
 
         std::string filepath = get_view_path(file, true);
@@ -362,7 +363,8 @@ namespace legion::rendering
 
     bool ShaderCompiler::process(const fs::view& file, bitfield8 compilerSettings, shader_ilo& ilo, shader_state& state, const std::vector<std::string>& defines, const std::vector<std::string>& additionalIncludes)
     {
-        using severity = log::severity;                
+        OPTICK_EVENT();
+        using severity = log::severity;
 
         log::info("Compiling shader: {}", file.get_virtual_path());
 
@@ -376,6 +378,13 @@ namespace legion::rendering
         auto end = result.find("============ END SHADER CODE ============");
 
         auto rest = std::string_view(result.data() + start, end - start);
+
+        // Default shader state in case nothing was specified by the shader.
+        state[GL_DEPTH_TEST] = GL_GREATER;
+        state[GL_CULL_FACE] = GL_BACK;
+        state[GL_BLEND_SRC] = GL_SRC_ALPHA;
+        state[GL_BLEND_DST] = GL_ONE_MINUS_SRC_ALPHA;
+        state[GL_DITHER] = GL_FALSE;
 
         while (!rest.empty())
         {
@@ -408,7 +417,7 @@ namespace legion::rendering
             {
                 extract_state(source, state);
             }
-            else if(!extract_ilo(source, shaderType, ilo))
+            else if (!extract_ilo(source, shaderType, ilo))
             {
                 return false;
             }

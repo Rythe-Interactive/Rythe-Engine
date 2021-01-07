@@ -54,32 +54,26 @@ namespace legion::core::ecs
 
     component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(m_familyLock);
-
-        if (!m_families.count(componentTypeId))
-            return nullptr;
-
         return m_families[componentTypeId].get();
     }
 
     bool EcsRegistry::hasComponent(id_type entityId, id_type componentTypeId)
     {
-        if (!validateEntity(entityId))
-            return false;
-
+        OPTICK_EVENT();
         return getFamily(componentTypeId)->has_component(entityId);
     }
 
     component_handle_base EcsRegistry::getComponent(id_type entityId, id_type componentTypeId)
     {
-        if (!validateEntity(entityId))
-            component_handle_base();
-
+        OPTICK_EVENT();
         return component_handle_base(entityId, componentTypeId);
     }
 
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
     {
+        OPTICK_EVENT();
         if (!validateEntity(entityId))
             return component_handle_base();
 
@@ -99,6 +93,7 @@ namespace legion::core::ecs
 
     component_handle_base EcsRegistry::copyComponent(id_type destinationEntity, id_type sourceEntity, id_type componentTypeId)
     {
+        OPTICK_EVENT();
         if (!validateEntity(sourceEntity) || !validateEntity(destinationEntity))
             return component_handle_base();
 
@@ -116,6 +111,7 @@ namespace legion::core::ecs
 
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId, void* value)
     {
+        OPTICK_EVENT();
         if (!validateEntity(entityId))
             return component_handle_base();
 
@@ -133,6 +129,7 @@ namespace legion::core::ecs
 
     void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)
     {
+        OPTICK_EVENT();
         if (!validateEntity(entityId))
             return;
 
@@ -147,12 +144,16 @@ namespace legion::core::ecs
 
     L_NODISCARD bool EcsRegistry::validateEntity(id_type entityId)
     {
+        OPTICK_EVENT();
+        if (!entityId)
+            return false;
         async::readonly_guard guard(m_entityLock);
-        return entityId && m_entities.contains(entityId);
+        return m_entities.contains(entityId);
     }
 
     entity_handle EcsRegistry::createEntity(id_type entityId)
     {
+        OPTICK_EVENT();
         id_type id;
         if (!entityId)
             id = m_nextEntityId++;
@@ -182,6 +183,7 @@ namespace legion::core::ecs
 
     void EcsRegistry::destroyEntity(id_type entityId, bool recurse)
     {
+        OPTICK_EVENT();
         if (!validateEntity(entityId))
             return;
 
@@ -220,6 +222,7 @@ namespace legion::core::ecs
 
     L_NODISCARD entity_handle EcsRegistry::getEntity(id_type entityId)
     {
+        OPTICK_EVENT();
         if (!validateEntity(entityId))
             return entity_handle(invalid_id);
 
@@ -228,6 +231,7 @@ namespace legion::core::ecs
 
     L_NODISCARD entity_data EcsRegistry::getEntityData(id_type entityId)
     {
+        OPTICK_EVENT();
         if (!validateEntity(entityId))
             return entity_data();
 
@@ -244,12 +248,30 @@ namespace legion::core::ecs
 
     void EcsRegistry::setEntityData(id_type entityId, const entity_data& data)
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(m_entityDataLock);
         m_entityData[entityId] = data;
     }
 
+    L_NODISCARD entity_handle EcsRegistry::getEntityParent(id_type entityId)
+    {
+        OPTICK_EVENT();
+        id_type parentId;
+
+        {
+            async::readonly_guard guard(m_entityDataLock);
+            parentId = m_entityData[entityId].parent;
+        }
+
+        if (parentId && !validateEntity(parentId)) // Re-validate parent.
+            parentId = invalid_id;
+
+        return { parentId };
+    }
+
     L_NODISCARD std::pair<entity_set&, async::rw_spinlock&> EcsRegistry::getEntities()
     {
+        OPTICK_EVENT();
         return std::make_pair(std::ref(m_entities), std::ref(m_entityLock));
     }
 }
