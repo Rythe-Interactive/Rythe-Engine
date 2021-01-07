@@ -34,7 +34,7 @@ class GuiTestSystem : public System<GuiTestSystem>
             application::context_guard guard(window);
 
             cubeModel = ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            vertexColorMaterial = MaterialCache::create_material("color shader", "assets://shaders/texture.shs"_view);
+            vertexColorMaterial = MaterialCache::create_material("decal", "assets://shaders/decal.shs"_view);
         }
 
 

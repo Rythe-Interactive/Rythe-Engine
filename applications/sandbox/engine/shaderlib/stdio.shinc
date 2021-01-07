@@ -109,6 +109,8 @@ uniform sampler2D lgn_hdrOverdraw : SV_HDROVERDRAW;
 #define ViewMatrix lgn_cmr_in.view
 #define ProjectionMatrix lgn_cmr_in.proj
 #define ViewProjectionMatrix (lgn_cmr_in.proj * lgn_cmr_in.view)
+#define NearZ lgn_cmr_in.posnearz.w
+#define FarZ lgn_cmr_in.vdirfarz.w
 
 vec4 WorldToScreenSpacePosition(vec3 pos)
 {
