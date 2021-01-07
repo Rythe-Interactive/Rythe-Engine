@@ -5,8 +5,8 @@ namespace ext
     void Animator::onUpdate(time::span delta)
     {
         //get all entities with animation + transform
-        query.queryEntities();
-        for (ecs::entity_handle ent : query)
+        m_query.queryEntities();
+        for (ecs::entity_handle ent : m_query)
         {
             //get the animation data from the entity
             animation anim = ent.read_component<animation>();

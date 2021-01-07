@@ -11,7 +11,7 @@ namespace ext
      */
     class Animator : public System<Animator>
     {
-        ecs::EntityQuery query = createQuery<animation, position, rotation, scale>();
+        ecs::EntityQuery m_query = createQuery<animation, position, rotation, scale>();
 
         void setup() override
         {

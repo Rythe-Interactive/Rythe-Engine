@@ -90,202 +90,67 @@ namespace ext
 
     class AnimationEditor : public System<AnimationEditor>
     {
-        ecs::entity_handle cubeEntity;
+        ecs::entity_handle m_cubeEntity;
+        int m_selectedEntry = 0;
+        int m_firstFrame = 0;
+        detail::AnimationSequencer m_sequencer;
+        bool m_animatorHasControl = false;
+
+
+        //since this is a char buffer we need to explicitly spell out assets://test.anim ... how lovely
+        char m_filenameBuffer[512]{ 'a','s','s','e','t','s',':','\\','\\','t','e','s','t','.','a','n','i','m','\0' };
 
         void setup() override
         {
-            using namespace legion::filesystem::literals;
+            //we use _view, thus we need access to the literals namespace
+            using namespace filesystem::literals;
+
             app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
             rendering::model_handle cubeModel;
             rendering::material_handle vertexColorMaterial;
 
             {
+                //to create models and materials we need to lock the window entity
+                //this is in a higher scope, such that the guard is returned on completion
+                //of the material & mesh creation
                 application::context_guard guard(window);
 
                 cubeModel = rendering::ModelCache::create_model("cube - Animator", "assets://models/cube.obj"_view);
                 vertexColorMaterial = rendering::MaterialCache::create_material("color shader - Animator", "assets://shaders/texture.shs"_view);
             }
 
+            // create a new entity that we can attach the animation to 
+            m_cubeEntity = createEntity();
+            //TODO(algo-ryth-mix): In the future this boilerplate code should
+            //TODO(cont.)          go in favor of a raycasting system.
 
-            cubeEntity = createEntity();
+            //add mesh & material
+            m_cubeEntity.add_components<transform>(position(), rotation(), scale());
+            m_cubeEntity.add_components<rendering::mesh_renderable>(mesh_filter(cubeModel.get_mesh()), rendering::mesh_renderer(vertexColorMaterial));
 
-            cubeEntity.add_components<transform>(position(), rotation(), scale());
-            cubeEntity.add_components<rendering::mesh_renderable>(mesh_filter(cubeModel.get_mesh()), rendering::mesh_renderer(vertexColorMaterial));
+            //create new running & looping animation
+            ext::animation anim{ true };
 
-            ext::animation anim;
-            anim.looping = true;
-            anim.running = true;
+            //load animation data from disk
             filesystem::basic_resource res = fs::view("assets://test.anim").get().except([](auto err)
                 {
                     return filesystem::basic_resource("{}");
                 });
+
+            //convert to animation
             anim = res.to<animation>();
 
+            //add animation to entity
+            m_cubeEntity.add_component<animation>(anim);
 
-            cubeEntity.add_component<animation>(anim);
-
+            //add custom gui stage
             rendering::ImGuiStage::addGuiRender<AnimationEditor, &AnimationEditor::onGUI>(this);
         }
 
 
-        int selectedEntry = 0;
-        int firstFrame = 0;
-        detail::AnimationSequencer sequencer;
-
-        char filenamebuffer[512]{ 'a','s','s','e','t','s',':','\\','\\','t','e','s','t','.','a','n','i','m','\0' };
-
-        void onGUI(application::window&, rendering::camera& cam, const rendering::camera::camera_input& cInput, time::span)
-        {
-            //TODO (algorythmix) anim here needs to come from the selected object, the problem ofc is that
-            //TODO (cont.)       the concept of a "selected" object is not defined as such 
-
-            auto anim = cubeEntity.read_component<animation>();
-            using namespace imgui;
-            static bool animatorHasControl = false;
-
-
-            base::Begin("Animator");
-
-            if (base::Button("Toggle Animation"))
-            {
-                anim.running = !anim.running;
-            }
-
-            base::SameLine();
-            base::InputText("Location", filenamebuffer, 512);
-            base::SameLine();
-            if (base::Button("Save"))
-            {
-                fs::view f(filenamebuffer);
-                f.set(filesystem::to_resource(anim));
-            }
-            base::Checkbox("Pause & Edit", &animatorHasControl);
-
-            sequencer.SetAnimation(&anim);
-
-
-            Sequencer(&sequencer, nullptr, nullptr, &selectedEntry, &firstFrame,
-                sequencer::SEQUENCER_EDIT_STARTEND |
-                sequencer::SEQUENCER_ADD |
-                sequencer::SEQUENCER_DEL |
-                sequencer::SEQUENCER_COPYPASTE |
-                sequencer::SEQUENCER_CHANGE_FRAME);
-
-
-
-            base::End();
-            if (selectedEntry != -1)
-            {
-                auto& dp = sequencer.GetDataPointAt(selectedEntry);
-
-                if (std::holds_alternative<position>(dp))
-                {
-                    base::Begin(" - Animator - Edit Position");
-                    position& pos = std::get<position>(dp);
-                    float v[3]{ pos.x,pos.y,pos.z };
-                    base::InputFloat3("Position", v);
-                    pos.x = v[0];
-                    pos.y = v[1];
-                    pos.z = v[2];
-                    if (animatorHasControl)
-                    {
-                        math::mat4 model = math::compose(cubeEntity.read_component<scale>(), cubeEntity.read_component<rotation>(), pos);
-                        ImGuiIO& io = ImGui::GetIO();
-
-                        float aspect = io.DisplaySize.x / io.DisplaySize.y;
-                        math::mat4 projection = projection = math::perspective(math::deg2rad(cam.fov * aspect), aspect, cam.nearz, cam.farz);
-                        gizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-                        gizmo::Manipulate(value_ptr(cInput.view), value_ptr(projection), gizmo::OPERATION::TRANSLATE, gizmo::MODE::LOCAL, value_ptr(model));
-
-                        math::vec3 dummyv;
-                        math::quat dummyq;
-                        math::decompose(model, dummyv, dummyq, pos);
-
-                    }
-                    base::End();
-                    if (animatorHasControl)
-                    {
-                        cubeEntity.get_component_handle<position>().write(pos);
-                    }
-                }
-                if (std::holds_alternative<rotation>(dp))
-                {
-                    base::Begin(" - Animator - Edit Rotation");
-                    rotation& rot = std::get<rotation>(dp);
-
-                    auto euler = math::eulerAngles(rot);
-
-                    float v[3]{ euler.x,euler.y,euler.z };
-                    base::InputFloat3("Euler", v);
-
-
-                    euler.x = v[0];
-                    euler.y = v[1];
-                    euler.z = v[2];
-
-                    if (animatorHasControl)
-                    {
-                        math::mat4 model = math::compose(cubeEntity.read_component<scale>(), math::quat(euler), cubeEntity.read_component<position>());
-                        ImGuiIO& io = ImGui::GetIO();
-
-                        float aspect = io.DisplaySize.x / io.DisplaySize.y;
-                        math::mat4 projection = projection = math::perspective(math::deg2rad(cam.fov * aspect), aspect, cam.nearz, cam.farz);;
-                        gizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-                        gizmo::Manipulate(value_ptr(cInput.view), value_ptr(projection), gizmo::OPERATION::ROTATE, gizmo::MODE::LOCAL, value_ptr(model));
-                        math::vec3 nothing;
-
-                        math::decompose(model, nothing, rot, nothing);
-                    }
-
-
-                    base::End();
-                    if (animatorHasControl)
-                    {
-                        cubeEntity.get_component_handle<rotation>().write(rot);
-                    }
-                }
-                if (std::holds_alternative<scale>(dp))
-                {
-                    base::Begin(" - Animator - Edit Scale");
-                    scale& s = std::get<scale>(dp);
-                    float v[3]{ s.x,s.y,s.z };
-                    base::InputFloat3("Scale", v);
-                    s.x = v[0];
-                    s.y = v[1];
-                    s.z = v[2];
-                    if (animatorHasControl)
-                    {
-                        math::mat4 model = math::compose(s, cubeEntity.read_component<rotation>(), cubeEntity.read_component<position>());
-                        ImGuiIO& io = ImGui::GetIO();
-
-                        float aspect = io.DisplaySize.x / io.DisplaySize.y;
-                        math::mat4 projection = projection = math::perspective(math::deg2rad(cam.fov * aspect), aspect, cam.nearz, cam.farz);
-                        gizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-                        gizmo::Manipulate(value_ptr(cInput.view), value_ptr(projection), gizmo::OPERATION::SCALE, gizmo::MODE::LOCAL, value_ptr(model));
-
-                        math::vec3 dummyv;
-                        math::quat dummyq;
-                        math::decompose(model, s, dummyq, dummyv);
-
-                    }
-                    base::End();
-                    if (animatorHasControl)
-                    {
-                        cubeEntity.get_component_handle<scale>().write(s);
-                    }
-                }
-            }
-
-
-
-            anim = sequencer.GetAnimation();
-            if (animatorHasControl)
-            {
-                anim.running = false;
-            }
-            cubeEntity.get_component_handle<animation>().write(anim);
-        }
+        void onGUI(application::window&, rendering::camera& cam, const rendering::camera::camera_input& cInput,
+                   time::span);
     };
 
 
