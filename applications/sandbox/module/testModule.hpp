@@ -14,6 +14,11 @@
 #include "../systems/scenetestsystem1.hpp"
 #include <rendering/systems/pointcloudgeneration.hpp>
 
+#include "../data/animation.hpp"
+#include "../systems/animation_editor.hpp"
+#include "../systems/animator.hpp"
+
+
 using namespace legion;
 
 class TestModule : public Module
@@ -23,6 +28,9 @@ public:
     {
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1920, 1080), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
         reportComponentType<sah>();
+        reportComponentType<ext::animation>();
+        reportSystem<ext::Animator>();
+        reportSystem<ext::AnimationEditor>();
         reportSystem<TestSystem>();
 
         reportComponentType<sah>();

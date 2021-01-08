@@ -420,13 +420,13 @@ namespace legion::core::common {
         template <class Func,class... Args>
         auto except(Func&& f,Args&&... args) -> decltype(auto)
         {
-            m_r.except(std::forward<Func>(f),std::forward<Args>(args)...);
+            return m_r.except(std::forward<Func>(f),std::forward<Args>(args)...);
         }
 
         template <class Func,class... Args>
         auto except(const Func& f,Args&&... args) -> decltype(auto)
         {
-            m_r.except(f,std::forward<Args>(args)...);
+            return m_r.except(f,std::forward<Args>(args)...);
         }
 
 
