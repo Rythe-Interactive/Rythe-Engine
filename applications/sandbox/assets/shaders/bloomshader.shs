@@ -1,7 +1,8 @@
 #version 450
-
+#state CULL OFF
+#state DEPTH OFF
 generate(vertex, fragment)
-
+#state ALPHA OFF
 #include <stdio.shinc>
 
 
@@ -20,7 +21,9 @@ shader(fragment)
 
     void main(void)
     {
-        fragment_color = vec4(SceneColor(stdin(uv))+ HDROverdraw(stdin(uv)),1.0);
+        vec4 brightness = HDROverdraw(stdin(uv));
+
+        fragment_color = vec4(SceneColor(stdin(uv)).rgb + brightness.rgb,1.0);
     }
 }
 

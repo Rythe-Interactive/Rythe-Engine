@@ -23,7 +23,7 @@ shader(fragment)
 
     void main(void)
     {
-        vec3 premapped = TonemapUnreal3(SceneColor(stdin(uv)));
+        vec3 premapped = TonemapUnreal3(SceneColor(stdin(uv)).rgb);
         vec3 exposureMapped = vec3(1.0) - exp(-premapped * exposure);
 
         fragment_color = vec4(GammaCorrect(exposureMapped), 1.0);
