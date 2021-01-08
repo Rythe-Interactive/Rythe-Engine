@@ -30,8 +30,6 @@
 #include "../data/pp_bloom.hpp"
 
 #include "../data/animation.hpp"
-#include "../data/pp_blur.hpp"
-#include "../data/pp_edgedetect.hpp"
 
 using namespace legion;
 

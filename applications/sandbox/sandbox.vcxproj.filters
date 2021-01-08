@@ -77,6 +77,9 @@
     <ClInclude Include="systems\animation_editor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data\pp_bloom.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\kernels\vadd_kernel.cl" />
