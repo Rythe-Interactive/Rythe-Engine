@@ -75,6 +75,8 @@ namespace legion::rendering
          */
         void attach(texture_handle texture, GLenum attachment);
 
+        void detach(GLenum attachment);
+
         /**@brief Get the attachment of a certain attachment-point.
          * @param attachment Attachment-point to fetch the attachment for.
          * @return const std::any& An std::any that should be any_castable to either a texture handle or a renderbuffer if an attachment was active, the std::any will be empty otherwise.
