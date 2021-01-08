@@ -4,10 +4,16 @@
 
 namespace legion::physics
 {
+    /** @struct HalfEdgeFinder
+    * @brief Responsible for creating a half-edge data structure for a mesh
+    */
 	struct HalfEdgeFinder
 	{
         meshHalfEdgePtr currentPtr;
 
+        /** @brief Given a mesh and its associated transform,
+        * populates the meshHalfEdges queue with the created meshHalfEdgePtrs
+        */
         void FindHalfEdge
         (mesh& mesh, const math::mat4& transform,
             std::queue<meshHalfEdgePtr>& meshHalfEdges)
@@ -125,7 +131,8 @@ namespace legion::physics
 
         }
 
-
+        /** @brief Instantiate a new half edge and returns it if its unique
+        */
         meshHalfEdgePtr InstantiateEdge(int vertexIndex
             , const std::pair<int, int> uniqueIndexPair
             , const mesh& mesh
@@ -141,6 +148,10 @@ namespace legion::physics
             return edgeToAdd;
         }
 
+        /** @brief Checks if a certain edge identified with 'uniqueIndexPair' is unique. If it is, it will
+        * be added to 'edgePtrs'. If its not, the original will take its place.
+        * @return a unique meshHalfEdgePtr
+        */
         meshHalfEdgePtr UniqueAdd(meshHalfEdgePtr newEdge, VertexIndexToHalfEdgePtr& indexToEdgeMap, edgeVertexIndexPair uniqueIndexPair)
         {
             auto iter = indexToEdgeMap.find(uniqueIndexPair);
