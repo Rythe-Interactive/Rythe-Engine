@@ -103,6 +103,9 @@ namespace legion::physics
 
         }
 
+        /** @brief Given the transform of the entity associated with this edge, returns
+       *  the centroid of the edge in world space.
+       */
         math::vec3 GetWorldCentroid(const math::mat4& transform) const
         {
             return transform * math::vec4((position + nextEdge->position) * 0.5f, 1);
@@ -147,6 +150,9 @@ namespace legion::physics
             return std::make_tuple(currentDistFromPlane, nextDistFromPlane);
         }
 
+        /** @brief Given the transform of the entity associated with this edge, returns 
+        *  the 2 vertices of the edge in world space
+        */
         std::tuple<math::vec3, math::vec3> GetEdgeWorldPositions(const math::mat4& transform)
         {
             math::vec3 currentWorldPos = GetEdgeWorldPosition(transform);
@@ -155,6 +161,9 @@ namespace legion::physics
             return std::make_tuple(currentWorldPos, nextWorldPos);
         }
 
+        /** @brief Given the transform of the entity associated with this edge, returns
+        *  'position' in world space.
+        */
         math::vec3 GetEdgeWorldPosition(const math::mat4& transform)
         {
             return transform * math::vec4(position, 1);
