@@ -10,7 +10,15 @@
 #include "../systems/gui_test.hpp"
 
 #include <rendering/systems/pointcloudgeneration.hpp>
+
 #include <physics/systems/physics_fracture_test_system.hpp>
+
+
+#include "../data/animation.hpp"
+#include "../systems/animation_editor.hpp"
+#include "../systems/animator.hpp"
+
+
 
 using namespace legion;
 
@@ -23,7 +31,10 @@ public:
         reportSystem<TestSystemConvexHull>();
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1920, 1080), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
         reportComponentType<sah>();
-        
+        reportComponentType<ext::animation>();
+        reportSystem<ext::Animator>();
+        reportSystem<ext::AnimationEditor>();
+        reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
         reportSystem<physics::PhysicsFractureTestSystem>();

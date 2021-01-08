@@ -1,4 +1,6 @@
 #version 450
+#state CULL OFF
+#state DEPTH OFF
 
 generate(vertex, fragment)
 
