@@ -31,7 +31,8 @@ namespace legion::physics
         PointerEncapsulator < HalfEdgeFace> BRefFace;
       
         float BRefSeperation;
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
+            this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
             manifold.isColliding = false;
             return;
