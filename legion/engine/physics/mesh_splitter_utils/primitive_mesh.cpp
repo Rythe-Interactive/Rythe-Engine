@@ -34,16 +34,7 @@ namespace legion::physics
         count++;
 
         //create renderable
-        //auto [meshFilterH, meshRendererH] = ent.add_components< rendering::mesh_renderable>();
-        //
-
-        //auto meshRenderer = meshRendererH.read();
-        //meshRenderer.material = originalMaterial;
-        //meshRendererH.write(meshRenderer);
-
-        //mesh_filter meshFilter = meshFilterH.read();
         mesh_filter meshFilter = mesh_filter( meshH );
-        //meshFilterH.write(meshFilter);
 
         ent.add_components<rendering::mesh_renderable>(meshFilter,rendering::mesh_renderer( originalMaterial));
 
@@ -120,17 +111,10 @@ namespace legion::physics
             }
         }
 
-        //TODO stop generating fake uvs
         for (int i = 0; i < vertices.size(); i++)
         {
             indices.push_back(i);
         }
-
-        //TODO stop generating fake uvs
-        //for (int i = 0; i < vertices.size(); i++)
-        //{
-        //    uvs.push_back(math::vec2(0,0));
-        //}
 
         //TODO stop generating fake normals
         for (int i = 0; i < vertices.size(); i++)

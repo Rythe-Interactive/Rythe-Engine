@@ -156,16 +156,6 @@ namespace legion::physics
             math::vec3 minWaCrossRa = math::cross(-wa, Ra);
             math::vec3 WbCrossRb = math::cross(wb, Rb);
 
-            /*if (auto rbRefID = rbRefHandle.entity.get_component_handle<identifier>())
-            {
-                log::debug("rbRefHandle is {} ", rbRefID.read().id);
-            }
-
-            if (auto rbIncID = rbIncHandle.entity.get_component_handle<identifier>())
-            {
-                log::debug("rbIncHandle is {} ", rbIncID.read().id);
-            }*/
-
             //restitution is based on the relative velocities of the 2 rigidbodies
             float dotResult = math::dot((-va + minWaCrossRa + vb + WbCrossRb), collisionNormal);
 
@@ -187,12 +177,6 @@ namespace legion::physics
 			totalLambda = math::clamp(totalLambda, 0.0f, std::numeric_limits<float>::max());
 
 			float lambdaApplied = totalLambda - oldTotalLambda;
-
-            //log::debug("restitutionConstraint {} ", restitutionConstraint);
-            //log::debug("baumgarteConstraint {} ", biasFactor);
-
-            /*log::debug("biasFactor {} ", biasFactor);
-            log::debug("foundLambda {} ", foundLambda);*/
 
     		ApplyImpulse(collisionNormal, lambdaApplied,
 				Ra, Rb);

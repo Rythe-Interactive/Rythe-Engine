@@ -20,8 +20,6 @@ namespace legion::physics
         bool isVisited = false;
         bool isBoundary = false;
 
-        //std::string debugID = "";
-
         MeshHalfEdge(const math::vec3& pPosition, const math::vec2& pUVs, std::weak_ptr<SplittablePolygon> pOwner) : position(pPosition), uv(pUVs),owner(pOwner)
         {
 
@@ -110,6 +108,9 @@ namespace legion::physics
             return transform * math::vec4((position + nextEdge->position) * 0.5f, 1);
         }
 
+        /** @brief Given the transform of the entity associated with this edge and the position and normal of the cutting plane,
+        * check if one of the vertices of the is above the plane
+        */
         bool isEdgePartlyAbovePlane(const math::mat4& transform, const math::vec3& planePosition, const math::vec3& planeNormal)
         {
             auto [currentDistFromPlane, nextDistFromPlane] = GetEdgeDistancesFromPlane(transform, planePosition, planeNormal);
@@ -120,6 +121,9 @@ namespace legion::physics
             return currentAbovePlane || nextAbovePlane;
         }
 
+        /** @brief Given the transform of the entity associated with this edge and the position and normal of the cutting plane,
+        * check if one of the vertices of the is below the plane
+        */
         bool isEdgePartlyBelowPlane(const math::mat4& transform, const math::vec3& planePosition, const math::vec3& planeNormal)
         {
             auto [currentDistFromPlane, nextDistFromPlane] = GetEdgeDistancesFromPlane(transform, planePosition, planeNormal);
@@ -130,6 +134,9 @@ namespace legion::physics
             return currentBelowPlane || nextBelowPlane;
         }
 
+        /** @brief Given the transform of the entity associated with this edge and the position and normal of the cutting plane,
+        *  Gets Edge Distances From Plane
+        */
         std::tuple<float, float> GetEdgeDistancesFromPlane(const math::mat4& transform, const math::vec3& planePosition, const math::vec3& planeNormal)
         {
             auto [currentWorldPos, nextWorldPos] = GetEdgeWorldPositions(transform);
@@ -152,8 +159,6 @@ namespace legion::physics
         {
             return transform * math::vec4(position, 1);
         }
-
-
 
         bool AttemptGetTrianglesInEdges
         (std::shared_ptr<MeshHalfEdge>& nextEdge, std::shared_ptr<MeshHalfEdge>& prevEdge)
@@ -188,29 +193,16 @@ namespace legion::physics
             {
                 edgeQueue.push(pairingEdge);
             }
-            //else
-            //{
-            //    isBoundary = true;
-            //}
-
 
             if (nextEdge->pairingEdge)
             {
                 edgeQueue.push(nextEdge->pairingEdge);
             }
-            /*else
-            {
-                nextEdge->isBoundary = true;
-            }*/
 
             if (nextEdge->nextEdge->pairingEdge)
             {
                 edgeQueue.push(nextEdge->nextEdge->pairingEdge);
             }
-            /*else
-            {
-                nextEdge->nextEdge->isBoundary = true;
-            }*/
 
         }
 
@@ -238,9 +230,6 @@ namespace legion::physics
 
         bool IsNormalCloseEnough(const math::vec3& comparisonNormal, const math::mat4& transform)
         {
-            
-            //float dotResult = math::dot(CalculateEdgeNormal(transform), comparisonNormal);
-
             return CompareNormals(CalculateEdgeNormal(transform), comparisonNormal);
         }
 
@@ -253,9 +242,6 @@ namespace legion::physics
 
             return dotResult > toleranceDot;
         }
-
-        
-
 
     };
 

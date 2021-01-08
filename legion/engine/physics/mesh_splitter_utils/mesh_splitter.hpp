@@ -655,6 +655,9 @@ namespace legion::physics
             return  polygon;
         };
 
+
+        #pragma endregion
+
         //--------------------------------------------------------- Functions related to Debugging ---------------------------------------------------//
 
         void DestroyTestSplitter(ecs::EcsRegistry* m_ecs)

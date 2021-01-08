@@ -135,7 +135,7 @@ public:
         physics::PrimitiveMesh::SetECSRegistry(m_ecs);
         
 
-#pragma region Input binding
+        #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
 

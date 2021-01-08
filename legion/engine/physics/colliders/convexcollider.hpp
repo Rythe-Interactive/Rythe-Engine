@@ -15,7 +15,6 @@ namespace legion::physics
     {
     public:
 
-        std::vector<math::vec3> vertices;
 
         ConvexCollider() = default;
 
@@ -639,6 +638,9 @@ namespace legion::physics
 
 
     private:
+
+
+        std::vector<math::vec3> vertices;
 
         HalfEdgeFace* instantiateMeshFace(const std::vector<math::vec3*>& vertices, const math::vec3& faceNormal)
         {

@@ -3,12 +3,14 @@
 #include <physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp>
 namespace legion::physics
 {
+    /** @struct IntersectionEdgeInfo
+    * @brief The information required to create a edge for a hole polygon
+    */
 	struct IntersectionEdgeInfo
 	{
 		IntersectionEdgeInfo(meshHalfEdgePtr pPairintToConnectTo) : 
 			pairingToConnectTo(pPairintToConnectTo)
 		{
-			assert(pPairintToConnectTo);
 			first = pairingToConnectTo->nextEdge->position;
 			second = pairingToConnectTo->position;
 		}
