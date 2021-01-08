@@ -389,7 +389,7 @@ public:
             gnomeMH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/warlock/warlock-normalHeight-512.png"_view));
             gnomeMH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/warlock/warlock-MRDAo-512.png"_view));
             gnomeMH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/warlock/warlock-emissive-512.png"_view));
-            gnomeMH.set_param(SV_HEIGHTSCALE, 1.f);
+            gnomeMH.set_param(SV_HEIGHTSCALE, 0.f);
             gnomeMH.set_param("discardExcess", false);
             gnomeMH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
