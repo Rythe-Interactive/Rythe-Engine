@@ -22,31 +22,20 @@ namespace legion::physics
 
         float ARefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(
-            this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation, math::colors::cyan) || !ARefFace.ptr)
+            this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation) || !ARefFace.ptr)
         {
-            //log::debug("-> Seperating axis not found on A {}", ARefSeperation);
-            //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::magenta,1.0f);
             manifold.isColliding = false;
             return;
         }
-
-        //log::debug("-> ARefSeperation Seperating Axis not Found, {} ", ARefSeperation);
-        //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::cyan,5.0f);
         
-
         PointerEncapsulator < HalfEdgeFace> BRefFace;
       
         float BRefSeperation;
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation, math::colors::orange) || !BRefFace.ptr)
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
-            //log::debug("-> Seperating axis not found on B {} ", BRefSeperation);
-            //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::magenta);
             manifold.isColliding = false;
             return;
         }
-
-        //log::debug("-> BRefSeperation Seperating Axis not Found, {}", BRefSeperation);
-        //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::orange, 5.0f);
 
         PointerEncapsulator< HalfEdgeEdge> edgeRef;
         PointerEncapsulator< HalfEdgeEdge> edgeInc;
@@ -57,19 +46,11 @@ namespace legion::physics
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformB, manifold.transformA,
             edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation))
         {
-            //log::debug("-> Seperating axis found on edges {} ", aToBEdgeSeperation);
-    /*        edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::magenta,20.0f,10.0f);
-            edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::magenta, 20.0f, 10.0f);*/
             manifold.isColliding = false;
             return;
         }
 
-        //edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::red);
-        //edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::red);
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
-        /*log::debug("ARefFace ", math::to_string(ARefFace.ptr->normal));
-        log::debug("BRefFace ", math::to_string(BRefFace.ptr->normal));*/
-
 
         //Get world position and normal of reference faces //
         
@@ -94,19 +75,7 @@ namespace legion::physics
 
         std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery, abPenetrationQuery, baPenetrationQuery  };
 
-        /*log::debug("abPenetrationQuery with normal {} , has penetration {}", abPenetrationQuery->normal,abPenetrationQuery->penetration);
-        log::debug("baPenetrationQuery n with normal {} ,  has penetration {}", baPenetrationQuery->normal,baPenetrationQuery->penetration);
-        log::debug("abEdgePenetrationQuery with normal {} ,  has penetration {}", abEdgePenetrationQuery->normal ,abEdgePenetrationQuery->penetration);*/
-
-        //auto lessThan
-        //{
-        //    []( std::shared_ptr<PenetrationQuery> lhs,  std::shared_ptr<PenetrationQuery> rhs)
-        //    {
-        //    return lhs->penetration < rhs->penetration;
-        //    }
-        //};
-
-        ////manifold.penetrationInformation = *std::max_element(penetrationQueryArray.begin(), penetrationQueryArray.end(),lessThan);
+        //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
 
         if (abPenetrationQuery->penetration + physics::constants::faceToFacePenetrationBias >
             baPenetrationQuery->penetration)
@@ -126,7 +95,6 @@ namespace legion::physics
         }
 
         manifold.isColliding = true;
-        //log::debug("manifold.penetrationInformation chosen {}", manifold.penetrationInformation->debugID);
 
         //keeping this here so i can copy pasta when i need it again
         //log::debug("---- PENETRATION INFO");

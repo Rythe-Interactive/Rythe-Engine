@@ -57,12 +57,9 @@ namespace legion::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation,math::color color)
+            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation)
         {
-            log::debug("FindSeperatingAxisByExtremePointProjection");
-
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
-            math::vec3 cachedworldPoint;
 
             for (auto face : convexB->GetHalfEdgeFaces())
             {
@@ -84,7 +81,6 @@ namespace legion::physics
                 {
                     currentMaximumSeperation = seperation;
                     refFace.ptr = face;
-                    cachedworldPoint = worldSupportPoint;
                 }
 
                 if (seperation > 0)
@@ -96,8 +92,6 @@ namespace legion::physics
             }
             //no seperating axis was found
             maximumSeperation = currentMaximumSeperation;
-
-            //debug::user_projectdrawLine(cachedworldPoint, cachedworldPoint + math::vec3(0, 0.1f, 0), color, 10.0f, 20.0f,true);
 
             return false;
         }
@@ -118,23 +112,13 @@ namespace legion::physics
             const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
             math::vec3& seperatingAxisFound, float& maximumSeperation)
         {
-            log::debug("FindSeperatingAxisByGaussMapEdgeCheck");
-            auto ids = std::make_tuple(0,0,0);
-            
-
             float currentMinimumSeperation = std::numeric_limits<float>::max();
 
             math::vec3 positionA = transformA[3];
 
-            int faceAID = 0;
-            int requestedfaceAID = 1;
-            int faceBID = 0;
-            int requestedfaceBID = 12;
-
             for (const auto faceA : convexA->GetHalfEdgeFaces())
             {
                 //----------------- Get all edges of faceA ------------//
-                faceAID++;
                 std::vector<HalfEdgeEdge*> convexAHalfEdges;
 
                 auto lambda = [&convexAHalfEdges](HalfEdgeEdge* edge)
@@ -147,7 +131,6 @@ namespace legion::physics
                 for (const auto faceB : convexB->GetHalfEdgeFaces())
                 {
                     //----------------- Get all edges of faceB ------------//
-                    faceBID++;
                     std::vector<HalfEdgeEdge*> convexBHalfEdges;
 
                     auto lambda = [&convexBHalfEdges](HalfEdgeEdge* edge)
@@ -156,34 +139,13 @@ namespace legion::physics
                     };
 
                     faceB->forEachEdge(lambda);
-
-                    int combinationID = 0;
-                    int requestedCombination = 8;
       
-
                     for (HalfEdgeEdge* edgeA : convexAHalfEdges)
                     {
                         for (HalfEdgeEdge* edgeB : convexBHalfEdges)
                         {
-
-                            combinationID++;
-                            //combinationID == requestedCombination &&
-                            bool atCombination
-                                = combinationID == requestedCombination &&  faceAID == requestedfaceAID && faceBID == requestedfaceBID;
-
-                            if (atCombination)
-                            {
-                                /*faceA->DEBUG_DrawFace(transformA, math::colors::red);
-                                faceB->DEBUG_DrawFace(transformB, math::colors::red);*/
-
-                                //edgeA->DEBUG_drawEdge(transformA, math::colors::red);
-                                //edgeB->DEBUG_drawEdge(transformB, math::colors::red);
-
-
-                            }
-
                             //if the given edges creates a minkowski face
-                            if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB, atCombination))
+                            if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
                             {
                                 //get world edge direction
                                 math::vec3 edgeADirection= transformA * math::vec4(edgeA->nextEdge->edgePosition, 1) - 
@@ -218,12 +180,7 @@ namespace legion::physics
 
                                 //check if given edges create a seperating axis
                                 float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
-                                
-                                /*if (atCombination)
-                                {
-                                    log::debug("Built combination for  requestedCombinationID, distanct found {}", distance);
-                                }*/
-
+                               
                                 if (distance < currentMinimumSeperation)
                                 {                                 
                                     refEdge.ptr = edgeA;
@@ -231,29 +188,9 @@ namespace legion::physics
 
                                     seperatingAxisFound = seperatingAxis;
                                     currentMinimumSeperation = distance;
-
-                                    std::get<0>(ids) = faceAID;
-                                    std::get<1>(ids) = faceBID;
-                                    std::get<2>(ids) = combinationID;
                                 }
 
-                                //if (distance > 0.0f)
-                                //{
-                                //    log::debug("a id  {}  b id {} combination {} ",faceAID,faceBID,combinationID);
-                                //    edgeA->DEBUG_drawEdge(transformA, math::colors::lightgrey);
-                                //    edgeB->DEBUG_drawEdge(transformB, math::colors::lightgrey);
-                                //    maximumSeperation = currentMaximumSeperation;
-                                //    return true;
-                                //}
                             }
-                            //else
-                            //{
-                            //    //TODO DEBUG STUFF REMOVE THIS
-                            //    if (atCombination)
-                            //    {
-                            //        log::debug("NOT Built combination for {} requestedCombination", requestedCombination);
-                            //    }
-                            //}
                         }
                     }
                 }
@@ -337,10 +274,6 @@ namespace legion::physics
                         outputList.push_back(ContactVertex(intersectionPoint, label));
                     }
                 }
-
-
-
-
             }
         }
 
@@ -577,7 +510,7 @@ namespace legion::physics
          * @return returns true if a minkowski face was succesfully constructed
          */
         static bool attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::mat4& transformA,
-            const math::mat4& transformB, bool DEBUG_atRequested)
+            const math::mat4& transformB)
         {
             const math::vec3 transformedA1 = transformA * math::vec4(edgeA->getLocalNormal(), 0);
             const math::vec3 transformedA2 = transformA * math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
@@ -589,21 +522,8 @@ namespace legion::physics
 
             math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
 
-            /*if (DEBUG_atRequested)
-            {
-                math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
-                math::vec3 positionB = transformB * math::vec4(edgeB->edgePosition, 1);
-
-                debug::user_projectdrawLine(positionA, positionA + math::normalize(transformedA1), math::colors::darkgrey,true);
-                debug::user_projectdrawLine(positionA, positionA + math::normalize(transformedA2), math::colors::darkgrey, true);
-
-                debug::user_projectdrawLine(positionA, positionA - math::normalize(transformedB1), math::colors::black, true);
-                debug::user_projectdrawLine(positionA, positionA - math::normalize(transformedB2), math::colors::black, true);
-
-            }*/
-
             return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2
-                , transformedEdgeDirectionA, transformedEdgeDirectionB, DEBUG_atRequested, positionA);
+                , transformedEdgeDirectionA, transformedEdgeDirectionB);
         }
 
         /** @brief Given 2 arcs, one that starts from transformedA1 and ends at transformedA2 and another arc
@@ -612,7 +532,7 @@ namespace legion::physics
          */
         static bool isMinkowskiFace(const math::vec3& transformedA1, const math::vec3& transformedA2,
             const math::vec3& transformedB1, const math::vec3& transformedB2
-            ,const math::vec3& planeANormal, const math::vec3& planeBNormal,bool DEBUG_atRequested,math::vec3 DEBUG_drawPos)
+            ,const math::vec3& planeANormal, const math::vec3& planeBNormal)
         {
             //------------------------ Check if normals created by arcA seperate normals of B --------------------------------------//
             //CBA
@@ -625,16 +545,11 @@ namespace legion::physics
 
             if (dotMultiplyResultA > 0.0f || math::epsilonEqual(dotMultiplyResultA, 0.0f, math::epsilon<float>()))
             {
-                /*if (DEBUG_atRequested)
-                {
-                    log::debug("Failed At Check if normals created by arcA seperate normals of B");
-                }*/
                 return false;
             }
 
             //------------------------ Check if normals created by arcB seperate normals of A --------------------------------------//
 
-            
             //ADC
             float planeBDotA1 = math::dot(planeBNormal, transformedA1);
             //BDC
@@ -644,38 +559,17 @@ namespace legion::physics
 
             if (dotMultiplyResultB > 0.0f || math::epsilonEqual(dotMultiplyResultB, 0.0f, math::epsilon<float>()))
             {
-                /*if (DEBUG_atRequested)
-                {
-                    log::debug("Failed at Check if normals created by arcB seperate normals of A ");
-                }*/
                 return false;
             }
 
             //------------------------ Check if arcA and arcB are in the same hemisphere --------------------------------------------//
 
-            //math::vec3 abNormal = math::cross(transformedA2, transformedB2);
-
-            //float planeABDotA1 = math::dot(abNormal, transformedA1);
-            //float planeABDotB1 = math::dot(abNormal, transformedB1);
-
-            //float dotMultiplyResultAB = planeABDotA1 * planeABDotB1;
-
             float dotMultiplyResultAB = planeADotB1 * planeBDotA2;
 
             if (planeADotB1  * planeBDotA2  < 0.0f || math::epsilonEqual(dotMultiplyResultAB, 0.0f, math::epsilon<float>()))
             {
-                /*if (DEBUG_atRequested)
-                {
-                    log::debug("Failed at Check if arcA and arcB are in the same hemisphere ");
-                }*/
                 return false;
             }
-
-            
-            /*if (DEBUG_atRequested)
-            {
-                debug::user_projectdrawLine(DEBUG_drawPos, DEBUG_drawPos + math::normalize(abNormal), math::colors::magenta, 5.0f, 200.0f, true);
-            }*/
 
             return true;
         }
