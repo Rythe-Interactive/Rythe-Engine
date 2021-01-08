@@ -169,8 +169,6 @@ namespace legion::rendering
             shader_handle::release();
         }
 
-        std::string get_name();
-
         /**@brief Set the value of a parameter by name.
          */
         template<typename T>
