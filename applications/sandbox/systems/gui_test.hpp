@@ -35,6 +35,12 @@ class GuiTestSystem : public System<GuiTestSystem>
 
             cubeModel = ModelCache::create_model("cube", "assets://models/cube.obj"_view);
             vertexColorMaterial = MaterialCache::create_material("decal", "assets://shaders/decal.shs"_view);
+            vertexColorMaterial.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            vertexColorMaterial.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
+            vertexColorMaterial.set_param(SV_MRDAO, rendering::TextureCache::create_texture("engine://resources/default/MRDAo"_view));
+            vertexColorMaterial.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("engine://resources/default/emissive"_view));
+            vertexColorMaterial.set_param(SV_HEIGHTSCALE, 0.f);
+            vertexColorMaterial.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
         }
 
 

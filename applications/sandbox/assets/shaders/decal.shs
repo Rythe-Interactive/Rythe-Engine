@@ -5,6 +5,7 @@ generate(vertex, fragment)
 
 #include<stdio.shinc>
 #include<math_ext.shinc>
+#include <lighting.shinc>
 
 shader(vertex)
 {
@@ -17,7 +18,7 @@ shader(vertex)
 
 shader(fragment)
 {
-    //uniform sampler2D _texture;
+    uniform vec4 skycolor;
 
     void main(void)
     {
@@ -38,7 +39,26 @@ shader(fragment)
             if(max(abs(localScenePos.x), max(abs(localScenePos.y), abs(localScenePos.z))) > 0.5)
                 discard;
 
-            fragment_color =  vec4(vec3(1.0), length(localScenePos.xz) < 0.25 );
+            Camera camera = GetCamera();
+
+            vec3 ddxWp = dFdxFine(worldScenePos);
+            vec3 ddyWp = dFdyFine(worldScenePos);
+            vec3 worldNormal = normalize(cross(ddyWp, ddxWp));
+
+            vec3 worldTangent = (stdin(modelMatrix) * vec4(1, 0, 0, 1)).xyz;
+            worldTangent = normalize(worldTangent - dot(worldTangent, worldNormal) * worldNormal);
+
+            Material material = ExtractMaterial(localScenePos.xz + vec2(0.5), camera, worldNormal, worldTangent);
+
+            vec3 lighting = GetAllLighting(material, camera, worldScenePos);
+
+            vec3 unitDir = reflect(-normalize(camera.toView), material.normal);
+            float reflectance = clamp01(0.01 + (pow(max(0.0, (1.0 - material.roughness)), 4) * 0.99));
+            vec3 reflection = mix(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), (vec3(length(skycolor.rgb)) + skycolor.rgb)*0.5, material.roughness);
+
+            lighting += reflection * mix(vec3(1.0), material.albedo.rgb, material.metallic) * reflectance;
+
+            fragment_color = vec4(lighting, material.albedo.a);
         }
         else
         fragment_color = vec4(vec3(0), 1);

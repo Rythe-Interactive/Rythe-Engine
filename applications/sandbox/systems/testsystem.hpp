@@ -1751,6 +1751,8 @@ public:
     {
         static bool on = true;
 
+        static auto decalH = gfx::MaterialCache::get_material("decal");
+
         if (!action->value)
         {
             //auto light = sun.read_component<rendering::light>();
@@ -1762,6 +1764,7 @@ public:
                 if (sun)
                     sun.destroy();
 
+                decalH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
                 pbrH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
                 copperH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
                 aluminumH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
@@ -1784,6 +1787,7 @@ public:
                     sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
                 }
 
+                decalH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
                 pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
                 copperH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
                 aluminumH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
