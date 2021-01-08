@@ -119,9 +119,7 @@ namespace legion::physics
                     otherEdge->pairingEdge = edgePair;
 
                 }
-
             }
-
 
             currentPtr = meshHalfEdges.front();
 

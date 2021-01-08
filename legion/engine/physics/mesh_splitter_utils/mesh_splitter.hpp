@@ -64,7 +64,6 @@ namespace legion::physics
             {
                 log::warn("The given entity does not have a meshHandle!");
             }
-
         }
 
         /** @brief Given a queue of edges and a transform,
@@ -87,10 +86,7 @@ namespace legion::physics
                         meshPolygons.push_back(polygon);
                     }
                 }
-                //break;
             }
-
-
         }
 
         /** @brief Given an intial startEdge, do a BFS to identify the polygon
@@ -112,7 +108,6 @@ namespace legion::physics
             {
                 return false;
             }
-
 
             edgesInPolygon.push_back(startEdge);
             edgesInPolygon.push_back(nextEdge);
@@ -150,19 +145,13 @@ namespace legion::physics
                         edgeToCheck->populateVectorWithTriangle(edgesInPolygon);
                         //add neigbors to polygonEdgeNonVisitedQueue
                         edgeToCheck->populateQueueWithTriangleNeighbor(unvisitedEdgeQueue);
-                        //log::debug("Is in same polygon");
                     }
                     else
                     {
                         //add edge to edgesNotInPolygon
                         edgeToCheck->populateVectorWithTriangle(edgesNotInPolygon);
-                        //log::debug("Is NOT same polygon");
-                        //edgeToCheck->pairingEdge->isBoundary = true;
                     }
-
-
                 }
-
             }
 
             for (auto edge : edgesNotInPolygon)
@@ -198,9 +187,7 @@ namespace legion::physics
 
             outputPolygonIslandsGenerated.push_back(std::move(copiedPolygons));
 
-
             //-------------------------------- spllit mesh based on list of splitting planes -----------------------------------------//
-
             for (const MeshSplitParams& splitParam : splittingPlanes)
             {
                 std::vector< std::vector<SplittablePolygonPtr>> inputList = std::move(outputPolygonIslandsGenerated);
@@ -229,8 +216,6 @@ namespace legion::physics
                 PrimitiveMesh newMesh(owner, polygonIsland, ownerMaterialH);
                 newMesh.InstantiateNewGameObject();
             }
-
-
         }
 
         /** @brief Given a list of polygons to split in 'polygonsToSplit', splits them based on a splitting plane defined by
@@ -245,7 +230,6 @@ namespace legion::physics
             bool keepBelow = true)
         {
             log::debug("SplitPolygons");
-
 
             //----------------------- Find out which polygons are below,above, or intersecting the splitting plane -----------------------------------//
 
@@ -286,8 +270,6 @@ namespace legion::physics
 
                 DetectIntersectionIsland(splitMesh, intersectionIslands);
 
-                
-
                 //----------------------------------- Filter Edges in polygon in order to fit sliced mesh --------------------------------------------------//
 
                 std::vector<IntersectionEdgeInfo> generatedIntersectionEdges;
@@ -317,8 +299,6 @@ namespace legion::physics
 
                 resultPolygons.push_back(std::move(intersectionPolygon));
 
-
-
                 foundUnvisited =
                     FindFirstIntersectingOrRequestedState
                     (initialFound, requestedState, polygonsToSplit);
@@ -326,8 +306,6 @@ namespace legion::physics
                 resultingIslands.push_back(std::move(resultPolygons));
 
             }
-
-
         }
 
         //--------------------------------------------------------- Function related to polygon copying ----------------------------------------------------------------//
@@ -380,7 +358,6 @@ namespace legion::physics
                     originalEdge->shadowEdge = nullptr;
                 }
             }
-
         }
 
         void CopyEdgeVector(std::vector<meshHalfEdgePtr>& originalHalfEdgeList, std::vector<meshHalfEdgePtr>& resultCopyList)
@@ -430,13 +407,7 @@ namespace legion::physics
                     shadow1->populateVectorWithTriangle(resultCopyList);
 
                 }
-
-
             }
-
-
-
-
         }
 
         //--------------------------------------------------------- MeshSplitting helper functions ----------------------------------------------------------------//
@@ -491,7 +462,6 @@ namespace legion::physics
                             {
                                 unvisitedPolygonQueue.push(edge->pairingEdge->owner.lock());
                             }
-
                         }
                     }
                 }
@@ -509,7 +479,6 @@ namespace legion::physics
             //find first intersection polygon
             SplittablePolygonPtr initialPolygon;
             bool foundUnvisited = FindFirstUnivistedIntersectionPolygon(splitPolygons, initialPolygon);
-
 
             //while can find intersection polygon
             while (foundUnvisited)
@@ -552,9 +521,6 @@ namespace legion::physics
                 foundUnvisited = FindFirstUnivistedIntersectionPolygon(splitPolygons, initialPolygon);
 
             }
-
-
-
         }
 
         /** @brief Creates an IntersectingPolygonOrganizer thats splits a 
@@ -617,7 +583,6 @@ namespace legion::physics
             math::vec3 localCentroid{};
 
             //---------------------------------- Instantiate Edges and connect them into a triangle -------------------------------------//
-
             for (IntersectionEdgeInfo& info : generatedIntersectionEdges)
             {
                 //instantiate edge and set its pairing
@@ -625,9 +590,6 @@ namespace legion::physics
                 meshHalfEdgePtr secondEdge = std::make_shared<MeshHalfEdge>(info.second);
                 //temporarily second edge to info.second
                 meshHalfEdgePtr thirdEdge = std::make_shared<MeshHalfEdge>(info.second);
-
-                //info.pairingToConnectTo->debugID = "ShouldConnecTo";
-                
 
                 info.centroidEdge = thirdEdge;
                 info.instantiatedEdge  = firstEdge;
@@ -640,15 +602,6 @@ namespace legion::physics
             
                 info.instantiatedEdge->populateVectorWithTriangle(edgesCreated);
 
-                //info.instantiatedEdge->debugID = "InstantiatedEdge";
-
-                /*assert(firstEdge != info.pairingToConnectTo);
-
-                assert(firstEdge->pairingEdge == info.pairingToConnectTo);
-
-                assert(info.pairingToConnectTo->pairingEdge == firstEdge);
-
-                assert(info.pairingToConnectTo->pairingEdge != info.pairingToConnectTo);*/
                 localCentroid += info.first;
             }
 
@@ -660,7 +613,6 @@ namespace legion::physics
             {
                 info.centroidEdge->position = localCentroid;
                 assert(info.instantiatedEdge->nextEdge->nextEdge);
-                
             }
 
             //---------------------------------- Set pairing information of all edges ---------------------------------------------//
@@ -672,7 +624,6 @@ namespace legion::physics
                 //get closest unvisisted IntersectionEdgeInfo
 
                 const math::vec3& pointToCompare = info.second;
-                //log::debug("Finding distance");
                 //find edge closest to pointToCompare
                 for (IntersectionEdgeInfo& otherInfo : generatedIntersectionEdges)
                 {
@@ -687,7 +638,6 @@ namespace legion::physics
                         currentClosestDistance = distanceFound;
                         closestEdge = otherInfo.centroidEdge;
                     }
-
                 }
 
                 assert(closestEdge);
@@ -714,7 +664,6 @@ namespace legion::physics
             }
 
             splitTester.clear();
-
         }
 
         void TestSplit()
@@ -742,8 +691,6 @@ namespace legion::physics
                 log::error("Split tester not set");
             }
         }
-
     };
-
 }
 

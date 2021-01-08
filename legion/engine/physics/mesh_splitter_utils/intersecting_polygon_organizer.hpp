@@ -20,7 +20,6 @@ namespace legion::physics
         }
 
         //------------------------------------------------------ Related to Edge Categorization  ----------------------------------------------------------------//
-
         void SplitPolygon(SplittablePolygonPtr splitPolygon
             , const math::mat4& transform, const math::vec3 cutPosition
             , const math::vec3 cutNormal, SplitState requestedState
@@ -90,10 +89,7 @@ namespace legion::physics
                 return
                     math::dot(AtoPolygonCentroid, polygonNormalCrossCutNormal) <
                     math::dot(BtoPolygonCentroid, polygonNormalCrossCutNormal);
-
-
             };
-
 
             std::sort(splitEdges.begin(), splitEdges.end(), initialSorter);
 
@@ -143,7 +139,6 @@ namespace legion::physics
                 return
                     math::dot(AtoPolygonCentroid, sortingDirection) <
                     math::dot(BtoPolygonCentroid, sortingDirection);
-
             };
 
             std::sort(effectedUsedEdges.begin(), effectedUsedEdges.end(), boundarySorter);
@@ -151,9 +146,7 @@ namespace legion::physics
             meshHalfEdgePtr firstEdge = effectedUsedEdges.at(0);
             meshHalfEdgePtr secondEdge = effectedUsedEdges.at(effectedUsedEdges.size() - 1);
 
-
             //------------------------------------- [5] Regenerate Edges ----------------------------------------------------------------------------------------------------------//
-
 
             //get start and end intersection points
             auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->GetEdgeWorldPositions(transform);
@@ -303,7 +296,6 @@ namespace legion::physics
             std::queue<meshHalfEdgePtr> unvisitedEdges;
             unvisitedEdges.push(initalEdge);
 
-
             while (!unvisitedEdges.empty())
             {
                 auto currentEdge = unvisitedEdges.front();
@@ -327,7 +319,6 @@ namespace legion::physics
                     {
                         //if we reach this point the triangle is either completely above the plane or completly below it
                         //we cache it only if its at the correct position
-
                         math::vec3 edgePosition = transform * math::vec4(currentEdge->position, 1);
 
                         if (keepAbove == PhysicsStatics::IsPointAbovePlane(cutNormal, cutPosition, edgePosition))
