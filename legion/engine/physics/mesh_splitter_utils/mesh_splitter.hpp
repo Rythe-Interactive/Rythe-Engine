@@ -67,7 +67,8 @@ namespace legion::physics
         }
 
         /** @brief Given a queue of edges and a transform,
-        * populates the std::vector 'meshPolygons' using BFS
+        * populates the std::vector 'meshPolygons' using BFS.
+        * @note halfEdgeQueue will be empty after this function
         */
         void BFSPolygonize(std::queue<meshHalfEdgePtr>& halfEdgeQueue, const math::mat4& transform)
         {
@@ -90,7 +91,7 @@ namespace legion::physics
         }
 
         /** @brief Given an intial startEdge, do a BFS to identify the polygon
-        * that the edge is in. Also populates the halfEdgeQueue with the
+        * that the edge is in. Also populates the halfEdgeQueue with the neigbors of the boundary of the polygon
         */
         bool BFSIdentifyPolygon(meshHalfEdgePtr startEdge
             , std::shared_ptr<SplittablePolygon>& polygon, std::queue<meshHalfEdgePtr>& halfEdgeQueue
