@@ -121,6 +121,5 @@ namespace legion::physics
         {
             normals.push_back(math::vec3(0, 1,0));
         }
-
     }
 }

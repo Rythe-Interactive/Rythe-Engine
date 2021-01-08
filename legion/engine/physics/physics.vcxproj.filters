@@ -51,6 +51,9 @@
     <ClCompile Include="systems\physics_fracture_test_system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="components\fracturer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -162,6 +165,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="systems\physics_fracture_test_system.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\fracturer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

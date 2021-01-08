@@ -5,16 +5,7 @@ namespace legion::physics
 {
 	struct Fracturer
 	{
-
 		void Fracture();
-		
-
-
-
 	};
-
-
-
-
 }
 
