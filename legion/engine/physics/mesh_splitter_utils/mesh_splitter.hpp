@@ -105,7 +105,7 @@ namespace legion::physics
             meshHalfEdgePtr prevEdge = nullptr;
 
             //startEdge may not form a triangle,we early out if this happens
-            if (!startEdge->AttemptGetTrianglesInEdges(nextEdge, prevEdge))
+            if (!startEdge->attemptGetTrianglesInEdges(nextEdge, prevEdge))
             {
                 return false;
             }
@@ -115,7 +115,7 @@ namespace legion::physics
             edgesInPolygon.push_back(prevEdge);
 
             //mark all edges visited
-            startEdge->MarkTriangleEdgeVisited();
+            startEdge->markTriangleEdgeVisited();
 
             //get all neigbors of the startEdge Triangle and put them in unvisitedEdgeQueue
             std::queue<meshHalfEdgePtr> unvisitedEdgeQueue;
@@ -123,7 +123,7 @@ namespace legion::physics
 
             std::vector<meshHalfEdgePtr> edgesNotInPolygon;
 
-            const math::vec3 comparisonNormal = startEdge->CalculateEdgeNormal(transform);
+            const math::vec3 comparisonNormal = startEdge->calculateEdgeNormal(transform);
 
             //BFS search for adjacent triangles with same normal
             while (!unvisitedEdgeQueue.empty())
@@ -135,12 +135,12 @@ namespace legion::physics
 
                 if (!edgeToCheck) { continue; }
 
-                if (!edgeToCheck->isVisited && edgeToCheck->IsTriangleValid())
+                if (!edgeToCheck->isVisited && edgeToCheck->isTriangleValid())
                 {
-                    edgeToCheck->MarkTriangleEdgeVisited();
+                    edgeToCheck->markTriangleEdgeVisited();
 
                     //if triangle has same normal as original
-                    if (edgeToCheck->IsNormalCloseEnough(comparisonNormal, transform))
+                    if (edgeToCheck->isNormalCloseEnough(comparisonNormal, transform))
                     {
                         //add all edges in triangle to polygonEdgeList
                         edgeToCheck->populateVectorWithTriangle(edgesInPolygon);
@@ -342,7 +342,7 @@ namespace legion::physics
                         auto shadowEdge = originalEdge->shadowEdge;
                         auto shadowEdgePairing = originalEdge->pairingEdge->shadowEdge;
 
-                        shadowEdge->SetPairing(shadowEdgePairing);
+                        shadowEdge->setPairing(shadowEdgePairing);
                     }
 
                 }
@@ -366,7 +366,7 @@ namespace legion::physics
             for (meshHalfEdgePtr originalEdge : originalHalfEdgeList)
             {
                 //copy polygon and place on shadow edge
-                originalEdge->CloneOnShadowEdge();
+                originalEdge->cloneOnShadowEdge();
             }
 
             //BFS connect with clone edge
@@ -382,26 +382,26 @@ namespace legion::physics
                 {
                     originalEdge->isVisited = true;
 
-                    auto [original1, original2, original3] = originalEdge->GetTriangle();
-                    auto [shadow1, shadow2, shadow3] = originalEdge->GetShadowTriangle();
+                    auto [original1, original2, original3] = originalEdge->getTriangle();
+                    auto [shadow1, shadow2, shadow3] = originalEdge->getShadowTriangle();
 
-                    MeshHalfEdge::ConnectIntoTriangle(shadow1, shadow2, shadow3);
+                    MeshHalfEdge::connectIntoTriangle(shadow1, shadow2, shadow3);
 
                     if (!original1->isBoundary)
                     {
-                        shadow1->SetPairing(original1->pairingEdge->shadowEdge);
+                        shadow1->setPairing(original1->pairingEdge->shadowEdge);
                         unvisitedOriginalHalfEdgeList.push(original1->pairingEdge);
                     }
 
                     if (!original2->isBoundary)
                     {
-                        shadow2->SetPairing(original2->pairingEdge->shadowEdge);
+                        shadow2->setPairing(original2->pairingEdge->shadowEdge);
                         unvisitedOriginalHalfEdgeList.push(original2->pairingEdge);
                     }
 
                     if (!original3->isBoundary)
                     {
-                        shadow3->SetPairing(original3->pairingEdge->shadowEdge);
+                        shadow3->setPairing(original3->pairingEdge->shadowEdge);
                         unvisitedOriginalHalfEdgeList.push(original3->pairingEdge);
                     }
 
@@ -595,11 +595,11 @@ namespace legion::physics
                 info.centroidEdge = thirdEdge;
                 info.instantiatedEdge  = firstEdge;
 
-                info.pairingToConnectTo->SetPairing(info.instantiatedEdge);
+                info.pairingToConnectTo->setPairing(info.instantiatedEdge);
                 
                 info.instantiatedEdge->isBoundary = true;
 
-                MeshHalfEdge::ConnectIntoTriangle(firstEdge, secondEdge, thirdEdge);
+                MeshHalfEdge::connectIntoTriangle(firstEdge, secondEdge, thirdEdge);
             
                 info.instantiatedEdge->populateVectorWithTriangle(edgesCreated);
 
@@ -645,7 +645,7 @@ namespace legion::physics
                 auto infoEdge = info.instantiatedEdge->nextEdge;
                 auto infoEdgePairing = closestEdge;
 
-                infoEdge->SetPairing(infoEdgePairing);
+                infoEdge->setPairing(infoEdgePairing);
 
             }
 

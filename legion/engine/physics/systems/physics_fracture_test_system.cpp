@@ -76,7 +76,7 @@ namespace legion::physics
                 {
                     if (edge->isBoundary)
                     {
-                        auto [start, end] = edge->GetEdgeWorldPositions(transform);
+                        auto [start, end] = edge->getEdgeWorldPositions(transform);
                         auto startOffset = (worldCentroid - start) * 0.1f + worldNormal * 0.01f;
                         auto endOffset = (worldCentroid - end) * 0.1f + worldNormal * 0.01f;
                         

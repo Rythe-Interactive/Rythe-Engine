@@ -111,12 +111,12 @@ namespace legion::physics
         for (auto edge : edgesInPolygon)
         {
             bool edgeIsBoundary = true;
-            math::vec3 transformedNormal = edge->CalculateEdgeNormal(transform);
-            math::vec3 transformedOtherNormal = edge->pairingEdge->CalculateEdgeNormal(transform);
+            math::vec3 transformedNormal = edge->calculateEdgeNormal(transform);
+            math::vec3 transformedOtherNormal = edge->pairingEdge->calculateEdgeNormal(transform);
 
             if (edge->pairingEdge)
             {
-                if (MeshHalfEdge::CompareNormals(transformedNormal,transformedOtherNormal))
+                if (MeshHalfEdge::compareNormals(transformedNormal,transformedOtherNormal))
                 {
                     edgeIsBoundary = false;
                 }

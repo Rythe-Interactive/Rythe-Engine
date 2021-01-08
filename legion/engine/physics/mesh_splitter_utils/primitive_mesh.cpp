@@ -81,9 +81,9 @@ namespace legion::physics
 
                 if (!halfEdge->isVisited)
                 {
-                    halfEdge->MarkTriangleEdgeVisited();
+                    halfEdge->markTriangleEdgeVisited();
 
-                    auto [edge1, edge2, edge3] = halfEdge->GetTriangle();
+                    auto [edge1, edge2, edge3] = halfEdge->getTriangle();
 
                     vertices.push_back(edge1->position);
                     vertices.push_back(edge2->position);
