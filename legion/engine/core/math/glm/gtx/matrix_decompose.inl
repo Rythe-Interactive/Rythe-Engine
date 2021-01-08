@@ -323,4 +323,32 @@ namespace detail
 
         return true;
     }
+
+    //TODO(anyone): Create header predef.
+     template<typename T, qualifier Q>
+    GLM_FUNC_QUALIFIER void extract_translation(mat<4, 4, T, Q> const& ModelMatrix, vec<3, T, Q>& Translation)
+    {
+        OPTICK_EVENT();   
+
+        // Take care of translation (easy).
+        Translation = vec<3, T, Q>(ModelMatrix[3]);
+    }
+
+    template<typename T, qualifier Q>
+    GLM_FUNC_QUALIFIER void extract_scale(mat<4, 4, T, Q> const& ModelMatrix, vec<3, T, Q>& Scale)
+    {
+        OPTICK_EVENT();
+
+        Scale[0] = length(ModelMatrix[0]);
+        Scale[1] = length(ModelMatrix[1]);
+        Scale[2] = length(ModelMatrix[2]);
+    }
+
+    template<typename T, qualifier Q>
+    GLM_FUNC_QUALIFIER void extract_orientation(mat<4, 4, T, Q> const& ModelMatrix, qua<T, Q>& Orientation)
+    {
+        OPTICK_EVENT();
+        mat<3, 3, T, Q> rotationMatrix{ normalize(ModelMatrix[0]), normalize(ModelMatrix[1]), normalize(ModelMatrix[2]) };
+        Orientation = quat_cast(rotationMatrix);
+    }
 }//namespace legion::core::math

@@ -28,6 +28,8 @@
 
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 
+
+#include "../data/animation.hpp"
 #include "../data/pp_blur.hpp"
 #include "../data/pp_edgedetect.hpp"
 

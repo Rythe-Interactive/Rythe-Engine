@@ -78,9 +78,9 @@ namespace legion::rendering
         while (!rest.empty())
         {
             auto seperator = rest.find_first_not_of('\n');
-            seperator = rest.find_first_of('\n', seperator) + 1;
+            seperator = rest.find_first_of('\n', seperator);
 
-            if (seperator == 0)
+            if (seperator == std::string::npos)
                 seperator = rest.size();
 
             auto line = rest.substr(0, seperator);
@@ -94,6 +94,8 @@ namespace legion::rendering
             seperator = rest.find_first_not_of('\n');
             if (seperator == std::string::npos)
                 break;
+            else
+                rest = rest.substr(seperator);
         }
 
         // Create lookup table for the OpenGL function types that can be changed by the shader state.
@@ -109,13 +111,6 @@ namespace legion::rendering
             funcTypes["ALPHA"] = GL_BLEND;
             funcTypes["DITHER"] = GL_DITHER;
         }
-
-        // Default shader state in case nothing was specified by the shader.
-        state[GL_DEPTH_TEST] = GL_GREATER;
-        state[GL_CULL_FACE] = GL_BACK;
-        state[GL_BLEND_SRC] = GL_SRC_ALPHA;
-        state[GL_BLEND_DST] = GL_ONE_MINUS_SRC_ALPHA;
-        state[GL_DITHER] = GL_FALSE;
 
         for (auto& [func, par] : stateInput)
         {
@@ -384,6 +379,13 @@ namespace legion::rendering
 
         auto rest = std::string_view(result.data() + start, end - start);
 
+        // Default shader state in case nothing was specified by the shader.
+        state[GL_DEPTH_TEST] = GL_GREATER;
+        state[GL_CULL_FACE] = GL_BACK;
+        state[GL_BLEND_SRC] = GL_SRC_ALPHA;
+        state[GL_BLEND_DST] = GL_ONE_MINUS_SRC_ALPHA;
+        state[GL_DITHER] = GL_FALSE;
+
         while (!rest.empty())
         {
             auto seperator = rest.find_first_not_of('\n');
@@ -415,7 +417,7 @@ namespace legion::rendering
             {
                 extract_state(source, state);
             }
-            else if(!extract_ilo(source, shaderType, ilo))
+            else if (!extract_ilo(source, shaderType, ilo))
             {
                 return false;
             }
