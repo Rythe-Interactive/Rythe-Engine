@@ -2113,10 +2113,11 @@ public:
                 auto usedColor = statibBlockColor;
                 bool useDepth = false;
 
-                if (entity.get_component_handle<physics::rigidbody>())
+                if (auto rb = entity.get_component_handle<physics::rigidbody>())
                 {
                     usedColor = rbColor;
                     useDepth = true;
+                    //rb.read().
                 }
 
                 

@@ -25,13 +25,13 @@ namespace legion::physics
         static std::vector<math::vec3 > aPoint;
         static std::vector<math::vec3> bPoint;
 
-        ecs::EntityQuery  rigidbodyIntegrationQuery;
+        ecs::EntityQuery rigidbodyIntegrationQuery;
 
         virtual void setup()
         {
             createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
 
-            rigidbodyIntegrationQuery = createQuery<rigidbody, position, rotation>();
+            rigidbodyIntegrationQuery = createQuery<rigidbody, position, rotation,physicsComponent>();
 
             auto broadPhaseLambda = [this]
             (std::vector<physics_manifold_precursor>& manifoldPrecursors
@@ -349,6 +349,7 @@ namespace legion::physics
         */
         void integrateRigidbodies(float deltaTime)
         {
+            rigidbodyIntegrationQuery.queryEntities();
             for (auto ent : rigidbodyIntegrationQuery)
             {
                 auto rbPosHandle = ent.get_component_handle<position>();
@@ -391,14 +392,17 @@ namespace legion::physics
                 auto rbPosHandle = ent.get_component_handle<position>();
                 auto rbRotHandle = ent.get_component_handle<rotation>();
                 auto rbRigidbodyHandle = ent.get_component_handle<rigidbody>();
+                auto rbPhysicsComponentHandle = ent.get_component_handle<physicsComponent>();
 
-                integrateRigidbodyPositionAndRotations(rbPosHandle, rbRotHandle, rbRigidbodyHandle, deltaTime);
+                integrateRigidbodyPositionAndRotations(rbPosHandle, rbRotHandle
+                    , rbRigidbodyHandle, rbPhysicsComponentHandle, deltaTime);
 
             }
         }
 
         void integrateRigidbodyPositionAndRotations(ecs::component_handle<position>& posHandle
-            , ecs::component_handle<rotation>& rotHandle, ecs::component_handle<rigidbody>& rbHandle, float dt)
+            , ecs::component_handle<rotation>& rotHandle, ecs::component_handle<rigidbody>& rbHandle,
+            ecs::component_handle<physicsComponent>& physicsComponentHandle, float dt)
         {
             auto rb = rbHandle.read();
             auto rbPos = posHandle.read();
@@ -413,8 +417,6 @@ namespace legion::physics
 
             math::quat bfr = rbRot;
 
-
-          
             if (!math::epsilonEqual(dtAngle, 0.0f, math::epsilon<float>()))
             { 
                 math::vec3 axis = math::normalize(rb.angularVelocity);
@@ -422,10 +424,11 @@ namespace legion::physics
                 math::quat glmQuat = math::angleAxis(dtAngle, axis);
                 rbRot = glmQuat * rbRot;
                 rbRot = math::normalize(rbRot);
-
             }
 
             math::quat afr = rbRot;
+
+
 
             //for now assume that there is no offset from bodyP
             rb.globalCentreOfMass = rbPos;

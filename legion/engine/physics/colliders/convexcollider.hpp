@@ -401,6 +401,18 @@ namespace legion::physics
 
         }
 
+        void CalculateLocalColliderCentroid()
+        {
+            math::vec3 localCentroid;
+
+            for (auto& vertex : vertices)
+            {
+                localCentroid += vertex;
+            }
+
+            localCentroid /= vertices.size();
+        }
+
         /**@brief Constructs a box-shaped convex hull based on the given parameters.
          * @param cubeParams The parameters that will be used to create the box.
         */
@@ -410,6 +422,8 @@ namespace legion::physics
             float halfWidth = cubeParams.width / 2;
             float halfBreath = cubeParams.breadth / 2;
             float halfHeight = cubeParams.height / 2;
+
+            
 
             // BOTTOM FACE          // TOP FACE
 
@@ -602,7 +616,7 @@ namespace legion::physics
 
             //check if halfEdge data structure was initialized correctly. this will be commented when I know it always works
             AssertEdgeValidity();
-
+            CalculateLocalColliderCentroid();
         }
 
         std::vector<HalfEdgeFace*>& GetHalfEdgeFaces() override
