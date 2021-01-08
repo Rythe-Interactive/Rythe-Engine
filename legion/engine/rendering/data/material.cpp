@@ -141,10 +141,10 @@ namespace legion::rendering
     std::vector<material> MaterialCache::get_all_materials()
     {
         std::vector<material> output;
-        for (auto& material : m_materials)
-        {
-            output.push_back(material.second);
-        }
+        //for (auto& material : m_materials)
+        //{
+        //    output.push_back(material.second);
+        //}
         return output;
     }
 

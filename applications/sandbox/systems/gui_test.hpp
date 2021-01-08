@@ -116,13 +116,11 @@ class GuiTestSystem : public System<GuiTestSystem>
        // base::End();
 
         gizmo::BeginFrame();
-        base::Begin("Hello World");
         gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::Begin("Edit Cube Transform");
         //cannot render more than one gizmo at once (and animator also uses one)
         //gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::End();
-        base::Begin("Save current scene");
 
         base::Begin("Edit Camera Transform");
 
@@ -151,7 +149,6 @@ class GuiTestSystem : public System<GuiTestSystem>
                 handle.write(p);    
             }
         }
-
         base::End();
 
 

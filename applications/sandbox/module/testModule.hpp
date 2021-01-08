@@ -32,8 +32,6 @@ public:
         reportSystem<ext::Animator>();
         reportSystem<ext::AnimationEditor>();
         reportSystem<TestSystem>();
-
-        reportComponentType<sah>();
         //reportSystem<SceneTestSystem1>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
