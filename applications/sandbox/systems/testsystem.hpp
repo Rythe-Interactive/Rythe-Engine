@@ -28,6 +28,8 @@
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 
 
+
+#include "animation_editor.hpp"
 #include "../data/animation.hpp"
 #include "../data/pp_blur.hpp"
 #include "../data/pp_edgedetect.hpp"
@@ -92,6 +94,7 @@ class TestSystem final : public System<TestSystem>
 public:
     ecs::entity_handle audioSphereLeft;
     ecs::entity_handle audioSphereRight;
+    ecs::entity_handle eventAudio;
 
     std::vector< ecs::entity_handle > physicsUnitTestCD;
     std::vector< ecs::entity_handle > physicsUnitTestCR;
@@ -137,7 +140,7 @@ public:
 
     virtual void setup()
     {
-        
+
 
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
@@ -201,6 +204,8 @@ public:
 
         bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
         bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
+
+        bindToEvent<ext::void_animation_event, &TestSystem::onVoidAnimationEvent>();
 
 #pragma endregion
 
@@ -515,7 +520,7 @@ public:
             ent.add_component(gfx::mesh_renderer(fixedSizeParticleMH, billboardH));
             ent.add_components<transform>(position(-9, 0.5, 8), rotation(), scale());
         }
-        
+
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
@@ -611,6 +616,21 @@ public:
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(axesH.get_mesh()), rendering::mesh_renderer(vertexColorH));
             ent.add_components<transform>();
+        }
+
+        {
+            eventAudio = createEntity();
+
+            auto segment = audio::AudioSegmentCache::createAudioSegment("e",
+                fs::view("assets://audio/fx/explosion.wav"));
+            audio::audio_source source;
+            source.setAudioHandle(segment);
+            source.disableSpatialAudio();
+            
+            eventAudio.add_components<transform>();
+            eventAudio.add_component<audio::audio_source>(source);
+
+
         }
 
         //position positions[1000];
@@ -752,6 +772,7 @@ public:
 
             audio::audio_source source;
             source.setAudioHandle(segment);
+            source.setLooping(true);
             audioSphereRight.add_component<audio::audio_source>(source);
         }
 #pragma endregion
@@ -800,7 +821,32 @@ public:
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
 
         createProcess<&TestSystem::update>("Update");
+        ext::AnimationEditor::onRenderCustomEventGUI(ext::void_animation_event::id, [this](id_type id, ext::animation_event_base* ebase)
+            {
+                imgui::base::Text("Void Animations Custom Edit Frontend!");
+
+                static bool showBaseRenderLayer = false;
+                if (imgui::base::Button(fmt::format("Show Base Renderer [{}]", showBaseRenderLayer).c_str()))
+                {
+                    showBaseRenderLayer = !showBaseRenderLayer;
+                }
+                imgui::base::Text(fmt::format("evtAudio is Playing: {}",eventAudio.read_component<audio::audio_source>().isPlaying()).c_str());
+
+
+                return showBaseRenderLayer;
+            });
         //createProcess<&TestSystem::drawInterval>("TestChain");
+    }
+
+
+
+    void onVoidAnimationEvent(ext::void_animation_event* evnt)
+    {
+        auto source = eventAudio.read_component<audio::audio_source>();
+        source.play();
+        eventAudio.get_component_handle<audio::audio_source>().write(source);
+
+        log::debug("received void animation_event");
     }
 
     void testPhysicsEvent(physics::trigger_event* evnt)

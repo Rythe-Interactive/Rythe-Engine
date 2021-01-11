@@ -281,7 +281,13 @@ namespace legion::core::ecs
         {
             get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value));
         }
-
+        /**@brief Shortcut to component_handle::write
+         */
+        template<typename component_type>
+        void write_component(const component_type& value)
+        {
+            get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value));
+        }
 
         /**@brief Add component to the entity.
          * @param componentTypeId Type id of component to add.

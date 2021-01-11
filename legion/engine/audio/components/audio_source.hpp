@@ -13,12 +13,13 @@ namespace legion::audio
     public:
         enum sound_properties
         {
-            pitch = 1,
-            gain = 2,
-            playState = 4,
-            doRewind = 8,
-            audioHandle = 16,
-            rollOffFactor = 32,
+            pitch =         1 << 0,
+            gain =          1 << 1,
+            playState =     1 << 2,
+            doRewind =      1 << 3,
+            audioHandle =   1 << 4,
+            rollOffFactor = 1 << 5,
+            looping =       1 << 6
         };
 
         enum playstate
@@ -189,6 +190,18 @@ namespace legion::audio
             return getChannels() == 1;
         }
 
+        void setLooping(bool state = false)
+        {
+            if(state != m_looping){
+                m_looping = state;
+                m_changes |= looping;
+            }
+        }
+        operator ALuint() const
+        {
+            return m_sourceId;
+        }
+
     private:
         /**
         * @brief Function to clear the changes that will be applied
@@ -205,6 +218,8 @@ namespace legion::audio
 
         float m_pitch = 1.0f;
         float m_gain = 1.0f;
+
+        bool m_looping = false;
 
         playstate m_playState = playstate::stopped;
         playstate m_nextPlayState = playstate::stopped;

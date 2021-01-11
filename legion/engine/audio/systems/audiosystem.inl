@@ -184,8 +184,21 @@ namespace legion::audio
             {
                 alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, source.m_rolloffFactor);
             }
+            if(source.m_changes & change::looping)
+            {
+                alSourcei(source,AL_LOOPING ,static_cast<int>(source.m_looping));
+            }
+
 
             source.clearChanges();
+
+            ALenum isPlaying;
+            alGetSourcei(source.m_sourceId,AL_SOURCE_STATE,&isPlaying);
+            if(isPlaying == AL_STOPPED){
+                source.m_playState = audio_source::stopped;
+                source.m_nextPlayState = audio_source::stopped;
+            }
+
             sourceHandle.write(source);
 
             openal_error();
@@ -281,7 +294,7 @@ namespace legion::audio
         alGenSources((ALuint)1, &source.m_sourceId);
         alSourcef(source.m_sourceId, AL_PITCH, 1);
         alSourcef(source.m_sourceId, AL_GAIN, 1);
-        alSourcef(source.m_sourceId, AL_LOOPING, AL_TRUE);
+        alSourcei(source.m_sourceId, AL_LOOPING, AL_FALSE);
 
         // 3D audio stuffs
         alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, 1.0f);

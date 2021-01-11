@@ -2,6 +2,8 @@
 
 namespace ext
 {
+    sparse_map<id_type, AnimationEditor::custom_render_gui_fn> AnimationEditor::m_guiRenderers;
+
     int detail::AnimationSequencer::GetFrameMin() const
     {
         //minimum frame in sequencer
@@ -24,13 +26,13 @@ namespace ext
     int detail::AnimationSequencer::GetItemTypeCount() const
     {
         //amount of unique data types
-        return 3;
+        return 4;
     }
 
     const char* detail::AnimationSequencer::GetItemTypeName(int type) const
     {
         //name of data type
-        return type == 0 ? "Position" : type == 1 ? "Rotation" : "Scale";
+        return type == 0 ? "Position" : type == 1 ? "Rotation" : type == 2 ? "Scale" : "Event";
     }
 
     const char* detail::AnimationSequencer::GetItemLabel(int index) const
@@ -55,14 +57,20 @@ namespace ext
         }
         if (std::holds_alternative<rotation>(std::get<2>(m_currentAnimation.data[index])))
         {
-            if (color) *color = 0xd08770FF;
+            if (color) *color = 0xD08770FF;
             if (type) *type = 1;
         }
         if (std::holds_alternative<scale>(std::get<2>(m_currentAnimation.data[index])))
         {
-            if (color) *color = 0xb48eadFF;
+            if (color) *color = 0xB48EADFF;
             if (type) *type = 2;
         }
+        if (std::holds_alternative<event_t>(std::get<2>(m_currentAnimation.data[index])))
+        {
+            if (color) *color = 0x88C0D0FF;
+            if (type) *type = 3;
+        }
+
 
     }
 
@@ -89,6 +97,11 @@ namespace ext
             {
                 anim.scale_key_frames.emplace_back(end - start, std::get<scale>(variant));
             }
+            if (std::holds_alternative<event_t>(variant))
+            {
+                auto& ev = std::get<event_t>(variant);
+                anim.events.emplace_back(start, std::make_pair(ev.first, ev.second));
+            }
         }
 
         //write internal animation data
@@ -97,9 +110,12 @@ namespace ext
         anim.p_accumulator = m_savedAnimationData.pa;
         anim.r_accumulator = m_savedAnimationData.ra;
         anim.s_accumulator = m_savedAnimationData.sa;
+        anim.e_accumulator = m_savedAnimationData.ea;
+
         anim.p_index = m_savedAnimationData.pi;
         anim.r_index = m_savedAnimationData.ri;
         anim.s_index = m_savedAnimationData.si;
+        anim.e_index = m_savedAnimationData.ei;
         anim.looping = m_savedAnimationData.looping;
         anim.running = m_savedAnimationData.running;
 
@@ -115,6 +131,8 @@ namespace ext
             m_currentAnimation.data.emplace_back(0, 0, rotation());
         if (type == 2)
             m_currentAnimation.data.emplace_back(0, 0, scale());
+        if (type == 3)
+            m_currentAnimation.data.emplace_back(0, 0, std::make_pair(std::make_shared<animation_event_base>(), void_animation_event::id));
     }
 
     void detail::AnimationSequencer::Del(int index)
@@ -143,40 +161,49 @@ namespace ext
             m_savedAnimationData.pa = anim->p_accumulator;
             m_savedAnimationData.ra = anim->r_accumulator;
             m_savedAnimationData.sa = anim->s_accumulator;
+            m_savedAnimationData.ea = anim->e_accumulator;
             m_savedAnimationData.pi = anim->p_index;
             m_savedAnimationData.ri = anim->r_index;
             m_savedAnimationData.si = anim->s_index;
+            m_savedAnimationData.ei = anim->e_index;
             m_savedAnimationData.looping = anim->looping;
             m_savedAnimationData.running = anim->running;
 
             //iterate over keyframes and convert to dps
-            int start = 0;
+            float start = 0;
             for (auto& entry : anim->position_key_frames)
             {
                 //here we need to calculate a start and an end, since the keyframes only have a duration
-                m_currentAnimation.data.emplace_back(start, entry.first + start, entry.second);
+                m_currentAnimation.data.emplace_back(static_cast<int>(start), entry.first + start, entry.second);
 
                 //we also add spacing otherwise the dps would overlap in the sequencer
-                start += entry.first + 1;
+                start += entry.first + 1.0f;
             }
 
             start = 0;
             for (auto& entry : anim->rotation_key_frames)
             {
-                m_currentAnimation.data.emplace_back(start, entry.first + start, entry.second);
-                start += entry.first + 1;
+                m_currentAnimation.data.emplace_back(static_cast<int>(start), entry.first + start, entry.second);
+                start += entry.first + 1.0f;
             }
 
             start = 0;
             for (auto& entry : anim->scale_key_frames)
             {
-                m_currentAnimation.data.emplace_back(start, entry.first + start, entry.second);
-                start += entry.first + 1;
+                m_currentAnimation.data.emplace_back(static_cast<int>(start), entry.first + start, entry.second);
+                start += entry.first + 1.0f;
             }
+            for (auto& [frame, entry] : anim->events)
+            {
+                event_t ev = std::make_pair(entry.first, entry.second);
+                m_currentAnimation.data.emplace_back(static_cast<int>(frame), static_cast<int>(frame + 1.0f), ev);
+
+            }
+
         }
     }
 
-    std::variant<position, rotation, scale>& detail::AnimationSequencer::GetDataPointAt(int index)
+    detail::AnimationSequencer::holder& detail::AnimationSequencer::GetDataPointAt(int index)
     {
         //return the variant that contains the data
         return std::get<2>(m_currentAnimation.data.at(index));
@@ -246,7 +273,7 @@ namespace ext
         base::End();
 
         //check if the user selected something in the sequencer window
-        if (m_selectedEntry != -1)
+        if (m_selectedEntry != -1 && m_selectedEntry < m_sequencer.GetItemCount())
         {
             //prepare something things for the gizmos
             ////////////////////////////////////////////////////////////////////////
@@ -365,6 +392,54 @@ namespace ext
                     m_cubeEntity.get_component_handle<scale>().write(s);
                 }
             }
+            if (std::holds_alternative<detail::AnimationSequencer::event_t>(dp))
+            {
+                auto& [event_pointer, id] = std::get<detail::AnimationSequencer::event_t>(dp);
+                bool render_base_gui = true;
+
+                if (m_guiRenderers.contains(id))
+                {
+                    render_base_gui = m_guiRenderers[id](id, event_pointer.get());
+                }
+                if (render_base_gui)
+                {
+
+                    char vbuffer[512]{ 0 };
+
+                    base::InputScalar("ID", ImGuiDataType_U64, &id);
+
+                    base::PushItemWidth(200);
+
+                    base::Text("Event Parameters");
+                    base::Separator();
+                    for (const auto& [key, value] : event_pointer->enumerate_params())
+                    {
+                        memcpy(vbuffer, value.data(), value.size() + 1);
+                        base::Text(key.c_str());
+                        base::SameLine();
+                        base::InputText(("##" + key).c_str(), vbuffer, 512);
+                        event_pointer->receive_param(key, vbuffer);
+                    }
+
+                    base::Separator();
+
+                    static char newkbuffer[512]{ 0 }, newvbuffer[512]{ 0 };
+                    base::Text("Key");
+                    base::SameLine();
+                    base::InputText("##Key", newkbuffer, 512);
+                    base::SameLine();
+                    base::Text("Value");
+                    base::SameLine();
+                    base::InputText("##Value", newvbuffer, 512);
+                    base::PopItemWidth();
+
+                    if (base::Button("Add"))
+                    {
+                        event_pointer->receive_param(newkbuffer, newvbuffer);
+                    }
+                }
+            }
+
             //don't need that little helper macro anymore
             #undef  MAP_XYZ_TO_012
 

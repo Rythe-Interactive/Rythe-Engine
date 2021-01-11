@@ -38,7 +38,10 @@ namespace ext
         const auto posptr = jptr("/animation/positions");
         const auto rotptr = jptr("/animation/rotations");
         const auto sclptr = jptr("/animation/scales");
+        const auto evtptr = jptr("/animation/events");
         const auto loopingptr = jptr("/animation/looping");
+
+
 
 
         //read the looping value from the json
@@ -49,6 +52,7 @@ namespace ext
         auto positions = j.value(posptr, json::array());
         auto rotations = j.value(rotptr, json::array());
         auto scales = j.value(sclptr, json::array());
+        auto events = j.value(evtptr, json::array());
 
         //parse position arrays
         for (auto& elem : positions)
@@ -93,6 +97,37 @@ namespace ext
                     core::scale(detail::vec3_from_json_array(pl->get<json::array_t>())));
             }
         }
+
+        //parse events
+        for (auto& elem : events)
+        {
+            id_type id = invalid_id;
+            float trigger = std::numeric_limits<float>::max();
+            std::unordered_map<std::string, std::string> meta;
+            for (auto& [key, value] : elem.items())
+            {
+                if (key == "id") {
+                    id = value.get<id_type>();
+                }
+                else if(key == "trigger")
+                {
+                    trigger = value.get<float>();
+                }
+                else {
+                    meta[key] = value.get<std::string>();
+                }
+            }
+            if(id != invalid_id && trigger != std::numeric_limits<float>::max())
+            {
+                auto ptr = std::shared_ptr<animation_event_base>(
+                    std::make_shared<void_animation_event>());
+                ptr->m_params = meta;
+                auto pair = std::make_pair(std::move(ptr),id);
+
+                anim->events.emplace_back(trigger,std::move(pair));
+            }
+
+        }
     }
 
     void animation::to_resource(core::filesystem::basic_resource* resource, const animation& anim)
@@ -105,6 +140,7 @@ namespace ext
                 {"positions",json::array()},
                 {"rotations",json::array()},
                 {"scales",json::array()},
+                {"events",json::array()},
                 {"looping",anim.looping}
             }
         );
@@ -117,6 +153,20 @@ namespace ext
         }
         for (const auto& [duration, sc] : anim.scale_key_frames) {
             j["animation"]["scales"] += json::object({ {"duration",duration},{"payload",json::array({sc.x,sc.y,sc.z})} });
+        }
+
+        for (const auto& [trig, ev] : anim.events) {
+
+            const auto& [evptr,id] = ev;
+            auto evobj = json::object({{"id",id},{"trigger",trig}});
+            for(auto& [key,value]: evptr->m_params)
+            {
+                evobj[key] = value;
+            }
+
+            j["animation"]["events"] += evobj;
+
+
         }
 
         *(resource) = core::filesystem::basic_resource(j.dump(4));
