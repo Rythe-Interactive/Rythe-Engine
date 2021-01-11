@@ -67,7 +67,7 @@ public:
 
         for (auto position : m_positions)
         {
-            //Checks the emitter if it has a recycled particle to use, if not it creates a new one.
+            ////Checks the emitter if it has a recycled particle to use, if not it creates a new one.
             //ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter_handle);
             //auto ent = particleComponent.entity;
             ////Checks if the entity has a transform, if not it adds one.
@@ -106,7 +106,7 @@ public:
         }
         tree.GetAverage();
 
-        int depth = 3;
+        int depth = 4;
         auto data = tree.GetData(depth);
         float treeSize = (universalMax - universalMin);
         float pointSizeModifier = treeSize / (float)((depth + 1) * 8);
@@ -114,7 +114,7 @@ public:
         log::debug("point items :" + std::to_string(data.size()));
         for (auto item : data)
         {
-            //  log::debug(item);
+           // log::debug(item);
             ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter_handle);
             auto ent = particleComponent.entity;
             //Checks if the entity has a transform, if not it adds one.

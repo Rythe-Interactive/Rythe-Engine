@@ -34,6 +34,9 @@ public:
     {
         //get mesh
         ModelCache::create_model("cube", "assets://models/Cube.obj"_view);
+        ModelCache::create_model("plane", "assets://models/plane.obj"_view);
+        ModelCache::create_model("billboard", "assets://models/billboard.obj"_view);
+
         ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
         ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
         ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
@@ -41,6 +44,7 @@ public:
 
         //create particle system material
         material_handle particleMaterial;
+        material_handle billboardMat;
         rendering::material_handle rockH;
         //rendering::texture m_normalMap;
         rendering::texture_handle m_normalMap;
@@ -49,11 +53,19 @@ public:
         {
             app::context_guard guard(window);
             auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
+            auto billBoardsh = rendering::ShaderCache::create_shader("billboard", "assets://shaders/pointShader.shs"_view);
+            billboardMat = rendering::MaterialCache::create_material("billboardMat", billBoardsh);
+            billboardMat.set_param("fixedSize", 1);
+            billboardMat.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/sphere.png"_view));
+            billboardMat.set_param("_color", math::colors::blue);
+
             particleMaterial = rendering::MaterialCache::create_material("directional light", colorshader);
             particleMaterial.set_param("color", math::colors::blue);
 
-            image = ImageCache::create_image("normal image", "assets://textures/test-height.png"_view);
-          //  image = ImageCache::create_image("normal image", "assets://textures/rock-height.png"_view);
+            //    image = ImageCache::create_image("normal image", "assets://textures/test-height.png"_view);
+              //  billboardMat.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+
+            image = ImageCache::create_image("normal image", "assets://textures/rock-height.png"_view);
         }
 
         mesh_handle uvMesh = MeshCache::get_handle("uvsphere");
@@ -63,7 +75,7 @@ public:
 
         auto ent2 = createEntity();
         auto trans2 = ent2.add_components<transform>(position(5, 0, 0), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(cubeMesh, trans2, particleMaterial, image, 3000, 1.0f));
+        ent2.add_component<point_cloud>(point_cloud(uvMesh, trans2, billboardMat, image, 10000, 10));
     }
 };
 
