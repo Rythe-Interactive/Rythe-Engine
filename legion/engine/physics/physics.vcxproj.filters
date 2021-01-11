@@ -164,10 +164,10 @@
     <ClInclude Include="mesh_splitter_utils\intersection_edge_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\physics_fracture_test_system.hpp">
+    <ClInclude Include="components\fracturer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\fracturer.h">
+    <ClInclude Include="systems\physics_fracture_test_system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

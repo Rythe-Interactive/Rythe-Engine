@@ -785,14 +785,14 @@ public:
         //setupPhysicsStackingUnitTest(cubeH,uvH,textureH);
 
         //setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH,texture2H);
-        setupPhysicsCompositeTest(cubeH, texture2H);
+        //setupPhysicsCompositeTest(cubeH, texture2H);
         //setupPhysicsCRUnitTest(cubeH, texture2H);
 
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 1.0f;
         cubeParams.width = 1.0f;
         cubeParams.height = 1.0f;
-        setupPhysicsCRUnitTest(cubeH, uvH);
+        //setupPhysicsCRUnitTest(cubeH, uvH);
 
 
         //auto sceneEntity = createEntity();
@@ -1529,24 +1529,24 @@ public:
 
             //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(staticToOBBEnt);
             //renderableHandle.write({ cubeH, wireframeH });
-            staticToOBBEnt.add_components<rendering::mesh_renderable>
-                (mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
+            //staticToOBBEnt.add_components<rendering::mesh_renderable>
+                //(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
         //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
         //    positionH.write(math::vec3(testPos, -0.0f, 2.0f));
         //    scaleH.write(math::vec3(1.0f));
 
-            auto rot = rotationH.read();
+            //auto rot = rotationH.read();
             /*rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
             rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));
             rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));*/
             //rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-            rotationH.write(rot);
+            //rotationH.write(rot);
 
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToOBBEnt);
-            auto id = idHandle.read();
-            id.id = "NON_STATIC";
-            idHandle.write(id);
+            //auto idHandle = m_ecs->createComponent<physics::identifier>(staticToOBBEnt);
+            //auto id = idHandle.read();
+            //id.id = "NON_STATIC";
+            //idHandle.write(id);
 
 
         //    //log::debug("rb.angularVelocity {}", rb.angularVelocity);
@@ -1916,103 +1916,7 @@ public:
     }
     //20,0,15
 
-    void setupPhysicsCompositeTest(rendering::model_handle cubeH, rendering::material_handle textureH)
-    {
-        float testPos = 20.f;
-        physics::cube_collider_params cubeParams;
-        cubeParams.breadth = 1.0f;
-        cubeParams.width = 1.0f;
-        cubeParams.height = 1.0f;
-
-        physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 2.0f;
-        staticBlockParams.width = 2.0f;
-        staticBlockParams.height = 1.0f;
-
-        //BLOCK
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(2.0f, 1.0f, 2.0f));
-
-            //auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-           /* physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);*/
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "STATIC_BLOCK";
-            idHandle.write(id);
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "STATIC_BLOCK";
-            idHandle.write(id);
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -1.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "NON_STATIC";
-            idHandle.write(id);
-
-            //rotation *= math::angleAxis(math::deg2rad(30.0f), math::vec3(1, 0, 0));
-
-            auto rbHandle = ent.add_component<physics::rigidbody>();
-        }
-
-
-
-
-
-    }
+   
 
 
 #pragma region input stuff
@@ -2307,7 +2211,7 @@ public:
             }
         }*/
 
-        sahQuery.queryEntities();
+        /*sahQuery.queryEntities();
         for (auto entity : sahQuery)
         {
             auto rot = entity.read_component<rotation>();
@@ -2335,7 +2239,7 @@ public:
             }
         }
 
-        static auto posQuery = createQuery<position>();
+        static auto posQuery = createQuery<position>();*/
 
         //posQuery.queryEntities();
         //for (auto entity : posQuery)

@@ -1,4 +1,4 @@
-#include <physics/systems/physics_fracture_test_system.hpp>
+#include <physics/systems/physics_fracture_test_system.h>
 #include <physics/mesh_splitter_utils/mesh_splitter.hpp>
 #include <physics/mesh_splitter_utils/splittable_polygon.h>
 #include <physics/components/physics_component.hpp>
@@ -44,6 +44,9 @@ namespace legion::physics
         bindToEvent<nextPhysicsTimeStepContinue, &PhysicsFractureTestSystem::OneTimeContinuePhysics>();
 
         #pragma endregion
+
+        compositeColliderTest();
+
 
        /* meshSplittingTest(planeH, cubeH
             , cylinderH, complexH, textureH);*/
@@ -666,6 +669,117 @@ namespace legion::physics
         }
     }
 
+    void PhysicsFractureTestSystem::compositeColliderTest()
+    {
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.width = 1.0f;
+        cubeParams.height = 1.0f;
+
+        //-------------------------------------------------------------------------------------------------------------------------------//
+                                                        //COMPOSITE
+        //-------------------------------------------------------------------------------------------------------------------------------//
+
+        ecs::entity_handle composite;
+        {
+            composite = m_ecs->createEntity();
+
+
+            auto entPhyHande = composite.add_component<physics::physicsComponent>();
+            composite.add_component < physics::rigidbody>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+            physicsComponent2.AddBox(cubeParams);
+
+            //physicsComponent2.AddBox(cube_collider_params(1.0f,1.0f,1.0f,math::vec3(0.5f,-0.5f,0.5f)));
+
+            entPhyHande.write(physicsComponent2);
+
+            composite.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(composite);
+            positionH.write(math::vec3(10, 5.0f, 10.0f));
+            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+
+            auto rotation = rotationH.read();
+
+            composite.write_component(rotation);
+
+        }
+
+        ecs::entity_handle floor;
+        {
+            auto ent = m_ecs->createEntity();
+            floor = ent;
+
+            auto entPhyHande = floor.add_component<physics::physicsComponent>();
+
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(10, 2.0f, 10.0f));
+            scaleH.write(math::vec3(5.0f, 1.0f,5.0f));
+
+            auto rotation = rotationH.read();
+
+            ent.write_component(rotation);
+
+        }
+
+    }
+
+    void PhysicsFractureTestSystem::fractureTest()
+    {
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.width = 1.0f;
+        cubeParams.height = 1.0f;
+
+        //-------------------------------------------------------------------------------------------------------------------------------//
+                                                       //WALL
+        //-------------------------------------------------------------------------------------------------------------------------------//
+
+        ecs::entity_handle wall;
+        {
+            wall = m_ecs->createEntity();
+
+
+            auto entPhyHande = wall.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            wall.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(wall);
+            positionH.write(math::vec3(10, 2.0f, 10.0f));
+            scaleH.write(math::vec3(1.0f, 3.0f, 5.0f));
+
+            auto rotation = rotationH.read();
+
+            wall.write_component(rotation);
+
+        }
+
+        //-------------------------------------------------------------------------------------------------------------------------------//
+                                                     //THROWN OBJECT TEST 
+        //-------------------------------------------------------------------------------------------------------------------------------//
+    }
+
     void PhysicsFractureTestSystem::OnSplit(physics_split_test* action)
     {
   
@@ -687,6 +801,9 @@ namespace legion::physics
             }
         }
     }
+
+
+
 }
 
 

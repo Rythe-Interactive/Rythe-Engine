@@ -20,20 +20,23 @@ namespace legion::physics
         log::debug("-------------------- SAT CHECK -----------------");
         PointerEncapsulator < HalfEdgeFace> ARefFace;
 
+        log::debug("Face Check A");
         float ARefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(
             this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation) || !ARefFace.ptr)
         {
+            log::debug("Not Found on A ");
             manifold.isColliding = false;
             return;
         }
-        
+     
         PointerEncapsulator < HalfEdgeFace> BRefFace;
-      
+        log::debug("Face Check B");
         float BRefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
             this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
+            log::debug("Not Found on B ");
             manifold.isColliding = false;
             return;
         }
@@ -43,10 +46,11 @@ namespace legion::physics
 
         math::vec3 edgeNormal;
         float aToBEdgeSeperation;
-
+        log::debug("Edge Check");
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformB, manifold.transformA,
             edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation))
         {
+            log::debug("aToBEdgeSeperation {} " , aToBEdgeSeperation);
             manifold.isColliding = false;
             return;
         }

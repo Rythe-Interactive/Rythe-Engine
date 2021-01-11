@@ -148,7 +148,7 @@ namespace legion::physics
                             if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
                             {
                                 //get world edge direction
-                                math::vec3 edgeADirection= transformA * math::vec4(edgeA->nextEdge->edgePosition, 1) - 
+                                math::vec3 edgeADirection = transformA * math::vec4(edgeA->nextEdge->edgePosition, 1) - 
                                     transformA * math::vec4(edgeA->edgePosition, 1);
 
 
@@ -180,7 +180,7 @@ namespace legion::physics
 
                                 //check if given edges create a seperating axis
                                 float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
-                               
+                                //log::debug("distance {} , currentMinimumSeperation {}", distance, currentMinimumSeperation);
                                 if (distance < currentMinimumSeperation)
                                 {                                 
                                     refEdge.ptr = edgeA;
@@ -189,14 +189,21 @@ namespace legion::physics
                                     seperatingAxisFound = seperatingAxis;
                                     currentMinimumSeperation = distance;
                                 }
-
+                                //log::debug("BUILT MINKOWSKI");
+                            }
+                            else
+                            {
+                                //log::debug("NOT BUILT");
                             }
                         }
                     }
                 }
             }
-
+            assert(refEdge.ptr);
+            assert(incEdge.ptr);
             //log::debug("a id  {}  b id {} combination {} ", std::get<0>(ids), std::get<1>(ids), std::get<2>(ids));
+            //refEdge.ptr->DEBUG_drawEdge(transformA, math::colors::red);
+            //incEdge.ptr->DEBUG_drawEdge(transformB, math::colors::red);
             maximumSeperation = currentMinimumSeperation;
             return currentMinimumSeperation > 0.0f;
         }
@@ -543,7 +550,9 @@ namespace legion::physics
             float dotMultiplyResultA =
                 planeADotB1 * planeADotB2;
 
-            if (dotMultiplyResultA > 0.0f || math::epsilonEqual(dotMultiplyResultA, 0.0f, math::epsilon<float>()))
+            //log::debug("dotMultiplyResultA {}", dotMultiplyResultA);
+
+            if (dotMultiplyResultA > 0.0f )
             {
                 return false;
             }
@@ -557,7 +566,9 @@ namespace legion::physics
 
             float  dotMultiplyResultB = planeBDotA1 * planeBDotA2;
 
-            if (dotMultiplyResultB > 0.0f || math::epsilonEqual(dotMultiplyResultB, 0.0f, math::epsilon<float>()))
+            //log::debug("dotMultiplyResultB {}", dotMultiplyResultB);
+
+            if (dotMultiplyResultB > 0.0f )
             {
                 return false;
             }
@@ -566,7 +577,9 @@ namespace legion::physics
 
             float dotMultiplyResultAB = planeADotB1 * planeBDotA2;
 
-            if (planeADotB1  * planeBDotA2  < 0.0f || math::epsilonEqual(dotMultiplyResultAB, 0.0f, math::epsilon<float>()))
+            //log::debug("dotMultiplyResultAB {}", dotMultiplyResultAB);
+
+            if (planeADotB1  * planeBDotA2  < 0.0f)
             {
                 return false;
             }

@@ -32,6 +32,9 @@ namespace legion::physics
 
         void OneTimeContinuePhysics(nextPhysicsTimeStepContinue * action);
 
+        void compositeColliderTest();
+            
+        void fractureTest();
         rendering::material_handle textureH;
 
         rendering::model_handle cubeH;
