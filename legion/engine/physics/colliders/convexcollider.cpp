@@ -15,26 +15,29 @@ namespace legion::physics
 
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA
+        
 
+        log::debug("-------------------- SAT CHECK -----------------");
         PointerEncapsulator < HalfEdgeFace> ARefFace;
 
         float ARefSeperation;
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation) || !ARefFace.ptr)
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(
+            this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation) || !ARefFace.ptr)
         {
             manifold.isColliding = false;
             return;
         }
-
+        
         PointerEncapsulator < HalfEdgeFace> BRefFace;
       
         float BRefSeperation;
-        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider, this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
+            this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
             manifold.isColliding = false;
             return;
         }
 
-  
         PointerEncapsulator< HalfEdgeEdge> edgeRef;
         PointerEncapsulator< HalfEdgeEdge> edgeInc;
 
@@ -73,15 +76,7 @@ namespace legion::physics
 
         std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery, abPenetrationQuery, baPenetrationQuery  };
 
-        auto lessThan
-        {
-            []( std::shared_ptr<PenetrationQuery> lhs,  std::shared_ptr<PenetrationQuery> rhs)
-            {
-            return lhs->penetration < rhs->penetration;
-            }
-        };
-
-        //manifold.penetrationInformation = *std::max_element(penetrationQueryArray.begin(), penetrationQueryArray.end(),lessThan);
+        //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
 
         if (abPenetrationQuery->penetration + physics::constants::faceToFacePenetrationBias >
             baPenetrationQuery->penetration)
