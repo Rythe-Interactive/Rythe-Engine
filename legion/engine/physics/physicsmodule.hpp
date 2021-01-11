@@ -4,6 +4,7 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
+#include <physics/mesh_splitter_utils/mesh_splitter.hpp>
 
 namespace legion::physics
 {
@@ -18,7 +19,8 @@ namespace legion::physics
             reportComponentType<physicsComponent>();
             reportComponentType<rigidbody>();
             reportComponentType<identifier>();
-
+            reportComponentType<MeshSplitter>();
+            //reportComponentType <addRB>();
         }
 
         virtual priority_type priority() override

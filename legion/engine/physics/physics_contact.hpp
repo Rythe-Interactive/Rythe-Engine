@@ -135,11 +135,14 @@ namespace legion::physics
 
             float minJV = -(JVx + JVy + JVz + JVw);
 
+
+            //log::debug("CALCULATE");
+
             //-------------------------- Positional Constraint ----------------------------------//
 
 			//resolve the position violation by adding it into the lambda
 			float penetration = math::dot(RefWorldContact - IncWorldContact, -collisionNormal);
-
+            
             //but allow some penetration for the sake of stability
             penetration = math::min(penetration + physics::constants::baumgarteSlop, 0.0f);
 
@@ -152,14 +155,21 @@ namespace legion::physics
 
             math::vec3 minWaCrossRa = math::cross(-wa, Ra);
             math::vec3 WbCrossRb = math::cross(wb, Rb);
+
             //restitution is based on the relative velocities of the 2 rigidbodies
-            float restitutionConstraint = math::dot((-va + minWaCrossRa + vb + WbCrossRb),collisionNormal) * restCoeff;
+            float dotResult = math::dot((-va + minWaCrossRa + vb + WbCrossRb), collisionNormal);
+
+            float restitutionConstraint = dotResult * restCoeff;
+
             restitutionConstraint = math::max(restitutionConstraint - physics::constants::restitutionSlop, 0.0f);
 
             //-------------------------- Velocity Constraint ----------------------------------//
+
+
+
             float biasFactor = baumgarteConstraint + restitutionConstraint;
 			
-			float foundLambda = (minJV + biasFactor ) / effectiveMass;
+			float foundLambda = (minJV + biasFactor) / effectiveMass;
 
 			float oldTotalLambda = totalLambda;
 			totalLambda += foundLambda;
@@ -168,10 +178,7 @@ namespace legion::physics
 
 			float lambdaApplied = totalLambda - oldTotalLambda;
 
-            auto idHandleRef = rbRefHandle.entity.get_component_handle<identifier>();
-            auto idHandleInc = rbIncHandle.entity.get_component_handle<identifier>();
-
-			ApplyImpulse(collisionNormal, lambdaApplied,
+    		ApplyImpulse(collisionNormal, lambdaApplied,
 				Ra, Rb);
 
 		}
@@ -356,7 +363,7 @@ namespace legion::physics
 
 		void logRigidbodyState()
 		{
-			//log::debug("//--------logRigidbodyState----------//");
+			log::debug("//--------logRigidbodyState----------//");
 			auto incRb = rbIncHandle.read();
 			auto refRb = rbRefHandle.read();
 			log::debug("incRb.velocity {} ", math::to_string(incRb.velocity));

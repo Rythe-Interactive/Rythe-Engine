@@ -1,5 +1,6 @@
 #include <physics/halfedgeface.hpp>
 #include <physics/halfedgeedge.hpp>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::physics
 {
@@ -8,6 +9,7 @@ namespace legion::physics
         /*log::debug("HalfEdgeFace::HalfEdgeFace");*/
         static int faceCount = 0;
 
+        DEBUG_color =math::color( math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f));
         math::vec3 faceCenter{ 0.0f };
         int edgeCount = 0;
 
@@ -240,6 +242,18 @@ namespace legion::physics
         delete& middleEdge;
 
         return face;
+    }
+
+    void HalfEdgeFace::DEBUG_DrawFace(const math::mat4& transform,const math::color& debugColor,float time)
+    {
+
+        auto drawFunc = [&transform,debugColor,time](HalfEdgeEdge* edge)
+        {
+            edge->DEBUG_drawEdge(transform, debugColor, time);
+
+        };
+
+        forEachEdge(drawFunc);
     }
 
     HalfEdgeFace::~HalfEdgeFace()

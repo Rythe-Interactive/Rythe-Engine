@@ -10,7 +10,7 @@ namespace legion::physics
         math::vec3& pFaceCentroid, math::vec3& pNormal, float pPenetration, bool pIsARef)
         :  PenetrationQuery(pFaceCentroid,pNormal,pPenetration,pIsARef),refFace(pRefFace), incFace(pIncFace)
     {
-
+        debugID = "ConvexConvexPenetrationQuery";
     }
 
     void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform

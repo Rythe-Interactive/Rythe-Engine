@@ -178,6 +178,18 @@ namespace legion::core
         return { id };
     }
 
+    mesh_handle MeshCache::create_mesh(const std::string& name, const mesh& meshData)
+    {
+        id_type newId = nameHash(name); // Get the new id.
+
+        async::readwrite_guard guard(m_meshesLock);
+        auto* pair_ptr = new std::pair<async::rw_spinlock, mesh>();
+        pair_ptr->second = std::move(meshData);
+        m_meshes.emplace(newId, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>(pair_ptr));
+
+        return { newId };
+    }
+
     mesh_handle MeshCache::copy_mesh(const std::string& name, const std::string& newName)
     {
         OPTICK_EVENT();

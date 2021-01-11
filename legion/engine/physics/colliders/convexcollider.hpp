@@ -15,6 +15,7 @@ namespace legion::physics
     {
     public:
 
+
         ConvexCollider() = default;
 
         ~ConvexCollider()
@@ -44,7 +45,6 @@ namespace legion::physics
         */
         void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
 
-
         void PopulateContactPoints(std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) override
         {
             physicsCollider->PopulateContactPointsWith(this, manifold);
@@ -52,9 +52,14 @@ namespace legion::physics
 
         void PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
 
+        void UpdateTightBoundingVolume(const math::mat4& transform) override
+        {
+            UpdateTightAABB(transform);
+        }
+
         /**@brief Given the current transform of the entity, creates a tight AABB of the collider;
         */
-        void UpdateTightAABB(math::mat4 transform)
+        void UpdateTightAABB(const math::mat4& transform)
         {
 
         }
@@ -79,6 +84,7 @@ namespace legion::physics
         */
         void ConstructConvexHullWithMesh(legion::core::mesh_handle& meshHandle)
         {
+            
             // Step 0 - Create inital hull
             if (step == 0)
             {
@@ -649,6 +655,9 @@ namespace legion::physics
 
     private:
 
+
+        std::vector<math::vec3> vertices;
+
         HalfEdgeFace* instantiateMeshFace(const std::vector<math::vec3*>& vertices, const math::vec3& faceNormal)
         {
             if (vertices.size() == 0) { return nullptr; }
@@ -952,7 +961,7 @@ namespace legion::physics
             }
         }
 
-        std::vector<math::vec3> vertices;
+        
         std::vector<HalfEdgeFace*> halfEdgeFaces;
 
         // Convex hull generation debug stuffs
