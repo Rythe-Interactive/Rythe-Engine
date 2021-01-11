@@ -172,6 +172,7 @@ namespace legion::core
             auto& [positionH, rotationH, scaleH] = handles;
             return math::compose(scaleH.read(), rotationH.read(), positionH.read());
         }
+
     };
 
     struct velocity : public math::vec3
