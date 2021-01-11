@@ -71,7 +71,7 @@ class GuiTestSystem : public System<GuiTestSystem>
         gizmo::SetOrthographic(false);
         base::Begin("Edit Cube Transform");
         //cannot render more than one gizmo at once (and animator also uses one)
-        //gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
+        gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::End();
 
         base::Begin("Edit Camera Transform");

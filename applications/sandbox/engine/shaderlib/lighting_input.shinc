@@ -90,6 +90,6 @@ vec3 GetAllLighting(Material material, Camera camera, vec3 worldPosition)
     for(int i = 0; i < lgn_light_count; i++)
         lighting += CalculateLight(lights[i], camera, material, worldPosition);
 
-    return lighting + GetAmbientLight(material.ambientOcclusion, material.albedo.rgb) + material.emissive;
+    return lighting + GetAmbientLight(material.ambientOcclusion, material.albedo.rgb);
 }
 #endif

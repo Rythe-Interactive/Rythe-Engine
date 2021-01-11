@@ -18,6 +18,6 @@ shader(fragment)
     uniform vec4 color;
     void main(void)
     {
-        SubmitOutput(color);
+        SubmitOutput(color, GetWorldNormal(), GetWorldPosition(), color.xyz);
     }
 }

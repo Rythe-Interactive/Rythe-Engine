@@ -1,5 +1,4 @@
 #version 450
-#state CULL OFF
 
 generate(vertex, fragment)
 
@@ -18,7 +17,7 @@ shader(vertex)
         else
             gl_Position = BillboardModelToScreenSpacePosition(position);
 
-        PropagateStdIO();
+        PropagateStdIO((inverse(ViewProjectionMatrix) * gl_Position).xyz, (BillboardModelMatrix() * vec4(-stdin(normal), 0.0)).xyz);
     }
 }
 
@@ -28,6 +27,6 @@ shader(fragment)
 
     void main(void)
     {
-        fragment_color = texture(_texture, stdio(uv));
+        SubmitOutput(texture(_texture, stdio(uv)));
     }
 }

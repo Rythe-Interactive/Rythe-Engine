@@ -15,7 +15,6 @@ namespace legion::rendering
         shader_handle m_gaussianBlurShader;
         shader_handle m_combineShader;
 
-        texture_handle m_brightTexture;
         framebuffer m_pingpongFrameBuffers[2];
         texture_handle m_pingpongTextureBuffers[2];
 
@@ -28,9 +27,9 @@ namespace legion::rendering
               true,
               texture_mipmap::linear,
               texture_mipmap::linear,
-              texture_wrap::repeat,
-              texture_wrap::repeat,
-              texture_wrap::repeat
+              texture_wrap::mirror,
+              texture_wrap::mirror,
+              texture_wrap::mirror
         };
 
     public:
@@ -51,7 +50,7 @@ namespace legion::rendering
             {
                 m_pingpongFrameBuffers[i] = framebuffer(GL_FRAMEBUFFER);
                 m_pingpongTextureBuffers[i] = rendering::TextureCache::create_texture("blurTexture" + i, context.size(), settings);
-                m_pingpongFrameBuffers[i].attach(m_pingpongTextureBuffers[i], GL_COLOR_ATTACHMENT0);
+                m_pingpongFrameBuffers[i].attach(m_pingpongTextureBuffers[i], FRAGMENT_ATTACHMENT);
             }
             //Adding itself to the post processing renderpass.
             addRenderPass<&PostProcessingBloom::renderPass>();
@@ -66,52 +65,57 @@ namespace legion::rendering
         void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime)
         {
             //If a brightness threshold texture had not been created yet, create one.
-            if (!m_brightTexture)
+            texture_handle overdrawTexture;
+
             {
-                m_brightTexture = TextureCache::create_texture("brightTexture", colortexture.get_texture().size(), settings);
+                auto attachment = fbo.getAttachment(OVERDRAW_ATTACHMENT);
+                if (std::holds_alternative<texture_handle>(attachment))
+                    overdrawTexture = std::get<texture_handle>(attachment);
             }
+
             //Gets the size of the lighting data texture.
             math::ivec2 framebufferSize = colortexture.get_texture().size();
             //If brightness threshold texture has a different size than the lighting data, it will set it to the size of lighting data.
-            if (m_brightTexture.get_texture().size() != framebufferSize)
-                m_brightTexture.get_texture().resize(framebufferSize);
-
-            fbo.attach(m_brightTexture, GL_COLOR_ATTACHMENT1);
+            if (overdrawTexture.get_texture().size() != framebufferSize)
+                overdrawTexture.get_texture().resize(framebufferSize);
 
             //Brightness threshold stage
             fbo.bind();
             //Create 2 color attachments and add them the buffer.
-            uint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+            uint attachments[2] = { FRAGMENT_ATTACHMENT, OVERDRAW_ATTACHMENT };
             glDrawBuffers(2, attachments);
 
             //Bind and assign the brightness threshold shader.
             m_brightnessThresholdShader.bind();
             m_brightnessThresholdShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(colortexture);
+            m_brightnessThresholdShader.get_uniform_with_location<texture_handle>(SV_HDROVERDRAW).set_value(overdrawTexture);
             //Render onto the quad.
             renderQuad();
             //Release the shader.
             m_brightnessThresholdShader.release();
 
             //release the brightness texture from the renderbuffer.
-            uint attachment = GL_COLOR_ATTACHMENT0;
+            uint attachment = FRAGMENT_ATTACHMENT;
             glDrawBuffers(1, &attachment);
 
             //detach the second color attachment from the framebuffer.
             fbo.release();
-            fbo.detach(GL_COLOR_ATTACHMENT1);
 
             //Gaussian blur stage
             bool horizontal = true, first_iteration = true;
-            int amount = 10;
+            int amount = 2;
+
             //Bind and assign the viewport size to the gaussian blur shader.
             m_gaussianBlurShader.bind();
             m_gaussianBlurShader.get_uniform_with_location<math::ivec2>(SV_VIEWPORT).set_value(framebufferSize);
+
             //Resize the pingpong textures.
             if (m_pingpongTextureBuffers[0].get_texture().size() != framebufferSize)
             {
                 m_pingpongTextureBuffers[0].get_texture().resize(framebufferSize);
                 m_pingpongTextureBuffers[1].get_texture().resize(framebufferSize);
             }
+
             //This loop blurs the brightness threshold texture an x amount of times.
             for (uint i = 0; i < amount; i++)
             {
@@ -124,14 +128,14 @@ namespace legion::rendering
                 if (first_iteration)
                 {
                     first_iteration = false;
-                    m_gaussianBlurShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(m_brightTexture);
+                    m_gaussianBlurShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(overdrawTexture);
                 }
                 else
                 {
                     m_gaussianBlurShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(m_pingpongTextureBuffers[!horizontal]);
                 }
                 //Render the texture onto the quad, using the shader.
-                renderQuad(); 
+                renderQuad();
                 horizontal = !horizontal;
             }
             //release the last used framebuffer and shader.

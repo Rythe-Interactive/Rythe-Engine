@@ -32,6 +32,6 @@ shader(fragment)
 
         vec4 col = textureLod(floorTile, grid, mip);
         col.a *= alpha;
-        fragment_color = col;
+        SubmitOutput(col);
     }
 }

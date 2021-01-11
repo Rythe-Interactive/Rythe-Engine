@@ -261,16 +261,17 @@ public:
             vertexColorH = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
             uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.shs"_view);
 
-            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
-            directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
+            auto lightshader = rendering::ShaderCache::create_shader("light", "assets://shaders/light.shs"_view);
+            directionalLightMH = rendering::MaterialCache::create_material("directional light", lightshader);
             directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
 
-            spotLightMH = rendering::MaterialCache::create_material("spot light", colorshader);
+            spotLightMH = rendering::MaterialCache::create_material("spot light", lightshader);
             spotLightMH.set_param("color", math::colors::green);
 
-            pointLightMH = rendering::MaterialCache::create_material("point light", colorshader);
+            pointLightMH = rendering::MaterialCache::create_material("point light", lightshader);
             pointLightMH.set_param("color", math::colors::red);
 
+            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
             gizmoMH = rendering::MaterialCache::create_material("gizmo", colorshader);
             gizmoMH.set_param("color", math::colors::lightgrey);
 
@@ -515,28 +516,28 @@ public:
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
-            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
+            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 0.2f, 50.f));
             ent.add_components<transform>(position(-10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
-            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
+            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 0.2f, 50.f));
             ent.add_components<transform>(position(0, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
-            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 1.f, 100.f));
+            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 0.2f, 50.f));
             ent.add_components<transform>(position(10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
-            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
+            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 0.2f, 50.f));
             ent.add_components<transform>(position(0, 1, 0), rotation(), scale());
         }
 
@@ -544,7 +545,7 @@ public:
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
-            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
+            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 0.2f, 50.f));
             ent.add_components<transform>(position(-10, 1, 0), rotation(), scale());
         }
 
@@ -552,7 +553,7 @@ public:
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
-            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
+            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 0.2f, 50.f));
             ent.add_components<transform>(position(10, 1, 0), rotation(), scale());
         }
 

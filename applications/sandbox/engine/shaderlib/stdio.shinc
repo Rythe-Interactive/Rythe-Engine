@@ -102,8 +102,10 @@ struct CameraInput
 
 uniform CameraInput lgn_cmr_in : SV_CAMERA;
 
-uniform sampler2D lgn_sceneDepth : SV_SCENEDEPTH;
 uniform sampler2D lgn_sceneColor : SV_SCENECOLOR;
+uniform sampler2D lgn_sceneDepth : SV_SCENEDEPTH;
+uniform sampler2D lgn_sceneNormal : SV_SCENENORMAL;
+uniform sampler2D lgn_scenePosition : SV_SCENEPOSITION;
 uniform sampler2D lgn_hdrOverdraw : SV_HDROVERDRAW;
 
 #define ViewMatrix lgn_cmr_in.view
@@ -166,6 +168,16 @@ vec3 SceneDepth(vec2 uv)
     return texture(lgn_sceneDepth, uv).rgb;
 }
 
+vec3 SceneNormal(vec2 uv)
+{
+    return texture(lgn_sceneNormal, uv).rgb;
+}
+
+vec3 ScenePosition(vec2 uv)
+{
+    return texture(lgn_scenePosition, uv).rgb;
+}
+
 vec4 HDROverdraw(vec2 uv)
 {
     return texture(lgn_hdrOverdraw,uv);
@@ -177,18 +189,49 @@ float LinearDepth(float depth)
 }
 
 #if defined(FRAGMENT_SHADER)
-
-#define SV_FRAGMENTOUT 0
-#define SV_HDROVERDRAWOUT 1
-
-#if !defined(NO_DEFAULT_OUT)
-out vec4 fragment_color : SV_FRAGMENTOUT;
-#endif
-
 #if !defined(NO_DEPTH_OUT)
 out float gl_FragDepth;
 
 #define fragment_depth gl_FragDepth
+#endif
+
+#if !defined(NO_DEFAULT_OUT)
+out vec4 fragment_color : SV_FRAGMENTOUT;
+out vec4 fragment_normal : SV_NORMALOUT;
+out vec4 fragment_position : SV_POSITIONOUT;
+out vec4 fragment_overdraw : SV_HDROVERDRAWOUT;
+
+void SubmitOutput(vec4 color)
+{
+    fragment_color = color;
+    fragment_normal = vec4(stdin(wnormal), 1.0);
+    fragment_position = vec4(stdin(wvertex), 1.0);
+    fragment_overdraw = vec4(vec3(0.0), 1.0);
+}
+
+void SubmitOutput(vec4 color, vec3 normal, vec3 position)
+{
+    fragment_color = color;
+    fragment_normal = vec4(normal, 1.0);
+    fragment_position = vec4(position, 1.0);
+    fragment_overdraw = vec4(vec3(0.0), 1.0);
+    #if !defined(NO_DEPTH_OUT)
+    vec4 screenpos = WorldToScreenSpacePosition(position);
+    fragment_depth = screenpos.z / screenpos.w;
+    #endif
+}
+
+void SubmitOutput(vec4 color, vec3 normal, vec3 position, vec3 emissive)
+{
+    fragment_color = color;
+    fragment_normal = vec4(normal, 1.0);
+    fragment_position = vec4(position, 1.0);
+    fragment_overdraw = vec4(emissive, 1.0);
+    #if !defined(NO_DEPTH_OUT)
+    vec4 screenpos = WorldToScreenSpacePosition(position);
+    fragment_depth = screenpos.z / screenpos.w;
+    #endif
+}
 #endif
 
 in vec4 gl_FragCoord;
@@ -213,6 +256,16 @@ vec3 SceneDepth()
     return texture(lgn_sceneDepth, gl_FragCoord.xy / lgn_cmr_in.viewportSize).rgb;
 }
 
+vec3 SceneNormal()
+{
+    return texture(lgn_sceneNormal, gl_FragCoord.xy / lgn_cmr_in.viewportSize).rgb;
+}
+
+vec3 ScenePosition()
+{
+    return texture(lgn_scenePosition, gl_FragCoord.xy / lgn_cmr_in.viewportSize).rgb;
+}
+
 vec4 HDROverdraw()
 {
     return texture(lgn_hdrOverdraw, gl_FragCoord.xy / lgn_cmr_in.viewportSize);
@@ -220,7 +273,7 @@ vec4 HDROverdraw()
 
 float LinearDepth()
 {
-       return lgn_cmr_in.posnearz.w * lgn_cmr_in.vdirfarz.w / (lgn_cmr_in.vdirfarz.w - gl_FragCoord.z * (lgn_cmr_in.posnearz.w - lgn_cmr_in.vdirfarz.w));
+	return lgn_cmr_in.posnearz.w * lgn_cmr_in.vdirfarz.w / (lgn_cmr_in.vdirfarz.w - gl_FragCoord.z * (lgn_cmr_in.posnearz.w - lgn_cmr_in.vdirfarz.w));
 }
 
 bool DepthCull(float depth)
@@ -231,6 +284,34 @@ bool DepthCull(float depth)
     //return LinearDepth() <= LinearDepth(depth) + 0.0001;
     return false;
     #endif
+}
+
+vec3 GetViewRay(vec3 worldPosition)
+{
+    vec4 viewSpacePos = ViewMatrix * vec4(worldPosition, 1.0);
+    return viewSpacePos.xyz / viewSpacePos.z;
+}
+
+vec3 ViewPositionFromDepth(float depth)
+{
+    vec4 clipSpacePos = vec4((ScreenUV() * vec2(2.0)) - vec2(1.0), depth, 1.0);
+    vec4 viewSpacePos = inverse(ProjectionMatrix) * clipSpacePos;
+    return viewSpacePos.xyz / viewSpacePos.w;
+}
+
+vec3 WorldPositionFromDepth(float depth, vec3 direction)
+{
+    vec4 clipSpacePos = vec4(vec2(0.0), depth, 1.0);
+    vec4 viewSpacePos = inverse(ProjectionMatrix) * clipSpacePos;
+
+    float eyeDepth = viewSpacePos.z / viewSpacePos.w;
+    vec3 viewSpaceResultPos = direction * eyeDepth;
+    return (inverse(ViewMatrix) * vec4(viewSpaceResultPos, 1.0)).xyz;
+}
+
+vec3 ViewToWorldSpacePostion(vec3 viewSpacePos)
+{
+    return (inverse(ViewMatrix) * vec4(viewSpacePos, 1.0)).xyz;
 }
 #endif
 
@@ -391,6 +472,19 @@ void PropagateStdIO()
     lgn_stdio.vertexcolor = vertexcolor;
     lgn_stdio.normal = normal;
     lgn_stdio.wnormal = GetWorldNormal();
+    lgn_stdio.tangent = tangent;
+    lgn_stdio.wtangent = GetWorldTangent(lgn_stdio.wnormal);
+    lgn_stdio.uv = uv;
+    lgn_stdio.modelMatrix = modelMatrix;
+}
+
+void PropagateStdIO(vec3 worldPosition, vec3 worldNormal)
+{
+    lgn_stdio.position = position;
+    lgn_stdio.wvertex = worldPosition;
+    lgn_stdio.vertexcolor = vertexcolor;
+    lgn_stdio.normal = normal;
+    lgn_stdio.wnormal = worldNormal;
     lgn_stdio.tangent = tangent;
     lgn_stdio.wtangent = GetWorldTangent(lgn_stdio.wnormal);
     lgn_stdio.uv = uv;

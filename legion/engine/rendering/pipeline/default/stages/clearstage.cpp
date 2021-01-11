@@ -37,8 +37,21 @@ namespace legion::rendering
 
         fbo->bind();
 
+        uint attachment = FRAGMENT_ATTACHMENT;
+        glDrawBuffers(1, &attachment);
+
         glClearColor(cam.clearColor.r, cam.clearColor.g, cam.clearColor.b, cam.clearColor.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+        uint metaAttachments[3] = { NORMAL_ATTACHMENT, POSITION_ATTACHMENT, OVERDRAW_ATTACHMENT };
+        glDrawBuffers(3, metaAttachments);
+
+        glClearColor(0.f, 0.f, 0.f, 0.f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        uint attachments[4] = { FRAGMENT_ATTACHMENT, NORMAL_ATTACHMENT, POSITION_ATTACHMENT, OVERDRAW_ATTACHMENT };
+        glDrawBuffers(4, attachments);
 
         fbo->release();
     }

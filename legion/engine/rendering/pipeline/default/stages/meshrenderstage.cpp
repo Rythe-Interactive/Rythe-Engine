@@ -18,8 +18,8 @@ namespace legion::rendering
         static id_type lightsId = nameHash("light buffer");
         static id_type lightCountId = nameHash("light count");
         static id_type matricesId = nameHash("model matrix buffer");
-        static id_type sceneColorId = nameHash("scene color");
-        static id_type sceneDepthId = nameHash("scene depth");
+        //static id_type sceneColorId = nameHash("scene color history");
+        //static id_type sceneDepthId = nameHash("scene depth history");
 
         auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
         if (!batches)
@@ -46,9 +46,25 @@ namespace legion::rendering
         }
 
         texture_handle sceneColor;
-        auto colorAttachment = fbo->getAttachment(GL_COLOR_ATTACHMENT0);
+        auto colorAttachment = fbo->getAttachment(FRAGMENT_ATTACHMENT);
         if (std::holds_alternative<texture_handle>(colorAttachment))
             sceneColor = std::get<texture_handle>(colorAttachment);
+
+        texture_handle sceneNormal;
+        auto normalAttachment = fbo->getAttachment(NORMAL_ATTACHMENT);
+        if (std::holds_alternative<texture_handle>(normalAttachment))
+            sceneNormal = std::get<texture_handle>(normalAttachment);
+
+        texture_handle scenePosition;
+        auto positionAttachment = fbo->getAttachment(POSITION_ATTACHMENT);
+        if (std::holds_alternative<texture_handle>(positionAttachment))
+            scenePosition = std::get<texture_handle>(positionAttachment);
+
+        texture_handle hdrOverdraw;
+        auto overdrawAttachment = fbo->getAttachment(OVERDRAW_ATTACHMENT);
+        if (std::holds_alternative<texture_handle>(overdrawAttachment))
+            hdrOverdraw = std::get<texture_handle>(overdrawAttachment);
+
         texture_handle sceneDepth;
         auto depthAttachment = fbo->getAttachment(GL_DEPTH_ATTACHMENT);
         if(std::holds_alternative<std::monostate>(depthAttachment))
@@ -85,6 +101,15 @@ namespace legion::rendering
 
             if (sceneColor && material.has_param<texture_handle>(SV_SCENECOLOR))
                 material.set_param<texture_handle>(SV_SCENECOLOR, sceneColor);
+
+            if (sceneNormal && material.has_param<texture_handle>(SV_SCENENORMAL))
+                material.set_param<texture_handle>(SV_SCENENORMAL, sceneNormal);
+
+            if (scenePosition && material.has_param<texture_handle>(SV_SCENEPOSITION))
+                material.set_param<texture_handle>(SV_SCENEPOSITION, scenePosition);
+
+            if (hdrOverdraw && material.has_param<texture_handle>(SV_HDROVERDRAW))
+                material.set_param<texture_handle>(SV_HDROVERDRAW, hdrOverdraw);
 
             if (sceneDepth && material.has_param<texture_handle>(SV_SCENEDEPTH))
                 material.set_param<texture_handle>(SV_SCENEDEPTH, sceneDepth);

@@ -17,6 +17,6 @@ shader(fragment)
 {
     void main(void)
     {
-        fragment_color = stdio(vertexcolor);
+        SubmitOutput(stdio(vertexcolor));
     }
 }
