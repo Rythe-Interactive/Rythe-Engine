@@ -17,6 +17,6 @@ shader(fragment)
 {
     void main(void)
     {
-        fragment_color = vec4(stdin(position), 1);
+        SubmitOutput(vec4(stdin(position), 1));
     }
 }

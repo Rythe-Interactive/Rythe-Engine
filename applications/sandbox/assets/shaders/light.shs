@@ -1,4 +1,9 @@
+///
+/// Shader for rendering light gizmos with a certain emission.
+///
+
 #version 450
+#define NO_DEPTH_OUT
 
 generate(vertex, fragment)
 
@@ -9,15 +14,16 @@ shader(vertex)
     void main(void)
     {
         gl_Position = ModelToScreenSpacePosition(position);
-        PropagateStdIO();
     }
 }
 
 shader(fragment)
 {
     uniform vec4 color;
+    uniform float intensity;
+
     void main(void)
     {
-        SubmitOutput(color);
+        SubmitOutput(color, vec3(0.0), vec3(0.0), color.rgb * intensity);
     }
 }

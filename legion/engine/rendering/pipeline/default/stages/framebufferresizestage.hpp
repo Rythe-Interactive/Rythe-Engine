@@ -10,6 +10,9 @@ namespace legion::rendering
 
         math::ivec2 m_framebufferSize;
         texture_handle m_colorTexture[2];
+        texture_handle m_normalTexture[2];
+        texture_handle m_positionTexture[2];
+        texture_handle m_overdrawTexture[2];
         texture_handle m_depthStencilTexture[2];
 
     public:

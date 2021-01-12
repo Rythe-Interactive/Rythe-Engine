@@ -20,6 +20,8 @@ namespace legion::rendering
 
         void setThreadPriority();
 
+        static RenderPipelineBase* m_currentPipeline;
+
     public:
         Renderer() : System<Renderer>()
         {
@@ -27,8 +29,6 @@ namespace legion::rendering
         }
 
         virtual void setup();
-
-        void onDebugLine(events::event_base* event);
 
         void onExit(events::exit* event);
 
@@ -38,6 +38,7 @@ namespace legion::rendering
         static void setPipeline(Args&&... args);
 
         L_NODISCARD static RenderPipelineBase* getPipeline(app::window& context);
+        L_NODISCARD static RenderPipelineBase* getCurrentPipeline();
         L_NODISCARD static RenderPipelineBase* getMainPipeline();
     };
 }
