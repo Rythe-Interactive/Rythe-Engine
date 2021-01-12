@@ -4,8 +4,8 @@
 #state ALPHA OFF
 
 generate(vertex, fragment)
-#include <stdio.shinc>
 
+#include <stdio.shinc>
 
 shader(vertex)
 {
@@ -23,7 +23,6 @@ shader(fragment)
     void main(void)
     {
         vec4 brightness = HDROverdraw(stdin(uv));
-
         fragment_color = vec4(SceneColor(stdin(uv)).rgb + brightness.rgb, 1.0);
     }
 }

@@ -27,8 +27,6 @@
 
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 
-#include "../data/pp_bloom.hpp"
-
 #include "../data/animation.hpp"
 
 using namespace legion;
@@ -204,6 +202,8 @@ public:
 #pragma endregion
 
 #pragma region Model and material loading
+        const float additionalLightIntensity = 0.5f;
+
         rendering::model_handle directionalLightH;
         rendering::model_handle spotLightH;
         rendering::model_handle pointLightH;
@@ -240,8 +240,6 @@ public:
             std::lock_guard guard(*window.lock);
             app::ContextHelper::makeContextCurrent(window);
 
-            rendering::PostProcessingStage::addEffect<rendering::PostProcessingBloom>();
-
             directionalLightH = rendering::ModelCache::create_model("directional light", "assets://models/directional-light.obj"_view);
             spotLightH = rendering::ModelCache::create_model("spot light", "assets://models/spot-light.obj"_view);
             pointLightH = rendering::ModelCache::create_model("point light", "assets://models/point-light.obj"_view);
@@ -267,9 +265,11 @@ public:
 
             spotLightMH = rendering::MaterialCache::create_material("spot light", lightshader);
             spotLightMH.set_param("color", math::colors::green);
+            spotLightMH.set_param("intensity", additionalLightIntensity);
 
             pointLightMH = rendering::MaterialCache::create_material("point light", lightshader);
             pointLightMH.set_param("color", math::colors::red);
+            pointLightMH.set_param("intensity", additionalLightIntensity);
 
             auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
             gizmoMH = rendering::MaterialCache::create_material("gizmo", colorshader);
@@ -516,28 +516,28 @@ public:
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
-            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 0.2f, 50.f));
+            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), additionalLightIntensity, 50.f));
             ent.add_components<transform>(position(-10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
-            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 0.2f, 50.f));
+            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), additionalLightIntensity, 50.f));
             ent.add_components<transform>(position(0, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(spotLightH.get_mesh()), rendering::mesh_renderer(spotLightMH));
-            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), 0.2f, 50.f));
+            ent.add_component<rendering::light>(rendering::light::spot(math::colors::green, math::deg2rad(45.f), additionalLightIntensity, 50.f));
             ent.add_components<transform>(position(10, 0.5, -10), rotation::lookat(math::vec3(0, 0, -1), math::vec3::zero), scale());
         }
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
-            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 0.2f, 50.f));
+            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, additionalLightIntensity, 50.f));
             ent.add_components<transform>(position(0, 1, 0), rotation(), scale());
         }
 
@@ -545,7 +545,7 @@ public:
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
-            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 0.2f, 50.f));
+            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, additionalLightIntensity, 50.f));
             ent.add_components<transform>(position(-10, 1, 0), rotation(), scale());
         }
 
@@ -553,7 +553,7 @@ public:
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
-            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 0.2f, 50.f));
+            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, additionalLightIntensity, 50.f));
             ent.add_components<transform>(position(10, 1, 0), rotation(), scale());
         }
 

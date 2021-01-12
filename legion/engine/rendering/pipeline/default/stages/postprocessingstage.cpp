@@ -87,8 +87,6 @@ namespace legion::rendering
             depthTexture = std::get<texture_handle>(depthAttachment);
         glDisable(GL_DEPTH_TEST);
 
-
-
         fbo->bind();
         uint attachment = FRAGMENT_ATTACHMENT;
         glDrawBuffers(1, &attachment);
@@ -120,11 +118,6 @@ namespace legion::rendering
             m_screenQuad.render();
             fbo->release();
         }
-
-        fbo->bind();
-        uint attachments[4] = { FRAGMENT_ATTACHMENT, NORMAL_ATTACHMENT, POSITION_ATTACHMENT, OVERDRAW_ATTACHMENT };
-        glDrawBuffers(4, attachments);
-        fbo->release();
 
         rendering::shader::release();
 
