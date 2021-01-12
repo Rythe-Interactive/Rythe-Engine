@@ -262,6 +262,7 @@ public:
             auto lightshader = rendering::ShaderCache::create_shader("light", "assets://shaders/light.shs"_view);
             directionalLightMH = rendering::MaterialCache::create_material("directional light", lightshader);
             directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
+            directionalLightMH.set_param("intensity", 1.f);
 
             spotLightMH = rendering::MaterialCache::create_material("spot light", lightshader);
             spotLightMH.set_param("color", math::colors::green);

@@ -6,6 +6,7 @@ generate(vertex, fragment)
 
 #include <stdio.shinc>
 #include <math_ext.shinc>
+#include <color_correction.shinc>
 
 shader(vertex)
 {
@@ -24,10 +25,10 @@ shader(fragment)
 
     void main(void)
     {
-        vec4 current = HDROverdraw(stdin(uv));
-        vec4 history = texture(overdrawHistory, stdin(uv));
+        vec3 current = HDROverdraw(stdin(uv)).rgb;
+        vec3 history = texture(overdrawHistory, stdin(uv)).rgb;
         fragment_color = vec4(0.0);
-        fragment_overdraw = vec4(mix(history.rgb, current.rgb, clamp(length(history) - length(current), 0.99, 1.0)), 1.0);
+        fragment_overdraw = vec4(mix(history, current, clamp(abs(Luminance(history) - Luminance(current)), 0.95, 1.0)), 1.0);
         fragment_normal = vec4(0.0);
         fragment_position = vec4(0.0);
     }
