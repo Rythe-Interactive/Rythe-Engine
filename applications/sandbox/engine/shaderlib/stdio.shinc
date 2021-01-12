@@ -2,10 +2,12 @@
 //  Default Input  //
 /////////////////////
 
+// Notify other headers that this header exists.
 #if !defined(STDIO_INCL)
 #define STDIO_INCL
 #endif
 
+// Default vertex attribute input.
 #if defined(VERTEX_SHADER)
 in vec3 position : SV_POSITION;
 in vec3 normal : SV_NORMAL;
@@ -15,12 +17,15 @@ in vec2 uv : SV_TEXCOORD0;
 in mat4 modelMatrix : SV_MODELMATRIX;
 #endif
 
+// Define standard io keyword so that we can auto detect whether it should be input or output.
 #if defined(VERTEX_SHADER)
 #define io out
 #elif defined(FRAGMENT_SHADER)
 #define io in
 #endif
 
+// Magic communication blocks between shaders,
+// they all have the same layout but other decoration depending on the shader type.
 #if defined(GEOMETRY_SHADER)
 in LGN_STDVTXGEOM
 #elif defined(GEOMETRY_SHADER_ACTIVE)
@@ -48,6 +53,8 @@ lgn_stdin[LGN_geom_vtxc];
 #else
 lgn_stdio;
 #endif
+
+// Geometry shaders have both input and output and thus need an extra communication block.
 #if defined(GEOMETRY_SHADER)
 out LGN_STDGEOMFRAG
 {
@@ -63,7 +70,7 @@ out LGN_STDGEOMFRAG
 } lgn_stdout;
 #endif
 
-
+// stdio definition makes working with io blocks easier.
 #if defined(VERTEX_SHADER)
 #define stdio(param) param
 #define stdin(param) param
@@ -76,6 +83,8 @@ out LGN_STDGEOMFRAG
 #define stdout(param) lgn_stdout.param
 #endif
 
+// Camera utility structure for easier use,
+// can be acquired through the GetCamera function.
 struct Camera
 {
     mat4 viewMatrix;
@@ -91,6 +100,7 @@ struct Camera
     #endif
 };
 
+// Raw IO optimized struct for CPU/GPU communication.
 struct CameraInput
 {
     mat4 view;
@@ -100,14 +110,17 @@ struct CameraInput
     ivec2 viewportSize;
 };
 
+// Camera uniform.
 uniform CameraInput lgn_cmr_in : SV_CAMERA;
 
+// GBuffer scene data
 uniform sampler2D lgn_sceneColor : SV_SCENECOLOR;
 uniform sampler2D lgn_sceneDepth : SV_SCENEDEPTH;
 uniform sampler2D lgn_sceneNormal : SV_SCENENORMAL;
 uniform sampler2D lgn_scenePosition : SV_SCENEPOSITION;
 uniform sampler2D lgn_hdrOverdraw : SV_HDROVERDRAW;
 
+// Util defines
 #define ViewMatrix lgn_cmr_in.view
 #define ProjectionMatrix lgn_cmr_in.proj
 #define ViewProjectionMatrix (lgn_cmr_in.proj * lgn_cmr_in.view)
@@ -124,6 +137,7 @@ vec4 WorldToScreenSpacePosition(vec4 pos)
     return (ViewProjectionMatrix * pos);
 }
 
+// Extract camera from input struct.
 Camera GetCamera()
 {
     Camera camera;

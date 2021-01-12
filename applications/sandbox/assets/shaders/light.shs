@@ -1,3 +1,7 @@
+///
+/// Shader for rendering light gizmos with a certain emission.
+///
+
 #version 450
 #define NO_DEPTH_OUT
 

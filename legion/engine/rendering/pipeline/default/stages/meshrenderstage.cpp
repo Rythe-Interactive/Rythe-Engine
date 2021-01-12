@@ -18,8 +18,10 @@ namespace legion::rendering
         static id_type lightsId = nameHash("light buffer");
         static id_type lightCountId = nameHash("light count");
         static id_type matricesId = nameHash("model matrix buffer");
-        //static id_type sceneColorId = nameHash("scene color history");
-        //static id_type sceneDepthId = nameHash("scene depth history");
+
+        // Leave this for later implementation, no time rn. (Glyn)
+        // static id_type sceneColorId = nameHash("scene color history");
+        // static id_type sceneDepthId = nameHash("scene depth history");
 
         auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
         if (!batches)
