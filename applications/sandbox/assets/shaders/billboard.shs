@@ -13,11 +13,18 @@ shader(vertex)
     void main(void)
     {
         if(fixedSize)
+        {
             gl_Position = FixedSizeBillboardModelToScreenSpacePosition(position);
+        }
         else
+        {
             gl_Position = BillboardModelToScreenSpacePosition(position);
+        }
 
-        PropagateStdIO((inverse(ViewProjectionMatrix) * gl_Position).xyz, (BillboardModelMatrix() * vec4(-stdin(normal), 0.0)).xyz);
+        // If we want lit billboards use this instead:
+        // PropagateStdIO((inverse(ViewProjectionMatrix) * gl_Position).xyz, (BillboardModelMatrix() * vec4(-stdin(normal), 0.0)).xyz);
+
+        PropagateStdIO();
     }
 }
 
@@ -27,6 +34,11 @@ shader(fragment)
 
     void main(void)
     {
-        SubmitOutput(texture(_texture, stdio(uv)));
+        // If we want lit billboards use this instead:
+        //SubmitOutput(texture(_texture, stdio(uv)));
+        fragment_color = texture(_texture, stdio(uv));
+        fragment_normal = vec4(vec3(0.0), 1.0);
+        fragment_position = vec4(vec3(0.0), 1.0);
+        fragment_overdraw = vec4(vec3(0.0), 1.0);
     }
 }

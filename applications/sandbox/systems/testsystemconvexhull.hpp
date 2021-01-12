@@ -30,12 +30,6 @@ class TestSystemConvexHull final : public System<TestSystemConvexHull>
 public:
     std::shared_ptr<legion::physics::ConvexCollider> collider = nullptr;
 
-    TestSystemConvexHull()
-    {
-        log::filter(log::severity::debug);
-        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1);
-    }
-
     core::ecs::entity_handle physicsEnt;
     std::vector< core::ecs::entity_handle> followerObjects;
 

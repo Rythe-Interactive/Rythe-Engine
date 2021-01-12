@@ -244,9 +244,7 @@ public:
         rendering::material_handle fixedSizeParticleMH;
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
-        rendering::material_handle skyboxH;
         rendering::material_handle floorMH;
-       
 
         {
             std::lock_guard guard(*window.lock);
