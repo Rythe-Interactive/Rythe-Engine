@@ -3,58 +3,11 @@
 #include <core/core.hpp>
 #include <optional>
 
+#include "animation_events.hpp"
+
 namespace ext
 {
     using namespace legion;
-
-    struct animation_event_base;
-
-    template <class T>
-    struct animation_event;
-
-
-    struct animation_event_base
-    {
-        void receive_param(const std::string& key, const std::string& value)
-        {
-            m_params[key] = value;
-        }
-        std::string get_param(const std::string& key)
-        {
-            if (auto itr = m_params.find(key); itr != m_params.end())
-            {
-                return itr->second;
-            }
-            return "";
-        }
-        const std::unordered_map<std::string,std::string>& enumerate_params() const
-        {
-            return m_params;
-        }
-
-        events::event_base* surrogate_ctor() const;
-
-    protected:
-        friend struct animation;
-        std::unordered_map<std::string, std::string> m_params;
-
-    };
-
-
-    template <class T>
-    struct animation_event : public events::event<T>, animation_event_base
-    {
-    };
-
-    struct void_animation_event : animation_event<void_animation_event>{};
-
-    inline events::event_base* animation_event_base::surrogate_ctor() const
-    {
-        void_animation_event* t = new void_animation_event();
-        t->m_params = this->m_params;
-        return t;
-    }
-
     /**
      * @brief Represents the animation data as a component
      * @see animator.hpp for how it is used
@@ -104,4 +57,31 @@ namespace ext
         static void to_resource(filesystem::basic_resource* resource, const animation& anim);
 
     };
+
+
+    namespace detail
+    {
+        extern std::unordered_map<std::string_view, index_type> g_AnimationEventDatabase;
+        extern std::unordered_map<index_type, std::string_view> g_ReverseAnimationEventDatabase;
+    }
+
+    template <class T, inherits_from<T, animation_event_base> = 0, inherits_from<T, events::event_base> = 0>
+    inline void registerAnimationEvent(std::string_view prettyName)
+    {
+        detail::g_AnimationEventDatabase[prettyName] = T::id;
+        detail::g_ReverseAnimationEventDatabase[T::id] = prettyName;
+    }
+
+    inline common::result<id_type, void> getRegisteredAnimationEventID(std::string_view prettyName)
+    {
+        using common::Ok, common::Err;
+
+        const auto itr = detail::g_AnimationEventDatabase.find(prettyName);
+        if (itr == detail::g_AnimationEventDatabase.end())
+        {
+            return Err();
+        }
+        return Ok(itr->second);
+    }
+
 }

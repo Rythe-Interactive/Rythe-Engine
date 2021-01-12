@@ -14,6 +14,12 @@ namespace ext
         {
             return core::math::quat{ a[0].get<float>(), a[1].get<float>(), a[2].get<float>(), a[3].get<float>() };
         }
+        std::unordered_map<std::string_view,id_type> g_AnimationEventDatabase =
+            {std::make_pair(std::string_view("VoidAnimationEvent"),typeHash<void_animation_event>())};
+        std::unordered_map<id_type,std::string_view> g_ReverseAnimationEventDatabase =
+            {std::make_pair(typeHash<void_animation_event>(),std::string_view("VoidAnimationEvent"))};
+
+
     }
 
     void animation::from_resource(animation* anim, const core::filesystem::basic_resource& resource)
@@ -107,7 +113,27 @@ namespace ext
             for (auto& [key, value] : elem.items())
             {
                 if (key == "id") {
-                    id = value.get<id_type>();
+                    if(value.is_string())
+                    {
+                        auto res = getRegisteredAnimationEventID(value.get<std::string>());
+                        if(!res.has_err())
+                        {
+                            id = res.get();
+                        }
+                        else
+                        {
+                            log::warn("Found event in animation that has invalid id string!");
+                            log::warn("No event generated for \"{}\"!",value.get<std::string>());
+                        }
+                    }
+                    else
+                    {
+                        log::warn("Non portable save of id as typeid-hash detected!");
+                        log::warn("Please register your animation Event in the EventDatabase");
+                        log::info("Usage: ext::detail::registerAnimationEvent< Event >(\"myCoolAnimationEvent\"); ");
+                        id = value.get<id_type>();
+                        
+                    }
                 }
                 else if(key == "trigger")
                 {
@@ -158,15 +184,26 @@ namespace ext
         for (const auto& [trig, ev] : anim.events) {
 
             const auto& [evptr,id] = ev;
-            auto evobj = json::object({{"id",id},{"trigger",trig}});
+
+            auto evobj = json::object({{"trigger",trig}});
+
+            auto itr = detail::g_ReverseAnimationEventDatabase.find(id);
+            if(itr != detail::g_ReverseAnimationEventDatabase.end())
+            {
+                evobj["id"] = itr->second;
+            } else {
+                log::warn("Had to save an animation event using a typeid instead of a name!");
+                log::warn("Please ensure that all your anim-events are registered!");
+                log::trace("For Id:{}",id);
+                evobj["id"] = id;
+            }
+
             for(auto& [key,value]: evptr->m_params)
             {
                 evobj[key] = value;
             }
 
             j["animation"]["events"] += evobj;
-
-
         }
 
         *(resource) = core::filesystem::basic_resource(j.dump(4));

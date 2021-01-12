@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\animation.hpp" />
+    <ClInclude Include="data\animation_events.hpp" />
     <ClInclude Include="data\pp_edgedetect.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="systems\animation_editor.hpp" />

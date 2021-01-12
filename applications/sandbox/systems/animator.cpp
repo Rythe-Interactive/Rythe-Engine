@@ -166,8 +166,11 @@ namespace ext
             }
             if(!anim.events.empty())
             {
+
+                //advance event accumulator (since events only trigger, they do not need a duration)
                 anim.e_accumulator = anim.e_accumulator + delta.seconds();
-                
+
+                //check if all events triggered and reset if requested
                 if(anim.e_index >= anim.events.size())
                 {
                     if(anim.looping)
@@ -178,6 +181,7 @@ namespace ext
                 }
                 else
                 {
+                    //get current event and trigger if the acc is above the threshold
                     auto& [trigger_time, event_info] = anim.events[anim.e_index];
                     if(anim.e_accumulator > trigger_time)
                     {

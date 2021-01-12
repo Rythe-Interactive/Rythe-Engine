@@ -140,8 +140,6 @@ public:
 
     virtual void setup()
     {
-
-
 #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
@@ -830,9 +828,6 @@ public:
                 {
                     showBaseRenderLayer = !showBaseRenderLayer;
                 }
-                imgui::base::Text(fmt::format("evtAudio is Playing: {}",eventAudio.read_component<audio::audio_source>().isPlaying()).c_str());
-
-
                 return showBaseRenderLayer;
             });
         //createProcess<&TestSystem::drawInterval>("TestChain");

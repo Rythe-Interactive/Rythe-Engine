@@ -107,6 +107,7 @@ namespace ext
         bool m_animatorHasControl = false;
 
         using custom_render_gui_fn = delegate<bool(id_type, animation_event_base*)>;
+
         static sparse_map<id_type, custom_render_gui_fn> m_guiRenderers;
 
 
@@ -167,7 +168,26 @@ namespace ext
 
     public:
 
-        static void onRenderCustomEventGUI(id_type event_id, custom_render_gui_fn renderer)
+
+        /**
+         * @brief The function signature for a custom render Layer for custom
+         *         Animation-Events editors
+         */
+        using custom_render_layer = custom_render_gui_fn;
+
+
+        /**
+         * @brief Registers a custom GUI Layer for an event type
+         * @note if no custom layer is registered, your event will be rendered with the default
+         *        Base Layer
+         * @param event_id The ID you want to register a custom render layer for
+         * @param renderer The Custom render function you want to register.
+         *         Please note that this is called in an active gui context, so there is no need
+         *         to call imgui::base::Begin() again. if you want the base gui layer to be
+         *         rendered in conjunction with your custom layer your function should return
+         *         true, otherwise it should return false.
+         */
+        static void onRenderCustomEventGUI(id_type event_id, custom_render_layer renderer)
         {
             m_guiRenderers[event_id] = renderer;
         }

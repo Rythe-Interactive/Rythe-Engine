@@ -2,7 +2,7 @@
     "animation": {
         "events": [
             {
-                "id": 11434529521438460272,
+                "id": "VoidAnimationEvent",
                 "trigger": 5.0,
                 "type": "explosion"
             }

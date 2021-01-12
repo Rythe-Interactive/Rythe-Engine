@@ -94,7 +94,14 @@ namespace legion::audio
         const ALchar* ALCExtensions = alcGetString(alDevice, ALC_EXTENSIONS);
         ALCint srate;
         alcGetIntegerv(alDevice, ALC_FREQUENCY, 1, &srate);
-        log::info("Initialized OpenAL\n\tCONTEXT INFO\n\t----------------------------------\n\tVendor:\t\t\t{}\n\tVersion:\t\t{}\n\tRenderer:\t\t{}\n\tDevice samplerate:\t{}\n\tOpenAl Extensions:\n\t\t{}\n\n\tALC Extensions:\n\t\t{}\n\t----------------------------------\n",
+        log::info(
+            "Initialized OpenAL\n\tCONTEXT INFO\n\t"\
+            "----------------------------------\n\t"\
+            "Vendor:\t\t\t{}\n\tVersion:\t\t{}\n\t"\
+            "Renderer:\t\t{}\n\tDevice samplerate:\t{}\n\t"\
+            "OpenAl Extensions:\n\t\t{}\n\n\t"\
+            "ALC Extensions:\n\t\t{}\n\t"\
+            "----------------------------------\n",
             vendor, version, renderer, srate, openALExtensions, ALCExtensions);
     }
 

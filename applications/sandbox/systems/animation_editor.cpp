@@ -392,30 +392,73 @@ namespace ext
                     m_cubeEntity.get_component_handle<scale>().write(s);
                 }
             }
+            //check if the data contains an event
             if (std::holds_alternative<detail::AnimationSequencer::event_t>(dp))
             {
+                char vbuffer[512]{ 0 };
+
+
+                //destructure event data
                 auto& [event_pointer, id] = std::get<detail::AnimationSequencer::event_t>(dp);
                 bool render_base_gui = true;
 
+                base::Separator();
+                std::string preview_v = "Nothing";
+
+
+                auto itr = ext::detail::g_ReverseAnimationEventDatabase.find(id);
+                if (itr != detail::g_ReverseAnimationEventDatabase.end())
+                {
+                    preview_v = std::string(itr->second);
+                }
+                else
+                {
+                    //display warning that this is probably not a valid event
+                    ImGuiWindowFlags window_flags = ImGuiWindowFlags_None | ImGuiWindowFlags_NoScrollWithMouse;
+                    ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+                    ImGui::BeginChild("Warning Child", ImVec2(0, 75), true, window_flags);
+                    base::TextColored({ 255,180,0,255 }, "Warning!!");
+                    base::TextUnformatted("This id does not have an associated name, saving this is going to produce bad results!");
+                    ImGui::EndChild();
+                    ImGui::PopStyleVar();
+                }
+
+                //display name and changer!
+                if (base::BeginCombo("##Type", preview_v.c_str())) {
+
+                    for (auto& [key, value] : detail::g_AnimationEventDatabase)
+                    {
+                        //we query the database for entries and display them in a combobox, which makes for a pretty useful chooser
+                        if (ImGui::Selectable(std::string(key).c_str(), value == id))
+                        {
+                            id = value;
+                        }
+                    }
+                    base::EndCombo();
+                }
+
+
+                base::Separator();
+                //check if a custom render layer is available
                 if (m_guiRenderers.contains(id))
                 {
                     render_base_gui = m_guiRenderers[id](id, event_pointer.get());
                 }
                 if (render_base_gui)
                 {
-
-                    char vbuffer[512]{ 0 };
-
+                    //if the generic layer is still required:
+                    //display id
                     base::InputScalar("ID", ImGuiDataType_U64, &id);
 
+                    //display raw parameters
                     base::PushItemWidth(200);
 
-                    base::Text("Event Parameters");
+                    base::TextUnformatted("Event Parameters");
                     base::Separator();
                     for (const auto& [key, value] : event_pointer->enumerate_params())
                     {
                         memcpy(vbuffer, value.data(), value.size() + 1);
-                        base::Text(key.c_str());
+                        base::TextUnformatted(key.c_str());
                         base::SameLine();
                         base::InputText(("##" + key).c_str(), vbuffer, 512);
                         event_pointer->receive_param(key, vbuffer);
@@ -423,12 +466,13 @@ namespace ext
 
                     base::Separator();
 
+                    //display little dialog to add new entries
                     static char newkbuffer[512]{ 0 }, newvbuffer[512]{ 0 };
-                    base::Text("Key");
+                    base::TextUnformatted("Key");
                     base::SameLine();
                     base::InputText("##Key", newkbuffer, 512);
                     base::SameLine();
-                    base::Text("Value");
+                    base::TextUnformatted("Value");
                     base::SameLine();
                     base::InputText("##Value", newvbuffer, 512);
                     base::PopItemWidth();
