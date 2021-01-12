@@ -4,6 +4,7 @@
 #include <physics/data/pointer_encapsulator.hpp>
 #include <physics/data/contact_vertex.hpp>
 #include <Voro++/voro++.hh>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::physics
 {
@@ -40,6 +41,9 @@ namespace legion::physics
                     worldSupportPoint = transformedVert;
                 }
             }
+
+
+
         }
 
         /** @brief Given 2 ConvexColliders, convexA and convexB, checks if one of the faces of convexB creates a seperating axis
@@ -57,11 +61,12 @@ namespace legion::physics
         {
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
-
             for (auto face : convexB->GetHalfEdgeFaces())
             {
+
+                //og::debug("face->normal {} ", math::to_string( face->normal));
                 //get inverse normal
-                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4(face->normal, 0));
+                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4(math::normalize(face->normal), 0));
 
                 math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
 
@@ -107,14 +112,13 @@ namespace legion::physics
             const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
             math::vec3& seperatingAxisFound, float& maximumSeperation)
         {
-            float currentMaximumSeperation = std::numeric_limits<float>::lowest();
+            float currentMinimumSeperation = std::numeric_limits<float>::max();
 
             math::vec3 positionA = transformA[3];
 
             for (const auto faceA : convexA->GetHalfEdgeFaces())
             {
                 //----------------- Get all edges of faceA ------------//
-
                 std::vector<HalfEdgeEdge*> convexAHalfEdges;
 
                 auto lambda = [&convexAHalfEdges](HalfEdgeEdge* edge)
@@ -127,7 +131,6 @@ namespace legion::physics
                 for (const auto faceB : convexB->GetHalfEdgeFaces())
                 {
                     //----------------- Get all edges of faceB ------------//
-
                     std::vector<HalfEdgeEdge*> convexBHalfEdges;
 
                     auto lambda = [&convexBHalfEdges](HalfEdgeEdge* edge)
@@ -136,7 +139,7 @@ namespace legion::physics
                     };
 
                     faceB->forEachEdge(lambda);
-
+      
                     for (HalfEdgeEdge* edgeA : convexAHalfEdges)
                     {
                         for (HalfEdgeEdge* edgeB : convexBHalfEdges)
@@ -177,29 +180,25 @@ namespace legion::physics
 
                                 //check if given edges create a seperating axis
                                 float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
-
-                                if (distance > currentMaximumSeperation)
+                               
+                                if (distance < currentMinimumSeperation)
                                 {                                 
                                     refEdge.ptr = edgeA;
                                     incEdge.ptr = edgeB;
 
                                     seperatingAxisFound = seperatingAxis;
-                                    currentMaximumSeperation = distance;
+                                    currentMinimumSeperation = distance;
                                 }
 
-                                if (distance > 0.0f)
-                                {
-                                    maximumSeperation = currentMaximumSeperation;
-                                    return true;
-                                }
                             }
                         }
                     }
                 }
             }
 
-            maximumSeperation = currentMaximumSeperation;
-            return false;
+            //log::debug("a id  {}  b id {} combination {} ", std::get<0>(ids), std::get<1>(ids), std::get<2>(ids));
+            maximumSeperation = currentMinimumSeperation;
+            return currentMinimumSeperation > 0.0f;
         }
 
         //---------------------------------------------------------- Polyhedron Clipping ----------------------------------------------------------------------------//
@@ -275,10 +274,6 @@ namespace legion::physics
                         outputList.push_back(ContactVertex(intersectionPoint, label));
                     }
                 }
-
-
-
-
             }
         }
 
@@ -405,17 +400,41 @@ namespace legion::physics
 
             float t = FindLineToPointInterpolant(startPoint, endPoint, planePosition, planeNormal);
 
-            intersectionPoint = startPoint + math::normalize(direction) * t;
+            intersectionPoint = startPoint + direction * t;
 
             return true;
         }
+
+        /**@brief Given a line going from start point to end point finds the intersection point of the line to a given 3D plane
+        * @param [out] interpolant The calculated interpolant required to get from the startPoint to the endPoint
+        * @return Returns true if an intersection is found
+        */
+        static bool FindLineToPlaneIntersectionPoint(const math::vec3& planeNormal, const math::vec3& planePosition,
+            const math::vec3& startPoint, const math::vec3& endPoint, math::vec3& intersectionPoint,float& interpolant)
+        {
+            math::vec3 direction = endPoint - startPoint;
+
+            if (math::epsilonEqual(math::dot(direction, planeNormal), 0.0f, math::epsilon<float>()))
+            {
+                return false;
+            }
+
+            interpolant = FindLineToPointInterpolant(startPoint, endPoint, planePosition, planeNormal);
+            
+
+            intersectionPoint = startPoint + direction * interpolant;
+
+            return true;
+        }
+
+
 
         /** Given a line going from a startPoint to and endPoint, finds the interpolant required to intersect a given 3D plane
         */
         static float FindLineToPointInterpolant(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
             const math::vec3& planeNormal)
         {
-            return math::dot(planePosition - startPoint, planeNormal) / math::dot(math::normalize(endPoint - startPoint), planeNormal);
+            return math::dot(planePosition - startPoint, planeNormal) / math::dot(endPoint - startPoint, planeNormal);
         }
 
         /**Creates a Voronoi diagram based on the given parameters.
@@ -495,25 +514,30 @@ namespace legion::physics
         {
             const math::vec3 transformedA1 = transformA * math::vec4(edgeA->getLocalNormal(), 0);
             const math::vec3 transformedA2 = transformA * math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
+            const math::vec3 transformedEdgeDirectionA = transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
 
             const math::vec3 transformedB1 = transformB * math::vec4(edgeB->getLocalNormal(), 0);
             const math::vec3 transformedB2 = transformB * math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
+            const math::vec3 transformedEdgeDirectionB = transformB * math::vec4(edgeB->getLocalEdgeDirection(), 0);
 
-            return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2);
+            math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
+
+            return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2
+                , transformedEdgeDirectionA, transformedEdgeDirectionB);
         }
 
         /** @brief Given 2 arcs, one that starts from transformedA1 and ends at transformedA2 and another arc
          * that starts at transformedB1 and ends at transformedB2, checks if the given arcs collider each other
          * @return returns true if the given arcs intersect
          */
-        static bool isMinkowskiFace(const math::vec3 transformedA1, const math::vec3 transformedA2,
-            const math::vec3 transformedB1, const math::vec3 transformedB2)
+        static bool isMinkowskiFace(const math::vec3& transformedA1, const math::vec3& transformedA2,
+            const math::vec3& transformedB1, const math::vec3& transformedB2
+            ,const math::vec3& planeANormal, const math::vec3& planeBNormal)
         {
             //------------------------ Check if normals created by arcA seperate normals of B --------------------------------------//
-
-            math::vec3 planeANormal = math::cross(transformedA1, transformedA2);
-
+            //CBA
             float planeADotB1 = math::dot(planeANormal, transformedB1);
+            //DBA
             float planeADotB2 = math::dot(planeANormal, transformedB2);
 
             float dotMultiplyResultA =
@@ -526,9 +550,9 @@ namespace legion::physics
 
             //------------------------ Check if normals created by arcB seperate normals of A --------------------------------------//
 
-            math::vec3 planeBNormal = math::cross(transformedB1, transformedB2);
-
+            //ADC
             float planeBDotA1 = math::dot(planeBNormal, transformedA1);
+            //BDC
             float planeBDotA2 = math::dot(planeBNormal, transformedA2);
 
             float  dotMultiplyResultB = planeBDotA1 * planeBDotA2;
@@ -540,14 +564,9 @@ namespace legion::physics
 
             //------------------------ Check if arcA and arcB are in the same hemisphere --------------------------------------------//
 
-            math::vec3 abNormal = math::cross(transformedA2, transformedB2);
+            float dotMultiplyResultAB = planeADotB1 * planeBDotA2;
 
-            float planeABDotA1 = math::dot(abNormal, transformedA1);
-            float planeABDotB1 = math::dot(abNormal, transformedB1);
-
-            float dotMultiplyResultAB = planeABDotA1 * planeABDotB1;
-
-            if (dotMultiplyResultAB < 0.0f || math::epsilonEqual(dotMultiplyResultAB, 0.0f, math::epsilon<float>()))
+            if (planeADotB1  * planeBDotA2  < 0.0f || math::epsilonEqual(dotMultiplyResultAB, 0.0f, math::epsilon<float>()))
             {
                 return false;
             }

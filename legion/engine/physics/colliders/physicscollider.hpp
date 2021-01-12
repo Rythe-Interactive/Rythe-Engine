@@ -8,7 +8,6 @@
 
 namespace legion::physics
 {
-
     struct physics_manifold;
     class ConvexCollider;
 
@@ -16,7 +15,7 @@ namespace legion::physics
     class PhysicsCollider
     {
     public:
-
+        bool shouldBeDrawn = true;
         std::vector<std::unique_ptr<ConverganceIdentifier>> converganceIdentifiers;
 
         PhysicsCollider()
@@ -29,6 +28,8 @@ namespace legion::physics
 
         void AttemptFindAndCopyConverganceID(physics_contact& contact)
         {
+            if (!constants::applyWarmStarting) { return; }
+
             for (auto&& converganceId : converganceIdentifiers)
             {
                 if (converganceId->refColliderID == contact.refCollider->GetColliderID())
@@ -83,7 +84,10 @@ namespace legion::physics
         */
         virtual void DrawColliderRepresentation(math::mat4 transform) {};
 
-        virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
+        virtual void UpdateTightBoundingVolume(const math::mat4& transform) {};
+
+
+        inline virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
         {
             return dummyHalfEdges;
         }

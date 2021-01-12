@@ -2,13 +2,14 @@
 #include <core/core.hpp>
 #include <physics/data/edge_label.hpp>
 #include <physics/halfedgeface.hpp>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::physics
 {
 	struct HalfEdgeEdge
 	{
 		HalfEdgeEdge* pairingEdge = nullptr;
-		HalfEdgeEdge * nextEdge = nullptr;
+		HalfEdgeEdge* nextEdge = nullptr;
 		HalfEdgeEdge* prevEdge = nullptr;
 
 		HalfEdgeFace* face = nullptr;
@@ -54,6 +55,15 @@ namespace legion::physics
 		{
 			return nextEdge->edgePosition - edgePosition;
 		}
+
+        void DEBUG_drawEdge(const math::mat4& transform, const math::color& debugColor,float time = 20.0f, float width = 5.0f)
+        {
+            math::vec3 worldStart = transform * math::vec4(edgePosition, 1);
+            math::vec3 worldEnd = transform * math::vec4(nextEdge->edgePosition, 1);
+
+            debug::user_projectDrawLine(worldStart, worldEnd, debugColor, width, time, true);
+        }
+
 	};
 }
 

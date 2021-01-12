@@ -13,6 +13,7 @@
 #include <physics/halfedgeface.hpp>
 #include <physics/data/penetrationquery.h>
 
+
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
 #include <core/compute/high_level/function.hpp>
@@ -48,12 +49,12 @@ struct sah
     }
 };
 
-enum class PhysicsUnitTestMode
-{
-    CollisionDetectionMode,
-    CollisionResolution
-};
-
+//struct addRB{
+//    math::vec3 force = math::vec3(0, 0, 30);
+//    float time = 0.0f;
+//    float addTime = 5.0f;
+//    bool rigidbodyAdded = false;
+//};
 // Move and strive for the wireframe sphere (which holds the only audio source)
 // For testing the movement of audio sources (Spatial audio/doppler)
 struct audio_move : public app::input_axis<audio_move> {};
@@ -67,6 +68,8 @@ struct stop_audio_source : public app::input_action<stop_audio_source> {};
 struct rewind_audio_source : public app::input_action<rewind_audio_source> {};
 struct audio_test_input : public app::input_action<audio_test_input> {};
 
+struct nextEdge_action : public  app::input_action<nextEdge_action> {};
+struct nextPairing_action : public  app::input_action<nextPairing_action> {};
 //some test stuff just so i can change things
 
 struct physics_test_move : public app::input_axis<physics_test_move> {};
@@ -74,13 +77,14 @@ struct physics_test_move : public app::input_axis<physics_test_move> {};
 struct light_switch : public app::input_action<light_switch> {};
 struct tonemap_switch : public app::input_action<tonemap_switch> {};
 
+
 struct activate_CRtest2 : public app::input_action<activate_CRtest2> {};
 struct activate_CRtest3 : public app::input_action<activate_CRtest3> {};
 
 struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
-
-struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
-struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
+//
+//struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
+//struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
 using namespace legion::core::filesystem::literals;
 
@@ -123,20 +127,14 @@ public:
     ecs::entity_handle Point6FrictionBody;
     ecs::entity_handle FullFrictionBody;
 
-    rendering::shader_handle invertShader;
-    //rendering::PostProcessingEffect invertEffect;
-
-    rendering::shader_handle edgedetectShader;
-    //rendering::PostProcessingEffect edgedetectEffect;
-
-    rendering::shader_handle blurShader;
-    //rendering::PostProcessingBlur blurEffect;
+    //ecs::EntityQuery halfEdgeQuery;
 
     virtual void setup()
     {
+        physics::PrimitiveMesh::SetECSRegistry(m_ecs);
         
 
-#pragma region Input binding
+        #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
 
@@ -161,13 +159,16 @@ public:
         app::InputSystem::createBinding< activate_CRtest2>(app::inputmap::method::KP_2);
         app::InputSystem::createBinding< activate_CRtest3>(app::inputmap::method::KP_3);
 
+        app::InputSystem::createBinding< nextEdge_action>(app::inputmap::method::R);
+        app::InputSystem::createBinding< nextPairing_action>(app::inputmap::method::T);
+
         app::InputSystem::createBinding< activateFrictionTest >(app::inputmap::method::KP_4);
 
         app::InputSystem::createBinding<light_switch>(app::inputmap::method::F);
         app::InputSystem::createBinding<tonemap_switch>(app::inputmap::method::G);
 
-        app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
-        app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
+        //app::InputSystem::createBinding< extendedPhysicsContinue>(app::inputmap::method::M);
+        //app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
 
         bindToEvent<physics_test_move, &TestSystem::onUnitPhysicsUnitTestMove>();
 
@@ -188,16 +189,20 @@ public:
 
         bindToEvent<audio_test_input, &TestSystem::audioTestInput>();
 
+        //bindToEvent<physics_split_test, &TestSystem::OnSplit>();
+
         //collision resolution test
         bindToEvent< activate_CRtest2, &TestSystem::onActivateUnitTest2>();
         bindToEvent< activate_CRtest3, &TestSystem::onActivateUnitTest3>();
 
         //friction test
-        bindToEvent< activateFrictionTest, &TestSystem::FrictionTestActivate>();
+        //bindToEvent< activateFrictionTest, &TestSystem::FrictionTestActivate>();
 
+        bindToEvent< nextEdge_action, &TestSystem::OnNextEdge>();
+        bindToEvent<nextPairing_action, &TestSystem::OnNextPair>();
 
-        bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
-        bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
+        //bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
+        //bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
 
 #pragma endregion
 
@@ -216,6 +221,9 @@ public:
         rendering::model_handle axesH;
         rendering::model_handle submeshtestH;
         rendering::model_handle planeH;
+        rendering::model_handle floorH;
+        rendering::model_handle magneticLowH;
+        rendering::model_handle cylinderH;
         rendering::model_handle billboardH;
         //rendering::model_handle cylinderH;
 
@@ -224,6 +232,7 @@ public:
 
         rendering::material_handle uvH;
         rendering::material_handle textureH;
+        rendering::material_handle texture2H;
         rendering::material_handle directionalLightMH;
         rendering::material_handle spotLightMH;
         rendering::material_handle pointLightMH;
@@ -235,6 +244,9 @@ public:
         rendering::material_handle fixedSizeParticleMH;
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
+        rendering::material_handle skyboxH;
+        rendering::material_handle floorMH;
+       
 
         {
             std::lock_guard guard(*window.lock);
@@ -245,6 +257,7 @@ public:
             pointLightH = rendering::ModelCache::create_model("point light", "assets://models/point-light.obj"_view);
             audioSourceH = rendering::ModelCache::create_model("audio source", "assets://models/audio-source.obj"_view);
             cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+            cylinderH = rendering::ModelCache::create_model("cylinder", "assets://models/cylinder.obj"_view);
             sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
             suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
             gnomeH = rendering::ModelCache::create_model("gnome", "assets://models/wizardgnomeretop.obj"_view);
@@ -252,6 +265,8 @@ public:
             axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view);
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
             planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
+            floorH = rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view);
+            magneticLowH = rendering::ModelCache::create_model("complexMesh", "assets://models/magneticLevelLow.obj"_view);
             billboardH = rendering::ModelCache::create_model("billboard", "assets://models/billboard.obj"_view);
             //cylinderH = rendering::ModelCache::create_model("cylinder","assets://models/cylinder.obj"_view);
 
@@ -292,6 +307,8 @@ public:
 
             fixedSizeParticleMH = rendering::MaterialCache::create_material("fixed size particle", "assets://shaders/particle.shs"_view);
             fixedSizeParticleMH.set_param("fixedSize", true);
+            texture2H = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
+            texture2H.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
 
             auto pbrShader = rendering::ShaderCache::create_shader("pbr", "assets://shaders/pbr.shs"_view);
             pbrH = rendering::MaterialCache::create_material("pbr", pbrShader);
@@ -754,18 +771,24 @@ public:
         }
 #pragma endregion
 
-
-
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
 
         //setupPhysicsCDUnitTest(cubeH, wireframeH);
 
         //----------- Rigidbody-Collider AABB Test------------//
 
-
+        //physics::HalfEdgeFinder finder;
+        //std::vector<std::shared_ptr<physics::MeshHalfEdge>> physics;
+        //std::vector<int> indices;
+        //std::vector<math::vec3> vertices;
+        //finder.FindHalfEdge(indices, vertices, math::mat4(1.0), physics);
         //setupPhysicsFrictionUnitTest(cubeH, uvH);
 
-        //setupPhysicsStackingUnitTest(cubeH, uvH);
+        //setupPhysicsStackingUnitTest(cubeH,uvH,textureH);
+
+        //setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH,texture2H);
+        setupPhysicsCompositeTest(cubeH, texture2H);
+        //setupPhysicsCRUnitTest(cubeH, texture2H);
 
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 1.0f;
@@ -796,6 +819,206 @@ public:
 
         //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
         //    ,cubeParams, 0.1f, cubeH, wireframeH);
+        //physicsUpdate(time::span deltaTime)
+        createProcess<&TestSystem::update>("Update" );
+        createProcess<&TestSystem::drawInterval>("Update");
+        createProcess<&TestSystem::physicsUpdate>("Physics" , 0.02f);
+    }
+
+    void setupMeshSplitterTest(rendering::model_handle planeH, rendering::model_handle cubeH
+        , rendering::model_handle cylinderH, rendering::model_handle complexH, rendering::material_handle TextureH)
+    {
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 2.0f;
+        cubeParams.width = 2.0f;
+        cubeParams.height = 2.0f;
+        ecs::entity_handle cubeSplit2;
+        {
+            auto splitter = m_ecs->createEntity();
+            cubeSplit2 = splitter;
+
+            auto entPhyHande = splitter.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            splitter.add_components<rendering::mesh_renderable>(mesh_filter( planeH.get_mesh()), rendering::mesh_renderer(TextureH));
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
+            positionH.write(math::vec3(36, 1.0f, 10.0f));
+            scaleH.write(math::vec3(0.01f));
+
+            auto rotation = rotationH.read();
+
+            rotation *= math::angleAxis(math::deg2rad(-60.0f), math::vec3(1, 0, 0));
+
+            splitter.write_component(rotation);
+
+        }
+        //Cube split plane
+        ecs::entity_handle cubeSplit;
+        {
+           /* auto splitter = m_ecs->createEntity();
+            cubeSplit = splitter;
+
+            auto entPhyHande = splitter.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            splitter.add_components<rendering::mesh_renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
+            positionH.write(math::vec3(37, 1.5f, 10.0f));
+            scaleH.write(math::vec3(0.01f));
+
+            auto rotation = rotationH.read();
+
+            rotation *= math::angleAxis(math::deg2rad(60.0f), math::vec3(1, 0, 0));
+            
+            splitter.write_component(rotation);*/
+
+        }
+
+       
+
+
+        //Cube 
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+            //ent.add_component<addRB>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            ent.add_components<rendering::mesh_renderable>(mesh_filter( cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
+            //renderableHandle.write({ cubeH,TextureH });
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(37, 1.5f, 10.0f));
+            scaleH.write(math::vec3(1.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "AABBRbStable";
+            idHandle.write(id);
+
+            auto finderH = ent.add_component<physics::MeshSplitter>();
+
+            auto finder = finderH.read();
+            //finder.splitTester.push_back(cubeSplit);
+            finder.splitTester.push_back(cubeSplit2);
+            finder.InitializePolygons(ent);
+            finderH.write(finder);
+
+        }
+
+        //Split plane
+        ecs::entity_handle cylinderSplit;
+        {
+            //auto splitterCylinder = m_ecs->createEntity();
+            //cylinderSplit = splitterCylinder;
+
+            ////auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+            ////auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
+            //splitterCylinder.add_components<rendering::mesh_renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
+
+            //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitterCylinder);
+            //positionH.write(math::vec3(37, 1.5f, 15.0f));
+            //scaleH.write(math::vec3(0.02f));
+
+        }
+
+        //Cylinder
+        {
+            //auto ent = m_ecs->createEntity();
+
+            //auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            //physics::physicsComponent physicsComponent;
+            //physics::physicsComponent::init(physicsComponent);
+
+            //physicsComponent.AddBox(cubeParams);
+            //entPhyHande.write(physicsComponent);
+
+            //
+
+            ////auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+            ////auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
+
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(ent);
+            //renderableHandle.write({ cylinderH,TextureH });
+
+            //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            //positionH.write(math::vec3(37, 1.5f, 15.0f));
+            //scaleH.write(math::vec3(1.0f));
+
+            //auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            //auto id = idHandle.read();
+            //id.id = "AABBRbStable";
+            //idHandle.write(id);
+
+
+            //auto finderH = ent.add_component<physics::MeshSplitter>();
+
+            //auto finder = finderH.read();
+            //finder.splitTester = cylinderSplit;
+            //finder.InitializePolygons(ent);
+            //finderH.write(finder);
+        }
+
+        //Complex Mesh
+        {
+            auto ent = m_ecs->createEntity();
+
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(cubeParams);
+
+            entPhyHande.write(physicsComponent2);
+
+            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
+            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
+            ent.add_components<rendering::mesh_renderable>(mesh_filter( complexH.get_mesh()), rendering::mesh_renderer(TextureH));
+
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(37, 1.5f, 20.0f));
+            scaleH.write(math::vec3(5.0f));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "AABBRbStable";
+            idHandle.write(id);
+
+
+            /*auto finderH = ent.add_component<physics::HalfEdgeFinder>();
+
+            auto finder = finderH.read();
+            finder.InitializePolygons(ent);
+            finderH.write(finder);*/
+        }
+
+        //Complex Mesh
 
         createProcess<&TestSystem::update>("Update");
         //createProcess<&TestSystem::drawInterval>("TestChain");
@@ -1072,6 +1295,7 @@ public:
         //*/
     }
     //10,0,15
+
     void setupPhysicsCRUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
     {
         physics::cube_collider_params cubeParams;
@@ -1080,9 +1304,9 @@ public:
         cubeParams.height = 1.0f;
 
         physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 5.0f;
-        staticBlockParams.width = 5.0f;
-        staticBlockParams.height = 2.0f;
+        staticBlockParams.breadth = 2.5f;
+        staticBlockParams.width = 2.5f;
+        staticBlockParams.height = 1.0f;
 
         float testPos = 10.0f;
         //----------- Static Block To AABB Body Stability Test ------------//
@@ -1094,6 +1318,7 @@ public:
             scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
 
             ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
+
         }
 
         {
@@ -1120,7 +1345,6 @@ public:
             auto idComp = idHandle.read();
             idComp.id = "AABBStaticStable";
             idHandle.write(idComp);
-
 
         }
 
@@ -1300,23 +1524,25 @@ public:
             entPhyHande.write(physicsComponent2);
 
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToOBBEnt);
-            //renderableHandle.write({ cubeH), wireframeH });
+            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(staticToOBBEnt);
+            //renderableHandle.write({ cubeH, wireframeH });
+            staticToOBBEnt.add_components<rendering::mesh_renderable>
+                (mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
             positionH.write(math::vec3(testPos, -0.0f, 2.0f));
             scaleH.write(math::vec3(1.0f));
 
             auto rot = rotationH.read();
-            rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
+            /*rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
             rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));
-            rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));
+            rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));*/
             //rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
             rotationH.write(rot);
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(staticToOBBEnt);
             auto id = idHandle.read();
-            id.id = "OBBRb";
+            id.id = "NON_STATIC";
             idHandle.write(id);
 
 
@@ -1686,7 +1912,8 @@ public:
 
     }
     //20,0,15
-    void setupPhysicsStackingUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
+
+    void setupPhysicsCompositeTest(rendering::model_handle cubeH, rendering::material_handle textureH)
     {
         float testPos = 20.f;
         physics::cube_collider_params cubeParams;
@@ -1695,23 +1922,42 @@ public:
         cubeParams.height = 1.0f;
 
         physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 5.0f;
-        staticBlockParams.width = 5.0f;
-        staticBlockParams.height = 2.0f;
+        staticBlockParams.breadth = 2.0f;
+        staticBlockParams.width = 2.0f;
+        staticBlockParams.height = 1.0f;
 
-        //2 stack
+        //BLOCK
         {
             auto ent = m_ecs->createEntity();
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(35, -3.0f, 15.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
+            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::vec3(2.0f, 1.0f, 2.0f));
 
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
+            //auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+           /* physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+
+            physicsComponent2.AddBox(staticBlockParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);*/
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "STATIC_BLOCK";
+            idHandle.write(id);
+
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
         }
 
         {
             auto ent = m_ecs->createEntity();
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
+            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
 
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
@@ -1723,28 +1969,48 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(35, -3.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f));
-
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto idComp = idHandle.read();
-            idComp.id = "Stack";
-            idHandle.write(idComp);
+            auto id = idHandle.read();
+            id.id = "STATIC_BLOCK";
+            idHandle.write(id);
 
-
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
         }
 
-        CreateCubeStack(2, 1, 1, math::vec3(35, -1.5f, 15.0f), math::vec3(1, 1, 1)
-            , cubeParams, 0.1f, cubeH, wireframeH);
+        {
+            auto ent = m_ecs->createEntity();
 
-        //10 stactk
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+            positionH.write(math::vec3(testPos, -1.0f, 15.0f));
+            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
 
-        //Pyramid Stack
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+
+            physicsComponent2.AddBox(cubeParams);
+            physicsComponent2.isTrigger = false;
+            entPhyHande.write(physicsComponent2);
+
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+
+            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+            auto id = idHandle.read();
+            id.id = "NON_STATIC";
+            idHandle.write(id);
+
+            //rotation *= math::angleAxis(math::deg2rad(30.0f), math::vec3(1, 0, 0));
+
+            auto rbHandle = ent.add_component<physics::rigidbody>();
+        }
+
+
+
+
+
     }
+
 
 #pragma region input stuff
     void onLightSwitch(light_switch* action)
@@ -1782,7 +2048,10 @@ public:
                 if (!sun)
                 {
                     sun = createEntity();
-                    sun.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle("directional light")), rendering::mesh_renderer(rendering::MaterialCache::get_material("directional light")));
+                    sun.add_components<rendering::mesh_renderable>(
+                        mesh_filter(MeshCache::get_handle("directional light")),
+                        rendering::mesh_renderer( rendering::MaterialCache::get_material("directional light")));
+
                     sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
                     sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
                 }
@@ -1971,6 +2240,8 @@ public:
     }
 #pragma endregion
 
+
+
     void update(time::span deltaTime)
     {
         static float timer = 0;
@@ -2000,6 +2271,43 @@ public:
 
         static auto sahQuery = createQuery<sah, rotation, position>();
 
+        //static auto rbQuery = createQuery<addRB>();
+       
+
+        //static time::span buffer;
+        static int frameCount;
+        //static time::span accumulated;
+
+        //buffer += deltaTime;
+        //accumulated += deltaTime;
+        frameCount++;
+
+      /*  for (auto entity : rbQuery)
+        {
+            if (physics::PhysicsSystem::IsPaused) { break; }
+
+            if (auto addHandle = entity.get_component_handle<addRB>())
+            {
+                auto adder = addHandle.read();
+                adder.time += deltaTime;
+
+                if (adder.time > adder.addTime && !adder.rigidbodyAdded)
+                {
+                    adder.rigidbodyAdded = true;
+
+                    auto rbHandle = entity.add_component<physics::rigidbody>();
+                    auto rb = rbHandle.read();
+
+                    rb.velocity = adder.force;
+
+                    rbHandle.write(rb);
+                  
+                }
+
+                addHandle.write(adder);
+            }
+        }*/
+
         sahQuery.queryEntities();
         for (auto entity : sahQuery)
         {
@@ -2011,6 +2319,9 @@ public:
 
             auto pos = entity.read_component<position>();
             debug::drawLine(pos, pos + rot.forward(), math::colors::magenta);
+
+           
+
         }
 
         if (rotate && !physics::PhysicsSystem::IsPaused)
@@ -2024,6 +2335,223 @@ public:
                 entity.write_component(rot);
             }
         }
+
+        static auto posQuery = createQuery<position>();
+
+        //posQuery.queryEntities();
+        //for (auto entity : posQuery)
+        //{
+        //    auto pos = entity.read_component<position>();
+
+        //    debug::drawLine(pos, pos + math::vec3(0,1,0), math::colors::blue,10.0f,0.0f);
+
+        //}
+
+       
+
+        //if (buffer > 1.f)
+        //{
+        //    buffer -= 1.f;
+
+        //    for (auto entity : query)
+        //    {
+        //        auto comp = entity.get_component_handle<sah>();
+        //        std::cout << "component value: " << comp.read().value << std::endl;
+        //    }
+
+        //    std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+        //}
+    }
+
+    void physicsUpdate(time::span deltaTime)
+    {
+        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+
+        halfEdgeQuery.queryEntities();
+        //log::debug("halfEdgeQuery.size() {} ", halfEdgeQuery.size());
+        for (auto entity : halfEdgeQuery)
+        {
+            auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
+            auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
+
+            math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+
+            auto splitter = edgeFinderH.read();
+
+            //auto edgePtr = splitter.edgeFinder.currentPtr;
+
+            //math::vec3 worldPos = transform * math::vec4(edgePtr->position, 1);
+            //math::vec3 worldNextPos = transform * math::vec4(edgePtr->nextEdge->position, 1);
+
+            //debug::drawLine(worldPos, worldNextPos, math::colors::red, 1.0f, 0.0f, true);
+
+            //debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1f, 0), math::colors::green, 5.0f, 0.0f, true);
+            //debug::drawLine(worldNextPos, worldNextPos + math::vec3(0, 0.1f, 0), math::colors::blue, 5.0f, 0.0f, true);
+
+            auto getEdge = entity.get_component_handle<physics::identifier>();
+
+            for (size_t i = 0; i < splitter.debugHelper.intersectionIslands.size(); i++)
+            {
+                auto maxColor = splitter.debugHelper.colors.size();
+                math::color color = splitter.debugHelper.colors[i % maxColor];
+
+                auto island = splitter.debugHelper.intersectionIslands.at(i);
+
+                for (auto pos : island)
+                {
+                    math::vec3 worldIntersect = transform * math::vec4(pos, 1);
+                    debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), color, 10.0f, 0.0f);
+                }
+
+
+            }
+
+            /* for (auto intersectingPosition : edgeFinder.debugHelper.intersectionsPolygons)
+             {
+                 math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
+                 debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::blue, 10.0f, 0.0f);
+             }*/
+
+            for (auto intersectingPosition : splitter.debugHelper.nonIntersectionPolygons)
+            {
+                math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
+                debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::yellow, 10.0f, 0.0f);
+            }
+
+
+            //log::debug("Count boundary polygon {} ");
+            for (auto polygon : splitter.meshPolygons)
+            {
+                int boundaryCount = 0;
+                math::vec3 worldCentroid = transform * math::vec4(polygon->localCentroid, 1);
+
+                for (auto edge : polygon->GetMeshEdges())
+                {
+                    if (edge->isBoundary)
+                    {
+                        boundaryCount++;
+
+                        math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
+                        math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
+
+                        math::vec3 edgeToCentroid = (worldCentroid - worldEdgePos) * 0.05f;
+                        math::vec3 nextEdgeToCentroid = (worldCentroid - worldEdgeNextPos) * 0.05f;
+
+                        debug::drawLine(worldEdgePos + edgeToCentroid
+                            , worldEdgeNextPos + nextEdgeToCentroid, polygon->debugColor, 5.0f, 0.0f, false);
+                    }
+
+                }
+  /*              math::vec3 normalWorld = transform * math::vec4(polygon->localNormal, 0);
+                debug::drawLine(worldCentroid
+                    , worldCentroid + (normalWorld), polygon->debugColor, 5.0f, 0.0f, false);*/
+
+                // log::debug("polygon boundaryCount {} ", boundaryCount);
+
+            }
+
+            auto& boundaryInfoList = splitter.debugHelper.boundaryEdgesForPolygon;
+
+           /* debug::drawLine(splitter.debugHelper.cuttingSetting.first
+                , splitter.debugHelper.cuttingSetting.first + (splitter.debugHelper.cuttingSetting.second) * 2.0f, math::colors::cyan, 5.0f, 0.0f, false);*/
+
+            
+
+            for (size_t i = 0; i < boundaryInfoList.size(); i++)
+            {
+                auto& boundaryInfo = boundaryInfoList[i];
+                math::color color = boundaryInfo.drawColor;
+
+                if (i != splitter.debugHelper.polygonToDisplay) { continue; }
+
+                math::vec3 polygonNormalOffset = boundaryInfo.worldNormal * 0.01f;
+
+                debug::drawLine(boundaryInfo.intersectionPoints.first
+                    ,  boundaryInfo.intersectionPoints.second, math::colors::magenta, 10.0f, 0.0f, false);
+
+                for (int j = 0; j < boundaryInfo.boundaryEdges.size(); j++)
+                {
+                    auto edge = boundaryInfo.boundaryEdges.at(j);
+
+                    math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
+                    math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
+
+                    float interpolant = (float)j / boundaryInfo.boundaryEdges.size();
+
+                    debug::drawLine(worldEdgePos
+                        , worldEdgeNextPos, math::lerp(color, math::colors::black, interpolant), 10.0f, 0.0f, false);
+
+                }
+
+                math::vec3 basePos = boundaryInfo.base + polygonNormalOffset;
+                debug::drawLine(basePos
+                    , boundaryInfo.base + math::vec3(0,0.1f,0) + polygonNormalOffset, math::colors::red, 10.0f, 0.0f, false);
+
+                debug::drawLine(boundaryInfo.prevSupport + polygonNormalOffset
+                    , boundaryInfo.prevSupport + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::green, 10.0f, 0.0f, false);
+
+                debug::drawLine(boundaryInfo.nextSupport + polygonNormalOffset
+                    , boundaryInfo.nextSupport + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::blue, 10.0f, 0.0f, false);
+
+                debug::drawLine(boundaryInfo.intersectionEdge + polygonNormalOffset
+                    , boundaryInfo.intersectionEdge + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::magenta, 10.0f, 0.0f, false);
+            }
+
+        }
+    }
+
+    void differentInterval(time::span deltaTime)
+    {
+        static time::span buffer;
+        static int frameCount;
+        static time::span accumulated;
+
+        buffer += deltaTime;
+        accumulated += deltaTime;
+        frameCount++;
+
+        math::vec2 v;
+        v.x = 10;
+        v.y = 20;
+
+        if (buffer > 1.f)
+        {
+            buffer -= 1.f;
+            //std::cout << "This is a fixed interval!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+        }
+    }
+
+    void differentThread(time::span deltaTime)
+    {
+        static auto query = createQuery<sah>();
+
+        static time::span buffer;
+        static int frameCount;
+        static time::span accumulated;
+
+        buffer += deltaTime;
+        accumulated += deltaTime;
+        frameCount++;
+
+        /* if (buffer > 1.f)
+         {
+             buffer -= 1.f;
+
+             for (auto entity : query)
+             {
+                 auto comp = entity.get_component_handle<sah>();
+                 std::cout << "component value on different thread: " << comp.read().value << std::endl;
+             }
+
+             std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+         }*/
+
+         //if (accumulated > 10.f)
+         //{
+         //	std::cout << "raising exit event" << std::endl;
+         //	raiseEvent<events::exit>();
+         //	//throw legion_exception_msg("hehehe fuck you >:D");
+         //}
     }
 
     void drawInterval(time::span deltaTime)
@@ -2089,6 +2617,7 @@ public:
         physics::PhysicsSystem::bPoint.clear();
 
         physicsQuery.queryEntities();
+        auto size = physicsQuery.size();
         //this is called so that i can draw stuff
         for (auto entity : physicsQuery)
         {
@@ -2115,7 +2644,6 @@ public:
                 if (entity.get_component_handle<physics::rigidbody>())
                 {
                     usedColor = rbColor;
-                    useDepth = true;
                 }
 
 
@@ -2139,7 +2667,7 @@ public:
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
 
-                        debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
+                        //debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
 
                         if (!currentEdge) { return; }
 
@@ -2151,7 +2679,7 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
                             math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
 
-                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f, 0.0f, useDepth);
+                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f,0.0f, useDepth);
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
@@ -2214,31 +2742,32 @@ public:
         }
     }
 
-    void onExtendedPhysicsContinueRequest(extendedPhysicsContinue* action)
-    {
-        if (action->value)
-        {
-            physics::PhysicsSystem::IsPaused = false;
-        }
-        else
-        {
-            physics::PhysicsSystem::IsPaused = true;
-        }
+    //void onExtendedPhysicsContinueRequest(extendedPhysicsContinue* action)
+    //{
+    //    if (action->value)
+    //    {
+    //        physics::PhysicsSystem::IsPaused = false;
+    //    }
+    //    else
+    //    {
+    //        physics::PhysicsSystem::IsPaused = true;
+    //    }
 
-    }
+    //}
 
-    void onNextPhysicsTimeStepRequest(nextPhysicsTimeStepContinue* action)
-    {
-        if (!(action->value))
-        {
-            physics::PhysicsSystem::IsPaused = true;
-            physics::PhysicsSystem::oneTimeRunActive = true;
-            log::debug(" onNextPhysicsTimeStepRequest");
-        }
+    //void onNextPhysicsTimeStepRequest(nextPhysicsTimeStepContinue* action)
+    //{
+    //    if (!(action->value))
+    //    {
+    //        physics::PhysicsSystem::IsPaused = true;
+    //        physics::PhysicsSystem::oneTimeRunActive = true;
+    //        log::debug(" onNextPhysicsTimeStepRequest");
+    //    }
 
-    }
+    //}
 
-    void FrictionTestActivate(activateFrictionTest* action)
+
+    /*void FrictionTestActivate(activateFrictionTest* action)
     {
         if (action->value)
         {
@@ -2285,7 +2814,7 @@ public:
 
 
         }
-    }
+    }*/
 
     void CreateCubeStack(int height, int width, int breadth, math::vec3 startPosition, math::vec3 offset,
         physics::cube_collider_params cubeParams, float cubeFriction, rendering::model_handle cubeH, rendering::material_handle wireframeH, bool addRigidbody = true)
@@ -2300,6 +2829,10 @@ public:
                     auto ent = m_ecs->createEntity();
 
                     auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+                    //auto renderableHandle = m_ecs->createComponents<rendering::mesh_renderable>(ent);
+                    //renderableHandle.write({ cubeH, wireframeH });
+                    ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
                     physics::physicsComponent physicsComponent;
                     physics::physicsComponent::init(physicsComponent);
@@ -2333,5 +2866,58 @@ public:
             }
         }
     }
+
+    void OnNextEdge(nextEdge_action* action)
+    {
+        /*static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+
+        if (action->value)
+        {
+            log::debug("OnNextEdge(nextEdge_action* action)");
+            for (auto entity : halfEdgeQuery)
+            {
+
+                auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
+
+                auto splitter = edgeFinderH.read();
+
+              
+                splitter .edgeFinder.currentPtr = splitter .edgeFinder.currentPtr->nextEdge;
+
+                edgeFinderH.write(splitter);
+
+            }
+        }*/
+
+      
+    }
+
+    void OnNextPair(nextPairing_action * action)
+    {
+        /*static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+
+        if (action->value)
+        {
+            log::debug("OnNextPair(nextPairing_action * action)");
+            for (auto entity : halfEdgeQuery)
+            {
+
+                auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
+
+                auto splitter = edgeFinderH.read();
+
+                splitter .edgeFinder.currentPtr = splitter .edgeFinder.currentPtr->pairingEdge;
+
+
+                edgeFinderH.write(splitter);
+
+            }
+        }*/
+      
+    }
+
+   
+        
+    
 
 };
