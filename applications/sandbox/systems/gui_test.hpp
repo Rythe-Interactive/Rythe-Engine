@@ -38,15 +38,15 @@ class GuiTestSystem : public System<GuiTestSystem>
         }
 
 
-        cubeEntity = createEntity();
+        /*cubeEntity = createEntity();
 
         cubeEntity.add_components<transform>(position(), rotation(), scale());
-        cubeEntity.add_components<mesh_renderable>(mesh_filter(cubeModel.get_mesh()), mesh_renderer(vertexColorMaterial));
+        cubeEntity.add_components<mesh_renderable>(mesh_filter(cubeModel.get_mesh()), mesh_renderer(vertexColorMaterial));*/
 
 
         //gui code goes here
-        ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
-        createProcess<&GuiTestSystem::update>("Update");
+       /* ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
+        createProcess<&GuiTestSystem::update>("Update");*/
     }
 
 

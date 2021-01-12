@@ -154,14 +154,19 @@ vec4 ModelToScreenSpacePosition(vec3 pos)
     #endif
 }
 
-vec3 SceneColor(vec2 uv)
+vec4 SceneColor(vec2 uv)
 {
-    return texture(lgn_sceneColor, uv).rgb;
+    return texture(lgn_sceneColor, uv);
 }
 
 vec3 SceneDepth(vec2 uv)
 {
     return texture(lgn_sceneDepth, uv).rgb;
+}
+
+vec4 HDROverdraw(vec2 uv)
+{
+    return texture(lgn_hdrOverdraw,uv);
 }
 
 float LinearDepth(float depth)
@@ -186,19 +191,29 @@ out float gl_FragDepth;
 
 in vec4 gl_FragCoord;
 
+ivec2 ScreenResolution()
+{
+    return lgn_cmr_in.viewportSize;
+}
+
 vec2 ScreenUV()
 {
     return gl_FragCoord.xy / lgn_cmr_in.viewportSize;
 }
 
-vec3 SceneColor()
+vec4 SceneColor()
 {
-    return texture(lgn_sceneColor, gl_FragCoord.xy / lgn_cmr_in.viewportSize).rgb;
+    return texture(lgn_sceneColor, gl_FragCoord.xy / lgn_cmr_in.viewportSize);
 }
 
 vec3 SceneDepth()
 {
     return texture(lgn_sceneDepth, gl_FragCoord.xy / lgn_cmr_in.viewportSize).rgb;
+}
+
+vec4 HDROverdraw()
+{
+    return texture(lgn_hdrOverdraw, gl_FragCoord.xy / lgn_cmr_in.viewportSize);
 }
 
 float LinearDepth()

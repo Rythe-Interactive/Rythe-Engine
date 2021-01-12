@@ -11,8 +11,8 @@ namespace legion::physics
         float breadth;
         float height;
 
-        cube_collider_params(float pWidth = 1.0f, float pBreath = 1.0f
-            , float pHeight = 1.0f, math::vec3 pOffset = math::vec3(0.0f))
+        cube_collider_params(float pWidth = 2.0f, float pBreath = 2.0f
+            , float pHeight = 2.0f, math::vec3 pOffset = math::vec3(0.0f))
             : width{pWidth},breadth{pBreath},height{pHeight},offset{pOffset}
         {
             

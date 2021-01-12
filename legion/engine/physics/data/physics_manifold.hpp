@@ -9,14 +9,12 @@
 
 namespace legion::physics
 {
-
-    /** @struct physics_manifold_precursor
-    * @brief contains the necessary information to detect and resolve a collision
-    */
-
     class PhysicsCollider;
     class PenetrationQuery;
 
+    /** @struct physics_manifold
+    * @brief contains the necessary information to detect and resolve a collision
+    */
     struct physics_manifold
     {
         std::vector<physics_contact> contacts;

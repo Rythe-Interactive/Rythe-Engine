@@ -1,14 +1,17 @@
 
 #include <physics/data/edgepenetrationquery.hpp>
 #include <physics/physics_statics.hpp>
-
+#include <rendering/debugrendering.hpp>
 
 
 namespace legion::physics
 {
     EdgePenetrationQuery::EdgePenetrationQuery(HalfEdgeEdge* pRefEdge, HalfEdgeEdge* pIncEdge,
         math::vec3& pFaceCentroid, math::vec3& pNormal, float& pPenetration, bool pIsARef) :
-        PenetrationQuery(pFaceCentroid,pNormal,pPenetration,pIsARef),refEdge(pRefEdge),incEdge(pIncEdge) {}
+        PenetrationQuery(pFaceCentroid,pNormal,pPenetration,pIsARef),refEdge(pRefEdge),incEdge(pIncEdge)
+    {
+        debugID = "EdgePenetrationQuery";
+    }
 
 
     void EdgePenetrationQuery::populateContactList(physics_manifold& manifold,
@@ -27,6 +30,10 @@ namespace legion::physics
         math::vec3 incContactPoint;
 
         PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, refContactPoint, incContactPoint);
+
+        /*debug::user_projectdrawLine(p1, p2, math::colors::black, 5.0f, 20.0f);
+        debug::user_projectdrawLine(p3, p4, math::colors::grey, 5.0f, 20.0f);
+        debug::user_projectdrawLine(refContactPoint, incContactPoint, math::colors::darkgrey, 5.0f, 20.0f);*/
 
         physics_contact contact;
 
