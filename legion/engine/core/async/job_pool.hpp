@@ -48,7 +48,7 @@ namespace legion::core::async
 
         virtual void wait(wait_priority priority = wait_priority_normal) const noexcept override
         {
-            while (!m_progress->isDone())
+            while (!this->m_progress->isDone())
             {
                 switch (priority)
                 {
@@ -61,7 +61,7 @@ namespace legion::core::async
                     if (job)
                         job->execute();
                     else
-                        m_progress->complete();
+                        this->m_progress->complete();
                     L_PAUSE_INSTRUCTION();
                     break;
                 }
@@ -72,7 +72,7 @@ namespace legion::core::async
                     if (job)
                         job->execute();
                     else
-                        m_progress->complete();
+                        this->m_progress->complete();
                     break;
                 }
                 }
