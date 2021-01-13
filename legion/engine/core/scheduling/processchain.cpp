@@ -56,7 +56,7 @@ namespace legion::core::scheduling
         {
             m_threadId = threadId;
 
-            m_scheduler->sendCommand(threadId, [](void* param) { ProcessChain::threadedRun(reinterpret_cast<ProcessChain*>(param)); }, this);
+            m_scheduler->sendCommand(threadId, [&]() { ProcessChain::threadedRun(reinterpret_cast<ProcessChain*>(this)); });
 
             return true;
         }

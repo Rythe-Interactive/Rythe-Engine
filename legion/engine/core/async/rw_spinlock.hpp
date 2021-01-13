@@ -9,6 +9,7 @@
 #include <core/platform/platform.hpp>
 #include <core/containers/sparse_set.hpp>
 #include <core/detail/internals.hpp>
+#include <core/async/wait_priority.hpp>
 
 /**
  * @file rw_spinlock.hpp
@@ -18,15 +19,9 @@ namespace legion::core::async
 {
     enum struct lock_state : int { idle = 0, read = 1, write = -1 };
 
-    enum struct lock_priority : int { normal, wait, real_time };
-
     inline constexpr lock_state lock_state_idle = lock_state::idle;
     inline constexpr lock_state lock_state_read = lock_state::read;
     inline constexpr lock_state lock_state_write = lock_state::write;
-
-    inline constexpr lock_priority lock_priority_normal = lock_priority::normal;
-    inline constexpr lock_priority lock_priority_wait = lock_priority::wait;
-    inline constexpr lock_priority lock_priority_real_time = lock_priority::real_time;
 
     /**@class rw_spinlock
      * @brief Lock used with ::async::readonly_guard and ::async::readwrite_guard.
@@ -55,11 +50,11 @@ namespace legion::core::async
         mutable  std::atomic_int m_lockState = { 0 };
         mutable std::thread::id m_writer;
 
-        void read_lock(lock_priority priority = lock_priority::real_time) const;
+        void read_lock(wait_priority priority = wait_priority::real_time) const;
 
         bool read_try_lock() const;
 
-        void write_lock(lock_priority priority = lock_priority::real_time) const;
+        void write_lock(wait_priority priority = wait_priority::real_time) const;
 
         bool write_try_lock() const;
 
@@ -85,7 +80,7 @@ namespace legion::core::async
          *		 Locking for write multiple times will remain in write.
          * @param permissionLevel
          */
-        void lock(lock_state permissionLevel = lock_state::write, lock_priority priority = lock_priority::real_time) const;
+        void lock(lock_state permissionLevel = lock_state::write, wait_priority priority = wait_priority::real_time) const;
 
         /**@brief Try to lock for a certain permission level. If it fails it will return false otherwise true. (locking for idle does nothing)
          * @note Locking stacks, locking for readonly multiple times will remain readonly.
@@ -141,7 +136,7 @@ namespace legion::core::async
     public:
         /**@brief Creates readonly guard and locks for Read-only.
          */
-        readonly_guard(const rw_spinlock& lock, lock_priority priority = lock_priority::real_time) : m_lock(lock)
+        readonly_guard(const rw_spinlock& lock, wait_priority priority = wait_priority::real_time) : m_lock(lock)
         {
             m_lock.lock(lock_state::read, priority);
         }
@@ -235,7 +230,7 @@ namespace legion::core::async
     public:
         /**@brief Creates read-write guard and locks for Read-Write.
          */
-        readwrite_guard(const rw_spinlock& lock, lock_priority priority = lock_priority::real_time) : m_lock(lock)
+        readwrite_guard(const rw_spinlock& lock, wait_priority priority = wait_priority::real_time) : m_lock(lock)
         {
             m_lock.lock(lock_state::write, priority);
         }

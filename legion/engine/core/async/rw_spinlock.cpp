@@ -11,7 +11,7 @@ namespace legion::core::async
     thread_local std::unordered_map<uint, int> rw_spinlock::m_localReaders;
     thread_local std::unordered_map<uint, lock_state> rw_spinlock::m_localState;
 
-    void rw_spinlock::read_lock(lock_priority priority) const
+    void rw_spinlock::read_lock(wait_priority priority) const
     {
         OPTICK_EVENT();
         if (m_forceRelease)
@@ -35,13 +35,13 @@ namespace legion::core::async
 
                 switch (priority)
                 {
-                case lock_priority::wait:
+                case wait_priority::sleep:
                     std::this_thread::sleep_for(std::chrono::microseconds(1));
                     break;
-                case lock_priority::normal:
+                case wait_priority::normal:
                     std::this_thread::yield();
                     break;
-                case lock_priority::real_time:
+                case wait_priority::real_time:
                 default:
                     L_PAUSE_INSTRUCTION();
                     break;
@@ -84,7 +84,7 @@ namespace legion::core::async
         return true;
     }
 
-    void rw_spinlock::write_lock(lock_priority priority) const
+    void rw_spinlock::write_lock(wait_priority priority) const
     {
         OPTICK_EVENT();
         if (m_forceRelease)
@@ -112,13 +112,13 @@ namespace legion::core::async
 
                 switch (priority)
                 {
-                case lock_priority::wait:
+                case wait_priority::sleep:
                     std::this_thread::sleep_for(std::chrono::microseconds(1));
                     break;
-                case lock_priority::normal:
+                case wait_priority::normal:
                     std::this_thread::yield();
                     break;
-                case lock_priority::real_time:
+                case wait_priority::real_time:
                 default:
                     L_PAUSE_INSTRUCTION();
                     break;
@@ -242,7 +242,7 @@ namespace legion::core::async
         return *this;
     }
 
-    void rw_spinlock::lock(lock_state permissionLevel, lock_priority priority) const
+    void rw_spinlock::lock(lock_state permissionLevel, wait_priority priority) const
     {
         OPTICK_EVENT();
         if (m_forceRelease)
