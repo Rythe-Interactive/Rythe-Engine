@@ -2033,10 +2033,11 @@ public:
                 }).wait();
 
         auto elapsed = t.end();
-        for (auto num : numbers)
+        for (int i = 0; i < 20; i++)
         {
-            log::debug(num);
+            log::debug(numbers[i]);
         }
+        log::debug("...");
         log::debug("dispatches took {}ms", elapsed.milliseconds());
 
         static bool on = true;
