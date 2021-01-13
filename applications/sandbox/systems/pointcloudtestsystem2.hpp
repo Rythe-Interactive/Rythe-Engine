@@ -75,7 +75,7 @@ public:
 
         auto ent2 = createEntity();
         auto trans2 = ent2.add_components<transform>(position(5, 0, 0), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(uvMesh, trans2, billboardMat, image, 10000, 10));
+        ent2.add_component<point_cloud>(point_cloud(uvMesh, trans2, billboardMat, image, 5000, 0.2f));
     }
 };
 

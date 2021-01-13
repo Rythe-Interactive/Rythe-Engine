@@ -6,12 +6,15 @@ namespace legion::rendering
     struct lod
     {
         // lod() = default;
-        lod(int maxLevel = 4, float maxDistance = 50.0f) : m_maxLOD(maxLevel), m_maxDistance(maxDistance)
+        lod(int maxLevel = 5, float maxDistance = 50.0f) : MaxLod(maxLevel), m_maxDistance(maxDistance)
         {
             UpdateThresholdLinear();
         }
+        int MaxLod;
+        int Level = 0;
+        int MaxTreeLevel = 0;
 
-        int  Level = 0;
+
 
         void UpdateLOD(float distance)
         {
@@ -28,10 +31,10 @@ namespace legion::rendering
         }
         void UpdateThresholdLinear()
         {
-            float distance = m_maxDistance / (float)m_maxLOD;
+            float distance = m_maxDistance / (float)MaxLod;
             float currentDist = distance;
-            m_thresholdLevels = std::vector<float>(m_maxLOD);
-            for (size_t i = 0; i < m_maxLOD; i++)
+            m_thresholdLevels = std::vector<float>(MaxLod);
+            for (size_t i = 0; i < MaxLod; i++)
             {
                 m_thresholdLevels.at(i) = currentDist;
                 currentDist += distance;
@@ -40,7 +43,6 @@ namespace legion::rendering
         }
 
     private:
-        int m_maxLOD;
         float m_maxDistance;
         std::vector<float> m_thresholdLevels;
 

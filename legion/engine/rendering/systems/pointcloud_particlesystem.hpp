@@ -1,8 +1,9 @@
 #pragma once
 #include <rendering/data/particle_system_base.hpp>
 #include <rendering/debugrendering.hpp>
-#include<core/core.hpp>
+#include <core/core.hpp>
 #include <rendering/data/Octree.hpp>
+#include <rendering/components/lod.hpp>
 using namespace legion;
 /**
  * @struct pointCloudParameters
@@ -53,7 +54,7 @@ public:
      */
     void setup(ecs::component_handle<rendering::particle_emitter> emitter_handle) const override
     {
-        //Reads emitter.
+        //Reads emitter
         rendering::particle_emitter emitter = emitter_handle.read();
 
         float minX = std::numeric_limits<float>().max();
@@ -67,77 +68,142 @@ public:
 
         for (auto position : m_positions)
         {
-            ////Checks the emitter if it has a recycled particle to use, if not it creates a new one.
-            //ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter_handle);
-            //auto ent = particleComponent.entity;
-            ////Checks if the entity has a transform, if not it adds one.
-            //if (!ent.has_components<transform>())
-            //    ent.add_components<transform>();
-
-            ////  Gets position, rotatio nand scale of entity.
-            //auto trans = ent.get_component_handles<transform>();
-            //auto& [pos, _, scale] = trans;
-            //auto currentPos = pos.read();
             if (position.x < minX) minX = position.x;
             if (position.x > maxX) maxX = position.x;
             if (position.y < minY) minY = position.y;
             if (position.y > maxY) maxY = position.y;
             if (position.z < minZ) minZ = position.z;
             if (position.z > maxZ) maxZ = position.z;
-
-            //////Sets the particle scale to the right scale.
-            //pos.write(position);
-            //scale.write(math::vec3(m_startingSize));
-
-            ////Populates the particle with the appropriate stuffs.
-            //createParticle(particleComponent, trans);
         }
         float universalMin = math::min(minX, math::min(minY, minX));
         float universalMax = math::max(maxX, math::max(maxY, maxX));
 
-        math::vec3 min = math::vec3(universalMin, universalMin, universalMin);
-        math::vec3 max = math::vec3(universalMax, universalMax, universalMax);
-        auto tree = rendering::Octree<uint8>(8, min, max);
+        math::vec3 min = math::vec3(universalMin);
+        math::vec3 max = math::vec3(universalMax);
+        emitter.Tree = new rendering::Octree<uint8>(8, min, max);
 
-        tree.GenerateAverage();
+        //  emitter.Tree.GenerateAverage();
+        log::debug("got points: ");
+        log::debug(m_positions.size());
+
         for (auto position : m_positions)
         {
-            tree.insertNode(0, position);
+            emitter.Tree->insertNode(0, position);
         }
-        tree.GetAverage();
-
-        int depth = 4;
-        auto data = tree.GetData(depth);
-        float treeSize = (universalMax - universalMin);
-        float pointSizeModifier = treeSize / (float)((depth + 1) * 8);
-        log::debug("tree depth :" + std::to_string(depth));
-        log::debug("point items :" + std::to_string(data.size()));
-        for (auto item : data)
+        // m_maxLevel = emitter.Tree->GetTreeDepth();
+      //   log::debug(m_maxLevel);
+         //make sure to write so that populate emitter gets the generated tree data
+        emitter_handle.write(emitter);
+        populateEmitter(emitter_handle);
+    }
+    //iterates input posiitons and creates particles based on position
+    void CreateParticles(std::vector<math::vec3>* inputData, rendering::particle_emitter& emitter) const
+    {
+        for (auto item : *inputData)
         {
-           // log::debug(item);
-            ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter_handle);
+            ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter);
             auto ent = particleComponent.entity;
-            //Checks if the entity has a transform, if not it adds one.
-            if (!ent.has_components<transform>())
-                ent.add_components<transform>();
 
             //Gets position, rotation and scale of entity.
             auto trans = ent.get_component_handles<transform>();
             auto& [pos, _, scale] = trans;
 
-
             //Sets the particle scale to the right scale.
             pos.write(item);
-            scale.write(math::vec3(m_startingSize * pointSizeModifier));
+            scale.write(math::vec3(m_startingSize));
 
             //Populates the particle with the appropriate stuffs.
             createParticle(particleComponent, trans);
         }
     }
-
-    void update(std::vector<ecs::entity_handle>, ecs::component_handle<rendering::particle_emitter>, time::span) const override
+    void decreaseDetail(rendering::particle_emitter& emitter, int targetLod, int maxLod) const
     {
+        log::debug("decreasing detail");
 
+        //read emitter
+        if (emitter.livingParticles.size() == 0) return;
+        //get the amount of particles to remove
+        int targetParticleCount = emitter.ElementsPerLOD.at(maxLod - targetLod);
+        int delta = emitter.livingParticles.size() - targetParticleCount;
+        //remove particles from the end of the living particles
+        //living particles should be stored in order of detail
+        for (size_t i = 1; i < delta + 1; i++)
+        {
+            cleanUpParticle(emitter.livingParticles.at(emitter.livingParticles.size() - 1), emitter);
+        }
+    }
+    void increaseDetail(rendering::particle_emitter& emitter, int targetLod, int maxLod, rendering::lod& lod) const
+    {
+        log::debug("increasing detail");
+        if (!emitter.Tree) return;
+        //get lod component 
+        int maxLOD = lod.MaxLod;
+        int maxTreeDepth = emitter.Tree->GetTreeDepth();
+        //calculates how many tree depth levels are on LOD 
+        int treeStep = maxTreeDepth / maxLOD;
+        //create data container
+        std::vector<math::vec3>* newData = new std::vector<math::vec3>();
+        //populate emitter progressively for each LOD
+        int particleCount = 0;
+        for (size_t i = targetLod; i < emitter.CurrentLOD; i++)
+        {
+            emitter.Tree->GetDataRange(i, (i + 1), newData);
+            particleCount += newData->size();
+            emitter.ElementsPerLOD.push_back(particleCount);
+            CreateParticles(newData, emitter);
+            newData->clear();
+        }
+    }
+    void populateEmitter(ecs::component_handle<rendering::particle_emitter> emitter_handle) const
+    {
+        OPTICK_EVENT();
+        //read particle emitter if tree is null something went wrong, return
+        rendering::particle_emitter emitter = emitter_handle.read();
+        if (!emitter.Tree) return;
+        //get lod component 
+        auto lod = emitter_handle.entity.get_component_handle<rendering::lod>().read();
+        int maxLOD = lod.MaxLod;
+        int maxTreeDepth = emitter.Tree->GetTreeDepth();
+        //calculates how many tree depth levels are on LOD 
+        int treeStep = maxTreeDepth / maxLOD;
+        //create data container
+        std::vector<math::vec3>* newData = new std::vector<math::vec3>();
+        //populate emitter progressively for each LOD
+        int particleCount = 0;
+        for (size_t i = 0; i < maxLOD; i++)
+        {
+            log::debug(std::to_string(newData->size()));
+            emitter.Tree->GetDataRange(i, (i + 1), newData);
+            particleCount += newData->size();
+            emitter.ElementsPerLOD.push_back(particleCount);
+            CreateParticles(newData, emitter);
+            newData->clear();
+        }
+
+        emitter_handle.write(emitter);
+    }
+
+
+    void update(std::vector<ecs::entity_handle>& entities, ecs::component_handle<rendering::particle_emitter> emitterHandle, time::span) const override
+    {
+        OPTICK_EVENT();
+        auto lodComponent = emitterHandle.entity.get_component_handle<rendering::lod>().read();
+        rendering::particle_emitter emitter = emitterHandle.read();
+
+        if (emitter.CurrentLOD != lodComponent.Level)
+        {
+            if (emitter.CurrentLOD > lodComponent.Level)
+            {
+                increaseDetail(emitter, lodComponent.Level, lodComponent.MaxLod, lodComponent);
+            }
+            else
+            {
+                decreaseDetail(emitter, lodComponent.Level, lodComponent.MaxLod);
+            }
+            emitter.CurrentLOD = lodComponent.Level;
+            emitterHandle.write(emitter);
+
+        }
     }
 
 private:

@@ -94,6 +94,10 @@
     <ClInclude Include="pipeline\default\postfx\fxaa.hpp" />
     <ClInclude Include="pipeline\default\stages\debugrenderstage.hpp" />
     <ClInclude Include="data\Octree.hpp" />
+    <ClInclude Include="components\lod.hpp" />
+    <ClInclude Include="systems\lod_manager.hpp" />
+    <ClInclude Include="components\pointcloud_renderable.hpp" />
+    <ClInclude Include="components\point.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\buffer.inl" />

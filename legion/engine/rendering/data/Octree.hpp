@@ -22,6 +22,10 @@ namespace legion::rendering
     public:
 
         Octree() = default;
+        Octree(const Octree&) = default;
+        Octree(Octree&&) noexcept = default;
+        Octree& operator=(const Octree&) = default;
+        Octree& operator=(Octree&&) noexcept = default;
         Octree(size_type capacity, math::vec3 min, math::vec3 max, math::vec3 position)
             : m_capacity(capacity), m_min(min), m_max(max), m_position(position) {};
 
@@ -55,11 +59,11 @@ namespace legion::rendering
                 m_children->at(Subsection::BotRightBack) = Octree<ValueType>(m_capacity, math::vec3(m_position.x, m_min.y, m_position.z), math::vec3(m_max.x, m_position.y, m_max.z));
                 m_children->at(Subsection::BotLeftBack) = Octree<ValueType>(m_capacity, math::vec3(m_min.x, m_min.y, m_position.z), math::vec3(m_position.x, m_position.y, m_max.z));
                 //pass in current hold data into newly created children
-                for (auto& [itemPos, item] : m_items)
+             /*   for (auto& [itemPos, item] : m_items)
                 {
                     int childIndex = GetChildIndex(itemPos);
                     m_children->at(childIndex).insertNode(item, itemPos);
-                }
+                }*/
             }
             int childIndex = GetChildIndex(pos);
             m_children->at(childIndex).insertNode(item, pos);
@@ -81,10 +85,30 @@ namespace legion::rendering
             return m_averagePos;
         }
 
-        std::unique_ptr<std::array<Octree, 8>>  m_children;
-        std::vector<math::vec3> GetData(int depth)
+        int GetTreeDepth(int inputDepth = 0)
         {
-            std::vector<math::vec3> Data;
+            int depth = inputDepth;
+
+
+            if (m_children)
+            {
+                //iterate child octants and get their largest depth
+                int newDepth = -INT16_MAX;
+                for (int i = 0; i < 8; i++)
+                {
+                    if (m_children->at(i).GetTreeDepth(depth + 1) > newDepth)  newDepth = m_children->at(i).GetTreeDepth(depth + 1);
+                }
+                return depth + newDepth;
+            }
+            return depth;
+        }
+        void GetData(int depth, std::vector<math::vec3>* Data)
+        {
+            //get data for current tree depth
+            for (auto& [itemPos, item] : m_items)
+            {
+                Data->push_back(itemPos);
+            }
             //check if this tree has children
             if (m_children)
             {
@@ -93,29 +117,63 @@ namespace legion::rendering
                 {
                     for (int i = 0; i < 8; i++)
                     {
-                        std::vector<math::vec3> newData = m_children->at(i).GetData(depth - 1);
-
-                        Data.insert(Data.end(), newData.begin(), newData.end());
+                        m_children->at(i).GetData(depth - 1, Data);
                     }
                 }
-                //if depth 0 has been reached get the average of all the left children
-                else
+                //if depth 0 has been reached get the child data
+               /* else
                 {
                     for (int i = 0; i < 8; i++)
                     {
-                        Data.push_back(std::get<0>(m_items.at(i)));
+                        Data->push_back(std::get<0>(m_items.at(i)));
+                    }
+                }*/
+            }
+            //if there are no children get all data items
+            //else
+            //{
+            //    for (auto& [itemPos, item] : m_items)
+            //    {
+            //      //  if (std::find(Data->begin(), Data->end(), itemPos) != Data->end())
+            //            Data->push_back(itemPos);
+            //    }
+            //}
+            return;
+        }
+        void GetDataRange(int startingDepth, int endDepth, std::vector<math::vec3>* Data)
+        {
+            //check if starting depth has been reached
+            if (startingDepth > 0)
+            {
+                //if there are children go deeper
+                if (m_children)
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        m_children->at(i).GetDataRange(startingDepth - 1, endDepth-1, Data);
                     }
                 }
             }
-            //if there are no children get all data items
             else
             {
-                for (auto& [itemPos, item] : m_items)
+                //only continue if end depth has not been reached
+                if (endDepth > 0)
                 {
-                    Data.push_back(itemPos);
+                    //start depth has been reached, end depth has not yet been reached, start getting data and go deeper
+                    for (auto& [itemPos, item] : m_items)
+                    {
+                        Data->push_back(itemPos);
+                    }
+                    //if there are children go deeper 
+                    if (m_children)
+                    {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            m_children->at(i).GetDataRange(startingDepth, endDepth - 1, Data);
+                        }
+                    }
                 }
             }
-            return Data;
         }
         void GenerateAverage()
         {
@@ -203,6 +261,7 @@ namespace legion::rendering
                     || position.z > m_max.z
                     );
         }
+        std::shared_ptr<std::array<Octree, 8>>  m_children;
 
         std::vector <std::pair<math::vec3, ValueType>>m_items;
         size_type m_capacity;

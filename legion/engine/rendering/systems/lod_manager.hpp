@@ -24,17 +24,17 @@ namespace legion::rendering
                 float distance = CalculateDistance(entity.get_component_handle<position>());
                 auto currentLOD = entity.get_component_handle<lod>().read();
                 currentLOD.UpdateLOD(distance);
-                log::debug(currentLOD.Level);
+             //   log::debug(currentLOD.Level);
                 entity.get_component_handle<lod>().write(currentLOD);
             }
 
 
-            for (ecs::entity_handle entity : m_query)
-            {
-                log::debug(entity.get_component_handle<lod>().read().Level);
-            }
+            //for (ecs::entity_handle entity : m_query)
+            //{
+            //  //  log::debug(entity.get_component_handle<lod>().read().Level);
+            //}
 
-        }
+        } 
 
     private:
         void UpdateCam()
@@ -44,13 +44,9 @@ namespace legion::rendering
             {
                 if (entity.has_component<position>())
                 {
-                    //   log::debug("found camera position");
-                       //  entity.get_component_handles<transform>().get
                     m_camPosition = entity.get_component_handle<position>().read();
                 }
-
             }
-
         }
         float CalculateDistance(ecs::component_handle<position> pos)
         {

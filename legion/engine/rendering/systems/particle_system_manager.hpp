@@ -48,9 +48,8 @@ namespace legion::rendering
                 else
                 {
                     //If it IS then it runs the emitter through the particle system update.
-                    std::vector<ecs::entity_handle> particles = emit.livingParticles;
                     const ParticleSystemBase* particleSystem = emit.particleSystemHandle.get();
-                    particleSystem->update(particles, emitterHandle,deltaTime);
+                    particleSystem->update(emit.livingParticles, emitterHandle,deltaTime);
                 }
             }
         }
