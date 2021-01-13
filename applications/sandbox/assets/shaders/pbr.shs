@@ -31,24 +31,16 @@ shader(fragment)
             if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
                 discard;
 
-        vec4 worldpos = WorldToScreenSpacePosition((worldNormal * material.height) + GetWorldPosition());
-        fragment_depth = worldpos.z / worldpos.w;
+        vec3 worldpos = (worldNormal * material.height) + GetWorldPosition();
 
-        if(!DepthCull(fragment_depth))
-        {
-            vec3 lighting = GetAllLighting(material, camera, GetWorldPosition());
+        vec3 lighting = GetAllLighting(material, camera, worldpos);
 
-            vec3 unitDir = reflect(-normalize(camera.toView), material.normal);
-            float reflectance = clamp01(0.01 + (pow(max(0.0, (1.0 - material.roughness)), 4) * 0.99));
-            vec3 reflection = mix(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), (vec3(length(skycolor.rgb)) + skycolor.rgb)*0.5, material.roughness);
+        vec3 unitDir = reflect(-normalize(camera.toView), material.normal);
+        float reflectance = clamp01(0.01 + (pow(max(0.0, (1.0 - material.roughness)), 4) * 0.99));
+        vec3 reflection = mix(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), (vec3(length(skycolor.rgb)) + skycolor.rgb)*0.5, material.roughness);
 
-            lighting += reflection * mix(vec3(1.0), material.albedo.rgb, material.metallic) * reflectance;
+        lighting += reflection * mix(vec3(1.0), material.albedo.rgb, material.metallic) * reflectance;
 
-            fragment_color = vec4(lighting, material.albedo.a);
-        }
-        else
-        {
-            fragment_color = vec4(1.0);
-        }
+        SubmitOutput(vec4(lighting, material.albedo.a), material.normal, worldpos, material.emissive);
     }
 }

@@ -24,5 +24,9 @@ shader(fragment)
         vec3 unitDir = normalize(stdin(position));
 
         fragment_color = vec4(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), 1.f);
+        fragment_depth = 0.0000001;
+        fragment_normal = vec4(0.0);
+        fragment_position = vec4(0.0);
+        fragment_overdraw = vec4(0.0);
     }
 }

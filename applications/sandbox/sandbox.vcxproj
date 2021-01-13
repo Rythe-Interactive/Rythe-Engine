@@ -118,7 +118,7 @@
     <ClInclude Include="systems\explosion_particlesystem.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="data\pp_blur.hpp" />
-      <ClInclude Include="data\pp_bloom.hpp" />
+    <ClInclude Include="data\pp_bloom.hpp" />
     <ClInclude Include="systems\simplecameracontroller.hpp" />
     <ClInclude Include="systems\testsystem2.hpp" />
     <ClInclude Include="systems\testsystemconvexhull.hpp" />

@@ -34,19 +34,29 @@ class GuiTestSystem : public System<GuiTestSystem>
             application::context_guard guard(window);
 
             cubeModel = ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            vertexColorMaterial = MaterialCache::create_material("color shader", "assets://shaders/texture.shs"_view);
+            vertexColorMaterial = MaterialCache::create_material("decal", "assets://shaders/decal.shs"_view);
+            vertexColorMaterial.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            vertexColorMaterial.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
+            vertexColorMaterial.set_param(SV_MRDAO, rendering::TextureCache::create_texture("engine://resources/default/MRDAo"_view));
+            vertexColorMaterial.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("engine://resources/default/emissive"_view));
+            vertexColorMaterial.set_param(SV_HEIGHTSCALE, 0.f);
+            vertexColorMaterial.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
         }
 
 
-        /*cubeEntity = createEntity();
+        cubeEntity = createEntity();
 
-        cubeEntity.add_components<transform>(position(), rotation(), scale());
-        cubeEntity.add_components<mesh_renderable>(mesh_filter(cubeModel.get_mesh()), mesh_renderer(vertexColorMaterial));*/
+        position pos(5.f, 0.f, 5.f);
+        scale scal(3.f, 2.f, 3.f);
+        rotation rot = math::angleAxis(math::quarter_pi<float>(), math::vec3::up);
+        model = math::compose(scal, rot, pos);
 
+        cubeEntity.add_components<transform>(pos, rot, scal);
+        cubeEntity.add_components<mesh_renderable>(mesh_filter(cubeModel.get_mesh()), mesh_renderer(vertexColorMaterial));
 
         //gui code goes here
-       /* ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
-        createProcess<&GuiTestSystem::update>("Update");*/
+        ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
+        createProcess<&GuiTestSystem::update>("Update");
     }
 
 
@@ -65,7 +75,7 @@ class GuiTestSystem : public System<GuiTestSystem>
         gizmo::SetOrthographic(false);
         base::Begin("Edit Cube Transform");
         //cannot render more than one gizmo at once (and animator also uses one)
-        //gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
+        gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::End();
 
         base::Begin("Edit Camera Transform");
@@ -99,7 +109,7 @@ class GuiTestSystem : public System<GuiTestSystem>
         base::End();
 
 
-        //gizmo::ViewManipulate(value_ptr(view), 1.0f, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
+        gizmo::ViewManipulate(value_ptr(view), 1.0f, ImVec2(io.DisplaySize.x - 128, 0), ImVec2(128, 128), 0x10101010);
     }
 
 

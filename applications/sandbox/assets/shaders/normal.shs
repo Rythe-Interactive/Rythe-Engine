@@ -20,6 +20,6 @@ shader(fragment)
     {
         vec3 normal = NormalMap(material_input.normalHeight, stdio(uv), GetTBNMatrix());
 
-        fragment_color = vec4((abs(normal) + clamp(normal, 0.0, 1.0) * 2) / 3, 1);
+        SubmitOutput(vec4((abs(normal) + clamp(normal, 0.0, 1.0) * 2) / 3, 1), normal, GetWorldPosition());
     }
 }

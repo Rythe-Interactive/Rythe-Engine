@@ -125,13 +125,13 @@ namespace legion::core::time
             return time_span(0);
         }
 
-        L_NODISCARD static constexpr time_span(min)() noexcept
+        L_NODISCARD static constexpr time_span min() noexcept
         {
             // get minimum value
             return time_span((std::chrono::duration_values<time_type>::min)());
         }
 
-        L_NODISCARD static constexpr time_span(max)() noexcept
+        L_NODISCARD static constexpr time_span max() noexcept
         {
             // get maximum value
             return time_span((std::chrono::duration_values<time_type>::max)());

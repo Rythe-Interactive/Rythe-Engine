@@ -57,7 +57,7 @@ namespace legion::rendering
 
         auto viewportSize = context.framebufferSize();
 
-        auto colorAttachment = fbo->getAttachment(GL_COLOR_ATTACHMENT0);
+        auto colorAttachment = fbo->getAttachment(FRAGMENT_ATTACHMENT);
         if (std::holds_alternative<std::monostate>(colorAttachment) || !std::holds_alternative<texture_handle>(colorAttachment))
         {
             log::error("Color attachment of main FBO was invalid.");

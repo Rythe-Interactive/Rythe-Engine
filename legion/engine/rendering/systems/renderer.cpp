@@ -5,6 +5,7 @@
 namespace legion::rendering
 {
     delegate<RenderPipelineBase* (app::window&)> Renderer::m_pipelineProvider;
+    RenderPipelineBase* Renderer::m_currentPipeline;
 
     void Renderer::debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED const void* userParam)
     {
@@ -396,7 +397,10 @@ namespace legion::rendering
             camera::camera_input cam_input_data(view, projection, camPos, camRot.forward(), cam.nearz, cam.farz, viewportSize);
 
             if (!m_exiting.load(std::memory_order_relaxed))
-                m_pipelineProvider(win)->render(win, cam, cam_input_data, deltatime);
+            {
+                m_currentPipeline = m_pipelineProvider(win);
+                m_currentPipeline->render(win, cam, cam_input_data, deltatime);
+            }
         }
     }
 
@@ -410,6 +414,11 @@ namespace legion::rendering
             return nullptr;
 
         return m_pipelineProvider(context);
+    }
+
+    L_NODISCARD RenderPipelineBase* Renderer::getCurrentPipeline()
+    {
+        return m_currentPipeline;
     }
 
     L_NODISCARD RenderPipelineBase* Renderer::getMainPipeline()
