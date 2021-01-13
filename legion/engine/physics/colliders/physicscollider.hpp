@@ -43,8 +43,6 @@ namespace legion::physics
             }
         }
             
-      
-
         /** @brief given a PhysicsCollider, CheckCollision calls "CheckCollisionWith". Both colliders are then passed through
         * to the correct "CheckCollisionWith" function with double dispatch.
         * @param physicsCollider The collider we would like to check collision against
@@ -84,8 +82,9 @@ namespace legion::physics
         */
         virtual void DrawColliderRepresentation(math::mat4 transform) {};
 
-        virtual void UpdateTightBoundingVolume(const math::mat4& transform) {};
+        virtual void UpdateTransformedTightBoundingVolume(const math::mat4& transform) {};
 
+        virtual void UpdateLocalAABB() {};
 
         inline virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
         {
@@ -97,10 +96,22 @@ namespace legion::physics
             return localColliderCentroid;
         }
 
+        //
+        std::tuple<math::vec3, math::vec3> GetMinMaxLocalAABB() const
+        {
+            return minMaxLocalAABB;
+        }
+
+        std::tuple<math::vec3, math::vec3> GetMinMaxWorldAABB() const
+        {
+            return minMaxWorldAABB;
+        }
+
     protected:
 
         math::vec3 localColliderCentroid = math::vec3(0, 0, 0);
-
+        std::tuple<math::vec3, math::vec3> minMaxLocalAABB;
+        std::tuple<math::vec3, math::vec3> minMaxWorldAABB;
     private:
 
         int id = -1;

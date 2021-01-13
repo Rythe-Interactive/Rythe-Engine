@@ -13,6 +13,7 @@ namespace legion::physics
     class PhysicsStatics
     {
     public:
+        //TODO move implementation to seperate cpp file
 
         //---------------------------------------------------------------- Collision Detection ----------------------------------------------------------------------------//
 
@@ -46,6 +47,8 @@ namespace legion::physics
 
         }
 
+        static float GetSupportPoint(const std::vector<math::vec3>& vertices, const math::vec3& direction, math::vec3& outVec);
+        
         /** @brief Given 2 ConvexColliders, convexA and convexB, checks if one of the faces of convexB creates a seperating axis
          * that seperates the given convex shapes
          * @param convexA the reference collider
@@ -114,7 +117,8 @@ namespace legion::physics
         {
             float currentMinimumSeperation = std::numeric_limits<float>::max();
 
-            math::vec3 positionA = transformA[3];
+            math::vec3 centroidDir = transformA * math::vec4(convexA->GetLocalCentroid(), 0);
+            math::vec3 positionA = math::vec3(transformA[3]) + centroidDir;
 
             for (const auto faceA : convexA->GetHalfEdgeFaces())
             {
@@ -207,6 +211,16 @@ namespace legion::physics
             maximumSeperation = currentMinimumSeperation;
             return currentMinimumSeperation > 0.0f;
         }
+
+
+        static std::tuple< math::vec3,math::vec3> ConstructAABBFromPhysicsComponentWithTransform
+        (ecs::component_handle<physicsComponent> physicsComponentToUse, const math::mat4& transform);
+
+        static float GetPhysicsComponentSupportPointAtDirection(math::vec3 direction,physicsComponent& physicsComponentToUse);
+
+        static std::tuple< math::vec3, math::vec3> ConstructAABBFromVertices(const std::vector<math::vec3>& vertices);
+
+        static std::tuple< math::vec3, math::vec3> ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices,const math::mat4& transform);
 
         //---------------------------------------------------------- Polyhedron Clipping ----------------------------------------------------------------------------//
 
@@ -444,6 +458,9 @@ namespace legion::physics
             return math::dot(planePosition - startPoint, planeNormal) / math::dot(endPoint - startPoint, planeNormal);
         }
 
+
+
+
         /**Creates a Voronoi diagram based on the given parameters.
         * @param points A list of points these will serve as the points of the voronoi diagram.
         * @param xRange The min and max of the width of the voronoi diagram space.
@@ -456,7 +473,8 @@ namespace legion::physics
         * @param initMem The initial memory amount.
         * @return A list of lists of vec4's
         */
-        static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,math::vec2 xRange, math::vec2 yRange, math::vec2 zRange, math::vec3 containerResolution, bool xPeriodic = false, bool yPeriodic = false, bool zPeriodic = false, int initMem = 8)
+        static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,math::vec2 xRange, math::vec2 yRange,
+            math::vec2 zRange, math::vec3 containerResolution, bool xPeriodic = false, bool yPeriodic = false, bool zPeriodic = false, int initMem = 8)
         {
             return GenerateVoronoi(points,xRange.x,xRange.y,yRange.x,yRange.y,zRange.x,zRange.y,containerResolution.x,containerResolution.y,containerResolution.z,xPeriodic,yPeriodic,zPeriodic,initMem);
         }

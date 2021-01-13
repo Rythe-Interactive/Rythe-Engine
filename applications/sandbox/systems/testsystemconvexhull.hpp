@@ -219,7 +219,9 @@ public:
                 {
                     //--------------------------------- Draw Collider Outlines ---------------------------------------------//
                     if (!physCollider->shouldBeDrawn) { continue; }
-
+                    //math::vec3 colliderCentroid = pos + math::vec3(localTransform * math::vec4(physCollider->GetLocalCentroid(), 0));
+                    //debug::user_projectDrawLine(colliderCentroid, colliderCentroid + math::vec3(0.0f,0.2f,0.0f), math::colors::cyan, 6.0f,0.0f,true);
+                    
                     for (auto face : physCollider->GetHalfEdgeFaces())
                     {
                         //face->forEachEdge(drawFunc);
@@ -229,7 +231,7 @@ public:
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0))) * 0.1f;
                         
-                        debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 2.0f);
+                        //debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 2.0f);
 
                         if (!currentEdge) { return; }
 

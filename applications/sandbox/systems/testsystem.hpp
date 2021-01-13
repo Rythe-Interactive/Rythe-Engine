@@ -2521,77 +2521,9 @@ public:
 
         physicsQuery.queryEntities();
         auto size = physicsQuery.size();
-        //this is called so that i can draw stuff
-        for (auto entity : physicsQuery)
-        {
-            auto rotationHandle = entity.get_component_handle<rotation>();
-            auto positionHandle = entity.get_component_handle<position>();
-            auto scaleHandle = entity.get_component_handle<scale>();
-            auto physicsComponentHandle = entity.get_component_handle<physics::physicsComponent>();
+        
 
-            bool hasTransform = rotationHandle && positionHandle && scaleHandle;
-            bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
-
-            if (hasNecessaryComponentsForPhysicsManifold)
-            {
-                auto rbColor = math::color(0.0, 0.5, 0, 1);
-                auto statibBlockColor = math::color(0, 1, 0, 1);
-
-                rotation rot = rotationHandle.read();
-                position pos = positionHandle.read();
-                scale scale = scaleHandle.read();
-
-                auto usedColor = statibBlockColor;
-                bool useDepth = false;
-
-                if (auto rb = entity.get_component_handle<physics::rigidbody>())
-                {
-                    usedColor = rbColor;
-                }
-
-                
-                //assemble the local transform matrix of the entity
-                math::mat4 localTransform;
-                math::compose(localTransform, scale, rot, pos);
-
-                auto physicsComponent = physicsComponentHandle.read();
-
-                //if (physicsComponent.colliders->size() == 2) { DebugBreak(); }
-                i = 0;
-                for (auto physCollider : *physicsComponent.colliders)
-                {
-                    //--------------------------------- Draw Collider Outlines ---------------------------------------------//
-
-                    for (auto face : physCollider->GetHalfEdgeFaces())
-                    {
-                        //face->forEachEdge(drawFunc);
-                        physics::HalfEdgeEdge* initialEdge = face->startEdge;
-                        physics::HalfEdgeEdge* currentEdge = face->startEdge;
-
-                        math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
-                        math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
-
-                        debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 5.0f);
-
-                        if (!currentEdge) { return; }
-
-                        do
-                        {
-                            physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
-                            currentEdge = currentEdge->nextEdge;
-
-                            math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
-                            math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
-
-                            debug::user_projectDrawLine(worldStart, worldEnd, usedColor, 2.0f, 0.0f, useDepth);
-
-                        } while (initialEdge != currentEdge && currentEdge != nullptr);
-                    }
-                }
-
-            }
-
-        }
+        
 
         //FindClosestPointsToLineSegment unit test
 

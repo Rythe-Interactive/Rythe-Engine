@@ -19,6 +19,7 @@
     <ClCompile Include="components\physics_component.cpp" />
     <ClCompile Include="mesh_splitter_utils\primitive_mesh.cpp" />
     <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp" />
+    <ClCompile Include="physics_statics.cpp" />
     <ClCompile Include="systems\physicssystem.cpp" />
     <ClCompile Include="systems\physics_fracture_test_system.cpp" />
   </ItemGroup>
@@ -41,6 +42,7 @@
     <ClInclude Include="data\physics_manifold_precursor.h" />
     <ClInclude Include="data\edgepenetrationquery.h" />
     <ClInclude Include="data\pointer_encapsulator.hpp" />
+    <ClInclude Include="data\VoronoiAABB.hpp" />
     <ClInclude Include="events\events.hpp" />
     <ClInclude Include="halfedgeedge.hpp" />
     <ClInclude Include="halfedgeface.hpp" />

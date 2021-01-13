@@ -9,6 +9,7 @@
 #include <physics/events/events.hpp>
 #include <memory>
 #include <rendering/debugrendering.hpp>
+#include <physics/components/fracturer.h>
 
 namespace legion::physics
 {
@@ -35,6 +36,8 @@ namespace legion::physics
 
         ecs::EntityQuery rigidbodyIntegrationQuery;
 
+        //TODO move implementation to a seperate cpp file
+
         virtual void setup()
         {
             createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
@@ -51,8 +54,6 @@ namespace legion::physics
             m_optimizeBroadPhase = broadPhaseLambda;
 
         }
-
-
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
@@ -121,7 +122,8 @@ namespace legion::physics
 
                 for (auto physCollider : *physicsComponent.colliders)
                 {
-                    physCollider->DrawColliderRepresentation(rootTransform);
+                    //physCollider->DrawColliderRepresentation(rootTransform);
+                    physCollider->UpdateTransformedTightBoundingVolume(rootTransform);
                 }
 
                 manifoldPrecursors.push_back(manifoldPrecursor);
@@ -213,6 +215,50 @@ namespace legion::physics
 
             //------------------------------------------------ Pre Colliison Solve Event --------------------------------------------//
 
+            // all manifolds are initially valid
+
+            std::vector<bool> manifoldValidity(manifoldsToSolve.size());
+
+            std::fill(manifoldValidity.begin(),manifoldValidity.end(),true );
+
+            //TODO we are currently hard coding fracture, this should be an event at some point
+
+            for (size_t i = 0; i < manifoldsToSolve.size(); i++)
+            {
+                auto& manifold = manifoldsToSolve.at(i);
+
+                auto entityHandleA = manifold.physicsCompA.entity;
+                auto entityHandleB = manifold.physicsCompB.entity;
+
+                auto fracturerHandleA = entityHandleA.get_component_handle<Fracturer>();
+                auto fracturerHandleB = entityHandleB.get_component_handle<Fracturer>();
+
+                bool currentManifoldValidity = manifoldValidity.at(i);
+
+                log::debug("- A Fracture Check");
+
+                if (fracturerHandleA)
+                {
+                    auto fracturerA = fracturerHandleA.read();
+                    log::debug(" A is fracturable");
+                    fracturerA.HandleFracture(manifold, currentManifoldValidity, true);
+
+                    fracturerHandleA.write(fracturerA);
+                }
+
+                log::debug("- B Fracture Check");
+
+                if (fracturerHandleB)
+                {
+                    auto fracturerB = fracturerHandleB.read();
+                    log::debug(" B is fracturable");
+                    fracturerB.HandleFracture(manifold, currentManifoldValidity,false);
+
+                    fracturerHandleB.write(fracturerB);
+                }
+
+                manifoldValidity.at(i) = currentManifoldValidity;
+            }
 
             //-------------------------------------------------- Collision Solver ---------------------------------------------------//
             //for both contact and friction resolution, an iterative algorithm is used.
@@ -225,71 +271,20 @@ namespace legion::physics
 
             //log::debug("--------------Logging contacts for manifold -------------------");
 
-            for (auto& manifold : manifoldsToSolve)
-            {
-                for (auto& contact : manifold.contacts)
-                {
-                    contact.preCalculateEffectiveMass();
-
-                    contact.ApplyWarmStarting();
-
-                }
-            }
-
-            /*for (auto& manifold : manifoldsToSolve)
-            {
-                for (auto& contact : manifold.contacts)
-                {
-                    debug::user_projectdrawLine
-                    (contact.RefWorldContact, contact.RefWorldContact + math::vec3(0,0.1f,0),math::colors::red,2.0f,5.0f,true);
-
-                    debug::user_projectdrawLine
-                    (contact.IncWorldContact, contact.IncWorldContact + math::vec3(0, 0.1f, 0), math::colors::blue, 2.0f, 5.0f, true);
-
-                    debug::user_projectdrawLine
-                    (contact.IncWorldContact, contact.RefWorldContact , math::colors::magenta, 2.0f, 5.0f, true);
-                }
-            }*/
-
-
-            for (auto& manifold : manifoldsToSolve)
-            {
-                log::debug("----> InitialVelocity");
-                //manifold.contacts.at(0).logRigidbodyState();
-            }
-
-
+            initializeManifolds(manifoldsToSolve, manifoldValidity);
 
             //resolve contact constraint
-            for (size_t i = 0; i < constants::contactSolverIterationCount; i++)
+            for (size_t contactIter = 0;
+                contactIter < constants::contactSolverIterationCount; contactIter++)
             {
-                for (auto& manifold : manifoldsToSolve)
-                {
-                    for (auto& contact : manifold.contacts)
-                    {
-                        contact.resolveContactConstraint(dt,i);
-                    }
-                }
-            }
-
-            
-            for (auto& manifold : manifoldsToSolve)
-            {
-                log::debug("----> Final Velocity");
-                //manifold.contacts.at(0).logRigidbodyState();
+                resolveContactConstraint(manifoldsToSolve, manifoldValidity, dt, contactIter);
             }
             
             //resolve friction constraint
-           
-            for (size_t i = 0; i < constants::frictionSolverIterationCount; i++)
+            for (size_t frictionIter = 0;
+                frictionIter < constants::frictionSolverIterationCount; frictionIter++)
             {
-                for (auto& manifold : manifoldsToSolve)
-                {
-                    for (auto& contact : manifold.contacts)
-                    {
-                        contact.resolveFrictionConstraint();
-                    }
-                }
+                resolveFrictionConstraint(manifoldsToSolve, manifoldValidity);
             }
 
            
@@ -298,15 +293,8 @@ namespace legion::physics
             {
                 manifold.colliderA->converganceIdentifiers.clear();
                 manifold.colliderB->converganceIdentifiers.clear();
-
-                for (auto& contact : manifold.contacts)
-                {
-                    
-                   // PhysicsSystem::contactPoints.push_back(contact);
-                }
             }
 
-            log::debug("*END IMPULSE");
             //using the known lambdas of this time step, add it as a convergance identifier
             for (auto& manifold : manifoldsToSolve)
             {
@@ -490,7 +478,57 @@ namespace legion::physics
 
         }
 
+        void initializeManifolds(std::vector<physics_manifold>& manifoldsToSolve, std::vector<bool>& manifoldValidity)
+        {
+            for (int i = 0; i < manifoldsToSolve.size(); i++)
+            {
+                if (manifoldValidity.at(i))
+                {
+                    auto& manifold = manifoldsToSolve.at(i);
 
+                    for (auto& contact : manifold.contacts)
+                    {
+                        contact.preCalculateEffectiveMass();
+                        contact.ApplyWarmStarting();
+                    }
+                }
+
+            }
+        }
+
+        void resolveContactConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<bool>& manifoldValidity,float dt,int contactIter)
+        {
+            for (int manifoldIter = 0;
+                manifoldIter < manifoldsToSolve.size(); manifoldIter++)
+            {
+                if (manifoldValidity.at(manifoldIter))
+                {
+                    auto& manifold = manifoldsToSolve.at(manifoldIter);
+
+                    for (auto& contact : manifold.contacts)
+                    {
+                        contact.resolveContactConstraint(dt, contactIter);
+                    }
+                }
+            }
+        }
+
+        void resolveFrictionConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<bool>& manifoldValidity)
+        {
+            for (int manifoldIter = 0;
+                manifoldIter < manifoldsToSolve.size(); manifoldIter++)
+            {
+                if (manifoldValidity.at(manifoldIter))
+                {
+                    auto& manifold = manifoldsToSolve.at(manifoldIter);
+
+                    for (auto& contact : manifold.contacts)
+                    {
+                        contact.resolveFrictionConstraint();
+                    }
+                }
+            }
+        }
 
     };
 }

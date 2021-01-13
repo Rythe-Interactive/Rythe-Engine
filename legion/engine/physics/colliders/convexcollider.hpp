@@ -8,6 +8,7 @@
 #include <physics/halfedgeface.hpp>
 #include <physics/data/convex_convergance_identifier.hpp>
 #include <physics/data/physics_manifold.hpp>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::physics
 {
@@ -52,17 +53,20 @@ namespace legion::physics
 
         void PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
 
-        void UpdateTightBoundingVolume(const math::mat4& transform) override
+        void UpdateTransformedTightBoundingVolume(const math::mat4& transform) override
         {
             UpdateTightAABB(transform);
         }
 
         /**@brief Given the current transform of the entity, creates a tight AABB of the collider;
         */
-        void UpdateTightAABB(const math::mat4& transform)
-        {
+        void UpdateTightAABB(const math::mat4& transform);
+       
 
-        }
+        /**@brief Using the vertices of the convexCollider,creates a ;
+       */
+        void UpdateLocalAABB() override;
+       
 
 
         /**@brief Does one step of the convex hull generation
@@ -220,8 +224,8 @@ namespace legion::physics
 
             // Step 1 and up, add a vert to the hull
             if (step == 0) return;
-            while (looped < step)
-            //while(true)
+            //while (looped < step)
+            while(true)
             {
                 // Section here is return condition
                 if (toBeSorted.size() == 0)
@@ -409,14 +413,14 @@ namespace legion::physics
 
         void CalculateLocalColliderCentroid()
         {
-            math::vec3 localCentroid;
+            localColliderCentroid = math::vec3();
 
             for (auto& vertex : vertices)
             {
-                localCentroid += vertex;
+                localColliderCentroid += vertex;
             }
-
-            localCentroid /= vertices.size();
+            
+            localColliderCentroid /= vertices.size();
         }
 
         /**@brief Constructs a box-shaped convex hull based on the given parameters.
@@ -474,7 +478,7 @@ namespace legion::physics
             math::vec3 g = vertices.at(6);
             math::vec3 h = vertices.at(7);
 
-            
+            CalculateLocalColliderCentroid();
 
             //note: each edge carries adjacency information. (for example, an edge 'eg' must know its edge pair 'ge').
             //This is why each edge must be declared explicitly.

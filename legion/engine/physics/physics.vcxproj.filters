@@ -54,6 +54,9 @@
     <ClCompile Include="components\fracturer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="physics_statics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -168,6 +171,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="systems\physics_fracture_test_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\VoronoiAABB.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

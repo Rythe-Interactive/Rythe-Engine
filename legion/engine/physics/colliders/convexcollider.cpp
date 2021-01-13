@@ -17,26 +17,26 @@ namespace legion::physics
         //'this' is colliderB and 'convexCollider' is colliderA
         
 
-        log::debug("-------------------- SAT CHECK -----------------");
+        //log::debug("-------------------- SAT CHECK -----------------");
         PointerEncapsulator < HalfEdgeFace> ARefFace;
 
-        log::debug("Face Check A");
+        //log::debug("Face Check A");
         float ARefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(
             this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation) || !ARefFace.ptr)
         {
-            log::debug("Not Found on A ");
+            //log::debug("Not Found on A ");
             manifold.isColliding = false;
             return;
         }
      
         PointerEncapsulator < HalfEdgeFace> BRefFace;
-        log::debug("Face Check B");
+        //log::debug("Face Check B");
         float BRefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
             this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
-            log::debug("Not Found on B ");
+            //log::debug("Not Found on B ");
             manifold.isColliding = false;
             return;
         }
@@ -46,11 +46,11 @@ namespace legion::physics
 
         math::vec3 edgeNormal;
         float aToBEdgeSeperation;
-        log::debug("Edge Check");
+        //log::debug("Edge Check");
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformB, manifold.transformA,
             edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation))
         {
-            log::debug("aToBEdgeSeperation {} " , aToBEdgeSeperation);
+            //log::debug("aToBEdgeSeperation {} " , aToBEdgeSeperation);
             manifold.isColliding = false;
             return;
         }
@@ -151,6 +151,25 @@ namespace legion::physics
 
         }
     }
+
+    void ConvexCollider::UpdateTightAABB(const math::mat4& transform)
+    {
+        minMaxWorldAABB = PhysicsStatics::ConstructAABBFromTransformedVertices
+        (vertices, transform);
+
+        //math::vec3 min = std::get<0>(minMaxWorldAABB);
+        //math::vec3 max = std::get<1>(minMaxWorldAABB);
+        //math::vec3 difference = max - min;
+
+      /*  debug::user_projectDrawLine(min, min + math::vec3(difference.x,0,0), math::colors::red, 5.0f);
+        debug::user_projectDrawLine(min, min + math::vec3(0,difference.y,0), math::colors::red, 5.0f);
+        debug::user_projectDrawLine(min, min + math::vec3(0,0,difference.z), math::colors::red, 5.0f);*/
+    }
+
+    void ConvexCollider::UpdateLocalAABB()
+    {
+        minMaxLocalAABB = PhysicsStatics::ConstructAABBFromVertices(vertices);
+    };
 
 
 
