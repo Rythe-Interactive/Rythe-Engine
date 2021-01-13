@@ -74,9 +74,6 @@ namespace legion::audio
         using common::Err, common::Ok;
         using decay = common::result_decay_more<audio_segment, fs_error>;
 
-        log::debug("Attempting to load WAV file");
-
-
         RIFF_Header header;
         WAVE_Data waveData;
 
