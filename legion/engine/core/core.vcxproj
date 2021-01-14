@@ -160,6 +160,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="ecs\component_meta.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
+    <ClInclude Include="ecs\component_pool.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
     <ClInclude Include="ecs\ecsregistry.hpp" />
     <ClInclude Include="ecs\entity_handle.hpp" />

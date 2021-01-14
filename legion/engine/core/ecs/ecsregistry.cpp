@@ -1,6 +1,6 @@
 #include <core/ecs/ecsregistry.hpp>
 #include <core/ecs/entity_handle.hpp>
-#include <core/ecs/component_container.hpp>
+#include <core/ecs/component_pool.hpp>
 #include <core/ecs/component_handle.hpp>
 
 #include <core/events/eventbus.hpp>
@@ -54,7 +54,7 @@ namespace legion::core::ecs
         m_entities.emplace(world_entity_id);
     }
 
-    component_container_base* EcsRegistry::getFamily(id_type componentTypeId)
+    component_pool_base* EcsRegistry::getFamily(id_type componentTypeId)
     {
         OPTICK_EVENT();
         async::readonly_guard guard(m_familyLock);

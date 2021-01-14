@@ -24,10 +24,16 @@ namespace legion::core::ecs
         friend class EntityQuery;
     private:
         EcsRegistry& m_registry;
+
         mutable async::rw_spinlock m_entityLock;
         sparse_map<id_type, std::unique_ptr<entity_set>> m_entityLists;
+
+        static thread_local std::unordered_map<id_type, std::vector<entity_handle>> m_localCopies;
+        static thread_local std::unordered_map<id_type, std::unordered_map<id_type, std::vector<component_handle_base>>> m_localComponents;
+
         mutable async::rw_spinlock m_referenceLock;
         sparse_map<id_type, size_type> m_references;
+
         mutable async::rw_spinlock m_componentLock;
         sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
 

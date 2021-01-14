@@ -2,7 +2,7 @@
 #include <atomic>
 #include <core/common/exception.hpp>
 #include <core/ecs/ecsregistry.hpp>
-#include <core/ecs/component_container.hpp>
+#include <core/ecs/component_pool.hpp>
 #include <core/ecs/entity_handle.hpp>
 #include <core/platform/platform.hpp>
 
@@ -95,7 +95,7 @@ namespace legion::core::ecs
         L_NODISCARD component_type read() const
         {
             OPTICK_EVENT();
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             async::readonly_guard rguard(family->get_lock());
 
@@ -110,7 +110,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             {
                 async::readonly_guard rguard(family->get_lock());
@@ -134,7 +134,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             {
                 async::readonly_guard rguard(family->get_lock());
@@ -159,7 +159,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
             {
@@ -183,7 +183,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
             {
@@ -210,7 +210,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
             {
@@ -237,7 +237,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
             {
@@ -264,7 +264,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
             {
@@ -291,7 +291,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
             {
@@ -311,7 +311,7 @@ namespace legion::core::ecs
         }
 
         /**@brief Locks component family and destroys component.
-         * @ref legion::core::ecs::component_container::destroy_component
+         * @ref legion::core::ecs::component_pool::destroy_component
          */
         void destroy()
         {

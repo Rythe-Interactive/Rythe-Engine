@@ -3,7 +3,7 @@
 #include <core/types/types.hpp>
 #include <core/common/common.hpp>
 #include <core/async/async.hpp>
-#include <core/ecs/component_container.hpp>
+#include <core/ecs/component_pool.hpp>
 #include <core/ecs/queryregistry.hpp>
 #include <core/ecs/entityquery.hpp>
 #include <core/ecs/entity_handle.hpp>
@@ -45,7 +45,7 @@ namespace legion::core::ecs
         static id_type m_nextEntityId;
 
         mutable async::rw_spinlock m_familyLock;
-        std::unordered_map<id_type, std::unique_ptr<component_container_base>> m_families;
+        std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_families;
 
         mutable async::rw_spinlock m_entityDataLock;
         std::unordered_map<id_type, entity_data> m_entityData;
@@ -81,26 +81,26 @@ namespace legion::core::ecs
             OPTICK_EVENT();
             async::readwrite_guard guard(m_familyLock);
             if (!m_families.count(typeHash<component_type>()))
-                m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>(this, m_eventBus);
+                m_families[typeHash<component_type>()] = std::make_unique<component_pool<component_type>>(this, m_eventBus);
         }
 
         /**@brief Get component storage of a certain type.
          * @tparam component_type Type of the component you wish to fetch.
-         * @returns component_container<component_type>* Pointer to the component container that contains all components of the requested type.
+         * @returns component_pool<component_type>* Pointer to the component container that contains all components of the requested type.
          * @throws legion_unknown_component_error When component type is unknown.
          */
         template<typename component_type>
-        L_NODISCARD component_container<component_type>* getFamily()
+        L_NODISCARD component_pool<component_type>* getFamily()
         {
-            return static_cast<component_container<component_type>*>(getFamily(typeHash<component_type>()));
+            return static_cast<component_pool<component_type>*>(getFamily(typeHash<component_type>()));
         }
 
         /**@brief Get component storage of a certain type.
          * @param componentTypeId Type id of the component you wish to fetch.
-         * @returns component_container_base* Pointer to the component container that contains all components of the requested type. (needs to be cast to original type to use)
+         * @returns component_pool_base* Pointer to the component container that contains all components of the requested type. (needs to be cast to original type to use)
          * @throws legion_unknown_component_error When component type is unknown.
          */
-        L_NODISCARD component_container_base* getFamily(id_type componentTypeId);
+        L_NODISCARD component_pool_base* getFamily(id_type componentTypeId);
 
         /**@brief Check if an entity has a certain component.
          * @param entityId Id of the entity.

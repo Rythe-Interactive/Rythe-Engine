@@ -18,17 +18,17 @@
 #include <Optick/optick.h>
 
 /**
- * @file component_container.hpp
+ * @file component_pool.hpp
  */
 
 namespace legion::core::ecs
 {
     class EcsRegistry;
 
-    /**@class component_container_base
-     * @brief Base class of legion::core::ecs::component_container
+    /**@class component_pool_base
+     * @brief Base class of legion::core::ecs::component_pool
      */
-    class component_container_base
+    class component_pool_base
     {
     public:
         L_NODISCARD virtual bool has_component(id_type entityId) const LEGION_PURE;
@@ -44,15 +44,15 @@ namespace legion::core::ecs
         virtual void serialize(cereal::JSONInputArchive& oarchive, id_type entityId) LEGION_PURE;
         virtual void serialize(cereal::BinaryInputArchive& oarchive, id_type entityId) LEGION_PURE;
 
-        virtual ~component_container_base() = default;
+        virtual ~component_pool_base() = default;
     };
 
-    /**@class component_container
+    /**@class component_pool
      * @brief Thread-safe container to store a component family in.
      * @tparam component_type Type of component.
      */
     template<typename component_type>
-    class component_container : public component_container_base
+    class component_pool : public component_pool_base
     {
     private:
         sparse_map<id_type, component_type> m_components;
@@ -62,8 +62,8 @@ namespace legion::core::ecs
         EcsRegistry* m_registry;
         component_type m_nullComp;
     public:
-        component_container() = default;
-        component_container(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
+        component_pool() = default;
+        component_pool(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
 
         virtual void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) override
         {
@@ -121,9 +121,9 @@ namespace legion::core::ecs
             return m_components.contains(entityId);
         }
 
-        /**@brief Thread unsafe component fetch, use component_container::get_lock and lock for at least read_only before calling this function.
+        /**@brief Thread unsafe component fetch, use component_pool::get_lock and lock for at least read_only before calling this function.
          * @param entityId ID of entity you want to get the component from.
-         * @ref component_container::get_lock()
+         * @ref component_pool::get_lock()
          * @ref legion::core::async::rw_spinlock
          */
         L_NODISCARD component_type& get_component(id_type entityId)
@@ -134,9 +134,9 @@ namespace legion::core::ecs
             return m_nullComp;
         }
 
-        /**@brief Thread unsafe component fetch, use component_container::get_lock and lock for at least read_only before calling this function.
+        /**@brief Thread unsafe component fetch, use component_pool::get_lock and lock for at least read_only before calling this function.
          * @param entityId ID of entity you want to get the component from.
-         * @ref component_container::get_lock()
+         * @ref component_pool::get_lock()
          * @ref legion::core::async::rw_spinlock
          */
         L_NODISCARD const component_type& get_component(id_type entityId) const
