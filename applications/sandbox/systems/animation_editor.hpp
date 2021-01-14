@@ -19,6 +19,10 @@ namespace ext
         {
         public:
 
+            using event_t = std::pair<std::shared_ptr<animation_event_base>, id_type>;
+            using holder = std::variant<position, rotation, scale, event_t>;
+
+
             //////////////////////////////////////////////////////
             ///INTERFACE
             ///
@@ -58,12 +62,16 @@ namespace ext
             /**
              * @brief gets a particular datapoint at a certain index
              */
-            std::variant<position, rotation, scale>& GetDataPointAt(int index);
+           holder& GetDataPointAt(int index);
         private:
 
-            const char* make_label(std::variant<position, rotation, scale> v) const
+            const char* make_label(holder v) const
             {
-                return std::holds_alternative<position>(v) ? "Position" : std::holds_alternative<rotation>(v) ? "Rotation" : "Scale";
+                return
+                std::holds_alternative<position>(v) ? "Position" :
+                std::holds_alternative<rotation>(v) ? "Rotation" :
+                std::holds_alternative<scale>(v)    ? "Scale":
+                                                      "Event";
             }
 
             struct InternalAnimationData
@@ -72,9 +80,11 @@ namespace ext
                 float ra;
                 float pa;
                 float sa;
+                float ea;
                 index_type ri;
                 index_type pi;
                 index_type si;
+                index_type ei;
 
             } m_savedAnimationData;
 
@@ -82,7 +92,7 @@ namespace ext
             int m_frameMin = 0;
             struct SequencerData
             {
-                std::vector<std::tuple<int, int, std::variant<position, rotation, scale>>> data;
+                std::vector<std::tuple<int, int, holder>> data;
             }m_currentAnimation;
 
         };
@@ -95,6 +105,10 @@ namespace ext
         int m_firstFrame = 0;
         detail::AnimationSequencer m_sequencer;
         bool m_animatorHasControl = false;
+
+        using custom_render_gui_fn = delegate<bool(id_type, animation_event_base*)>;
+
+        static sparse_map<id_type, custom_render_gui_fn> m_guiRenderers;
 
 
         //since this is a char buffer we need to explicitly spell out assets://test.anim ... how lovely
@@ -150,7 +164,33 @@ namespace ext
 
 
         void onGUI(application::window&, rendering::camera& cam, const rendering::camera::camera_input& cInput,
-                   time::span);
+            time::span);
+
+    public:
+
+
+        /**
+         * @brief The function signature for a custom render Layer for custom
+         *         Animation-Events editors
+         */
+        using custom_render_layer = custom_render_gui_fn;
+
+
+        /**
+         * @brief Registers a custom GUI Layer for an event type
+         * @note if no custom layer is registered, your event will be rendered with the default
+         *        Base Layer
+         * @param event_id The ID you want to register a custom render layer for
+         * @param renderer The Custom render function you want to register.
+         *         Please note that this is called in an active gui context, so there is no need
+         *         to call imgui::base::Begin() again. if you want the base gui layer to be
+         *         rendered in conjunction with your custom layer your function should return
+         *         true, otherwise it should return false.
+         */
+        static void onRenderCustomEventGUI(id_type event_id, custom_render_layer renderer)
+        {
+            m_guiRenderers[event_id] = renderer;
+        }
     };
 
 

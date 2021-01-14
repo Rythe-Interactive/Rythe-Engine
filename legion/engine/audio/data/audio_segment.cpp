@@ -210,7 +210,7 @@ namespace legion::audio
         m_segments.clear();
     }
 
-    std::pair<async::rw_spinlock&, audio_segment&> audio_segment_handle::get()
+    std::pair<async::rw_spinlock&, audio_segment&> audio_segment_handle::get() const
     {
         async::readonly_guard guard(AudioSegmentCache::m_segmentsLock);
 

@@ -28,6 +28,10 @@
 
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 
+#include "../data/pp_bloom.hpp"
+
+
+#include "animation_editor.hpp"
 #include "../data/animation.hpp"
 
 using namespace legion;
@@ -93,6 +97,7 @@ class TestSystem final : public System<TestSystem>
 public:
     ecs::entity_handle audioSphereLeft;
     ecs::entity_handle audioSphereRight;
+    ecs::entity_handle eventAudio;
 
     std::vector< ecs::entity_handle > physicsUnitTestCD;
     std::vector< ecs::entity_handle > physicsUnitTestCR;
@@ -131,10 +136,10 @@ public:
 
     virtual void setup()
     {
+
         physics::PrimitiveMesh::SetECSRegistry(m_ecs);
-
-
-#pragma region Input binding
+        
+        #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
 
@@ -203,6 +208,8 @@ public:
 
         //bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
         //bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
+
+        bindToEvent<ext::void_animation_event, &TestSystem::onVoidAnimationEvent>();
 
 #pragma endregion
 
@@ -626,6 +633,21 @@ public:
             ent.add_components<transform>();
         }
 
+        {
+            eventAudio = createEntity();
+
+            auto segment = audio::AudioSegmentCache::createAudioSegment("e",
+                fs::view("assets://audio/fx/explosion.wav"));
+            audio::audio_source source;
+            source.setAudioHandle(segment);
+            source.disableSpatialAudio();
+            
+            eventAudio.add_components<transform>();
+            eventAudio.add_component<audio::audio_source>(source);
+
+
+        }
+
         //position positions[1000];
         //for (int i = 0; i < 1000; i++)
         //{
@@ -765,6 +787,7 @@ public:
 
             audio::audio_source source;
             source.setAudioHandle(segment);
+            source.setLooping(true);
             audioSphereRight.add_component<audio::audio_source>(source);
         }
 #pragma endregion
@@ -1019,7 +1042,29 @@ public:
         //Complex Mesh
 
         createProcess<&TestSystem::update>("Update");
+        ext::AnimationEditor::onRenderCustomEventGUI(ext::void_animation_event::id, [this](id_type id, ext::animation_event_base* ebase)
+            {
+                imgui::base::Text("Void Animations Custom Edit Frontend!");
+
+                static bool showBaseRenderLayer = false;
+                if (imgui::base::Button(fmt::format("Show Base Renderer [{}]", showBaseRenderLayer).c_str()))
+                {
+                    showBaseRenderLayer = !showBaseRenderLayer;
+                }
+                return showBaseRenderLayer;
+            });
         //createProcess<&TestSystem::drawInterval>("TestChain");
+    }
+
+
+
+    void onVoidAnimationEvent(ext::void_animation_event* evnt)
+    {
+        auto source = eventAudio.read_component<audio::audio_source>();
+        source.play();
+        eventAudio.get_component_handle<audio::audio_source>().write(source);
+
+        log::debug("received void animation_event");
     }
 
     void testPhysicsEvent(physics::trigger_event* evnt)
@@ -2055,18 +2100,18 @@ public:
                 if (sun)
                     sun.destroy();
 
-                decalH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                pbrH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                copperH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                aluminumH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                ironH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                slateH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                rockH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                rock2H.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                fabricH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                bogH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                paintH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                skyboxH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                decalH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                pbrH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                copperH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                aluminumH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                ironH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                slateH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                rockH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                rock2H.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                fabricH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                bogH.set_param("skycolor", math::color(0.002f, 0.003f, 0.0035f));
+                paintH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                skyboxH.set_param("skycolor", math::color(0.002f, 0.003f, 0.0035f));
             }
             else
             {
