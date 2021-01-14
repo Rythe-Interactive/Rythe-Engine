@@ -74,10 +74,13 @@ namespace legion::rendering
             using compute::in, compute::out, compute::karg;
 
             auto realPointCloud = pointCloud.read();
+
+
             //exit early if point cloud has already been generated
             if (realPointCloud.m_hasBeenGenerated) return;
             // log::debug("new point cloud generation!");
 
+            math::vec3 posiitonOffset = pointCloud.entity.get_component_handle<position>().read();
             //get mesh data
             auto m = realPointCloud.m_mesh.get();
             auto vertices = m.second.vertices;
@@ -119,8 +122,7 @@ namespace legion::rendering
             std::vector<math::vec3> particleInput(points_Generated);
             for (int i = 0; i < points_Generated; i++)
             {
-                // log::debug(result.at(i));
-                particleInput.at(i) = result.at(i).xyz;
+                particleInput.at(i) = result.at(i).xyz + posiitonOffset;
             }
             //generate particle params
             pointCloudParameters params
@@ -147,7 +149,7 @@ namespace legion::rendering
             //create entity to store particle system
             auto newEnt = createEntity();
 
-            newEnt.add_component <rendering::lod>();
+          //  newEnt.add_component <rendering::lod>();
             newEnt.add_components<transform>(trans.get<position>().read(), trans.get<rotation>().read(), trans.get<scale>().read());
 
             rendering::particle_emitter emitter = newEnt.add_component<rendering::particle_emitter>().read();

@@ -37,9 +37,7 @@ namespace legion::rendering
 
         void insertNode(ValueType item, const math::vec3& pos)
         {
-            //exit if node does not fit inside tree
-            if (!fitsNode(pos)) return;
-
+            //check if there are no children 
             if (!m_children)
             {
                 //store item if possible
@@ -48,7 +46,7 @@ namespace legion::rendering
                     m_items.push_back(std::make_pair(pos, item));
                     return;
                 }
-                //initialize children
+                //initialize children since capacity is full
                 m_children = std::make_unique<std::array<Octree, 8>>();
                 m_children->at(Subsection::TopLeftFront) = Octree<ValueType>(m_capacity, math::vec3(m_min.x, m_position.y, m_min.z), math::vec3(m_position.x, m_max.y, m_position.z));
                 m_children->at(Subsection::TopRightFront) = Octree<ValueType>(m_capacity, math::vec3(m_position.x, m_position.y, m_min.z), math::vec3(m_max.x, m_max.y, m_position.z));
@@ -58,13 +56,9 @@ namespace legion::rendering
                 m_children->at(Subsection::TopRightBack) = Octree<ValueType>(m_capacity, math::vec3(m_position.x, m_position.y, m_position.z), math::vec3(m_max.x, m_max.y, m_max.z));
                 m_children->at(Subsection::BotRightBack) = Octree<ValueType>(m_capacity, math::vec3(m_position.x, m_min.y, m_position.z), math::vec3(m_max.x, m_position.y, m_max.z));
                 m_children->at(Subsection::BotLeftBack) = Octree<ValueType>(m_capacity, math::vec3(m_min.x, m_min.y, m_position.z), math::vec3(m_position.x, m_position.y, m_max.z));
-                //pass in current hold data into newly created children
-             /*   for (auto& [itemPos, item] : m_items)
-                {
-                    int childIndex = GetChildIndex(itemPos);
-                    m_children->at(childIndex).insertNode(item, itemPos);
-                }*/
+           
             }
+            //there are children, insert into child
             int childIndex = GetChildIndex(pos);
             m_children->at(childIndex).insertNode(item, pos);
         };
@@ -150,7 +144,7 @@ namespace legion::rendering
                 {
                     for (int i = 0; i < 8; i++)
                     {
-                        m_children->at(i).GetDataRange(startingDepth - 1, endDepth-1, Data);
+                        m_children->at(i).GetDataRange(startingDepth - 1, endDepth - 1, Data);
                     }
                 }
             }
@@ -249,18 +243,7 @@ namespace legion::rendering
 
             }
         }
-        bool fitsNode(const math::vec3& position)
-        {
-            return
-                !(
-                    position.x < m_min.x
-                    || position.y < m_min.y
-                    || position.z < m_min.z
-                    || position.x > m_max.x
-                    || position.y > m_max.y
-                    || position.z > m_max.z
-                    );
-        }
+
         std::shared_ptr<std::array<Octree, 8>>  m_children;
 
         std::vector <std::pair<math::vec3, ValueType>>m_items;

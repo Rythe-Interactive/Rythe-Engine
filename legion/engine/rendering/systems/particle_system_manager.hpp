@@ -36,7 +36,7 @@ namespace legion::rendering
                 auto emitterHandle = entity.get_component_handle<particle_emitter>();
                 auto emit = emitterHandle.read();
                 //Checks if emitter was already initialized.
-                if(!emit.setupCompleted)
+                if (!emit.setupCompleted)
                 {
                     //If NOT then it goes through the particle system setup.
                     emit.setupCompleted = true;
@@ -49,7 +49,7 @@ namespace legion::rendering
                 {
                     //If it IS then it runs the emitter through the particle system update.
                     const ParticleSystemBase* particleSystem = emit.particleSystemHandle.get();
-                    particleSystem->update(emit.livingParticles, emitterHandle,deltaTime);
+                    particleSystem->update(emit.livingParticles, emitterHandle, deltaTime);
                 }
             }
         }

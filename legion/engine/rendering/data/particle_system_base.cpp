@@ -29,8 +29,6 @@ namespace legion::rendering
             emitter.deadParticles.emplace_back(particleHandle);
             //Remove renderable to stop them from being rendered
             particleHandle.remove_component<mesh_renderer>();
-            //Write to emitter
-          //  emitterHandle.write(emitter);
         }
     }
 

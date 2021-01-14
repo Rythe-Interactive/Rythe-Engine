@@ -55,17 +55,14 @@ public:
             auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
             auto billBoardsh = rendering::ShaderCache::create_shader("billboard", "assets://shaders/pointShader.shs"_view);
             billboardMat = rendering::MaterialCache::create_material("billboardMat", billBoardsh);
-            billboardMat.set_param("fixedSize", 1);
+            billboardMat.set_param("fixedSize", true);
             billboardMat.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/sphere.png"_view));
             billboardMat.set_param("_color", math::colors::blue);
 
             particleMaterial = rendering::MaterialCache::create_material("directional light", colorshader);
             particleMaterial.set_param("color", math::colors::blue);
 
-            //    image = ImageCache::create_image("normal image", "assets://textures/test-height.png"_view);
-              //  billboardMat.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
-
-            image = ImageCache::create_image("normal image", "assets://textures/rock-height.png"_view);
+            image = ImageCache::create_image("normal image", "assets://textures/nullHeight.png"_view);
         }
 
         mesh_handle uvMesh = MeshCache::get_handle("uvsphere");
@@ -73,9 +70,18 @@ public:
         mesh_handle sphereMesh = MeshCache::get_handle("sphere");
         mesh_handle suzanneeMesh = MeshCache::get_handle("suzanne");
 
-        auto ent2 = createEntity();
-        auto trans2 = ent2.add_components<transform>(position(5, 0, 0), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(uvMesh, trans2, billboardMat, image, 5000, 0.2f));
+    /*    auto ent2 = createEntity();
+        auto trans2 = ent2.add_components<transform>(position(0, 1, 0), rotation(), scale(0.5f));
+        ent2.add_component<point_cloud>(point_cloud(suzanneeMesh, trans2, billboardMat, image, 5000, 0.1f));*/
+
+        auto ent1 = createEntity();
+        auto trans1 = ent1.add_components<transform>(position(1.5f, 1, 0), rotation(), scale(0.5f));
+        ent1.add_component<point_cloud>(point_cloud(uvMesh, trans1, billboardMat, image, 2000, 0.1f));
+
+        //auto ent3 = createEntity();
+        //auto trans3 = ent1.add_components<transform>(position(-1.5f, 1, 0), rotation(), scale(0.5f));
+        //ent3.add_component<point_cloud>(point_cloud(cubeMesh, trans1, billboardMat, image, 2000, 0.1f));
+
     }
 };
 
