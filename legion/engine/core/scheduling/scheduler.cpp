@@ -13,9 +13,9 @@ namespace legion::core::scheduling
     uint Scheduler::m_availableThreads = static_cast<uint>(math::ceil(((m_maxThreadCount * 0.5f) - reserved_threads)) + math::epsilon<float>()); // subtract OS and this_thread, and then leave some extra for miscellaneous processes.
 
     async::rw_spinlock Scheduler::m_jobQueueLock;
-    std::queue<Scheduler::runnable> Scheduler::m_jobs;
-    sparse_map<std::thread::id, async::rw_spinlock> Scheduler::m_commandLocks;
-    sparse_map<std::thread::id, std::queue<Scheduler::runnable>> Scheduler::m_commands;
+    std::queue<std::unique_ptr<async::job_pool_base>> Scheduler::m_jobs;
+    std::unordered_map<std::thread::id, async::rw_spinlock> Scheduler::m_commandLocks;
+    std::unordered_map<std::thread::id, std::queue<std::unique_ptr<runnable_base>>> Scheduler::m_commands;
 
     void Scheduler::threadMain(bool* exit, bool* start, bool lowPower)
     {
@@ -32,36 +32,50 @@ namespace legion::core::scheduling
         while (!(*exit))
         {
             OPTICK_EVENT();
-            Scheduler::runnable instruction{};
+            runnable_base* instruction = nullptr;
 
             {
-                async::readwrite_guard guard(m_commandLocks[id], async::lock_priority_normal);
+                async::readonly_guard guard(m_commandLocks[id], async::wait_priority_normal);
                 if (!m_commands[id].empty())
+                    instruction = m_commands[id].front().get();
+            }
+
+            if (instruction)
+            {
+                instruction->execute();
                 {
-                    instruction = m_commands[id].front();
+                    async::readwrite_guard guard(m_commandLocks[id], async::wait_priority_normal);
                     m_commands[id].pop();
                 }
+                instruction = nullptr;
             }
 
-            instruction();
-            instruction = {};
-
-            static bool empty;
             {
-                async::readwrite_guard guard(m_jobQueueLock, async::lock_priority_normal);
-                empty = m_jobs.empty();
-
-                if (!empty)
+                async::readonly_guard guard(m_jobQueueLock, async::wait_priority_normal);
+                if (!m_jobs.empty())
                 {
-                    instruction = m_jobs.front();
-                    m_jobs.pop();
-                    empty = m_jobs.empty();
+                    instruction = m_jobs.front()->pop_job();
+                    if (!instruction)
+                    {
+                        async::readwrite_guard wguard(m_jobQueueLock);
+                        if (!m_jobs.empty())
+                        {
+                            auto& pool = m_jobs.front();
+                            if (pool->empty())
+                            {
+                                pool->complete();
+                                m_jobs.pop();
+                            }
+                        }
+                    }
                 }
             }
 
-            instruction();
-
-            if (empty)
+            if (instruction)
+            {
+                instruction->execute();
+            }
+            else
             {
                 OPTICK_CATEGORY("Relieve LSU contention", Optick::Category::Wait);
                 if (lowPower)
@@ -123,23 +137,20 @@ namespace legion::core::scheduling
                 unreserved.pop();
                 legion::core::log::impl::thread_names[id] = std::string("Worker ") + std::to_string(i++);
 #if USE_OPTICK
-                sendCommand(id, [&](void* param)
+                sendCommand(id, [&]()
                     {
-                        (void)param;
                         log::info("Thread {} assigned.", std::this_thread::get_id());
                         std::lock_guard guard(m_threadScopesLock);
                         m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-                        OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
                     });
 #else
-                sendCommand(id, [](void* param)
+                sendCommand(id, []()
                     {
-                        (void)param;
                         log::info("Thread {} assigned.", std::this_thread::get_id());
                     });
 #endif
+                }
             }
-        }
 
         { // Start threads of all the other chains.
             async::readonly_guard guard(m_processChainsLock);
@@ -264,21 +275,7 @@ namespace legion::core::scheduling
         async::spinlock::force_release(true);
 
         m_exits.clear();
-    }
-
-    void Scheduler::sendCommand(std::thread::id id, delegate<void(void*)> command, void* parameter)
-    {
-        OPTICK_EVENT();
-        async::readwrite_guard guard(m_commandLocks[id]);
-        m_commands[id].push({ command, parameter });
-    }
-
-    void Scheduler::queueJob(delegate<void(void*)> job, void* parameter)
-    {
-        OPTICK_EVENT();
-        async::readwrite_guard guard(m_jobQueueLock);
-        m_jobs.push({ job, parameter });
-    }
+        }
 
     void Scheduler::destroyThread(std::thread::id id)
     {
@@ -417,4 +414,4 @@ namespace legion::core::scheduling
         return false;
     }
 
-}
+    }

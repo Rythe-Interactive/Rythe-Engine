@@ -10,7 +10,6 @@ namespace legion::rendering
     {
     private:
         static delegate<RenderPipelineBase*(app::window&)> m_pipelineProvider;
-        std::atomic_bool m_initialized = false;
         std::atomic_bool m_exiting = false;
 
         static void debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED const void* userParam);
