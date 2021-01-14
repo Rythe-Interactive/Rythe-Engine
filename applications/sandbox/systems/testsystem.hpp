@@ -28,8 +28,6 @@
 
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 
-#include "../data/pp_bloom.hpp"
-
 
 #include "animation_editor.hpp"
 #include "../data/animation.hpp"
