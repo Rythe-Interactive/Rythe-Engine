@@ -60,7 +60,7 @@ shader(fragment)
         // Do skybox lighting hack.
         vec3 unitDir = reflect(-normalize(camera.toView), material.normal);
         float reflectance = clamp01(0.01 + (pow(max(0.0, (1.0 - material.roughness)), 4) * 0.99));
-        vec3 reflection = mix(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), (vec3(length(skycolor.rgb)) + skycolor.rgb)*0.5, material.roughness);
+        vec3 reflection = mix(mix(vec3(average(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), (vec3(average(skycolor.rgb)) + skycolor.rgb)*0.5, material.roughness);
 
         lighting += reflection * mix(vec3(1.0), material.albedo.rgb, material.metallic) * reflectance;
 

@@ -2028,18 +2028,18 @@ public:
                 if (sun)
                     sun.destroy();
 
-                decalH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                pbrH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                copperH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                aluminumH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                ironH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                slateH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                rockH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                rock2H.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                fabricH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                bogH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                paintH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
-                skyboxH.set_param("skycolor", math::color(0.0001f, 0.0005f, 0.0025f));
+                decalH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                pbrH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                copperH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                aluminumH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                ironH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                slateH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                rockH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                rock2H.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                fabricH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                bogH.set_param("skycolor", math::color(0.002f, 0.003f, 0.0035f));
+                paintH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                skyboxH.set_param("skycolor", math::color(0.002f, 0.003f, 0.0035f));
             }
             else
             {
