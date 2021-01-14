@@ -5,6 +5,7 @@
 #include <physics/data/edgepenetrationquery.hpp>
 #include <physics/data/pointer_encapsulator.hpp>
 #include <physics/systems/physicssystem.hpp>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::physics
 {
@@ -120,8 +121,6 @@ namespace legion::physics
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
-     
-
         auto refPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
         auto incPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
 
@@ -169,7 +168,43 @@ namespace legion::physics
     void ConvexCollider::UpdateLocalAABB()
     {
         minMaxLocalAABB = PhysicsStatics::ConstructAABBFromVertices(vertices);
-    };
+    }
+
+    void ConvexCollider::DrawColliderRepresentation(const math::mat4& transform,math::color usedColor, float width, float time)
+    {
+        if (!shouldBeDrawn) { return; }
+        //math::vec3 colliderCentroid = pos + math::vec3(localTransform * math::vec4(physCollider->GetLocalCentroid(), 0));
+        //debug::user_projectDrawLine(colliderCentroid, colliderCentroid + math::vec3(0.0f,0.2f,0.0f), math::colors::cyan, 6.0f,0.0f,true);
+
+        for (auto face : GetHalfEdgeFaces())
+        {
+            //face->forEachEdge(drawFunc);
+            physics::HalfEdgeEdge* initialEdge = face->startEdge;
+            physics::HalfEdgeEdge* currentEdge = face->startEdge;
+
+            math::vec3 faceStart = transform * math::vec4(face->centroid, 1);
+            math::vec3 faceEnd = faceStart + math::vec3((transform * math::vec4(face->normal, 0))) * 0.5f;
+
+            debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 2.0f);
+
+            if (!currentEdge) { return; }
+
+            do
+            {
+                physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
+                currentEdge = currentEdge->nextEdge;
+
+                math::vec3 worldStart = transform * math::vec4(edgeToExecuteOn->edgePosition, 1);
+                math::vec3 worldEnd = transform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
+
+                debug::user_projectDrawLine(worldStart, worldEnd, usedColor, width, time);
+
+            } while (initialEdge != currentEdge && currentEdge != nullptr);
+        }
+
+
+    }
+    
 
 
 

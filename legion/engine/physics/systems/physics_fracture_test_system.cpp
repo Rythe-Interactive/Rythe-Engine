@@ -47,7 +47,7 @@ namespace legion::physics
 
         #pragma endregion
 
-        compositeColliderTest();
+        //compositeColliderTest();
         fractureTest();
 
        /* meshSplittingTest(planeH, cubeH

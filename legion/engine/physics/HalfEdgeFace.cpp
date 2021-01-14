@@ -122,7 +122,7 @@ namespace legion::physics
         float scaledAngle = math::dot(difference, normal);
 
         // if the scaledAngle is smaller or equal to 0, it is not convex
-        if (scaledAngle <= 0)
+        if (scaledAngle < 0)
         {
             inverse();
             return true;

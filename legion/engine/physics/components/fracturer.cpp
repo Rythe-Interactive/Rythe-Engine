@@ -41,6 +41,8 @@ namespace legion::physics
 
         auto vectorList = PhysicsStatics::GenerateVoronoi(VoronoiPoints, min.x, max.x, min.y, max.y, min.z, max.z,1,1,1);
 
+        vectorList.pop_back();
+
         debug::user_projectDrawLine(min,
             min + math::vec3(0, 0.5f, 0), math::colors::red, 8.0f, FLT_MAX, true);
 
@@ -49,27 +51,48 @@ namespace legion::physics
 
         std::vector<std::vector<math::vec3>> groupedPoints(VoronoiPoints.size());
 
+
+
         for (std::vector<math::vec4>& vector : vectorList)
         {
             for (const math::vec4& position : vector)
             {
                 int id = position.w;
 
-                log::debug("id {} ", id);
+                log::debug("position {} id {} ",math::to_string(math::vec3(position)), id);
                 groupedPoints.at(id).push_back(position);
+
             }
         }
 
+        
+
         //using positions of voronoi diagram create an array of convex colliders with quickhull
         std::vector<std::shared_ptr<ConvexCollider>> voronoiColliders;
+        int i = 1;
 
-        for (const std::vector<math::vec3>& vector : groupedPoints)
+        for ( std::vector<math::vec3>& vector : groupedPoints)
         {
+            math::color debugColor = 
+                math::color(math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f));
+
+            math::mat4 transform =
+                math::compose(math::vec3(1.0f), math::identity<math::quat>(), math::vec3(i * 2.0f, 0, 0));
+
+            for (math::vec3 vertex : vector)
+            {
+                math::vec3 vertPos = vertex + math::vec3(i * 2.0f, 0, 0);
+                debug::user_projectDrawLine(vertPos, vertPos + math::vec3(0,0.5,0), debugColor,10.0f,FLT_MAX);
+            }
+
             auto newCollider = std::make_shared<ConvexCollider>();
-            
-            //newCollider->DrawColliderRepresentation()
+            colliders.push_back(newCollider);
+            verticesList.push_back(vector);
+            newCollider->ConstructConvexHullWithVertices(vector);
 
-
+            transforms.push_back(transform);
+            newCollider->DrawColliderRepresentation(transform,math::colors::green,4.0f,FLT_MAX);
+            i++;
         }
 
 

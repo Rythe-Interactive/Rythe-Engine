@@ -8,7 +8,7 @@
 
 #include <rendering/components/renderable.hpp>
 #include <physics/components/physics_component.hpp>
-
+#include <physics/components/fracturer.h>
 
 #include <rendering/components/particle_emitter.hpp>
 
@@ -17,7 +17,7 @@ using namespace legion;
 struct convex_hull_step : public app::input_action<convex_hull_step> {};
 struct convex_hull_draw : public app::input_action<convex_hull_draw> {};
 struct convex_hull_info : public app::input_action<convex_hull_info> {};
-
+struct convex_hull_debug : public app::input_action<convex_hull_debug> {};
 struct convex_hull_iteration : public app::input_action<convex_hull_iteration> {};
 
 struct followerData
@@ -42,12 +42,13 @@ public:
         app::InputSystem::createBinding<convex_hull_draw>(app::inputmap::method::M);
         app::InputSystem::createBinding<convex_hull_info>(app::inputmap::method::I);
         app::InputSystem::createBinding<convex_hull_iteration>(app::inputmap::method::NUM1);
-  
+        app::InputSystem::createBinding<convex_hull_debug>(app::inputmap::method::P);
 
         bindToEvent<convex_hull_step, &TestSystemConvexHull::convexHullStep>();
         bindToEvent<convex_hull_draw, &TestSystemConvexHull::convexHullDraw>();
         bindToEvent<convex_hull_info, &TestSystemConvexHull::convexHullInfo>();
         bindToEvent<convex_hull_iteration, &TestSystemConvexHull::convexHullIteration>();
+        bindToEvent< convex_hull_debug, &TestSystemConvexHull::drawConvexHull>();
 
         createProcess<&TestSystemConvexHull::update>("Update");
 
@@ -173,6 +174,53 @@ public:
                 ent.write_component<scale>(scaleH.read());
             }
         }
+    }
+    
+    int stepToSee = 0;
+    math::vec3 spacing = math::vec3(2.5f, 0, 0);
+    int indexToSee = 2;
+    void drawConvexHull(convex_hull_debug * action)
+    {
+        
+        log::debug("drawConvexHull");
+        log::debug("stepToSee {} ", stepToSee);
+        if (!action->value)
+        {
+            ecs::EntityQuery fractureQuery = createQuery<physics::Fracturer>();
+            fractureQuery.queryEntities();
+            for (auto ent : fractureQuery)
+            {
+                auto fracturer = ent.read_component<physics::Fracturer>();
+
+                log::debug("fracturer.transforms {} ", fracturer.transforms.size());
+
+                for (size_t i = 0; i < fracturer.verticesList.size(); i++)
+                {
+                    if (i != indexToSee) { continue; }
+                    auto verticesToUse = fracturer.verticesList.at(i);
+
+                    for (auto& vertex : verticesToUse)
+                    {
+                        vertex += spacing * stepToSee;
+                        math::vec3 drawPos = math::vec3(fracturer.transforms.at(i)[3]) + vertex;
+                        debug::user_projectDrawLine(drawPos, drawPos + math::vec3(0, 0.2f, 0), math::colors::red, 12.0f, FLT_MAX);
+                    }
+
+                    std::shared_ptr<physics::ConvexCollider> newCollider = std::make_shared<physics::ConvexCollider>();
+                    newCollider->debug = false;
+                    newCollider->step = stepToSee;
+                    log::debug("ConstructConvexHullWithVertices with step {}", newCollider->step);
+                    newCollider->ConstructConvexHullWithVertices(verticesToUse);
+                    //newCollider->DrawColliderRepresentation(fracturer.transforms.at(i), math::colors::green, 8.0f, FLT_MAX);
+
+                }
+
+
+            }
+            stepToSee++;
+        }
+       
+
     }
 
     void drawPhysicsColliders()

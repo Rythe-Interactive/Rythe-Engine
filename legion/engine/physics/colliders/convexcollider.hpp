@@ -15,8 +15,8 @@ namespace legion::physics
     class ConvexCollider : public PhysicsCollider
     {
     public:
-
-
+        bool debug = false;
+        int step = 0;
         ConvexCollider() = default;
 
         ~ConvexCollider()
@@ -67,17 +67,29 @@ namespace legion::physics
        */
         void UpdateLocalAABB() override;
        
-
+        virtual void DrawColliderRepresentation(const math::mat4& transform, math::color usedColor, float width,float time) override;
+        
 
         /**@brief Does one step of the convex hull generation
          * Just for debug purposes
          */
         void doStep(legion::core::mesh_handle& mesh)
         {
+           
             ConstructConvexHullWithMesh(mesh);
             ++step;
         }
 
+        void ConstructConvexHullWithVertices( std::vector<math::vec3>& vertices)
+        {
+            //many of the functions for convex hull are coupled to mesh,
+            //for now we create a mesh so that we can pass it into the function
+            core::mesh mesh;
+            mesh.vertices = std::move(vertices);
+            ConstructConvexHullWithMesh(mesh);
+        }
+
+        
 
         //TODO(algorythmix,jelled1st) This desperately needs cleanup
         //TODO(cont.) investigate unused variables! (projected)
@@ -88,17 +100,20 @@ namespace legion::physics
         */
         void ConstructConvexHullWithMesh(legion::core::mesh_handle& meshHandle)
         {
-            
+            auto meshLockPair = meshHandle.get();
+
+            //mesh lock stuff
+            async::readonly_guard guard(meshLockPair.first);
+            auto mesh = meshLockPair.second;
+
+            ConstructConvexHullWithMesh(mesh);
+        }
+
+        void  ConstructConvexHullWithMesh(mesh& mesh)
+        {
             // Step 0 - Create inital hull
-            if (step == 0)
-            {
-                auto meshLockPair = meshHandle.get();
-
-                //mesh lock stuff
-                async::readonly_guard guard(meshLockPair.first);
-
-                auto mesh = meshLockPair.second;
-
+            /*if (step == 0)
+            {*/
                 //Make sure our mesh has enough vertices for at least an initial hulls
                 if (mesh.vertices.size() < 4)
                 {
@@ -107,8 +122,12 @@ namespace legion::physics
                 }
 
                 //index 0 and 1 - a line
-                auto [index0,index1] = convexHullFindOuterIndices(mesh);
+                auto [index0, index1] = convexHullFindOuterIndices(mesh);
 
+                /*if (step == 0)
+                {
+                    return;
+                }*/
                 //index 2 - together with index0 and index1 creates a plane 
                 size_type index2 = convexHullFindIndexClosestToLine(mesh, index0, index1);
                 if (index2 == mesh.vertices.size())
@@ -119,9 +138,32 @@ namespace legion::physics
 
                 //normal for face constructed from index0, index1 and index2
                 math::vec3 normal012 = math::normalize(math::cross((mesh.vertices.at(index1) - mesh.vertices.at(index0)), (mesh.vertices.at(index2) - mesh.vertices.at(index0))));
+                if (debug)
+                {
+                    log::debug("triangle verts {} {} {} ", mesh.vertices.at(index0), mesh.vertices.at(index1), mesh.vertices.at(index2));
+                }
+                vertices.push_back(mesh.vertices.at(index0));
+                vertices.push_back(mesh.vertices.at(index1));
+                vertices.push_back(mesh.vertices.at(index2));
+                HalfEdgeEdge* edge0 = new HalfEdgeEdge(vertices.at(0));
+                HalfEdgeEdge* edge1 = new HalfEdgeEdge(vertices.at(1));
+                HalfEdgeEdge* edge2 = new HalfEdgeEdge(vertices.at(2));
+                edge0->setNextAndPrevEdge(edge2, edge1); //goes from 0 to 1
+                edge1->setNextAndPrevEdge(edge0, edge2); //goes from 1 to 2
+                edge2->setNextAndPrevEdge(edge1, edge0); //goes from 2 to 0
+                HalfEdgeFace* face012 = new HalfEdgeFace(edge0, normal012);
+                halfEdgeFaces.push_back(face012);
+                faceIndexMap.emplace(halfEdgeFaces[0], 0);
+
+                if (step == 1)
+                {
+                    return;
+                }
 
                 //index 3 - Together with previous indices creates initial hull
-                size_type index3 = convexHullFindIndexClosestToTriangle(mesh, index0, index1, index2, normal012);
+                size_type index3 = convexHullFindIndexClosestToTriangle(mesh, index0, index1, index2, normal012,debug);
+
+
                 if (index3 == mesh.vertices.size())
                 {
                     log::error("Initial hull, index 3 cannot be found!");
@@ -129,20 +171,20 @@ namespace legion::physics
                 }
 
                 // Build the initial hull
-                #pragma region buildInitialHull
-                vertices.push_back(mesh.vertices.at(index0));
+#pragma region buildInitialHull
+   /*             vertices.push_back(mesh.vertices.at(index0));
                 vertices.push_back(mesh.vertices.at(index1));
-                vertices.push_back(mesh.vertices.at(index2));
+                vertices.push_back(mesh.vertices.at(index2));*/
                 vertices.push_back(mesh.vertices.at(index3));
 
                 // Face 0 - edges: 0, 1, 2 - vertices: 0, 1, 2
-                HalfEdgeEdge* edge0 = new HalfEdgeEdge(vertices.at(0));
-                HalfEdgeEdge* edge1 = new HalfEdgeEdge(vertices.at(1)); 
-                HalfEdgeEdge* edge2 = new HalfEdgeEdge(vertices.at(2));
-                edge0->setNextAndPrevEdge(edge2, edge1); //goes from 0 to 1
-                edge1->setNextAndPrevEdge(edge0, edge2); //goes from 1 to 2
-                edge2->setNextAndPrevEdge(edge1, edge0); //goes from 2 to 0
-                HalfEdgeFace* face012 = new HalfEdgeFace(edge0, normal012);
+                //HalfEdgeEdge* edge0 = new HalfEdgeEdge(vertices.at(0));
+                //HalfEdgeEdge* edge1 = new HalfEdgeEdge(vertices.at(1));
+                //HalfEdgeEdge* edge2 = new HalfEdgeEdge(vertices.at(2));
+                //edge0->setNextAndPrevEdge(edge2, edge1); //goes from 0 to 1
+                //edge1->setNextAndPrevEdge(edge0, edge2); //goes from 1 to 2
+                //edge2->setNextAndPrevEdge(edge1, edge0); //goes from 2 to 0
+                //HalfEdgeFace* face012 = new HalfEdgeFace(edge0, normal012);
 
                 // Face 1 - edges: 3, 4, 5 - vertices: 3, 1, 0
                 HalfEdgeEdge* edge3 = new HalfEdgeEdge(vertices.at(3));
@@ -177,16 +219,16 @@ namespace legion::physics
                 HalfEdgeFace* face302 = new HalfEdgeFace(edge9, normal302);
 
                 // Pair edges
-                edge0->setPairingEdge(edge4); 
-                edge1->setPairingEdge(edge6); 
+                edge0->setPairingEdge(edge4);
+                edge1->setPairingEdge(edge6);
                 edge2->setPairingEdge(edge10);
-                edge3->setPairingEdge(edge7); 
-                edge5->setPairingEdge(edge9); 
+                edge3->setPairingEdge(edge7);
+                edge5->setPairingEdge(edge9);
                 edge8->setPairingEdge(edge11);
 
                 // Make sure all the created faces are convex with each other
                 // Also invert normals when they are concave
-                
+
                 HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face310);
                 HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face213);
                 HalfEdgeFace::makeNormalsConvexWithFace(*face012, *face302);
@@ -195,18 +237,18 @@ namespace legion::physics
                 HalfEdgeFace::makeNormalsConvexWithFace(*face213, *face302);
 
                 // Add faces to the faces list
-                halfEdgeFaces.push_back(face012);
+                //halfEdgeFaces.push_back(face012);
                 halfEdgeFaces.push_back(face310);
                 halfEdgeFaces.push_back(face213);
                 halfEdgeFaces.push_back(face302);
 
                 // Store face index in faceIndexMap
-                faceIndexMap.emplace(halfEdgeFaces[0], 0);
+                //faceIndexMap.emplace(halfEdgeFaces[0], 0);
                 faceIndexMap.emplace(halfEdgeFaces[1], 1);
                 faceIndexMap.emplace(halfEdgeFaces[2], 2);
                 faceIndexMap.emplace(halfEdgeFaces[3], 3);
 
-                #pragma endregion buildInitalHull
+#pragma endregion buildInitalHull
                 // End of building the initial hull
 
                 //  Construct a toBeSorted list, conaining all the vertices that need to be added to the mesh
@@ -219,13 +261,14 @@ namespace legion::physics
 
                     toBeSorted.push_back(mesh.vertices.at(i));
                 }
-            }
+            ///}
             // end of Step 0 - Create inital hull
 
             // Step 1 and up, add a vert to the hull
-            if (step == 0) return;
+            if (step == 2) return;
+            looped = 2;
             //while (looped < step)
-            while(true)
+            while (true)
             {
                 // Section here is return condition
                 if (toBeSorted.size() == 0)
@@ -233,8 +276,7 @@ namespace legion::physics
                     // We are done here
                     // if toBesorted == 0 there are no vertices left in the original mesh that are not added to the hulls
 
-                    AssertEdgeValidity();
-                    return;
+                    break;
                 }
 
                 faceVertMap.clear();
@@ -242,22 +284,21 @@ namespace legion::physics
 
                 // Check if there are any faces with matched unsorted vertices
                 bool shouldEnd = true;
-                for(auto& faceVert : faceVertMap)
+                for (auto& faceVert : faceVertMap)
                 {
-                    if(faceVert.size() != 0)
+                    if (faceVert.size() != 0)
                     {
                         shouldEnd = false;
                         break;
                     }
                 }
 
-                if(shouldEnd)
+                if (shouldEnd)
                 {
                     //We are done yay!
                     // If there aren't any unsorted vertices, we should exit 
-
-                    AssertEdgeValidity();
-                    return;
+                    break;
+                 
                 }
 
                 // Find the largest distance form vert to its face
@@ -401,6 +442,7 @@ namespace legion::physics
                 ++looped;
             }
 
+            convexHullMergeFaces(halfEdgeFaces);
             AssertEdgeValidity();
         }
 
@@ -793,7 +835,8 @@ namespace legion::physics
          * @param normal The normal of the plane vertex index
          * @return The index of the vertex with the largest distance from the plane, mesh.vertices.size() is returned if a such a point cannot be found
          */
-        size_type convexHullFindIndexClosestToTriangle(const core::mesh& mesh, const size_type planeIndex0, const size_type planeIndex1, const size_type planeIndex2, const math::vec3 normal)
+        size_type convexHullFindIndexClosestToTriangle(const core::mesh& mesh, const size_type planeIndex0,
+            const size_type planeIndex1, const size_type planeIndex2, const math::vec3 normal,bool debug = false)
         {
             float largestDistance = 0;
             // Save the index which is furthest from the plane between the mesh vertices at the plane indices
@@ -803,7 +846,13 @@ namespace legion::physics
             {
                 // If the index is the same as one of the triangle indices, continue
                 if (i == planeIndex0 || i == planeIndex1 || i == planeIndex2) continue;
-                float dist = abs(math::pointToTriangle(mesh.vertices.at(i), mesh.vertices.at(planeIndex0), mesh.vertices.at(planeIndex1), mesh.vertices.at(planeIndex2), normal));
+
+                if (math::abs(math::pointToPlane(mesh.vertices.at(i), mesh.vertices.at(planeIndex0), normal)) < math::epsilon<float>())
+                {
+                    continue;
+                }
+
+                float dist = abs(math::pointToTriangle(mesh.vertices.at(i), mesh.vertices.at(planeIndex0), mesh.vertices.at(planeIndex1), mesh.vertices.at(planeIndex2), normal,debug));
                 if (dist > largestDistance && dist > 0)
                 {
                     largestDistance = dist;
@@ -969,7 +1018,7 @@ namespace legion::physics
         std::vector<HalfEdgeFace*> halfEdgeFaces;
 
         // Convex hull generation debug stuffs
-        int step = 0;
+       
         std::vector<math::vec3> toBeSorted;
         std::vector<std::vector<math::vec3>> faceVertMap;
         std::unordered_map<HalfEdgeFace*, int> faceIndexMap;

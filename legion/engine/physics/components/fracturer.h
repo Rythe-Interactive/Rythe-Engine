@@ -35,7 +35,9 @@ namespace legion::physics
 
         int fractureCount = 0;
 
-
+        std::vector<std::vector<math::vec3>> verticesList;
+        std::vector<std::shared_ptr<ConvexCollider>> colliders;
+        std::vector<math::mat4> transforms;
 	};
 
    
