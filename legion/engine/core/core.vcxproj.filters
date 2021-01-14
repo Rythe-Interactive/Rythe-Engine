@@ -35,6 +35,8 @@
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
     <ClCompile Include="async\spinlock.cpp" />
+    <ClCompile Include="async\async_operation.cpp" />
+    <ClCompile Include="async\job_pool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -414,6 +416,11 @@
     <ClInclude Include="common\managed_resource.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
+    <ClInclude Include="async\async_operation.hpp" />
+    <ClInclude Include="async\job_pool.hpp" />
+    <ClInclude Include="containers\runnable.hpp" />
+    <ClInclude Include="async\wait_priority.hpp" />
+    <ClInclude Include="async\async_runnable.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

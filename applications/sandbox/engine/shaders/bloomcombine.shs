@@ -1,0 +1,29 @@
+#version 450
+#state CULL OFF
+#state DEPTH OFF
+#state ALPHA OFF
+
+generate(vertex, fragment)
+
+#include <stdio.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position =  vec4(stdin(position), 1.0);
+        PropagateStdIO();
+    }
+}
+
+
+shader(fragment)
+{
+
+    void main(void)
+    {
+        vec4 brightness = HDROverdraw(stdin(uv));
+        fragment_color = vec4(SceneColor(stdin(uv)).rgb + brightness.rgb, 1.0);
+    }
+}
+

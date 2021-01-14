@@ -3,6 +3,7 @@
 
 generate(vertex, fragment)
 
+#define NO_DEPTH_OUT
 #include <stdio.shinc>
 #include <math_ext.shinc>
 
@@ -33,5 +34,8 @@ shader(fragment)
         vec4 col = textureLod(floorTile, grid, mip);
         col.a *= alpha;
         fragment_color = col;
+        fragment_normal = vec4(stdin(wnormal), 1.0);
+        fragment_position = vec4(stdin(wvertex), 1.0);
+        fragment_overdraw = vec4(vec3(0.0), col.a);
     }
 }

@@ -231,6 +231,13 @@ namespace legion::rendering
         auto start = data.cbegin() + 19;
         auto end = data.cend();
 
+
+        state[GL_DEPTH_TEST] = GL_GREATER;
+        state[GL_CULL_FACE] = GL_BACK;
+        state[GL_BLEND_SRC] = GL_SRC_ALPHA;
+        state[GL_BLEND_DST] = GL_ONE_MINUS_SRC_ALPHA;
+        state[GL_DITHER] = GL_FALSE;
+
         while (start != end)
         {
             GLenum shaderType;

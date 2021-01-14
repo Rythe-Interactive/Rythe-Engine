@@ -43,6 +43,7 @@
     <ClCompile Include="pipeline\default\postfx\tonemapping.cpp" />
     <ClCompile Include="pipeline\default\postfx\fxaa.cpp" />
     <ClCompile Include="pipeline\default\stages\debugrenderstage.cpp" />
+    <ClCompile Include="pipeline\default\postfx\bloom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="components\pointcloud_renderable.hpp" />
     <ClInclude Include="components\point.hpp" />
     <ClInclude Include="components\point_emitter_data.hpp" />
+    <ClInclude Include="pipeline\default\postfx\bloom.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\buffer.inl" />

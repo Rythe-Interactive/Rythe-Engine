@@ -53,7 +53,7 @@ namespace legion::rendering
             return;
         }
 
-        auto colorAttachment = fbo->getAttachment(GL_COLOR_ATTACHMENT0);
+        auto colorAttachment = fbo->getAttachment(FRAGMENT_ATTACHMENT);
         if (std::holds_alternative<std::monostate>(colorAttachment))
         {
             log::error("Color attachment was not found.");
@@ -87,6 +87,10 @@ namespace legion::rendering
             depthTexture = std::get<texture_handle>(depthAttachment);
         glDisable(GL_DEPTH_TEST);
 
+        fbo->bind();
+        uint attachment = FRAGMENT_ATTACHMENT;
+        glDrawBuffers(1, &attachment);
+        fbo->release();
 
         for (auto& [_, effect] : m_effects)
         {
@@ -97,7 +101,7 @@ namespace legion::rendering
             for (auto& pass : effect->renderPasses)
             {
                 OPTICK_EVENT("Effect pass");
-                fbo->attach(textures[!index], GL_COLOR_ATTACHMENT0);
+                fbo->attach(textures[!index], FRAGMENT_ATTACHMENT);
                 
                 pass.invoke(*fbo, textures[index], depthTexture, deltaTime);
                                 
@@ -107,7 +111,7 @@ namespace legion::rendering
 
         if (index)
         {
-            fbo->attach(textures[0], GL_COLOR_ATTACHMENT0);
+            fbo->attach(textures[0], FRAGMENT_ATTACHMENT);
             fbo->bind();
             m_screenShader.bind();
             m_screenShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(textures[1]);

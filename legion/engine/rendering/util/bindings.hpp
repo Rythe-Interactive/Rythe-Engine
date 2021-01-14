@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <application/application.hpp>
 
 #define SV_START 0
 
@@ -28,15 +29,22 @@
 
 /* uniform 15 */  #define SV_SCENECOLOR     SV_LIGHTCOUNT + 1
 /* uniform 16 */  #define SV_SCENEDEPTH     SV_SCENECOLOR + 1
-/* uniform 17 */  #define SV_HDROVERDRAW    SV_SCENEDEPTH + 1
+/* uniform 17 */  #define SV_SCENENORMAL    SV_SCENEDEPTH + 1
+/* uniform 18 */  #define SV_SCENEPOSITION  SV_SCENENORMAL + 1
+/* uniform 19 */  #define SV_HDROVERDRAW    SV_SCENEPOSITION + 1
 
-/* uniform 21 */  #define SV_ALBEDO         SV_HDROVERDRAW + 4   
-/* uniform 22 */  #define SV_NORMALHEIGHT   SV_ALBEDO + 1   
-/* uniform 23 */  #define SV_MRDAO          SV_NORMALHEIGHT + 1    
-/* uniform 24 */  #define SV_EMISSIVE       SV_MRDAO + 1        
-/* uniform 25 */  #define SV_HEIGHTSCALE    SV_EMISSIVE + 1
+/* uniform 23 */  #define SV_ALBEDO         SV_HDROVERDRAW + 4   
+/* uniform 24 */  #define SV_NORMALHEIGHT   SV_ALBEDO + 1   
+/* uniform 25 */  #define SV_MRDAO          SV_NORMALHEIGHT + 1    
+/* uniform 26 */  #define SV_EMISSIVE       SV_MRDAO + 1        
+/* uniform 27 */  #define SV_HEIGHTSCALE    SV_EMISSIVE + 1
 
-/* uniform 21 */  #define SV_MATERIAL       SV_ALBEDO
+/* uniform 23 */  #define SV_MATERIAL       SV_ALBEDO
+
+/* attachment 0 */ #define FRAGMENT_ATTACHMENT  GL_COLOR_ATTACHMENT0
+/* attachment 1 */ #define NORMAL_ATTACHMENT    FRAGMENT_ATTACHMENT + 1
+/* attachment 2 */ #define POSITION_ATTACHMENT  NORMAL_ATTACHMENT + 1
+/* attachment 3 */ #define OVERDRAW_ATTACHMENT  POSITION_ATTACHMENT + 1
 
 namespace legion::rendering::detail
 {
@@ -69,6 +77,8 @@ namespace legion::rendering::detail
 
             defines.push_back("SV_SCENECOLOR=" +   std::to_string(SV_SCENECOLOR));
             defines.push_back("SV_SCENEDEPTH=" +   std::to_string(SV_SCENEDEPTH));
+            defines.push_back("SV_SCENENORMAL=" +  std::to_string(SV_SCENENORMAL));
+            defines.push_back("SV_SCENEPOSITION=" +std::to_string(SV_SCENEPOSITION));
             defines.push_back("SV_HDROVERDRAW=" +  std::to_string(SV_HDROVERDRAW));
 
             defines.push_back("SV_ALBEDO=" +       std::to_string(SV_ALBEDO));
@@ -78,6 +88,11 @@ namespace legion::rendering::detail
             defines.push_back("SV_HEIGHTSCALE=" +  std::to_string(SV_HEIGHTSCALE));
 
             defines.push_back("SV_MATERIAL=" +     std::to_string(SV_MATERIAL));
+
+            defines.push_back("SV_FRAGMENTOUT=" +    std::to_string(FRAGMENT_ATTACHMENT - GL_COLOR_ATTACHMENT0));
+            defines.push_back("SV_NORMALOUT=" +      std::to_string(NORMAL_ATTACHMENT - GL_COLOR_ATTACHMENT0));
+            defines.push_back("SV_POSITIONOUT=" +    std::to_string(POSITION_ATTACHMENT - GL_COLOR_ATTACHMENT0));
+            defines.push_back("SV_HDROVERDRAWOUT=" + std::to_string(OVERDRAW_ATTACHMENT - GL_COLOR_ATTACHMENT0));
         }
 
         return defines;

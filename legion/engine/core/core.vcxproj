@@ -117,7 +117,12 @@ del ".\xcopyexclude"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
+    <ClInclude Include="async\async_operation.hpp" />
+    <ClInclude Include="async\async_runnable.hpp" />
+    <ClInclude Include="async\job_pool.hpp" />
     <ClInclude Include="async\ring_sync_lock.hpp" />
+    <ClInclude Include="async\wait_priority.hpp" />
+    <ClInclude Include="containers\runnable.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
@@ -495,6 +500,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="async\async_operation.cpp" />
+    <ClCompile Include="async\job_pool.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
     <ClCompile Include="async\spinlock.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
