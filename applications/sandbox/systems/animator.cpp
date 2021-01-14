@@ -11,6 +11,7 @@ namespace ext
             //get the animation data from the entity
             animation anim = ent.read_component<animation>();
 
+
             //Animation disabled, early out
             if (!anim.running) continue;
 
@@ -162,6 +163,33 @@ namespace ext
                 index_type prev_index = anim.s_index == 0 ? anim.scale_key_frames.size() - 1 : anim.s_index - 1;
                 auto newSc = math::lerp(anim.scale_key_frames[prev_index].second, scale, anim.s_accumulator);
                 scale_handle.write(newSc);
+            }
+            if(!anim.events.empty())
+            {
+
+                //advance event accumulator (since events only trigger, they do not need a duration)
+                anim.e_accumulator = anim.e_accumulator + delta.seconds();
+
+                //check if all events triggered and reset if requested
+                if(anim.e_index >= anim.events.size())
+                {
+                    if(anim.looping)
+                    {
+                        anim.e_accumulator = 0.0f;
+                        anim.e_index = 0;
+                    }
+                }
+                else
+                {
+                    //get current event and trigger if the acc is above the threshold
+                    auto& [trigger_time, event_info] = anim.events[anim.e_index];
+                    if(anim.e_accumulator > trigger_time)
+                    {
+                        auto &[ev,event_id] = event_info;
+                        anim.e_index++;
+                        m_eventBus->raiseEventUnsafe(std::unique_ptr<events::event_base>(ev->surrogate_ctor()),event_id);
+                    }
+                }
             }
 
             //commit animation component to entity
