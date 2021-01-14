@@ -188,7 +188,7 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         async::readonly_guard entguard(m_entityLock);
 
-        auto& ret = m_entityLists.get(queryId);
+        auto& ret = m_entityLists.at(queryId);
         OPTICK_EVENT("Copy entity set");
         return *ret;
     }
@@ -198,7 +198,7 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         async::readonly_guard refguard(m_referenceLock);
 
-        m_references.get(queryId)++;
+        m_references.at(queryId)++;
     }
 
     void QueryRegistry::removeReference(id_type queryId)
@@ -212,7 +212,7 @@ namespace legion::core::ecs
         if (!m_references.contains(queryId))
             return;
 
-        size_type& referenceCount = m_references.get(queryId);
+        size_type& referenceCount = m_references.at(queryId);
         referenceCount--;
 
         if (referenceCount == 0) // If there are no more references to this query then erase the query to reduce memory footprint.
@@ -230,7 +230,7 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         async::readonly_guard refguard(m_referenceLock);
         if (m_references.contains(queryId))
-            return m_references[queryId];
+            return m_references.at(queryId);
         return 0;
     }
 }

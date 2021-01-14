@@ -79,7 +79,7 @@ namespace legion::core::ecs
         /**@brief Copy assignment. Exists for the same reasons as the copy constructor.
          * @ref legion::core::ecs::entity_handle::entity_handle(const legion::core::ecs::entity& other)
          */
-        entity_handle& operator=(const entity_handle& other);
+        entity_handle& operator=(const entity_handle& other) noexcept;
 
         /**
          * @brief Clones an entity.
@@ -100,14 +100,17 @@ namespace legion::core::ecs
         /**@brief Cast to id_type returns the id of the entity this handle references.
          * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.
          */
-        operator id_type() const { return get_id(); }
+        operator id_type() const { return m_id; }
 
         bool operator==(const entity_handle& other) const
         {
             return m_id == other.m_id;
         }
 
-        operator bool() const { return valid(); }
+        operator bool() const
+        {
+            return valid();
+        }
 
         /**@brief Returns the id of the entity this handle references.
          * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.

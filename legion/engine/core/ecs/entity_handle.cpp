@@ -16,7 +16,7 @@ namespace legion::core::ecs
 
     child_iterator::child_iterator(impl* implptr) : m_pimpl(implptr) {}
 
-    entity_handle& entity_handle::operator=(const entity_handle& other)
+    entity_handle& entity_handle::operator=(const entity_handle& other) noexcept
     {
         m_id = other.m_id;
         return *this;
@@ -78,13 +78,21 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         entity_data data = m_registry->getEntityData(m_id);
 
+#ifdef LGN_SAFE_MODE
         if (m_registry->validateEntity(data.parent))
+#else
+        if (data.parent)
+#endif
         {
             auto parentData = m_registry->getEntityData(data.parent);
             parentData.children.erase(*this);
             m_registry->setEntityData(data.parent, parentData);
         }
-        if (m_registry->validateEntity(newParent))
+#ifdef LGN_SAFE_MODE
+        if(m_registry->validateEntity(newParent))
+#else
+        if (newParent)
+#endif
         {
             data.parent = newParent;
 
@@ -191,7 +199,7 @@ namespace legion::core::ecs
 
         entity_handle child = m_registry->getEntity(childId);
 
-        if (child && !data.children.contains(child))
+        if (child.m_id && !data.children.contains(child))
             child.set_parent(m_id);
     }
 
@@ -201,7 +209,7 @@ namespace legion::core::ecs
         entity_data data = m_registry->getEntityData(m_id);
         entity_handle child = m_registry->getEntity(childId);
 
-        if (child && data.children.contains(child))
+        if (child.m_id && data.children.contains(child))
             child.set_parent(world_entity_id);
     }
 
@@ -245,6 +253,7 @@ namespace legion::core::ecs
     {
         OPTICK_EVENT();
         m_registry->destroyEntity(m_id);
+        m_id = invalid_id;
     }
 
     bool entity_handle::valid() const

@@ -106,7 +106,7 @@ namespace legion::core::ecs
 
         /**@brief Get the rw_spinlock of this container.
          */
-        async::rw_spinlock& get_lock() const
+        async::rw_spinlock& get_lock() const noexcept
         {
             return m_lock;
         }
@@ -130,7 +130,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
             if (m_components.contains(entityId))
-                return m_components.get(entityId);
+                return m_components.at(entityId);
             return m_nullComp;
         }
 
@@ -143,7 +143,7 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
             if (m_components.contains(entityId))
-                return m_components.get(entityId);
+                return m_components.at(entityId);
             return m_nullComp;
         }
 

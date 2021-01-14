@@ -39,7 +39,7 @@ namespace legion::rendering
         if (!modelMatrixBuffer)
             return;
 
-        auto fbo = getFramebuffer(mainId);
+        auto* fbo = getFramebuffer(mainId);
         if (!fbo)
         {
             log::error("Main frame buffer is missing.");
@@ -120,14 +120,14 @@ namespace legion::rendering
 
             for (auto [modelHandle, instances] : instancesPerMaterial)
             {
-                OPTICK_EVENT("Rendering instances");
                 auto modelName = ModelCache::get_model_name(modelHandle.id);
+                OPTICK_EVENT("Rendering instances");
                 OPTICK_TAG("Model", modelName.c_str());
 
-                if (!modelHandle.is_buffered())
+                const model& mesh = modelHandle.get_model();
+                if (!mesh.buffered)
                     modelHandle.buffer_data(*modelMatrixBuffer);
 
-                model mesh = modelHandle.get_model();
                 if (mesh.submeshes.empty())
                 {
                     log::warn("Empty mesh found.");
@@ -143,18 +143,22 @@ namespace legion::rendering
                         m_matrices[i] = transform(ent.get_component_handles<transform>()).get_local_to_world_matrix();
                         i++;
                     }
+
+                    modelMatrixBuffer->bufferData(m_matrices);
                 }
-                modelMatrixBuffer->bufferData(m_matrices);
 
-                mesh.vertexArray.bind();
-                mesh.indexBuffer.bind();
-                lightsBuffer->bind();
-                for (auto submesh : mesh.submeshes)
-                    glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
+                {
+                    OPTICK_EVENT("Draw call");
+                    mesh.vertexArray.bind();
+                    mesh.indexBuffer.bind();
+                    lightsBuffer->bind();
+                    for (auto submesh : mesh.submeshes)
+                        glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
 
-                lightsBuffer->release();
-                mesh.indexBuffer.release();
-                mesh.vertexArray.release();
+                    lightsBuffer->release();
+                    mesh.indexBuffer.release();
+                    mesh.vertexArray.release();
+                }
             }
 
             material.release();

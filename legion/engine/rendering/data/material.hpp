@@ -244,6 +244,9 @@ namespace legion::rendering
     template<typename T>
     void material_handle::set_param(const std::string& name, const T& value)
     {
+        OPTICK_EVENT();
+        OPTICK_TAG("Name", name.c_str());
+
         async::readonly_guard guard(MaterialCache::m_materialLock);
         MaterialCache::m_materials[id].set_param<T>(name, value);
     }
@@ -251,6 +254,9 @@ namespace legion::rendering
     template<typename T>
     void material_handle::set_param(GLint location, const T& value)
     {
+        OPTICK_EVENT();
+        OPTICK_TAG("Location", location);
+
         async::readonly_guard guard(MaterialCache::m_materialLock);
         MaterialCache::m_materials[id].set_param<T>(location, value);
     }

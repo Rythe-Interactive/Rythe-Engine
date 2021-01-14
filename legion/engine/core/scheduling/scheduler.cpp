@@ -42,7 +42,10 @@ namespace legion::core::scheduling
 
             if (instruction)
             {
-                instruction->execute();
+                {
+                    OPTICK_EVENT("Executing command")
+                    instruction->execute();
+                }
                 {
                     async::readwrite_guard guard(m_commandLocks[id], async::wait_priority_normal);
                     m_commands[id].pop();
@@ -73,6 +76,7 @@ namespace legion::core::scheduling
 
             if (instruction)
             {
+                OPTICK_EVENT("Executing job")
                 instruction->execute();
             }
             else
@@ -163,7 +167,6 @@ namespace legion::core::scheduling
         {
             std::lock_guard guard(m_threadScopesLock);
             m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-            OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
         }
 #endif
 
@@ -268,7 +271,9 @@ namespace legion::core::scheduling
             destroyThread(id);
         }
 
+#if USE_OPTICK
         m_threadScopes.clear();
+#endif
         OPTICK_SHUTDOWN();
 
         async::rw_spinlock::force_release(true);

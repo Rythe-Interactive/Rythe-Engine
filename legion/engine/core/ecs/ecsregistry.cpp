@@ -13,8 +13,10 @@ namespace legion::core::ecs
 
     void EcsRegistry::recursiveDestroyEntityInternal(id_type entityId)
     {
+#ifdef LGN_SAFE_MODE
         if (!validateEntity(entityId))
             return;
+#endif
 
         m_queryRegistry.markEntityDestruction(entityId); // Remove entity from any queries.
 
@@ -56,7 +58,7 @@ namespace legion::core::ecs
     {
         OPTICK_EVENT();
         async::readonly_guard guard(m_familyLock);
-        return m_families[componentTypeId].get();
+        return m_families.at(componentTypeId).get();
     }
 
     bool EcsRegistry::hasComponent(id_type entityId, id_type componentTypeId)
@@ -74,8 +76,10 @@ namespace legion::core::ecs
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId)
     {
         OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
         if (!validateEntity(entityId))
             return component_handle_base();
+#endif
 
         getFamily(componentTypeId)->create_component(entityId);
 
@@ -94,8 +98,10 @@ namespace legion::core::ecs
     component_handle_base EcsRegistry::copyComponent(id_type destinationEntity, id_type sourceEntity, id_type componentTypeId)
     {
         OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
         if (!validateEntity(sourceEntity) || !validateEntity(destinationEntity))
             return component_handle_base();
+#endif
 
         getFamily(componentTypeId)->clone_component(destinationEntity, sourceEntity);
 
@@ -112,8 +118,10 @@ namespace legion::core::ecs
     component_handle_base EcsRegistry::createComponent(id_type entityId, id_type componentTypeId, void* value)
     {
         OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
         if (!validateEntity(entityId))
             return component_handle_base();
+#endif
 
         getFamily(componentTypeId)->create_component(entityId, value);
 
@@ -130,8 +138,10 @@ namespace legion::core::ecs
     void EcsRegistry::destroyComponent(id_type entityId, id_type componentTypeId)
     {
         OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
         if (!validateEntity(entityId))
             return;
+#endif
 
         m_queryRegistry.evaluateEntityChange(entityId, componentTypeId, true);
         getFamily(componentTypeId)->destroy_component(entityId);
@@ -184,8 +194,10 @@ namespace legion::core::ecs
     void EcsRegistry::destroyEntity(id_type entityId, bool recurse)
     {
         OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
         if (!validateEntity(entityId))
             return;
+#endif
 
         m_queryRegistry.markEntityDestruction(entityId); // Remove entity from any queries.
 
@@ -223,8 +235,10 @@ namespace legion::core::ecs
     L_NODISCARD entity_handle EcsRegistry::getEntity(id_type entityId)
     {
         OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
         if (!validateEntity(entityId))
             return entity_handle(invalid_id);
+#endif
 
         return entity_handle(entityId);;
     }
@@ -232,16 +246,18 @@ namespace legion::core::ecs
     L_NODISCARD entity_data EcsRegistry::getEntityData(id_type entityId)
     {
         OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
         if (!validateEntity(entityId))
             return entity_data();
-
+#endif
 
         async::readonly_guard guard(m_entityDataLock);
         entity_data& data = m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
 
-
+#ifdef LGN_SAFE_MODE
         if (data.parent && !validateEntity(data.parent)) // Re-validate parent.
             data.parent = invalid_id;
+#endif
 
         return data;
     }
@@ -249,6 +265,11 @@ namespace legion::core::ecs
     void EcsRegistry::setEntityData(id_type entityId, const entity_data& data)
     {
         OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
+        if (!validateEntity(entityId))
+            return;
+#endif
+
         async::readonly_guard guard(m_entityDataLock);
         m_entityData[entityId] = data;
     }
@@ -263,8 +284,10 @@ namespace legion::core::ecs
             parentId = m_entityData[entityId].parent;
         }
 
+#ifdef LGN_SAFE_MODE
         if (parentId && !validateEntity(parentId)) // Re-validate parent.
             parentId = invalid_id;
+#endif
 
         return { parentId };
     }

@@ -249,7 +249,6 @@ public:
         rendering::material_handle fixedSizeParticleMH;
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
-        rendering::material_handle floorMH;
 
         {
             std::lock_guard guard(*window.lock);
@@ -2327,9 +2326,9 @@ public:
         {
             timer += deltaTime;
 
-            if (timer >= 0.1)
+            if (timer >= 0.02)
             {
-                timer -= 0.1;
+                timer -= 0.02;
                 auto ent = createEntity();
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle(sphereId)), rendering::mesh_renderer(pbrH));
                 ent.add_component<sah>({});

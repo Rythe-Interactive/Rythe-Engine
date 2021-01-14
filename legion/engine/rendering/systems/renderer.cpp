@@ -347,8 +347,8 @@ namespace legion::rendering
 
     void Renderer::render(time::span deltatime)
     {
-        OPTICK_FRAME("Rendering");
         OPTICK_EVENT();
+
         if (m_pipelineProvider.isNull())
             return;
 

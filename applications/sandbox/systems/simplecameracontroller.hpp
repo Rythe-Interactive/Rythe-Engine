@@ -149,7 +149,7 @@ public:
 
         auto posH = camera.get_component_handle<position>();
         auto rot = camera.get_component_handle<rotation>().read();
-        math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
+        math::vec3 move = math::toMat3(rot) * math::vec3::forward;
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * movementspeed;
         posH.fetch_add(move);
 
@@ -165,7 +165,7 @@ public:
 
         auto posH = camera.get_component_handle<position>();
         auto rot = camera.get_component_handle<rotation>().read();
-        math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
+        math::vec3 move = math::toMat3(rot) * math::vec3::right;
         move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * movementspeed;
         posH.fetch_add(move);
 
@@ -192,17 +192,9 @@ public:
             return;
 
         auto rotH = camera.get_component_handle<rotation>();
-        rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(0, 1, 0)));
-        rotH.read_modify_write([](rotation& src)
+        rotH.read_modify_write([&](rotation& src)
             {
-                math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
-                if (fwd.y < -0.95f)
-                    fwd.y = -0.95f;
-                else if (fwd.y > 0.95f)
-                    fwd.y = 0.95f;
-                fwd = math::normalize(fwd);
-                math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
-                src = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
+                src = math::angleAxis(action->value * action->input_delta * 500.f, math::vec3::up) *  src;
             });
     }
 
@@ -212,17 +204,24 @@ public:
             return;
 
         auto rotH = camera.get_component_handle<rotation>();
-        rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(1, 0, 0)));
-        rotH.read_modify_write([](rotation& src)
+        rotH.read_modify_write([&](rotation& src)
             {
-                math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
-                if (fwd.y < -0.95f)
-                    fwd.y = -0.95f;
-                else if (fwd.y > 0.95f)
-                    fwd.y = 0.95f;
-                fwd = math::normalize(fwd);
-                math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
-                src = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
+                math::mat3 rot = math::toMat3(src);
+                math::vec3 right = rot * math::vec3::right;
+                math::vec3 fwd = math::normalize(math::cross(right, math::vec3::up));
+                math::vec3 up = rot * math::vec3::up;
+                float angle = math::orientedAngle(fwd, up, right);
+
+                angle += action->value * action->input_delta * 500.f;
+
+                if (angle > -0.001f)
+                    angle = -0.001f;
+                if (angle < -(math::pi<float>() - 0.001f))
+                    angle = -(math::pi<float>() - 0.001f);
+
+                up = math::mat3(math::axisAngleMatrix(right, angle)) * fwd;
+                fwd = math::cross(right, up);
+                src = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3::zero, fwd, up)));
             });
     }
 #pragma endregion

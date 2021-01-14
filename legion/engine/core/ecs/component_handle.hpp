@@ -115,8 +115,10 @@ namespace legion::core::ecs
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 family->get_component(entity) = value;
             }
@@ -137,8 +139,10 @@ namespace legion::core::ecs
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 family->get_component(entity) = value;
             }
@@ -161,8 +165,10 @@ namespace legion::core::ecs
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
                 modifier(comp);
@@ -183,8 +189,10 @@ namespace legion::core::ecs
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
                 modifier(comp);
@@ -208,8 +216,10 @@ namespace legion::core::ecs
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
                 comp = comp + value;
@@ -233,8 +243,10 @@ namespace legion::core::ecs
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
                 comp = comp + value;
@@ -258,8 +270,10 @@ namespace legion::core::ecs
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
                 comp = comp * value;
@@ -283,8 +297,10 @@ namespace legion::core::ecs
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
                 comp = comp * value;
