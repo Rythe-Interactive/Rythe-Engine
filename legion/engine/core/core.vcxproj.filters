@@ -35,6 +35,7 @@
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
     <ClCompile Include="async\spinlock.cpp" />
+    <ClCompile Include="scenemanagement\components\resource_cache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -405,7 +406,6 @@
     <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="data\image.hpp" />
     <ClInclude Include="data\importers\image_importers.hpp" />
-    <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
@@ -414,6 +414,8 @@
     <ClInclude Include="common\managed_resource.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
+    <ClInclude Include="scenemanagement\components\scene.hpp" />
+    <ClInclude Include="scenemanagement\components\resource_cache.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

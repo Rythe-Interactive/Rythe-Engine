@@ -477,7 +477,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />
-    <ClInclude Include="scenemanagement\scene.hpp" />
+    <ClInclude Include="scenemanagement\components\scene.hpp" />
+    <ClInclude Include="scenemanagement\components\resource_cache.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />
@@ -525,6 +526,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="compute\program.cpp" />
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
+    <ClCompile Include="scenemanagement\components\resource_cache.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />

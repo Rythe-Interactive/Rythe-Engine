@@ -1,7 +1,7 @@
-#include <core/scenemanagement/scene.hpp>
+#include <core/scenemanagement/components/scene.hpp>
 #include <core/serialization/serializationUtil.hpp>
 #include <core/logging/logging.hpp>
-
+#include <core/common/string_extra.hpp>
 
 namespace legion::core::scenemanagement
 {
@@ -61,8 +61,9 @@ namespace legion::core::scenemanagement
 
     bool SceneManager::loadScene(const std::string& name)
     {
-
-        std::ifstream inFile("assets/scenes/" + name + ".cornflake");
+        std::string filename = name;
+        if (!common::ends_with(filename, ".cornflake")) filename += ".cornflake";
+        std::ifstream inFile("assets/scenes/" + filename);
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
         SceneManager::currentScene = name;
 

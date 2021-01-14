@@ -31,11 +31,6 @@ double rnd() { return double(rand()) / RAND_MAX; }
 class SceneTestSystem1 final : public System<SceneTestSystem1>
 {
 public:
-    SceneTestSystem1()
-    {
-        log::filter(log::severity::debug);
-        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1);
-    }
 
     rendering::model_handle cube;
     rendering::material_handle flatGreen;

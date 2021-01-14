@@ -3,7 +3,7 @@
 #include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
 
-//#include "../systems/testsystemconvexhull.hpp"
+#include "../systems/testsystemconvexhull.hpp"
 //#include "../systems/testsystem2.hpp"
 //#include"../systems/pointcloudtestsystem2.hpp"
 #include "../systems/simplecameracontroller.hpp"
@@ -31,14 +31,14 @@ public:
     virtual void setup() override
     {
         //reportSystem<TestSystem>();
-        reportSystem<TestSystemConvexHull>();
+        //reportSystem<TestSystemConvexHull>();
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1920, 1080), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
         reportComponentType<sah>();
         reportComponentType<ext::animation>();
         reportSystem<ext::Animator>();
         reportSystem<ext::AnimationEditor>();
         reportSystem<TestSystem>();
-        //reportSystem<SceneTestSystem1>();
+        reportSystem<SceneTestSystem1>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
         reportSystem<physics::PhysicsFractureTestSystem>();

@@ -28,7 +28,7 @@ namespace legion::core::scenemanagement
           */
         virtual void setup()
         {
-            fs::view fileView = fs::view("assets://scenes");
+            fs::view fileView = fs::view("assets://scenes/");
             auto files = fileView.ls();
             if (files == common::valid)
             {
@@ -41,6 +41,10 @@ namespace legion::core::scenemanagement
                             auto fileName = file.get_filename().decay();
                             log::debug("Added {}",fileName);
                             sceneNames.emplace(nameHash(fileName), fileName);
+                            for(auto scene : sceneNames)
+                            {
+                                //loadScene(scene.second);
+                            }
                         }
                     }
                 }

@@ -208,11 +208,11 @@ namespace legion::core
 
         bool operator==(const mesh_filter& other) const { return id == other.id; }
 
-        template<class Archive>
-        void serialize(Archive& oa)
+        //template<class Archive>
+        /*void serialize(Archive& oa)
         {
             oa(id,cereal::make_nvp("Filepath", get().second.fileName));
-        }
+        }*/
     };
 }
 

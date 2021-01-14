@@ -1,6 +1,9 @@
 #include "provider_registry.hpp"
 #include <algorithm>
 #include <core/containers/iterator_tricks.hpp>
+#include <core/platform/platform.hpp>
+#include <core/logging/logging.hpp>
+#include <core/filesystem/basic_resolver.hpp>
 
 namespace legion::core::filesystem
 {
@@ -10,6 +13,33 @@ namespace legion::core::filesystem
         {
             //pointer to pointer to implementation ?
             m_domain_resolver_map = new std::unordered_multimap<domain, std::unique_ptr<resolver>>;
+#if defined(LEGION_WINDOWS)
+            LPSTR buffer = new char[512];
+            auto charCount = GetLogicalDriveStringsA(512,buffer);
+            if (!charCount)
+            {
+                log::error(GetLastError());
+            }
+            else
+            {
+                std::string driveName;
+                for (int i = 0; i < charCount; i++)
+                {
+                    if (buffer[i] == '\0')
+                    {
+                        driveName += '\\';
+                        m_domain_resolver_map->emplace(driveName, std::make_unique<basic_resolver>(driveName));
+                        driveName.clear();
+                    }
+                    else
+                    {
+                        driveName += buffer[i];
+                    }
+                }
+            }
+            delete[] buffer;
+#elif defined(LEGION_LINUX)
+#endif
         }
 
         ~driver()

@@ -152,8 +152,8 @@ namespace legion::core::filesystem
             std::set<std::string> entries;
             for (const auto & entry : std::filesystem::directory_iterator(strpath_manip::subdir(m_root_path,get_target())))
             {
-                entries.insert(get_identifier()+entry.path().relative_path().string());
-                
+                entries.insert(get_identifier()+entry.path().string());
+                //.relative_path()
             }
             return entries;
         }
