@@ -48,15 +48,18 @@ namespace legion::rendering
         fbo.release();
     }
 
+#define itterations 2
+#define kernelsize 5
+
     texture_handle Bloom::blurOverdraw(const math::ivec2& framebufferSize, texture_handle overdrawtexture)
     {
         // Gaussian blur stage
         bool horizontal = true, first_iteration = true;
-        int amount = 2;
 
         // Bind and assign the viewport size to the gaussian blur shader.
         m_gaussianBlurShader.bind();
         m_gaussianBlurShader.get_uniform_with_location<math::ivec2>(SV_VIEWPORT).set_value(framebufferSize);
+        m_gaussianBlurShader.get_uniform<int>("kernelsize").set_value(kernelsize);
 
         // Resize the pingpong textures.
         if (m_pingpongTextureBuffers[0].get_texture().size() != framebufferSize)
@@ -66,7 +69,7 @@ namespace legion::rendering
         }
 
         // This loop blurs the brightness threshold texture an x amount of times.
-        for (uint i = 0; i < amount; i++)
+        for (uint i = 0; i < itterations * 2; i++)
         {
             // Bind the first pongpong framebuffer.
             m_pingpongFrameBuffers[horizontal].bind();
