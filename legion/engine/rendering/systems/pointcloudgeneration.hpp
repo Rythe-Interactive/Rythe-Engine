@@ -149,7 +149,7 @@ namespace legion::rendering
             //create entity to store particle system
             auto newEnt = createEntity();
 
-          //  newEnt.add_component <rendering::lod>();
+            //  newEnt.add_component <rendering::lod>();
             newEnt.add_components<transform>(trans.get<position>().read(), trans.get<rotation>().read(), trans.get<scale>().read());
 
             rendering::particle_emitter emitter = newEnt.add_component<rendering::particle_emitter>().read();

@@ -98,6 +98,7 @@
     <ClInclude Include="systems\lod_manager.hpp" />
     <ClInclude Include="components\pointcloud_renderable.hpp" />
     <ClInclude Include="components\point.hpp" />
+    <ClInclude Include="components\point_emitter_data.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\buffer.inl" />
