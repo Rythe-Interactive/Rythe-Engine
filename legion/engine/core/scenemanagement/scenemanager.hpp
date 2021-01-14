@@ -3,6 +3,7 @@
 #include <core/ecs/component_handle.hpp>
 #include <core/filesystem/filesystem.hpp>
 #include <core/filesystem/view.hpp>
+#include <tinygltf/json.hpp>
 
 /**
 *@file scenemanager.hpp
@@ -57,8 +58,19 @@ namespace legion::core::scenemanagement
          */
         void update()
         {
-
         }
+
+        /**@brief Prefetches resources
+         */
+        static bool prefetchResources(fs::view fileView);
+
+        /** @internal
+         */
+        static bool prefetchRecursive(nlohmann::json j, id_type hash);
+
+        /** @internal
+         */
+        static bool importResource(const std::string& path, bool unique, const std::string& unique_ident);
 
         /**@brief Creates a scene with given name.
           * @param name The name you wish to set the scene.

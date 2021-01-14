@@ -9,6 +9,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
 
+#include <core/filesystem/assetimporter.hpp>
 
 namespace legion::core
 {
@@ -208,11 +209,29 @@ namespace legion::core
 
         bool operator==(const mesh_filter& other) const { return id == other.id; }
 
-        //template<class Archive>
-        /*void serialize(Archive& oa)
+        template<class Archive>
+        void save(Archive& oa)
         {
             oa(id,cereal::make_nvp("Filepath", get().second.fileName));
-        }*/
+        }
+
+        template<class Archive>
+        void load(Archive& oa)
+        {
+            log::debug("Started loading a mesh_filter");
+            std::string filepath;
+            oa(id,cereal::make_nvp("Filepath", filepath));
+
+            auto pair = get();
+            pair.first.critical_section<async::readwrite_guard>([&]
+            {
+                pair.second = filesystem::AssetImporter::get_prefetched<mesh>(filepath);
+                log::debug("Successfully loaded {}",filepath);
+            });
+
+            
+        }
+        
     };
 }
 

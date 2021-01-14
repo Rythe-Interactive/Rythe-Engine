@@ -48,8 +48,8 @@ class GuiTestSystem : public System<GuiTestSystem>
 
         entityQuery.queryEntities();
         //gui code goes here
-       /* ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
-        createProcess<&GuiTestSystem::update>("Update");*/
+        ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
+        createProcess<&GuiTestSystem::update>("Update");
     }
 
 
