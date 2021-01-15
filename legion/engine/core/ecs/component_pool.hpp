@@ -124,15 +124,18 @@ namespace legion::core::ecs
         {
             auto* container = new component_container<component_type>();
             container->reserve(entities.size());
-            //if (!container.getComponentTypeId())
-            //    return;
+
             async::readonly_guard guard(m_lock);
             for (auto ent : entities)
             {
-                //if (m_components.contains(entityId))
+#ifdef LGN_SAFE_MODE
+                if (m_components.contains(entityId))
+                    container->push_back(m_components.at(ent));
+                else
+                    container.emplace_back()
+#else
                 container->push_back(m_components.at(ent));
-                //else
-                    //container.emplace_back()
+#endif
             }
 
             return container;
@@ -144,23 +147,34 @@ namespace legion::core::ecs
             component_container<component_type>& container = comps.cast<component_type>();
             container.clear();
             container.reserve(entities.size());
-            //if (!container.getComponentTypeId())
-            //    return;
+
+#ifdef LGN_SAFE_MODE
+            if (!container.getComponentTypeId())
+                return;
+#endif
+
             async::readonly_guard guard(m_lock);
             for (auto ent : entities)
             {
-                //if (m_components.contains(entityId))
-                    container.push_back(m_components.at(ent));
-                //else
-                    //container.emplace_back()
+#ifdef LGN_SAFE_MODE
+                if (m_components.contains(entityId))
+                    container->push_back(m_components.at(ent));
+                else
+                    container.emplace_back()
+#else
+                container->push_back(m_components.at(ent));
+#endif
             }
         }
 
         virtual void set_components(const entity_container& entities, const component_container_base& comps) override
         {
             const component_container<component_type>& container = comps.cast<component_type>();
-            //if (!container.getComponentTypeId())
-            //    return;
+
+#ifdef LGN_SAFE_MODE
+            if (!container.getComponentTypeId())
+                return;
+#endif
 
             static std::vector<std::tuple<entity_handle, component_type, const component_type&>> modifications;
             modifications.clear();
