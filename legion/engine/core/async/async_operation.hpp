@@ -17,8 +17,11 @@ namespace legion::core::async
     public:
         async_progress(size_type size) : m_size(size), m_progress(0) {}
 
+        size_type size() const noexcept;
+        size_type rawProgress() const noexcept;
+
         void complete() noexcept;
-        void setProgress(size_type progress) noexcept;
+        void advanceProgress(size_type progress) noexcept;
         bool isDone() const noexcept;
         float progress() const noexcept;
     };

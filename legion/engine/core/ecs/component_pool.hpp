@@ -7,6 +7,7 @@
 #include <core/events/eventbus.hpp>
 #include <core/events/events.hpp>
 #include <core/ecs/component_meta.hpp>
+#include <core/ecs/component_container.hpp>
 
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/memory.hpp>
@@ -25,12 +26,18 @@ namespace legion::core::ecs
 {
     class EcsRegistry;
 
+    using entity_container = std::vector<entity_handle>;
+
     /**@class component_pool_base
      * @brief Base class of legion::core::ecs::component_pool
      */
     class component_pool_base
     {
     public:
+        virtual component_container_base* get_components(const entity_container& entities) const LEGION_PURE;
+        virtual void get_components(const entity_container& entities, component_container_base& comps) const LEGION_PURE;
+        virtual void set_components(const entity_container& entities, const component_container_base& comps) LEGION_PURE;
+
         L_NODISCARD virtual bool has_component(id_type entityId) const LEGION_PURE;
         virtual void create_component(id_type entityId) LEGION_PURE;
         virtual void create_component(id_type entityId, void* value) LEGION_PURE;
@@ -111,6 +118,56 @@ namespace legion::core::ecs
             return m_lock;
         }
 
+        virtual component_container_base* get_components(const entity_container& entities) const override
+        {
+            auto* container = new component_container<component_type>();
+            container->reserve(entities.size());
+            //if (!container.getComponentTypeId())
+            //    return;
+            async::readonly_guard guard(m_lock);
+            for (auto ent : entities)
+            {
+                //if (m_components.contains(entityId))
+                container->push_back(m_components.at(ent));
+                //else
+                    //container.emplace_back()
+            }
+
+            return container;
+        }
+
+
+        virtual void get_components(const entity_container& entities, component_container_base& comps) const override
+        {
+            component_container<component_type>& container = comps.cast<component_type>();
+            container.clear();
+            container.reserve(entities.size());
+            //if (!container.getComponentTypeId())
+            //    return;
+            async::readonly_guard guard(m_lock);
+            for (auto ent : entities)
+            {
+                //if (m_components.contains(entityId))
+                    container.push_back(m_components.at(ent));
+                //else
+                    //container.emplace_back()
+            }
+        }
+
+        virtual void set_components(const entity_container& entities, const component_container_base& comps) override
+        {
+            const component_container<component_type>& container = comps.cast<component_type>();
+            //if (!container.getComponentTypeId())
+            //    return;
+            async::readonly_guard guard(m_lock);
+            for (int i = 0; i < entities.size(); i++)
+            {
+                auto& ent = entities[i];
+                if (m_components.contains(ent))
+                    m_components.at(ent) = container[i];
+            }
+        }
+
         /**@brief Thread-safe check for whether an entity has the component.
          * @param entityId ID of the entity you wish to check for.
          */
@@ -159,10 +216,17 @@ namespace legion::core::ecs
                 async::readwrite_guard guard(m_lock);
                 m_components.emplace(entityId);
             }
+
             if constexpr (detail::has_init<component_type, void(component_type&, entity_handle)>::value)
+            {
+                async::readonly_guard rguard(m_lock);
                 component_type::init(m_components[entityId], entity_handle(entityId));
+            }
             else if constexpr (detail::has_init<component_type, void(component_type&)>::value)
+            {
+                async::readonly_guard rguard(m_lock);
                 component_type::init(m_components[entityId]);
+            }
 
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
         }
@@ -180,10 +244,17 @@ namespace legion::core::ecs
                 async::readwrite_guard guard(m_lock);
                 m_components[entityId] = *reinterpret_cast<component_type*>(value);
             }
+
             if constexpr (detail::has_init<component_type, void(component_type&, entity_handle)>::value)
+            {
+                async::readonly_guard rguard(m_lock);
                 component_type::init(m_components[entityId], entity_handle(entityId));
+            }
             else if constexpr (detail::has_init<component_type, void(component_type&)>::value)
+            {
+                async::readonly_guard rguard(m_lock);
                 component_type::init(m_components[entityId]);
+            }
 
             m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
         }

@@ -75,7 +75,7 @@ namespace legion::core::scheduling
         static uint m_availableThreads;
 
         static async::rw_spinlock m_jobQueueLock;
-        static std::queue<std::unique_ptr<async::job_pool_base>> m_jobs;
+        static std::queue<std::shared_ptr<async::job_pool_base>> m_jobs;
         static std::unordered_map<std::thread::id, async::rw_spinlock> m_commandLocks;
         static std::unordered_map<std::thread::id, std::queue<std::unique_ptr<runnable_base>>> m_commands;
 
@@ -151,10 +151,10 @@ namespace legion::core::scheduling
         template<typename Func>
         auto queueJobs(size_type count, const Func& func)
         {
-            async::job_pool<Func>* jobPool = new async::job_pool<Func>(count, func);
+            std::shared_ptr<async::job_pool_base> jobPool = std::shared_ptr<async::job_pool_base>(new async::job_pool<Func>(count, func));
             async::readwrite_guard guard(m_jobQueueLock);
-            m_jobs.push(std::unique_ptr<async::job_pool_base>(jobPool));
-            return jobPool->getOperation([&](size_type count, auto func) { return queueJobs(count, func); });
+            m_jobs.push(jobPool);
+            return async::job_operation(jobPool->getProgress(), jobPool, [&](size_type count, auto func) { return queueJobs(count, func); });
         }
 
         /**@brief Destroy a thread.

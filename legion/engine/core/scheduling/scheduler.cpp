@@ -13,7 +13,7 @@ namespace legion::core::scheduling
     uint Scheduler::m_availableThreads = static_cast<uint>(math::ceil(((m_maxThreadCount) - reserved_threads)) + math::epsilon<float>()); // subtract OS and this_thread, and then leave some extra for miscellaneous processes.
 
     async::rw_spinlock Scheduler::m_jobQueueLock;
-    std::queue<std::unique_ptr<async::job_pool_base>> Scheduler::m_jobs;
+    std::queue<std::shared_ptr<async::job_pool_base>> Scheduler::m_jobs;
     std::unordered_map<std::thread::id, async::rw_spinlock> Scheduler::m_commandLocks;
     std::unordered_map<std::thread::id, std::queue<std::unique_ptr<runnable_base>>> Scheduler::m_commands;
 
@@ -81,7 +81,6 @@ namespace legion::core::scheduling
             }
             else
             {
-                OPTICK_CATEGORY("Relieve LSU contention", Optick::Category::Wait);
                 if (lowPower)
                 {
                     std::this_thread::sleep_for(std::chrono::milliseconds(2));

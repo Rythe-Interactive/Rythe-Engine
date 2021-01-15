@@ -2322,19 +2322,14 @@ public:
             entityCount = entities.size();
         }
 
-        if (entityCount < 200)
-        {
-            timer += deltaTime;
-
-            if (timer >= 0.02)
+        if(entityCount < 200)
+            for (int i = 0; i < 200 - entityCount; i++)
             {
-                timer -= 0.02;
                 auto ent = createEntity();
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle(sphereId)), rendering::mesh_renderer(pbrH));
                 ent.add_component<sah>({});
                 ent.add_components<transform>(position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10))), rotation(), scale());
             }
-        }
 
         static auto sahQuery = createQuery<sah, rotation, position>();
 
@@ -2376,20 +2371,25 @@ public:
           }*/
 
         sahQuery.queryEntities();
-        for (auto entity : sahQuery)
-        {
-            auto rot = entity.read_component<rotation>();
 
-            rot *= math::angleAxis(math::deg2rad(45.f * deltaTime), math::vec3(0, 1, 0));
+        auto& rotations = sahQuery.get<rotation>();
+        auto& positions = sahQuery.get<position>();
+        static std::vector<math::vec3> ends;
+        ends.resize(positions.size());
+        float dt = deltaTime;
 
-            entity.write_component(rot);
+        m_scheduler->queueJobs(sahQuery.size(), [&]()
+            {
+                id_type idx = async::this_job::get_id();
+                auto& rot = rotations[idx];
+                auto& pos = positions[idx];
+                rot *= math::angleAxis(math::deg2rad(45.f * dt), math::vec3(0, 1, 0));
+                ends[idx] = pos + rot.forward();
+            }).wait();
+        sahQuery.submit<rotation>();
 
-            auto pos = entity.read_component<position>();
-            debug::drawLine(pos, pos + rot.forward(), math::colors::magenta);
-
-
-
-        }
+        for(int i = 0; i < positions.size(); i++)
+            debug::drawLine(positions[i], ends[i], math::colors::magenta);
 
         if (rotate && !physics::PhysicsSystem::IsPaused)
         {

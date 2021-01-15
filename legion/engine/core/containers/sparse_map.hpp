@@ -472,8 +472,10 @@ namespace legion::core
         value_const_reference operator[](key_type&& key) const
         {
             OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
             if (!contains(key))
                 throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
+#endif
 
             return m_dense_value.at(m_sparse.at(key));
         }
@@ -484,8 +486,10 @@ namespace legion::core
         value_const_reference operator[](key_const_reference key) const
         {
             OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
             if (!contains(key))
                 throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
+#endif
 
             return m_dense_value.at(m_sparse.at(key));
         }

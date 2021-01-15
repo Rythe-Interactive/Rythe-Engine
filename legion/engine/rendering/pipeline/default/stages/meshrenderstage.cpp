@@ -23,7 +23,8 @@ namespace legion::rendering
         // static id_type sceneColorId = nameHash("scene color history");
         // static id_type sceneDepthId = nameHash("scene depth history");
 
-        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
+        //auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
+        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::vector<math::mat4>>>>(batchesId);
         if (!batches)
             return;
 
@@ -136,15 +137,15 @@ namespace legion::rendering
 
                 {
                     OPTICK_EVENT("Calculating matrices");
-                    m_matrices.resize(instances.size());
+                    /*m_matrices.resize(instances.size());
                     int i = 0;
                     for (auto& ent : instances)
                     {
                         m_matrices[i] = transform(ent.get_component_handles<transform>()).get_local_to_world_matrix();
                         i++;
-                    }
+                    }*/
 
-                    modelMatrixBuffer->bufferData(m_matrices);
+                    modelMatrixBuffer->bufferData(instances);
                 }
 
                 {

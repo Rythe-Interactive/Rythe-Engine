@@ -38,11 +38,11 @@ namespace legion::core::async
     template<typename Func>
     struct job_operation : public async_operation<Func>
     {
-    protected:
-        job_pool_base* m_jobPool;
     public:
-        job_operation(const std::shared_ptr<async_progress>& progress, job_pool_base* jobPool, const Func& repeater)
-            : async_operation<Func>(progress, repeater), m_jobPool(jobPool) {}
+        std::shared_ptr<job_pool_base> jobPoolPtr;
+
+        job_operation(const std::shared_ptr<async_progress>& progress, const std::shared_ptr<job_pool_base>& jobPool, const Func& repeater)
+            : async_operation<Func>(progress, repeater), jobPoolPtr(jobPool) {}
         job_operation(const job_operation&) = default;
         job_operation(job_operation&&) = default;
 
@@ -57,7 +57,7 @@ namespace legion::core::async
                     break;
                 case wait_priority::normal:
                 {
-                    auto* job = m_jobPool->pop_job();
+                    auto* job = jobPoolPtr->pop_job();
                     if (job)
                         job->execute();
                     else
@@ -68,7 +68,7 @@ namespace legion::core::async
                 case wait_priority::real_time:
                 default:
                 {
-                    auto* job = m_jobPool->pop_job();
+                    auto* job = jobPoolPtr->pop_job();
                     if (job)
                         job->execute();
                     else
@@ -81,7 +81,7 @@ namespace legion::core::async
     };
 
     template<typename Func>
-    job_operation(const std::shared_ptr<async_progress>&, job_pool_base* jobPool, const Func&)->job_operation<Func>;
+    job_operation(const std::shared_ptr<async_progress>&, const std::shared_ptr<job_pool_base>&, const Func&)->job_operation<Func>;
 
     template<typename Func>
     struct job_pool : public job_pool_base
@@ -96,12 +96,6 @@ namespace legion::core::async
             m_jobs.resize(count, runnable<Func>(func));
         }
 
-        template<typename RepeaterFunc>
-        job_operation<RepeaterFunc> getOperation(const RepeaterFunc& func)
-        {
-            return job_operation<RepeaterFunc>(getProgress(), this, func);
-        }
-
         virtual runnable_base* pop_job() override
         {
             size_type idx = m_index.fetch_sub(1, std::memory_order_acquire);
@@ -110,7 +104,8 @@ namespace legion::core::async
 
             size_type id = m_jobs.size() - idx;
             this_job::m_id = id;
-            m_progress->setProgress(id);
+            if (id)
+                m_progress->advanceProgress(1);
             auto* ret = &m_jobs[idx - 1];
             return ret;
         }
@@ -118,7 +113,7 @@ namespace legion::core::async
         virtual bool empty() const noexcept override
         {
             size_type idx = m_index.load(std::memory_order_relaxed);
-            return idx == 0 || idx > m_jobs.size();
+            return (idx == 0 || idx > m_jobs.size()) && (m_progress->rawProgress() >= (m_jobs.size() - 1));
         }
     };
 }

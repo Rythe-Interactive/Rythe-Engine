@@ -64,17 +64,17 @@ namespace legion::core::ecs
     public:
         /**@brief Main constructor for constructing a valid entity handle.
          */
-        entity_handle(id_type id) : m_id(id) {  }
+        entity_handle(id_type id) noexcept : m_id(id) {  }
 
         /**@brief Constructor for constructing an invalid entity handle.
          * @note Should only be used to create temporary handles. Allows use of entity handle in containers together with copy constructor.
          */
-        entity_handle() : m_id(invalid_id) {  }
+        entity_handle() noexcept : m_id(invalid_id) {  }
 
         /**@brief Copy constructor (DOES NOT CREATE NEW ENTITY, both handles will reference the same entity).
          * @note Allows use of entity handle in containers together with default invalid entity constructor.
          */
-        entity_handle(const entity_handle& other) : m_id(other.m_id) {  }
+        entity_handle(const entity_handle& other) noexcept : m_id(other.m_id) {  }
 
         /**@brief Copy assignment. Exists for the same reasons as the copy constructor.
          * @ref legion::core::ecs::entity_handle::entity_handle(const legion::core::ecs::entity& other)

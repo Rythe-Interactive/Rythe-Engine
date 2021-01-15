@@ -153,6 +153,7 @@ namespace legion::application
     void WindowSystem::onExit(events::exit* event)
     {
         std::lock_guard guard(m_creationLock);
+        m_windowQuery.queryEntities();
         for (auto entity : m_windowQuery)
         {
             auto handle = entity.get_component_handle<window>();
