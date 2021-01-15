@@ -2,7 +2,7 @@
 #include <atomic>
 #include <core/common/exception.hpp>
 #include <core/ecs/ecsregistry.hpp>
-#include <core/ecs/component_container.hpp>
+#include <core/ecs/component_pool.hpp>
 #include <core/ecs/entity_handle.hpp>
 #include <core/platform/platform.hpp>
 
@@ -95,7 +95,7 @@ namespace legion::core::ecs
         L_NODISCARD component_type read() const
         {
             OPTICK_EVENT();
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             async::readonly_guard rguard(family->get_lock());
 
@@ -110,17 +110,22 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
-                family->get_component(entity) = value;
+                component_type& ref = family->get_component(entity);
+                old = ref;
+                ref = value;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), std::cref(value));
             return value;
         }
 
@@ -132,17 +137,22 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
-                family->get_component(entity) = value;
+                component_type& ref = family->get_component(entity);
+                old = ref;
+                ref = value;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), value);
             return value;
         }
 
@@ -155,20 +165,24 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 modifier(comp);
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -177,20 +191,24 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 modifier(comp);
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -202,20 +220,24 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 comp = comp + value;
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -227,20 +249,24 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 comp = comp + value;
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -252,20 +278,24 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 comp = comp * value;
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -277,25 +307,29 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
 
-            component_container<component_type>* family = m_registry->getFamily<component_type>();
+            component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
+#ifdef LGN_SAFE_MODE
                 if (!family->has_component(entity))
                     return component_type();
+#endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 comp = comp * value;
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
         /**@brief Locks component family and destroys component.
-         * @ref legion::core::ecs::component_container::destroy_component
+         * @ref legion::core::ecs::component_pool::destroy_component
          */
         void destroy()
         {

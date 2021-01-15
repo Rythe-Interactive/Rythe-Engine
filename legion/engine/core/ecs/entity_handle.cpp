@@ -6,17 +6,9 @@
 namespace legion::core::ecs
 {
     EcsRegistry* entity_handle::m_registry = nullptr;
+    events::EventBus* entity_handle::m_eventBus = nullptr;
 
-    struct child_iterator::impl
-    {
-        entity_set::iterator iterator;
-
-        impl(entity_set::iterator it) : iterator(it) {}
-    };
-
-    child_iterator::child_iterator(impl* implptr) : m_pimpl(implptr) {}
-
-    entity_handle& entity_handle::operator=(const entity_handle& other)
+    entity_handle& entity_handle::operator=(const entity_handle& other) noexcept
     {
         m_id = other.m_id;
         return *this;
@@ -57,14 +49,9 @@ namespace legion::core::ecs
         return m_id;
     }
 
-    L_NODISCARD child_iterator entity_handle::begin() const
+    L_NODISCARD entity_set entity_handle::children() const
     {
-        return child_iterator(new child_iterator::impl(m_registry->getEntityData(m_id).children.begin()));
-    }
-
-    L_NODISCARD child_iterator entity_handle::end() const
-    {
-        return child_iterator(new child_iterator::impl(m_registry->getEntityData(m_id).children.end()));
+        return m_registry->getEntityData(m_id).children;
     }
 
     L_NODISCARD entity_handle entity_handle::get_parent() const
@@ -78,13 +65,24 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         entity_data data = m_registry->getEntityData(m_id);
 
+        id_type previousParent = invalid_id;
+
+#ifdef LGN_SAFE_MODE
         if (m_registry->validateEntity(data.parent))
+#else
+        if (data.parent)
+#endif
         {
+            previousParent = data.parent;
             auto parentData = m_registry->getEntityData(data.parent);
             parentData.children.erase(*this);
             m_registry->setEntityData(data.parent, parentData);
         }
-        if (m_registry->validateEntity(newParent))
+#ifdef LGN_SAFE_MODE
+        if(m_registry->validateEntity(newParent))
+#else
+        if (newParent)
+#endif
         {
             data.parent = newParent;
 
@@ -96,6 +94,7 @@ namespace legion::core::ecs
             data.parent = invalid_id;
 
         m_registry->setEntityData(m_id, data);
+        m_eventBus->raiseEvent<events::parent_change>(*this, previousParent, data.parent);
     }
 
     void entity_handle::serialize(cereal::JSONOutputArchive& oarchive)
@@ -191,7 +190,7 @@ namespace legion::core::ecs
 
         entity_handle child = m_registry->getEntity(childId);
 
-        if (child && !data.children.contains(child))
+        if (child.m_id && !data.children.contains(child))
             child.set_parent(m_id);
     }
 
@@ -201,7 +200,7 @@ namespace legion::core::ecs
         entity_data data = m_registry->getEntityData(m_id);
         entity_handle child = m_registry->getEntity(childId);
 
-        if (child && data.children.contains(child))
+        if (child.m_id && data.children.contains(child))
             child.set_parent(world_entity_id);
     }
 
@@ -245,56 +244,12 @@ namespace legion::core::ecs
     {
         OPTICK_EVENT();
         m_registry->destroyEntity(m_id);
+        m_id = invalid_id;
     }
 
     bool entity_handle::valid() const
     {
         OPTICK_EVENT();
         return m_registry->validateEntity(m_id);
-    }
-
-    bool operator==(const child_iterator& lhs, const child_iterator& rhs)
-    {
-        return lhs.m_pimpl->iterator == rhs.m_pimpl->iterator;
-    }
-
-    entity_handle& child_iterator::operator*()
-    {
-        return *m_pimpl->iterator;
-    }
-
-    entity_handle* child_iterator::operator->()
-    {
-        return &*m_pimpl->iterator;
-    }
-
-    child_iterator& child_iterator::operator++()
-    {
-        ++m_pimpl->iterator;
-        return *this;
-    }
-
-    child_iterator& child_iterator::operator--()
-    {
-        --m_pimpl->iterator;
-        return *this;
-    }
-
-    child_iterator child_iterator::operator++(int)
-    {
-        impl* prev = new impl(m_pimpl->iterator);
-
-        m_pimpl->iterator++;
-
-        return child_iterator(prev);
-    }
-
-    child_iterator child_iterator::operator--(int)
-    {
-        impl* prev = new impl(m_pimpl->iterator);
-
-        m_pimpl->iterator--;
-
-        return child_iterator(prev);
     }
 }

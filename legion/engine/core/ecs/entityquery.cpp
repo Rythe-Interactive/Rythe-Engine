@@ -47,10 +47,22 @@ namespace legion::core::ecs
         return *this;
     }
 
+    component_container_base& EntityQuery::get(id_type componentTypeId)
+    {
+        OPTICK_EVENT();
+        return m_registry->getComponents(m_id, componentTypeId);
+    }
+
+    void EntityQuery::submit(id_type componentTypeId)
+    {
+        OPTICK_EVENT();
+        m_registry->submit(m_id, componentTypeId);
+    }
+
     void EntityQuery::queryEntities()
     {
         OPTICK_EVENT();
-        m_localcopy = m_registry->getEntities(m_id);
+        m_localcopy = &m_registry->getEntities(m_id);
     }
 
     EntityQuery::~EntityQuery()
@@ -61,14 +73,14 @@ namespace legion::core::ecs
         }
     }
 
-    entity_set::const_iterator EntityQuery::begin() const
+    entity_container::const_iterator EntityQuery::begin() const
     {
-        return m_localcopy.begin();
+        return m_localcopy->begin();
     }
 
-    entity_set::const_iterator EntityQuery::end() const
+    entity_container::const_iterator EntityQuery::end() const
     {
-        return m_localcopy.end();
+        return m_localcopy->end();
     }
 
     void EntityQuery::addComponentType(id_type componentTypeId)
@@ -139,12 +151,12 @@ namespace legion::core::ecs
     entity_handle EntityQuery::operator[](size_type index)
     {
         OPTICK_EVENT();
-        return m_localcopy[index];
+        return m_localcopy->at(index);
     }
 
     size_type EntityQuery::size()
     {
         OPTICK_EVENT();
-        return m_localcopy.size();
+        return m_localcopy->size();
     }
 }

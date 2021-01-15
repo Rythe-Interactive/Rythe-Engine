@@ -8,6 +8,7 @@
 #include <cereal/types/memory.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
+#include <core/ecs/component_handle.hpp>
 
 
 namespace legion::core
@@ -133,18 +134,7 @@ namespace legion::core
         transform() = default;
         transform(const base::handleGroup& handles) : base(handles) {}
 
-        L_NODISCARD std::tuple<position, rotation, scale> get_world_components()
-        {
-            OPTICK_EVENT();
-            math::mat4 worldMatrix = get_world_to_local_matrix();
-            math::vec3 p;
-            math::quat r;
-            math::vec3 s;
-
-            math::decompose(worldMatrix, s, r, p);
-
-            return std::make_tuple<position, rotation, scale>(p, r, s);
-        }
+        L_NODISCARD std::tuple<position, rotation, scale> get_local_components();
 
         L_NODISCARD math::mat4 get_world_to_local_matrix()
         {
@@ -152,25 +142,13 @@ namespace legion::core
             return math::inverse(get_local_to_world_matrix());
         }
 
-        L_NODISCARD math::mat4 get_local_to_world_matrix()
-        {
-            OPTICK_EVENT();
-            auto& [positionH, rotationH, scaleH] = handles;
-            auto parent = positionH.entity.get_parent();
-
-
-            transform transf = parent.get_component_handles<transform>();
-            if (transf)
-                return transf.get_local_to_world_matrix() * math::compose(scaleH.read(), rotationH.read(), positionH.read());
-
-            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
-        }
+        L_NODISCARD math::mat4 get_local_to_world_matrix();
 
         L_NODISCARD math::mat4 get_local_to_parent_matrix()
         {
             OPTICK_EVENT();
-            auto& [positionH, rotationH, scaleH] = handles;
-            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
+            auto [position, rotation, scale] = get_local_components();
+            return math::compose(scale, rotation, position);
         }
 
     };

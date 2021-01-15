@@ -65,6 +65,7 @@ namespace legion::audio
         std::lock_guard guard(contextLock);
         alcMakeContextCurrent(alcContext);
 
+        sourceQuery.queryEntities();
         for (auto entity : sourceQuery)
         {
             auto sourceHandle = entity.get_component_handle<audio_source>();

@@ -11,8 +11,10 @@ shader(vertex)
 {
     void main(void)
     {
-        gl_Position = ModelToScreenSpacePosition(position);
-        PropagateStdIO();
+        vec3 worldPos = vec3(position.x*250.0 + lgn_cmr_in.posnearz.x, 0.0, position.z*250.0 + lgn_cmr_in.posnearz.z);
+        gl_Position = WorldToScreenSpacePosition(vec4(worldPos, 1.0));
+        stdout(position) = stdin(position);
+        stdout(wvertex) = worldPos;
     }
 }
 
@@ -22,7 +24,7 @@ shader(fragment)
 
     void main(void)
     {
-        vec2 grid = mod(GetWorldPosition().xz, 1.0);
+        vec2 grid = mod(stdin(wvertex).xz, 1.0);
 
         float alpha = mix(1, 0, 1.0-pow(1.0-clamp01(length(stdio(position))), 5.0));
 

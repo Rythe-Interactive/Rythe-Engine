@@ -1,229 +1,113 @@
 #pragma once
-#include <core/async/rw_spinlock.hpp>
-#include <core/async/transferable_atomic.hpp>
-#include <core/platform/platform.hpp>
-#include <core/containers/atomic_sparse_map.hpp>
 #include <core/types/types.hpp>
-#include <core/events/eventbus.hpp>
-#include <core/events/events.hpp>
-#include <core/ecs/component_meta.hpp>
-
-#include <cereal/types/unordered_map.hpp>
-#include <cereal/types/memory.hpp>
-#include <cereal/archives/json.hpp>
-#include <cereal/archives/portable_binary.hpp>
-
-#include <core/serialization/serializationmeta.hpp>
-
-#include <Optick/optick.h>
-
-/**
- * @file component_container.hpp
- */
+#include <vector>
 
 namespace legion::core::ecs
 {
-    class EcsRegistry;
+    template<typename component_type>
+    struct component_container;
 
-    /**@class component_container_base
-     * @brief Base class of legion::core::ecs::component_container
-     */
-    class component_container_base
+    struct component_container_base
     {
     public:
-        L_NODISCARD virtual bool has_component(id_type entityId) const LEGION_PURE;
-        virtual void create_component(id_type entityId) LEGION_PURE;
-        virtual void create_component(id_type entityId, void* value) LEGION_PURE;
-        virtual void destroy_component(id_type entityId) LEGION_PURE;
+        id_type m_componentid = invalid_id;
 
-        virtual void clone_component(id_type dst, id_type src) LEGION_PURE;
+    protected:
+        component_container_base(id_type componentId) noexcept : m_componentid(componentId) {}
 
-        virtual void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) LEGION_PURE;
-        virtual void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) LEGION_PURE;
+        id_type getComponentTypeId() const noexcept { return m_componentid; }
 
-        virtual void serialize(cereal::JSONInputArchive& oarchive, id_type entityId) LEGION_PURE;
-        virtual void serialize(cereal::BinaryInputArchive& oarchive, id_type entityId) LEGION_PURE;
+    public:
+        component_container_base() = default;
 
-        virtual ~component_container_base() = default;
+        template<typename component_type>
+        component_container<component_type>& cast() noexcept;
+
+        template<typename component_type>
+        const component_container<component_type>& cast() const noexcept;
     };
 
     /**@class component_container
-     * @brief Thread-safe container to store a component family in.
-     * @tparam component_type Type of component.
+     * @brief This is just a vector with a common base class.
      */
     template<typename component_type>
-    class component_container : public component_container_base
+    struct component_container : public component_container_base, public std::vector<component_type>
     {
-    private:
-        sparse_map<id_type, component_type> m_components;
-        mutable async::rw_spinlock m_lock;
+        using underlying_type = std::vector<component_type>;
+        using allocator_type = typename underlying_type::allocator_type;
 
-        events::EventBus* m_eventBus;
-        EcsRegistry* m_registry;
-        component_type m_nullComp;
-    public:
-        component_container() = default;
-        component_container(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
+        component_container() noexcept : component_container_base(typeHash<component_type>()), underlying_type() {}
 
-        virtual void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) override
-        {
-            OPTICK_EVENT();
-            if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
-            {
-                async::readonly_guard guard(m_lock);
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
-                m_components[entityId].serialize(oarchive);
-            }
-            else
-            {
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
-            }
-        }
-        virtual void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) override
-        {
-            OPTICK_EVENT();
-            oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
-        }
-        virtual void serialize(cereal::JSONInputArchive& oarchive, id_type entityId) override
-        {
-            OPTICK_EVENT();
-            if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
-            {
-                async::readonly_guard guard(m_lock);
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
-                m_components[entityId].serialize(oarchive);
-            }
-            else
-            {
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
-            }
-        }
-        virtual void serialize(cereal::BinaryInputArchive& oarchive, id_type entityId) override
-        {
-            OPTICK_EVENT();
-            oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
-        }
+        explicit component_container(const allocator_type& alloc) noexcept
+            : component_container_base(typeHash<component_type>()), underlying_type(alloc) {}
 
-        /**@brief Get the rw_spinlock of this container.
-         */
-        async::rw_spinlock& get_lock() const
-        {
-            return m_lock;
-        }
+        component_container(size_type count,
+            const component_type& value,
+            const allocator_type& alloc = allocator_type())
+            : component_container_base(typeHash<component_type>()), underlying_type(count, value, alloc) {}
 
-        /**@brief Thread-safe check for whether an entity has the component.
-         * @param entityId ID of the entity you wish to check for.
-         */
-        L_NODISCARD virtual bool has_component(id_type entityId) const override
-        {
-            OPTICK_EVENT();
-            async::readonly_guard guard(m_lock);
-            return m_components.contains(entityId);
-        }
+        explicit component_container(size_type count, const allocator_type& alloc = allocator_type())
+            : component_container_base(typeHash<component_type>()), underlying_type(count, alloc) {}
 
-        /**@brief Thread unsafe component fetch, use component_container::get_lock and lock for at least read_only before calling this function.
-         * @param entityId ID of entity you want to get the component from.
-         * @ref component_container::get_lock()
-         * @ref legion::core::async::rw_spinlock
-         */
-        L_NODISCARD component_type& get_component(id_type entityId)
-        {
-            OPTICK_EVENT();
-            if (m_components.contains(entityId))
-                return m_components.get(entityId);
-            return m_nullComp;
-        }
+        template<typename InputIt>
+        component_container(InputIt first, InputIt last, const allocator_type& alloc = allocator_type())
+            : component_container_base(typeHash<component_type>()), underlying_type(first, last, alloc) {}
 
-        /**@brief Thread unsafe component fetch, use component_container::get_lock and lock for at least read_only before calling this function.
-         * @param entityId ID of entity you want to get the component from.
-         * @ref component_container::get_lock()
-         * @ref legion::core::async::rw_spinlock
-         */
-        L_NODISCARD const component_type& get_component(id_type entityId) const
-        {
-            OPTICK_EVENT();
-            if (m_components.contains(entityId))
-                return m_components.get(entityId);
-            return m_nullComp;
-        }
+        component_container(const underlying_type& other)
+            : component_container_base(typeHash<component_type>()), underlying_type(other) {}
+        component_container(const component_container& other)
+            : component_container_base(typeHash<component_type>()), underlying_type(static_cast<const underlying_type&>(other)) {}
 
-        /**@brief Creates component in a thread-safe way.
-         * @note Calls component_type::init if it exists.
-         * @note Raises the events::component_creation<component_type>> event.
-         * @param entityId ID of entity you wish to add the component to.
-         */
-        virtual void create_component(id_type entityId) override
-        {
-            OPTICK_EVENT();
-            {
-                async::readwrite_guard guard(m_lock);
-                m_components.emplace(entityId);
-            }
-            if constexpr (detail::has_init<component_type, void(component_type&, entity_handle)>::value)
-                component_type::init(m_components[entityId], entity_handle(entityId));
-            else if constexpr (detail::has_init<component_type, void(component_type&)>::value)
-                component_type::init(m_components[entityId]);
+        component_container(const underlying_type& other, const allocator_type& alloc)
+            : component_container_base(typeHash<component_type>()), underlying_type(other, alloc) {}
+        component_container(const component_container& other, const allocator_type& alloc)
+            : component_container_base(typeHash<component_type>()), underlying_type(static_cast<const underlying_type&>(other), alloc) {}
 
-            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
-        }
+        component_container(underlying_type&& other) noexcept
+            : component_container_base(typeHash<component_type>()), underlying_type(other) {}
+        component_container(component_container&& other) noexcept
+            : component_container_base(typeHash<component_type>()), underlying_type(static_cast<underlying_type&&>(other)) {}
 
-        /**@brief Creates component in a thread-safe way and initializes it with the given value.
-         * @note Does NOT call component_type::init.
-         * @note Raises the events::component_creation<component_type>> event.
-         * @param entityId ID of entity you wish to add the component to.
-         * @param value Pointer to component_type that has the starting value you require.
-         */
-        virtual void create_component(id_type entityId, void* value) override
-        {
-            OPTICK_EVENT();
-            {
-                async::readwrite_guard guard(m_lock);
-                m_components[entityId] = *reinterpret_cast<component_type*>(value);
-            }
-            if constexpr (detail::has_init<component_type, void(component_type&, entity_handle)>::value)
-                component_type::init(m_components[entityId], entity_handle(entityId));
-            else if constexpr (detail::has_init<component_type, void(component_type&)>::value)
-                component_type::init(m_components[entityId]);
+        component_container(underlying_type&& other, const allocator_type& alloc)
+            : component_container_base(typeHash<component_type>()), underlying_type(other, alloc) {}
+        component_container(component_container&& other, const allocator_type& alloc)
+            : component_container_base(typeHash<component_type>()), underlying_type(static_cast<underlying_type&&>(other), alloc) {}
 
-            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(entityId));
-        }
+        component_container(std::initializer_list<component_type> init,
+            const allocator_type& alloc = allocator_type())
+            : component_container_base(typeHash<component_type>()), underlying_type(init, alloc) {}
 
-
-        /**@brief Destroys component in a thread-safe way.
-         * @note Calls component_type::destroy if it exists.
-         * @note Raises the events::component_destruction<component_type>> event.
-         * @param entityId ID of entity you wish to remove the component from.
-         */
-        virtual void destroy_component(id_type entityId) override
-        {
-            OPTICK_EVENT();
-            m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId));
-
-            if constexpr (detail::has_destroy<component_type, void(component_type&)>::value)
-            {
-                async::readonly_guard rguard(m_lock);
-                component_type::destroy(m_components[entityId]);
-            }
-
-            async::readwrite_guard wguard(m_lock);
-            m_components.erase(entityId);
-        }
-
-        /**
-         * @brief clones a component from a source to a destination entity
-         */
-        void clone_component(id_type dst, id_type src) override
-        {
-            OPTICK_EVENT();
-            static_assert(std::is_copy_constructible<component_type>::value,
-                "cannot copy component, therefore component cannot be cloned onto new entity!");
-
-            {
-                async::readwrite_guard guard(m_lock);
-                m_components[dst] = m_components[src];
-            }
-
-            m_eventBus->raiseEvent<events::component_creation<component_type>>(entity_handle(dst));
-        }
     };
+
+    template<>
+    struct component_container<void> : public component_container_base, public std::vector<std::nullptr_t>
+    {
+        using underlying_type = std::vector<std::nullptr_t>;
+        using allocator_type = typename underlying_type::allocator_type;
+    };
+
+    template<>
+    struct component_container<std::nullptr_t> : public component_container_base, public std::vector<std::nullptr_t>
+    {
+        using underlying_type = std::vector<std::nullptr_t>;
+        using allocator_type = typename underlying_type::allocator_type;
+    };
+
+    static inline component_container<void> invalid_container;
+
+    template<typename component_type>
+    inline component_container<component_type>& component_container_base::cast() noexcept
+    {
+        if (typeHash<component_type>() != m_componentid)
+            return *reinterpret_cast<component_container<component_type>*>(&invalid_container);;
+        return *static_cast<component_container<component_type>*>(this);
+    }
+
+    template<typename component_type>
+    inline const component_container<component_type>& component_container_base::cast() const noexcept
+    {
+        if (typeHash<component_type>() != m_componentid)
+            return *reinterpret_cast<const component_container<component_type>*>(&invalid_container);;
+        return *static_cast<const component_container<component_type>*>(this);
+    }
 }

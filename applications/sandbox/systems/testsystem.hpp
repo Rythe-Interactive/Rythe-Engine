@@ -226,7 +226,6 @@ public:
         rendering::model_handle axesH;
         rendering::model_handle submeshtestH;
         rendering::model_handle planeH;
-        rendering::model_handle floorH;
         rendering::model_handle magneticLowH;
         rendering::model_handle cylinderH;
         rendering::model_handle billboardH;
@@ -249,7 +248,6 @@ public:
         rendering::material_handle fixedSizeParticleMH;
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
-        rendering::material_handle floorMH;
 
         {
             std::lock_guard guard(*window.lock);
@@ -268,7 +266,6 @@ public:
             axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view);
             submeshtestH = rendering::ModelCache::create_model("submeshtest", "assets://models/submeshtest.obj"_view);
             planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
-            floorH = rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view);
             magneticLowH = rendering::ModelCache::create_model("complexMesh", "assets://models/magneticLevelLow.obj"_view);
             billboardH = rendering::ModelCache::create_model("billboard", "assets://models/billboard.obj"_view);
             //cylinderH = rendering::ModelCache::create_model("cylinder","assets://models/cylinder.obj"_view);
@@ -805,7 +802,7 @@ public:
 
         //setupPhysicsStackingUnitTest(cubeH,uvH,textureH);
 
-        //setupMeshSplitterTest(floorH,cubeH, cylinderH, magneticLowH,texture2H);
+        //setupMeshSplitterTest(planeH,cubeH, cylinderH, magneticLowH,texture2H);
         setupPhysicsCompositeTest(cubeH, texture2H);
         //setupPhysicsCRUnitTest(cubeH, texture2H);
 
@@ -2323,74 +2320,41 @@ public:
             entityCount = entities.size();
         }
 
-        if (entityCount < 200)
-        {
-            timer += deltaTime;
-
-            if (timer >= 0.1)
+        if(entityCount < 200)
+            for (int i = 0; i < 200 - entityCount; i++)
             {
-                timer -= 0.1;
                 auto ent = createEntity();
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle(sphereId)), rendering::mesh_renderer(pbrH));
                 ent.add_component<sah>({});
                 ent.add_components<transform>(position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10))), rotation(), scale());
             }
-        }
 
-        static auto sahQuery = createQuery<sah, rotation, position>();
-
-        //static auto rbQuery = createQuery<addRB>();
-
-
-        //static time::span buffer;
-        static int frameCount;
-        //static time::span accumulated;
-
-        //buffer += deltaTime;
-        //accumulated += deltaTime;
-        frameCount++;
-
-        /*  for (auto entity : rbQuery)
-          {
-              if (physics::PhysicsSystem::IsPaused) { break; }
-
-              if (auto addHandle = entity.get_component_handle<addRB>())
-              {
-                  auto adder = addHandle.read();
-                  adder.time += deltaTime;
-
-                  if (adder.time > adder.addTime && !adder.rigidbodyAdded)
-                  {
-                      adder.rigidbodyAdded = true;
-
-                      auto rbHandle = entity.add_component<physics::rigidbody>();
-                      auto rb = rbHandle.read();
-
-                      rb.velocity = adder.force;
-
-                      rbHandle.write(rb);
-
-                  }
-
-                  addHandle.write(adder);
-              }
-          }*/
-
+        static auto sahQuery = createQuery<sah, rotation, position, scale>();
         sahQuery.queryEntities();
-        for (auto entity : sahQuery)
-        {
-            auto rot = entity.read_component<rotation>();
 
-            rot *= math::angleAxis(math::deg2rad(45.f * deltaTime), math::vec3(0, 1, 0));
+        auto& rotations = sahQuery.get<rotation>();
+        auto& positions = sahQuery.get<position>();
+        auto& scales = sahQuery.get<scale>();
 
-            entity.write_component(rot);
+        static std::vector<math::vec3> ends;
+        ends.resize(positions.size());
+        float dt = deltaTime;
 
-            auto pos = entity.read_component<position>();
-            debug::drawLine(pos, pos + rot.forward(), math::colors::magenta);
+        m_scheduler->queueJobs(sahQuery.size(), [&]()
+            {
+                id_type idx = async::this_job::get_id();
+                auto& rot = rotations[idx];
+                auto& pos = positions[idx];
+                auto& scale = scales[idx];
+                scale = (math::sin(time::mainClock.elapsedTime()) * 0.25f) + 0.75f;
+                rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
+                ends[idx] = pos + rot.forward();
+            }).wait();
+        sahQuery.submit<scale>();
+        sahQuery.submit<rotation>();
 
-
-
-        }
+        for(int i = 0; i < positions.size(); i++)
+            debug::drawLine(positions[i], ends[i], math::colors::magenta);
 
         if (rotate && !physics::PhysicsSystem::IsPaused)
         {
