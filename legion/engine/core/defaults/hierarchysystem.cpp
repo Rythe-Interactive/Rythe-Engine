@@ -2,9 +2,6 @@
 
 void legion::core::HierarchySystem::onPositionModified(events::component_modification<position>* event)
 {
-    /*if (event->entity == m_ignore)
-        return;*/
-
     position diff = event->newValue - event->oldValue;
     for (auto child : event->entity.children())
         child.write_component<position>(child.read_component<position>() + diff);
@@ -16,9 +13,7 @@ void legion::core::HierarchySystem::onRotationModified(events::component_modific
     position p = event->entity.read_component<position>();
     for (auto child : event->entity.children())
     {
-        //m_ignore = child;
         child.write_component<position>(p + (math::toMat3(diff) * (child.read_component<position>() - p)));
-        //m_ignore = invalid_id;
         child.write_component<rotation>(diff * child.read_component<rotation>());
     }
 }
@@ -29,9 +24,7 @@ void legion::core::HierarchySystem::onScaleModified(events::component_modificati
     position p = event->entity.read_component<position>();
     for (auto child : event->entity.children())
     {
-        //m_ignore = child;
         child.write_component<position>(p + (diff * (child.read_component<position>() - p)));
-        //m_ignore = invalid_id;
         child.write_component<scale>(child.read_component<scale>() * diff);
     }
 }

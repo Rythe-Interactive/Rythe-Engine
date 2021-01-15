@@ -8,15 +8,6 @@ namespace legion::core::ecs
     EcsRegistry* entity_handle::m_registry = nullptr;
     events::EventBus* entity_handle::m_eventBus = nullptr;
 
-    struct child_iterator::impl
-    {
-        entity_set::iterator iterator;
-
-        impl(entity_set::iterator it) : iterator(it) {}
-    };
-
-    child_iterator::child_iterator(impl* implptr) : m_pimpl(implptr) {}
-
     entity_handle& entity_handle::operator=(const entity_handle& other) noexcept
     {
         m_id = other.m_id;
@@ -61,16 +52,6 @@ namespace legion::core::ecs
     L_NODISCARD entity_set entity_handle::children() const
     {
         return m_registry->getEntityData(m_id).children;
-    }
-
-    L_NODISCARD child_iterator entity_handle::begin() const
-    {
-        return child_iterator(new child_iterator::impl(m_registry->getEntityData(m_id).children.begin()));
-    }
-
-    L_NODISCARD child_iterator entity_handle::end() const
-    {
-        return child_iterator(new child_iterator::impl(m_registry->getEntityData(m_id).children.end()));
     }
 
     L_NODISCARD entity_handle entity_handle::get_parent() const
@@ -270,50 +251,5 @@ namespace legion::core::ecs
     {
         OPTICK_EVENT();
         return m_registry->validateEntity(m_id);
-    }
-
-    bool operator==(const child_iterator& lhs, const child_iterator& rhs)
-    {
-        return lhs.m_pimpl->iterator == rhs.m_pimpl->iterator;
-    }
-
-    entity_handle& child_iterator::operator*()
-    {
-        return *m_pimpl->iterator;
-    }
-
-    entity_handle* child_iterator::operator->()
-    {
-        return &*m_pimpl->iterator;
-    }
-
-    child_iterator& child_iterator::operator++()
-    {
-        ++m_pimpl->iterator;
-        return *this;
-    }
-
-    child_iterator& child_iterator::operator--()
-    {
-        --m_pimpl->iterator;
-        return *this;
-    }
-
-    child_iterator child_iterator::operator++(int)
-    {
-        impl* prev = new impl(m_pimpl->iterator);
-
-        m_pimpl->iterator++;
-
-        return child_iterator(prev);
-    }
-
-    child_iterator child_iterator::operator--(int)
-    {
-        impl* prev = new impl(m_pimpl->iterator);
-
-        m_pimpl->iterator--;
-
-        return child_iterator(prev);
     }
 }
