@@ -44,7 +44,7 @@ namespace legion::core::ecs
         template<typename component_type>
         component_container<component_type>& get()
         {
-            return get(typeHash<component_type>()).cast<component_type>();
+            return get(typeHash<component_type>()).template cast<component_type>();
         }
 
         void submit(id_type componentTypeId);

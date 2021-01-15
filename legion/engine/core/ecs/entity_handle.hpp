@@ -25,32 +25,6 @@ namespace legion::core::ecs
 
     class entity_handle;
 
-    struct child_iterator
-    {
-        friend class entity_handle;
-    private:
-        struct impl;
-
-        std::shared_ptr<impl> m_pimpl;
-        child_iterator(impl* implptr);
-
-    public:
-
-        friend bool operator==(const child_iterator& lhs, const child_iterator& rhs);
-
-        friend bool operator!=(const child_iterator& lhs, const child_iterator& rhs) { return !(lhs == rhs); }
-
-        entity_handle& operator*();
-
-        entity_handle* operator->();
-
-        child_iterator& operator++();
-        child_iterator& operator--();
-        child_iterator operator++(int);
-        child_iterator operator--(int);
-
-    };
-
     /**@class entity_handle
      * @brief Serializable handle for executing operations on entities.
      *		  This class only stores a reference to the registry and the id of the entity.
@@ -120,19 +94,9 @@ namespace legion::core::ecs
          */
         L_NODISCARD id_type get_id() const;
 
+        /**@brief Returns hashed sparse set with all children of this entity.
+         */
         L_NODISCARD entity_set children() const;
-
-        /**@brief Const iterator to first child entity. (dereferences to entity handle)
-         * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
-         * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
-         */
-        L_NODISCARD child_iterator begin() const;
-
-        /**@brief Const iterator to last child entity. (dereferences to entity handle)
-         * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
-         * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
-         */
-        L_NODISCARD child_iterator end() const;
 
         /**@brief Returns entity handle to parent entity.
          * @returns entity_handle Entity handle that either points to the parent entity or is invalid if the entity doesn't have a parent.
