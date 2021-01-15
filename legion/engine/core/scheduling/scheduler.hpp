@@ -208,7 +208,7 @@ namespace legion::core::scheduling
             id_type id = nameHash<charc>(name);
             async::readonly_guard guard(m_processChainsLock);
             if (m_processChains.contains(id))
-                return &m_processChains.get(id);
+                return &m_processChains.at(id);
             return nullptr;
         }
 
