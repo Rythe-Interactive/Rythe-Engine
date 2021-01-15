@@ -27,6 +27,9 @@ namespace legion::core::ecs
         const component_container<component_type>& cast() const noexcept;
     };
 
+    /**@class component_container
+     * @brief This is just a vector with a common base class.
+     */
     template<typename component_type>
     struct component_container : public component_container_base, public std::vector<component_type>
     {
