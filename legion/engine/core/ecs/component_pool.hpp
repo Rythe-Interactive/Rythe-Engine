@@ -132,7 +132,7 @@ namespace legion::core::ecs
                 if (m_components.contains(entityId))
                     container->push_back(m_components.at(ent));
                 else
-                    container.emplace_back()
+                    container->emplace_back()
 #else
                 container->push_back(m_components.at(ent));
 #endif
@@ -158,11 +158,11 @@ namespace legion::core::ecs
             {
 #ifdef LGN_SAFE_MODE
                 if (m_components.contains(entityId))
-                    container->push_back(m_components.at(ent));
+                    container.push_back(m_components.at(ent));
                 else
                     container.emplace_back()
 #else
-                container->push_back(m_components.at(ent));
+                container.push_back(m_components.at(ent));
 #endif
             }
         }
