@@ -93,7 +93,7 @@ namespace legion::rendering
             return depth;
         }
         //gets data of the tree starting at defined depth
-        void GetData(int depth=0, std::vector<math::vec3>* Data)
+        void GetData(int depth, std::vector<math::vec3>* Data)
         {
             //get data for current tree depth
             for (auto& [itemPos, item] : m_items)
