@@ -155,6 +155,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />
+    <ClInclude Include="defaults\hierarchysystem.hpp" />
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\archetype.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
@@ -492,6 +493,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\clock.hpp" />
+    <ClInclude Include="time\defaults.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
     <ClInclude Include="types\meta.hpp" />
@@ -513,6 +515,8 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
+    <ClCompile Include="defaults\defaultcomponents.cpp" />
+    <ClCompile Include="defaults\hierarchysystem.cpp" />
     <ClCompile Include="ecs\component_handle.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity_handle.cpp" />

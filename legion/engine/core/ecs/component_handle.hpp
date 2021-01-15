@@ -112,6 +112,7 @@ namespace legion::core::ecs
 
             component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -120,9 +121,11 @@ namespace legion::core::ecs
                     return component_type();
 #endif
 
-                family->get_component(entity) = value;
+                component_type& ref = family->get_component(entity);
+                old = ref;
+                ref = value;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), std::cref(value));
             return value;
         }
 
@@ -136,6 +139,7 @@ namespace legion::core::ecs
 
             component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -144,9 +148,11 @@ namespace legion::core::ecs
                     return component_type();
 #endif
 
-                family->get_component(entity) = value;
+                component_type& ref = family->get_component(entity);
+                old = ref;
+                ref = value;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), value);
             return value;
         }
 
@@ -162,6 +168,7 @@ namespace legion::core::ecs
             component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -171,10 +178,11 @@ namespace legion::core::ecs
 #endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 modifier(comp);
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -186,6 +194,7 @@ namespace legion::core::ecs
             component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -195,10 +204,11 @@ namespace legion::core::ecs
 #endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 modifier(comp);
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -213,6 +223,7 @@ namespace legion::core::ecs
             component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -222,10 +233,11 @@ namespace legion::core::ecs
 #endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 comp = comp + value;
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -240,6 +252,7 @@ namespace legion::core::ecs
             component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -249,10 +262,11 @@ namespace legion::core::ecs
 #endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 comp = comp + value;
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -267,6 +281,7 @@ namespace legion::core::ecs
             component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -276,10 +291,11 @@ namespace legion::core::ecs
 #endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 comp = comp * value;
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 
@@ -294,6 +310,7 @@ namespace legion::core::ecs
             component_pool<component_type>* family = m_registry->getFamily<component_type>();
 
             component_type ret;
+            component_type old;
             {
                 async::readonly_guard rguard(family->get_lock());
 
@@ -303,10 +320,11 @@ namespace legion::core::ecs
 #endif
 
                 component_type& comp = family->get_component(entity);
+                old = comp;
                 comp = comp * value;
                 ret = comp;
             }
-            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity);
+            m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
             return ret;
         }
 

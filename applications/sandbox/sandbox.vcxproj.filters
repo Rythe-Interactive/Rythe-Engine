@@ -65,9 +65,6 @@
     <ClInclude Include="systems\testsystemconvexhull.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test_filesystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\animation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

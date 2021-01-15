@@ -8,6 +8,7 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
+#include <core/events/eventbus.hpp>
 
 /**
  * @file entity_handle.hpp
@@ -60,6 +61,8 @@ namespace legion::core::ecs
     private:
         id_type m_id;
         static EcsRegistry* m_registry;
+        static events::EventBus* m_eventBus;
+        using entity_set = hashed_sparse_set<entity_handle>;
 
     public:
         /**@brief Main constructor for constructing a valid entity handle.
@@ -116,6 +119,8 @@ namespace legion::core::ecs
          * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.
          */
         L_NODISCARD id_type get_id() const;
+
+        L_NODISCARD entity_set children() const;
 
         /**@brief Const iterator to first child entity. (dereferences to entity handle)
          * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.

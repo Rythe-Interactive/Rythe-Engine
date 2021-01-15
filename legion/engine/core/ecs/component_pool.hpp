@@ -16,6 +16,8 @@
 
 #include <core/serialization/serializationmeta.hpp>
 
+#include <functional>
+
 #include <Optick/optick.h>
 
 /**
@@ -159,13 +161,26 @@ namespace legion::core::ecs
             const component_container<component_type>& container = comps.cast<component_type>();
             //if (!container.getComponentTypeId())
             //    return;
-            async::readonly_guard guard(m_lock);
-            for (int i = 0; i < entities.size(); i++)
+
+            static std::vector<std::tuple<entity_handle, component_type, const component_type&>> modifications;
+            modifications.clear();
+
             {
-                auto& ent = entities[i];
-                if (m_components.contains(ent))
-                    m_components.at(ent) = container[i];
+                async::readonly_guard guard(m_lock);
+                for (int i = 0; i < entities.size(); i++)
+                {
+                    auto& ent = entities[i];
+                    if (m_components.contains(ent))
+                    {
+                        component_type& ref = m_components.at(ent);
+                        modifications.emplace_back(ent, ref, std::cref(container[i]));
+                        ref = container[i];
+                    }
+                }
             }
+
+            for (auto& [ent, oldVal, newVal] : modifications)
+                m_eventBus->raiseEvent<events::component_modification<component_type>>(ent, std::move(oldVal), newVal);
         }
 
         /**@brief Thread-safe check for whether an entity has the component.

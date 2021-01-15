@@ -10,7 +10,9 @@ shader(vertex)
 {
     void main(void)
     {
-        gl_Position = ModelToScreenSpacePosition(position);
+        vec4 viewspace = ViewMatrix * vec4(position, 0.0);
+        viewspace.w = 1.0;
+        gl_Position = ProjectionMatrix * viewspace;
         PropagateStdIO();
     }
 }

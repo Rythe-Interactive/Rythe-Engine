@@ -37,6 +37,8 @@
     <ClCompile Include="async\spinlock.cpp" />
     <ClCompile Include="async\async_operation.cpp" />
     <ClCompile Include="async\job_pool.cpp" />
+    <ClCompile Include="defaults\hierarchysystem.cpp" />
+    <ClCompile Include="defaults\defaultcomponents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -422,6 +424,8 @@
     <ClInclude Include="async\async_runnable.hpp" />
     <ClInclude Include="ecs\component_pool.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
+    <ClInclude Include="defaults\hierarchysystem.hpp" />
+    <ClInclude Include="time\defaults.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

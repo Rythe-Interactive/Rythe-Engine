@@ -14,6 +14,19 @@ namespace legion::core::events
 
     };
 
+    struct parent_change : public event<parent_change>
+    {
+        ecs::entity_handle oldParent;
+        ecs::entity_handle newParent;
+        ecs::entity_handle entity;
+        parent_change() = default;
+        parent_change(ecs::entity_handle entity, id_type oldParent, id_type newParent) : oldParent(oldParent), newParent(newParent), entity(entity) {}
+
+        virtual bool persistent() override { return false; }
+        virtual bool unique() override { return false; }
+
+    };
+
     template<typename component_type>
     struct component_creation : public event<component_creation<component_type>>
     {
@@ -30,10 +43,13 @@ namespace legion::core::events
     template<typename component_type>
     struct component_modification : public event<component_modification<component_type>>
     {
+        component_type oldValue;
+        component_type newValue;
         ecs::entity_handle entity;
 
         component_modification() = default;
-        component_modification(ecs::entity_handle entity) : entity(entity) {}
+        component_modification(ecs::entity_handle entity, component_type&& oldVal, const component_type& newVal) : oldValue(oldVal), newValue(newVal), entity(entity) {}
+        component_modification(ecs::entity_handle entity, const component_type& oldVal, const component_type& newVal) : oldValue(oldVal), newValue(newVal), entity(entity) {}
 
         virtual bool persistent() override { return false; }
         virtual bool unique() override { return false; }

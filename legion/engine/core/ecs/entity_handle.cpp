@@ -6,6 +6,7 @@
 namespace legion::core::ecs
 {
     EcsRegistry* entity_handle::m_registry = nullptr;
+    events::EventBus* entity_handle::m_eventBus = nullptr;
 
     struct child_iterator::impl
     {
@@ -57,6 +58,11 @@ namespace legion::core::ecs
         return m_id;
     }
 
+    L_NODISCARD entity_set entity_handle::children() const
+    {
+        return m_registry->getEntityData(m_id).children;
+    }
+
     L_NODISCARD child_iterator entity_handle::begin() const
     {
         return child_iterator(new child_iterator::impl(m_registry->getEntityData(m_id).children.begin()));
@@ -78,12 +84,15 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         entity_data data = m_registry->getEntityData(m_id);
 
+        id_type previousParent = invalid_id;
+
 #ifdef LGN_SAFE_MODE
         if (m_registry->validateEntity(data.parent))
 #else
         if (data.parent)
 #endif
         {
+            previousParent = data.parent;
             auto parentData = m_registry->getEntityData(data.parent);
             parentData.children.erase(*this);
             m_registry->setEntityData(data.parent, parentData);
@@ -104,6 +113,7 @@ namespace legion::core::ecs
             data.parent = invalid_id;
 
         m_registry->setEntityData(m_id, data);
+        m_eventBus->raiseEvent<events::parent_change>(*this, previousParent, data.parent);
     }
 
     void entity_handle::serialize(cereal::JSONOutputArchive& oarchive)

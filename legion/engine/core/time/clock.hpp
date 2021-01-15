@@ -15,12 +15,12 @@ namespace legion::core::time
 			m_start = std::chrono::high_resolution_clock::now();
 		}
 
-		time_span<time_type> startPoint()
+		time_span<time_type> startPoint() const noexcept
 		{
 			return m_start.time_since_epoch();
 		}
 
-		time_span<time_type> elapsedTime()
+		time_span<time_type> elapsedTime() const
 		{
 			return time_span<time_type>(std::chrono::high_resolution_clock::now() - m_start);
 		}

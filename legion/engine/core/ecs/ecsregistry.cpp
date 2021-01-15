@@ -49,6 +49,7 @@ namespace legion::core::ecs
     EcsRegistry::EcsRegistry(events::EventBus* eventBus) : m_families(), m_entityData(), m_entities(), m_queryRegistry(*this), m_eventBus(eventBus)
     {
         entity_handle::m_registry = this;
+        entity_handle::m_eventBus = eventBus;
         // Create world entity.
         m_entityData.emplace(world_entity_id, entity_data());
         m_entities.emplace(world_entity_id);
