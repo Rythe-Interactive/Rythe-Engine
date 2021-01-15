@@ -58,19 +58,6 @@ namespace legion::core::scheduling
                 if (!m_jobs.empty())
                 {
                     instruction = m_jobs.front()->pop_job();
-                    if (!instruction)
-                    {
-                        async::readwrite_guard wguard(m_jobQueueLock);
-                        if (!m_jobs.empty())
-                        {
-                            auto& pool = m_jobs.front();
-                            if (pool->empty())
-                            {
-                                pool->complete();
-                                m_jobs.pop();
-                            }
-                        }
-                    }
                 }
             }
 
@@ -78,6 +65,20 @@ namespace legion::core::scheduling
             {
                 OPTICK_EVENT("Executing job")
                 instruction->execute();
+
+                async::readonly_guard guard(m_jobQueueLock);
+                if (!m_jobs.empty())
+                {
+                    if (m_jobs.front()->empty())
+                    {
+                        async::readwrite_guard wguard(m_jobQueueLock);
+                        if (!m_jobs.empty())
+                        {
+                            m_jobs.front()->complete();
+                            m_jobs.pop();
+                        }
+                    }
+                }
             }
             else
             {

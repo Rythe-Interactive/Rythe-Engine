@@ -106,14 +106,13 @@ namespace legion::core::async
             this_job::m_id = id;
             if (id)
                 m_progress->advanceProgress(1);
-            auto* ret = &m_jobs[idx - 1];
-            return ret;
+            return &m_jobs[idx - 1];
         }
 
         virtual bool empty() const noexcept override
         {
             size_type idx = m_index.load(std::memory_order_relaxed);
-            return (idx == 0 || idx > m_jobs.size()) && (m_progress->rawProgress() >= (m_jobs.size() - 1));
+            return ((idx == 0 || idx > m_jobs.size()) && (m_progress->rawProgress() >= (m_jobs.size() - 1)));
         }
     };
 }
