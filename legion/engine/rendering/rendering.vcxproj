@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -58,9 +58,14 @@
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\light.hpp" />
+    <ClInclude Include="components\lod.hpp" />
     <ClInclude Include="components\particle.hpp" />
     <ClInclude Include="components\particle_emitter.hpp" />
+    <ClInclude Include="components\point.hpp" />
+    <ClInclude Include="components\pointcloud_renderable.hpp" />
     <ClInclude Include="components\point_cloud.hpp" />
+    <ClInclude Include="components\point_emitter_data.hpp" />
+    <ClInclude Include="data\Octree.hpp" />
     <ClInclude Include="data\postprocessingeffect.hpp" />
     <ClInclude Include="data\screen_quad.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
@@ -70,6 +75,7 @@
     <ClInclude Include="pipeline\default\stages\debugrenderstage.hpp" />
     <ClInclude Include="pipeline\default\stages\postprocessingstage.hpp" />
     <ClInclude Include="pipeline\gui\stages\imguirenderstage.hpp" />
+    <ClInclude Include="systems\lod_manager.hpp" />
     <ClInclude Include="systems\pointcloudgeneration.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\buffer.hpp" />
