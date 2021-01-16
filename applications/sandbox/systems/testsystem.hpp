@@ -120,6 +120,7 @@ public:
     rendering::material_handle paintH;
     rendering::material_handle skyboxH;
     rendering::material_handle gnomeMH;
+    rendering::material_handle texture2H;
 
     //Friction Test
     std::vector<ecs::entity_handle> physicsFrictionTestRotators;
@@ -236,7 +237,6 @@ public:
 
         rendering::material_handle uvH;
         rendering::material_handle textureH;
-        rendering::material_handle texture2H;
         rendering::material_handle directionalLightMH;
         rendering::material_handle spotLightMH;
         rendering::material_handle pointLightMH;
@@ -2310,7 +2310,7 @@ public:
     void update(time::span deltaTime)
     {
         static float timer = 0;
-        static id_type sphereId = nameHash("sphere");
+        static id_type sphereId = nameHash("plane");
 
         auto [entities, lock] = m_ecs->getEntities();
         size_type entityCount;
@@ -2320,11 +2320,11 @@ public:
             entityCount = entities.size();
         }
 
-        if(entityCount < 200)
-            for (int i = 0; i < 200 - entityCount; i++)
+        if(entityCount < 1000)
+            for (int i = 0; i < 1000 - entityCount; i++)
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle(sphereId)), rendering::mesh_renderer(pbrH));
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle(sphereId)), rendering::mesh_renderer(texture2H));
                 ent.add_component<sah>({});
                 ent.add_components<transform>(position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10))), rotation(), scale());
             }
