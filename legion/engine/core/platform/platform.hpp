@@ -62,6 +62,7 @@
      */
     #define LEGION_LINUX
 
+    #include <sys/prctl.h>
     #include <sys/resource.h>
     #include <sys/types.h>
     #include <sys/wait.h>

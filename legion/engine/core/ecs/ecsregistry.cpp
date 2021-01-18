@@ -253,14 +253,16 @@ namespace legion::core::ecs
 #endif
 
         async::readonly_guard guard(m_entityDataLock);
-        entity_data& data = m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
 
 #ifdef LGN_SAFE_MODE
+        entity_data& data = m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
         if (data.parent && !validateEntity(data.parent)) // Re-validate parent.
             data.parent = invalid_id;
+        return data;
+#else
+        return m_entityData[entityId]; // Is fine because the lock only locks order changes in the container, not the values themselves.
 #endif
 
-        return data;
     }
 
     void EcsRegistry::setEntityData(id_type entityId, const entity_data& data)

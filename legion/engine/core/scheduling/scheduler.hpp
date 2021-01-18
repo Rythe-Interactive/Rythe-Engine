@@ -9,6 +9,7 @@
 #include <core/events/events.hpp>
 #include <core/async/job_pool.hpp>
 #include <core/async/async_runnable.hpp>
+#include <core/async/thread_util.hpp>
 
 #include <Optick/optick.h>
 
@@ -245,15 +246,17 @@ namespace legion::core::scheduling
             sendCommand(chainThreadId, [&]()
                 {
                     log::info("Thread {} assigned.", std::this_thread::get_id());
+                    async::set_thread_name(name);
 
                     std::lock_guard guard(m_threadScopesLock);
                     m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
                     OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
                 });
 #else
-            sendCommand(chainThreadId, []()
+            sendCommand(chainThreadId, [&]()
                 {
                     log::info("Thread {} assigned.", std::this_thread::get_id());
+                    async::set_thread_name(name);
                 });
 #endif
             async::readwrite_guard guard(m_processChainsLock);

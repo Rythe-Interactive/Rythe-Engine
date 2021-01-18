@@ -117,6 +117,7 @@ namespace legion::core::scheduling
     Scheduler::Scheduler(events::EventBus* eventBus, bool lowPower, uint minThreads) : m_eventBus(eventBus), m_lowPower(lowPower)
     {
         legion::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
+        async::set_thread_name("Initialization");
 
         if (std::thread::hardware_concurrency() < minThreads)
             m_lowPower = true;
@@ -159,22 +160,24 @@ namespace legion::core::scheduling
             {
                 auto id = unreserved.front();
                 unreserved.pop();
-                legion::core::log::impl::thread_names[id] = std::string("Worker ") + std::to_string(i++);
+                log::impl::thread_names[id] = std::string("Worker ") + std::to_string(i++);
 #if USE_OPTICK
                 sendCommand(id, [&]()
                     {
                         log::info("Thread {} assigned.", std::this_thread::get_id());
+                        async::set_thread_name(log::impl::thread_names[std::this_thread::get_id()].c_str());
                         std::lock_guard guard(m_threadScopesLock);
                         m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-                    });
+            });
 #else
-                sendCommand(id, []()
+                sendCommand(id, [&]()
                     {
                         log::info("Thread {} assigned.", std::this_thread::get_id());
+                        async::set_thread_name(log::impl::thread_names[std::this_thread::get_id()].c_str());
                     });
 #endif
-            }
         }
+    }
 
         { // Start threads of all the other chains.
             async::readonly_guard guard(m_processChainsLock);
@@ -182,12 +185,13 @@ namespace legion::core::scheduling
                 chain.run(m_lowPower);
         }
 
-        legion::core::log::impl::thread_names[std::this_thread::get_id()] = "Update";
+        log::impl::thread_names[std::this_thread::get_id()] = "Update";
+        async::set_thread_name("Update");
 #if USE_OPTICK
         {
             std::lock_guard guard(m_threadScopesLock);
             m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-        }
+}
 #endif
 
         while (!m_eventBus->checkEvent<events::exit>()) // Check for engine exit flag.
