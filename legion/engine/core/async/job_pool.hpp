@@ -29,26 +29,39 @@ namespace legion::core::async
             return m_progress;
         }
 
-        void complete() noexcept { m_progress->complete(); }
-
         virtual runnable_base* pop_job() LEGION_PURE;
+
+        void complete_job()
+        {
+            m_progress->advanceProgress();
+        }
+
+        bool isDone() const noexcept
+        {
+            return m_progress->isDone();
+        }
+
         virtual bool empty() const noexcept LEGION_PURE;
     };
 
-    template<typename Func>
+    template<typename Func, typename CompleteFunc>
     struct job_operation : public async_operation<Func>
     {
+    private:
+        CompleteFunc m_onComplete;
+
     public:
         std::shared_ptr<job_pool_base> jobPoolPtr;
 
-        job_operation(const std::shared_ptr<async_progress>& progress, const std::shared_ptr<job_pool_base>& jobPool, const Func& repeater)
-            : async_operation<Func>(progress, repeater), jobPoolPtr(jobPool) {}
+        job_operation(const std::shared_ptr<async_progress>& progress, const std::shared_ptr<job_pool_base>& jobPool, const Func& repeater, const CompleteFunc& complete)
+            : async_operation<Func>(progress, repeater), m_onComplete(complete), jobPoolPtr(jobPool) {}
         job_operation(const job_operation&) = default;
         job_operation(job_operation&&) = default;
 
         virtual void wait(wait_priority priority = wait_priority_normal) const noexcept override
         {
-            while (!this->m_progress->isDone())
+            OPTICK_EVENT("legion::core::async::job_operation<T>::wait");
+            while (!jobPoolPtr->isDone())
             {
                 switch (priority)
                 {
@@ -59,9 +72,15 @@ namespace legion::core::async
                 {
                     auto* job = jobPoolPtr->pop_job();
                     if (job)
+                    {
                         job->execute();
-                    else
-                        this->m_progress->complete();
+                        jobPoolPtr->complete_job();
+                    }
+
+                    if (jobPoolPtr->isDone())
+                    {
+                        m_onComplete();
+                    }
                     L_PAUSE_INSTRUCTION();
                     break;
                 }
@@ -70,9 +89,15 @@ namespace legion::core::async
                 {
                     auto* job = jobPoolPtr->pop_job();
                     if (job)
+                    {
                         job->execute();
-                    else
-                        this->m_progress->complete();
+                        jobPoolPtr->complete_job();
+                    }
+
+                    if (jobPoolPtr->isDone())
+                    {
+                        m_onComplete();
+                    }
                     break;
                 }
                 }
@@ -80,8 +105,8 @@ namespace legion::core::async
         }
     };
 
-    template<typename Func>
-    job_operation(const std::shared_ptr<async_progress>&, const std::shared_ptr<job_pool_base>&, const Func&)->job_operation<Func>;
+    template<typename Func, typename CompletionFunc>
+    job_operation(const std::shared_ptr<async_progress>&, const std::shared_ptr<job_pool_base>&, const Func&, const CompletionFunc&)->job_operation<Func, CompletionFunc>;
 
     template<typename Func>
     struct job_pool : public job_pool_base
@@ -104,15 +129,13 @@ namespace legion::core::async
 
             size_type id = m_jobs.size() - idx;
             this_job::m_id = id;
-            if (id)
-                m_progress->advanceProgress(1);
             return &m_jobs[idx - 1];
         }
 
         virtual bool empty() const noexcept override
         {
             size_type idx = m_index.load(std::memory_order_relaxed);
-            return ((idx == 0 || idx > m_jobs.size()) && (m_progress->rawProgress() >= (m_jobs.size() - 1)));
+            return idx < 1 || idx > m_jobs.size();
         }
     };
 }

@@ -35,6 +35,7 @@ namespace legion::core::scheduling
     class Scheduler
     {
     private:
+        friend struct job_pool_base;
         struct thread_error
         {
             std::string message;
@@ -81,7 +82,10 @@ namespace legion::core::scheduling
 
         static void threadMain(bool* exit, bool* start, bool lowPower);
 
+        static void tryCompleteJobPool();
+
     public:
+
         Scheduler(events::EventBus* eventBus, bool lowPower, uint minThreads);
 
         ~Scheduler();
@@ -142,6 +146,7 @@ namespace legion::core::scheduling
         template<typename Func>
         auto sendCommand(std::thread::id id, const Func& func)
         {
+            OPTICK_EVENT("legion::core::scheduling::Scheduler::sendCommand<T>");
             async::async_runnable<Func>* command = new async::async_runnable<Func>(func);
             async::readwrite_guard guard(m_commandLocks[id]);
             m_commands[id].push(std::unique_ptr<runnable_base>(command));
@@ -151,10 +156,11 @@ namespace legion::core::scheduling
         template<typename Func>
         auto queueJobs(size_type count, const Func& func)
         {
+            OPTICK_EVENT("legion::core::scheduling::Scheduler::queueJobs<T>");
             std::shared_ptr<async::job_pool_base> jobPool = std::shared_ptr<async::job_pool_base>(new async::job_pool<Func>(count, func));
             async::readwrite_guard guard(m_jobQueueLock);
             m_jobs.push(jobPool);
-            return async::job_operation(jobPool->getProgress(), jobPool, [&](size_type count, auto func) { return queueJobs(count, func); });
+            return async::job_operation(jobPool->getProgress(), jobPool, [&](size_type count, auto func) { return queueJobs(count, func); }, [&]() {tryCompleteJobPool(); });
         }
 
         /**@brief Destroy a thread.

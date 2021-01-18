@@ -1,5 +1,6 @@
 #include <core/scheduling/scheduler.hpp>
 #include <core/logging/logging.hpp>
+#include <core/time/clock.hpp>
 
 namespace legion::core::scheduling
 {
@@ -10,7 +11,7 @@ namespace legion::core::scheduling
     std::queue<std::thread::id> Scheduler::m_unreservedThreads;
     const uint Scheduler::m_maxThreadCount = (static_cast<int>(std::thread::hardware_concurrency()) - reserved_threads) <= 0 ? reserved_threads : (std::thread::hardware_concurrency());
     async::rw_spinlock Scheduler::m_availabilityLock;
-    uint Scheduler::m_availableThreads = static_cast<uint>(math::ceil((m_maxThreadCount*0.5f) - reserved_threads) + math::epsilon<float>()); // subtract OS and this_thread, and then leave some extra for miscellaneous processes.
+    uint Scheduler::m_availableThreads = static_cast<uint>(math::ceil((m_maxThreadCount * 0.5f) - reserved_threads) + math::epsilon<float>()); // subtract OS and this_thread, and then leave some extra for miscellaneous processes.
 
     async::rw_spinlock Scheduler::m_jobQueueLock;
     std::queue<std::shared_ptr<async::job_pool_base>> Scheduler::m_jobs;
@@ -29,12 +30,14 @@ namespace legion::core::scheduling
                 std::this_thread::yield();
         }
 
+
         while (!(*exit))
         {
             OPTICK_EVENT();
             runnable_base* instruction = nullptr;
 
             {
+                OPTICK_EVENT("Fetching command");
                 async::readonly_guard guard(m_commandLocks[id], async::wait_priority_normal);
                 if (!m_commands[id].empty())
                     instruction = m_commands[id].front().get();
@@ -43,9 +46,10 @@ namespace legion::core::scheduling
             if (instruction)
             {
                 {
-                    OPTICK_EVENT("Executing command")
+                    OPTICK_EVENT("Executing command");
                     instruction->execute();
                 }
+
                 {
                     async::readwrite_guard guard(m_commandLocks[id], async::wait_priority_normal);
                     m_commands[id].pop();
@@ -54,6 +58,7 @@ namespace legion::core::scheduling
             }
 
             {
+                OPTICK_EVENT("Fetching job");
                 async::readonly_guard guard(m_jobQueueLock, async::wait_priority_normal);
                 if (!m_jobs.empty())
                 {
@@ -63,19 +68,22 @@ namespace legion::core::scheduling
 
             if (instruction)
             {
-                OPTICK_EVENT("Executing job")
-                instruction->execute();
-
                 async::readonly_guard guard(m_jobQueueLock);
-                if (!m_jobs.empty())
+                auto pool = m_jobs.front();
+                while (instruction && !pool->isDone())
                 {
-                    if (m_jobs.front()->empty())
                     {
-                        async::readwrite_guard wguard(m_jobQueueLock);
-                        if (!m_jobs.empty())
+                        OPTICK_EVENT("Executing job");
+                        instruction->execute();
+                    }
+
+                    {
+                        OPTICK_EVENT("Fetching job");
+                        pool->complete_job();
+                        instruction = pool->pop_job();
+                        if (!instruction)
                         {
-                            m_jobs.front()->complete();
-                            m_jobs.pop();
+                            tryCompleteJobPool();
                         }
                     }
                 }
@@ -84,12 +92,24 @@ namespace legion::core::scheduling
             {
                 if (lowPower)
                 {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(2));
+                    std::this_thread::sleep_for(std::chrono::microseconds(1));
                 }
                 else
                 {
-                    std::this_thread::sleep_for(std::chrono::microseconds(1));
+                    std::this_thread::yield();
                 }
+            }
+        }
+    }
+
+    void Scheduler::tryCompleteJobPool()
+    {
+        async::readwrite_guard wguard(m_jobQueueLock);
+        if (!m_jobs.empty())
+        {
+            if (m_jobs.front()->isDone())
+            {
+                m_jobs.pop();
             }
         }
     }
@@ -153,8 +173,8 @@ namespace legion::core::scheduling
                         log::info("Thread {} assigned.", std::this_thread::get_id());
                     });
 #endif
-                }
             }
+        }
 
         { // Start threads of all the other chains.
             async::readonly_guard guard(m_processChainsLock);
@@ -280,7 +300,7 @@ namespace legion::core::scheduling
         async::spinlock::force_release(true);
 
         m_exits.clear();
-        }
+                }
 
     void Scheduler::destroyThread(std::thread::id id)
     {
@@ -419,4 +439,4 @@ namespace legion::core::scheduling
         return false;
     }
 
-    }
+            }

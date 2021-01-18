@@ -2320,13 +2320,21 @@ public:
             entityCount = entities.size();
         }
 
-        if(entityCount < 1000)
-            for (int i = 0; i < 1000 - entityCount; i++)
+        static float avgdt = deltaTime;
+        avgdt = (avgdt + deltaTime) / 2.f;
+        timer += deltaTime;
+        if (timer > 1.f)
+        {
+            timer -= 1.f;
+            log::debug("frametime {}ms, fps {}", avgdt, 1.f / avgdt);
+        }
+        if(entityCount < 5000)
+            for (int i = 0; i < 5000 - entityCount; i++)
             {
                 auto ent = createEntity();
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle(sphereId)), rendering::mesh_renderer(texture2H));
                 ent.add_component<sah>({});
-                ent.add_components<transform>(position(math::linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10))), rotation(), scale());
+                ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale());
             }
 
         static auto sahQuery = createQuery<sah, rotation, position, scale>();
@@ -2352,9 +2360,6 @@ public:
             }).wait();
         sahQuery.submit<scale>();
         sahQuery.submit<rotation>();
-
-        for(int i = 0; i < positions.size(); i++)
-            debug::drawLine(positions[i], ends[i], math::colors::magenta);
 
         if (rotate && !physics::PhysicsSystem::IsPaused)
         {
