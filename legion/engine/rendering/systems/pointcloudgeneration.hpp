@@ -60,8 +60,6 @@ namespace legion::rendering
         //query entities and iterate them
         void Generate()
         {
-
-            // log::debug("generating clouds");
             query.queryEntities();
             for (auto& ent : query)
             {
@@ -88,9 +86,21 @@ namespace legion::rendering
             auto uvs = m.second.uvs;
 
             size_t triangle_count = indices.size() / 3;
+            int divider = 2;
             uint process_Size = triangle_count;
-            size_t points_Generated = (triangle_count * realPointCloud.m_samplesPerTriangle);
 
+            if (triangle_count > 10000)
+            {
+                while (triangle_count > 100000)
+                {
+                    triangle_count /= 2;
+                    divider *= 2;
+                }
+                process_Size /= divider;
+
+            }
+            size_t points_Generated = (process_Size * realPointCloud.m_samplesPerTriangle);
+            log::debug(points_Generated);
             //Generate points 
             std::vector<math::vec4> result(points_Generated);
 

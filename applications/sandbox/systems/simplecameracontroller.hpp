@@ -87,22 +87,22 @@ public:
 
         camera = createEntity();
         camera.add_components<transform>(position(0.f, 3.f, 0.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
-        camera.add_component<audio::audio_listener>();
+//        camera.add_component<audio::audio_listener>();
 
         rendering::camera cam;
         cam.set_projection(22.5f, 0.001f, 1000.f);
         camera.add_component<rendering::camera>(cam);
 
-        auto ent = createEntity();
-        ent.add_component<rendering::mesh_renderer>({ rendering::MaterialCache::get_material("pbr"), rendering::ModelCache::get_handle("cube") });
-        ent.add_components<transform>(position(-5.f, 2.f, 10.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
-        ent.add_component<sah>();
-        ent.set_parent(camera);
+        //auto ent = createEntity();
+        //ent.add_component<rendering::mesh_renderer>({ rendering::MaterialCache::get_material("pbr"), rendering::ModelCache::get_handle("cube") });
+        //ent.add_components<transform>(position(-5.f, 2.f, 10.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
+        //ent.add_component<sah>();
+        //ent.set_parent(camera);
 
-        auto ent2 = createEntity();
-        ent2.add_component<rendering::mesh_renderer>({ rendering::MaterialCache::get_material("pbr"), rendering::ModelCache::get_handle("cube") });
-        ent2.add_components<transform>(position(-7.f, 2.f, 10.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
-        ent2.set_parent(ent);
+        //auto ent2 = createEntity();
+        //ent2.add_component<rendering::mesh_renderer>({ rendering::MaterialCache::get_material("pbr"), rendering::ModelCache::get_handle("cube") });
+        //ent2.add_components<transform>(position(-7.f, 2.f, 10.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
+        //ent2.set_parent(ent);
     }
 
 #pragma region input stuff

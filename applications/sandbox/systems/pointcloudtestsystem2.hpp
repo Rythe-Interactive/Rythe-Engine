@@ -40,6 +40,7 @@ public:
             ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
             ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
             ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
+            ModelCache::create_model("room", "assets://models/fireplace_room.obj"_view);
 
 
             auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
@@ -60,17 +61,18 @@ public:
         mesh_handle cubeMesh = MeshCache::get_handle("cube");
         mesh_handle sphereMesh = MeshCache::get_handle("sphere");
         mesh_handle suzanneeMesh = MeshCache::get_handle("suzanne");
+        mesh_handle room = MeshCache::get_handle("room");
 
         auto ent2 = createEntity();
         auto trans2 = ent2.add_components<transform>(position(0, 1, 0), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(suzanneeMesh, trans2, billboardMat, image, 5000, 0.1f));
+        ent2.add_component<point_cloud>(point_cloud(room, trans2, billboardMat, image, 2000, 0.2f));
 
-        auto ent1 = createEntity();
+ /*       auto ent1 = createEntity();
         auto trans1 = ent1.add_components<transform>(position(1.5f, 1, 0), rotation(), scale(0.5f));
-        ent1.add_component<point_cloud>(point_cloud(uvMesh, trans1, billboardMat, image, 2000, 0.1f));
+        ent1.add_component<point_cloud>(point_cloud(uvMesh, trans1, billboardMat, image, 2000, 0.2f));
         auto ent3 = createEntity();
         auto trans3 = ent1.add_components<transform>(position(-1.5f, 1, 0), rotation(), scale(0.5f));
-        ent3.add_component<point_cloud>(point_cloud(cubeMesh, trans1, billboardMat, image, 2000, 0.1f));
+        ent3.add_component<point_cloud>(point_cloud(cubeMesh, trans1, billboardMat, image, 2000, 0.2f));*/
 
     }
 };

@@ -220,7 +220,7 @@ public:
                 std::uniform_real_distribution<double> unif(0, 1);
 
                 std::vector<math::color> randColors;
-                for (size_t i = 0; i < 10000; i++)
+                for (size_t i = 0; i < 150000; i++)
                 {
                     double rand1 = unif(rng);
                     double rand2 = unif(rng);
