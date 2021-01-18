@@ -343,6 +343,11 @@ namespace legion::core::math
         return dot(normalize(planeNormal), point - planePosition);
     }
 
+    inline float angleToPlane(const vec3& point, const vec3& planePosition, const vec3& planeNormal)
+    {
+        return normalizeDot(planeNormal, point - planePosition);
+    }
+
     /**@class plane
      * @brief 
      */

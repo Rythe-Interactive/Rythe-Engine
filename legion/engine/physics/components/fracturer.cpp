@@ -73,6 +73,7 @@ namespace legion::physics
 
         for ( std::vector<math::vec3>& vector : groupedPoints)
         {
+           // if (i != 1) { continue; }
             math::color debugColor = 
                 math::color(math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f));
 
@@ -90,19 +91,26 @@ namespace legion::physics
             verticesList.push_back(vector);
             newCollider->ConstructConvexHullWithVertices(vector);
 
+
             transforms.push_back(transform);
             newCollider->DrawColliderRepresentation(transform,math::colors::green,4.0f,FLT_MAX);
             i++;
         }
 
 
+        std::vector< FracturerColliderToMeshPairing> colliderToMeshPairings;
 
         //get list of collider to mesh pairs
 
-
+        //make sure fractureInstigatorEnt is a direct child of the world
+        
         for (size_t i = 0; i < fractureInstigatorEnt.child_count() ; i++)
         {
+            //get mesh
+            //get mesh_splitter
+            //get physicsComponent
 
+            //if all three components are present in this child added in colliderToMeshPairings
         }
 
 

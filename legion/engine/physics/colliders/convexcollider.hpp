@@ -80,13 +80,13 @@ namespace legion::physics
             ++step;
         }
 
-        void ConstructConvexHullWithVertices( std::vector<math::vec3>& vertices)
+        void ConstructConvexHullWithVertices( std::vector<math::vec3>& vertices,math::vec3 spacingAmount = math::vec3())
         {
             //many of the functions for convex hull are coupled to mesh,
             //for now we create a mesh so that we can pass it into the function
             core::mesh mesh;
             mesh.vertices = std::move(vertices);
-            ConstructConvexHullWithMesh(mesh);
+            ConstructConvexHullWithMesh(mesh,spacingAmount);
         }
 
         
@@ -109,7 +109,7 @@ namespace legion::physics
             ConstructConvexHullWithMesh(mesh);
         }
 
-        void  ConstructConvexHullWithMesh(mesh& mesh)
+        void  ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount = math::vec3())
         {
             // Step 0 - Create inital hull
             /*if (step == 0)
@@ -155,10 +155,10 @@ namespace legion::physics
                 halfEdgeFaces.push_back(face012);
                 faceIndexMap.emplace(halfEdgeFaces[0], 0);
 
-                if (step == 1)
+                /*if (step == 1)
                 {
                     return;
-                }
+                }*/
 
                 //index 3 - Together with previous indices creates initial hull
                 size_type index3 = convexHullFindIndexClosestToTriangle(mesh, index0, index1, index2, normal012,debug);
@@ -265,8 +265,8 @@ namespace legion::physics
             // end of Step 0 - Create inital hull
 
             // Step 1 and up, add a vert to the hull
-            if (step == 2) return;
-            looped = 2;
+            //if (step == 2) return;
+            //looped = 2;
             //while (looped < step)
             while (true)
             {
@@ -292,6 +292,9 @@ namespace legion::physics
                         break;
                     }
                 }
+                log::debug("--------------------------------------------------------------------------------------");
+                log::debug("--------------------------------------- STEP {} ---------------------------------------", step);
+                log::debug("--------------------------------------------------------------------------------------------");
 
                 if (shouldEnd)
                 {
@@ -322,11 +325,28 @@ namespace legion::physics
                     }
                 }
 
+                
                 // list of horizon edges
                 std::deque<HalfEdgeEdge*> edges;
                 // The selected vert needs to be merged into the hull
                 // Find the horizon edges for the current vertex
                 convexHullConstructHorizon(faceVertMap.at(faceIndex).at(vertIndex), *halfEdgeFaces.at(faceIndex), edges);
+
+               /* if (step == 5)
+                {
+                    log::debug("  edges size {} ", edges.size());
+                    for (size_t i = 0; i < edges.size(); i++)
+                    {
+                        math::vec3 edgePosition = edges.at(i)->edgePosition;
+                        math::vec3 nextEdgePosiion = edges.at((i+1)% edges.size())->edgePosition;
+
+                        debug::user_projectDrawLine(edgePosition + spacingAmount,
+                            nextEdgePosiion + spacingAmount, math::colors::blue, 10.0f, FLT_MAX);
+                    }
+                       
+
+                    
+                }*/
 
                 HalfEdgeEdge* firstEdge = nullptr;
                 HalfEdgeEdge* pairingEdge = nullptr;
@@ -421,7 +441,7 @@ namespace legion::physics
                     face->startEdge = nullptr;
                     //delete face;
                 }
-
+                //log::debug("----------------------------------------------------");
                 // Some of the created faces may be coplanar to other faces, these faces will be merged
                 convexHullMergeFaces(createdFaces);
 
@@ -436,13 +456,31 @@ namespace legion::physics
                     // We only need to check convexity with the very next face
                     // Therefore we cross over the startEdge to startEdge.pairingEdge and take that face
                     HalfEdgeFace* pairing = createdFaces.at(i)->startEdge->pairingEdge->face;
-                    HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *pairing);
+                    createdFaces.at(i)->makeNormalsConvexWithNeighbors(*pairing);
+                   
+                    //HalfEdgeFace::makeNormalsConvexWithFace(*createdFaces.at(i), *pairing);
                 }
                 // We increase looped counter for debug tools
                 ++looped;
             }
 
-            convexHullMergeFaces(halfEdgeFaces);
+            //log::debug("---------------------------------------------------------------------");
+
+            //std::vector<HalfEdgeFace*> removed;
+            //for (size_t i = 0; i < halfEdgeFaces.size(); i++)
+            //{
+            //   /* HalfEdgeFace* pairing = halfEdgeFaces.at(i)->startEdge->pairingEdge->face;
+            //    HalfEdgeFace::makeNormalsConvexWithFace(*halfEdgeFaces.at(i), *pairing);*/
+            //    halfEdgeFaces.at(i)->mergeCoplanarNeighbors(removed);
+            //}
+
+            //for (size_t i = 0; i < removed.size(); i++)
+            //{
+            //    std::vector<HalfEdgeFace*>::iterator iter;
+
+            //    iter = std::remove(halfEdgeFaces.begin(), halfEdgeFaces.end(), removed.at(i));
+            //}
+            ////convexHullMergeFaces(halfEdgeFaces,true);
             AssertEdgeValidity();
         }
 
@@ -921,6 +959,11 @@ namespace legion::physics
             return collection;
         }
 
+
+        //TODO Raphael,Jelle : FIX MERGE FACES AND NORMALS
+        // Current bug is in construct horizon
+
+
         /**
          * @brief Constructs a horizon from a vert view onto the current hull
          * 
@@ -930,20 +973,30 @@ namespace legion::physics
          * @param originEdge The edge where the previous iteration came from, pass nullptr, only used for recursive calling
          * @param originFace The face where the origin started, pass nullptr, only used for recursive calling
          */
-        void convexHullConstructHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge = nullptr, std::shared_ptr<std::unordered_set<HalfEdgeFace*>> visited = nullptr)
+        void convexHullConstructHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges,
+            HalfEdgeEdge* originEdge = nullptr, std::shared_ptr<std::unordered_set<HalfEdgeFace*>> visited = nullptr)
         {
-            if (!visited) visited = std::make_shared<std::unordered_set<HalfEdgeFace*>>();
+            if (!visited)
+            {
+                visited = std::make_shared<std::unordered_set<HalfEdgeFace*>>();
+                float distanceToPlane =
+                    math::pointToPlane(vert, face.startEdge->edgePosition, face.normal);
+
+                log::debug("Start Face Dist {} ", distanceToPlane);
+            }
 
             // Make sure we do not call recursively on faces we came from
             if (visited->find(&face) != visited->end()) return;
             // Mark face as "visited"
             visited->emplace(&face);
             HalfEdgeEdge* start = face.startEdge->prevEdge;
-            HalfEdgeEdge* edge = face.startEdge->prevEdge;
+            HalfEdgeEdge* edge = start;
+
 
             // Loop through all the edges of this face
             do
             {
+
                 // Makr sure we do not keep jumping between 2 faces (over 2 edges)
                 if (originEdge == edge || !edge->pairingEdge )
                 {
@@ -956,14 +1009,20 @@ namespace legion::physics
                 HalfEdgeFace* crossedFace = edge->pairingEdge->face;
                 if(!crossedFace->startEdge) return;
 
+                float distanceToPlane =
+                    math::pointToPlane(vert, crossedFace->startEdge->edgePosition, crossedFace->normal) ;
+                log::debug("distanceToPlane {} ", distanceToPlane);
                 // If the vertex is above the face (The face can see the vertex), the face is part of the horizon
-                if (math::pointToPlane(vert, crossedFace->startEdge->edgePosition, crossedFace->normal) > 0.0f)
+                if (distanceToPlane > math::epsilon<float>())
                 {
+                    log::debug("\t Checking Next Face");
                     // Plane is part of horizon -> find horizon edges recursively
                     convexHullConstructHorizon(vert, *crossedFace, edges, edge->pairingEdge, visited);
+
                 }
                 else
                 {
+                    log::debug("\t Adding Edge");
                     // Plane is not part of horizon
                     // Therefore the crossed edge was a horizon edge
                     edges.push_back(edge);
@@ -986,19 +1045,29 @@ namespace legion::physics
             {
                 for (int j = 0; j < halfEdgeFaces.size(); ++j)
                 {
+                    if (faces.at(i) == halfEdgeFaces.at(j)) { continue; }
                     // Do not check if createdFace is halfEdgeFace, because the createdFaces are not yet added to the halfEdgeFaces list
-                    HalfEdgeFace::face_angle_relation relation = faces.at(i)->getAngleRelation(*halfEdgeFaces.at(j));
+                    //log::debug("face i {} face j {}", math::to_string(faces.at(i)->normal), math::to_string(halfEdgeFaces.at(j)->normal));
+                    HalfEdgeFace::face_angle_relation relation = faces.at(i)->getAngleRelation(*(halfEdgeFaces.at(j)));
+                    //log::debug("relation {}", HalfEdgeFace::to_string(relation));
+                    
+
+
                     if (relation == HalfEdgeFace::face_angle_relation::coplanar)
                     {
                         // Try to find the edge between the faces that need to be merged
                         HalfEdgeEdge* centerEdge = HalfEdgeFace::findMiddleEdge(*halfEdgeFaces.at(j), *faces.at(i));
                         if (centerEdge != nullptr)
                         {
+                            log::debug("merge faces {}", halfEdgeFaces.at(j)->normal);
+
+
                             // Because we tried to get a center edge on the halfEdgeFaces.at(j) side
                             // That face should still exist and be correct
                             // We check if this is indeed the case: if the returned face is a different face
                             // we need to remove the old face and add the new face to the halfEdgeFaces vector
                             HalfEdgeFace* face = HalfEdgeFace::mergeFaces(*centerEdge);
+                       
                             if (face != halfEdgeFaces.at(j))
                             {
                                 halfEdgeFaces.erase(halfEdgeFaces.begin() + j);

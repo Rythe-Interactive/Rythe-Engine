@@ -210,7 +210,7 @@ public:
                     newCollider->debug = false;
                     newCollider->step = stepToSee;
                     log::debug("ConstructConvexHullWithVertices with step {}", newCollider->step);
-                    newCollider->ConstructConvexHullWithVertices(verticesToUse);
+                    newCollider->ConstructConvexHullWithVertices(verticesToUse, fracturer.transforms.at(i)[3]);
                     //newCollider->DrawColliderRepresentation(fracturer.transforms.at(i), math::colors::green, 8.0f, FLT_MAX);
 
                 }
