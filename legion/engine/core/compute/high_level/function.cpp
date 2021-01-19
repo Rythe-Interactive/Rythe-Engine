@@ -23,7 +23,7 @@ namespace legion::core::compute
         OPTICK_EVENT();
         if(!m_kernel)
         {
-            log::error("you fucked up your kernel is null");
+            log::error("something went wrong your openCL kernel is null");
             return common::Err();
         }
         if (std::holds_alternative<std::tuple<size_type, size_type, size_type>>(global))
