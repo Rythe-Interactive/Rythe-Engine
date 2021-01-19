@@ -629,7 +629,7 @@ public:
         }
 
         {
-        /*    eventAudio = createEntity();
+            eventAudio = createEntity();
 
             auto segment = audio::AudioSegmentCache::createAudioSegment("e",
                 fs::view("assets://audio/fx/explosion.wav"));
@@ -638,7 +638,7 @@ public:
             source.disableSpatialAudio();
             
             eventAudio.add_components<transform>();
-            eventAudio.add_component<audio::audio_source>(source);*/
+            eventAudio.add_component<audio::audio_source>(source);
 
 
         }
@@ -2724,34 +2724,34 @@ public:
         //FindClosestPointsToLineSegment unit test
 
 
-        //math::vec3 p1(5, -0.5, 0);
-        //math::vec3 p2(5, 0.5, 0);
+       /* math::vec3 p1(5, -0.5, 0);
+        math::vec3 p2(5, 0.5, 0);
 
-        //math::vec3 p3(6, 0, -0.5);
-        //math::vec3 p4(6, 0, 0.5);
+        math::vec3 p3(6, 0, -0.5);
+        math::vec3 p4(6, 0, 0.5);
 
-        //math::vec3 p1p2;
-        //math::vec3 p3p4;
+        math::vec3 p1p2;
+        math::vec3 p3p4;
 
-        //debug::drawLine(p1, p2, math::colors::red, 5.0f);
-        //debug::drawLine(p3, p4, math::colors::red, 5.0f);
+        debug::drawLine(p1, p2, math::colors::red, 5.0f);
+        debug::drawLine(p3, p4, math::colors::red, 5.0f);
 
-        //physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
+        physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
 
-        //debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);
+        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);
 
-        //p1 = math::vec3(8, 0, 0);
-        //p2 = p1 + math::vec3(0, 1.0f, 0);
+        p1 = math::vec3(8, 0, 0);
+        p2 = p1 + math::vec3(0, 1.0f, 0);
 
-        //p3 = math::vec3(10, 0, 0) + math::vec3(1.0f);
-        //p4 = p3 - math::vec3(1.0f);
+        p3 = math::vec3(10, 0, 0) + math::vec3(1.0f);
+        p4 = p3 - math::vec3(1.0f);
 
-        //debug::drawLine(p1, p2, math::colors::red, 5.0f);
-        //debug::drawLine(p3, p4, math::colors::red, 5.0f);
+        debug::drawLine(p1, p2, math::colors::red, 5.0f);
+        debug::drawLine(p3, p4, math::colors::red, 5.0f);
 
-        //physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
+        physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
 
-        //debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);
+        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);*/
 
     }
 
