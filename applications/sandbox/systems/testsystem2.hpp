@@ -26,10 +26,10 @@ class TestSystem2 final : public System<TestSystem2>
 public:
     TestSystem2() : System<TestSystem2>()
     {
-        log::filter(log::severity::debug);
+        filter(log::severity::debug);
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1);
     }
-    ecs::EntityQuery cameraQuery = createQuery<rendering::camera, position, rotation, scale>();
+    ecs::EntityQuery cameraQuery = createQuery<camera, position, rotation, scale>();
     ecs::entity_handle m_cubeent;
     std::vector<std::pair<int, int>> links;
     imgui::filebrowser::ImGuiFileBrowser file_dialog;
@@ -42,13 +42,13 @@ public:
         app::InputSystem::createBinding<activateUpdate>(app::inputmap::method::COMMA, 1.f);
         bindToEvent<activateUpdate, &TestSystem2::onParticleActivate>();
 
-        rendering::model_handle explosionSphere;
-        rendering::model_handle particleSphere;
-        rendering::model_handle cube;
+        model_handle explosionSphere;
+        model_handle particleSphere;
+        model_handle cube;
 
-        rendering::material_handle vertexColor;
-        rendering::material_handle pointCloudColor;
-        rendering::material_handle directionalLightMH;
+        material_handle vertexColor;
+        material_handle pointCloudColor;
+        material_handle directionalLightMH;
 
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
@@ -56,18 +56,18 @@ public:
         {
             app::context_guard guard(window);
 
-            auto colorshader = rendering::ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
-            directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
+            auto colorshader = ShaderCache::create_shader("color", "assets://shaders/color.shs"_view);
+            directionalLightMH = MaterialCache::create_material("directional light", colorshader);
             directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
 
-            cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);;
+            cube = ModelCache::create_model("cube", "assets://models/cube.obj"_view);;
 
-            explosionSphere = rendering::ModelCache::create_model("cube", "assets://models/explosionMesh.obj"_view);
-            particleSphere = rendering::ModelCache::create_model("cube", "assets://models/particleModel.obj"_view);
+            explosionSphere = ModelCache::create_model("cube", "assets://models/explosionMesh.obj"_view);
+            particleSphere = ModelCache::create_model("cube", "assets://models/particleModel.obj"_view);
 
-            pointCloudColor = rendering::MaterialCache::create_material("color2", "assets://shaders/color.shs"_view);
+            pointCloudColor = MaterialCache::create_material("color2", "assets://shaders/color.shs"_view);
             pointCloudColor.set_param("color", math::color(0, 1, 1));
-            vertexColor = rendering::MaterialCache::create_material("color1", "assets://shaders/color.shs"_view);
+            vertexColor = MaterialCache::create_material("color1", "assets://shaders/color.shs"_view);
             vertexColor.set_param("color", math::color(227.0f / 255.0f, 86.0f / 255.0f, 28.0f / 255.0f));
             std::vector<math::vec3> positions{
                 math::vec3(0,1.0f,0),
@@ -95,16 +95,16 @@ public:
             params.particleMaterial = vertexColor,
                 params.particleModel = cube
             };
-            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
+            auto pointcloud = ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
 
 #pragma region entities
 
             {
                 auto ent = createEntity();
                 ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale(1));
-                rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
+                particle_emitter emitter = ent.add_component<particle_emitter>().read();
                 emitter.particleSystemHandle = pointcloud;
-                ent.get_component_handle<rendering::particle_emitter>().write(emitter);
+                ent.get_component_handle<particle_emitter>().write(emitter);
             }
 
 #pragma endregion
@@ -132,7 +132,7 @@ public:
         pointCloudColor,
             particleSphere
         };
-        auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, pos);
+        auto pointcloud = ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, pos);
 
 
         explosionParameters explosionParams{
@@ -147,23 +147,23 @@ public:
             explosionSphere
         };
 
-        auto explosion = rendering::ParticleSystemCache::createParticleSystem<ExplosionParticleSystem>("explosion", explosionParams);
+        auto explosion = ParticleSystemCache::createParticleSystem<ExplosionParticleSystem>("explosion", explosionParams);
 #pragma region entities
 
         {
             auto ent = createEntity();
             ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale());
-            rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
+            particle_emitter emitter = ent.add_component<particle_emitter>().read();
             emitter.particleSystemHandle = pointcloud;
-            ent.get_component_handle<rendering::particle_emitter>().write(emitter);
+            ent.get_component_handle<particle_emitter>().write(emitter);
         }
 
         {
             auto ent = createEntity();
             ent.add_components<transform>(position(0, 3.0f, 3.0f), rotation(), scale(15.f));
-            rendering::particle_emitter emitter = ent.add_component<rendering::particle_emitter>().read();
+            particle_emitter emitter = ent.add_component<particle_emitter>().read();
             emitter.particleSystemHandle = explosion;
-            ent.get_component_handle<rendering::particle_emitter>().write(emitter);
+            ent.get_component_handle<particle_emitter>().write(emitter);
         }
 
         /*{
@@ -185,13 +185,13 @@ public:
     
     void onParticleActivate(activateUpdate* action)
     {
-        auto emitters = createQuery<rendering::particle_emitter>();
+        auto emitters = createQuery<particle_emitter>();
         emitters.queryEntities();
         for (auto entity_handle : emitters)
         {
-            rendering::particle_emitter emit = entity_handle.get_component_handle<rendering::particle_emitter>().read();
+            particle_emitter emit = entity_handle.get_component_handle<particle_emitter>().read();
             emit.playAnimation = true;
-            entity_handle.get_component_handle<rendering::particle_emitter>().write(emit);
+            entity_handle.get_component_handle<particle_emitter>().write(emit);
         }
     }
 };

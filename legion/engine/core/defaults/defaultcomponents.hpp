@@ -8,6 +8,7 @@
 #include <cereal/types/memory.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
+#include <core/ecs/component_handle.hpp>
 
 #include <core/filesystem/assetimporter.hpp>
 
@@ -134,18 +135,7 @@ namespace legion::core
         transform() = default;
         transform(const base::handleGroup& handles) : base(handles) {}
 
-        L_NODISCARD std::tuple<position, rotation, scale> get_world_components()
-        {
-            OPTICK_EVENT();
-            math::mat4 worldMatrix = get_world_to_local_matrix();
-            math::vec3 p;
-            math::quat r;
-            math::vec3 s;
-
-            math::decompose(worldMatrix, s, r, p);
-
-            return std::make_tuple<position, rotation, scale>(p, r, s);
-        }
+        L_NODISCARD std::tuple<position, rotation, scale> get_local_components();
 
         L_NODISCARD math::mat4 get_world_to_local_matrix()
         {
@@ -153,25 +143,13 @@ namespace legion::core
             return math::inverse(get_local_to_world_matrix());
         }
 
-        L_NODISCARD math::mat4 get_local_to_world_matrix()
-        {
-            OPTICK_EVENT();
-            auto& [positionH, rotationH, scaleH] = handles;
-            auto parent = positionH.entity.get_parent();
-
-
-            transform transf = parent.get_component_handles<transform>();
-            if (transf)
-                return transf.get_local_to_world_matrix() * math::compose(scaleH.read(), rotationH.read(), positionH.read());
-
-            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
-        }
+        L_NODISCARD math::mat4 get_local_to_world_matrix();
 
         L_NODISCARD math::mat4 get_local_to_parent_matrix()
         {
             OPTICK_EVENT();
-            auto& [positionH, rotationH, scaleH] = handles;
-            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
+            auto [position, rotation, scale] = get_local_components();
+            return math::compose(scale, rotation, position);
         }
 
     };
@@ -205,23 +183,28 @@ namespace legion::core
     struct mesh_filter : public mesh_handle
     {
         mesh_filter() = default;
-        explicit mesh_filter(const mesh_handle& src) { id = src.id; };
+        explicit mesh_filter(const mesh_handle& src) : mesh_handle(src) {}
 
         bool operator==(const mesh_filter& other) const { return id == other.id; }
 
         template<class Archive>
         void save(Archive& oa)
         {
-            oa(id, cereal::make_nvp("Filepath", get().second.filePath));
+            if(id != invalid_id)
+                oa(id, cereal::make_nvp("Filepath", get().second.filePath));
+            else
+            {
+                log::error("Deserialized Mesh was missing!");
+                std::string missing = "engine://resources/invalid/missing_mesh.obj";
+                oa(id,cereal::make_nvp("Filepath",missing));
+            }
         }
 
         template<class Archive>
         void load(Archive& oa)
         {
-
             std::string filepath;
             oa(id, cereal::make_nvp("Filepath", filepath));
-            log::debug("[CEREAL] Loading mesh with fp: {}",filepath);
 
             auto copy = default_mesh_settings;
             copy.contextFolder = fs::view(filepath).parent();

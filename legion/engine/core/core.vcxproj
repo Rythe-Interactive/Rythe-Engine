@@ -117,8 +117,13 @@ del ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="async\async.hpp" />
+    <ClInclude Include="async\async_operation.hpp" />
+    <ClInclude Include="async\async_runnable.hpp" />
+    <ClInclude Include="async\job_pool.hpp" />
     <ClInclude Include="async\ring_sync_lock.hpp" />
+    <ClInclude Include="async\wait_priority.hpp" />
+    <ClInclude Include="containers\runnable.hpp" />
+    <ClInclude Include="async\async.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
@@ -151,11 +156,13 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="defaults\defaultcomponents.hpp" />
+    <ClInclude Include="defaults\hierarchysystem.hpp" />
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\archetype.hpp" />
     <ClInclude Include="ecs\component_meta.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
+    <ClInclude Include="ecs\component_pool.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
     <ClInclude Include="ecs\ecsregistry.hpp" />
     <ClInclude Include="ecs\entity_handle.hpp" />
@@ -478,6 +485,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="platform\shellinvoke.hpp" />
     <ClInclude Include="scenemanagement\components\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
@@ -487,6 +495,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\clock.hpp" />
+    <ClInclude Include="time\defaults.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
     <ClInclude Include="types\meta.hpp" />
@@ -496,6 +505,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="async\async_operation.cpp" />
+    <ClCompile Include="async\job_pool.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
     <ClCompile Include="async\spinlock.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
@@ -506,6 +517,8 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
+    <ClCompile Include="defaults\defaultcomponents.cpp" />
+    <ClCompile Include="defaults\hierarchysystem.cpp" />
     <ClCompile Include="ecs\component_handle.cpp" />
     <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="ecs\entity_handle.cpp" />

@@ -281,6 +281,9 @@ namespace legion::rendering
     template<typename T>
     void material_handle::set_param(const std::string& name, const T& value)
     {
+        OPTICK_EVENT();
+        OPTICK_TAG("Name", name.c_str());
+
         async::readonly_guard guard(MaterialCache::m_materialLock);
         MaterialCache::m_materials[id].set_param<T>(name, value);
     }
@@ -288,6 +291,9 @@ namespace legion::rendering
     template<typename T>
     void material_handle::set_param(GLint location, const T& value)
     {
+        OPTICK_EVENT();
+        OPTICK_TAG("Location", location);
+
         async::readonly_guard guard(MaterialCache::m_materialLock);
         MaterialCache::m_materials[id].set_param<T>(location, value);
     }
@@ -467,10 +473,6 @@ namespace legion::rendering
         bob.comment("");
         bob.comment("Base parameters contains static information about the material");
         bob.section("base").glyph("shader").eq().value(m.m_shader.get_path()).finish_entry();
-
-        if(m.get_name() == "pbr")
-            __debugbreak();
-
         bob.comment("Custom Parameters contains dynamic information about the material");
         bob.comment("if you _really_ need to edit this file, it is probably something here!");
         bob.section("custom");

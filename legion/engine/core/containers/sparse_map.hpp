@@ -57,19 +57,19 @@ namespace legion::core
         size_type m_capacity = 0;
 
     public:
-        L_NODISCARD dense_value_container& values() { return m_dense_value; }
-        L_NODISCARD const dense_value_container& values() const { return m_dense_value; }
+        L_NODISCARD dense_value_container& values() noexcept { return m_dense_value; }
+        L_NODISCARD const dense_value_container& values() const noexcept { return m_dense_value; }
 
-        L_NODISCARD dense_key_container& keys() { return m_dense_key; }
-        L_NODISCARD const dense_key_container& keys() const { return m_dense_key; }
+        L_NODISCARD dense_key_container& keys() noexcept { return m_dense_key; }
+        L_NODISCARD const dense_key_container& keys() const noexcept { return m_dense_key; }
 
-        L_NODISCARD iterator begin() { return iterator(m_dense_key.begin(), m_dense_value.begin()); }
-        L_NODISCARD const_iterator begin() const { return const_iterator(m_dense_key.cbegin(), m_dense_value.cbegin()); }
-        L_NODISCARD const_iterator cbegin() const { return const_iterator(m_dense_key.cbegin(), m_dense_value.cbegin()); }
+        L_NODISCARD iterator begin() noexcept { return iterator(m_dense_key.begin(), m_dense_value.begin()); }
+        L_NODISCARD const_iterator begin() const noexcept { return const_iterator(m_dense_key.cbegin(), m_dense_value.cbegin()); }
+        L_NODISCARD const_iterator cbegin() const noexcept { return const_iterator(m_dense_key.cbegin(), m_dense_value.cbegin()); }
 
-        L_NODISCARD iterator end() { return iterator(m_dense_key.begin() + m_size, m_dense_value.begin() + m_size); }
-        L_NODISCARD const_iterator end() const { return const_iterator(m_dense_key.cbegin() + m_size, m_dense_value.cbegin() + m_size); }
-        L_NODISCARD const_iterator cend() const { return const_iterator(m_dense_key.cbegin() + m_size, m_dense_value.cbegin() + m_size); }
+        L_NODISCARD iterator end() noexcept { return iterator(m_dense_key.begin() + m_size, m_dense_value.begin() + m_size); }
+        L_NODISCARD const_iterator end() const noexcept { return const_iterator(m_dense_key.cbegin() + m_size, m_dense_value.cbegin() + m_size); }
+        L_NODISCARD const_iterator cend() const noexcept { return const_iterator(m_dense_key.cbegin() + m_size, m_dense_value.cbegin() + m_size); }
 
         /**@brief Returns the amount of items in the sparse_map.
          * @returns size_type Current amount of items contained in sparse_map.
@@ -183,7 +183,7 @@ namespace legion::core
                 return false;
 
             for (int i = 0; i < other.m_size; i++)
-                if (!contains(other.m_dense_key[i]))
+                if (!contains(other.m_dense_key.at(i)))
                     return false;
 
             return true;
@@ -200,7 +200,7 @@ namespace legion::core
             if (m_size == other.m_size)
             {
                 for (int i = 0; i < m_size; i++)
-                    if (!(other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i])))
+                    if (!(other.contains(m_dense_key.at(i)) && get(m_dense_key.at(i)) == other.get(m_dense_key.at(i))))
                         return false;
 
                 return true;
@@ -219,7 +219,7 @@ namespace legion::core
             if (m_size == other.m_size)
             {
                 for (int i = 0; i < m_size; i++)
-                    if (!(other.contains(m_dense_key[i]) && get(m_dense_key[i]) == other.get(m_dense_key[i])))
+                    if (!(other.contains(m_dense_key.at(i)) && get(m_dense_key.at(i)) == other.get(m_dense_key.at(i))))
                         return false;
 
                 return true;
@@ -439,7 +439,7 @@ namespace legion::core
             else
                 k = key;
 
-            return m_dense_value[m_sparse[k]];
+            return m_dense_value.at(m_sparse.at(k));
         }
 
         /**@brief Returns item from sparse_map, inserts default value if it doesn't exist yet.
@@ -453,6 +453,9 @@ namespace legion::core
                 if (m_size >= m_capacity)
                     reserve(m_size + 1);
 
+                auto itr_value = m_dense_value.begin() + m_size;
+                *itr_value = value_type();
+
                 auto itr_key = m_dense_key.begin() + m_size;
                 *itr_key = key;
 
@@ -460,7 +463,7 @@ namespace legion::core
                 ++m_size;
             }
 
-            return m_dense_value[m_sparse[key]];
+            return m_dense_value.at(m_sparse.at(key));
         }
 
         /**@brief Returns const item from const sparse_map.
@@ -469,10 +472,12 @@ namespace legion::core
         value_const_reference operator[](key_type&& key) const
         {
             OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
             if (!contains(key))
                 throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
+#endif
 
-            return m_dense_value[m_sparse.at(key)];
+            return m_dense_value.at(m_sparse.at(key));
         }
 
         /**@brief Returns const item from const sparse_map.
@@ -481,48 +486,50 @@ namespace legion::core
         value_const_reference operator[](key_const_reference key) const
         {
             OPTICK_EVENT();
+#ifdef LGN_SAFE_MODE
             if (!contains(key))
                 throw std::out_of_range("Sparse map does not contain this key and is non modifiable.");
+#endif
 
-            return m_dense_value[m_sparse.at(key)];
+            return m_dense_value.at(m_sparse.at(key));
         }
 #pragma endregion
 
-#pragma region get
+#pragma region at
         /**@brief Returns item from sparse_map, throws exception if it doesn't exist yet.
          * @param key Key value that needs to be retrieved.
          */
-        inline value_reference get(key_type&& key)
+        inline value_reference at(key_type&& key)
         {
             OPTICK_EVENT();
-            return m_dense_value[m_sparse[key]];
+            return m_dense_value.at(m_sparse.at(key));
         }
 
         /**@brief Returns item from sparse_map, throws exception if it doesn't exist yet.
          * @param key Key value that needs to be retrieved.
          */
-        inline value_reference get(key_const_reference key)
+        inline value_reference at(key_const_reference key)
         {
             OPTICK_EVENT();
-            return m_dense_value[m_sparse[key]];
+            return m_dense_value.at(m_sparse.at(key));
         }
 
         /**@brief Returns const item from const sparse_map.
          * @param key Key value that needs to be retrieved.
          */
-        inline value_const_reference get(key_type&& key) const
+        inline value_const_reference at(key_type&& key) const
         {
             OPTICK_EVENT();
-            return m_dense_value[m_sparse.at(key)];
+            return m_dense_value.at(m_sparse.at(key));
         }
 
         /**@brief Returns const item from const sparse_map.
          * @param key Key value that needs to be retrieved.
          */
-        inline value_const_reference get(key_const_reference key) const
+        inline value_const_reference at(key_const_reference key) const
         {
             OPTICK_EVENT();
-            return m_dense_value[m_sparse.at(key)];
+            return m_dense_value.at(m_sparse.at(key));
         }
 #pragma endregion
 
@@ -534,11 +541,11 @@ namespace legion::core
             OPTICK_EVENT();
             if (contains(key))
             {
-                if (m_size - 1 != m_sparse[key])
+                if (m_size - 1 != m_sparse.at(key))
                 {
-                    m_dense_value[m_sparse[key]] = std::move(m_dense_value[m_size - 1]);
-                    m_dense_key[m_sparse[key]] = std::move(m_dense_key[m_size - 1]);
-                    m_sparse[m_dense_key[m_size - 1]] = std::move(m_sparse[key]);
+                    m_dense_value.at(m_sparse.at(key)) = std::move(m_dense_value.at(m_size - 1));
+                    m_dense_key.at(m_sparse.at(key)) = std::move(m_dense_key.at(m_size - 1));
+                    m_sparse.at(m_dense_key.at(m_size - 1)) = std::move(m_sparse.at(key));
                 }
                 --m_size;
                 --m_capacity;

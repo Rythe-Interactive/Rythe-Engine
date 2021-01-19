@@ -4,6 +4,8 @@
 #include <core/types/primitives.hpp>
 #include <core/ecs/entityquery.hpp>
 #include <core/ecs/archetype.hpp>
+#include <core/ecs/component_container.hpp>
+#include <core/time/clock.hpp>
 
 /**
  * @file queryregistry.hpp
@@ -15,6 +17,7 @@ namespace legion::core::ecs
     class entity_handle;
 
     using entity_set = hashed_sparse_set<entity_handle>;
+    using entity_container = std::vector<entity_handle>;
 
     /**@class QueryRegistry
      * @brief Main manager and owner of all queries and query related objects.
@@ -24,10 +27,17 @@ namespace legion::core::ecs
         friend class EntityQuery;
     private:
         EcsRegistry& m_registry;
+
         mutable async::rw_spinlock m_entityLock;
-        sparse_map<id_type, std::unique_ptr<entity_set>> m_entityLists;
+        sparse_map<id_type, std::pair<float, entity_set>> m_entityLists;
+
+        static thread_local std::unordered_map<id_type, std::pair<float, entity_container>> m_localCopies;
+        static thread_local std::unordered_map<id_type, std::unordered_map<id_type, std::unique_ptr<component_container_base>>> m_localComponents;
+        static time::clock<fast_time> m_clock;
+
         mutable async::rw_spinlock m_referenceLock;
         sparse_map<id_type, size_type> m_references;
+
         mutable async::rw_spinlock m_componentLock;
         sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
 
@@ -139,7 +149,10 @@ namespace legion::core::ecs
          * @param queryId Id of the query to get the entities from.
          * @return sparse_map<id_type, entity_handle>& Sparse map with the ids as the key and the handles as the value.
          */
-        entity_set getEntities(id_type queryId) const;
+        const entity_container& getEntities(id_type queryId);
+
+        component_container_base& getComponents(id_type queryId, id_type componentTypeId);
+        void submit(id_type queryId, id_type componentTypeId);
 
         /**@brief Add to reference count of a query.
          * @param queryId Id of query to increase reference count of.

@@ -1,9 +1,16 @@
 {
     "animation": {
-		"looping": true,
+        "events": [
+            {
+                "id": "VoidAnimationEvent",
+                "trigger": 5.0,
+                "type": "explosion"
+            }
+        ],
+        "looping": true,
         "positions": [
             {
-                "duration": 5,
+                "duration": 5.0,
                 "payload": [
                     1.0,
                     1.0,
@@ -11,7 +18,7 @@
                 ]
             },
             {
-                "duration": 2,
+                "duration": 2.0,
                 "payload": [
                     2.0,
                     2.0,
@@ -19,7 +26,7 @@
                 ]
             },
             {
-                "duration": 4,
+                "duration": 4.0,
                 "payload": [
                     2.0,
                     1.0,
@@ -29,7 +36,7 @@
         ],
         "rotations": [
             {
-                "duration": 3,
+                "duration": 3.0,
                 "payload": [
                     0.8775825500488281,
                     0.0,
@@ -38,7 +45,7 @@
                 ]
             },
             {
-                "duration": 3,
+                "duration": 3.0,
                 "payload": [
                     0.7701511383056641,
                     0.42073550820350647,
@@ -47,7 +54,7 @@
                 ]
             },
             {
-                "duration": 3,
+                "duration": 3.0,
                 "payload": [
                     0.8775825500488281,
                     0.0,
@@ -56,7 +63,7 @@
                 ]
             },
             {
-                "duration": 2,
+                "duration": 2.0,
                 "payload": [
                     0.7701511383056641,
                     -0.22984886169433594,
@@ -67,7 +74,7 @@
         ],
         "scales": [
             {
-                "duration": 4,
+                "duration": 4.0,
                 "payload": [
                     1.0,
                     2.0,
@@ -75,7 +82,7 @@
                 ]
             },
             {
-                "duration": 4,
+                "duration": 4.0,
                 "payload": [
                     2.0,
                     1.0,

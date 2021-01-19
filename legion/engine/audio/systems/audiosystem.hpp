@@ -34,7 +34,7 @@ namespace legion::audio
 
         /**@brief Function for initializing the system.
          */
-        virtual void setup();
+        void setup() override;
 
         void onEngineExit(events::exit* event);
 

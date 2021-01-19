@@ -13,13 +13,7 @@ namespace legion::core::scenemanagement
 
     bool SceneManager::createScene(const std::string& name)
     {
-        auto testEntity = m_ecs->createEntity();
-        serialization::cache stuff;
-        stuff.data = std::vector<std::string>{ "Hello","World","I","Am","Rowan Ramsey" };
-        testEntity.add_component<serialization::cache>(stuff);
-
         auto sceneEntity = m_ecs->createEntity();
-        testEntity.set_parent(sceneEntity);
         std::vector<ecs::entity_handle> children;
         for (size_type i = 0; i < m_ecs->world.child_count(); i++)
         {
@@ -32,12 +26,12 @@ namespace legion::core::scenemanagement
             child.set_parent(sceneEntity);
         }
 
-        if (!SceneManager::getScene(name))
+        if (!getScene(name))
         {
             scene s;
             s.id = nameHash(name);
             sceneNames.emplace(s.id, name);
-            sceneEntity.add_component<scenemanagement::scene>(s);
+            sceneEntity.add_component<scene>(s);
             sceneList.emplace(nameHash(name), sceneEntity);
         }
         return SceneManager::saveScene(name, sceneEntity);
@@ -125,16 +119,16 @@ namespace legion::core::scenemanagement
 
     bool SceneManager::createScene(const std::string& name, ecs::entity_handle& ent)
     {
-        if (!ent.has_component<scenemanagement::scene>())
+        if (!ent.has_component<scene>())
         {
             scene s;
             s.id = nameHash(name);
             sceneNames.emplace(s.id, name);
-            auto sceneHandle = ent.add_component<scenemanagement::scene>(s);
+            auto sceneHandle = ent.add_component<scene>(s);
             sceneList.emplace(nameHash(name), sceneHandle);
-            SceneManager::sceneCount++;
+            sceneCount++;
             //true if entity does not have the scene component
-            return SceneManager::saveScene(name, ent);
+            return saveScene(name, ent);
         }
         //false if it doesn't
         return false;
@@ -158,7 +152,7 @@ namespace legion::core::scenemanagement
         }
 
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
-        SceneManager::currentScene = name;
+        currentScene = name;
 
         //SceneManager::saveScene(name, sceneEntity);
         //log::debug("........Done saving scene");
@@ -174,14 +168,11 @@ namespace legion::core::scenemanagement
 
     ecs::component_handle<scene> SceneManager::getScene(std::string name)
     {
-        return SceneManager::sceneList[nameHash(name)];
+        return sceneList[nameHash(name)];
     }
 
     ecs::entity_handle SceneManager::getSceneEntity(std::string name)
     {
-        return SceneManager::sceneList[nameHash(name)].entity;
+        return sceneList[nameHash(name)].entity;
     }
-
-
-
 }

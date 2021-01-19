@@ -8,22 +8,29 @@ namespace legion::core::ecs
 {
     hashed_sparse_set<QueryRegistry*> QueryRegistry::m_validRegistries;
 
+    thread_local std::unordered_map<id_type, std::pair<float, entity_container>> QueryRegistry::m_localCopies;
+    thread_local std::unordered_map<id_type, std::unordered_map<id_type, std::unique_ptr<component_container_base>>> QueryRegistry::m_localComponents;
+    time::clock<fast_time> QueryRegistry::m_clock;
+
     void QueryRegistry::addComponentType(id_type queryId, id_type componentTypeId)
     {
         OPTICK_EVENT();
         {
             async::readwrite_guard guard(m_componentLock); // In this case the lock handles both the sparse_map and the contained hashed_sparse_sets
-            m_componentTypes[queryId].insert(componentTypeId); // We insert the new component type we wish to track.
+            m_componentTypes.at(queryId).insert(componentTypeId); // We insert the new component type we wish to track.
         }
+
+        bool modified = false;
 
         // First we need to erase all the entities that no longer apply to the new query.
         std::vector<entity_handle> toRemove;
 
         {
             async::readonly_multiguard mguard(m_entityLock, m_componentLock);
-            for (int i = 0; i < m_entityLists[queryId]->size(); i++) // Iterate over all tracked entities.
+            auto& [_, entityList] = m_entityLists.at(queryId);
+            for (int i = 0; i < entityList.size(); i++) // Iterate over all tracked entities.
             {
-                entity_handle entity = m_entityLists[queryId]->at(i); // Get the id from the keys of the map.
+                entity_handle entity = entityList.at(i); // Get the id from the keys of the map.
                 if (!m_registry.getEntityData(entity).components.contains(m_componentTypes[queryId])) // Check component composition
                     toRemove.push_back(entity); // Mark for erasure if the component composition doesn't overlap with the query.
             }
@@ -31,24 +38,32 @@ namespace legion::core::ecs
 
         if (toRemove.size() > 0)
         {
+            modified = true;
             async::readwrite_guard guard(m_entityLock);
+            auto& [_, entityList] = m_entityLists.at(queryId);
             for (entity_handle entity : toRemove)
-                m_entityLists[queryId]->erase(entity); // Erase all entities marked for erasure.
+                entityList.erase(entity); // Erase all entities marked for erasure.
         }
 
         // Next we need to filter through all the entities to get all the new ones that apply to the new query.
 
         auto [entities, entitiesLock] = m_registry.getEntities(); // getEntities returns a pair of both the container as well as the lock that should be locked by you when operating on it.
         async::mixed_multiguard mguard(entitiesLock, async::lock_state_read, m_componentLock, async::lock_state_read, m_entityLock, async::lock_state_write); // Lock locks.
-
+        auto& [lastModified, entityList] = m_entityLists.at(queryId);
         for (entity_handle entity : entities) // Iterate over all entities.
         {
-            if (m_entityLists[queryId]->contains(entity)) // If the entity is already tracked, continue to the next entity.
+            if (entityList.contains(entity)) // If the entity is already tracked, continue to the next entity.
                 continue;
 
             if (m_registry.getEntityData(entity).components.contains(m_componentTypes[queryId])) // Check if the queried components completely overlaps the components in the entity.
-                m_entityLists[queryId]->insert(entity); // Insert entity into tracking list.
+            {
+                modified = true;
+                entityList.insert(entity); // Insert entity into tracking list.
+            }
         }
+
+        if (modified)
+            lastModified = m_clock.elapsedTime();
     }
 
     void QueryRegistry::removeComponentType(id_type queryId, id_type componentTypeId)
@@ -64,18 +79,22 @@ namespace legion::core::ecs
 
         {
             async::readonly_multiguard mguard(m_entityLock, m_componentLock);
-            for (int i = 0; i < m_entityLists[queryId]->size(); i++) // Iterate over all tracked entities.
+            auto& [_, entityList] = m_entityLists.at(queryId);
+            for (int i = 0; i < entityList.size(); i++) // Iterate over all tracked entities.
             {
-                entity_handle entity = m_entityLists[queryId]->at(i); // Get the id from the keys of the map.
+                entity_handle entity = entityList.at(i); // Get the id from the keys of the map.
                 if (!m_registry.getEntity(entity).component_composition().contains(m_componentTypes[queryId])) // Check component composition
                     toRemove.push_back(entity); // Mark for erasure if the component composition doesn't overlap with the query.
             }
         }
 
+        if (toRemove.size() > 0)
         {
             async::readwrite_guard guard(m_entityLock);
+            auto& [lastModified, entityList] = m_entityLists.at(queryId);
+            lastModified = m_clock.elapsedTime();
             for (entity_handle entity : toRemove)
-                m_entityLists[queryId]->erase(entity); // Erase all entities marked for erasure.
+                entityList.erase(entity); // Erase all entities marked for erasure.
         }
     }
 
@@ -92,17 +111,19 @@ namespace legion::core::ecs
             if (!m_componentTypes[queryId].contains(componentTypeId)) // This query doesn't care about this component type.
                 continue;
 
-            if (m_entityLists[queryId]->contains(entity))
+            auto& [lastModified, entityList] = m_entityLists.at(queryId);
+            if (entityList.contains(entity))
             {
                 if (removal)
                 {
-                    m_entityLists[queryId]->erase(entity); // Erase the entity from the query's tracking list if the component was removed from the entity.
-                    continue;
+                    entityList.erase(entity); // Erase the entity from the query's tracking list if the component was removed from the entity.
+                    lastModified = m_clock.elapsedTime();
                 }
             }
             else if (m_registry.getEntityData(entityId).components.contains(m_componentTypes[queryId]))
             {
-                m_entityLists[queryId]->insert(entity); // If the entity also contains all the other required components for this query, then add this entity to the tracking list.
+                entityList.insert(entity); // If the entity also contains all the other required components for this query, then add this entity to the tracking list.
+                lastModified = m_clock.elapsedTime();
             }
         }
     }
@@ -116,8 +137,12 @@ namespace legion::core::ecs
         for (int i = 0; i < m_entityLists.size(); i++) // Iterate over all query tracking lists.
         {
             id_type queryId = m_entityLists.keys()[i];
-            if (m_entityLists[queryId]->contains(entity))
-                m_entityLists[queryId]->erase(entity); // Erase entity from tracking list if it's present.
+            auto& [lastModified, entityList] = m_entityLists.at(queryId);
+            if (entityList.contains(entity))
+            {
+                entityList.erase(entity); // Erase entity from tracking list if it's present.
+                lastModified = m_clock.elapsedTime();
+            }
         }
     }
 
@@ -164,7 +189,7 @@ namespace legion::core::ecs
             async::readwrite_multiguard mguard(m_referenceLock, m_entityLock, m_componentLock);
 
             queryId = m_lastQueryId++;
-            m_entityLists.emplace(queryId, new entity_set()); // Create a new entity tracking list.
+            m_entityLists.emplace(queryId); // Create a new entity tracking list.
 
             m_references.emplace(queryId); // Create a new reference count.
 
@@ -174,23 +199,66 @@ namespace legion::core::ecs
         { // Next we need to filter through all the entities to get all the new ones that apply to the new query.
             auto [entities, entitiesLock] = m_registry.getEntities(); // getEntities returns a pair of both the container as well as the lock that should be locked by you when operating on it.
             async::mixed_multiguard mguard(entitiesLock, async::lock_state_read, m_entityLock, async::lock_state_write); // Lock locks.
+            auto& [lastModified, entityList] = m_entityLists.at(queryId);
 
             for (entity_handle entity : entities) // Iterate over all entities.
                 if (m_registry.getEntityData(entity).components.contains(componentTypes)) // Check if the queried components completely overlaps the components in the entity.
-                    m_entityLists[queryId]->insert(entity); // Insert entity into tracking list.
+                {
+                    entityList.insert(entity); // Insert entity into tracking list.
+                }
+
+            lastModified = m_clock.elapsedTime();
         }
 
         return queryId;
     }
 
-    entity_set QueryRegistry::getEntities(id_type queryId) const
+    const entity_container& QueryRegistry::getEntities(id_type queryId)
     {
         OPTICK_EVENT();
-        async::readonly_guard entguard(m_entityLock);
+        async::readonly_multiguard entguard(m_entityLock, m_componentLock);
+        auto& [lastModified, entityList] = m_entityLists.at(queryId);
+        auto& [localModified, localList] = m_localCopies[queryId];
+        if (lastModified > localModified)
+        {
+            localList.clear();
 
-        auto& ret = m_entityLists.get(queryId);
-        OPTICK_EVENT("Copy entity set");
-        return *ret;
+            localList.assign(entityList.begin(), entityList.end());
+
+            auto& localComps = m_localComponents[queryId];
+            auto& compTypes = m_componentTypes.at(queryId);
+
+            for (auto compType : compTypes)
+            {
+                if (!localComps.count(compType))
+                    localComps.emplace(compType, std::unique_ptr<component_container_base>(m_registry.getFamily(compType)->get_components(localList)));
+                else
+                    m_registry.getFamily(compType)->get_components(localList, *localComps.at(compType));
+            }
+
+            std::vector<id_type> toRemove;
+
+            for (auto& [compType, compList] : localComps)
+            {
+                if (!compTypes.contains(compType))
+                    toRemove.push_back(compType);
+            }
+
+            for (auto compType : toRemove)
+                localComps.erase(compType);
+        }
+
+        return localList;
+    }
+
+    component_container_base& QueryRegistry::getComponents(id_type queryId, id_type componentTypeId)
+    {
+        return *m_localComponents.at(queryId).at(componentTypeId);
+    }
+
+    void QueryRegistry::submit(id_type queryId, id_type componentTypeId)
+    {
+        m_registry.getFamily(componentTypeId)->set_components(m_localCopies.at(queryId).second, *(m_localComponents.at(queryId).at(componentTypeId)));
     }
 
     void QueryRegistry::addReference(id_type queryId)
@@ -198,7 +266,7 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         async::readonly_guard refguard(m_referenceLock);
 
-        m_references.get(queryId)++;
+        m_references.at(queryId)++;
     }
 
     void QueryRegistry::removeReference(id_type queryId)
@@ -212,7 +280,7 @@ namespace legion::core::ecs
         if (!m_references.contains(queryId))
             return;
 
-        size_type& referenceCount = m_references.get(queryId);
+        size_type& referenceCount = m_references.at(queryId);
         referenceCount--;
 
         if (referenceCount == 0) // If there are no more references to this query then erase the query to reduce memory footprint.
@@ -230,7 +298,7 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         async::readonly_guard refguard(m_referenceLock);
         if (m_references.contains(queryId))
-            return m_references[queryId];
+            return m_references.at(queryId);
         return 0;
     }
 }

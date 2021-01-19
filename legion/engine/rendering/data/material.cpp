@@ -149,6 +149,7 @@ namespace legion::rendering
 
     void material_handle::bind()
     {
+        OPTICK_EVENT();
         async::readonly_guard guard(MaterialCache::m_materialLock);
         MaterialCache::m_materials[id].bind();
     }

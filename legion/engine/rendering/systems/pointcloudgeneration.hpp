@@ -10,6 +10,7 @@
 #include <rendering/systems/pointcloud_particlesystem.hpp>
 #include <rendering/components/point_cloud.hpp>
 #include <rendering/components/particle_emitter.hpp>
+#include <rendering/components/lod.hpp>
 using namespace legion;
 
 
@@ -49,18 +50,17 @@ namespace legion::rendering
         ecs::EntityQuery query = createQuery<point_cloud>();
         //compute shader
         compute::function pointCloudGeneratorCS;
-
+        compute::function preProcessPointCloudCS;
         void InitComputeShader()
         {
-            //log::debug("init compute shader");
-             if(!pointCloudGeneratorCS.isValid())
+            if (!pointCloudGeneratorCS.isValid())
                 pointCloudGeneratorCS = fs::view("assets://kernels/pointRasterizer.cl").load_as<compute::function>("Main");
+            if (!preProcessPointCloudCS.isValid())
+                preProcessPointCloudCS = fs::view("assets://kernels/calculatePoints.cl").load_as<compute::function>("Main");
         }
         //query entities and iterate them
         void Generate()
         {
-           
-            // log::debug("generating clouds");
             query.queryEntities();
             for (auto& ent : query)
             {
@@ -71,32 +71,60 @@ namespace legion::rendering
         void GeneratePointCloud(ecs::component_handle<point_cloud> pointCloud)
         {
             using compute::in, compute::out, compute::karg;
-
             auto realPointCloud = pointCloud.read();
+
             //exit early if point cloud has already been generated
             if (realPointCloud.m_hasBeenGenerated) return;
-            // log::debug("new point cloud generation!");
-
+            //read position
+            math::vec3 posiitonOffset = pointCloud.entity.get_component_handle<position>().read();
             //get mesh data
             auto m = realPointCloud.m_mesh.get();
             auto vertices = m.second.vertices;
             auto indices = m.second.indices;
             auto uvs = m.second.uvs;
-          
-            size_t triangle_count = indices.size() / 3;
+            uint triangle_count = indices.size() / 3;
+
+            //compute process size
             uint process_Size = triangle_count;
-            size_t points_Generated = (triangle_count * realPointCloud.m_samplesPerTriangle);
-            
-            //Generate points 
-            std::vector<math::vec4> result(points_Generated);
+            //generate initial buffers from triangle info
+            std::vector<uint> samplesPerTri(triangle_count);
+            auto vertexBuffer = compute::Context::createBuffer(vertices, compute::buffer_type::READ_BUFFER, "vertices");
+            auto indexBuffer = compute::Context::createBuffer(indices, compute::buffer_type::READ_BUFFER, "indices");
+            uint totalSampleCount = 0;
+            uint samplesPerTriangle = realPointCloud.m_maxPoints / triangle_count;
+
+
+
+            //preprocess, calculate individual sample count per triangle
+            std::vector<uint> output(triangle_count);
+            auto outBuffer = compute::Context::createBuffer(output, compute::buffer_type::WRITE_BUFFER, "pointsCount");
+            auto computeResult = preProcessPointCloudCS
+            (
+                process_Size,
+                vertexBuffer,
+                indexBuffer,
+                karg(samplesPerTriangle, "samplesPerTri"),
+                outBuffer
+            );
+            //accumulate toutal triangle sample count
+            for (size_t i = 0; i < triangle_count; i++)
+            {
+                totalSampleCount += output.at(i);
+            }
+
+            log::debug(totalSampleCount);
+            //Generate points result vector
+            std::vector<math::vec4> result(totalSampleCount);
 
             //Get normal map
             auto [lock, img] = realPointCloud.m_heightMap.get_raw_image();
             {
                 async::readonly_guard guard(lock);
+                //Create buffers
                 auto normalMapBuffer = compute::Context::createImage(img, compute::buffer_type::READ_BUFFER, "normalMap");
                 auto vertexBuffer = compute::Context::createBuffer(vertices, compute::buffer_type::READ_BUFFER, "vertices");
                 auto indexBuffer = compute::Context::createBuffer(indices, compute::buffer_type::READ_BUFFER, "indices");
+                auto sampleBuffer = compute::Context::createBuffer(output, compute::buffer_type::READ_BUFFER, "samples");
                 auto uvBuffer = compute::Context::createBuffer(uvs, compute::buffer_type::READ_BUFFER, "uvs");
                 auto outBuffer = compute::Context::createBuffer(result, compute::buffer_type::WRITE_BUFFER, "points");
                 uint size = realPointCloud.m_heightMap.size().x;
@@ -106,27 +134,26 @@ namespace legion::rendering
                     vertexBuffer,
                     indexBuffer,
                     uvBuffer,
+                    sampleBuffer,
                     normalMapBuffer,
-                    karg(realPointCloud.m_samplesPerTriangle, "samplePerTri"),
-                    karg(realPointCloud.m_sampleDepth, "sampleWidth"),
+                    // karg(realPointCloud.m_sampleDepth, "sampleWidth"),
                     karg(realPointCloud.m_heightStrength, "normalStrength"),
                     karg(size, "textureSize"),
                     outBuffer
                 );
             }
             //translate vec4 into vec3
-            std::vector<math::vec3> particleInput(points_Generated);
-            for (int i = 0; i < points_Generated; i++)
+            std::vector<math::vec3> particleInput(totalSampleCount);
+            for (int i = 0; i < totalSampleCount; i++)
             {
-              // log::debug(result.at(i));
-                particleInput.at(i) = result.at(i).xyz;
+                particleInput.at(i) = result.at(i).xyz + posiitonOffset;
             }
             //generate particle params
             pointCloudParameters params
             {
                math::vec3(realPointCloud.m_pointRadius),
                realPointCloud.m_Material,
-               ModelCache::get_handle("cube")
+               ModelCache::get_handle("billboard")
             };
             GenerateParticles(params, particleInput, realPointCloud.m_trans);
 
@@ -145,6 +172,8 @@ namespace legion::rendering
 
             //create entity to store particle system
             auto newEnt = createEntity();
+
+            //  newEnt.add_component <rendering::lod>();
             newEnt.add_components<transform>(trans.get<position>().read(), trans.get<rotation>().read(), trans.get<scale>().read());
 
             rendering::particle_emitter emitter = newEnt.add_component<rendering::particle_emitter>().read();

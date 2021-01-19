@@ -7,9 +7,6 @@ vec4 BillboardModelToScreenSpacePosition(vec3 pos)
 {
     mat4 billboardMatrix;
     vec3 scale;
-    billboardMatrix[0] = vec4(ViewMatrix[0][2], ViewMatrix[1][2], ViewMatrix[2][2], 0);
-    billboardMatrix[1] = vec4(ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1], 0);
-    billboardMatrix[2] = vec4(ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0], 0);
     #if defined(GEOMETRY_SHADER)
     billboardMatrix[3] = stdin(0, modelMatrix)[3];
     scale.x = length(stdin(0, modelMatrix)[0].xyz);
@@ -22,7 +19,33 @@ vec4 BillboardModelToScreenSpacePosition(vec3 pos)
     scale.z = length(stdin(modelMatrix)[2].xyz);
     #endif
 
-    return (ViewProjectionMatrix * billboardMatrix) * vec4(pos * scale, 1.0);
+    billboardMatrix[0] = vec4(ViewMatrix[0][2], ViewMatrix[1][2], ViewMatrix[2][2], 0) * scale.x;
+    billboardMatrix[1] = vec4(ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1], 0) * scale.y;
+    billboardMatrix[2] = vec4(ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0], 0) * scale.z;
+
+    return (ViewProjectionMatrix * billboardMatrix) * vec4(pos, 1.0);
+}
+
+mat4 BillboardModelMatrix()
+{
+    mat4 billboardMatrix;
+    vec3 scale;
+    #if defined(GEOMETRY_SHADER)
+    billboardMatrix[3] = stdin(0, modelMatrix)[3];
+    scale.x = length(stdin(0, modelMatrix)[0].xyz);
+    scale.y = length(stdin(0, modelMatrix)[1].xyz);
+    scale.z = length(stdin(0, modelMatrix)[2].xyz);
+    #else
+    billboardMatrix[3] = stdin(modelMatrix)[3];
+    scale.x = length(stdin(modelMatrix)[0].xyz);
+    scale.y = length(stdin(modelMatrix)[1].xyz);
+    scale.z = length(stdin(modelMatrix)[2].xyz);
+    #endif
+
+    billboardMatrix[0] = vec4(ViewMatrix[0][2], ViewMatrix[1][2], ViewMatrix[2][2], 0) * scale.x;
+    billboardMatrix[1] = vec4(ViewMatrix[0][1], ViewMatrix[1][1], ViewMatrix[2][1], 0) * scale.y;
+    billboardMatrix[2] = vec4(ViewMatrix[0][0], ViewMatrix[1][0], ViewMatrix[2][0], 0) * scale.z;
+    return billboardMatrix;
 }
 
 vec4 FixedSizeBillboardModelToScreenSpacePosition(vec3 pos)
@@ -42,7 +65,7 @@ vec4 FixedSizeBillboardModelToScreenSpacePosition(vec3 pos)
     #endif
 
     vec4 ret = ViewProjectionMatrix * vec4(origin, 1.0);
-    return (ret/ret.w) + vec4(pos.zyx * scale * vec3(0.1, (float(lgn_cmr_in.viewportSize.x)/lgn_cmr_in.viewportSize.y) * 0.1, 0.001), 0);
+    return (ret/ret.w) + vec4(pos.zyx * scale * vec3(0.1, (float(lgn_cmr_in.viewportSize.x)/lgn_cmr_in.viewportSize.y) * 0.1, 1.0/FrustumDepth()), 0);
 }
 
 #if defined(FRAGMENT_SHADER)

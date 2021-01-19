@@ -54,7 +54,6 @@ struct Records
 };
 #pragma endregion
 
-
 namespace legion::core::serialization
 {
 
@@ -158,59 +157,4 @@ namespace legion::core::serialization
             return t;
         }
     };
-
-    template<typename serializableType>
-    class DataCache
-    {
-    public:
-        static std::unordered_map<id_type, std::vector<serializableType>> cache;
-
-        static size_t append_list(std::string cacheName, serializableType type)
-        {
-            id_type id = nameHash(cacheName);
-            cache[id].push_back(type);
-            return cache[id].size() - 1;
-        }
-
-        static serializableType get_item_from_list(std::string cacheName, size_t index)
-        {
-            id_type id = nameHash(cacheName);
-            /* if (!cache[id])
-             {
-                 log::error("Cache does not exist!"); return nullptr;
-             }*/
-
-            if (index < cache[id].size())
-            {
-                return cache[id][index];
-            }
-        }
-
-    };
-
-    struct cache
-    {
-    public:
-        id_type id;
-        std::vector<std::string> data;
-
-        template<typename Archive>
-        void serialize(Archive& archive);
-
-        template<typename T>
-        void generateCache(T materialParams);
-
-    };
-
-    template<typename Archive>
-    inline void cache::serialize(Archive& archive)
-    {
-        archive(cereal::make_nvp("Name", id), cereal::make_nvp("Data", data));
-    }
-
-    template<typename T>
-    inline void cache::generateCache(T materialParams)
-    {
-        
-    }
 }

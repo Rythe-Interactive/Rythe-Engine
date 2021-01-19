@@ -8,6 +8,7 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/archives/binary.hpp>
 #include <cereal/archives/json.hpp>
+#include <core/events/eventbus.hpp>
 
 /**
  * @file entity_handle.hpp
@@ -24,32 +25,6 @@ namespace legion::core::ecs
 
     class entity_handle;
 
-    struct child_iterator
-    {
-        friend class entity_handle;
-    private:
-        struct impl;
-
-        std::shared_ptr<impl> m_pimpl;
-        child_iterator(impl* implptr);
-
-    public:
-
-        friend bool operator==(const child_iterator& lhs, const child_iterator& rhs);
-
-        friend bool operator!=(const child_iterator& lhs, const child_iterator& rhs) { return !(lhs == rhs); }
-
-        entity_handle& operator*();
-
-        entity_handle* operator->();
-
-        child_iterator& operator++();
-        child_iterator& operator--();
-        child_iterator operator++(int);
-        child_iterator operator--(int);
-
-    };
-
     /**@class entity_handle
      * @brief Serializable handle for executing operations on entities.
      *		  This class only stores a reference to the registry and the id of the entity.
@@ -60,26 +35,28 @@ namespace legion::core::ecs
     private:
         id_type m_id;
         static EcsRegistry* m_registry;
+        static events::EventBus* m_eventBus;
+        using entity_set = hashed_sparse_set<entity_handle>;
 
     public:
         /**@brief Main constructor for constructing a valid entity handle.
          */
-        entity_handle(id_type id) : m_id(id) {  }
+        entity_handle(id_type id) noexcept : m_id(id) {  }
 
         /**@brief Constructor for constructing an invalid entity handle.
          * @note Should only be used to create temporary handles. Allows use of entity handle in containers together with copy constructor.
          */
-        entity_handle() : m_id(invalid_id) {  }
+        entity_handle() noexcept : m_id(invalid_id) {  }
 
         /**@brief Copy constructor (DOES NOT CREATE NEW ENTITY, both handles will reference the same entity).
          * @note Allows use of entity handle in containers together with default invalid entity constructor.
          */
-        entity_handle(const entity_handle& other) : m_id(other.m_id) {  }
+        entity_handle(const entity_handle& other) noexcept : m_id(other.m_id) {  }
 
         /**@brief Copy assignment. Exists for the same reasons as the copy constructor.
          * @ref legion::core::ecs::entity_handle::entity_handle(const legion::core::ecs::entity& other)
          */
-        entity_handle& operator=(const entity_handle& other);
+        entity_handle& operator=(const entity_handle& other) noexcept;
 
         /**
          * @brief Clones an entity.
@@ -100,31 +77,26 @@ namespace legion::core::ecs
         /**@brief Cast to id_type returns the id of the entity this handle references.
          * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.
          */
-        operator id_type() const { return get_id(); }
+        operator id_type() const { return m_id; }
 
         bool operator==(const entity_handle& other) const
         {
             return m_id == other.m_id;
         }
 
-        operator bool() const { return valid(); }
+        operator bool() const
+        {
+            return valid();
+        }
 
         /**@brief Returns the id of the entity this handle references.
          * @returns id_type If the handle is valid it will return the entity id, otherwise invalid_id.
          */
         L_NODISCARD id_type get_id() const;
 
-        /**@brief Const iterator to first child entity. (dereferences to entity handle)
-         * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
-         * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
+        /**@brief Returns hashed sparse set with all children of this entity.
          */
-        L_NODISCARD child_iterator begin() const;
-
-        /**@brief Const iterator to last child entity. (dereferences to entity handle)
-         * @throws legion_invalid_entity_error Thrown when handle's registry reference is invalid.
-         * @throws legion_entity_not_found_error Thrown when handle's id is invalid.
-         */
-        L_NODISCARD child_iterator end() const;
+        L_NODISCARD entity_set children() const;
 
         /**@brief Returns entity handle to parent entity.
          * @returns entity_handle Entity handle that either points to the parent entity or is invalid if the entity doesn't have a parent.
@@ -281,7 +253,13 @@ namespace legion::core::ecs
         {
             get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value));
         }
-
+        /**@brief Shortcut to component_handle::write
+         */
+        template<typename component_type>
+        void write_component(const component_type& value)
+        {
+            get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value));
+        }
 
         /**@brief Add component to the entity.
          * @param componentTypeId Type id of component to add.

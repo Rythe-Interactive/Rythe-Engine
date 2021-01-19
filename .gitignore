@@ -116,9 +116,4 @@ lib/*
 
 # Legion Includes
 include/**
-include/core
-lib/legion-application.lib
-lib/legion-audio.lib
-lib/legion-core.lib
-lib/legion-physics.lib
-lib/legion-rendering.lib
+*/**/Thumbs.db

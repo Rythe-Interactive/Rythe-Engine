@@ -5,16 +5,15 @@
 #include <rendering/pipeline/gui/stages/imguirenderstage.hpp>
 #include <rendering/systems/renderer.hpp>
 
-using namespace legion::rendering;
+using namespace rendering;
 
 class GuiTestSystem : public System<GuiTestSystem>
 {
-    ecs::EntityQuery cameraQuery = createQuery<rendering::camera, position, rotation, scale>();
+    ecs::EntityQuery cameraQuery = createQuery<camera, transform>();
     ecs::EntityQuery entityQuery = createQuery<transform>();
 
-
-    rendering::material_handle vertexColorMaterial;
-    rendering::model_handle cubeModel;
+    material_handle vertexColorMaterial;
+    model_handle cubeModel;
     ecs::entity_handle cubeEntity;
 
 
@@ -29,26 +28,37 @@ class GuiTestSystem : public System<GuiTestSystem>
     void setup() override
     {
 
-        static_cast<rendering::DefaultPipeline*>(rendering::Renderer::getMainPipeline())->attachStage<rendering::ImGuiStage>();
+        static_cast<DefaultPipeline*>(Renderer::getMainPipeline())->attachStage<ImGuiStage>();
 
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
         {
             application::context_guard guard(window);
-            cubeModel = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            vertexColorMaterial = rendering::MaterialCache::create_material("color shader", "assets://shaders/texture.shs"_view);
+
+            cubeModel = ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+            vertexColorMaterial = MaterialCache::create_material("decal", "assets://shaders/decal.shs"_view);
+            vertexColorMaterial.set_param(SV_ALBEDO, TextureCache::create_texture("engine://resources/default/albedo"_view));
+            vertexColorMaterial.set_param(SV_NORMALHEIGHT, TextureCache::create_texture("engine://resources/default/normalHeight"_view));
+            vertexColorMaterial.set_param(SV_MRDAO, TextureCache::create_texture("engine://resources/default/MRDAo"_view));
+            vertexColorMaterial.set_param(SV_EMISSIVE, TextureCache::create_texture("engine://resources/default/emissive"_view));
+            vertexColorMaterial.set_param(SV_HEIGHTSCALE, 0.f);
+            vertexColorMaterial.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
         }
 
 
-        /*cubeEntity = createEntity();
+        cubeEntity = createEntity();
 
-        cubeEntity.add_components<transform>(position(), rotation(), scale());
-        cubeEntity.add_components<mesh_renderable>(mesh_filter(cubeModel.get_mesh()), mesh_renderer(vertexColorMaterial));*/
+        position pos(5.f, 0.f, 5.f);
+        scale scal(3.f, 2.f, 3.f);
+        rotation rot = angleAxis(math::quarter_pi<float>(), math::vec3::up);
+        model = compose(scal, rot, pos);
 
+        cubeEntity.add_components<transform>(pos, rot, scal);
+        cubeEntity.add_components<mesh_renderable>(mesh_filter(cubeModel.get_mesh()), mesh_renderer(vertexColorMaterial));
 
         entityQuery.queryEntities();
         //gui code goes here
-        ImGuiStage::addGuiRender<GuiTestSystem, &GuiTestSystem::onGUI>(this);
+        ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
         createProcess<&GuiTestSystem::update>("Update");
     }
 
@@ -120,25 +130,10 @@ class GuiTestSystem : public System<GuiTestSystem>
                 ImGui::EndMenu();
             }
 
-
-
-
             base::Begin("Entities");
             BuildTree(m_ecs->world);
-
-
             base::End();
 
-            //if (ImGui::BeginMenu("Edit"))
-            //{
-            //    if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
-            //    if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-            //    ImGui::Separator();
-            //    if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-            //    if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-            //    if (ImGui::MenuItem("Paste", "CTRL+V")) {}
-            //    ImGui::EndMenu();
-            //}
             ImGui::EndMainMenuBar();
         }
 
@@ -150,7 +145,7 @@ class GuiTestSystem : public System<GuiTestSystem>
         gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::Begin("Edit Cube Transform");
         //cannot render more than one gizmo at once (and animator also uses one)
-        //gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
+        gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::End();
 
         base::Begin("Edit Camera Transform");

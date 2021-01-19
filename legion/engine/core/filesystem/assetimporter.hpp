@@ -136,7 +136,7 @@ namespace legion::core::filesystem
             const id_type extension = nameHash(location.get_extension());
             if (m_converters.contains(extension))
             {
-                return m_converters.get(extension).back()->prefetch(name, resource);
+                return m_converters.at(extension).back()->prefetch(name, resource);
             }
             return false;
         }

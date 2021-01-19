@@ -153,6 +153,7 @@ namespace legion::application
     void WindowSystem::onExit(events::exit* event)
     {
         std::lock_guard guard(m_creationLock);
+        m_windowQuery.queryEntities();
         for (auto entity : m_windowQuery)
         {
             auto handle = entity.get_component_handle<window>();
@@ -275,20 +276,18 @@ namespace legion::application
         if (m_creationRequests.empty() || (std::find_if(m_creationRequests.begin(), m_creationRequests.end(), [](window_request& r) { return r.entityId == world_entity_id; }) == m_creationRequests.end()))
             requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", invalid_image_handle, nullptr, nullptr, 1); // Create the request for the main window.
 
-        m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [](void* param) // We send a command to the input thread before the input process chain starts.
-            {                                                                            // This way we can create the main window before the rest of the engine get initialised.
-                WindowSystem* self = reinterpret_cast<WindowSystem*>(param);
-
+        m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [&]() // We send a command to the input thread before the input process chain starts.
+            {                                                                  // This way we can create the main window before the rest of the engine get initialised.
                 if (!ContextHelper::initialized()) // Initialize context.
                     if (!ContextHelper::init())
                     {
-                        self->exit();
+                        exit();
                         return; // If we can't initialize we can't create any windows, not creating the main window means the engine should shut down.
                     }
                 log::trace("Creating main window.");
-                self->createWindows();
-                self->showMainWindow();
-            }, this);
+                createWindows();
+                showMainWindow();
+            });
 
         createProcess<&WindowSystem::refreshWindows>("Rendering");
         createProcess<&WindowSystem::handleWindowEvents>("Input");

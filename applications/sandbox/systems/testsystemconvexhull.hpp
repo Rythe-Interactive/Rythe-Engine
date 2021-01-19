@@ -28,12 +28,12 @@ struct followerData
 class TestSystemConvexHull final : public System<TestSystemConvexHull>
 {
 public:
-    std::shared_ptr<legion::physics::ConvexCollider> collider = nullptr;
+    std::shared_ptr<physics::ConvexCollider> collider = nullptr;
 
-    core::ecs::entity_handle physicsEnt;
-    std::vector< core::ecs::entity_handle> followerObjects;
+    ecs::entity_handle physicsEnt;
+    std::vector<ecs::entity_handle> followerObjects;
 
-    core::mesh_handle meshH;
+    mesh_handle meshH;
     int pStep = 0;
 
     virtual void setup()
@@ -304,13 +304,13 @@ public:
 
             auto populateVectorLambda = [&localVert](physics::HalfEdgeEdge* edge)
             {
-                log::debug("edge {}", math::to_string( edge->edgePosition));
+                log::debug("edge {}", to_string( edge->edgePosition));
                 localVert.push_back(edge->edgePosition);
             };
 
             face->forEachEdge(populateVectorLambda);
 
-            legion::core::mesh newMesh;
+            mesh newMesh;
             
             std::vector<math::vec3> vertices;
             std::vector<uint> indices;
@@ -349,7 +349,7 @@ public:
 
             //creaate modelH
             static int count = 0;
-            mesh_handle meshH = core::MeshCache::create_mesh("meshh" + std::to_string(count), newMesh);
+            mesh_handle meshH = MeshCache::create_mesh("meshh" + std::to_string(count), newMesh);
             auto modelH = rendering::ModelCache::create_model(meshH);
             count++;
 
@@ -383,7 +383,7 @@ public:
         {
             if (pStep > 0)
             {
-                auto debugDrawEdges = [](legion::physics::HalfEdgeEdge* edge)
+                auto debugDrawEdges = [](physics::HalfEdgeEdge* edge)
                 {
                     if (!edge || !edge->nextEdge) return;
                     math::vec3 pos0 = edge->edgePosition;
