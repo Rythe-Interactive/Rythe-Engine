@@ -11,7 +11,7 @@
 #include <physics/components/fracturer.h>
 
 #include <rendering/components/particle_emitter.hpp>
-
+#include <physics/halfedgeedge.hpp>
 using namespace legion;
 
 struct convex_hull_step : public app::input_action<convex_hull_step> {};
@@ -178,7 +178,7 @@ public:
     
     int stepToSee = 0;
     math::vec3 spacing = math::vec3(2.5f, 0, 0);
-    int indexToSee = 2;
+    int indexToSee = 3;
     void drawConvexHull(convex_hull_debug * action)
     {
         
@@ -210,12 +210,14 @@ public:
                     newCollider->debug = false;
                     newCollider->step = stepToSee;
                     log::debug("ConstructConvexHullWithVertices with step {}", newCollider->step);
+
+                    
+
+                   
+                    //vertexDrawCollider(verticesToUse, fracturer.transforms.at(i)[3]);
                     newCollider->ConstructConvexHullWithVertices(verticesToUse, fracturer.transforms.at(i)[3]);
-                    //newCollider->DrawColliderRepresentation(fracturer.transforms.at(i), math::colors::green, 8.0f, FLT_MAX);
-
+                    newCollider->DrawColliderRepresentation(fracturer.transforms.at(i), math::colors::green, 5.0f, FLT_MAX);
                 }
-
-
             }
             stepToSee++;
         }
@@ -308,26 +310,12 @@ public:
 
         if (action->value)
         {
-            for (auto ent : followerObjects)
-            {
-                m_ecs->destroyEntity(ent);
-            }
-            followerObjects.clear();
+      
             
             auto pc = physicsEnt.read_component<physics::physicsComponent>();
-            
-            if (collider == nullptr)
-            {
-                collider = pc.ConstructConvexHull(meshH);
-                PopulateFollowerList();
-            }
-            else
-            {
-                collider->shouldBeDrawn = false;
-                pc.ConstructConvexHull(meshH, *collider);
-                collider->shouldBeDrawn = true;
-                PopulateFollowerList();
-            }
+
+            meshDrawCollider(pc);
+
             physicsEnt.write_component(pc);
 
             ++pStep;
@@ -336,7 +324,43 @@ public:
         isUpdating = false;
     }
 
-   
+    void meshDrawCollider(physics::physicsComponent& comp)
+    {
+        for (auto ent : followerObjects)
+        {
+            m_ecs->destroyEntity(ent);
+        }
+        followerObjects.clear();
+
+        if (collider == nullptr)
+        {
+            collider = comp.ConstructConvexHull(meshH);
+            PopulateFollowerList();
+        }
+        else
+        {
+            collider->shouldBeDrawn = false;
+            comp.ConstructConvexHull(meshH, *collider);
+            collider->shouldBeDrawn = true;
+            PopulateFollowerList();
+        }
+    }
+
+    void vertexDrawCollider(std::vector<math::vec3> vertices,math::vec3 spacing = math::vec3())
+    {
+        for (auto ent : followerObjects)
+        {
+            m_ecs->destroyEntity(ent);
+        }
+        followerObjects.clear();
+
+        collider->shouldBeDrawn = false;
+        collider->ConstructConvexHullWithVertices(vertices, spacing);
+        collider->shouldBeDrawn = true;
+        PopulateFollowerList();
+        collider->step++;
+
+    }
 
     void PopulateFollowerList()
     {

@@ -191,7 +191,7 @@ namespace legion::physics
             if (relation == face_angle_relation::concave)
             {
                 inverse();
-               // log::debug("true");
+                log::debug("inversing normals");
                 return true;
             }
             else if (relation == face_angle_relation::convex)

@@ -33,10 +33,13 @@ namespace legion::physics
         math::vec3 third = max - (differenceQuadrant * 2);
         VoronoiPoints.push_back(third);
 
+        math::vec3 fourth = max - (differenceQuadrant * 2) + math::vec3(0,0.5f,0);
+        VoronoiPoints.push_back(fourth);
+
         for (auto point : VoronoiPoints)
         {
             debug::user_projectDrawLine(point,
-                point + math::vec3(0, 0.5f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);
+                point + math::vec3(0, 0.1f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);
         }
 
         auto vectorList = PhysicsStatics::GenerateVoronoi(VoronoiPoints, min.x, max.x, min.y, max.y, min.z, max.z,1,1,1);
