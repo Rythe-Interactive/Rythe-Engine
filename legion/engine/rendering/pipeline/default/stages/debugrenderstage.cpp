@@ -14,6 +14,8 @@ namespace legion::rendering
 
     void DebugRenderStage::endDebugDomain()
     {
+        if (!localLines) return;
+
         size_type size = localLines->size();
 
         if (size == 0)

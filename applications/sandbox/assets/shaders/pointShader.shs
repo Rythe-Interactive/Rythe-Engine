@@ -10,7 +10,6 @@ generate(vertex, fragment)
 shader(vertex)
 {
     uniform bool fixedSize;
-
     void main(void)
     {
         if(fixedSize)
@@ -25,10 +24,8 @@ shader(vertex)
 shader(fragment)
 {
     uniform sampler2D _texture;
-    uniform vec4 _color;
-
     void main(void)
     {
-        fragment_color = texture(_texture, stdio(uv)) * _color;
+        fragment_color = texture(_texture, stdio(uv)) * stdio(vertexcolor);
     }
 }

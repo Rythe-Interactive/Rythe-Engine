@@ -629,7 +629,8 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(axesH.get_mesh()), rendering::mesh_renderer(vertexColorH));
             ent.add_components<transform>();
         }
-
+        //no audio for you 
+#if !defined(SUPER_LOW_POWER)
         {
             eventAudio = createEntity();
 
@@ -642,7 +643,7 @@ public:
             eventAudio.add_components<transform>();
             eventAudio.add_component<audio::audio_source>(source);
         }
-
+#endif
         //position positions[1000];
         //for (int i = 0; i < 1000; i++)
         //{
@@ -778,30 +779,30 @@ public:
         }
 
         //audioSphereLeft setup
-        {
-            audioSphereLeft = createEntity();
-            audioSphereLeft.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
-            audioSphereLeft.add_components<transform>(position(-5, 1, 10), rotation(), scale(0.5));
+        //{
+        //    audioSphereLeft = createEntity();
+        //    audioSphereLeft.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
+        //    audioSphereLeft.add_components<transform>(position(-5, 1, 10), rotation(), scale(0.5));
 
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
+        //    auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
 
-            audio::audio_source source;
-            source.setAudioHandle(segment);
-            audioSphereLeft.add_component<audio::audio_source>(source);
-        }
-        //audioSphereRight setup
-        {
-            audioSphereRight = createEntity();
-            audioSphereRight.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
-            audioSphereRight.add_components<transform>(position(5, 1, 10), rotation(), scale(0.5));
+        //    audio::audio_source source;
+        //    source.setAudioHandle(segment);
+        //    audioSphereLeft.add_component<audio::audio_source>(source);
+        //}
+        ////audioSphereRight setup
+        //{
+        //    audioSphereRight = createEntity();
+        //    audioSphereRight.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
+        //    audioSphereRight.add_components<transform>(position(5, 1, 10), rotation(), scale(0.5));
 
-            auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
+        //    auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
 
-            audio::audio_source source;
-            source.setAudioHandle(segment);
-            source.setLooping(true);
-            audioSphereRight.add_component<audio::audio_source>(source);
-        }
+        //    audio::audio_source source;
+        //    source.setAudioHandle(segment);
+        //    source.setLooping(true);
+        //    audioSphereRight.add_component<audio::audio_source>(source);
+       // }
 #pragma endregion
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
@@ -820,7 +821,7 @@ public:
         //setupPhysicsStackingUnitTest(cubeH,uvH,TextureH);
 
         //setupMeshSplitterTest(planeH,cubeH, cylinderH, magneticLowH,texture2H);
-        setupPhysicsCompositeTest(cubeH, texture2H);
+//        setupPhysicsCompositeTest(cubeH, texture2H);
         //setupPhysicsCRUnitTest(cubeH, texture2H);
 
         physics::cube_collider_params cubeParams;
@@ -855,7 +856,7 @@ public:
         //physicsUpdate(time::span deltaTime)
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::drawInterval>("Update");
-        createProcess<&TestSystem::physicsUpdate>("Physics", 0.02f);
+  //      createProcess<&TestSystem::physicsUpdate>("Physics", 0.02f);
     }
 
     void setupMeshSplitterTest(rendering::model_handle planeH, rendering::model_handle cubeH
@@ -2653,83 +2654,83 @@ public:
         physics::PhysicsSystem::aPoint.clear();
         physics::PhysicsSystem::bPoint.clear();
 
-        physicsQuery.queryEntities();
-        auto size = physicsQuery.size();
-        //this is called so that i can draw stuff
-        for (auto entity : physicsQuery)
-        {
-            auto rotationHandle = entity.get_component_handle<rotation>();
-            auto positionHandle = entity.get_component_handle<position>();
-            auto scaleHandle = entity.get_component_handle<scale>();
-            auto physicsComponentHandle = entity.get_component_handle<physics::physicsComponent>();
+        //physicsQuery.queryEntities();
+        //auto size = physicsQuery.size();
+        ////this is called so that i can draw stuff
+        //for (auto entity : physicsQuery)
+        //{
+        //    auto rotationHandle = entity.get_component_handle<rotation>();
+        //    auto positionHandle = entity.get_component_handle<position>();
+        //    auto scaleHandle = entity.get_component_handle<scale>();
+        //    auto physicsComponentHandle = entity.get_component_handle<physics::physicsComponent>();
 
-            bool hasTransform = rotationHandle && positionHandle && scaleHandle;
-            bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
+        //    bool hasTransform = rotationHandle && positionHandle && scaleHandle;
+        //    bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
 
-            if (hasNecessaryComponentsForPhysicsManifold)
-            {
-                auto rbColor = math::color(0.0, 0.5, 0, 1);
-                auto statibBlockColor = math::color(0, 1, 0, 1);
+        //    if (hasNecessaryComponentsForPhysicsManifold)
+        //    {
+        //        auto rbColor = math::color(0.0, 0.5, 0, 1);
+        //        auto statibBlockColor = math::color(0, 1, 0, 1);
 
-                rotation rot = rotationHandle.read();
-                position pos = positionHandle.read();
-                scale scale = scaleHandle.read();
+        //        rotation rot = rotationHandle.read();
+        //        position pos = positionHandle.read();
+        //        scale scale = scaleHandle.read();
 
-                auto usedColor = statibBlockColor;
-                bool useDepth = false;
+        //        auto usedColor = statibBlockColor;
+        //        bool useDepth = false;
 
-                if (entity.get_component_handle<physics::rigidbody>())
-                {
-                    usedColor = rbColor;
-                }
+        //        if (entity.get_component_handle<physics::rigidbody>())
+        //        {
+        //            usedColor = rbColor;
+        //        }
 
 
-                //assemble the local transform matrix of the entity
-                math::mat4 localTransform;
-                math::compose(localTransform, scale, rot, pos);
+        //        //assemble the local transform matrix of the entity
+        //        math::mat4 localTransform;
+        //        math::compose(localTransform, scale, rot, pos);
 
-                auto physicsComponent = physicsComponentHandle.read();
+        //        auto physicsComponent = physicsComponentHandle.read();
 
-                i = 0;
-                for (auto physCollider : *physicsComponent.colliders)
-                {
-                    //--------------------------------- Draw Collider Outlines ---------------------------------------------//
+        //        i = 0;
+        //        for (auto physCollider : *physicsComponent.colliders)
+        //        {
+        //            //--------------------------------- Draw Collider Outlines ---------------------------------------------//
 
-                    for (auto face : physCollider->GetHalfEdgeFaces())
-                    {
-                        //face->forEachEdge(drawFunc);
-                        physics::HalfEdgeEdge* initialEdge = face->startEdge;
-                        physics::HalfEdgeEdge* currentEdge = face->startEdge;
+        //            for (auto face : physCollider->GetHalfEdgeFaces())
+        //            {
+        //                //face->forEachEdge(drawFunc);
+        //                physics::HalfEdgeEdge* initialEdge = face->startEdge;
+        //                physics::HalfEdgeEdge* currentEdge = face->startEdge;
 
-                        math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
-                        math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
+        //                math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
+        //                math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
 
-                        //debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
+        //                //debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
 
-                        if (!currentEdge) { return; }
+        //                if (!currentEdge) { return; }
 
-                        do
-                        {
-                            physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
-                            currentEdge = currentEdge->nextEdge;
+        //                do
+        //                {
+        //                    physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
+        //                    currentEdge = currentEdge->nextEdge;
 
-                            math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
-                            math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
+        //                    math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
+        //                    math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
 
-                            debug::drawLine(worldStart, worldEnd, usedColor, 2.0f, 0.0f, useDepth);
+        //                    debug::drawLine(worldStart, worldEnd, usedColor, 2.0f, 0.0f, useDepth);
 
-                        } while (initialEdge != currentEdge && currentEdge != nullptr);
-                    }
-                }
+        //                } while (initialEdge != currentEdge && currentEdge != nullptr);
+        //            }
+        //        }
 
-            }
+        //    }
 
-        }
+        //}
 
         //FindClosestPointsToLineSegment unit test
 
 
-        math::vec3 p1(5, -0.5, 0);
+       /* math::vec3 p1(5, -0.5, 0);
         math::vec3 p2(5, 0.5, 0);
 
         math::vec3 p3(6, 0, -0.5);
@@ -2756,7 +2757,7 @@ public:
 
         physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
 
-        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);
+        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);*/
 
     }
 
