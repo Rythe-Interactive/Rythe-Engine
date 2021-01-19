@@ -48,19 +48,40 @@ class GuiTestSystem : public System<GuiTestSystem>
 
         entityQuery.queryEntities();
         //gui code goes here
-        ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
+        ImGuiStage::addGuiRender<GuiTestSystem, &GuiTestSystem::onGUI>(this);
         createProcess<&GuiTestSystem::update>("Update");
     }
 
 
     bool offsetMode = false;
-    float offset[3]{0};
+    float offset[3]{ 0 };
+
+    void BuildTree(ecs::entity_handle handle)
+    {
+        if (ImGui::TreeNode(reinterpret_cast<void*>(handle.get_id()), "%llu", handle.get_id())) {
+            for (size_type i = 0; i < handle.child_count(); ++i)
+            {
+                BuildTree(handle.get_child(i));
+            }
+
+            if (ImGui::TreeNode("Components")) {
+                for (id_type id : handle.component_composition())
+                {
+                    ImGui::Text(m_ecs->getFamilyName(id).c_str());
+                }
+
+                ImGui::TreePop();
+            }
+            ImGui::TreePop();
+        }
+    }
+
 
     void onGUI(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
         ImGuiIO& io = ImGui::GetIO();
 
-        setProjectionAndView(io.DisplaySize.x/io.DisplaySize.y, cam, camInput);
+        setProjectionAndView(io.DisplaySize.x / io.DisplaySize.y, cam, camInput);
 
 
         using namespace imgui;
@@ -91,13 +112,23 @@ class GuiTestSystem : public System<GuiTestSystem>
                         auto name = entry.second;
                         if (ImGui::MenuItem(name.c_str()))
                         {
-                            scenemanagement::SceneManager::loadScene(name.c_str());
+                            scenemanagement::SceneManager::loadScene(name);
                         }
                     }
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenu();
             }
+
+
+
+
+            base::Begin("Entities");
+            BuildTree(m_ecs->world);
+
+
+            base::End();
+
             //if (ImGui::BeginMenu("Edit"))
             //{
             //    if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
@@ -124,29 +155,30 @@ class GuiTestSystem : public System<GuiTestSystem>
 
         base::Begin("Edit Camera Transform");
 
-        if(base::RadioButton("offset",offsetMode)) {offsetMode = true;}
+        if (base::RadioButton("offset", offsetMode)) { offsetMode = true; }
         base::SameLine();
-        if(base::RadioButton("set",  !offsetMode)) {offsetMode = false;}
+        if (base::RadioButton("set", !offsetMode)) { offsetMode = false; }
 
-        base::InputFloat3("Modifier",offset);
-        if(base::Button("Change"))
+        base::InputFloat3("Modifier", offset);
+        if (base::Button("Change"))
         {
             cameraQuery.queryEntities();
             auto handle = cameraQuery[0].get_component_handle<position>();
 
-            if(offsetMode)
+            if (offsetMode)
             {
                 position p = handle.read();
                 p.x += offset[0];
                 p.y += offset[1];
                 p.z += offset[2];
-                handle.write(p);    
-            } else {
+                handle.write(p);
+            }
+            else {
                 position p;
                 p.x = offset[0];
                 p.y = offset[1];
                 p.z = offset[2];
-                handle.write(p);    
+                handle.write(p);
             }
         }
         base::End();
@@ -175,7 +207,7 @@ class GuiTestSystem : public System<GuiTestSystem>
     void setProjectionAndView(float aspect, const camera& cam, const camera::camera_input& camInput)
     {
         view = camInput.view;
-        projection = math::perspective(math::deg2rad(cam.fov*aspect),aspect,cam.nearz,cam.farz);
+        projection = math::perspective(math::deg2rad(cam.fov * aspect), aspect, cam.nearz, cam.farz);
     }
 };
 

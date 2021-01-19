@@ -46,6 +46,7 @@ namespace legion::core::ecs
 
         mutable async::rw_spinlock m_familyLock;
         std::unordered_map<id_type, std::unique_ptr<component_container_base>> m_families;
+        std::unordered_map<id_type,std::string> m_prettyNames;
 
         mutable async::rw_spinlock m_entityDataLock;
         std::unordered_map<id_type, entity_data> m_entityData;
@@ -80,8 +81,10 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
             async::readwrite_guard guard(m_familyLock);
-            if (!m_families.count(typeHash<component_type>()))
+            if (!m_families.count(typeHash<component_type>())) {
                 m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>(this, m_eventBus);
+                m_prettyNames[typeHash<component_type>()] = std::string(typeid(component_type).name());
+            }
         }
 
         /**@brief Get component storage of a certain type.
@@ -93,6 +96,16 @@ namespace legion::core::ecs
         L_NODISCARD component_container<component_type>* getFamily()
         {
             return static_cast<component_container<component_type>*>(getFamily(typeHash<component_type>()));
+        }
+
+        /**@brief  TODO*/
+        std::string getFamilyName(id_type id)
+        {
+            if(const auto itr = m_prettyNames.find(id);itr != m_prettyNames.end())
+            {
+                return itr->second;
+            }
+            return "";
         }
 
         /**@brief Get component storage of a certain type.

@@ -277,6 +277,7 @@ namespace legion::rendering
         std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
         std::unordered_map<GLint, id_type> idOfLocation;
         std::string name;
+        std::string path;
         shader_state state;
 
         // Since copying would mean that the in-vram version of the actual shader would also need to be copied, we don't allow copying.
@@ -387,6 +388,8 @@ namespace legion::rendering
         void bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const;
 
         std::string get_name() const;
+
+        std::string get_path() const;
 
         std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info() const;
 

@@ -69,6 +69,18 @@ public:
             app::context_guard guard(window);
             setupCameraEntity();
         }
+
+        createProcess<&SimpleCameraController::onGetCamera>("Update",0.5f);
+    }
+
+    void onGetCamera(time::span)
+    {
+        static auto query = createQuery<rendering::camera>();
+        query.queryEntities();
+        if(query.size())
+        {
+            camera = query[0];
+        }
     }
 
     void setupCameraEntity()

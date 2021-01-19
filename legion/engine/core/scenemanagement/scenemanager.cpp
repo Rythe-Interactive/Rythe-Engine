@@ -52,8 +52,12 @@ namespace legion::core::scenemanagement
         auto extension = path.substr(path.rfind('.'),std::string::npos);
 
         //ask the AssetImporter to prefetch the data
-        return filesystem::AssetImporter ::prefetch(fs::view("assets://" + path),key);
-        
+
+        //TODO(algo-ryth-mix): prefetching is prolly still a good idea, but for now we want this working
+        #if 0
+        return filesystem::AssetImporter::prefetch(fs::view(path),key);
+        #endif
+        return true;
     }
 
 
@@ -142,12 +146,17 @@ namespace legion::core::scenemanagement
         std::string filename = name;
         if (!common::ends_with(filename, ".cornflake")) filename += ".cornflake";
 
-        if(!prefetchResources(fs::view("assets://scenes/" + filename)))
-        {
-            return false;
-        }
+        //if(!prefetchResources(fs::view("assets://scenes/" + filename)))
+        //{
+        //    return false;
+        //}
 
         std::ifstream inFile("assets/scenes/" + filename);
+        for(size_type i = m_ecs->world.child_count(); i != 0; i--)
+        {
+            m_ecs->world.get_child(i-1).destroy(true);
+        }
+
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
         SceneManager::currentScene = name;
 

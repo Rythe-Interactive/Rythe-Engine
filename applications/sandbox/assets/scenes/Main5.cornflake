@@ -7,7 +7,7 @@
                 "Owner": 6,
                 "Component Type": 5290901135681259365,
                 "Component Name": "legion::core::scenemanagement::scene",
-                "NAME": "Main2"
+                "NAME": "Main5"
             }
         ],
         "Children": [
@@ -19,7 +19,7 @@
                         "Owner": 5,
                         "Component Type": 12068365091526706646,
                         "Component Name": "legion::core::serialization::cache",
-                        "Name": 97444570128337,
+                        "Name": 98985032177088,
                         "Data": [
                             "Hello",
                             "World",
@@ -37,18 +37,18 @@
                 "Components": [
                     {
                         "Owner": 2,
-                        "Component Type": 17829838403855360956,
-                        "Component Name": "legion::core::mesh_filter",
-                        "value0": 16147701225056486911,
-                        "Filepath": "assets:\\\\models\\uvsphere.obj"
-                    },
-                    {
-                        "Owner": 2,
                         "Component Type": 14566645459790289390,
                         "Component Name": "legion::rendering::mesh_renderer",
                         "value0": {
                             "MaterialFile": "assets:\\\\materials\\skybox.material"
                         }
+                    },
+					{
+                        "Owner": 2,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 16147701225056486911,
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
                     },
                     {
                         "Owner": 2,
@@ -84,18 +84,18 @@
                 "Components": [
                     {
                         "Owner": 3,
-                        "Component Type": 17829838403855360956,
-                        "Component Name": "legion::core::mesh_filter",
-                        "value0": 11545668865037648829,
-                        "Filepath": "assets:\\\\models\\plane.obj"
-                    },
-                    {
-                        "Owner": 3,
                         "Component Type": 14566645459790289390,
                         "Component Name": "legion::rendering::mesh_renderer",
                         "value0": {
                             "MaterialFile": "assets:\\\\materials\\floor.material"
                         }
+                    },
+					{
+                        "Owner": 3,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 11545668865037648829,
+                        "Filepath": "assets:\\\\models\\plane.obj"
                     },
                     {
                         "Owner": 3,

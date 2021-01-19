@@ -212,26 +212,22 @@ namespace legion::core
         template<class Archive>
         void save(Archive& oa)
         {
-            oa(id,cereal::make_nvp("Filepath", get().second.fileName));
+            oa(id, cereal::make_nvp("Filepath", get().second.filePath));
         }
 
         template<class Archive>
         void load(Archive& oa)
         {
-            log::debug("Started loading a mesh_filter");
+
             std::string filepath;
-            oa(id,cereal::make_nvp("Filepath", filepath));
+            oa(id, cereal::make_nvp("Filepath", filepath));
+            log::debug("[CEREAL] Loading mesh with fp: {}",filepath);
 
-            auto pair = get();
-            pair.first.critical_section<async::readwrite_guard>([&]
-            {
-                pair.second = filesystem::AssetImporter::get_prefetched<mesh>(filepath);
-                log::debug("Successfully loaded {}",filepath);
-            });
-
-            
+            auto copy = default_mesh_settings;
+            copy.contextFolder = fs::view(filepath).parent();
+            id = MeshCache::create_mesh(filepath, fs::view(filepath),copy).id;
         }
-        
+
     };
 }
 

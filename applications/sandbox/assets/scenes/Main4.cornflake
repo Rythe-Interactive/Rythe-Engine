@@ -1,25 +1,25 @@
 {
     "class legion::core::ecs::entity_handle": {
-        "Id": 97,
+        "Id": 104,
         "Name": "Entity",
         "Components": [
             {
-                "Owner": 97,
+                "Owner": 104,
                 "Component Type": 5290901135681259365,
                 "Component Name": "legion::core::scenemanagement::scene",
-                "NAME": "Main"
+                "NAME": "Main4"
             }
         ],
         "Children": [
             {
-                "Id": 96,
+                "Id": 103,
                 "Name": "Entity",
                 "Components": [
                     {
-                        "Owner": 96,
+                        "Owner": 103,
                         "Component Type": 12068365091526706646,
                         "Component Name": "legion::core::serialization::cache",
-                        "Name": 0,
+                        "Name": 44877743237718,
                         "Data": [
                             "Hello",
                             "World",
@@ -37,11 +37,26 @@
                 "Components": [
                     {
                         "Owner": 2,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 18257050065998780757,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 2,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\slate.material"
+                        }
+                    },
+                    {
+                        "Owner": 2,
                         "Component Type": 7976621606494152606,
                         "Component Name": "legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
                     },
                     {
                         "Owner": 2,
@@ -57,25 +72,8 @@
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 0.009999999776482582,
                         "z": 0.0
-                    },
-                    {
-                        "Owner": 2,
-                        "Component Type": 17829838403855360956,
-                        "Component Name": "legion::core::mesh_filter",
-                        "value0": 18179197754095098820,
-                        "Filepath": "models/cube.obj"
-                    },
-                    {
-                        "Owner": 2,
-                        "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
-                    },
-                    {
-                        "Owner": 2,
-                        "Component Type": 11101808784119435614,
-                        "Component Name": "ext::animation"
                     }
                 ],
                 "Children": []
@@ -89,12 +87,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 18257050065998780757,
-                        "Filepath": "models/plane.obj"
+                        "Filepath": "assets:\\\\models\\plane.obj"
                     },
                     {
                         "Owner": 3,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\copper.material"
+                        }
                     },
                     {
                         "Owner": 3,
@@ -117,7 +118,7 @@
                         "Owner": 3,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 0.0,
+                        "x": 10.0,
                         "y": 0.009999999776482582,
                         "z": 0.0
                     }
@@ -133,12 +134,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 18257050065998780757,
-                        "Filepath": "models/plane.obj"
+                        "Filepath": "assets:\\\\models\\plane.obj"
                     },
                     {
                         "Owner": 4,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\aluminum.material"
+                        }
                     },
                     {
                         "Owner": 4,
@@ -163,7 +167,7 @@
                         "Component Name": "legion::core::position",
                         "x": 10.0,
                         "y": 0.009999999776482582,
-                        "z": 0.0
+                        "z": 10.0
                     }
                 ],
                 "Children": []
@@ -177,12 +181,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 18257050065998780757,
-                        "Filepath": "models/plane.obj"
+                        "Filepath": "assets:\\\\models\\plane.obj"
                     },
                     {
                         "Owner": 5,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\iron.material"
+                        }
                     },
                     {
                         "Owner": 5,
@@ -207,7 +214,7 @@
                         "Component Name": "legion::core::position",
                         "x": 10.0,
                         "y": 0.009999999776482582,
-                        "z": 10.0
+                        "z": -10.0
                     }
                 ],
                 "Children": []
@@ -221,12 +228,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 18257050065998780757,
-                        "Filepath": "models/plane.obj"
+                        "Filepath": "assets:\\\\models\\plane.obj"
                     },
                     {
                         "Owner": 6,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\fabric.material"
+                        }
                     },
                     {
                         "Owner": 6,
@@ -249,9 +259,9 @@
                         "Owner": 6,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 10.0,
+                        "x": -10.0,
                         "y": 0.009999999776482582,
-                        "z": -10.0
+                        "z": 0.0
                     }
                 ],
                 "Children": []
@@ -265,12 +275,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 18257050065998780757,
-                        "Filepath": "models/plane.obj"
+                        "Filepath": "assets:\\\\models\\plane.obj"
                     },
                     {
                         "Owner": 7,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\bog.material"
+                        }
                     },
                     {
                         "Owner": 7,
@@ -295,7 +308,7 @@
                         "Component Name": "legion::core::position",
                         "x": -10.0,
                         "y": 0.009999999776482582,
-                        "z": 0.0
+                        "z": 10.0
                     }
                 ],
                 "Children": []
@@ -309,12 +322,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 18257050065998780757,
-                        "Filepath": "models/plane.obj"
+                        "Filepath": "assets:\\\\models\\plane.obj"
                     },
                     {
                         "Owner": 8,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 8,
@@ -337,7 +353,7 @@
                         "Owner": 8,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -10.0,
+                        "x": 0.0,
                         "y": 0.009999999776482582,
                         "z": 10.0
                     }
@@ -353,12 +369,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 18257050065998780757,
-                        "Filepath": "models/plane.obj"
+                        "Filepath": "assets:\\\\models\\plane.obj"
                     },
                     {
                         "Owner": 9,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\rock.material"
+                        }
                     },
                     {
                         "Owner": 9,
@@ -383,7 +402,7 @@
                         "Component Name": "legion::core::position",
                         "x": 0.0,
                         "y": 0.009999999776482582,
-                        "z": 10.0
+                        "z": -10.0
                     }
                 ],
                 "Children": []
@@ -397,12 +416,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 18257050065998780757,
-                        "Filepath": "models/plane.obj"
+                        "Filepath": "assets:\\\\models\\plane.obj"
                     },
                     {
                         "Owner": 10,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\paint.material"
+                        }
                     },
                     {
                         "Owner": 10,
@@ -425,7 +447,7 @@
                         "Owner": 10,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 0.0,
+                        "x": -10.0,
                         "y": 0.009999999776482582,
                         "z": -10.0
                     }
@@ -440,38 +462,46 @@
                         "Owner": 11,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 18257050065998780757,
-                        "Filepath": "models/plane.obj"
+                        "value0": 5112364170975192303,
+                        "Filepath": "assets:\\\\models\\directional-light.obj"
                     },
                     {
                         "Owner": 11,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\directional light.material"
+                        }
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 17923777057385106779,
+                        "Component Name": "legion::rendering::light"
                     },
                     {
                         "Owner": 11,
                         "Component Type": 7976621606494152606,
                         "Component Name": "legion::core::scale",
-                        "x": 10.0,
-                        "y": 10.0,
-                        "z": 10.0
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     {
                         "Owner": 11,
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
+                        "x": 0.115916907787323,
+                        "y": -0.8804763555526733,
+                        "z": 0.2798481583595276,
+                        "w": 0.3647052049636841
                     },
                     {
                         "Owner": 11,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -10.0,
-                        "y": 0.009999999776482582,
-                        "z": -10.0
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
                     }
                 ],
                 "Children": []
@@ -484,18 +514,16 @@
                         "Owner": 12,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 5112364170975192303,
-                        "Filepath": "models/directional-light.obj"
+                        "value0": 9718719777399816260,
+                        "Filepath": "assets:\\\\models\\billboard.obj"
                     },
                     {
                         "Owner": 12,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
-                    },
-                    {
-                        "Owner": 12,
-                        "Component Type": 17923777057385106779,
-                        "Component Name": "legion::rendering::light"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\billboard.material"
+                        }
                     },
                     {
                         "Owner": 12,
@@ -509,17 +537,17 @@
                         "Owner": 12,
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
-                        "x": 0.115916907787323,
-                        "y": -0.8804763555526733,
-                        "z": 0.2798481583595276,
-                        "w": 0.3647052049636841
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
                     },
                     {
                         "Owner": 12,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 10.0,
-                        "y": 10.0,
+                        "x": -10.0,
+                        "y": 0.0,
                         "z": 10.0
                     }
                 ],
@@ -534,12 +562,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9718719777399816260,
-                        "Filepath": "models/billboard.obj"
+                        "Filepath": "assets:\\\\models\\billboard.obj"
                     },
                     {
                         "Owner": 13,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\fixed size billboard.material"
+                        }
                     },
                     {
                         "Owner": 13,
@@ -564,7 +595,7 @@
                         "Component Name": "legion::core::position",
                         "x": -10.0,
                         "y": 0.0,
-                        "z": 10.0
+                        "z": 8.0
                     }
                 ],
                 "Children": []
@@ -578,12 +609,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9718719777399816260,
-                        "Filepath": "models/billboard.obj"
+                        "Filepath": "assets:\\\\models\\billboard.obj"
                     },
                     {
                         "Owner": 14,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\particle.material"
+                        }
                     },
                     {
                         "Owner": 14,
@@ -606,9 +640,9 @@
                         "Owner": 14,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -10.0,
+                        "x": -8.0,
                         "y": 0.0,
-                        "z": 8.0
+                        "z": 10.0
                     }
                 ],
                 "Children": []
@@ -622,12 +656,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9718719777399816260,
-                        "Filepath": "models/billboard.obj"
+                        "Filepath": "assets:\\\\models\\billboard.obj"
                     },
                     {
                         "Owner": 15,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\fixed size particle.material"
+                        }
                     },
                     {
                         "Owner": 15,
@@ -652,7 +689,7 @@
                         "Component Name": "legion::core::position",
                         "x": -8.0,
                         "y": 0.0,
-                        "z": 10.0
+                        "z": 8.0
                     }
                 ],
                 "Children": []
@@ -666,12 +703,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9718719777399816260,
-                        "Filepath": "models/billboard.obj"
+                        "Filepath": "assets:\\\\models\\billboard.obj"
                     },
                     {
                         "Owner": 16,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\billboard.material"
+                        }
                     },
                     {
                         "Owner": 16,
@@ -694,9 +734,9 @@
                         "Owner": 16,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -8.0,
-                        "y": 0.0,
-                        "z": 8.0
+                        "x": -11.0,
+                        "y": 0.5,
+                        "z": 10.0
                     }
                 ],
                 "Children": []
@@ -710,12 +750,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9718719777399816260,
-                        "Filepath": "models/billboard.obj"
+                        "Filepath": "assets:\\\\models\\billboard.obj"
                     },
                     {
                         "Owner": 17,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\fixed size billboard.material"
+                        }
                     },
                     {
                         "Owner": 17,
@@ -740,7 +783,7 @@
                         "Component Name": "legion::core::position",
                         "x": -11.0,
                         "y": 0.5,
-                        "z": 10.0
+                        "z": 8.0
                     }
                 ],
                 "Children": []
@@ -754,12 +797,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9718719777399816260,
-                        "Filepath": "models/billboard.obj"
+                        "Filepath": "assets:\\\\models\\billboard.obj"
                     },
                     {
                         "Owner": 18,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\particle.material"
+                        }
                     },
                     {
                         "Owner": 18,
@@ -782,9 +828,9 @@
                         "Owner": 18,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -11.0,
+                        "x": -9.0,
                         "y": 0.5,
-                        "z": 8.0
+                        "z": 10.0
                     }
                 ],
                 "Children": []
@@ -798,12 +844,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9718719777399816260,
-                        "Filepath": "models/billboard.obj"
+                        "Filepath": "assets:\\\\models\\billboard.obj"
                     },
                     {
                         "Owner": 19,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\fixed size particle.material"
+                        }
                     },
                     {
                         "Owner": 19,
@@ -828,7 +877,7 @@
                         "Component Name": "legion::core::position",
                         "x": -9.0,
                         "y": 0.5,
-                        "z": 10.0
+                        "z": 8.0
                     }
                 ],
                 "Children": []
@@ -841,13 +890,21 @@
                         "Owner": 20,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 9718719777399816260,
-                        "Filepath": "models/billboard.obj"
+                        "value0": 4127307817236017217,
+                        "Filepath": "assets:\\\\models\\spot-light.obj"
                     },
                     {
                         "Owner": 20,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\spot light.material"
+                        }
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 17923777057385106779,
+                        "Component Name": "legion::rendering::light"
                     },
                     {
                         "Owner": 20,
@@ -861,18 +918,18 @@
                         "Owner": 20,
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
+                        "x": -0.0,
+                        "y": -0.0,
+                        "z": -0.0,
                         "w": 1.0
                     },
                     {
                         "Owner": 20,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -9.0,
+                        "x": -10.0,
                         "y": 0.5,
-                        "z": 8.0
+                        "z": -10.0
                     }
                 ],
                 "Children": []
@@ -886,12 +943,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 4127307817236017217,
-                        "Filepath": "models/spot-light.obj"
+                        "Filepath": "assets:\\\\models\\spot-light.obj"
                     },
                     {
                         "Owner": 21,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\spot light.material"
+                        }
                     },
                     {
                         "Owner": 21,
@@ -919,7 +979,7 @@
                         "Owner": 21,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -10.0,
+                        "x": 0.0,
                         "y": 0.5,
                         "z": -10.0
                     }
@@ -935,12 +995,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 4127307817236017217,
-                        "Filepath": "models/spot-light.obj"
+                        "Filepath": "assets:\\\\models\\spot-light.obj"
                     },
                     {
                         "Owner": 22,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\spot light.material"
+                        }
                     },
                     {
                         "Owner": 22,
@@ -968,7 +1031,7 @@
                         "Owner": 22,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 0.0,
+                        "x": 10.0,
                         "y": 0.5,
                         "z": -10.0
                     }
@@ -983,13 +1046,16 @@
                         "Owner": 23,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 4127307817236017217,
-                        "Filepath": "models/spot-light.obj"
+                        "value0": 5592977308715235853,
+                        "Filepath": "assets:\\\\models\\point-light.obj"
                     },
                     {
                         "Owner": 23,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\point light.material"
+                        }
                     },
                     {
                         "Owner": 23,
@@ -1008,18 +1074,18 @@
                         "Owner": 23,
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
-                        "x": -0.0,
-                        "y": -0.0,
-                        "z": -0.0,
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
                         "w": 1.0
                     },
                     {
                         "Owner": 23,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 10.0,
-                        "y": 0.5,
-                        "z": -10.0
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
                     }
                 ],
                 "Children": []
@@ -1033,12 +1099,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 5592977308715235853,
-                        "Filepath": "models/point-light.obj"
+                        "Filepath": "assets:\\\\models\\point-light.obj"
                     },
                     {
                         "Owner": 24,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\point light.material"
+                        }
                     },
                     {
                         "Owner": 24,
@@ -1066,7 +1135,7 @@
                         "Owner": 24,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 0.0,
+                        "x": -10.0,
                         "y": 1.0,
                         "z": 0.0
                     }
@@ -1082,12 +1151,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 5592977308715235853,
-                        "Filepath": "models/point-light.obj"
+                        "Filepath": "assets:\\\\models\\point-light.obj"
                     },
                     {
                         "Owner": 25,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\point light.material"
+                        }
                     },
                     {
                         "Owner": 25,
@@ -1115,7 +1187,7 @@
                         "Owner": 25,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -10.0,
+                        "x": 10.0,
                         "y": 1.0,
                         "z": 0.0
                     }
@@ -1130,18 +1202,21 @@
                         "Owner": 26,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 5592977308715235853,
-                        "Filepath": "models/point-light.obj"
+                        "value0": 6546381963644500447,
+                        "Filepath": "assets:\\\\models\\suzanne.obj"
                     },
                     {
                         "Owner": 26,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\normal.material"
+                        }
                     },
                     {
                         "Owner": 26,
-                        "Component Type": 17923777057385106779,
-                        "Component Name": "legion::rendering::light"
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
                     },
                     {
                         "Owner": 26,
@@ -1156,17 +1231,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 0.8821020126342773,
                         "z": 0.0,
-                        "w": 1.0
+                        "w": -0.4709523916244507
                     },
                     {
                         "Owner": 26,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 10.0,
-                        "y": 1.0,
-                        "z": 0.0
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": 5.099999904632568
                     }
                 ],
                 "Children": []
@@ -1180,12 +1255,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 6546381963644500447,
-                        "Filepath": "models/suzanne.obj"
+                        "Filepath": "assets:\\\\models\\suzanne.obj"
                     },
                     {
                         "Owner": 27,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\wireframe.material"
+                        }
                     },
                     {
                         "Owner": 27,
@@ -1205,9 +1283,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999051690101624,
+                        "y": 0.8803352117538452,
                         "z": 0.0,
-                        "w": 0.007240105886012316
+                        "w": -0.4742465317249298
                     },
                     {
                         "Owner": 27,
@@ -1215,7 +1293,7 @@
                         "Component Name": "legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": 5.099999904632568
+                        "z": 8.100000381469727
                     }
                 ],
                 "Children": []
@@ -1229,12 +1307,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 6546381963644500447,
-                        "Filepath": "models/suzanne.obj"
+                        "Filepath": "assets:\\\\models\\suzanne.obj"
                     },
                     {
                         "Owner": 28,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\copper.material"
+                        }
                     },
                     {
                         "Owner": 28,
@@ -1254,9 +1335,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999051690101624,
+                        "y": 0.8791303038597107,
                         "z": 0.0,
-                        "w": 0.007240105886012316
+                        "w": -0.4764762818813324
                     },
                     {
                         "Owner": 28,
@@ -1264,7 +1345,7 @@
                         "Component Name": "legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": 8.100000381469727
+                        "z": 11.100000381469727
                     }
                 ],
                 "Children": []
@@ -1277,13 +1358,16 @@
                         "Owner": 29,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 6546381963644500447,
-                        "Filepath": "models/suzanne.obj"
+                        "value0": 8413252711983184375,
+                        "Filepath": "assets:\\\\models\\wizardgnomeretop.obj"
                     },
                     {
                         "Owner": 29,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\gnome.material"
+                        }
                     },
                     {
                         "Owner": 29,
@@ -1303,9 +1387,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999069571495056,
+                        "y": 0.8783276677131653,
                         "z": 0.0,
-                        "w": 0.0069835009053349499
+                        "w": -0.4779539704322815
                     },
                     {
                         "Owner": 29,
@@ -1313,7 +1397,7 @@
                         "Component Name": "legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": 11.100000381469727
+                        "z": 2.0999999046325685
                     }
                 ],
                 "Children": []
@@ -1326,13 +1410,16 @@
                         "Owner": 30,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 8413252711983184375,
-                        "Filepath": "models/wizardgnomeretop.obj"
+                        "value0": 13126652788706525288,
+                        "Filepath": "assets:\\\\models\\submeshtest.obj"
                     },
                     {
                         "Owner": 30,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 30,
@@ -1352,17 +1439,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999069571495056,
+                        "y": 0.8771588206291199,
                         "z": 0.0,
-                        "w": 0.0069835009053349499
+                        "w": -0.48009559512138369
                     },
                     {
                         "Owner": 30,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
                         "x": 0.0,
-                        "y": 3.0,
-                        "z": 2.0999999046325685
+                        "y": 10.0,
+                        "z": 0.0
                     }
                 ],
                 "Children": []
@@ -1375,18 +1462,16 @@
                         "Owner": 31,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 13126652788706525288,
-                        "Filepath": "models/submeshtest.obj"
+                        "value0": 3645275238404220856,
+                        "Filepath": "assets:\\\\models\\xyz.obj"
                     },
                     {
                         "Owner": 31,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
-                    },
-                    {
-                        "Owner": 31,
-                        "Component Type": 9380324132116624067,
-                        "Component Name": "sah"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\vertex color.material"
+                        }
                     },
                     {
                         "Owner": 31,
@@ -1401,16 +1486,16 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999089241027832,
+                        "y": 0.0,
                         "z": 0.0,
-                        "w": 0.006695286370813847
+                        "w": 1.0
                     },
                     {
                         "Owner": 31,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
                         "x": 0.0,
-                        "y": 10.0,
+                        "y": 0.0,
                         "z": 0.0
                     }
                 ],
@@ -1424,13 +1509,21 @@
                         "Owner": 32,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 3645275238404220856,
-                        "Filepath": "models/xyz.obj"
+                        "value0": 5503224543670688896,
+                        "Filepath": "assets:\\\\models\\cube.obj"
                     },
                     {
                         "Owner": 32,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
                     },
                     {
                         "Owner": 32,
@@ -1445,16 +1538,16 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 0.8751145601272583,
                         "z": 0.0,
-                        "w": 1.0
+                        "w": -0.4838114082813263
                     },
                     {
                         "Owner": 32,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 0.0,
-                        "y": 0.0,
+                        "x": 5.099999904632568,
+                        "y": 9.0,
                         "z": 0.0
                     }
                 ],
@@ -1468,13 +1561,16 @@
                         "Owner": 33,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 5503224543670688896,
-                        "Filepath": "models/cube.obj"
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 33,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\copper.material"
+                        }
                     },
                     {
                         "Owner": 33,
@@ -1494,17 +1590,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999089241027832,
+                        "y": 0.874131977558136,
                         "z": 0.0,
-                        "w": 0.006695286370813847
+                        "w": -0.48558440804481509
                     },
                     {
                         "Owner": 33,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 5.099999904632568,
-                        "y": 9.0,
-                        "z": 0.0
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -5.099999904632568
                     }
                 ],
                 "Children": []
@@ -1518,12 +1614,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 34,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\aluminum.material"
+                        }
                     },
                     {
                         "Owner": 34,
@@ -1543,9 +1642,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999106526374817,
+                        "y": 0.873029887676239,
                         "z": 0.0,
-                        "w": 0.006430355831980705
+                        "w": -0.48756295442581179
                     },
                     {
                         "Owner": 34,
@@ -1553,7 +1652,7 @@
                         "Component Name": "legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -5.099999904632568
+                        "z": -8.0
                     }
                 ],
                 "Children": []
@@ -1567,12 +1666,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 35,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\iron.material"
+                        }
                     },
                     {
                         "Owner": 35,
@@ -1592,9 +1694,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999106526374817,
+                        "y": 0.8724600076675415,
                         "z": 0.0,
-                        "w": 0.006430355831980705
+                        "w": -0.48858195543289187
                     },
                     {
                         "Owner": 35,
@@ -1602,7 +1704,7 @@
                         "Component Name": "legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -8.0
+                        "z": -2.200000047683716
                     }
                 ],
                 "Children": []
@@ -1616,12 +1718,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 36,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\rock 2.material"
+                        }
                     },
                     {
                         "Owner": 36,
@@ -1641,17 +1746,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.999912440776825,
+                        "y": 0.8707525730133057,
                         "z": 0.0,
-                        "w": 0.006141550838947296
+                        "w": -0.4916183650493622
                     },
                     {
                         "Owner": 36,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 0.0,
+                        "x": 4.0,
                         "y": 3.0,
-                        "z": -2.200000047683716
+                        "z": -8.0
                     }
                 ],
                 "Children": []
@@ -1665,12 +1770,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 37,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\fabric.material"
+                        }
                     },
                     {
                         "Owner": 37,
@@ -1690,9 +1798,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.999912440776825,
+                        "y": 0.86969393491745,
                         "z": 0.0,
-                        "w": 0.006141550838947296
+                        "w": -0.493488609790802
                     },
                     {
                         "Owner": 37,
@@ -1700,7 +1808,7 @@
                         "Component Name": "legion::core::position",
                         "x": 4.0,
                         "y": 3.0,
-                        "z": -8.0
+                        "z": -5.099999904632568
                     }
                 ],
                 "Children": []
@@ -1714,12 +1822,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 38,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\paint.material"
+                        }
                     },
                     {
                         "Owner": 38,
@@ -1739,9 +1850,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999141693115234,
+                        "y": 0.8685822486877441,
                         "z": 0.0,
-                        "w": 0.005853452254086733
+                        "w": -0.4954425096511841
                     },
                     {
                         "Owner": 38,
@@ -1749,7 +1860,7 @@
                         "Component Name": "legion::core::position",
                         "x": 4.0,
                         "y": 3.0,
-                        "z": -5.099999904632568
+                        "z": -2.200000047683716
                     }
                 ],
                 "Children": []
@@ -1762,13 +1873,16 @@
                         "Owner": 39,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "value0": 16147701225056486911,
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
                     },
                     {
                         "Owner": 39,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\copper.material"
+                        }
                     },
                     {
                         "Owner": 39,
@@ -1788,17 +1902,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999141693115234,
+                        "y": 0.8674226403236389,
                         "z": 0.0,
-                        "w": 0.005853452254086733
+                        "w": -0.49746978282928469
                     },
                     {
                         "Owner": 39,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 4.0,
+                        "x": 0.0,
                         "y": 3.0,
-                        "z": -2.200000047683716
+                        "z": -3.5999999046325685
                     }
                 ],
                 "Children": []
@@ -1812,12 +1926,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 16147701225056486911,
-                        "Filepath": "models/uvsphere.obj"
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
                     },
                     {
                         "Owner": 40,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\aluminum.material"
+                        }
                     },
                     {
                         "Owner": 40,
@@ -1837,9 +1954,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999141693115234,
+                        "y": 0.8664056658744812,
                         "z": 0.0,
-                        "w": 0.005853452254086733
+                        "w": -0.49923887848854067
                     },
                     {
                         "Owner": 40,
@@ -1847,7 +1964,7 @@
                         "Component Name": "legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -3.5999999046325685
+                        "z": -6.5
                     }
                 ],
                 "Children": []
@@ -1861,12 +1978,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 16147701225056486911,
-                        "Filepath": "models/uvsphere.obj"
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
                     },
                     {
                         "Owner": 41,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\iron.material"
+                        }
                     },
                     {
                         "Owner": 41,
@@ -1886,9 +2006,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999157786369324,
+                        "y": 0.8654276132583618,
                         "z": 0.0,
-                        "w": 0.00556452851742506
+                        "w": -0.5009323954582214
                     },
                     {
                         "Owner": 41,
@@ -1896,7 +2016,7 @@
                         "Component Name": "legion::core::position",
                         "x": 0.0,
                         "y": 3.0,
-                        "z": -6.5
+                        "z": -0.699999988079071
                     }
                 ],
                 "Children": []
@@ -1910,12 +2030,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 16147701225056486911,
-                        "Filepath": "models/uvsphere.obj"
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
                     },
                     {
                         "Owner": 42,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\rock 2.material"
+                        }
                     },
                     {
                         "Owner": 42,
@@ -1935,17 +2058,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999157786369324,
+                        "y": 0.8645530343055725,
                         "z": 0.0,
-                        "w": 0.00556452851742506
+                        "w": -0.5029062628746033
                     },
                     {
                         "Owner": 42,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 0.0,
+                        "x": 4.0,
                         "y": 3.0,
-                        "z": -0.699999988079071
+                        "z": -6.5
                     }
                 ],
                 "Children": []
@@ -1959,12 +2082,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 16147701225056486911,
-                        "Filepath": "models/uvsphere.obj"
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
                     },
                     {
                         "Owner": 43,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\fabric.material"
+                        }
                     },
                     {
                         "Owner": 43,
@@ -1984,9 +2110,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999172687530518,
+                        "y": 0.8634365200996399,
                         "z": 0.0,
-                        "w": 0.005282358266413212
+                        "w": -0.5043561458587647
                     },
                     {
                         "Owner": 43,
@@ -1994,7 +2120,7 @@
                         "Component Name": "legion::core::position",
                         "x": 4.0,
                         "y": 3.0,
-                        "z": -6.5
+                        "z": -3.5999999046325685
                     }
                 ],
                 "Children": []
@@ -2008,12 +2134,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 16147701225056486911,
-                        "Filepath": "models/uvsphere.obj"
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
                     },
                     {
                         "Owner": 44,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\paint.material"
+                        }
                     },
                     {
                         "Owner": 44,
@@ -2033,9 +2162,9 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999172687530518,
+                        "y": 0.8621621131896973,
                         "z": 0.0,
-                        "w": 0.005282358266413212
+                        "w": -0.5065314769744873
                     },
                     {
                         "Owner": 44,
@@ -2043,7 +2172,7 @@
                         "Component Name": "legion::core::position",
                         "x": 4.0,
                         "y": 3.0,
-                        "z": -3.5999999046325685
+                        "z": -0.699999988079071
                     }
                 ],
                 "Children": []
@@ -2057,12 +2186,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 16147701225056486911,
-                        "Filepath": "models/uvsphere.obj"
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
                     },
                     {
                         "Owner": 45,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\paint.material"
+                        }
                     },
                     {
                         "Owner": 45,
@@ -2082,16 +2214,16 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999172687530518,
+                        "y": 0.8612460494041443,
                         "z": 0.0,
-                        "w": 0.005282358266413212
+                        "w": -0.5080874562263489
                     },
                     {
                         "Owner": 45,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
                         "x": 4.0,
-                        "y": 3.0,
+                        "y": 6.0,
                         "z": -0.699999988079071
                     }
                 ],
@@ -2105,43 +2237,46 @@
                         "Owner": 46,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 16147701225056486911,
-                        "Filepath": "models/uvsphere.obj"
+                        "value0": 6842981191551175902,
+                        "Filepath": "assets:\\\\models\\audio-source.obj"
                     },
                     {
                         "Owner": 46,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
-                    },
-                    {
-                        "Owner": 46,
-                        "Component Type": 9380324132116624067,
-                        "Component Name": "sah"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\gizmo.material"
+                        }
                     },
                     {
                         "Owner": 46,
                         "Component Type": 7976621606494152606,
                         "Component Name": "legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 0.5,
+                        "y": 0.5,
+                        "z": 0.5
                     },
                     {
                         "Owner": 46,
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9999188184738159,
+                        "y": 0.0,
                         "z": 0.0,
-                        "w": 0.004979847464710474
+                        "w": 1.0
                     },
                     {
                         "Owner": 46,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 4.0,
-                        "y": 6.0,
-                        "z": -0.699999988079071
+                        "x": -5.0,
+                        "y": 1.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 46,
+                        "Component Type": 7153295768535488041,
+                        "Component Name": "legion::audio::audio_source"
                     }
                 ],
                 "Children": []
@@ -2155,12 +2290,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 6842981191551175902,
-                        "Filepath": "models/audio-source.obj"
+                        "Filepath": "assets:\\\\models\\audio-source.obj"
                     },
                     {
                         "Owner": 47,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\gizmo.material"
+                        }
                     },
                     {
                         "Owner": 47,
@@ -2183,7 +2321,7 @@
                         "Owner": 47,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -5.0,
+                        "x": 5.0,
                         "y": 1.0,
                         "z": 10.0
                     },
@@ -2201,23 +2339,11 @@
                 "Components": [
                     {
                         "Owner": 48,
-                        "Component Type": 17829838403855360956,
-                        "Component Name": "legion::core::mesh_filter",
-                        "value0": 6842981191551175902,
-                        "Filepath": "models/audio-source.obj"
-                    },
-                    {
-                        "Owner": 48,
-                        "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
-                    },
-                    {
-                        "Owner": 48,
                         "Component Type": 7976621606494152606,
                         "Component Name": "legion::core::scale",
-                        "x": 0.5,
-                        "y": 0.5,
-                        "z": 0.5
+                        "x": 2.0,
+                        "y": 1.0,
+                        "z": 2.0
                     },
                     {
                         "Owner": 48,
@@ -2232,14 +2358,29 @@
                         "Owner": 48,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 5.0,
-                        "y": 1.0,
-                        "z": 10.0
+                        "x": 20.0,
+                        "y": -3.0,
+                        "z": 15.0
                     },
                     {
                         "Owner": 48,
-                        "Component Type": 7153295768535488041,
-                        "Component Name": "legion::audio::audio_source"
+                        "Component Type": 1849660489544495751,
+                        "Component Name": "legion::physics::identifier"
+                    },
+                    {
+                        "Owner": 48,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 5503224543670688896,
+                        "Filepath": "assets:\\\\models\\cube.obj"
+                    },
+                    {
+                        "Owner": 48,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\texture.material"
+                        }
                     }
                 ],
                 "Children": []
@@ -2252,9 +2393,9 @@
                         "Owner": 49,
                         "Component Type": 7976621606494152606,
                         "Component Name": "legion::core::scale",
-                        "x": 2.0,
+                        "x": 1.0,
                         "y": 1.0,
-                        "z": 2.0
+                        "z": 1.0
                     },
                     {
                         "Owner": 49,
@@ -2275,6 +2416,11 @@
                     },
                     {
                         "Owner": 49,
+                        "Component Type": 17557151490884251464,
+                        "Component Name": "legion::physics::physicsComponent"
+                    },
+                    {
+                        "Owner": 49,
                         "Component Type": 1849660489544495751,
                         "Component Name": "legion::physics::identifier"
                     },
@@ -2283,12 +2429,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 5503224543670688896,
-                        "Filepath": "models/cube.obj"
+                        "Filepath": "assets:\\\\models\\cube.obj"
                     },
                     {
                         "Owner": 49,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\texture.material"
+                        }
                     }
                 ],
                 "Children": []
@@ -2319,87 +2468,36 @@
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
                         "x": 20.0,
-                        "y": -3.0,
-                        "z": 15.0
-                    },
-                    {
-                        "Owner": 50,
-                        "Component Type": 17557151490884251464,
-                        "Component Name": "legion::physics::physicsComponent"
-                    },
-                    {
-                        "Owner": 50,
-                        "Component Type": 1849660489544495751,
-                        "Component Name": "legion::physics::identifier"
-                    },
-                    {
-                        "Owner": 50,
-                        "Component Type": 17829838403855360956,
-                        "Component Name": "legion::core::mesh_filter",
-                        "value0": 5503224543670688896,
-                        "Filepath": "models/cube.obj"
-                    },
-                    {
-                        "Owner": 50,
-                        "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
-                    }
-                ],
-                "Children": []
-            },
-            {
-                "Id": 51,
-                "Name": "Entity",
-                "Components": [
-                    {
-                        "Owner": 51,
-                        "Component Type": 7976621606494152606,
-                        "Component Name": "legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    {
-                        "Owner": 51,
-                        "Component Type": 6841436683689612098,
-                        "Component Name": "legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
-                        "w": 1.0
-                    },
-                    {
-                        "Owner": 51,
-                        "Component Type": 5024733841066084311,
-                        "Component Name": "legion::core::position",
-                        "x": 20.0,
                         "y": -1.0,
                         "z": 15.0
                     },
                     {
-                        "Owner": 51,
+                        "Owner": 50,
                         "Component Type": 17557151490884251464,
                         "Component Name": "legion::physics::physicsComponent"
                     },
                     {
-                        "Owner": 51,
+                        "Owner": 50,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 5503224543670688896,
-                        "Filepath": "models/cube.obj"
+                        "Filepath": "assets:\\\\models\\cube.obj"
                     },
                     {
-                        "Owner": 51,
+                        "Owner": 50,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\texture.material"
+                        }
                     },
                     {
-                        "Owner": 51,
+                        "Owner": 50,
                         "Component Type": 1849660489544495751,
                         "Component Name": "legion::physics::identifier"
                     },
                     {
-                        "Owner": 51,
+                        "Owner": 50,
                         "Component Type": 8737011645205850167,
                         "Component Name": "legion::physics::rigidbody",
                         "Name": "Rigidbody",
@@ -2450,6 +2548,53 @@
                 "Children": []
             },
             {
+                "Id": 51,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 51,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 16147701225056486911,
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
+                    },
+                    {
+                        "Owner": 51,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\skybox.material"
+                        }
+                    },
+                    {
+                        "Owner": 51,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1000.0,
+                        "y": 1000.0,
+                        "z": 1000.0
+                    },
+                    {
+                        "Owner": 51,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 51,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                ],
+                "Children": []
+            },
+            {
                 "Id": 52,
                 "Name": "Entity",
                 "Components": [
@@ -2457,21 +2602,24 @@
                         "Owner": 52,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 5503224543670688896,
-                        "Filepath": "models/cube.obj"
+                        "value0": 11545668865037648829,
+                        "Filepath": "assets:\\\\models\\groundplane.obj"
                     },
                     {
                         "Owner": 52,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\floor.material"
+                        }
                     },
                     {
                         "Owner": 52,
                         "Component Type": 7976621606494152606,
                         "Component Name": "legion::core::scale",
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
+                        "x": 250.0,
+                        "y": 250.0,
+                        "z": 250.0
                     },
                     {
                         "Owner": 52,
@@ -2486,8 +2634,8 @@
                         "Owner": 52,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -5.0,
-                        "y": 0.009999999776482582,
+                        "x": 0.0,
+                        "y": 0.0,
                         "z": 0.0
                     }
                 ],
@@ -2499,18 +2647,6 @@
                 "Components": [
                     {
                         "Owner": 53,
-                        "Component Type": 17829838403855360956,
-                        "Component Name": "legion::core::mesh_filter",
-                        "value0": 5503224543670688896,
-                        "Filepath": "models/cube.obj"
-                    },
-                    {
-                        "Owner": 53,
-                        "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
-                    },
-                    {
-                        "Owner": 53,
                         "Component Type": 7976621606494152606,
                         "Component Name": "legion::core::scale",
                         "x": 1.0,
@@ -2521,18 +2657,31 @@
                         "Owner": 53,
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0,
+                        "x": -0.0,
+                        "y": -0.0,
+                        "z": -0.0,
                         "w": 1.0
                     },
                     {
                         "Owner": 53,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -2.0,
-                        "y": 0.009999999776482582,
+                        "x": 0.0,
+                        "y": 3.0,
                         "z": 0.0
+                    },
+                    {
+                        "Owner": 53,
+                        "Component Type": 11518894322830570044,
+                        "Component Name": "legion::audio::audio_listener"
+                    },
+                    {
+                        "Owner": 53,
+                        "Component Type": 15654855102072282618,
+                        "Component Name": "legion::rendering::camera",
+                        "value0": 22.5,
+                        "value1": 0.0010000000474974514,
+                        "value2": 1000.0
                     }
                 ],
                 "Children": []
@@ -2545,38 +2694,46 @@
                         "Owner": 54,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 16147701225056486911,
-                        "Filepath": "models/uvsphere.obj"
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 54,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 54,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
                     },
                     {
                         "Owner": 54,
                         "Component Type": 7976621606494152606,
                         "Component Name": "legion::core::scale",
-                        "x": 1000.0,
-                        "y": 1000.0,
-                        "z": 1000.0
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     {
                         "Owner": 54,
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 0.8731291890144348,
                         "z": 0.0,
-                        "w": 1.0
+                        "w": -0.48737722635269167
                     },
                     {
                         "Owner": 54,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -2.0779082775115969,
-                        "y": 3.0,
-                        "z": 5.281854629516602
+                        "x": -2.276033878326416,
+                        "y": -13.669682502746582,
+                        "z": -8.032449722290039
                     }
                 ],
                 "Children": []
@@ -2589,38 +2746,46 @@
                         "Owner": 55,
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
-                        "value0": 11545668865037648829,
-                        "Filepath": "models/groundplane.obj"
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 55,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 55,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
                     },
                     {
                         "Owner": 55,
                         "Component Type": 7976621606494152606,
                         "Component Name": "legion::core::scale",
-                        "x": 250.0,
-                        "y": 250.0,
-                        "z": 250.0
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     {
                         "Owner": 55,
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 0.8910922408103943,
                         "z": 0.0,
-                        "w": 1.0
+                        "w": -0.45370787382125857
                     },
                     {
                         "Owner": 55,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -2.0779082775115969,
-                        "y": 0.0,
-                        "z": 5.281854629516602
+                        "x": 6.914348602294922,
+                        "y": -16.661231994628908,
+                        "z": -1.5367155075073243
                     }
                 ],
                 "Children": []
@@ -2629,6 +2794,26 @@
                 "Id": 56,
                 "Name": "Entity",
                 "Components": [
+                    {
+                        "Owner": 56,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 56,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 56,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
+                    },
                     {
                         "Owner": 56,
                         "Component Type": 7976621606494152606,
@@ -2641,28 +2826,18 @@
                         "Owner": 56,
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
-                        "x": 0.19595538079738618,
-                        "y": -0.206369087100029,
-                        "z": 0.04222431406378746,
-                        "w": 0.957721471786499
+                        "x": 0.0,
+                        "y": 0.9069047570228577,
+                        "z": 0.0,
+                        "w": -0.42121151089668276
                     },
                     {
                         "Owner": 56,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -2.0779082775115969,
-                        "y": 3.0,
-                        "z": 5.281854629516602
-                    },
-                    {
-                        "Owner": 56,
-                        "Component Type": 11518894322830570044,
-                        "Component Name": "legion::audio::audio_listener"
-                    },
-                    {
-                        "Owner": 56,
-                        "Component Type": 15654855102072282618,
-                        "Component Name": "legion::rendering::camera"
+                        "x": -9.668208122253418,
+                        "y": -18.406078338623048,
+                        "z": 9.455238342285157
                     }
                 ],
                 "Children": []
@@ -2676,12 +2851,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 57,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 57,
@@ -2701,17 +2879,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.999026894569397,
+                        "y": 0.9218477606773377,
                         "z": 0.0,
-                        "w": 0.04246709495782852
+                        "w": -0.38741445541381838
                     },
                     {
                         "Owner": 57,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -2.276033878326416,
-                        "y": -13.669682502746582,
-                        "z": -8.032449722290039
+                        "x": -1.9462404251098633,
+                        "y": -8.58953857421875,
+                        "z": 6.567333221435547
                     }
                 ],
                 "Children": []
@@ -2725,12 +2903,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 58,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 58,
@@ -2750,17 +2931,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9965769648551941,
+                        "y": 0.9358158707618713,
                         "z": 0.0,
-                        "w": 0.08180589228868485
+                        "w": -0.3523365259170532
                     },
                     {
                         "Owner": 58,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 6.914348602294922,
-                        "y": -16.661231994628908,
-                        "z": -1.5367155075073243
+                        "x": -1.3189849853515626,
+                        "y": -15.897729873657227,
+                        "z": 7.301786422729492
                     }
                 ],
                 "Children": []
@@ -2774,12 +2955,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 59,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 59,
@@ -2799,17 +2983,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9926149845123291,
+                        "y": 0.9483363032341003,
                         "z": 0.0,
-                        "w": 0.12072250992059708
+                        "w": -0.3170977532863617
                     },
                     {
                         "Owner": 59,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -9.668208122253418,
-                        "y": -18.406078338623048,
-                        "z": 9.455238342285157
+                        "x": -5.0845842361450199,
+                        "y": -5.439878463745117,
+                        "z": 7.5319671630859379
                     }
                 ],
                 "Children": []
@@ -2823,12 +3007,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 60,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 60,
@@ -2848,17 +3035,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9871279001235962,
+                        "y": 0.9593833684921265,
                         "z": 0.0,
-                        "w": 0.15947505831718446
+                        "w": -0.28192320466041567
                     },
                     {
                         "Owner": 60,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -1.9462404251098633,
-                        "y": -8.58953857421875,
-                        "z": 6.567333221435547
+                        "x": 9.000617980957032,
+                        "y": -5.510286331176758,
+                        "z": 6.4807891845703129
                     }
                 ],
                 "Children": []
@@ -2872,12 +3059,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 61,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 61,
@@ -2897,17 +3087,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9800946712493897,
+                        "y": 0.9691423177719116,
                         "z": 0.0,
-                        "w": 0.19815663993358613
+                        "w": -0.24628524482250215
                     },
                     {
                         "Owner": 61,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -1.3189849853515626,
-                        "y": -15.897729873657227,
-                        "z": 7.301786422729492
+                        "x": -5.915356636047363,
+                        "y": -7.054742813110352,
+                        "z": 2.7218399047851564
                     }
                 ],
                 "Children": []
@@ -2921,12 +3111,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 62,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 62,
@@ -2946,17 +3139,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9716770052909851,
+                        "y": 0.9776605367660523,
                         "z": 0.0,
-                        "w": 0.2360023707151413
+                        "w": -0.2099372148513794
                     },
                     {
                         "Owner": 62,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -5.0845842361450199,
-                        "y": -5.439878463745117,
-                        "z": 7.5319671630859379
+                        "x": -3.4279541969299318,
+                        "y": -10.237911224365235,
+                        "z": -7.132475852966309
                     }
                 ],
                 "Children": []
@@ -2970,12 +3163,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 63,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 63,
@@ -2995,17 +3191,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9616137742996216,
+                        "y": 0.9848020672798157,
                         "z": 0.0,
-                        "w": 0.2741445302963257
+                        "w": -0.17339354753494264
                     },
                     {
                         "Owner": 63,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 9.000617980957032,
-                        "y": -5.510286331176758,
-                        "z": 6.4807891845703129
+                        "x": 1.0260505676269532,
+                        "y": -10.882696151733399,
+                        "z": 9.689271926879883
                     }
                 ],
                 "Children": []
@@ -3019,12 +3215,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 64,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 64,
@@ -3044,17 +3243,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9501020908355713,
+                        "y": 0.9904782772064209,
                         "z": 0.0,
-                        "w": 0.3117048144340515
+                        "w": -0.13730047643184663
                     },
                     {
                         "Owner": 64,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -5.915356636047363,
-                        "y": -7.054742813110352,
-                        "z": 2.7218399047851564
+                        "x": -9.814041137695313,
+                        "y": -2.978973388671875,
+                        "z": 2.8863964080810549
                     }
                 ],
                 "Children": []
@@ -3068,12 +3267,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 65,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 65,
@@ -3093,17 +3295,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9373220205307007,
+                        "y": 0.9948910474777222,
                         "z": 0.0,
-                        "w": 0.3482653498649597
+                        "w": -0.10046583414077759
                     },
                     {
                         "Owner": 65,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -3.4279541969299318,
-                        "y": -10.237911224365235,
-                        "z": -7.132475852966309
+                        "x": 0.2205190658569336,
+                        "y": -8.704148292541504,
+                        "z": -1.909982681274414
                     }
                 ],
                 "Children": []
@@ -3117,12 +3319,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 66,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 66,
@@ -3142,17 +3347,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9228922724723816,
+                        "y": 0.9979167580604553,
                         "z": 0.0,
-                        "w": 0.38488566875457766
+                        "w": -0.06377995014190674
                     },
                     {
                         "Owner": 66,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 1.0260505676269532,
-                        "y": -10.882696151733399,
-                        "z": 9.689271926879883
+                        "x": -1.8477897644042969,
+                        "y": -3.7108078002929689,
+                        "z": -1.0503406524658204
                     }
                 ],
                 "Children": []
@@ -3166,12 +3371,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 67,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 67,
@@ -3191,17 +3399,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.9070234894752502,
+                        "y": 0.9995774626731873,
                         "z": 0.0,
-                        "w": 0.4206398129463196
+                        "w": -0.02742728404700756
                     },
                     {
                         "Owner": 67,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -9.814041137695313,
-                        "y": -2.978973388671875,
-                        "z": 2.8863964080810549
+                        "x": 6.420406341552734,
+                        "y": -16.63323211669922,
+                        "z": -3.9479012489318849
                     }
                 ],
                 "Children": []
@@ -3215,12 +3423,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 68,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 68,
@@ -3240,17 +3451,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.8899823427200317,
+                        "y": 0.999914824962616,
                         "z": 0.0,
-                        "w": 0.4558539092540741
+                        "w": 0.009232661686837674
                     },
                     {
                         "Owner": 68,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 0.2205190658569336,
-                        "y": -8.704148292541504,
-                        "z": -1.909982681274414
+                        "x": 5.580426216125488,
+                        "y": -2.942493438720703,
+                        "z": -2.387476921081543
                     }
                 ],
                 "Children": []
@@ -3264,12 +3475,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 69,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 69,
@@ -3289,17 +3503,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.8713524341583252,
+                        "y": 0.9988669157028198,
                         "z": 0.0,
-                        "w": 0.4905319809913635
+                        "w": 0.04668699949979782
                     },
                     {
                         "Owner": 69,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -1.8477897644042969,
-                        "y": -3.7108078002929689,
-                        "z": -1.0503406524658204
+                        "x": 7.721912384033203,
+                        "y": -20.230369567871095,
+                        "z": 8.283712387084961
                     }
                 ],
                 "Children": []
@@ -3313,12 +3527,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 70,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 70,
@@ -3338,17 +3555,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.8517199754714966,
+                        "y": 0.9964523911476135,
                         "z": 0.0,
-                        "w": 0.5238862037658691
+                        "w": 0.08368849009275437
                     },
                     {
                         "Owner": 70,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 6.420406341552734,
-                        "y": -16.63323211669922,
-                        "z": -3.9479012489318849
+                        "x": -7.220608234405518,
+                        "y": -17.27810287475586,
+                        "z": -2.320833206176758
                     }
                 ],
                 "Children": []
@@ -3362,12 +3579,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 71,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 71,
@@ -3387,17 +3607,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.8305017352104187,
+                        "y": 0.9927101731300354,
                         "z": 0.0,
-                        "w": 0.5569210648536682
+                        "w": 0.12021896243095398
                     },
                     {
                         "Owner": 71,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 5.580426216125488,
-                        "y": -2.942493438720703,
-                        "z": -2.387476921081543
+                        "x": -0.47157859802246096,
+                        "y": -1.917745590209961,
+                        "z": -3.915191650390625
                     }
                 ],
                 "Children": []
@@ -3411,12 +3631,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 72,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 72,
@@ -3436,17 +3659,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.8081862330436707,
+                        "y": 0.9876440763473511,
                         "z": 0.0,
-                        "w": 0.5888450145721436
+                        "w": 0.1564938873052597
                     },
                     {
                         "Owner": 72,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 7.721912384033203,
-                        "y": -20.230369567871095,
-                        "z": 8.283712387084961
+                        "x": 4.504680633544922,
+                        "y": -9.696828842163086,
+                        "z": 0.4770040512084961
                     }
                 ],
                 "Children": []
@@ -3460,12 +3683,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 73,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 73,
@@ -3485,17 +3711,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.784341037273407,
+                        "y": 0.980783224105835,
                         "z": 0.0,
-                        "w": 0.6202569603919983
+                        "w": 0.194937065243721
                     },
                     {
                         "Owner": 73,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -7.220608234405518,
-                        "y": -17.27810287475586,
-                        "z": -2.320833206176758
+                        "x": 9.66213607788086,
+                        "y": -12.486649513244629,
+                        "z": 6.83612060546875
                     }
                 ],
                 "Children": []
@@ -3509,12 +3735,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 74,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 74,
@@ -3534,17 +3763,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.7593332529067993,
+                        "y": 0.9732101559638977,
                         "z": 0.0,
-                        "w": 0.6506422162055969
+                        "w": 0.22979094088077546
                     },
                     {
                         "Owner": 74,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -0.47157859802246096,
-                        "y": -1.917745590209961,
-                        "z": -3.915191650390625
+                        "x": -8.392556190490723,
+                        "y": -12.916648864746094,
+                        "z": -8.903409004211426
                     }
                 ],
                 "Children": []
@@ -3558,12 +3787,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 75,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 75,
@@ -3583,17 +3815,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.73353511095047,
+                        "y": 0.9639984965324402,
                         "z": 0.0,
-                        "w": 0.6796013712882996
+                        "w": 0.2657986581325531
                     },
                     {
                         "Owner": 75,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 4.504680633544922,
-                        "y": -9.696828842163086,
-                        "z": 0.4770040512084961
+                        "x": -4.889053821563721,
+                        "y": -17.682525634765626,
+                        "z": 6.868001937866211
                     }
                 ],
                 "Children": []
@@ -3607,12 +3839,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 76,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 76,
@@ -3632,17 +3867,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.7061919569969177,
+                        "y": 0.9533719420433044,
                         "z": 0.0,
-                        "w": 0.7079780101776123
+                        "w": 0.3017078936100006
                     },
                     {
                         "Owner": 76,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 9.66213607788086,
-                        "y": -12.486649513244629,
-                        "z": 6.83612060546875
+                        "x": 2.2052907943725588,
+                        "y": -16.58236312866211,
+                        "z": 0.7071161270141602
                     }
                 ],
                 "Children": []
@@ -3656,12 +3891,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 77,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 77,
@@ -3681,17 +3919,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.6782718300819397,
+                        "y": 0.9415932297706604,
                         "z": 0.0,
-                        "w": 0.7347744703292847
+                        "w": 0.3366847038269043
                     },
                     {
                         "Owner": 77,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -8.392556190490723,
-                        "y": -12.916648864746094,
-                        "z": -8.903409004211426
+                        "x": 9.573091506958008,
+                        "y": -16.347253799438478,
+                        "z": 3.7735633850097658
                     }
                 ],
                 "Children": []
@@ -3705,12 +3943,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 78,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 78,
@@ -3730,17 +3971,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.6487758159637451,
+                        "y": 0.9283580183982849,
                         "z": 0.0,
-                        "w": 0.7609478831291199
+                        "w": 0.37163203954696658
                     },
                     {
                         "Owner": 78,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -4.889053821563721,
-                        "y": -17.682525634765626,
-                        "z": 6.868001937866211
+                        "x": -3.961061477661133,
+                        "y": -18.897350311279298,
+                        "z": -9.537516593933106
                     }
                 ],
                 "Children": []
@@ -3754,12 +3995,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 79,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 79,
@@ -3779,17 +4023,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.6184506416320801,
+                        "y": 0.9140577912330627,
                         "z": 0.0,
-                        "w": 0.7857972979545593
+                        "w": 0.4055386185646057
                     },
                     {
                         "Owner": 79,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 2.2052907943725588,
-                        "y": -16.58236312866211,
-                        "z": 0.7071161270141602
+                        "x": -7.092041492462158,
+                        "y": -3.942636489868164,
+                        "z": -8.447052001953125
                     }
                 ],
                 "Children": []
@@ -3803,12 +4047,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 80,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 80,
@@ -3828,17 +4075,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.5874340534210205,
+                        "y": 0.8983415961265564,
                         "z": 0.0,
-                        "w": 0.8092513680458069
+                        "w": 0.4392663836479187
                     },
                     {
                         "Owner": 80,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 9.573091506958008,
-                        "y": -16.347253799438478,
-                        "z": 3.7735633850097658
+                        "x": 8.579690933227539,
+                        "y": -1.420064926147461,
+                        "z": 5.858641624450684
                     }
                 ],
                 "Children": []
@@ -3852,12 +4099,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 81,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 81,
@@ -3877,17 +4127,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.5550782084465027,
+                        "y": 0.8813891410827637,
                         "z": 0.0,
-                        "w": 0.8317806124687195
+                        "w": 0.4723685681819916
                     },
                     {
                         "Owner": 81,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -3.961061477661133,
-                        "y": -18.897350311279298,
-                        "z": -9.537516593933106
+                        "x": -9.278971672058106,
+                        "y": -19.08314323425293,
+                        "z": -5.034895420074463
                     }
                 ],
                 "Children": []
@@ -3901,12 +4151,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 82,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 82,
@@ -3926,17 +4179,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.5223252773284912,
+                        "y": 0.8633810877799988,
                         "z": 0.0,
-                        "w": 0.8527331352233887
+                        "w": 0.5045309066772461
                     },
                     {
                         "Owner": 82,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -7.092041492462158,
-                        "y": -3.942636489868164,
-                        "z": -8.447052001953125
+                        "x": 6.802906036376953,
+                        "y": -7.054692268371582,
+                        "z": -5.836280822753906
                     }
                 ],
                 "Children": []
@@ -3950,12 +4203,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 83,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 83,
@@ -3975,17 +4231,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.48859259486198428,
+                        "y": 0.8442891240119934,
                         "z": 0.0,
-                        "w": 0.8725001215934753
+                        "w": 0.5358723402023315
                     },
                     {
                         "Owner": 83,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 8.579690933227539,
-                        "y": -1.420064926147461,
-                        "z": 5.858641624450684
+                        "x": 6.558839797973633,
+                        "y": -14.550825119018555,
+                        "z": -2.111067771911621
                     }
                 ],
                 "Children": []
@@ -3999,12 +4255,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 84,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 84,
@@ -4024,17 +4283,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.45387735962867739,
+                        "y": 0.8235717415809631,
                         "z": 0.0,
-                        "w": 0.8910573720932007
+                        "w": 0.5671942830085754
                     },
                     {
                         "Owner": 84,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -9.278971672058106,
-                        "y": -19.08314323425293,
-                        "z": -5.034895420074463
+                        "x": -3.0608558654785158,
+                        "y": -13.313188552856446,
+                        "z": 0.5431127548217773
                     }
                 ],
                 "Children": []
@@ -4048,12 +4307,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 85,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 85,
@@ -4073,17 +4335,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.4185672402381897,
+                        "y": 0.801692545413971,
                         "z": 0.0,
-                        "w": 0.9081802368164063
+                        "w": 0.5977234244346619
                     },
                     {
                         "Owner": 85,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 6.802906036376953,
-                        "y": -7.054692268371582,
-                        "z": -5.836280822753906
+                        "x": 4.125202178955078,
+                        "y": -20.77106285095215,
+                        "z": -9.816823959350586
                     }
                 ],
                 "Children": []
@@ -4097,12 +4359,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 86,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 86,
@@ -4122,17 +4387,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.3827475309371948,
+                        "y": 0.7789561748504639,
                         "z": 0.0,
-                        "w": 0.9238499999046326
+                        "w": 0.627067506313324
                     },
                     {
                         "Owner": 86,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 6.558839797973633,
-                        "y": -14.550825119018555,
-                        "z": -2.111067771911621
+                        "x": 2.1713600158691408,
+                        "y": -8.028532028198243,
+                        "z": -2.390735149383545
                     }
                 ],
                 "Children": []
@@ -4146,12 +4411,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 87,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 87,
@@ -4171,17 +4439,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.3464810848236084,
+                        "y": 0.7549646496772766,
                         "z": 0.0,
-                        "w": 0.9380539655685425
+                        "w": 0.6557559967041016
                     },
                     {
                         "Owner": 87,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -3.0608558654785158,
-                        "y": -13.313188552856446,
-                        "z": 0.5431127548217773
+                        "x": -8.020736694335938,
+                        "y": -4.784149169921875,
+                        "z": 7.656673431396484
                     }
                 ],
                 "Children": []
@@ -4195,12 +4463,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 88,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 88,
@@ -4220,17 +4491,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.3091058135032654,
+                        "y": 0.7300314903259277,
                         "z": 0.0,
-                        "w": 0.9510272741317749
+                        "w": 0.6834075450897217
                     },
                     {
                         "Owner": 88,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 4.125202178955078,
-                        "y": -20.77106285095215,
-                        "z": -9.816823959350586
+                        "x": -7.183626174926758,
+                        "y": -8.939032554626465,
+                        "z": -4.809861183166504
                     }
                 ],
                 "Children": []
@@ -4244,12 +4515,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 89,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 89,
@@ -4269,17 +4543,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.27214959263801577,
+                        "y": 0.7042999863624573,
                         "z": 0.0,
-                        "w": 0.9622542858123779
+                        "w": 0.7098938822746277
                     },
                     {
                         "Owner": 89,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 2.1713600158691408,
-                        "y": -8.028532028198243,
-                        "z": -2.390735149383545
+                        "x": 8.029272079467774,
+                        "y": -20.66556739807129,
+                        "z": 2.4556446075439455
                     }
                 ],
                 "Children": []
@@ -4293,12 +4567,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 90,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 90,
@@ -4318,17 +4595,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.23426687717437745,
+                        "y": 0.6770995855331421,
                         "z": 0.0,
-                        "w": 0.9721733331680298
+                        "w": 0.7358838319778442
                     },
                     {
                         "Owner": 90,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -8.020736694335938,
-                        "y": -4.784149169921875,
-                        "z": 7.656673431396484
+                        "x": -3.0393929481506349,
+                        "y": -18.062297821044923,
+                        "z": 1.0980472564697266
                     }
                 ],
                 "Children": []
@@ -4342,12 +4619,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 91,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 91,
@@ -4367,17 +4647,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.19619235396385194,
+                        "y": 0.6491373777389526,
                         "z": 0.0,
-                        "w": 0.98056560754776
+                        "w": 0.7606609463691711
                     },
                     {
                         "Owner": 91,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -7.183626174926758,
-                        "y": -8.939032554626465,
-                        "z": -4.809861183166504
+                        "x": 6.588630676269531,
+                        "y": -6.656257629394531,
+                        "z": 4.7249555587768559
                     }
                 ],
                 "Children": []
@@ -4391,12 +4671,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 92,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 92,
@@ -4416,17 +4699,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.15739119052886964,
+                        "y": 0.6190294027328491,
                         "z": 0.0,
-                        "w": 0.9875362515449524
+                        "w": 0.7853583097457886
                     },
                     {
                         "Owner": 92,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 8.029272079467774,
-                        "y": -20.66556739807129,
-                        "z": 2.4556446075439455
+                        "x": 2.763946533203125,
+                        "y": -8.49384880065918,
+                        "z": -5.341455459594727
                     }
                 ],
                 "Children": []
@@ -4440,12 +4723,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 93,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 93,
@@ -4465,17 +4751,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.11853225529193878,
+                        "y": 0.5905091166496277,
                         "z": 0.0,
-                        "w": 0.9929503202438355
+                        "w": 0.8070223331451416
                     },
                     {
                         "Owner": 93,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": -3.0393929481506349,
-                        "y": -18.062297821044923,
-                        "z": 1.0980472564697266
+                        "x": 6.077249526977539,
+                        "y": -2.9486045837402345,
+                        "z": 6.282661437988281
                     }
                 ],
                 "Children": []
@@ -4489,12 +4775,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 94,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 94,
@@ -4514,17 +4803,17 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.07966341078281403,
+                        "y": 0.5603601336479187,
                         "z": 0.0,
-                        "w": 0.9968216419219971
+                        "w": 0.8282409310340881
                     },
                     {
                         "Owner": 94,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 6.588630676269531,
-                        "y": -6.656257629394531,
-                        "z": 4.7249555587768559
+                        "x": -8.239361763000489,
+                        "y": -15.41634464263916,
+                        "z": 8.973442077636719
                     }
                 ],
                 "Children": []
@@ -4538,12 +4827,15 @@
                         "Component Type": 17829838403855360956,
                         "Component Name": "legion::core::mesh_filter",
                         "value0": 9915782786907616376,
-                        "Filepath": "models/sphere.obj"
+                        "Filepath": "assets:\\\\models\\sphere.obj"
                     },
                     {
                         "Owner": 95,
                         "Component Type": 14566645459790289390,
-                        "Component Name": "legion::rendering::mesh_renderer"
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
                     },
                     {
                         "Owner": 95,
@@ -4563,17 +4855,433 @@
                         "Component Type": 6841436683689612098,
                         "Component Name": "legion::core::rotation",
                         "x": 0.0,
-                        "y": 0.04065043479204178,
+                        "y": 0.5288203358650208,
                         "z": 0.0,
-                        "w": 0.9991730451583862
+                        "w": 0.8487261533737183
                     },
                     {
                         "Owner": 95,
                         "Component Type": 5024733841066084311,
                         "Component Name": "legion::core::position",
-                        "x": 2.763946533203125,
-                        "y": -8.49384880065918,
-                        "z": -5.341455459594727
+                        "x": -2.153717041015625,
+                        "y": -15.646617889404297,
+                        "z": 4.247840881347656
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 96,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 96,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 96,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 96,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
+                    },
+                    {
+                        "Owner": 96,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 96,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.4974847137928009,
+                        "z": 0.0,
+                        "w": 0.8674652576446533
+                    },
+                    {
+                        "Owner": 96,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -6.914839744567871,
+                        "y": -11.79112434387207,
+                        "z": 7.233390808105469
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 97,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 97,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 97,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 97,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
+                    },
+                    {
+                        "Owner": 97,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 97,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.4644867181777954,
+                        "z": 0.0,
+                        "w": 0.8855745196342468
+                    },
+                    {
+                        "Owner": 97,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 6.430927276611328,
+                        "y": -3.253986358642578,
+                        "z": -3.0118584632873537
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 98,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 98,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 98,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 98,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
+                    },
+                    {
+                        "Owner": 98,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 98,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.4310705065727234,
+                        "z": 0.0,
+                        "w": 0.9023135304450989
+                    },
+                    {
+                        "Owner": 98,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -9.389094352722168,
+                        "y": -16.194019317626954,
+                        "z": 8.114627838134766
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 99,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 99,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 99,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 99,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
+                    },
+                    {
+                        "Owner": 99,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 99,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.3974083364009857,
+                        "z": 0.0,
+                        "w": 0.91763836145401
+                    },
+                    {
+                        "Owner": 99,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -8.25976276397705,
+                        "y": -16.794654846191408,
+                        "z": -8.922879219055176
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 100,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 100,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 100,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 100,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
+                    },
+                    {
+                        "Owner": 100,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 100,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.3629681169986725,
+                        "z": 0.0,
+                        "w": 0.9317988157272339
+                    },
+                    {
+                        "Owner": 100,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 8.399242401123047,
+                        "y": -5.529885292053223,
+                        "z": 3.4304189682006838
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 101,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 101,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 101,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 101,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
+                    },
+                    {
+                        "Owner": 101,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 101,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.32797884941101076,
+                        "z": 0.0,
+                        "w": 0.9446829557418823
+                    },
+                    {
+                        "Owner": 101,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.5730819702148438,
+                        "y": -5.041680335998535,
+                        "z": 8.857719421386719
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 102,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 102,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 102,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 102,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
+                    },
+                    {
+                        "Owner": 102,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 102,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.29284659028053286,
+                        "z": 0.0,
+                        "w": 0.9561571478843689
+                    },
+                    {
+                        "Owner": 102,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -9.223543167114258,
+                        "y": -10.82764720916748,
+                        "z": 6.857303619384766
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Id": 105,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 105,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 9915782786907616376,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 105,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "value0": {
+                            "MaterialFile": "assets:\\\\materials\\pbr.material"
+                        }
+                    },
+                    {
+                        "Owner": 105,
+                        "Component Type": 9380324132116624067,
+                        "Component Name": "sah"
+                    },
+                    {
+                        "Owner": 105,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 105,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.2574217617511749,
+                        "z": 0.0,
+                        "w": 0.9662978053092957
+                    },
+                    {
+                        "Owner": 105,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 1.9416885375976563,
+                        "y": -11.230018615722657,
+                        "z": -1.3555583953857422
                     }
                 ],
                 "Children": []

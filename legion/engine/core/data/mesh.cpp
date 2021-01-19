@@ -14,7 +14,7 @@ namespace legion::core
 
         // Write new data.
         auto& data = resource->get();
-        appendBinaryData(&value.fileName, data);
+        appendBinaryData(&value.filePath, data);
         appendBinaryData(&value.vertices, data);
         appendBinaryData(&value.colors, data);
         appendBinaryData(&value.normals, data);
@@ -43,7 +43,7 @@ namespace legion::core
         byte_vec::const_iterator start = resource.begin();
 
         // Read data
-        retrieveBinaryData(value->fileName, start);
+        retrieveBinaryData(value->filePath, start);
         retrieveBinaryData(value->vertices, start);
         retrieveBinaryData(value->colors, start);
         retrieveBinaryData(value->normals, start);
@@ -166,7 +166,7 @@ namespace legion::core
         }
 
         mesh data = result;
-        data.fileName = file.get_filename(); // Set the filename.
+        data.filePath = file.get_virtual_path(); // Set the filename.
 
         { // Insert the mesh into the mesh list.
             async::readwrite_guard guard(m_meshesLock);

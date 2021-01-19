@@ -188,54 +188,6 @@ namespace legion::core::serialization
 
     };
 
-    template <typename T>
-    class IniSerializer
-    {
-    public:
-
-        //ONLY WORKS WITH MATERIAL PARAMS!!!!
-        //maybe ill fix this later, idk
-        static std::string makeIni(std::string sectionName, T shader)
-        {
-            int count = 0;
-            std::string data = "[" + sectionName + "]\n";
-            fs::view outPutPath("assets://textures/testINI/" + sectionName + ".ini");
-
-            auto info = shader.get_uniform_info();
-            for (int i = 0; i < info.size(); i++)
-            {
-                auto [name, location, type] = info[i];
-                if (name.substr(0, 3).compare("_L_") != 0)
-                {
-                    data += std::string(name + "=\n");
-                }
-            }
-            outPutPath.set(fs::basic_resource(std::string_view(data)));
-            log::debug(outPutPath.get().decay().to_string());
-            return data;
-        }
-
-        static std::string setIni(std::string sectionName, T material)
-        {
-            /* int count = 0;
-             std::string data = "[" + sectionName + "]\n";
-             fs::view outPutPath("assets://textures/testINI/" + sectionName + ".ini");
-
-             auto info = shader.get_uniform_info();
-             for (int i = 0; i < info.size(); i++)
-             {
-                 auto [name, location, type] = info[i];
-                 if (name.substr(0, 3).compare("_L_") != 0)
-                 {
-                     data += std::string(name + "=\n");
-                 }
-             }
-             outPutPath.set(fs::basic_resource(std::string_view(data)));
-             log::debug(outPutPath.get().decay().to_string());*/
-            retur "";
-        }
-    };
-
     struct cache
     {
     public:

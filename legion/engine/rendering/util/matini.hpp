@@ -1,21 +1,90 @@
 #pragma once
 
 #include <inih/ini.h>
-#include <rendering/data/material.hpp>
 #include <tuple>
 #include <sstream>
 #include <vector>
 namespace legion::rendering {
 
+    struct material_handle;
+
     namespace detail
     {
+        class IniBuilder
+        {
+        public:
+            IniBuilder& glyph(const std::string& glyph)
+            {
+                m_contents += glyph;
+                return *this;
+            }
+
+            IniBuilder& section(const std::string & sectionName)
+            {
+                return glyph("["+sectionName+"]\n");
+            }
+            IniBuilder& eq()
+            {
+                return glyph("= ");
+            }
+            IniBuilder& comment(const std::string& contents)
+            {
+                return glyph("; "+contents+"\n");
+            }
+            IniBuilder& value(float v)
+            {
+                return glyph(std::to_string(v)+" ");
+            }
+            IniBuilder& value(int v)
+            {
+                return glyph(std::to_string(v)+ " ");
+            }
+
+            IniBuilder& value(math::vec3 v)
+            {
+                return value(v.x).value(v.y).value(v.z);
+            }
+            IniBuilder& value(math::ivec3 v)
+            {
+                return value(v.x).value(v.y).value(v.z);
+            }
+
+            IniBuilder& value(math::vec4 v)
+            {
+                return value(v.x).value(v.y).value(v.z).value(v.w);
+            }
+            IniBuilder& value(math::ivec4 v)
+            {
+                return value(v.x).value(v.y).value(v.z).value(v.w);
+            }
+            IniBuilder& value(bool b)
+            {
+                return glyph(b ? "true ":"false ");
+            }
+            IniBuilder& value(const std::string& v)
+            {
+                return glyph(v+" ");
+            }
+            IniBuilder& finish_entry()
+            {
+                return glyph("\n");
+            }
+
+            std::string get()
+            {
+                return m_contents;
+            }
+
+        private:
+            std::string m_contents;
+        };
+
         class handler_to_cpp
         {
         public:
             //a place to store the data? maybe, not used
             static int handle(void* user, const char* section, const char* name, const char* value)
             {
-                log::debug("got kv-pair: {}|{}", name, value);
                 auto& self = *static_cast<handler_to_cpp*>(user);
                 self.m_parsed.emplace(section, std::make_pair<std::string, std::string>(name, value));
                 return 1;
@@ -29,7 +98,7 @@ namespace legion::rendering {
 
                 for (auto& [key, value] : iterator::values_only(range))
                 {
-                    std::invoke(f, key, value);
+                    if(std::invoke(f, key, value)) return;
                 }
             }
 
@@ -97,91 +166,37 @@ namespace legion::rendering {
     }
 
 
-    //material_handle | material: the material handle for the material that will have its paramters set.
-    //std::string | section: the section of the ini file that we are going to parse.
-    //fs::view | file: the path to the ini file we are parsing.
-    inline void apply_material_conf(material_handle material, std::string section, fs::view file)
+    inline std::string extract_string(const std::string& section, const std::string& key,fs::view file)
     {
         detail::handler_to_cpp handler;
 
-        auto str = file.get().decay().to_string();
-        const char* cstr = str.c_str();
+        const auto str = file.get().except([](auto err)
+        {
+            log::warn("Unable to open {}, could not load ini settings!");
+            return fs::basic_resource("");
+        }).to_string();
+
+        const char* const cstr = str.c_str();
         ini_parse_string(cstr, &detail::handler_to_cpp::handle, &handler);//parses the ini data into a usable form.
 
-      //  ini_parse_stream(&detail::bytes_to_ini::reader,&reader,&detail::handler_to_cpp::handle,&handler);
+        std::string v;
 
-        //This function goes through each value in a section, reads it, converts it to an appropriate data type and sets the materials params.
-        handler.for_each_value_in_section(std::move(section), [&material, &file](std::string key, std::string value)
+        handler.for_each_value_in_section(section,[&](const std::string& k,const std::string& value)
+        {
+            if(k == key)
             {
-                //these first two are for bools
-                if (value == "true")
-                {
-                    material.set_param(key, true);
-                    return;
-                }
-                else if (value == "false")
-                {
-                    material.set_param(key, false);
-                    return;
-                }
-                else if (value.find_first_of(".f") != std::string::npos) //checks if value is a vector with dimensions 1-4 (where a vector1 is a float), and then converts the value into its respective type
-                {//.f stands for float
-                    if (auto [success, values] = detail::convert_tuple<float, 4>::convert(value); success)
-                    {
-                        auto& [v1, v2, v3, v4] = values;
-                        material.set_param(key, math::vec4(v1, v2, v3, v4));
-                        return;
-                    }
-                    if (auto [success, values] = detail::convert_tuple<float, 3>::convert(value); success)
-                    {
-                        auto& [v1, v2, v3] = values;
-                        material.set_param(key, math::vec3(v1, v2, v3));
-                        return;
-                    }
-                    if (auto [success, values] = detail::convert_tuple<float, 2>::convert(value); success)
-                    {
-                        auto& [v1, v2] = values;
-                        material.set_param(key, math::vec2(v1, v2));
-                        return;
-                    }
-                    if (auto [success, parsed] = detail::convert<float>(value); success)
-                    {
-                        material.set_param(key, parsed);
-                        return;
-                    }
-                }
-                else//checks if value is a ivector with dimensions 1-4 (where a vector1 is a int), and hten converts the value into its respective type
-                {
-                    if (auto [success, values] = detail::convert_tuple<int, 4>::convert(value); success)
-                    {
-                        auto& [v1, v2, v3, v4] = values;
-                        material.set_param(key, math::ivec4(v1, v2, v3, v4));
-                        return;
-                    }
-                    if (auto [success, values] = detail::convert_tuple<int, 3>::convert(value); success)
-                    {
-                        auto& [v1, v2, v3] = values;
-                        material.set_param(key, math::ivec3(v1, v2, v3));
-                        return;
-                    }
-                    if (auto [success, values] = detail::convert_tuple<int, 2>::convert(value); success)
-                    {
-                        auto& [v1, v2] = values;
-                        material.set_param(key, math::ivec2(v1, v2));
-                        return;
-                    }
-                    if (auto [success, parsed] = detail::convert<int>(value); success)
-                    {
-                        material.set_param(key, parsed);
-                        return;
-                    }
-                }
-                material.set_param(key, rendering::TextureCache::create_texture(file.parent() / value));//this will only ever be called if the value is unrecognizable, then the parameter is set to the a texture handle
-            });
+                v = value;
+                return true;
+            }
+            return false;
+        });
+        return v;
     }
 
-    inline void generate_material_conf()
-    {
 
-    }
+    //material_handle | material: the material handle for the material that will have its paramters set.
+    //std::string | section: the section of the ini file that we are going to parse.
+    //fs::view | file: the path to the ini file we are parsing.
+    extern void apply_material_conf(material_handle& material, const std::string& section, fs::view file);
+
 }

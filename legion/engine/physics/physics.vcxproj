@@ -143,7 +143,8 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </Lib>
     <PreBuildEvent>
       <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
 del ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>

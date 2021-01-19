@@ -32,7 +32,7 @@ namespace legion::core
      */
     struct mesh
     {
-        std::string fileName;
+        std::string filePath;
         std::vector<math::vec3> vertices;
         std::vector<math::color> colors;
         std::vector<math::vec3> normals;

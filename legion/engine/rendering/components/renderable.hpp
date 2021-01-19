@@ -22,6 +22,17 @@ namespace legion::rendering
         }
 
         material_handle material = invalid_material_handle;
+
+        template <class Archive>
+        void save(Archive& oa)
+        {
+            oa(material);
+        }
+        template <class Archive>
+        void load(Archive& ia)
+        {
+            ia(material);
+        }
     };
 
 

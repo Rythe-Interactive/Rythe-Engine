@@ -77,7 +77,6 @@ namespace legion::rendering
         if (m_materials.count(id))
             return { id };
 
-        serialization::IniSerializer<shader_handle>::makeIni(name,shader);
 
         if (shader == invalid_shader_handle)
         {
@@ -107,7 +106,7 @@ namespace legion::rendering
 
         auto shader = ShaderCache::create_shader(shaderFile, settings);
 
-        serialization::IniSerializer<shader_handle>::makeIni(name, shader);
+        //serialization::IniSerializer<shader_handle>::makeIni(name, shader);
 
         if (shader == invalid_shader_handle)
         {

@@ -28,19 +28,19 @@ namespace legion::core::ecs
         entity_handle clone = m_registry->createEntity();
         entity_data data = m_registry->getEntityData(get_id());
 
-        if(keep_parent)
+        if (keep_parent)
             clone.set_parent(data.parent);
 
-        if(clone_components)
-            for(id_type cid : data.components)
+        if (clone_components)
+            for (id_type cid : data.components)
             {
-                m_registry->copyComponent(clone,*this,cid);
+                m_registry->copyComponent(clone, *this, cid);
             }
 
-        if(clone_children)
-            for(const entity_handle& h: data.children)
+        if (clone_children)
+            for (const entity_handle& h : data.children)
             {
-                h.clone(false,true,true).set_parent(clone);
+                h.clone(false, true, true).set_parent(clone);
             }
 
         return clone;
@@ -145,7 +145,11 @@ namespace legion::core::ecs
         else
             ent = m_registry->getEntity(m_id);
 
+
         oarchive(cereal::make_nvp("Components", components), cereal::make_nvp("Children", children));
+
+
+
         for (auto child : children)
         {
             child.set_parent(m_id);

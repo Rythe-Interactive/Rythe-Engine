@@ -674,6 +674,7 @@ namespace legion::rendering
         shader shader;
         shader.name = name;
         shader.state = state;
+        shader.path = file.get_virtual_path();
 
         GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
 
@@ -927,6 +928,10 @@ namespace legion::rendering
         return ShaderCache::get_shader(id)->name;
     }
 
+    std::string shader_handle::get_path() const
+    {
+        return ShaderCache::get_shader(id)->path;
+    }
     std::vector<std::tuple<std::string, GLint, GLenum>> shader_handle::get_uniform_info() const
     {
         OPTICK_EVENT();
