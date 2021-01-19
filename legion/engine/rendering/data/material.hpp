@@ -35,7 +35,7 @@ namespace legion::rendering
 
         /**@brief Get the name of the parameter
          */
-        L_NODISCARD std::string get_name() const { return m_name;}
+        L_NODISCARD std::string get_name() const { return m_name; }
 
         /**@internal
          */
@@ -468,73 +468,84 @@ namespace legion::rendering
         bob.comment("Base parameters contains static information about the material");
         bob.section("base").glyph("shader").eq().value(m.m_shader.get_path()).finish_entry();
 
+        if(m.get_name() == "pbr")
+            __debugbreak();
+
         bob.comment("Custom Parameters contains dynamic information about the material");
         bob.comment("if you _really_ need to edit this file, it is probably something here!");
         bob.section("custom");
 
-        for(auto& [key,value] : m.get_params())
+        for (auto& [key, value] : m.get_params())
         {
             std::string kv = value->get_name();
-            if(common::starts_with(kv,"lgn_"))
+            if (common::starts_with(kv, "lgn_"))
                 continue;
 
-            if(common::ends_with(kv,"\0"))
-                kv.resize(kv.size()-1);
+            if (common::ends_with(kv, "\0"))
+                kv.resize(kv.size() - 1);
 
             bob.glyph(kv).eq();
 
-            if(value->type() == typeHash<bool>())
+            if (value->type() == typeHash<bool>())
             {
                 bob.value(static_cast<material_parameter<bool>*>(value.get())->get_value()).finish_entry();
+                continue;
             }
-            if(value->type() == typeHash<float>())
+            if (value->type() == typeHash<float>())
             {
                 bob.value(static_cast<material_parameter<float>*>(value.get())->get_value()).finish_entry();
+                continue;
             }
-            if(value->type() == typeHash<int>())
+            if (value->type() == typeHash<int>())
             {
                 bob.value(static_cast<material_parameter<int>*>(value.get())->get_value()).finish_entry();
+                continue;
             }
-            if(value->type() == typeHash<math::vec3>())
+            if (value->type() == typeHash<math::vec3>())
             {
                 bob.value(static_cast<material_parameter<math::vec3>*>(value.get())->get_value()).finish_entry();
+                continue;
             }
-            if(value->type() == typeHash<math::vec4>())
+            if (value->type() == typeHash<math::vec4>())
             {
                 bob.value(static_cast<material_parameter<math::vec4>*>(value.get())->get_value()).finish_entry();
+                continue;
             }
-            if(value->type() == typeHash<math::ivec3>())
+            if (value->type() == typeHash<math::ivec3>())
             {
                 bob.value(static_cast<material_parameter<math::ivec3>*>(value.get())->get_value()).finish_entry();
+                continue;
             }
-            if(value->type() == typeHash<math::ivec4>())
+            if (value->type() == typeHash<math::ivec4>())
             {
                 bob.value(static_cast<material_parameter<math::ivec4>*>(value.get())->get_value()).finish_entry();
+                continue;
             }
-            if(value->type() == typeHash<texture_handle>())
+            if (value->type() == typeHash<texture_handle>())
             {
-                texture_handle th= static_cast<material_parameter<texture_handle>*>(value.get())->get_value();
+                texture_handle th = static_cast<material_parameter<texture_handle>*>(value.get())->get_value();
                 bob.value(th.get_texture().path).finish_entry();
+                continue;
             }
         }
 
         //TODO(algo-ryth-mix): there needs to be a san step here to avoid impossible filenames!
-        fs::view file("assets://materials/"+m.get_name()+".material");
+        fs::view file("assets://materials/" + m.get_name() + ".material");
         file.set(fs::basic_resource(bob.get()));
-        oa(cereal::make_nvp("MaterialFile",file.get_virtual_path()));
+        oa(cereal::make_nvp("MaterialFile", file.get_virtual_path()));
     }
     template <class Archive>
     void material_handle::load(Archive& ia)
     {
         std::string filepath;
-        ia(cereal::make_nvp("MaterialFile",filepath));
+        ia(cereal::make_nvp("MaterialFile", filepath));
         const fs::view file(filepath);
 
-        const auto shader_location = extract_string("base","shader",file);
+        const auto shader_location = extract_string("base", "shader", file);
 
         async::readwrite_guard guard(MaterialCache::m_materialLock);
-        id = MaterialCache::create_material(filepath,fs::view(shader_location)).id ;
-        apply_material_conf(*this,"custom",file);
+        id = MaterialCache::create_material(filepath, fs::view(shader_location)).id;
+        apply_material_conf(*this, "custom", file);
     }
 
 
