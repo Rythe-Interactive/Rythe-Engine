@@ -33,7 +33,7 @@ namespace legion::core::async
         std::shared_ptr<async_progress> m_progress;
         Func m_repeater;
     public:
-        explicit async_operation(const std::shared_ptr<async_progress>& progress, const Func& repeater) : m_progress(progress), m_repeater(repeater) {}
+        async_operation(const std::shared_ptr<async_progress>& progress, const Func& repeater) : m_progress(progress), m_repeater(repeater) {}
         async_operation() = default;
         async_operation(const async_operation&) = default;
         async_operation(async_operation&&) = default;

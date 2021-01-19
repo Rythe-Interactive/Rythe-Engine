@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <core/platform/platform.hpp>
 #include <core/types/primitives.hpp>
+#include <core/containers/iterator_tricks.hpp>
 
 #include <Optick/optick.h>
 
@@ -41,6 +42,9 @@ namespace legion::core
 		using iterator = typename dense_container::iterator;
 		using const_iterator = typename dense_container::const_iterator;
 
+		using reverse_iterator = typename dense_container::reverse_iterator;
+		using const_reverse_iterator = typename dense_container::const_reverse_iterator;
+
 	private:
 		dense_container m_dense;
 		sparse_container m_sparse;
@@ -56,9 +60,20 @@ namespace legion::core
 		L_NODISCARD const_iterator begin() const { return m_dense.cbegin(); }
 		L_NODISCARD const_iterator cbegin() const { return m_dense.cbegin(); }
 
-		L_NODISCARD iterator end() { return m_dense.begin() + m_size; }
-		L_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
-		L_NODISCARD const_iterator cend() const { return m_dense.cbegin() + m_size; }
+        L_NODISCARD iterator end() { return m_dense.begin() + m_size; }
+        L_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
+        L_NODISCARD const_iterator cend() const { return m_dense.cbegin() + m_size; }
+
+		L_NODISCARD reverse_iterator rbegin() { return m_dense.rbegin() - (m_dense.size() - m_size); }
+		L_NODISCARD const_reverse_iterator rbegin() const { return m_dense.crbegin() - (m_dense.size() - m_size); }
+		L_NODISCARD const_reverse_iterator crbegin() const { return m_dense.crbegin() - (m_dense.size() - m_size); }
+
+		L_NODISCARD reverse_iterator rend() { return m_dense.rend(); }
+		L_NODISCARD const_reverse_iterator rend() const { return m_dense.crend(); }
+		L_NODISCARD const_reverse_iterator crend() const { return m_dense.crend(); }
+
+        L_NODISCARD pair_range<reverse_iterator> reverse_range() { return pair_range<reverse_iterator>(rbegin(), rend()); }
+        L_NODISCARD pair_range<const_reverse_iterator> reverse_range() const { return pair_range<const_reverse_iterator>(crbegin(), crend()); }
 
 		/**@brief Returns the amount of items in the sparse_map.
 		 * @returns size_type Current amount of items contained in sparse_map.

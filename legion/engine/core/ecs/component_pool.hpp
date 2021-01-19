@@ -176,7 +176,7 @@ namespace legion::core::ecs
                 return;
 #endif
 
-            static std::vector<std::tuple<entity_handle, component_type, const component_type&>> modifications;
+            static component_container<component_type> modifications;
             modifications.clear();
 
             {
@@ -187,14 +187,13 @@ namespace legion::core::ecs
                     if (m_components.contains(ent))
                     {
                         component_type& ref = m_components.at(ent);
-                        modifications.emplace_back(ent, ref, std::cref(container[i]));
+                        modifications.emplace_back(ref);
                         ref = container[i];
                     }
                 }
             }
 
-            for (auto& [ent, oldVal, newVal] : modifications)
-                m_eventBus->raiseEvent<events::component_modification<component_type>>(ent, std::move(oldVal), newVal);
+            m_eventBus->raiseEvent<events::bulk_component_modification<component_type>>(entities, modifications, container);
         }
 
         /**@brief Thread-safe check for whether an entity has the component.

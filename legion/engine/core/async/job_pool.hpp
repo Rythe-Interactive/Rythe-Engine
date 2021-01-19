@@ -60,6 +60,9 @@ namespace legion::core::async
 
         virtual void wait(wait_priority priority = wait_priority_normal) const noexcept override
         {
+            if (!jobPoolPtr)
+                return;
+
             OPTICK_EVENT("legion::core::async::job_operation<T>::wait");
             while (!jobPoolPtr->isDone())
             {

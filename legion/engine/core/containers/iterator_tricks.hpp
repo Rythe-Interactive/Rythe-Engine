@@ -3,13 +3,16 @@
 #include <functional>
 #include <core/platform/platform.hpp>
 
-namespace legion::core::iterator
+namespace legion::core
 {
     template <class T>
     struct pair_range
     {
         using iterator = T;
         pair_range(const std::pair<T, T> r) : range(r)
+        {
+        }
+        pair_range(T begin, T end) : range(begin, end)
         {
         }
 

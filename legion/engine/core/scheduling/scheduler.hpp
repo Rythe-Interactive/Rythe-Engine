@@ -36,7 +36,7 @@ namespace legion::core::scheduling
     class Scheduler
     {
     private:
-        friend struct job_pool_base;
+        friend struct legion::core::async::job_pool_base;
         struct thread_error
         {
             std::string message;
@@ -157,11 +157,17 @@ namespace legion::core::scheduling
         template<typename Func>
         auto queueJobs(size_type count, const Func& func)
         {
+            auto repeater = [&](size_type count, auto func) { return queueJobs(count, func); };
+            auto onComplete = [&]() {tryCompleteJobPool(); };
+
+            if (!count)
+                return async::job_operation<decltype(repeater), decltype(onComplete)>(std::shared_ptr<async::async_progress>(nullptr), std::shared_ptr<async::job_pool_base>(nullptr), repeater, onComplete);
+
             OPTICK_EVENT("legion::core::scheduling::Scheduler::queueJobs<T>");
             std::shared_ptr<async::job_pool_base> jobPool = std::shared_ptr<async::job_pool_base>(new async::job_pool<Func>(count, func));
             async::readwrite_guard guard(m_jobQueueLock);
             m_jobs.push(jobPool);
-            return async::job_operation(jobPool->getProgress(), jobPool, [&](size_type count, auto func) { return queueJobs(count, func); }, [&]() {tryCompleteJobPool(); });
+            return async::job_operation<decltype(repeater), decltype(onComplete)>(jobPool->getProgress(), jobPool, repeater, onComplete);
         }
 
         /**@brief Destroy a thread.
