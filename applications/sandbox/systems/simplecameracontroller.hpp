@@ -87,8 +87,10 @@ public:
 
         camera = createEntity();
         camera.add_components<transform>(position(0.f, 3.f, 0.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
+        //no audio for you
+#if !defined(SUPER_LOW_POWER)
         camera.add_component<audio::audio_listener>();
-
+#endif
         rendering::camera cam;
         cam.set_projection(22.5f, 0.001f, 1000.f);
         camera.add_component<rendering::camera>(cam);

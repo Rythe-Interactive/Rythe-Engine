@@ -627,7 +627,8 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(axesH.get_mesh()), rendering::mesh_renderer(vertexColorH));
             ent.add_components<transform>();
         }
-
+        //no audio for you 
+#if !defined(SUPER_LOW_POWER)
         {
             eventAudio = createEntity();
 
@@ -642,7 +643,7 @@ public:
 
 
         }
-
+#endif
         //position positions[1000];
         //for (int i = 0; i < 1000; i++)
         //{
