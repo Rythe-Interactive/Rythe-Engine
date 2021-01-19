@@ -31,16 +31,19 @@ public:
        // reportSystem<TestSystemConvexHull>();
         app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1920, 1080), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
         reportComponentType<sah>();
-        reportSystem<TestSystem>();
-       // reportSystem<pointcloudtestsystem2>();
+       // reportSystem<TestSystem>();
+        reportSystem<pointcloudtestsystem2>();
         reportSystem<SimpleCameraController>();
 
-        reportComponentType<ext::animation>();
+      /*  reportComponentType<ext::animation>();
         reportSystem<ext::Animator>();
         reportSystem<ext::AnimationEditor>();
-        reportSystem<GuiTestSystem>();
-        reportSystem<physics::PhysicsFractureTestSystem>();
+        reportSystem<GuiTestSystem>();*/
 
+        //no physics for you
+#if !defined(SUPER_LOW_POWER)
+        reportSystem<physics::PhysicsFractureTestSystem>();
+#endif
     }
 
     virtual priority_type priority() override
