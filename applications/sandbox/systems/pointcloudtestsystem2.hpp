@@ -60,12 +60,12 @@ public:
         mesh_handle uvMesh = MeshCache::get_handle("uvsphere");
         mesh_handle cubeMesh = MeshCache::get_handle("cube");
         mesh_handle sphereMesh = MeshCache::get_handle("sphere");
-        mesh_handle suzanneeMesh = MeshCache::get_handle("suzanne");
+        mesh_handle suzanne = MeshCache::get_handle("suzanne");
         mesh_handle room = MeshCache::get_handle("room");
 
         auto ent2 = createEntity();
         auto trans2 = ent2.add_components<transform>(position(0, 1, 0), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(room, trans2, billboardMat, image, 2000, 0.2f));
+        ent2.add_component<point_cloud>(point_cloud(suzanne, trans2, billboardMat, image, 5000, 0.1f));
 
  /*       auto ent1 = createEntity();
         auto trans1 = ent1.add_components<transform>(position(1.5f, 1, 0), rotation(), scale(0.5f));

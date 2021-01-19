@@ -50,12 +50,13 @@ namespace legion::rendering
         ecs::EntityQuery query = createQuery<point_cloud>();
         //compute shader
         compute::function pointCloudGeneratorCS;
-
+        compute::function preProcessPointCloudCS;
         void InitComputeShader()
         {
-            //log::debug("init compute shader");
             if (!pointCloudGeneratorCS.isValid())
                 pointCloudGeneratorCS = fs::view("assets://kernels/pointRasterizer.cl").load_as<compute::function>("Main");
+            if (!preProcessPointCloudCS.isValid())
+                preProcessPointCloudCS = fs::view("assets://kernels/calculatePoints.cl").load_as<compute::function>("Main");
         }
         //query entities and iterate them
         void Generate()
@@ -70,47 +71,60 @@ namespace legion::rendering
         void GeneratePointCloud(ecs::component_handle<point_cloud> pointCloud)
         {
             using compute::in, compute::out, compute::karg;
-
             auto realPointCloud = pointCloud.read();
-
 
             //exit early if point cloud has already been generated
             if (realPointCloud.m_hasBeenGenerated) return;
-            // log::debug("new point cloud generation!");
-
+            //read position
             math::vec3 posiitonOffset = pointCloud.entity.get_component_handle<position>().read();
             //get mesh data
             auto m = realPointCloud.m_mesh.get();
             auto vertices = m.second.vertices;
             auto indices = m.second.indices;
             auto uvs = m.second.uvs;
+            uint triangle_count = indices.size() / 3;
 
-            size_t triangle_count = indices.size() / 3;
-            int divider = 2;
+            //compute process size
             uint process_Size = triangle_count;
+            //generate initial buffers from triangle info
+            std::vector<uint> samplesPerTri(triangle_count);
+            auto vertexBuffer = compute::Context::createBuffer(vertices, compute::buffer_type::READ_BUFFER, "vertices");
+            auto indexBuffer = compute::Context::createBuffer(indices, compute::buffer_type::READ_BUFFER, "indices");
+            uint totalSampleCount = 0;
+            uint samplesPerTriangle = realPointCloud.m_maxPoints / triangle_count;
 
-            if (triangle_count > 10000)
+
+
+            //preprocess, calculate individual sample count per triangle
+            std::vector<uint> output(triangle_count);
+            auto outBuffer = compute::Context::createBuffer(output, compute::buffer_type::WRITE_BUFFER, "pointsCount");
+            auto computeResult = preProcessPointCloudCS
+            (
+                process_Size,
+                vertexBuffer,
+                indexBuffer,
+                karg(samplesPerTriangle, "samplesPerTri"),
+                outBuffer
+            );
+            //accumulate toutal triangle sample count
+            for (size_t i = 0; i < triangle_count; i++)
             {
-                while (triangle_count > 100000)
-                {
-                    triangle_count /= 2;
-                    divider *= 2;
-                }
-                process_Size /= divider;
-
+                totalSampleCount += output.at(i);
             }
-            size_t points_Generated = (process_Size * realPointCloud.m_samplesPerTriangle);
-            log::debug(points_Generated);
-            //Generate points 
-            std::vector<math::vec4> result(points_Generated);
+
+            log::debug(totalSampleCount);
+            //Generate points result vector
+            std::vector<math::vec4> result(totalSampleCount);
 
             //Get normal map
             auto [lock, img] = realPointCloud.m_heightMap.get_raw_image();
             {
                 async::readonly_guard guard(lock);
+                //Create buffers
                 auto normalMapBuffer = compute::Context::createImage(img, compute::buffer_type::READ_BUFFER, "normalMap");
                 auto vertexBuffer = compute::Context::createBuffer(vertices, compute::buffer_type::READ_BUFFER, "vertices");
                 auto indexBuffer = compute::Context::createBuffer(indices, compute::buffer_type::READ_BUFFER, "indices");
+                auto sampleBuffer = compute::Context::createBuffer(output, compute::buffer_type::READ_BUFFER, "samples");
                 auto uvBuffer = compute::Context::createBuffer(uvs, compute::buffer_type::READ_BUFFER, "uvs");
                 auto outBuffer = compute::Context::createBuffer(result, compute::buffer_type::WRITE_BUFFER, "points");
                 uint size = realPointCloud.m_heightMap.size().x;
@@ -120,17 +134,17 @@ namespace legion::rendering
                     vertexBuffer,
                     indexBuffer,
                     uvBuffer,
+                    sampleBuffer,
                     normalMapBuffer,
-                    karg(realPointCloud.m_samplesPerTriangle, "samplePerTri"),
-                    karg(realPointCloud.m_sampleDepth, "sampleWidth"),
+                    // karg(realPointCloud.m_sampleDepth, "sampleWidth"),
                     karg(realPointCloud.m_heightStrength, "normalStrength"),
                     karg(size, "textureSize"),
                     outBuffer
                 );
             }
             //translate vec4 into vec3
-            std::vector<math::vec3> particleInput(points_Generated);
-            for (int i = 0; i < points_Generated; i++)
+            std::vector<math::vec3> particleInput(totalSampleCount);
+            for (int i = 0; i < totalSampleCount; i++)
             {
                 particleInput.at(i) = result.at(i).xyz + posiitonOffset;
             }
