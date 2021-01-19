@@ -3,7 +3,6 @@
 #include <map>
 #include <string>
 #include <fstream>
-
 namespace legion::rendering
 {
     sparse_map<id_type, model> ModelCache::m_models;
@@ -11,7 +10,6 @@ namespace legion::rendering
 
     async::rw_spinlock ModelCache::m_modelNameLock;
     std::unordered_map<id_type, std::string> ModelCache::m_modelNames;
-
     bool model_handle::is_buffered() const
     {
         return ModelCache::get_model(id).buffered;
@@ -20,6 +18,11 @@ namespace legion::rendering
     void model_handle::buffer_data(const buffer& matrixBuffer) const
     {
         ModelCache::buffer_model(id, matrixBuffer);
+    }
+
+    void model_handle::overwrite_buffer(buffer& newBuffer, uint bufferID, bool perInstance) const
+    {
+        ModelCache::overwrite_buffer(id, newBuffer, bufferID, perInstance);
     }
 
     mesh_handle model_handle::get_mesh() const
@@ -42,6 +45,56 @@ namespace legion::rendering
     {
         async::readonly_guard guard(m_modelNameLock);
         return m_modelNames[id];
+    }
+
+    void ModelCache::overwrite_buffer(id_type id, buffer& newBuffer, uint bufferID, bool perInstance)
+    {
+        if (id == invalid_id)
+            return;
+        //get mesh handle
+        auto mesh_handle = MeshCache::get_handle(id);
+        if (!mesh_handle)
+            return;
+        //get mesh and lock
+        auto [lock, mesh] = mesh_handle.get();
+        async::readonly_multiguard guard(m_modelLock, lock);
+        model& model = m_models[id];
+        //set new buffer based on ID
+        switch (bufferID)
+        {
+            //COLOR
+        case SV_COLOR:
+            model.colorBuffer = newBuffer;
+            model.vertexArray.setAttribPointer(model.colorBuffer, SV_COLOR, 4, GL_FLOAT, false, 0, 0);
+            model.vertexArray.setAttribDivisor(SV_COLOR, perInstance);
+            break;
+            //POSITIONS
+        case SV_POSITION:
+            model.colorBuffer = newBuffer;
+            model.vertexArray.setAttribPointer(model.colorBuffer, SV_POSITION, 4, GL_FLOAT, false, 0, 0);
+            model.vertexArray.setAttribDivisor(SV_POSITION, perInstance);
+            break;
+            //NORMALS
+        case SV_NORMAL:
+            model.colorBuffer = newBuffer;
+            model.vertexArray.setAttribPointer(model.colorBuffer, SV_NORMAL, 4, GL_FLOAT, false, 0, 0);
+            model.vertexArray.setAttribDivisor(SV_NORMAL, perInstance);
+            break;
+            //TANGENT
+        case SV_TANGENT:
+            model.colorBuffer = newBuffer;
+            model.vertexArray.setAttribPointer(model.colorBuffer, SV_TANGENT, 4, GL_FLOAT, false, 0, 0);
+            model.vertexArray.setAttribDivisor(SV_TANGENT, perInstance);
+            break;
+            //UVS
+        case SV_TEXCOORD0:
+            model.colorBuffer = newBuffer;
+            model.vertexArray.setAttribPointer(model.colorBuffer, SV_TEXCOORD0, 4, GL_FLOAT, false, 0, 0);
+            model.vertexArray.setAttribDivisor(SV_TEXCOORD0, perInstance);
+            break;
+        default:
+            break;
+        }
     }
 
     void ModelCache::buffer_model(id_type id, const buffer& matrixBuffer)

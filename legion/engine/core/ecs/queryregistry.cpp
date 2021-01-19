@@ -222,8 +222,8 @@ namespace legion::core::ecs
         if (lastModified > localModified)
         {
             localList.clear();
-            for (auto ent : entityList)
-                localList.push_back(ent);
+
+            localList.assign(entityList.begin(), entityList.end());
 
             auto& localComps = m_localComponents[queryId];
             auto& compTypes = m_componentTypes.at(queryId);
