@@ -213,7 +213,7 @@ namespace legion::physics
                 }
             }
 
-            //------------------------------------------------ Pre Colliison Solve Event --------------------------------------------//
+            //------------------------------------------------ Pre Colliison Solve Events --------------------------------------------//
 
             // all manifolds are initially valid
 

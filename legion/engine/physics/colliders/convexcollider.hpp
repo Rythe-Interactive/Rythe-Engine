@@ -587,11 +587,6 @@ namespace legion::physics
             return collection;
         }
 
-
-        //TODO Raphael,Jelle : FIX MERGE FACES AND NORMALS
-        // Current bug is in construct horizon
-
-
         /**
          * @brief Constructs a horizon from a vert view onto the current hull
          * 
@@ -603,7 +598,7 @@ namespace legion::physics
          */
         void convexHullConstructHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges,
             HalfEdgeEdge* originEdge = nullptr, std::shared_ptr<std::unordered_set<HalfEdgeFace*>> visited = nullptr);
-
+        //TODO add documentation 
         void ConstructHorizonByEdgeJumping(math::vec3 vert, std::deque<HalfEdgeEdge*>& edges,
             std::vector<HalfEdgeFace*>& faces,math::vec3 spacing = math::vec3());
 
@@ -624,9 +619,9 @@ namespace legion::physics
                 {
                     if (faces.at(i) == halfEdgeFaces.at(j)) { continue; }
                      //Do not check if createdFace is halfEdgeFace, because the createdFaces are not yet added to the halfEdgeFaces list
-                    log::debug("face i {} face j {}", math::to_string(faces.at(i)->normal), math::to_string(halfEdgeFaces.at(j)->normal));
+                    //log::debug("face i {} face j {}", math::to_string(faces.at(i)->normal), math::to_string(halfEdgeFaces.at(j)->normal));
                     HalfEdgeFace::face_angle_relation relation = faces.at(i)->getAngleRelation(*(halfEdgeFaces.at(j)));
-                    log::debug("relation {}", HalfEdgeFace::to_string(relation));
+                    //log::debug("relation {}", HalfEdgeFace::to_string(relation));
                     
 
 
@@ -636,7 +631,7 @@ namespace legion::physics
                         HalfEdgeEdge* centerEdge = HalfEdgeFace::findMiddleEdge(*halfEdgeFaces.at(j), *faces.at(i));
                         if (centerEdge != nullptr)
                         {
-                            log::debug("merge faces {}", halfEdgeFaces.at(j)->normal);
+                            //log::debug("merge faces {}", halfEdgeFaces.at(j)->normal);
 
 
                             // Because we tried to get a center edge on the halfEdgeFaces.at(j) side

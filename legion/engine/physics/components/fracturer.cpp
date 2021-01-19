@@ -1,26 +1,36 @@
 #include <physics/components/fracturer.h>
 #include <physics/data/physics_manifold.hpp>
 #include <physics/physics_statics.hpp>
+#include <physics/colliders/convexcollider.hpp>
+#include <physics/data/identifier.hpp>
+#include <physics/physics_statics.hpp>
+
 namespace legion::physics
 {
+    ecs::EcsRegistry* Fracturer::registry = nullptr;
+
     void Fracturer::HandleFracture(physics_manifold& manifold, bool& manifoldValid,bool isfracturingA)
     {
         if (!IsFractureConditionMet()) { return; }
         log::debug("manifold invalidated");
         manifoldValid = false;
 
-
-        //create a voronoi diagram with a  set of positions for now the diagram is always as big as the colliders of the physicsComponent//
+        //-----------------------------------------------------------------------------------------------------------------------------//
+        //------------------------ create a voronoi diagram with a  set of positions for now the diagram-------------------------------//
+        //------------------------------- is always as big as the colliders of the physicsComponent------------------------------------//
+        //-----------------------------------------------------------------------------------------------------------------------------//
 
         auto collider = isfracturingA ? manifold.colliderA: manifold.colliderB;
-        auto fractureInstigatorEnt = isfracturingA ? manifold.physicsCompB.entity : manifold.physicsCompA.entity;
+        auto fractureInstigatorEnt = isfracturingA ? manifold.physicsCompA.entity : manifold.physicsCompB.entity;
 
         auto [min,max] = collider->GetMinMaxWorldAABB();
 
         math::vec3 difference = max - min;
         math::vec3 differenceQuadrant = difference / 4.0f;
 
-        //create voronoi points
+        //-----------------------------------------------------------------------------------------------------------------------------//
+                                //Generate a Voronoi Diagram, for now, the points are manually generated //
+        //-----------------------------------------------------------------------------------------------------------------------------//
 
         std::vector<math::vec3> VoronoiPoints;
 
@@ -35,6 +45,9 @@ namespace legion::physics
 
         math::vec3 fourth = max - (differenceQuadrant * 2) + math::vec3(0,0.5f,0);
         VoronoiPoints.push_back(fourth);
+
+        math::vec3 fifth = min + differenceQuadrant - math::vec3(0, 0.0f, -0.2f);
+        VoronoiPoints.push_back(fifth);
 
         for (auto point : VoronoiPoints)
         {
@@ -62,15 +75,16 @@ namespace legion::physics
             {
                 int id = position.w;
 
-                log::debug("position {} id {} ",math::to_string(math::vec3(position)), id);
+                //log::debug("position {} id {} ",math::to_string(math::vec3(position)), id);
                 groupedPoints.at(id).push_back(position);
 
             }
         }
 
-        
+        //-----------------------------------------------------------------------------------------------------------------------------//
+                                //Using the voronoi points, generate a set of colliders  //
+        //-----------------------------------------------------------------------------------------------------------------------------//
 
-        //using positions of voronoi diagram create an array of convex colliders with quickhull
         std::vector<std::shared_ptr<ConvexCollider>> voronoiColliders;
         int i = 1;
 
@@ -80,18 +94,24 @@ namespace legion::physics
             math::color debugColor = 
                 math::color(math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f));
 
+            //i * 2.0f, 0, 0
             math::mat4 transform =
-                math::compose(math::vec3(1.0f), math::identity<math::quat>(), math::vec3(i * 2.0f, 0, 0));
+                math::compose(math::vec3(1.0f), math::identity<math::quat>(), math::vec3());
 
             for (math::vec3 vertex : vector)
             {
-                math::vec3 vertPos = vertex + math::vec3(i * 2.0f, 0, 0);
+                //+ math::vec3(i * 2.0f, 0, 0)
+                math::vec3 vertPos = vertex ;
                 debug::user_projectDrawLine(vertPos, vertPos + math::vec3(0,0.5,0), debugColor,10.0f,FLT_MAX);
             }
 
             auto newCollider = std::make_shared<ConvexCollider>();
-            colliders.push_back(newCollider);
+
+            debugVectorcolliders.push_back(newCollider);
+            voronoiColliders.push_back(newCollider);
+
             verticesList.push_back(vector);
+
             newCollider->ConstructConvexHullWithVertices(vector);
 
 
@@ -100,36 +120,106 @@ namespace legion::physics
             i++;
         }
 
-
         std::vector< FracturerColliderToMeshPairing> colliderToMeshPairings;
 
-        //get list of collider to mesh pairs
+        //-----------------------------------------------------------------------------------------------------------------------------//
+                                //From the mesh about to be fractured, get the pairs of colliders to Mesh  //
+        //-----------------------------------------------------------------------------------------------------------------------------//
 
-        //make sure fractureInstigatorEnt is a direct child of the world
-        
-        for (size_t i = 0; i < fractureInstigatorEnt.child_count() ; i++)
+        //make sure fractureInstigatorEnt is a direct child of the world, the initial instigator will always
+        //be either a direct parent of the world, or a grandchild of the world
+        bool isInstigatorDirectParent = fractureInstigatorEnt.get_parent() == registry->world;
+
+        if (!isInstigatorDirectParent)
         {
-            //get mesh
-            //get mesh_splitter
-            //get physicsComponent
-
-            //if all three components are present in this child added in colliderToMeshPairings
+            log::debug("instigator is not direct parent");
+            fractureInstigatorEnt = fractureInstigatorEnt.get_parent();
         }
 
 
-        //for each instantiated convex collider
 
-            //check if it collides with one of the colliders in the original physics component
-            //if it does
-                //push back to pair list
+        InstantiateColliderMeshPairingWithEntity(fractureInstigatorEnt,
+            colliderToMeshPairings);
+
+        for (size_t i = 0; i < fractureInstigatorEnt.child_count() ; i++)
+        {
+            auto child = fractureInstigatorEnt.get_child(i);
+
+            InstantiateColliderMeshPairingWithEntity(child,
+                colliderToMeshPairings);
+        }
+
+        log::debug("colliderToMeshPairings size {} ", colliderToMeshPairings.size());
+        log::debug("voronoiColliderssize {} ", voronoiColliders.size());
+
+        int fractureID = 0;
+        //for each instantiated convex collider
+        for (std::shared_ptr<ConvexCollider> instantiatedVoronoiCollider : voronoiColliders)
+        {
+            for (auto& meshToColliderPairing : colliderToMeshPairings)
+            {
+                //check if it collides with one of the colliders in the original physics component
+                physics_manifold manifold;
+                ConvexConvexCollisionInfo collisionInfo;
+
+
+                auto ownerEntity = meshToColliderPairing.meshSplitterPairing.
+                    entity;
+                auto [posH,rotH,scaleH] = ownerEntity.get_component_handles<transform>();
+                
+                if (!ownerEntity)
+                {
+                    DebugBreak();
+                }
+
+                auto transformB = math::compose(scaleH.read(), rotH.read(), posH.read());
+
+                PhysicsStatics::DetectConvexConvexCollision(instantiatedVoronoiCollider.get()
+                    , meshToColliderPairing.colliderPair.get(), math::mat4(1.0f), transformB, collisionInfo, manifold);
+
+                if (manifold.isColliding)
+                {
+                    log::debug("-> Collision Found");
+                    if (fractureID == 0)
+                    {
+                        std::vector<MeshSplitParams> splittingParams;
+                        meshToColliderPairing.GenerateSplittingParamsFromCollider(instantiatedVoronoiCollider, splittingParams);
+                        log::debug("splittingParams {} ", splittingParams.size());
+
+
+                        for (size_t i = 0; i < splittingParams.size(); i++)
+                        {
+                            float interpolant = (float)i / splittingParams.size();
+
+                            math::vec3 color = math::color(1,0,0) * interpolant;
+
+                                debug::user_projectDrawLine(splittingParams.at(i).planePostion
+                                    , splittingParams.at(i).planePostion + splittingParams.at(i).planeNormal,
+                                    math::color(color.x,color.y,color.z,1), 15.0f, FLT_MAX, true);
+                        }
+                        
+
+                        std::vector<ecs::entity_handle> entitiesGenerated;
+
+                        auto splitter = meshToColliderPairing.meshSplitterPairing.read();
+                        splitter.MultipleSplitMesh(splittingParams, entitiesGenerated);
+                        meshToColliderPairing.meshSplitterPairing.write(splitter);
+
+
+                    }
+
+
+                    fractureID++;
+                }
+            }
+        }
+            
+            
 
         //for each pair list
+            
 
-            //invalidate original collider
-
-            //for each face in instantiated Collider
-                //split associated mesh with splitting params
-                //run quick hull on new mesh
+             //invalidate original collider
 
 
         //for each generated collider paired with a newly generated mesh
@@ -165,6 +255,54 @@ namespace legion::physics
        
 
 
+
+    }
+
+    void Fracturer::InstantiateColliderMeshPairingWithEntity(ecs::entity_handle ent,
+        std::vector<FracturerColliderToMeshPairing>& colliderToMeshPairings)
+    {
+        //the fracturer is setup in a way that fragments are all stored in a different entity
+        auto physicsCompHandle = ent.get_component_handle<physics::physicsComponent>();
+        std::shared_ptr<ConvexCollider> convexCollider = nullptr;
+
+        auto physicsCollider = physicsCompHandle.read().colliders->at(0);
+
+        if (physicsCompHandle)
+        {
+            convexCollider = std::dynamic_pointer_cast<ConvexCollider>(physicsCollider);
+        }
+
+        auto meshSplitterHandle = ent.get_component_handle<MeshSplitter>();
+        //assert(meshSplitterHandle);
+
+        if (auto idH = ent.get_component_handle<physics::identifier>())
+        {
+            auto id = idH.read();
+            log::debug("id found {} ", id.id);
+
+        }
+        else
+        {
+            log::debug("NO ID");
+        }
+
+
+        if (meshSplitterHandle && convexCollider)
+        {
+            FracturerColliderToMeshPairing colliderToMeshPairing(convexCollider, meshSplitterHandle);
+            colliderToMeshPairings.push_back(colliderToMeshPairing);
+        }
+
+
+    }
+
+    void FracturerColliderToMeshPairing::GenerateSplittingParamsFromCollider(std::shared_ptr<ConvexCollider> instantiatedCollider, std::vector<physics::MeshSplitParams>& meshSplitParams)
+    {
+        for (auto face : instantiatedCollider->GetHalfEdgeFaces())
+        {
+            MeshSplitParams splitParam(face->centroid, face->normal);
+            meshSplitParams.push_back(splitParam);
+        }
 
     }
 

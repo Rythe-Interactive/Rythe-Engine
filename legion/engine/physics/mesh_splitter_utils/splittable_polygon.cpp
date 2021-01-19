@@ -78,12 +78,12 @@ namespace legion::physics
             float distToPlane = PhysicsStatics::PointDistanceToPlane
             (planeNormal, planePosition, worldPosition);
 
-            if (distToPlane > constants::polygonItersectionEpsilon)
+            if (distToPlane > 0.0f)
             {
                 aboveCount++;
             }
 
-            if (distToPlane < constants::polygonItersectionEpsilon)
+            if (distToPlane < 0.0f)
             {
                 belowCount++;
             }

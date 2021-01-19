@@ -57,6 +57,9 @@
     <ClCompile Include="physics_statics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mesh_splitter_utils\mesh_splitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -174,6 +177,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\VoronoiAABB.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\convex_convex_collision_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

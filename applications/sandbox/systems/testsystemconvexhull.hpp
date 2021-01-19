@@ -182,8 +182,8 @@ public:
     void drawConvexHull(convex_hull_debug * action)
     {
         
-        log::debug("drawConvexHull");
-        log::debug("stepToSee {} ", stepToSee);
+        //log::debug("drawConvexHull");
+        //log::debug("stepToSee {} ", stepToSee);
         if (!action->value)
         {
             ecs::EntityQuery fractureQuery = createQuery<physics::Fracturer>();
@@ -192,7 +192,7 @@ public:
             {
                 auto fracturer = ent.read_component<physics::Fracturer>();
 
-                log::debug("fracturer.transforms {} ", fracturer.transforms.size());
+                //log::debug("fracturer.transforms {} ", fracturer.transforms.size());
 
                 for (size_t i = 0; i < fracturer.verticesList.size(); i++)
                 {
@@ -209,7 +209,7 @@ public:
                     std::shared_ptr<physics::ConvexCollider> newCollider = std::make_shared<physics::ConvexCollider>();
                     newCollider->debug = false;
                     newCollider->step = stepToSee;
-                    log::debug("ConstructConvexHullWithVertices with step {}", newCollider->step);
+                    //log::debug("ConstructConvexHullWithVertices with step {}", newCollider->step);
 
                     
 

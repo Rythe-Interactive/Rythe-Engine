@@ -54,6 +54,8 @@ namespace legion::physics
             , cylinderH, complexH, textureH);*/
 
         createProcess<&PhysicsFractureTestSystem::colliderDraw>("Update");
+
+        Fracturer::registry = m_ecs;
     }
 
     void PhysicsFractureTestSystem::colliderDraw(time::span dt)
@@ -776,6 +778,19 @@ namespace legion::physics
 
             wall.write_component(rotation);
 
+            auto splitterH = wall.add_component<physics::MeshSplitter>();
+            auto splitter = splitterH.read();
+            splitter.InitializePolygons(wall);
+            splitterH.write(splitter);
+
+
+            auto idH = wall.add_component<physics::identifier>();
+            auto id = idH.read();
+            id.id = "WALL";
+            idH.write(id);
+
+            
+
         }
 
         //-------------------------------------------------------------------------------------------------------------------------------//
@@ -810,6 +825,8 @@ namespace legion::physics
             rotation *= math::angleAxis(math::deg2rad(45.0f), math::vec3(0, 1, 0));
             rotation *= math::angleAxis(math::deg2rad(-60.0f), math::vec3(1, 0, 0));
             block.write_component(rotation);
+
+           
 
         }
 

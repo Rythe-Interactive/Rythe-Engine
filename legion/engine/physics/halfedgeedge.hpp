@@ -56,7 +56,7 @@ namespace legion::physics
 			return nextEdge->edgePosition - edgePosition;
 		}
 
-        bool isVertVisible(const math::vec3& vert)
+        bool isVertexVisible(const math::vec3& vert)
         {
             float distanceToPlane =
                 math::pointToPlane(vert, edgePosition, face->normal);
@@ -64,9 +64,9 @@ namespace legion::physics
             return distanceToPlane > math::epsilon<float>();
         }
 
-        bool isEdgeHorizonFromVert(const math::vec3& vert)
+        bool isEdgeHorizonFromVertex(const math::vec3& vert)
         {
-            return isVertVisible(vert) && !pairingEdge->isVertVisible(vert);
+            return isVertexVisible(vert) && !pairingEdge->isVertexVisible(vert);
         }
 
 

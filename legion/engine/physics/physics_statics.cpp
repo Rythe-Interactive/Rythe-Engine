@@ -3,6 +3,45 @@
 #include <rendering/debugrendering.hpp>
 namespace legion::physics
 {
+    void PhysicsStatics::DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB
+        , ConvexConvexCollisionInfo& outCollisionInfo,physics_manifold& manifold)
+    {
+        //'this' is colliderB and 'convexCollider' is colliderA
+
+        outCollisionInfo.ARefSeperation = 0.0f;
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(
+            convexB, convexA, transformB, transformA, outCollisionInfo.ARefFace, outCollisionInfo.ARefSeperation) || !outCollisionInfo.ARefFace.ptr)
+        {
+            //log::debug("Not Found on A ");
+            return;
+        }
+
+
+        //log::debug("Face Check B");
+        outCollisionInfo.BRefSeperation = 0.0f;
+        if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexA,
+            convexB, transformA,transformB, outCollisionInfo.BRefFace, outCollisionInfo.BRefSeperation) || !outCollisionInfo.BRefFace.ptr)
+        {
+            //log::debug("Not Found on B ");
+            return;
+        }
+
+        PointerEncapsulator< HalfEdgeEdge> edgeRef;
+        PointerEncapsulator< HalfEdgeEdge> edgeInc;
+
+
+        outCollisionInfo.aToBEdgeSeperation =0.0f;
+        //log::debug("Edge Check");
+        if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(convexB, convexA, transformB,transformA,
+            edgeRef, edgeInc, outCollisionInfo.edgeNormal, outCollisionInfo.aToBEdgeSeperation))
+        {
+            //log::debug("aToBEdgeSeperation {} " );
+            return;
+        }
+
+        manifold.isColliding = true;
+    }
+
     float PhysicsStatics::GetSupportPoint(const std::vector<math::vec3>& vertices, const math::vec3& direction,math::vec3& outVec)
     {
         float currentMaximumSupportPoint = std::numeric_limits<float>::lowest();

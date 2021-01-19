@@ -5,6 +5,7 @@
 #include <physics/data/contact_vertex.hpp>
 #include <Voro++/voro++.hh>
 #include <rendering/debugrendering.hpp>
+#include <physics/data/convex_convex_collision_info.h>
 
 namespace legion::physics
 {
@@ -16,6 +17,10 @@ namespace legion::physics
         //TODO move implementation to seperate cpp file
 
         //---------------------------------------------------------------- Collision Detection ----------------------------------------------------------------------------//
+
+        static void DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB
+            , const math::mat4& transformA, const math::mat4& transformB,
+            ConvexConvexCollisionInfo& outCollisionInfo,  physics_manifold& manifold);
 
         /** @brief Given a transformed ConvexCollider and a direction, Gets the vertex furthest in the given direction
          * @param planePosition The position of the support plane in world space
