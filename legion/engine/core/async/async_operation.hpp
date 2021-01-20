@@ -21,8 +21,8 @@ namespace legion::core::async
         size_type rawProgress() const noexcept;
 
         void complete() noexcept;
-        void advanceProgress(size_type progress = 1) noexcept;
-        bool isDone() const noexcept;
+        void advance_progress(size_type progress = 1) noexcept;
+        bool is_done() const noexcept;
         float progress() const noexcept;
     };
 
@@ -38,9 +38,9 @@ namespace legion::core::async
         async_operation(const async_operation&) = default;
         async_operation(async_operation&&) = default;
 
-        bool isDone() const noexcept
+        bool is_done() const noexcept
         {
-            return m_progress->isDone();
+            return m_progress->is_done();
         }
 
         float progress() const noexcept
@@ -51,7 +51,7 @@ namespace legion::core::async
         virtual void wait(wait_priority priority = wait_priority_normal) const noexcept
         {
             OPTICK_EVENT("legion::core::async::async_operation<T>::wait");
-            while (!m_progress->isDone())
+            while (!m_progress->is_done())
             {
                 switch (priority)
                 {

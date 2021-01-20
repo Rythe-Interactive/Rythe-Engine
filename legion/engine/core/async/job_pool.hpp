@@ -24,7 +24,7 @@ namespace legion::core::async
     public:
         job_pool_base(size_type count) : m_progress(new async_progress(count)) {}
 
-        std::shared_ptr<async_progress> getProgress() const noexcept
+        std::shared_ptr<async_progress> get_progress() const noexcept
         {
             return m_progress;
         }
@@ -33,12 +33,12 @@ namespace legion::core::async
 
         void complete_job()
         {
-            m_progress->advanceProgress();
+            m_progress->advance_progress();
         }
 
-        bool isDone() const noexcept
+        bool is_done() const noexcept
         {
-            return m_progress->isDone();
+            return m_progress->is_done();
         }
 
         virtual bool empty() const noexcept LEGION_PURE;
@@ -64,7 +64,7 @@ namespace legion::core::async
                 return;
 
             OPTICK_EVENT("legion::core::async::job_operation<T>::wait");
-            while (!jobPoolPtr->isDone())
+            while (!jobPoolPtr->is_done())
             {
                 switch (priority)
                 {
@@ -80,7 +80,7 @@ namespace legion::core::async
                         jobPoolPtr->complete_job();
                     }
 
-                    if (jobPoolPtr->isDone())
+                    if (jobPoolPtr->is_done())
                     {
                         m_onComplete();
                     }
@@ -97,7 +97,7 @@ namespace legion::core::async
                         jobPoolPtr->complete_job();
                     }
 
-                    if (jobPoolPtr->isDone())
+                    if (jobPoolPtr->is_done())
                     {
                         m_onComplete();
                     }

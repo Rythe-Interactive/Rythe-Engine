@@ -167,7 +167,7 @@ namespace legion::core::scheduling
             std::shared_ptr<async::job_pool_base> jobPool = std::shared_ptr<async::job_pool_base>(new async::job_pool<Func>(count, func));
             async::readwrite_guard guard(m_jobQueueLock);
             m_jobs.push(jobPool);
-            return async::job_operation<decltype(repeater), decltype(onComplete)>(jobPool->getProgress(), jobPool, repeater, onComplete);
+            return async::job_operation<decltype(repeater), decltype(onComplete)>(jobPool->get_progress(), jobPool, repeater, onComplete);
         }
 
         /**@brief Destroy a thread.
@@ -249,7 +249,7 @@ namespace legion::core::scheduling
 
             log::impl::thread_names[chainThreadId] = std::string(name);
 #if USE_OPTICK
-            sendCommand(chainThreadId, [&]()
+            sendCommand(chainThreadId, [&name = name]()
                 {
                     log::info("Thread {} assigned.", std::this_thread::get_id());
                     async::set_thread_name(name);
@@ -259,7 +259,7 @@ namespace legion::core::scheduling
                     OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
                 });
 #else
-            sendCommand(chainThreadId, [&]()
+            sendCommand(chainThreadId, [&name = name]()
                 {
                     log::info("Thread {} assigned.", std::this_thread::get_id());
                     async::set_thread_name(name);

@@ -70,7 +70,7 @@ namespace legion::core::scheduling
             {
                 async::readonly_guard guard(m_jobQueueLock);
                 auto pool = m_jobs.front();
-                while (instruction && !pool->isDone())
+                while (instruction && !pool->is_done())
                 {
                     {
                         OPTICK_EVENT("Executing job");
@@ -107,7 +107,7 @@ namespace legion::core::scheduling
         async::readwrite_guard wguard(m_jobQueueLock);
         if (!m_jobs.empty())
         {
-            if (m_jobs.front()->isDone())
+            if (m_jobs.front()->is_done())
             {
                 m_jobs.pop();
             }

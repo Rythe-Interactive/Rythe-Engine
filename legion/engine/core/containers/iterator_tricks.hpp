@@ -12,7 +12,9 @@ namespace legion::core
         pair_range(const std::pair<T, T> r) : range(r)
         {
         }
-        pair_range(T begin, T end) : range(begin, end)
+
+        template<typename ItType>
+        pair_range(ItType begin, ItType end) : range(std::move(begin), std::move(end))
         {
         }
 
@@ -32,6 +34,9 @@ namespace legion::core
     #if !defined(DOXY_EXCLUDE)
     template <class T>
     pair_range(std::pair<T, T>)->pair_range<T>;
+
+    template <class T>
+    pair_range(T begin, T end)->pair_range<std::remove_reference_t<T>>;
     #endif
 
     template <class It>
