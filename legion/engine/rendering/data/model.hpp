@@ -45,29 +45,7 @@ namespace legion::rendering
 
         mesh_handle get_mesh() const;
         const model& get_model() const;
-
-        /*void serialize(cereal::JSONOutputArchive& archive);
-
-        void serialize(cereal::JSONInputArchive& archive);*/
     };
-
-    ////Out to disk, i.e Serialize
-    //void model_handle::serialize(cereal::JSONOutputArchive& oarchive)
-    //{
-    //    size_type index = serialization::DataCache<model_handle>::append_list("ModelCache",*this);
-    //    oarchive(id,cereal::make_nvp("ModelCache Index",index));
-    //}
-
-    ////In from disk, i.e Deserialize
-    //void model_handle::serialize(cereal::JSONInputArchive& iarchive)
-    //{
-    //    size_type index;
-    //    iarchive(cereal::make_nvp("ModelCache Index",index));
-    //    model_handle modelH = serialization::DataCache<model_handle>::get_item_from_list("ModelCache", index);
-    //    //ModelCache::create_model(modelH.get_mesh());
-    //}
-
-   
 
     constexpr model_handle invalid_model_handle { invalid_id };
 

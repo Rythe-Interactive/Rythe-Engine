@@ -42,35 +42,11 @@ namespace legion::core::scenemanagement
                             auto fileName = file.get_filename().decay();
                             log::debug("Added {}",fileName);
                             sceneNames.emplace(nameHash(fileName), fileName);
-                            for(auto scene : sceneNames)
-                            {
-                                //loadScene(scene.second);
-                            }
                         }
                     }
                 }
             }
-            log::debug("This Setup Works");
         }
-
-        /**@brief Updates the SceneManager.
-         * @note Not used yet
-         */
-        void update()
-        {
-        }
-
-        /**@brief Prefetches resources
-         */
-        static bool prefetchResources(fs::view fileView);
-
-        /** @internal
-         */
-        static bool prefetchRecursive(nlohmann::json j, id_type hash);
-
-        /** @internal
-         */
-        static bool importResource(const std::string& path, bool unique, const std::string& unique_ident);
 
         /**@brief Creates a scene with given name.
           * @param name The name you wish to set the scene.

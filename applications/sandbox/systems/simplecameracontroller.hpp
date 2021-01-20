@@ -100,16 +100,16 @@ public:
         }
 
         skybox = createEntity();
-        auto skyboxMat = MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
+        auto skyboxMat = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
         skyboxMat.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
         skybox.add_components<mesh_renderer>(
             { skyboxMat, ModelCache::create_model("cube","assets://models/cube.obj"_view) });
         skybox.add_components<transform>();
 
         groundplane = createEntity();
-        auto groundmat = MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
-        groundmat.set_param("floorTile", TextureCache::create_texture("floorTile", "engine://resources/default/tile.png"_view));
-        groundplane.add_component<mesh_renderer>({ groundmat, ModelCache::create_model("floor", "assets://models/plane.obj"_view) });
+        auto groundmat = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
+        groundmat.set_param("floorTile", rendering::TextureCache::create_texture("floorTile", "engine://resources/default/tile.png"_view));
+        groundplane.add_component<rendering::mesh_renderer>({ groundmat, rendering::ModelCache::create_model("floor", "assets://models/plane.obj"_view) });
         groundplane.add_components<transform>();
 
         camera = createEntity();
@@ -121,13 +121,13 @@ public:
         camera.add_component<rendering::camera>(cam);
 
         auto ent = createEntity();
-        ent.add_component<mesh_renderer>({ MaterialCache::get_material("pbr"), ModelCache::get_handle("cube") });
+        ent.add_component<rendering::mesh_renderer>({ rendering::MaterialCache::get_material("pbr"), rendering::ModelCache::get_handle("cube") });
         ent.add_components<transform>(position(-5.f, 2.f, 10.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
         ent.add_component<sah>();
         ent.set_parent(camera);
 
         auto ent2 = createEntity();
-        ent2.add_component<mesh_renderer>({ MaterialCache::get_material("pbr"), ModelCache::get_handle("cube") });
+        ent2.add_component<mesh_renderer>({ rendering::MaterialCache::get_material("pbr"), rendering::ModelCache::get_handle("cube") });
         ent2.add_components<transform>(position(-7.f, 2.f, 10.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
         ent2.set_parent(ent);
     }

@@ -106,8 +106,6 @@ namespace legion::rendering
 
         auto shader = ShaderCache::create_shader(shaderFile, settings);
 
-        //serialization::IniSerializer<shader_handle>::makeIni(name, shader);
-
         if (shader == invalid_shader_handle)
         {
             log::error("Tried to create a material named {} with an invalid shader file: {}.", name, shaderFile.get_virtual_path());
@@ -135,16 +133,6 @@ namespace legion::rendering
         if (m_materials.count(id))
             return { id };
         return invalid_material_handle;
-    }
-
-    std::vector<material> MaterialCache::get_all_materials()
-    {
-        std::vector<material> output;
-        //for (auto& material : m_materials)
-        //{
-        //    output.push_back(material.second);
-        //}
-        return output;
     }
 
     void material_handle::bind()

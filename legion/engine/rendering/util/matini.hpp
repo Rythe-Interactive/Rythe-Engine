@@ -10,6 +10,13 @@ namespace legion::rendering {
 
     namespace detail
     {
+        /**@class IniBuilder
+         * @brief Bob the IniBuilder, a builder class to generate ini files
+         * @note does not validate entries, thus invalid combinations like
+         *       glyph("Something").value("v") is not caught as an error at runtime
+         *       instead of
+         *       glyph("Something").eq().value("v")
+         */
         class IniBuilder
         {
         public:
@@ -19,61 +26,22 @@ namespace legion::rendering {
                 return *this;
             }
 
-            IniBuilder& section(const std::string & sectionName)
-            {
-                return glyph("["+sectionName+"]\n");
-            }
-            IniBuilder& eq()
-            {
-                return glyph("= ");
-            }
-            IniBuilder& comment(const std::string& contents)
-            {
-                return glyph("; "+contents+"\n");
-            }
-            IniBuilder& value(float v)
-            {
-                return glyph(std::to_string(v)+" ");
-            }
-            IniBuilder& value(int v)
-            {
-                return glyph(std::to_string(v)+ " ");
-            }
+            IniBuilder& section(const std::string& v)   { return glyph("[" + v + "]\n"); }
+            IniBuilder& eq()                            { return glyph("= "); }
+            IniBuilder& comment(const std::string& v)   { return glyph("; " + v + "\n"); }
 
-            IniBuilder& value(math::vec3 v)
-            {
-                return value(v.x).value(v.y).value(v.z);
-            }
-            IniBuilder& value(math::ivec3 v)
-            {
-                return value(v.x).value(v.y).value(v.z);
-            }
+            IniBuilder& value(float v)                  { return glyph(std::to_string(v) + " "); }
+            IniBuilder& value(int v)                    { return glyph(std::to_string(v) + " "); }
+            IniBuilder& value(math::vec3 v)             { return value(v.x).value(v.y).value(v.z); }
+            IniBuilder& value(math::ivec3 v)            { return value(v.x).value(v.y).value(v.z); }
+            IniBuilder& value(math::vec4 v)             { return value(v.x).value(v.y).value(v.z).value(v.w); }
+            IniBuilder& value(math::ivec4 v)            { return value(v.x).value(v.y).value(v.z).value(v.w); }
+            IniBuilder& value(bool b)                   { return glyph(b ? "true " : "false "); }
+            IniBuilder& value(const std::string& v)     { return glyph(v + " "); }
 
-            IniBuilder& value(math::vec4 v)
-            {
-                return value(v.x).value(v.y).value(v.z).value(v.w);
-            }
-            IniBuilder& value(math::ivec4 v)
-            {
-                return value(v.x).value(v.y).value(v.z).value(v.w);
-            }
-            IniBuilder& value(bool b)
-            {
-                return glyph(b ? "true ":"false ");
-            }
-            IniBuilder& value(const std::string& v)
-            {
-                return glyph(v+" ");
-            }
-            IniBuilder& finish_entry()
-            {
-                return glyph("\n");
-            }
+            IniBuilder& finish_entry()                  { return glyph("\n"); }
 
-            std::string get()
-            {
-                return m_contents;
-            }
+            L_NODISCARD std::string get() const noexcept { return m_contents; }
 
         private:
             std::string m_contents;
@@ -98,7 +66,7 @@ namespace legion::rendering {
 
                 for (auto& [key, value] : iterator::values_only(range))
                 {
-                    if(std::invoke(f, key, value)) return;
+                    if (std::invoke(f, key, value)) return;
                 }
             }
 
@@ -166,31 +134,31 @@ namespace legion::rendering {
     }
 
 
-    inline std::string extract_string(const std::string& section, const std::string& key,fs::view file)
+    inline std::string extract_string(const std::string& section, const std::string& key, fs::view file)
     {
         detail::handler_to_cpp handler;
 
         const auto str = file.get().except([](auto err)
-        {
-            log::warn("Unable to open {}, could not load ini settings!");
-            return fs::basic_resource("");
-        }).to_string();
-
-        const char* const cstr = str.c_str();
-        ini_parse_string(cstr, &detail::handler_to_cpp::handle, &handler);//parses the ini data into a usable form.
-
-        std::string v;
-
-        handler.for_each_value_in_section(section,[&](const std::string& k,const std::string& value)
-        {
-            if(k == key)
             {
-                v = value;
-                return true;
-            }
-            return false;
-        });
-        return v;
+                log::warn("Unable to open {}, could not load ini settings!");
+                return fs::basic_resource("");
+            }).to_string();
+
+            const char* const cstr = str.c_str();
+            ini_parse_string(cstr, &detail::handler_to_cpp::handle, &handler);//parses the ini data into a usable form.
+
+            std::string v;
+
+            handler.for_each_value_in_section(section, [&](const std::string& k, const std::string& value)
+                {
+                    if (k == key)
+                    {
+                        v = value;
+                        return true;
+                    }
+                    return false;
+                });
+            return v;
     }
 
 

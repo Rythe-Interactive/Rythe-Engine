@@ -406,7 +406,7 @@ namespace ext
                 std::string preview_v = "Nothing";
 
 
-                auto itr = detail::g_ReverseAnimationEventDatabase.find(id);
+                auto itr = ext::detail::g_ReverseAnimationEventDatabase.find(id);
                 if (itr != detail::g_ReverseAnimationEventDatabase.end())
                 {
                     preview_v = std::string(itr->second);

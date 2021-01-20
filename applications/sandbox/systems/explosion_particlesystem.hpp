@@ -11,14 +11,14 @@ using namespace legion;
 struct explosionParameters
 {
     math::vec3 startingSize;
-    material_handle particleMaterial;
-    model_handle particleModel;
+    rendering::material_handle particleMaterial;
+    rendering::model_handle particleModel;
     float maxLifeTime;
     math::vec3 startingVel;
     float decelerationScalar;
     float sizeOverLifeTime;
     math::color endColor;
-    model_handle explosionModel;
+    rendering::model_handle explosionModel;
 
     float startingLifeTime = 0.0f;
     bool looping = false;
@@ -31,7 +31,7 @@ struct explosionParameters
  * @struct ExplosionParticleSystem
  * @brief Explosion particle system that can be used for explosion VFX
  */
-class ExplosionParticleSystem : public ParticleSystemBase
+class ExplosionParticleSystem : public rendering::ParticleSystemBase
 {
 public:
     /**
@@ -59,7 +59,7 @@ public:
     /**
      * @brief The setup function used to initialize all the particles.
      */
-    void setup(ecs::component_handle<particle_emitter> emitter_handle) const override
+    void setup(ecs::component_handle<rendering::particle_emitter> emitter_handle) const override
     {
         auto vertPositions = m_explosionModel.get_mesh().get().second.vertices;
 
@@ -100,7 +100,7 @@ public:
             #pragma endregion
             #pragma region Set parameter values
             //Read particle component to set its lifetime and its velocity.
-            particle particularParticle = particleComponent.read();
+            rendering::particle particularParticle = particleComponent.read();
             particularParticle.lifeTime = 0;
             particularParticle.particleVelocity = m_startingVelocity.x * pointDirection * scaleOfEmitter.r;
             particleComponent.write(particularParticle);
@@ -130,8 +130,8 @@ public:
                 auto particleEnt = particle_list[i];
 
                 //Get the specified particle handle.
-                auto particleHandle = particleEnt.get_component_handle<particle>();
-                particle particle = particleHandle.read();
+                auto particleHandle = particleEnt.get_component_handle<rendering::particle>();
+                rendering::particle particle = particleHandle.read();
 
                 //Checks if the particle lifetime has surpassed the total lifetime. If so, it gets recycled.
                 if (particle.lifeTime >= m_maxLifeTime* scaleOfEmitter.r)
@@ -161,8 +161,8 @@ public:
                     if (i == 0)
                     {
                         //Update color
-                        auto meshRenderer = particleEnt.get_component_handle<mesh_renderer>().read();
-                        material_handle matHandle = meshRenderer.material;
+                        auto meshRenderer = particleEnt.get_component_handle<rendering::mesh_renderer>().read();
+                        rendering::material_handle matHandle = meshRenderer.material;
                         math::color rgba = lerp(m_beginColor, m_endColor, (particle.lifeTime / m_maxLifeTime));
                         matHandle.set_param("color", rgba);
                     }
@@ -194,6 +194,6 @@ private:
     float m_decelerationScalar;
     math::color m_beginColor;
     math::color m_endColor;
-    model_handle m_explosionModel;
+    rendering::model_handle m_explosionModel;
 
 };

@@ -114,15 +114,6 @@ namespace legion::core
     }
 #endif
 
-
-    /**@brief combines hashes
-     */
-    inline id_type hash_combine(id_type lhs, id_type rhs)
-    {
-        return lhs ^ rhs + 0x9e3779b9 + (lhs << 6) + (lhs >> 2);
-    }
-
-
     /**@brief Returns type name with namespaces other than that it's undecorated.
      * @tparam T type of which you want the name.
      */

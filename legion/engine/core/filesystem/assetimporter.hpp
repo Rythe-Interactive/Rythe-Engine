@@ -21,33 +21,7 @@ namespace legion::core::filesystem
         struct resource_converter_base
         {
             virtual id_type result_type() LEGION_PURE;
-            virtual bool prefetch(std::string key, const basic_resource& resource) = 0;
         };
-
-        static std::unordered_map<std::string, std::any> prefetched;
-
-        inline bool has_prefetched(const std::string& name)
-        {
-            return prefetched.find(name) != prefetched.end();
-        }
-
-        template <class T>
-        static common::result_decay_more<T, fs_error> get_prefetched(std::string key)
-        {
-            using decay = common::result_decay_more<
-                T, fs_error>;
-
-            if (auto itr = prefetched.find(key); itr != prefetched.end())
-            {
-                if (itr->second.type() == typeid(T))
-                {
-                    return decay(common::Ok(std::any_cast<T>(itr->second)));
-
-                }
-                return decay(common::Err(legion_fs_error("Prefetched resource was of different type!"));
-            }
-            return decay(common::Err(legion_fs_error("Resource was not prefetched!")));
-        }
 
     }
 
@@ -62,25 +36,8 @@ namespace legion::core::filesystem
 
         virtual id_type result_type() override { return typeHash<result>(); }
 
-
         virtual common::result_decay_more<result, fs_error> load_default(const basic_resource& resource) LEGION_PURE;
         virtual common::result_decay_more<result, fs_error> load(const basic_resource& resource, Settings&&...) LEGION_PURE;
-
-
-
-        bool prefetch(std::string key, const basic_resource& resource) override
-        {
-            auto loaded = load_default(resource);
-            if (loaded != common::valid)
-            {
-                return false;
-            }
-
-            detail::prefetched[key] = loaded.decay();
-
-            return true;
-        }
-
 
     };
 
@@ -121,24 +78,6 @@ namespace legion::core::filesystem
         {
             OPTICK_EVENT();
             m_converters[nameHash(extension)].push_back(new T());
-        }
-
-
-
-        static bool prefetch(view location, const std::string& name)
-        {
-            auto resource = location.get();
-            if (resource != common::valid)
-            {
-                return false;
-            }
-
-            const id_type extension = nameHash(location.get_extension());
-            if (m_converters.contains(extension))
-            {
-                return m_converters.at(extension).back()->prefetch(name, resource);
-            }
-            return false;
         }
 
 
@@ -193,13 +132,5 @@ namespace legion::core::filesystem
             return decay(Err(legion_fs_error("requested asset load on file that stores a different type of asset.")));
         }
 
-        template<typename T>
-        static common::result_decay_more<T, fs_error> get_prefetched(const std::string& key)
-        {
-            //TODO (arjen,algorythmix) get the correct converter here from m_converters
-            //and load in scene from prefetched data
-
-           return detail::get_prefetched<T>(key);
-        }
     };
 }

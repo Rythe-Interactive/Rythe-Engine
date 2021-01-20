@@ -144,7 +144,7 @@ namespace ext
             m_cubeEntity.add_components<rendering::mesh_renderable>(mesh_filter(cubeModel.get_mesh()), rendering::mesh_renderer(vertexColorMaterial));
 
             //create new running & looping animation
-            animation anim{ true };
+            ext::animation anim{ true };
 
             //load animation data from disk
             filesystem::basic_resource res = fs::view("assets://test.anim").get().except([](auto err)

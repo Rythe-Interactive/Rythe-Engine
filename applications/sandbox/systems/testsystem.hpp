@@ -1,6 +1,5 @@
 #pragma once
 #include <core/core.hpp>
-#include <physics/halfedgeedge.hpp>
 #include <application/application.hpp>
 #include <core/math/math.hpp>
 
@@ -8,33 +7,21 @@
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/cube_collider_params.hpp>
-#include <physics/data/physics_manifold_precursor.h>
 #include <physics/systems/physicssystem.hpp>
-#include <physics/halfedgeface.hpp>
 #include <physics/data/penetrationquery.h>
 
-
-#include <core/compute/context.hpp>
-#include <core/compute/kernel.hpp>
-#include <core/compute/high_level/function.hpp>
 #include <rendering/debugrendering.hpp>
 
-#include <physics/physics_statics.hpp>
 #include <physics/data/identifier.hpp>
 #include <audio/audio.hpp>
 #include <rendering/components/renderable.hpp>
-#include <Voro++/voro++.hh>
-#include <Voro++/common.hh>
-
-#include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 
 
 #include "animation_editor.hpp"
 #include "../data/animation.hpp"
 
 using namespace legion;
-
-
+using namespace legion::core::filesystem::literals;
 
 struct sah
 {
@@ -88,7 +75,7 @@ struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
 //struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
 //struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
-using namespace filesystem::literals;
+
 
 class TestSystem final : public System<TestSystem>
 {

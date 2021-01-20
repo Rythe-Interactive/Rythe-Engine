@@ -115,9 +115,11 @@ namespace legion::core::serialization
         template<class T>
         static void JSONSerialize(std::ofstream& os, T serializable)
         {
-            log::debug("Started Serializing");
+            log::debug("[CEREAL] Started Serializing");
+            time::timer timer;
             cereal::JSONOutputArchive archive(os);// Create an output archive, Output as outputing to a filestream
             archive(cereal::make_nvp(typeid(T).name(), serializable)); // Read the data to the archive
+            log::debug("[CEREAL] Finished Serializing in : {}s", timer.end().seconds());
         }
 
         /**@brief JSON deserialization from a filestream

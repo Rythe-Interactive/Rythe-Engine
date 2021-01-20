@@ -5,7 +5,7 @@
 #include <rendering/pipeline/gui/stages/imguirenderstage.hpp>
 #include <rendering/systems/renderer.hpp>
 
-using namespace rendering;
+using namespace legion::rendering;
 
 class GuiTestSystem : public System<GuiTestSystem>
 {
@@ -66,6 +66,13 @@ class GuiTestSystem : public System<GuiTestSystem>
     bool offsetMode = false;
     float offset[3]{ 0 };
 
+
+
+    // BuildTree creates a rudimentary Entity View, as entities do currently not have the ability to be named
+    // This is going to display IDs, which isn't great but still gives a little insight
+    // In how the Scene is currently structured, it will also try to show the names of the components of the
+    // entities, which makes identifiying them easier
+    //
     void BuildTree(ecs::entity_handle handle)
     {
         if (ImGui::TreeNode(reinterpret_cast<void*>(handle.get_id()), "%llu", handle.get_id())) {

@@ -1,5 +1,5 @@
 #pragma once
-#include<core/core.hpp>
+#include <core/core.hpp>
 #include <core/math/math.hpp>
 #include <core/logging/logging.hpp>
 #include <application/application.hpp>
@@ -7,7 +7,7 @@
 using namespace legion;
 using namespace rendering;
 //system to test the point cloud generation system and the point cloud component
-class pointcloudtestsystem2 final : public System<pointcloudtestsystem2>
+class pointcloudtestsystem2 final : public core::System<pointcloudtestsystem2>
 {
 public:
     ecs::entity_handle player;
@@ -18,7 +18,7 @@ public:
     struct player_look_x : public app::input_axis<player_look_x> {};
     struct player_look_y : public app::input_axis<player_look_y> {};
 
-    virtual void setup() override
+    void setup() override
     {
         //create particle system material
         material_handle particleMaterial;

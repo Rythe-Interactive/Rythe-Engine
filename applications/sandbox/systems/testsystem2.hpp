@@ -42,9 +42,9 @@ public:
         app::InputSystem::createBinding<activateUpdate>(app::inputmap::method::COMMA, 1.f);
         bindToEvent<activateUpdate, &TestSystem2::onParticleActivate>();
 
-        model_handle explosionSphere;
-        model_handle particleSphere;
-        model_handle cube;
+        rendering::model_handle explosionSphere;
+        rendering::model_handle particleSphere;
+        rendering::model_handle cube;
 
         material_handle vertexColor;
         material_handle pointCloudColor;
@@ -153,7 +153,7 @@ public:
         {
             auto ent = createEntity();
             ent.add_components<transform>(position(-5, 0.01f, 0), rotation(), scale());
-            particle_emitter emitter = ent.add_component<particle_emitter>().read();
+            rendering::particle_emitter emitter = ent.add_component<particle_emitter>().read();
             emitter.particleSystemHandle = pointcloud;
             ent.get_component_handle<particle_emitter>().write(emitter);
         }

@@ -26,12 +26,12 @@ namespace legion::rendering
         template <class Archive>
         void save(Archive& oa)
         {
-            oa(material);
+            oa(CEREAL_NVP(material));
         }
         template <class Archive>
         void load(Archive& ia)
         {
-            ia(material);
+            ia(CEREAL_NVP(material));
         }
     };
 
@@ -55,28 +55,5 @@ namespace legion::rendering
         {
             return get<mesh_renderer>().read().material;
         }
-
-        template<typename Archive>
-        void serialize(Archive& archive);
     };
-
-    template<typename Archive>
-    void mesh_renderable::serialize(Archive& archive)
-    {
-        OPTICK_EVENT();
-        archive(get_model(), get_material());
-        model_handle modelH;
-        material_handle materialH;
-        if (typeid(archive) == typeid(cereal::JSONInputArchive))
-        {
-            modelH.serialize(archive);
-            materialH.serialize(archive);
-        }
-        else if (typeid(archive) == typeid(cereal::JSONOutputArchive))
-        {
-            modelH = get_model();
-            materialH = get_material();
-            archive(modelH, materialH);
-        }
-    }
 }

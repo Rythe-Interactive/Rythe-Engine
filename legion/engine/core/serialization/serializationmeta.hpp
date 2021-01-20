@@ -68,7 +68,7 @@ namespace legion::core::serialization
     private:
         template<typename T>
         static constexpr auto check(T*)
-            -> typename std::is_same< decltype(std::declval<T>().save(std::declval<Args>()...)), Ret>::type;
+            -> typename std::is_same< decltype(std::declval<T>().load(std::declval<Args>()...)), Ret>::type;
 
         template <typename>
         static constexpr auto check(...)

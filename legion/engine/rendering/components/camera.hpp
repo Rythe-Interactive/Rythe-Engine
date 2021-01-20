@@ -98,7 +98,13 @@ namespace legion::rendering
         template <class Archive>
         void serialize(Archive& oa)
         {
-            oa(fov, nearz, farz);
+            using cereal::make_nvp;
+
+            oa(
+                make_nvp("Fov",fov),
+                make_nvp("NearZ", nearz),
+                make_nvp("FarZ",farz)
+            );
         }
 
     };
