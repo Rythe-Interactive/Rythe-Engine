@@ -27,56 +27,15 @@ namespace legion::physics
 
         MeshSplitterDebugHelper debugHelper;
 
+      
+
         //------------------------------------------------------ Function related to Mesh Splitter Initialization ---------------------------------------------//
 
         /** @brief Creates a Half-Edge Data structure around the mesh and
        * @param entity the entity that this MeshSplitter is attached to
        */
-        void InitializePolygons(ecs::entity_handle entity)
-        {
-            owner = entity;
-
-            auto [meshFilter, meshRenderer] = entity.get_component_handles<rendering::mesh_renderable>();
-
-            ownerMaterialH = meshRenderer.read().material;
-
-            auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
-
-            if (meshFilter && posH && rotH && scaleH)
-            {
-                log::debug("Mesh and Transform found");
-                std::queue<meshHalfEdgePtr> meshHalfEdges;
-
-                //auto renderable = renderable.read();
-                mesh& mesh = meshFilter.read().get().second;
-
-                const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
-
-                HalfEdgeFinder edgeFinder;
-                edgeFinder.FindHalfEdge(mesh, transform, meshHalfEdges);
-
-                BFSPolygonize(meshHalfEdges, transform);
-
-                log::debug("Mesh vertices {}, Mesh indices {}", mesh.vertices.size(), mesh.indices.size());
-
-            }
-            else
-            {
-                log::warn("The given entity does not have a meshHandle!");
-            }
-
-            for (auto face : meshPolygons)
-            {
-                for (auto edge : face->GetMeshEdges())
-                {
-                    assert(edge->owner.lock());
-                    assert(edge->pairingEdge->owner.lock());
-                }
-            }
-
-
-
-        }
+        void InitializePolygons(ecs::entity_handle entity);
+       
 
         /** @brief Given a queue of edges and a transform,
         * populates the std::vector 'meshPolygons' using BFS.
@@ -186,7 +145,8 @@ namespace legion::physics
 
         /** @brief Given a list of splitting planes, splits the mesh based on the list of splitting planes
         */
-        void MultipleSplitMesh(const std::vector<MeshSplitParams>& splittingPlanes, std::vector<ecs::entity_handle>& entitiesGenerated, bool keepBelow = true);
+        void MultipleSplitMesh(const std::vector<MeshSplitParams>& splittingPlanes, std::vector<ecs::entity_handle>& entitiesGenerated,
+            bool keepBelow = true,int debugAt = -1);
        
 
         /** @brief Given a list of polygons to split in 'polygonsToSplit', splits them based on a splitting plane defined by
@@ -198,7 +158,7 @@ namespace legion::physics
             const math::vec3& planePosition,
             const math::mat4& transform,
             std::vector<std::vector<SplittablePolygonPtr>>& resultingIslands,
-            bool keepBelow = true);
+            bool keepBelow = true, bool shouldDebug = false);
         
 
         //--------------------------------------------------------- Function related to polygon copying ----------------------------------------------------------------//
@@ -216,61 +176,8 @@ namespace legion::physics
         void BFSFindRequestedAndIntersecting(
             SplittablePolygonPtr& intialPolygon,
             std::vector<SplittablePolygonPtr>& originalSplitMesh,
-            std::vector<SplittablePolygonPtr>& originalNonSplitMesh, SplitState requestedState)
-        {
-            std::queue<SplittablePolygonPtr> unvisitedPolygonQueue;
-            unvisitedPolygonQueue.push(intialPolygon);
-
-            while (!unvisitedPolygonQueue.empty())
-            {
-                auto polygonPtr = unvisitedPolygonQueue.front();
-                unvisitedPolygonQueue.pop();
-
-                //assert(polygonPtr);
-                if (!polygonPtr) { continue; }
-
-                if (!polygonPtr->isVisited)
-                {
-                    polygonPtr->isVisited = true;
-
-                    auto polygonSplitState = polygonPtr->GetPolygonSplitState();
-
-                    bool polygonAtRequestedState = polygonSplitState == requestedState;
-                    bool polygonAtIntersection = polygonSplitState == SplitState::Split;
-
-                    //place polygon in correct list
-
-                    if (polygonAtRequestedState)
-                    {
-                        originalNonSplitMesh.push_back(polygonPtr);
-                        debugHelper.nonIntersectionPolygons.push_back(polygonPtr->localCentroid);
-                    }
-                    else if (polygonAtIntersection)
-                    {
-                        originalSplitMesh.push_back(polygonPtr);
-                        debugHelper.intersectionsPolygons.push_back(polygonPtr->localCentroid);
-                    }
-
-                    //only put it on the unvisited list if polygon is at requested state or is intersecting the splitting plane
-
-                    if (polygonAtIntersection || polygonAtRequestedState)
-                    {
-                        for (auto edge : polygonPtr->GetMeshEdges())
-                        {
-                            bool isBoundary = edge->isBoundary;
-                            bool hasPairing = (edge->pairingEdge) != nullptr;
-                        
-                            if (isBoundary && hasPairing)
-                            {
-                                auto newPolygon = edge->pairingEdge->owner.lock();
-                                //assert(newPolygon);
-                                unvisitedPolygonQueue.push(newPolygon);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+            std::vector<SplittablePolygonPtr>& originalNonSplitMesh, SplitState requestedState);
+        
 
         /** @brief Given a list of polygons that are intersecting the splitting plane,
         * detects if there are sets of polygons that are disconected from each other
@@ -332,11 +239,9 @@ namespace legion::physics
         */
         void SplitPolygon(SplittablePolygonPtr splitPolygon
             , const math::mat4& transform, const math::vec3 cutPosition
-            , const math::vec3 cutNormal, SplitState requestedState, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges)
-        {
-            IntersectingPolygonOrganizer polygonOrganizer(&debugHelper);
-            polygonOrganizer.SplitPolygon(splitPolygon, transform, cutPosition, cutNormal, requestedState,generatedIntersectionEdges);
-        }
+            , const math::vec3 cutNormal, SplitState requestedState,
+            std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges, bool shouldDebug = false);
+       
 
         /** @brief Given a list of SplittablePolygons finds the first unvisited SplittablePolygon that has a split state of 'intersecting'
         * or a split state of 'requestedState'

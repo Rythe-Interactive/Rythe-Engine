@@ -23,9 +23,15 @@ namespace legion::physics
         void SplitPolygon(SplittablePolygonPtr splitPolygon
             , const math::mat4& transform, const math::vec3 cutPosition
             , const math::vec3 cutNormal, SplitState requestedState
-            , std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges)
+            , std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges,bool shouldeDebug)
         {
             BoundaryEdgeInfo polygonDebugInfo;
+
+            /*if (shouldeDebug)
+            {
+                DebugBreak();
+            }*/
+   
 
             bool keepAbove = requestedState == SplitState::Above ? true : false;
             //For now assume no islands in one polygon
@@ -39,7 +45,10 @@ namespace legion::physics
             std::vector<meshHalfEdgePtr> unEffectedUsedEdges;
             std::vector<meshHalfEdgePtr> effectedUsedEdges;
 
+
+
             BFSIdentifyEffectedEdges(transform, splitPolygon, unEffectedUsedEdges, effectedUsedEdges, cutPosition, cutNormal, keepAbove);
+
 
             //---------------------------- [2] Get used boundary Effected ----------------------------------------------------------------------------//
 
@@ -47,11 +56,35 @@ namespace legion::physics
             for (auto edge : effectedUsedEdges)
             {
                 edge->isVisited = false;
+                
+               
+
+            }
+
+            for (auto edge : splitPolygon->GetMeshEdges())
+            {
+                if (shouldeDebug)
+                {
+                    math::color color = edge->isBoundary ? math::colors::blue : math::colors::cyan;
+                    auto [first, second] = edge->getEdgeWorldPositions(transform);
+                    debug::user_projectDrawLine(first, second, color, 15.0f, FLT_MAX, true);
+                }
+            }
+
+            if (shouldeDebug)
+            {
+                log::debug("/// EDGE COUNT ///");
+                log::debug(" splitPolygon->GetMeshEdges() {} ", splitPolygon->GetMeshEdges().size());
+                log::debug(" unEffectedUsedEdges {} ", unEffectedUsedEdges.size());
+                log::debug("effectedUsedEdges  {} ", effectedUsedEdges.size());
+
             }
 
             IdentifyBoundaryEffectedEdges(effectedUsedEdges,
                 transform, cutPosition
                 , cutNormal, keepAbove);
+
+        
 
 
             //----------------------------- [3] Sort Edges ---------------------------------------------------------------------------------------//
@@ -59,8 +92,16 @@ namespace legion::physics
             //find edges in effectedUsedEdges that are split by plane and store them in a std::vector
             std::vector<meshHalfEdgePtr> splitEdges;
 
+            /*if (shouldeDebug)
+            {
+                DebugBreak();
+                log::debug("----// should debug //---");
+            }*/
+
             for (auto edge : effectedUsedEdges)
             {
+                
+
                 if (edge->isSplitByPlane(transform, cutPosition, cutNormal))
                 {
                     splitEdges.push_back(edge);
@@ -76,6 +117,7 @@ namespace legion::physics
             math::vec3 polygonNormalCrossCutNormal = math::normalize(math::cross(worldPolygonNormal, cutNormal));
 
             //SortingCriterium splittingPlaneSorter(worldCentroid,polygonNormalCrossCutNormal,transform);
+
 
             auto initialSorter = [&transform, &worldCentroid, &polygonNormalCrossCutNormal]
             (const std::shared_ptr<MeshHalfEdge>& lhs, std::shared_ptr<MeshHalfEdge>& rhs)
@@ -112,15 +154,35 @@ namespace legion::physics
             else if(edgesUsed < numberOfEdgesToMakeATriangle)
             {
                 //there exist a number of edges that is on the splitting plane
-                assert(false);
+                //assert(false);
                 return;
             }
 
+            auto firstSplit = splitEdges.at(0);
+            auto secondSplit = splitEdges.at(splitEdges.size() - 1);
+
+            int firstIndex = -1;
+            int secondIndex = -1;
+            for (size_t i = 0; i < effectedUsedEdges.size(); i++)
+            {
+                if (effectedUsedEdges.at(i) == firstSplit)
+                {
+                    firstIndex = i;
+                }
+
+                if (effectedUsedEdges.at(i) == secondSplit)
+                {
+                    secondIndex = i;
+                }
+            }
+           
+            effectedUsedEdges.erase(effectedUsedEdges.begin() + firstIndex);
+            effectedUsedEdges.erase(effectedUsedEdges.begin() + math::clamp(secondIndex-1,0,999));
             //previous sorting direction is dependent on cut tangent.
             //use centroids of first and last split edge as the new sorting direction
 
-            math::vec3 worldFirstEdge = splitEdges.at(0)->getWorldCentroid(transform);
-            math::vec3 worldSecondEdge = splitEdges.at(splitEdges.size() - 1)->getWorldCentroid(transform);
+            math::vec3 worldFirstEdge = firstSplit->getWorldCentroid(transform);
+            math::vec3 worldSecondEdge = secondSplit->getWorldCentroid(transform);
 
             //sort effectedUsedEdges based on sorting direction
 
@@ -142,14 +204,33 @@ namespace legion::physics
             };
 
             std::sort(effectedUsedEdges.begin(), effectedUsedEdges.end(), boundarySorter);
+            effectedUsedEdges.insert(effectedUsedEdges.begin(), firstSplit);
+            effectedUsedEdges.push_back(secondSplit);
 
-            meshHalfEdgePtr firstEdge = effectedUsedEdges.at(0);
-            meshHalfEdgePtr secondEdge = effectedUsedEdges.at(effectedUsedEdges.size() - 1);
+            //===================DEBUG
+            if (shouldeDebug)
+            {
+                float max = effectedUsedEdges.size();
+                int i = 0;
+                for (auto meshHalfEdgePtr : effectedUsedEdges)
+                {
+                    auto [first,second]=  meshHalfEdgePtr->getEdgeWorldPositions(transform);
+                    float interpolant = (float)i / max;
+                    math::vec3 white = math::vec3(1, 1, 1) * interpolant;
+                    debug::user_projectDrawLine(first, second, math::color(white.x, white.y, white.z, 1), 12.0f, FLT_MAX, true);
+                    
+                    i++;
+                }
 
+                debug::user_projectDrawLine(sortingCentroid, sortingCentroid + sortingDirection
+                    , math::colors::cyan, 12.0f, FLT_MAX, true);
+
+            }
+      
             //------------------------------------- [5] Regenerate Edges ----------------------------------------------------------------------------------------------------------//
 
             //get start and end intersection points
-            auto [firstEdgeCurrent, firstEdgeNext] = firstEdge->getEdgeWorldPositions(transform);
+            auto [firstEdgeCurrent, firstEdgeNext] = firstSplit->getEdgeWorldPositions(transform);
 
             //check if position of first edge is outside intersection, this is important because it will determine how the edges will be regenerated
             bool startFromOutsideIntersection =
@@ -157,7 +238,7 @@ namespace legion::physics
 
             auto [firstEdgeIntersection, firstInterpolantUV, secondEdgeIntersection, secondInterpolantUV]
                 = GetFirstAndLastEdgeIntersectionInfo(cutNormal, cutPosition, transform,
-                firstEdge, secondEdge);
+                firstSplit, secondSplit);
 
             math::vec3 startToEndIntersection = secondEdgeIntersection - firstEdgeIntersection;
             math::vec2 startToEndUV = secondInterpolantUV - firstInterpolantUV;
@@ -271,6 +352,7 @@ namespace legion::physics
 
                 intersectionEdge = std::make_shared<MeshHalfEdge>
                     (inverseTrans * math::vec4(secondEdgeIntersection, 1), secondInterpolantUV);
+                
 
                 MeshHalfEdge::connectIntoTriangle(firstSplitEdge, secondSplitEdge, intersectionEdge);
             }
@@ -284,6 +366,8 @@ namespace legion::physics
 
                 MeshHalfEdge::connectIntoTriangle(firstSplitEdge, intersectionEdge, secondSplitEdge);
             }
+
+            intersectionEdge->isBoundary = true;
         }
 
         void BFSIdentifyEffectedEdges(const math::mat4& transform, SplittablePolygonPtr splitPolygon,
@@ -545,7 +629,7 @@ namespace legion::physics
 
         void OutsideIntersectionMeshRegeneration(const math::mat4& transform, std::vector<meshHalfEdgePtr>& effectedBoundaryEdges,
             std::vector<meshHalfEdgePtr>& generatedEdges, int i
-            , meshHalfEdgePtr supportEdge,
+            , meshHalfEdgePtr& supportEdge,
             const SplitterIntersectionInfo& vertexIntersectionInfo, BoundaryEdgeInfo& debugStuff, std::vector<IntersectionEdgeInfo>& generatedIntersectionEdges
             , SplittablePolygonPtr owner)
         {
@@ -568,6 +652,7 @@ namespace legion::physics
             }
             else
             {
+                //assert(supportEdge->nextEdge);
                 currentSupportEdge = std::make_shared<MeshHalfEdge>
                     (supportEdge->nextEdge->position, supportEdge->nextEdge->uv, owner);
 

@@ -67,8 +67,6 @@ namespace legion::physics
 
         std::vector<std::vector<math::vec3>> groupedPoints(VoronoiPoints.size());
 
-
-
         for (std::vector<math::vec4>& vector : vectorList)
         {
             for (const math::vec4& position : vector)
@@ -102,7 +100,7 @@ namespace legion::physics
             {
                 //+ math::vec3(i * 2.0f, 0, 0)
                 math::vec3 vertPos = vertex ;
-                debug::user_projectDrawLine(vertPos, vertPos + math::vec3(0,0.5,0), debugColor,10.0f,FLT_MAX);
+                //debug::user_projectDrawLine(vertPos, vertPos + math::vec3(0,0.5,0), debugColor,10.0f,FLT_MAX);
             }
 
             auto newCollider = std::make_shared<ConvexCollider>();
@@ -151,6 +149,7 @@ namespace legion::physics
 
         log::debug("colliderToMeshPairings size {} ", colliderToMeshPairings.size());
         log::debug("voronoiColliderssize {} ", voronoiColliders.size());
+        std::vector<ecs::entity_handle> entitiesGenerated;
 
         int fractureID = 0;
         //for each instantiated convex collider
@@ -180,12 +179,11 @@ namespace legion::physics
                 if (manifold.isColliding)
                 {
                     log::debug("-> Collision Found");
-                    if (fractureID == 0)
+                    if (fractureID <= 4)
                     {
                         std::vector<MeshSplitParams> splittingParams;
                         meshToColliderPairing.GenerateSplittingParamsFromCollider(instantiatedVoronoiCollider, splittingParams);
-                        log::debug("splittingParams {} ", splittingParams.size());
-
+                        //log::debug("splittingParams {} ", splittingParams.size());
 
                         for (size_t i = 0; i < splittingParams.size(); i++)
                         {
@@ -198,13 +196,9 @@ namespace legion::physics
                                     math::color(color.x,color.y,color.z,1), 15.0f, FLT_MAX, true);
                         }
                         
-
-                        std::vector<ecs::entity_handle> entitiesGenerated;
-
                         auto splitter = meshToColliderPairing.meshSplitterPairing.read();
-                        splitter.MultipleSplitMesh(splittingParams, entitiesGenerated);
+                        splitter.MultipleSplitMesh(splittingParams, entitiesGenerated,true,-1);
                         meshToColliderPairing.meshSplitterPairing.write(splitter);
-
 
                     }
 
@@ -214,7 +208,7 @@ namespace legion::physics
             }
         }
             
-            
+        registry->destroyEntity(fractureInstigatorEnt);
 
         //for each pair list
             
@@ -298,10 +292,14 @@ namespace legion::physics
 
     void FracturerColliderToMeshPairing::GenerateSplittingParamsFromCollider(std::shared_ptr<ConvexCollider> instantiatedCollider, std::vector<physics::MeshSplitParams>& meshSplitParams)
     {
+        int until = 5;
+        int count = 0;
         for (auto face : instantiatedCollider->GetHalfEdgeFaces())
         {
+            //if (count > until) { continue; }
             MeshSplitParams splitParam(face->centroid, face->normal);
             meshSplitParams.push_back(splitParam);
+            count++;
         }
 
     }

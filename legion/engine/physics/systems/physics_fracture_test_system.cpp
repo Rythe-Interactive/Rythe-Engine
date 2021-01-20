@@ -50,8 +50,8 @@ namespace legion::physics
         //compositeColliderTest();
         fractureTest();
 
-       /* meshSplittingTest(planeH, cubeH
-            , cylinderH, complexH, textureH);*/
+        meshSplittingTest(planeH, cubeH
+            , cylinderH, complexH, textureH);
 
         createProcess<&PhysicsFractureTestSystem::colliderDraw>("Update");
 

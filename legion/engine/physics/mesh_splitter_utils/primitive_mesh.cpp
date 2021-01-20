@@ -47,7 +47,8 @@ namespace legion::physics
         scaleH.write(originalScaleH.read());
 
         math::vec3 initialPos = originalPosH.read();
-        originalPosH.write(initialPos + math::vec3(7, 0, 0));
+        //+ math::vec3(7, 0, 0)
+        originalPosH.write(initialPos );
         //m_ecs->destroyEntity(originalEntity);
 
         return ent;
@@ -69,6 +70,12 @@ namespace legion::physics
 
         for (auto polygon : polygons)
         {
+            if (polygon->GetMeshEdges().empty())
+            {
+                log::error("Primitive Mesh has has an empty polygon");
+                continue;
+            }
+
             polygon->ResetEdgeVisited();
 
             std::queue<meshHalfEdgePtr> unvisitedEdgeQueue;
@@ -93,17 +100,17 @@ namespace legion::physics
                     uvs.push_back(edge2->uv);
                     uvs.push_back(edge3->uv);
 
-                    if (!edge1->isBoundary)
+                    if (!edge1->isBoundary && edge1->pairingEdge)
                     {
                         unvisitedEdgeQueue.push(edge1->pairingEdge);
                     }
 
-                    if (!edge2->isBoundary)
+                    if (!edge2->isBoundary && edge2->pairingEdge)
                     {
                         unvisitedEdgeQueue.push(edge2->pairingEdge);
                     }
 
-                    if (!edge3->isBoundary)
+                    if (!edge3->isBoundary && edge3->pairingEdge)
                     {
                         unvisitedEdgeQueue.push(edge3->pairingEdge);
                     }

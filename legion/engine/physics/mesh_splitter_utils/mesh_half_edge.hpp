@@ -76,25 +76,27 @@ namespace legion::physics
 
             auto [currentDistFromPlane, nextDistFromPlane] = getEdgeDistancesFromPlane(transform, planePosition, planeNormal);
 
-            if (currentDistFromPlane > constants::polygonSplitterEpsilon)
+            static float splitEpsilon = math::sqrt(math::epsilon<float>());
+
+            if (currentDistFromPlane > splitEpsilon)
             {
                 x = 1;
             }
-            else if (currentDistFromPlane < -constants::polygonSplitterEpsilon)
+            else if (currentDistFromPlane < -splitEpsilon)
             {
                 x = -1;
             }
 
 
-            if (nextDistFromPlane > constants::polygonSplitterEpsilon)
+            if (nextDistFromPlane > splitEpsilon)
             {
                 y = 1;
             }
-            else if (nextDistFromPlane < -constants::polygonSplitterEpsilon)
+            else if (nextDistFromPlane < -splitEpsilon)
             {
                 y = -1;
             }
-
+            //log::debug("x {} y {}", x, y);
             int edgeSplitState = x * y;
 
 
