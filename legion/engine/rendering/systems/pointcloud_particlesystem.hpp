@@ -49,6 +49,7 @@ public:
         m_particleMaterial = params.particleMaterial;
         m_particleModel = params.particleModel;
         m_positions = positions;
+        m_colors = colors;
     }
     /**
      * @brief Setup function that will be called to populate the emitter with the required particles.
@@ -92,7 +93,8 @@ public:
         int index = 0;
         for (auto position : m_positions)
         {
-            emitterData.Tree->insertNode(m_colors, position);
+            emitterData.Tree->insertNode(math::color(m_colors.at(index)), position);
+            index++;
         }
         //Write to handle
         emitterDataHandle.write(emitterData);
@@ -103,9 +105,9 @@ public:
     /**
      * @brief Creates particles based on position for the emitter, checks for recycling
      */
-    void CreateParticles(std::vector<math::vec3>* inputData, rendering::particle_emitter& emitter) const
+    void CreateParticles(std::vector<std::pair<math::vec3, math::color>>* inputData, rendering::particle_emitter& emitter, rendering::point_emitter_data& data) const
     {
-        for (auto item : *inputData)
+        for (auto [newPos, newColor] : *inputData)
         {
             ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter);
             auto ent = particleComponent.entity;
@@ -115,10 +117,13 @@ public:
             auto& [pos, _, scale] = trans;
 
             //Sets the particle scale to the right scale.
-            pos.write(item);
+            pos.write(newPos);
             scale.write(math::vec3(m_startingSize));
-
-            //Populates the particle with the appropriate stuffs.
+            //  for (size_t i = 0; i < 4; i++)
+            //  {
+            data.m_colorBuffer.push_back(newColor);
+            //  }
+              //Populates the particle with the appropriate stuffs.
             createParticle(particleComponent, trans);
         }
     }
@@ -127,14 +132,14 @@ public:
      */
     void decreaseDetail(rendering::particle_emitter& emitter, rendering::point_emitter_data& data, int targetLod, int maxLod) const
     {
-        log::debug("decreasing detail");
+     //   log::debug("decreasing detail");
 
         //read emitter
         if (emitter.livingParticles.size() == 0) return;
         //get the amount of particles to remove
-        log::debug("particles: " + std::to_string(emitter.livingParticles.size()));
+      //  log::debug("particles: " + std::to_string(emitter.livingParticles.size()));
         int targetParticleCount = data.ElementsPerLOD.at(maxLod - targetLod);
-        log::debug("target count: " + std::to_string(targetParticleCount));
+     //   log::debug("target count: " + std::to_string(targetParticleCount));
 
         int delta = emitter.livingParticles.size() - targetParticleCount;
         //remove particles from the end of the living particles
@@ -142,7 +147,10 @@ public:
         for (size_t i = 1; i < delta + 1; i++)
         {
             cleanUpParticle(emitter.livingParticles.at(emitter.livingParticles.size() - 1), emitter);
+            
         }
+        //decrease color data 
+        data.m_colorBuffer.resize(data.m_colorBuffer.size() - delta);
         data.CurrentLOD = targetLod;
     }
     /**
@@ -153,11 +161,11 @@ public:
         if (!data.Tree) return;
 
         //create data container
-        std::vector<math::vec3>* newData = new std::vector<math::vec3>();
+        std::vector<std::pair<math::vec3, math::color>>* newData = new std::vector<std::pair<math::vec3, math::color>>();
         //populate emitter progressively for each LOD
-        data.Tree->GetDataRange(lod.MaxLod - data.CurrentLOD + 1, lod.MaxLod - targetLod + 1, newData);
+        data.Tree->GetDataRangePair(lod.MaxLod - data.CurrentLOD + 1, lod.MaxLod - targetLod + 1, newData);
 
-        CreateParticles(newData, emitter);
+        // CreateParticles(newData, emitter);
         newData->clear();
         data.CurrentLOD = targetLod;
     }
@@ -175,17 +183,17 @@ public:
         //add lod component and read its data
 
         //create data container
-        std::vector<math::vec3>* newData = new std::vector<math::vec3>();
+        std::vector<std::pair<math::vec3, math::color>>* newData = new std::vector<std::pair<math::vec3, math::color>>();
         //populate emitter progressively for each LOD
         int particleCount = 0;
         int LODcount = 0;
         for (size_t i = 0; i < maxTreeDepth; i++)
         {
-            emitterData.Tree->GetDataRange(i, (i + 1), newData);
+            emitterData.Tree->GetDataRangePair(i, (i + 1), newData);
             particleCount += newData->size();
             //exit loop if there is no new data to be found
             if (newData->size() == 0) break;
-            CreateParticles(newData, emitter);
+            CreateParticles(newData, emitter, emitterData);
             newData->clear();
             LODcount++;
             //store the amount of particles for the lod so that we can later easily remove them again
@@ -205,30 +213,29 @@ public:
      */
     void update(std::vector<ecs::entity_handle>& entities, ecs::component_handle<rendering::particle_emitter> emitterHandle, time::span) const override
     {
-       // log::debug(entities.size());
         auto lodComponent = emitterHandle.entity.get_component_handle<rendering::lod>().read();
         rendering::particle_emitter emitter = emitterHandle.read();
         auto emitterDataHandle = emitterHandle.entity.get_component_handle<rendering::point_emitter_data>();
         auto emitterData = emitterDataHandle.read();
 
-        //if (emitterData.CurrentLOD != lodComponent.Level)
-        //{
-        //    if (emitterData.CurrentLOD > lodComponent.Level)
-        //    {
-        //        increaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod, lodComponent);
-        //    }
-        //    else
-        //    {
-        //        decreaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod);
-        //    }
-        //    emitterData.CurrentLOD = lodComponent.Level;
-        //    emitterHandle.write(emitter);
-        //    emitterDataHandle.write(emitterData);
-        //}
+        if (emitterData.CurrentLOD != lodComponent.Level)
+        {
+            if (emitterData.CurrentLOD > lodComponent.Level)
+            {
+                increaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod, lodComponent);
+            }
+            else
+            {
+                decreaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod);
+            }
+            emitterData.CurrentLOD = lodComponent.Level;
+            emitterHandle.write(emitter);
+            emitterDataHandle.write(emitterData);
+        }
     }
-
 private:
     std::vector<math::vec3> m_positions;
-    std::vector<math::vec3> m_colors;
+    std::vector<math::vec4> m_colors;
+    mutable bool m_overwrittenColorBuffer = false;
 
 };

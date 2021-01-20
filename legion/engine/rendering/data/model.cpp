@@ -49,6 +49,7 @@ namespace legion::rendering
 
     void ModelCache::overwrite_buffer(id_type id, buffer& newBuffer, uint bufferID, bool perInstance)
     {
+        OPTICK_EVENT();
         if (id == invalid_id)
             return;
         //get mesh handle

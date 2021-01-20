@@ -67,7 +67,7 @@ namespace legion::rendering
 
         material_handle m_particleMaterial;
         model_handle m_particleModel;
-
+        bool m_overWrittenBuffer = false;
         static ecs::EcsRegistry* m_registry;
     };
 }

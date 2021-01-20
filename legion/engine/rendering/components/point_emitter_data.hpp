@@ -11,5 +11,6 @@ namespace legion::rendering
         int CurrentLOD = 0;
         rendering::Octree<math::color>* Tree;
         std::vector<int> ElementsPerLOD;
+        std::vector<math::color> m_colorBuffer;
     };
 }

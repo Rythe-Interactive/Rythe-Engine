@@ -125,7 +125,7 @@ namespace legion::rendering
             //Get normal map
             auto [lock, normal] = realPointCloud.m_heightMap.get_raw_image();
             {
-                auto [lock2, albedo] = realPointCloud.m_heightMap.get_raw_image();
+                auto [lock2, albedo] = realPointCloud.m_AlbedoMap.get_raw_image();
                 {
                     async::readonly_multiguard guard(lock,lock2);
 
@@ -141,7 +141,7 @@ namespace legion::rendering
                     auto outBuffer = compute::Context::createBuffer(result, compute::buffer_type::WRITE_BUFFER, "points");
                     auto colorBuffer = compute::Context::createBuffer(resultColor, compute::buffer_type::WRITE_BUFFER, "colors");
 
-                    uint size = realPointCloud.m_heightMap.size().x;
+                    uint size = realPointCloud.m_AlbedoMap.size().x;
                     auto computeResult = pointCloudGeneratorCS
                     (
                         process_Size,
@@ -162,9 +162,8 @@ namespace legion::rendering
             std::vector<math::vec3> particleInput(totalSampleCount);
             for (size_t i = 0; i < totalSampleCount; i++)
             {
-                particleInput.at(i) = result.at(i);
+                particleInput.at(i) = result.at(i).xyz + posiitonOffset;
             }
-            log::debug("creating particles: " + std::to_string(particleInput.size()));
             //generate particle params
             pointCloudParameters params
             {
@@ -177,16 +176,14 @@ namespace legion::rendering
 
             //write that pc has been generated
             realPointCloud.m_hasBeenGenerated = true;
+            pointCloud.write(realPointCloud);
         }
 
         void GenerateParticles(pointCloudParameters params, std::vector<math::vec3> input, std::vector<math::vec4> inputColor, transform trans)
         {
             //generate particle system
             std::string name = "GeneratedPointCloud " + std::to_string(cloudGenerationCount);
-            for (size_t i = 0; i < inputColor.size(); i++)
-            {
-                log::debug(inputColor.at(i));
-            }
+   
             auto newPointCloud = ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>(name, params, input, inputColor);
 
             //create entity to store particle system

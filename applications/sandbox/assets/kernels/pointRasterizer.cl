@@ -259,7 +259,8 @@ __kernel void Main
         //sample height based on uvs
         float heightOffset = sampleHeight(normalMap,uvCoordinates ,textureSize);
         float4 Color = sampleColor(albedoMap,uvCoordinates ,textureSize);
-
+      //  Color = (float4)(uvCoordinates.x, uvCoordinates.y, 0, 1);
+        //Color = (float4)(1,0,0,1);
         //scale normal by the height & add it to the point
         newPoint+= normal*heightOffset;
         colors[index]=Color;
