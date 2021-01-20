@@ -17,6 +17,7 @@ namespace legion::core::scenemanagement
     class SceneManager final : public core::System<SceneManager>
     {
     public:
+        static std::atomic_bool doNotCreateEntities;
         static int sceneCount;
         static std::string currentScene;
         static std::unordered_map < id_type, std::string> sceneNames;

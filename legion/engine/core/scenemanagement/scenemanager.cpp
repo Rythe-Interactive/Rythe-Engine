@@ -10,6 +10,7 @@ namespace legion::core::scenemanagement
     std::string SceneManager::currentScene = "Main";
     std::unordered_map < id_type, std::string> SceneManager::sceneNames;
     std::unordered_map<id_type, ecs::component_handle<scene>> SceneManager::sceneList;
+    std::atomic_bool SceneManager::doNotCreateEntities{false};
 
     bool SceneManager::createScene(const std::string& name)
     {
@@ -61,14 +62,34 @@ namespace legion::core::scenemanagement
         if (!common::ends_with(filename, ".cornflake")) filename += ".cornflake";
 
         std::ifstream inFile("assets/scenes/" + filename);
+
+        log::debug("Child Count Before: {}",m_ecs->world.child_count());
+
+
+        doNotCreateEntities = true;
+        m_ecs->getEntityLock().critical_section<async::readwrite_guard>([&]
+        {
+            while(m_ecs->world.child_count() > 0)
+            {
+                log::debug("children remaining {}",m_ecs->world.child_count() );
+                m_ecs->world.get_child(m_ecs->world.child_count() -1).destroy(true);
+            }
+        });
+
+        log::debug("Child Count After: {}",m_ecs->world.child_count());
+
+        /*
         for(size_type i = m_ecs->world.child_count(); i != 0; i--)
         {
             m_ecs->world.get_child(i-1).destroy(true);
         }
+        */
+
 
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
         currentScene = name;
 
+        doNotCreateEntities = true;
         //SceneManager::saveScene(name, sceneEntity);
         //log::debug("........Done saving scene");
         return true;

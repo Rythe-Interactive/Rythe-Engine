@@ -12,5 +12,5 @@ material_input.emissive= assets:\\textures\fabric\fabric-lowres-emissive-512.png
 material_input.normalHeight= assets:\\textures\fabric\fabric-lowres-normalHeight-512.png 
 material_input.albedo= assets:\\textures\fabric\fabric-lowres-albedo-512.png 
 material_input.MRDAo= assets:\\textures\fabric\fabric-lowres-MRDAo-512.png 
-material_input.heightScale= 0.100000 
+material_input.heightScale= 1.000000 
 skycolor= 0.100000 0.300000 1.000000 1.000000 

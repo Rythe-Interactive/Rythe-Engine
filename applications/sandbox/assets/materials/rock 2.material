@@ -12,5 +12,5 @@ material_input.emissive= assets:\\textures\rock\rock-emissive-512.png
 material_input.normalHeight= assets:\\textures\rock\rock-normalHeight-512.png 
 material_input.albedo= assets:\\textures\rock\rock-albedo-512.png 
 material_input.MRDAo= assets:\\textures\rock\rock-MRDAo-512.png 
-material_input.heightScale= 0.500000 
+material_input.heightScale= 1.000000 
 skycolor= 0.100000 0.300000 1.000000 1.000000 

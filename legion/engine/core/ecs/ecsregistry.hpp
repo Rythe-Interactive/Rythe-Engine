@@ -98,6 +98,11 @@ namespace legion::core::ecs
             return static_cast<component_pool<component_type>*>(getFamily(typeHash<component_type>()));
         }
 
+        async::rw_spinlock& getEntityLock() const 
+        {
+            return m_entityLock;
+        }
+
         /**@brief  TODO*/
         std::string getFamilyName(id_type id)
         {

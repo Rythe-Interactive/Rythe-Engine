@@ -1,4 +1,5 @@
 #pragma once
+#include <core/scenemanagement/scenemanager.hpp>
 
 namespace legion::audio
 {
@@ -276,8 +277,8 @@ namespace legion::audio
     {
         log::debug("Destroying Audio Listener...");
 
-        listenerCount = math::max((int)(listenerCount - 1), 0);
-        if (listenerCount == 0)
+        listenerCount = math::max(static_cast<int>(listenerCount - 1), 0);
+        if (listenerCount == 0 && scenemanagement::SceneManager::doNotCreateEntities == false)
         {
             log::debug("No Listeners left, resetting listener");
             m_listenerEnt = ecs::entity_handle();

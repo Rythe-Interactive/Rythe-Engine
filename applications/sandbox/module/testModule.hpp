@@ -42,7 +42,7 @@ public:
         //reportComponentType<ext::animation>();
         //reportSystem<ext::Animator>();
         //reportSystem<ext::AnimationEditor>();
-        //reportSystem<TestSystem>();
+        reportSystem<TestSystem>();
         //reportSystem<SceneTestSystem1>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
