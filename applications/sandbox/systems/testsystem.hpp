@@ -758,8 +758,11 @@ public:
             pos.y = 6;
             ent2.get_component_handle<position>().write(pos);
         }
-
+#if defined(LEGION_DEBUG)
+        for (int i = 0; i < 2000; i++)
+#else
         for (int i = 0; i < 20000; i++)
+#endif
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(billboardH.get_mesh()), rendering::mesh_renderer(textureBillboardH));

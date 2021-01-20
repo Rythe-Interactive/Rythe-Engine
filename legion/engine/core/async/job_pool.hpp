@@ -50,7 +50,7 @@ namespace legion::core::async
     private:
         CompleteFunc m_onComplete;
 
-        void execute_job()
+        void execute_job() const noexcept
         {
             auto* job = jobPoolPtr->pop_job();
             if (job)

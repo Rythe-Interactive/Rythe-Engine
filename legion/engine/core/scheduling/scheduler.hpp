@@ -249,7 +249,7 @@ namespace legion::core::scheduling
 
             log::impl::thread_names[chainThreadId] = std::string(name);
 #if USE_OPTICK
-            sendCommand(chainThreadId, [&name = name]()
+            sendCommand(chainThreadId, [&name = name, &m_threadScopesLock = m_threadScopesLock, &m_threadScopes = m_threadScopes]()
                 {
                     log::info("Thread {} assigned.", std::this_thread::get_id());
                     async::set_thread_name(name);
