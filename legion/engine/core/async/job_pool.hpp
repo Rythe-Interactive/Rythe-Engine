@@ -50,6 +50,21 @@ namespace legion::core::async
     private:
         CompleteFunc m_onComplete;
 
+        void execute_job()
+        {
+            auto* job = jobPoolPtr->pop_job();
+            if (job)
+            {
+                job->execute();
+                jobPoolPtr->complete_job();
+            }
+
+            if (jobPoolPtr->is_done())
+            {
+                m_onComplete();
+            }
+        }
+
     public:
         std::shared_ptr<job_pool_base> jobPoolPtr;
 
@@ -73,34 +88,14 @@ namespace legion::core::async
                     break;
                 case wait_priority::normal:
                 {
-                    auto* job = jobPoolPtr->pop_job();
-                    if (job)
-                    {
-                        job->execute();
-                        jobPoolPtr->complete_job();
-                    }
-
-                    if (jobPoolPtr->is_done())
-                    {
-                        m_onComplete();
-                    }
+                    execute_job();
                     L_PAUSE_INSTRUCTION();
                     break;
                 }
                 case wait_priority::real_time:
                 default:
                 {
-                    auto* job = jobPoolPtr->pop_job();
-                    if (job)
-                    {
-                        job->execute();
-                        jobPoolPtr->complete_job();
-                    }
-
-                    if (jobPoolPtr->is_done())
-                    {
-                        m_onComplete();
-                    }
+                    execute_job();
                     break;
                 }
                 }
@@ -108,8 +103,13 @@ namespace legion::core::async
         }
     };
 
+#if !defined(DOXY_EXCLUDE)
     template<typename Func, typename CompletionFunc>
-    job_operation(const std::shared_ptr<async_progress>&, const std::shared_ptr<job_pool_base>&, const Func&, const CompletionFunc&)->job_operation<Func, CompletionFunc>;
+    job_operation(
+        const std::shared_ptr<async_progress>&,
+        const std::shared_ptr<job_pool_base>&,
+        const Func&, const CompletionFunc&) -> job_operation<Func, CompletionFunc>;
+#endif
 
     template<typename Func>
     struct job_pool : public job_pool_base
