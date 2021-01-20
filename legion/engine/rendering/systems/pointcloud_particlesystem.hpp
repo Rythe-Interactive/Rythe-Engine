@@ -6,10 +6,6 @@
 #include <rendering/components/lod.hpp>
 #include <random>
 #include<rendering/components/point_emitter_data.hpp>
-#include <rendering/util/bindings.hpp>
-#include <application/application.hpp>
-#include<core/core.hpp>
-
 using namespace legion;
 /**
  * @struct pointCloudParameters
@@ -39,7 +35,7 @@ public:
      * @param params A struct with a bunch of default parameters and some parameters needed to be set.
      * @param positions A list of positions that the particle system uses to create its particles at.
      */
-    PointCloudParticleSystem(pointCloudParameters params, const std::vector<math::vec3>& positions)
+    PointCloudParticleSystem(pointCloudParameters params, const std::vector<math::vec3>& positions, const std::vector<math::vec4>& colors)
     {
         m_looping = params.looping;
         m_maxLifeTime = params.maxLifeTime;
@@ -91,11 +87,12 @@ public:
         math::vec3 min = math::vec3(universalMin);
         math::vec3 max = math::vec3(universalMax);
         //Create Octree
-        emitterData.Tree = new rendering::Octree<uint8>(8, min, max);
+        emitterData.Tree = new rendering::Octree<math::color>(8, min, max);
         //insert points into tree
+        int index = 0;
         for (auto position : m_positions)
         {
-            emitterData.Tree->insertNode(0, position);
+            emitterData.Tree->insertNode(m_colors, position);
         }
         //Write to handle
         emitterDataHandle.write(emitterData);
@@ -130,14 +127,14 @@ public:
      */
     void decreaseDetail(rendering::particle_emitter& emitter, rendering::point_emitter_data& data, int targetLod, int maxLod) const
     {
-        //   log::debug("decreasing detail");
+        log::debug("decreasing detail");
 
-           //read emitter
+        //read emitter
         if (emitter.livingParticles.size() == 0) return;
         //get the amount of particles to remove
-    //    log::debug("particles: " + std::to_string(emitter.livingParticles.size()));
+        log::debug("particles: " + std::to_string(emitter.livingParticles.size()));
         int targetParticleCount = data.ElementsPerLOD.at(maxLod - targetLod);
-        ///   log::debug("target count: " + std::to_string(targetParticleCount));
+        log::debug("target count: " + std::to_string(targetParticleCount));
 
         int delta = emitter.livingParticles.size() - targetParticleCount;
         //remove particles from the end of the living particles
@@ -175,6 +172,7 @@ public:
         if (!emitterData.Tree) return;
         int maxTreeDepth = emitterData.Tree->GetTreeDepth();
 
+        //add lod component and read its data
 
         //create data container
         std::vector<math::vec3>* newData = new std::vector<math::vec3>();
@@ -197,6 +195,8 @@ public:
         rendering::lod lodComponent = rendering::lod(LODcount);
         emitter_handle.entity.add_component<rendering::lod>(lodComponent);
         emitterData.CurrentLOD = 0;
+
+        //decreaseDetail(emitter, emitterData, 5, maxTreeDepth);
         data.write(emitterData);
         emitter_handle.write(emitter);
     }
@@ -205,59 +205,30 @@ public:
      */
     void update(std::vector<ecs::entity_handle>& entities, ecs::component_handle<rendering::particle_emitter> emitterHandle, time::span) const override
     {
-        //check if buffer has been read and has not been overwritten yet 
-        if (!m_overwrittenColorBuffer && m_particleModel.is_buffered())
-        {
-            //Get a window and lock
-            auto window = ecs::EcsRegistry::world.read_component<app::window>();
-            app::context_guard guard(window);
-            if (guard.contextIsValid())
-            {
-                //for now just create a random buffer
-                std::random_device rd;
-
-                std::mt19937_64 rng(rd());
-                std::uniform_real_distribution<double> unif(0, 1);
-
-                std::vector<math::color> randColors;
-                for (size_t i = 0; i < 150000; i++)
-                {
-                    double rand1 = unif(rng);
-                    double rand2 = unif(rng);
-                    double rand3 = unif(rng);
-                    math::color newColor = math::color(rand1, rand2, rand3, 1);
-                    randColors.push_back(newColor);
-                }
-                //create buffer
-                rendering::buffer colorBuffer = rendering::buffer(GL_ARRAY_BUFFER, randColors, GL_STATIC_DRAW);
-                auto& model = m_particleModel.get_model();
-                m_particleModel.overwrite_buffer(colorBuffer, SV_COLOR, true);
-                m_overwrittenColorBuffer = true;
-            }
-        }
-
+       // log::debug(entities.size());
         auto lodComponent = emitterHandle.entity.get_component_handle<rendering::lod>().read();
         rendering::particle_emitter emitter = emitterHandle.read();
         auto emitterDataHandle = emitterHandle.entity.get_component_handle<rendering::point_emitter_data>();
         auto emitterData = emitterDataHandle.read();
 
-        if (emitterData.CurrentLOD != lodComponent.Level)
-        {
-            if (emitterData.CurrentLOD > lodComponent.Level)
-            {
-                increaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod, lodComponent);
-            }
-            else
-            {
-                decreaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod);
-            }
-            emitterData.CurrentLOD = lodComponent.Level;
-            emitterHandle.write(emitter);
-            emitterDataHandle.write(emitterData);
-        }
+        //if (emitterData.CurrentLOD != lodComponent.Level)
+        //{
+        //    if (emitterData.CurrentLOD > lodComponent.Level)
+        //    {
+        //        increaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod, lodComponent);
+        //    }
+        //    else
+        //    {
+        //        decreaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod);
+        //    }
+        //    emitterData.CurrentLOD = lodComponent.Level;
+        //    emitterHandle.write(emitter);
+        //    emitterDataHandle.write(emitterData);
+        //}
     }
 
 private:
     std::vector<math::vec3> m_positions;
-    mutable bool m_overwrittenColorBuffer = false;
+    std::vector<math::vec3> m_colors;
+
 };

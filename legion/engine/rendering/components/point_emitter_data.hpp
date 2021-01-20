@@ -9,7 +9,7 @@ namespace legion::rendering
     struct point_emitter_data
     {
         int CurrentLOD = 0;
-        rendering::Octree<uint8>* Tree;
+        rendering::Octree<math::color>* Tree;
         std::vector<int> ElementsPerLOD;
     };
 }
