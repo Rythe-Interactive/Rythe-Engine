@@ -19,12 +19,12 @@ namespace legion::core::async
         m_progress.store(m_size, std::memory_order_release);
     }
 
-    void async_progress::advanceProgress(size_type progress) noexcept
+    void async_progress::advance_progress(size_type progress) noexcept
     {
         m_progress.fetch_add(progress, std::memory_order_release);
     }
 
-    bool async_progress::isDone() const noexcept
+    bool async_progress::is_done() const noexcept
     {
         return m_progress.load(std::memory_order_relaxed) >= m_size;
     }

@@ -113,6 +113,7 @@
     <ClInclude Include="data\animation.hpp" />
     <ClInclude Include="data\animation_events.hpp" />
     <ClInclude Include="data\pp_edgedetect.hpp" />
+    <ClInclude Include="module\testmodule.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="systems\animation_editor.hpp" />
     <ClInclude Include="systems\animator.hpp" />
@@ -125,7 +126,6 @@
     <ClInclude Include="systems\simplecameracontroller.hpp" />
     <ClInclude Include="systems\testsystem2.hpp" />
     <ClInclude Include="systems\testsystemconvexhull.hpp" />
-    <ClInclude Include="module\testmodule.hpp" />
     <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>
   <ItemGroup>

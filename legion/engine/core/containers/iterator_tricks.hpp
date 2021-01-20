@@ -3,13 +3,18 @@
 #include <functional>
 #include <core/platform/platform.hpp>
 
-namespace legion::core::iterator
+namespace legion::core
 {
     template <class T>
     struct pair_range
     {
         using iterator = T;
         pair_range(const std::pair<T, T> r) : range(r)
+        {
+        }
+
+        template<typename ItType>
+        pair_range(ItType begin, ItType end) : range(std::move(begin), std::move(end))
         {
         }
 
@@ -29,6 +34,9 @@ namespace legion::core::iterator
     #if !defined(DOXY_EXCLUDE)
     template <class T>
     pair_range(std::pair<T, T>)->pair_range<T>;
+
+    template <class T>
+    pair_range(T begin, T end)->pair_range<std::remove_reference_t<T>>;
     #endif
 
     template <class It>

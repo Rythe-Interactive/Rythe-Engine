@@ -31,8 +31,6 @@ namespace legion::core::ecs
      */
     struct entity_data
     {
-        id_type parent;
-        entity_set children;
         hashed_sparse_set<id_type> components;
     };
 

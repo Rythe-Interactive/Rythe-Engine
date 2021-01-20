@@ -19,7 +19,7 @@
 #include <rendering/module/renderingmodule.hpp>
 
 
-#include "module/testModule.hpp"
+#include "module/testmodule.hpp"
 
 using namespace legion;
 

@@ -1,0 +1,30 @@
+#version 450
+#state CULL OFF
+
+generate(vertex, fragment)
+
+#include <stdio.shinc>
+#include <utils.shinc>
+#include <math_ext.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = BillboardModelToScreenSpacePosition(position);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    void main(void)
+    {
+        if(length(stdio(uv) - vec2(0.5)) > 0.5)
+            discard;
+        fragment_color = stdio(vertexcolor);
+        fragment_normal = vec4(vec3(0.0), 1.0);
+        fragment_position = vec4(vec3(0.0), 1.0);
+        fragment_overdraw = vec4(vec3(0.0), 1.0);
+    }
+}

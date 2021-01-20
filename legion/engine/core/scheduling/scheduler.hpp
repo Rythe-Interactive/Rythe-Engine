@@ -9,6 +9,7 @@
 #include <core/events/events.hpp>
 #include <core/async/job_pool.hpp>
 #include <core/async/async_runnable.hpp>
+#include <core/async/thread_util.hpp>
 
 #include <Optick/optick.h>
 
@@ -35,6 +36,7 @@ namespace legion::core::scheduling
     class Scheduler
     {
     private:
+        friend struct legion::core::async::job_pool_base;
         struct thread_error
         {
             std::string message;
@@ -81,7 +83,10 @@ namespace legion::core::scheduling
 
         static void threadMain(bool* exit, bool* start, bool lowPower);
 
+        static void tryCompleteJobPool();
+
     public:
+
         Scheduler(events::EventBus* eventBus, bool lowPower, uint minThreads);
 
         ~Scheduler();
@@ -142,6 +147,7 @@ namespace legion::core::scheduling
         template<typename Func>
         auto sendCommand(std::thread::id id, const Func& func)
         {
+            OPTICK_EVENT("legion::core::scheduling::Scheduler::sendCommand<T>");
             async::async_runnable<Func>* command = new async::async_runnable<Func>(func);
             async::readwrite_guard guard(m_commandLocks[id]);
             m_commands[id].push(std::unique_ptr<runnable_base>(command));
@@ -151,10 +157,17 @@ namespace legion::core::scheduling
         template<typename Func>
         auto queueJobs(size_type count, const Func& func)
         {
+            auto repeater = [&](size_type count, auto func) { return queueJobs(count, func); };
+            auto onComplete = [&]() {tryCompleteJobPool(); };
+
+            if (!count)
+                return async::job_operation<decltype(repeater), decltype(onComplete)>(std::shared_ptr<async::async_progress>(nullptr), std::shared_ptr<async::job_pool_base>(nullptr), repeater, onComplete);
+
+            OPTICK_EVENT("legion::core::scheduling::Scheduler::queueJobs<T>");
             std::shared_ptr<async::job_pool_base> jobPool = std::shared_ptr<async::job_pool_base>(new async::job_pool<Func>(count, func));
             async::readwrite_guard guard(m_jobQueueLock);
             m_jobs.push(jobPool);
-            return async::job_operation(jobPool->getProgress(), jobPool, [&](size_type count, auto func) { return queueJobs(count, func); });
+            return async::job_operation<decltype(repeater), decltype(onComplete)>(jobPool->get_progress(), jobPool, repeater, onComplete);
         }
 
         /**@brief Destroy a thread.
@@ -236,18 +249,20 @@ namespace legion::core::scheduling
 
             log::impl::thread_names[chainThreadId] = std::string(name);
 #if USE_OPTICK
-            sendCommand(chainThreadId, [&]()
+            sendCommand(chainThreadId, [&name = name, &m_threadScopesLock = m_threadScopesLock, &m_threadScopes = m_threadScopes]()
                 {
                     log::info("Thread {} assigned.", std::this_thread::get_id());
+                    async::set_thread_name(name);
 
                     std::lock_guard guard(m_threadScopesLock);
                     m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
                     OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
                 });
 #else
-            sendCommand(chainThreadId, []()
+            sendCommand(chainThreadId, [&name = name]()
                 {
                     log::info("Thread {} assigned.", std::this_thread::get_id());
+                    async::set_thread_name(name);
                 });
 #endif
             async::readwrite_guard guard(m_processChainsLock);

@@ -426,6 +426,7 @@
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="defaults\hierarchysystem.hpp" />
     <ClInclude Include="time\defaults.hpp" />
+    <ClInclude Include="async\thread_util.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

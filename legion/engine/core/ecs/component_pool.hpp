@@ -122,19 +122,19 @@ namespace legion::core::ecs
 
         virtual component_container_base* get_components(const entity_container& entities) const override
         {
+            OPTICK_EVENT();
             auto* container = new component_container<component_type>();
-            container->reserve(entities.size());
+            container->resize(entities.size());
 
             async::readonly_guard guard(m_lock);
-            for (auto ent : entities)
+            for (int i = 0; i < entities.size(); i++)
             {
+                OPTICK_EVENT("Get component");
 #ifdef LGN_SAFE_MODE
-                if (m_components.contains(entityId))
-                    container->push_back(m_components.at(ent));
-                else
-                    container->emplace_back()
+                if (m_components.contains(entities[i]))
+                    container->at(i) = m_components.at(entities[i]);
 #else
-                container->push_back(m_components.at(ent));
+                container->at(i) = m_components.at(entities[i]);
 #endif
             }
 
@@ -144,9 +144,9 @@ namespace legion::core::ecs
 
         virtual void get_components(const entity_container& entities, component_container_base& comps) const override
         {
+            OPTICK_EVENT();
             component_container<component_type>& container = comps.cast<component_type>();
-            container.clear();
-            container.reserve(entities.size());
+            container.resize(entities.size());
 
 #ifdef LGN_SAFE_MODE
             if (!container.getComponentTypeId())
@@ -154,21 +154,21 @@ namespace legion::core::ecs
 #endif
 
             async::readonly_guard guard(m_lock);
-            for (auto ent : entities)
+            for (int i = 0; i < entities.size(); i++)
             {
+                OPTICK_EVENT("Get component");
 #ifdef LGN_SAFE_MODE
-                if (m_components.contains(entityId))
-                    container.push_back(m_components.at(ent));
-                else
-                    container.emplace_back()
+                if (m_components.contains(entities[i]))
+                    container[i] = m_components.at(entities[i]);
 #else
-                container.push_back(m_components.at(ent));
+                container[i] = m_components.at(entities[i]);
 #endif
             }
         }
 
         virtual void set_components(const entity_container& entities, const component_container_base& comps) override
         {
+            OPTICK_EVENT();
             const component_container<component_type>& container = comps.cast<component_type>();
 
 #ifdef LGN_SAFE_MODE
@@ -176,8 +176,8 @@ namespace legion::core::ecs
                 return;
 #endif
 
-            static std::vector<std::tuple<entity_handle, component_type, const component_type&>> modifications;
-            modifications.clear();
+            static component_container<component_type> modifications;
+            modifications.resize(entities.size());
 
             {
                 async::readonly_guard guard(m_lock);
@@ -187,14 +187,13 @@ namespace legion::core::ecs
                     if (m_components.contains(ent))
                     {
                         component_type& ref = m_components.at(ent);
-                        modifications.emplace_back(ent, ref, std::cref(container[i]));
+                        modifications[i] = ref;
                         ref = container[i];
                     }
                 }
             }
 
-            for (auto& [ent, oldVal, newVal] : modifications)
-                m_eventBus->raiseEvent<events::component_modification<component_type>>(ent, std::move(oldVal), newVal);
+            m_eventBus->raiseEvent<events::bulk_component_modification<component_type>>(entities, modifications, container);
         }
 
         /**@brief Thread-safe check for whether an entity has the component.
