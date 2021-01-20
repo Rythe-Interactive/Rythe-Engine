@@ -10,6 +10,7 @@
 #include <rendering/pipeline/default/postfx/tonemapping.hpp>
 #include <rendering/pipeline/default/postfx/fxaa.hpp>
 #include <rendering/pipeline/default/postfx/bloom.hpp>
+#include <rendering/pipeline/default/postfx/depthoffield.hpp>
 #include <rendering/data/buffer.hpp>
 
 
@@ -30,6 +31,7 @@ namespace legion::rendering
         PostProcessingStage::addEffect<Bloom>();
         PostProcessingStage::addEffect<Tonemapping>(-64);
         PostProcessingStage::addEffect<FXAA>(-100);
+        PostProcessingStage::addEffect<DepthOfField>(-101);
 
         buffer modelMatrixBuffer;
 

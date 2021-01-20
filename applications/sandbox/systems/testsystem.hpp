@@ -2386,7 +2386,7 @@ public:
             entity.write_component(rot);
 
             auto pos = entity.read_component<position>();
-            debug::drawLine(pos, pos + rot.forward(), math::colors::magenta);
+            //debug::drawLine(pos, pos + rot.forward(), math::colors::magenta);
 
 
 

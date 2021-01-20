@@ -1,0 +1,56 @@
+#version 450
+#state CULL OFF
+#state DEPTH OFF
+#state ALPHA OFF
+
+generate(vertex, fragment)
+
+#include <math_ext.shinc>
+#include <stdio.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = vec4(stdin(position), 1.0);
+        PropagateStdIO();
+    }
+}
+
+
+shader(fragment)
+{
+    uniform float sampleOffset;
+    uniform float focalOffset;
+    uniform float bokehRadius;
+
+    void main(void)
+    {
+        float depthColor = WorldToViewSpacePostion(ScenePosition(stdin(uv))).z;
+        vec3 sceneColor = SceneColor(stdin(uv)).rgb;
+        const vec2 centerTexture = vec2(0.5);
+        const vec2 texelSize = 1.0 / textureSize(lgn_sceneColor, 0);
+        const vec2 centerOffset = texelSize * sampleOffset;
+
+        const vec2 offsetTexels[4] = vec2[]
+        (vec2(-centerOffset.x+centerTexture.x,centerTexture.y),
+        vec2(centerTexture.x,centerTexture.y+centerOffset.y),
+        vec2(centerTexture.x+centerOffset.x,centerTexture.y),
+        vec2(centerTexture.x,-centerOffset.y+centerTexture.y));
+
+        const float averageDepth = 
+        (WorldToViewSpacePostion(ScenePosition(centerTexture)).z +
+         WorldToViewSpacePostion(ScenePosition(offsetTexels[0])).z +
+          WorldToViewSpacePostion(ScenePosition(offsetTexels[1])).z +
+           WorldToViewSpacePostion(ScenePosition(offsetTexels[2])).z +
+            WorldToViewSpacePostion(ScenePosition(offsetTexels[3])).z)*0.2;
+
+
+        float actualOffset = mix(focalOffset,FrustumDepth()*0.5,clamp01(pow(averageDepth/FrustumDepth(),10.0)));
+        float areaOfFocus = (depthColor - averageDepth)/actualOffset;
+        areaOfFocus = clamp(areaOfFocus, -1, 1) * bokehRadius;
+
+        fragment_color = vec4(vec3(areaOfFocus), 1.0);
+    }
+}
+

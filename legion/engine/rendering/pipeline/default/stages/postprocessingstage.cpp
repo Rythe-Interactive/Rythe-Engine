@@ -103,7 +103,7 @@ namespace legion::rendering
                 OPTICK_EVENT("Effect pass");
                 fbo->attach(textures[!index], FRAGMENT_ATTACHMENT);
                 
-                pass.invoke(*fbo, textures[index], depthTexture, deltaTime);
+                pass.invoke(*fbo, m_pipeline, cam, camInput, deltaTime);
                                 
                 index = !index;
             }

@@ -9,9 +9,9 @@ namespace legion::rendering
         addRenderPass<&FXAA::renderPass>();
     }
 
-    void FXAA::renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime)
+    void FXAA::renderPass(framebuffer& fbo, RenderPipelineBase* pipeline, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
-        static id_type texelSizeId = nameHash("texelSize");
+        /*static id_type texelSizeId = nameHash("texelSize");
         static id_type blurConstraintId = nameHash("blurConstraint");
         static id_type reductionScaleId = nameHash("reductionScale");
         static id_type reductionConstraintId = nameHash("reductionConstraint");
@@ -31,5 +31,6 @@ namespace legion::rendering
         renderQuad();
         m_fxaaShader.release();
         fbo.release();
+        */
     }
 }

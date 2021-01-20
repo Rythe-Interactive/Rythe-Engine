@@ -25,11 +25,6 @@ public:
     struct player_look_x : public app::input_axis<player_look_x> {};
     struct player_look_y : public app::input_axis<player_look_y> {};
 
-    pointcloudtestsystem2()
-    {
-        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(800, 600), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
-    }
-
     virtual void setup() override
     {
         //get mesh

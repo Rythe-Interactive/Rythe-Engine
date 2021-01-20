@@ -49,9 +49,9 @@ namespace legion::rendering
         exposure = 0.5f;
     }
 
-    void Tonemapping::renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime)
+    void Tonemapping::renderPass(framebuffer& fbo, RenderPipelineBase* pipeline, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
-        OPTICK_EVENT();
+        /*OPTICK_EVENT();
         static id_type exposureId = nameHash("exposure");
         static bool firstFrame = true;
 
@@ -97,7 +97,7 @@ namespace legion::rendering
         {
             OPTICK_EVENT("Generate scene color mipmaps");
             glGenerateTextureMipmap(tex.textureId);
-        }
+        }*/
     }
 
 }
