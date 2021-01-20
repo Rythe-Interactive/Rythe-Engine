@@ -42,7 +42,12 @@ namespace legion::core::compute {
     {
 
         karg(invalid_karg_type){}
+
+#if !defined(DOXY_EXCLUDE)
         template <class T, std::enable_if_t<!std::is_same_v<std::remove_reference_t<T>, karg>, int > = 0>
+#else
+        template <class T>
+#endif
         karg(T& v, const std::string& n = "") : container(&v, sizeof(T)), name(n){}
         karg(const karg&) = default;
         karg(karg&&) noexcept = default;

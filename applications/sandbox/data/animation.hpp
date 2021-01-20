@@ -65,7 +65,11 @@ namespace ext
         extern std::unordered_map<index_type, std::string_view> g_ReverseAnimationEventDatabase;
     }
 
+#if !defined(DOXY_EXCLUDE)
     template <class T, inherits_from<T, animation_event_base> = 0, inherits_from<T, events::event_base> = 0>
+#else
+    template <class T>
+#endif
     inline void registerAnimationEvent(std::string_view prettyName)
     {
         detail::g_AnimationEventDatabase[prettyName] = T::id;

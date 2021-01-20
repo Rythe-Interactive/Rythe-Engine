@@ -121,14 +121,24 @@ namespace legion::core::common {
     {
         return ok_proxy<void>{};
     }
+
+#if !defined(DOXY_EXCLUDE)
     template <class T, class...Any,
-        std::enable_if_t<!(std::is_base_of_v<result_ident, T> && sizeof...(Any) == 0),int> = 0>
+        std::enable_if_t<!(std::is_base_of_v<result_ident, T> && sizeof...(Any) == 0), int> = 0>
+#else
+    template <class T, class...Any>
+#endif
     inline ok_proxy<T, Any...> Ok(T&& t, Any&& ... any)
     {
         return ok_proxy<T, Any...>(std::move(t), std::forward<Any>(any)...);
     }
+
+#if !defined(DOXY_EXCLUDE)
     template <class T, class...Any,
-        std::enable_if_t<!(std::is_base_of_v<result_ident, T> && sizeof...(Any) == 0),int> = 0>
+        std::enable_if_t<!(std::is_base_of_v<result_ident, T> && sizeof...(Any) == 0), int> = 0>
+#else
+    template <class T, class...Any>
+#endif
     inline ok_proxy<T, Any...> Ok(T& t, Any&& ... any)
     {
         return ok_proxy<T, Any...>(t, std::forward<Any>(any)...);
@@ -213,16 +223,23 @@ namespace legion::core::common {
         return err_proxy<void>{};
     }
 
-
-
+#if !defined(DOXY_EXCLUDE)
     template <class T, class...Any,
-         std::enable_if_t<!(std::is_base_of_v<result_ident, std::remove_reference<T>> && sizeof...(Any) == 0),int> = 0>
+        std::enable_if_t<!(std::is_base_of_v<result_ident, std::remove_reference<T>> && sizeof...(Any) == 0), int> = 0>
+#else
+    template <class T, class...Any>
+#endif
     inline err_proxy<T, Any...> Err(T&& t, Any&& ... any)
     {
         return err_proxy<T, Any...>(std::move(t), std::forward<Any>(any)...);
     }
+
+#if !defined(DOXY_EXCLUDE)
     template <class T, class...Any,
-       std::enable_if_t<!(std::is_base_of_v<result_ident, std::remove_reference<T>> && sizeof...(Any) == 0),int> = 0>
+        std::enable_if_t<!(std::is_base_of_v<result_ident, std::remove_reference<T>> && sizeof...(Any) == 0), int> = 0>
+#else
+    template <class T, class...Any>
+#endif
     inline err_proxy<T, Any...> Err(T& t, Any&& ... any)
     {
         return err_proxy<T, Any...>(t, std::forward<Any>(any)...);

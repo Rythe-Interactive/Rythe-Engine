@@ -75,7 +75,11 @@ namespace legion::core
          * @param args the arguments you want to pass
          * @ref legion::core::Module
          */
+#if !defined(DOXY_EXCLUDE)
         template <class ModuleType, class... Args, inherits_from<ModuleType, Module> = 0>
+#else
+        template<class ModuleType, class... Args>
+#endif
         void reportModule(Args&&...args)
         {
             std::unique_ptr<Module> module = std::make_unique<ModuleType>(std::forward<Args>(args)...);

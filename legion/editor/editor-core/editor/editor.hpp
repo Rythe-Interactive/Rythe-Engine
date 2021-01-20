@@ -20,7 +20,11 @@ namespace legion::editor
 		 * @param args the arguments you want to pass
 		 * @ref legion::editor::EditorModule
 		 */
-		template <class ModuleType, class... Args, inherits_from<ModuleType, EditorModule> = 0>
+#if !defined(DOXY_EXCLUDE)
+        template <class ModuleType, class... Args, inherits_from<ModuleType, EditorModule> = 0>
+#else
+        template <class ModuleType, class... Args>
+#endif
 		void reportModule(Args&&...args)
 		{
 

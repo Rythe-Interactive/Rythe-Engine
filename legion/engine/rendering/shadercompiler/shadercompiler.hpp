@@ -35,7 +35,11 @@ namespace legion::rendering
             m_callback = func;
         }
 
+#if !defined(DOXY_EXCLUDE)
         template<typename lambda_type, std::enable_if_t<!std::is_same_v<std::remove_reference_t<lambda_type>, delegate<void(const std::string&, log::severity)>>, int> = 0>
+#else
+        template<typename lambda_type>
+#endif
         static void setErrorCallback(const lambda_type& lambda)
         {
             m_callback = delegate<void(const std::string&, log::severity)>::template create<lambda_type>(lambda);
