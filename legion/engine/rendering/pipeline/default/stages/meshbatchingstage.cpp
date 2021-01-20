@@ -39,7 +39,8 @@ namespace  legion::rendering
             OPTICK_EVENT("Calculate instances");
             for (int i = 0; i < renderablesQuery.size(); i++)
             {
-                (*batches)[renderers[i].material][ModelCache::create_model(filters[i].id)].push_back(math::compose(scales[i], rotations[i], positions[i]));
+                OPTICK_EVENT("instance");
+                (*batches)[renderers[i].material][model_handle{ filters[i].id }].push_back(math::compose(scales[i], rotations[i], positions[i]));
             }
         }
     }

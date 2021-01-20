@@ -52,6 +52,7 @@ namespace legion::core::async
 
         void execute_job() const noexcept
         {
+            OPTICK_EVENT();
             auto* job = jobPoolPtr->pop_job();
             if (job)
             {

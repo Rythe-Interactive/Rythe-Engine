@@ -2,6 +2,7 @@
 
 void legion::core::HierarchySystem::onPositionModified(events::component_modification<position>* event)
 {
+    OPTICK_EVENT();
     if (!event->entity.has_component<hierarchy>())
         return;
 
@@ -17,6 +18,7 @@ void legion::core::HierarchySystem::onPositionModified(events::component_modific
 
 void legion::core::HierarchySystem::onRotationModified(events::component_modification<rotation>* event)
 {
+    OPTICK_EVENT();
     if (!event->entity.has_component<hierarchy>())
         return;
 
@@ -33,6 +35,7 @@ void legion::core::HierarchySystem::onRotationModified(events::component_modific
 
 void legion::core::HierarchySystem::onScaleModified(events::component_modification<scale>* event)
 {
+    OPTICK_EVENT();
     if (!event->entity.has_component<hierarchy>())
         return;
 
@@ -49,6 +52,7 @@ void legion::core::HierarchySystem::onScaleModified(events::component_modificati
 
 void legion::core::HierarchySystem::onPositionBulkModified(events::bulk_component_modification<position>* event)
 {
+    OPTICK_EVENT();
     const auto& entities = event->entities;
     const auto& oldValues = event->oldValues;
     const auto& newValues = event->newValues;
@@ -83,6 +87,7 @@ void legion::core::HierarchySystem::onPositionBulkModified(events::bulk_componen
 
         for (int i = 0; i < count; i++)
         {
+            OPTICK_EVENT("Update child");
             if (!hasChildren[i])
                 continue;
 
@@ -96,6 +101,7 @@ void legion::core::HierarchySystem::onPositionBulkModified(events::bulk_componen
 
 void legion::core::HierarchySystem::onRotationBulkModified(events::bulk_component_modification<rotation>* event)
 {
+    OPTICK_EVENT();
     const auto& entities = event->entities;
     const auto& oldValues = event->oldValues;
     const auto& newValues = event->newValues;
@@ -130,6 +136,7 @@ void legion::core::HierarchySystem::onRotationBulkModified(events::bulk_componen
 
         for (int i = 0; i < count; i++)
         {
+            OPTICK_EVENT("Update child");
             if (!hasChildren[i])
                 continue;
 
@@ -146,6 +153,7 @@ void legion::core::HierarchySystem::onRotationBulkModified(events::bulk_componen
 
 void legion::core::HierarchySystem::onScaleBulkModified(events::bulk_component_modification<scale>* event)
 {
+    OPTICK_EVENT();
     const auto& entities = event->entities;
     const auto& oldValues = event->oldValues;
     const auto& newValues = event->newValues;
@@ -180,6 +188,8 @@ void legion::core::HierarchySystem::onScaleBulkModified(events::bulk_component_m
 
         for (int i = 0; i < count; i++)
         {
+            OPTICK_EVENT("Update child");
+
             if (!hasChildren[i])
                 continue;
 
