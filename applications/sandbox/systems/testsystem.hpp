@@ -291,9 +291,7 @@ public:
             gizmoMH = rendering::MaterialCache::create_material("gizmo", colorshader);
             gizmoMH.set_param("color", math::colors::lightgrey);
 
-            textureBillboardH = rendering::MaterialCache::create_material("texture billboard", "assets://shaders/billboard.shs"_view);
-            textureBillboardH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
-            textureBillboardH.set_param("fixedSize", false);
+            textureBillboardH = rendering::MaterialCache::create_material("texture billboard", "assets://shaders/point.shs"_view);
 
             billboardMH = rendering::MaterialCache::create_material("billboard", "assets://shaders/billboard.shs"_view);
             billboardMH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
@@ -761,21 +759,12 @@ public:
             ent2.get_component_handle<position>().write(pos);
         }
 
-
-        auto [entities, lock] = m_ecs->getEntities();
-        size_type entityCount;
-
-        {
-            async::readonly_guard guard(lock);
-            entityCount = entities.size();
-        }
-
-        for (int i = 0; i < 10000 - entityCount; i++)
+        for (int i = 0; i < 20000; i++)
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(texture2H));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(billboardH.get_mesh()), rendering::mesh_renderer(textureBillboardH));
             ent.add_component<sah>({});
-            ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale());
+            ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale(0.1f));
         }
 
         //audioSphereLeft setup
@@ -2338,43 +2327,42 @@ public:
             log::debug("frametime {}ms, fps {}", avgdt, 1.f / avgdt);
         }            
 
-        static auto sahQuery = createQuery<sah, rotation, position, scale>();
+        //static auto sahQuery = createQuery<sah, rotation, position, scale>();
+        static auto sahQuery = createQuery<sah, position>();
         sahQuery.queryEntities();
 
-        auto& rotations = sahQuery.get<rotation>();
+        //auto& rotations = sahQuery.get<rotation>();
         auto& positions = sahQuery.get<position>();
-        auto& scales = sahQuery.get<scale>();
+        //auto& scales = sahQuery.get<scale>();
 
-        static std::vector<math::vec3> ends;
-        ends.resize(positions.size());
         float dt = deltaTime;
 
         m_scheduler->queueJobs(sahQuery.size(), [&]()
             {
                 id_type idx = async::this_job::get_id();
-                auto& rot = rotations[idx];
+                //auto& rot = rotations[idx];
                 auto& pos = positions[idx];
-                auto& scale = scales[idx];
-                scale = (math::sin(time::mainClock.elapsedTime()) * 0.25f) + 0.75f;
-                rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
-                ends[idx] = pos + rot.forward();
+                //auto& scale = scales[idx];
+                float t = time::mainClock.elapsedTime();
+                pos += math::vec3(math::sin(t) * 0.01f, math::sin(t + 1.f) * 0.01f, math::sin(t - 1.f) * 0.01f);
+                //rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
             }).wait();
-        sahQuery.submit<scale>();
-        sahQuery.submit<rotation>();
+        sahQuery.submit<position>();
+        //sahQuery.submit<rotation>();
 
-        if (rotate && !physics::PhysicsSystem::IsPaused)
-        {
-            for (auto entity : physicsFrictionTestRotators)
-            {
-                auto rot = entity.read_component<rotation>();
+        //if (rotate && !physics::PhysicsSystem::IsPaused)
+        //{
+        //    for (auto entity : physicsFrictionTestRotators)
+        //    {
+        //        auto rot = entity.read_component<rotation>();
 
-                rot *= math::angleAxis(math::deg2rad(-20.f * deltaTime), math::vec3(0, 0, 1));
+        //        rot *= math::angleAxis(math::deg2rad(-20.f * deltaTime), math::vec3(0, 0, 1));
 
-                entity.write_component(rot);
-            }
-        }
+        //        entity.write_component(rot);
+        //    }
+        //}
 
-        static auto posQuery = createQuery<position>();
+        //static auto posQuery = createQuery<position>();
 
         //posQuery.queryEntities();
         //for (auto entity : posQuery)
