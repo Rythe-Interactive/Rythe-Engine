@@ -1,6 +1,8 @@
 #pragma once
 #include <core/platform/platform.hpp>
 #include <core/types/types.hpp>
+#include <memory>
+#include <functional>
 
 namespace legion::core
 {
@@ -16,15 +18,15 @@ namespace legion::core
     struct runnable : public runnable_base
     {
     protected:
-        Func m_func;
+        std::shared_ptr<std::remove_reference_t<Func>> m_func;
     public:
 
         runnable() = default;
-        runnable(const Func& func) : m_func(func) {}
+        runnable(const Func& func) : m_func(new Func(func)) {}
 
         virtual void execute() override
         {
-            m_func();
+            std::invoke(*m_func);
         }
     };
 }
