@@ -76,10 +76,11 @@ class GuiTestSystem : public System<GuiTestSystem>
     void BuildTree(ecs::entity_handle handle)
     {
         if (ImGui::TreeNode(reinterpret_cast<void*>(handle.get_id()), "%llu", handle.get_id())) {
-            for (size_type i = 0; i < handle.child_count(); ++i)
+            for (size_type i = 0; i < handle.children().size(); ++i)
             {
                 BuildTree(handle.get_child(i));
             }
+            ImGui::TreePop();
 
             if (ImGui::TreeNode("Components")) {
                 for (id_type id : handle.component_composition())
@@ -89,7 +90,7 @@ class GuiTestSystem : public System<GuiTestSystem>
 
                 ImGui::TreePop();
             }
-            ImGui::TreePop();
+
         }
     }
 
@@ -117,7 +118,7 @@ class GuiTestSystem : public System<GuiTestSystem>
                     text += sceneName;
                     if (base::Button(text.c_str()))
                     {
-                        scenemanagement::SceneManager::createScene(sceneName);
+                        scenemanagement::SceneManager::create_scene(sceneName);
                     }
                     ImGui::EndMenu();
                 }
@@ -129,7 +130,7 @@ class GuiTestSystem : public System<GuiTestSystem>
                         auto name = entry.second;
                         if (ImGui::MenuItem(name.c_str()))
                         {
-                            scenemanagement::SceneManager::loadScene(name);
+                            scenemanagement::SceneManager::load_scene(name);
                         }
                     }
                     ImGui::EndMenu();

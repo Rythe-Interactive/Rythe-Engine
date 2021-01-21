@@ -47,43 +47,47 @@ namespace legion::core::scenemanagement
             }
         }
 
+        /**@brief Creates a scene entity, to store all objects
+         */
+        static ecs::entity_handle create_scene_entity();
+
         /**@brief Creates a scene with given name.
           * @param name The name you wish to set the scene.
           * @returns bool Signifying whether it was successful.
           */
-        static bool createScene(const std::string& name);
+        static bool create_scene(const std::string& name);
 
         /**@brief Creates a scene with given name.
           * @param name The name you wish to set the scene to.
           * @param ent A specific entity to create a scene from.
           * @returns bool Signifying whether it was successful.
           */
-        static bool createScene(const std::string& name, ecs::entity_handle& ent);
+        static bool create_scene(const std::string& name, ecs::entity_handle& ent);
 
         /**@brief Deserializes the scene from the disk.
          * @param name The name of the file to deserialize.
          * @returns bool Signifying whether it was successful.
          */
-        static bool loadScene(const std::string& name);
+        static bool load_scene(const std::string& name);
 
         /**@brief Serializes a scene to disk
           * @param name string of the name of the scene you wish to save.
           * @param ent a specific entity to serialize.
           * @returns bool Signifying whether it was successful.
          */
-        static bool saveScene(const std::string& name, ecs::entity_handle& ent);
+        static bool save_scene(const std::string& name, ecs::entity_handle& ent);
 
         /**@brief Gets a scene from the scene list.
           * @param name The name of the scene that you wish to save.
           * @returns component_handle<scene> The component handle for the scene component stored in the sceneList.
           */
-        static ecs::component_handle<scene> getScene(std::string name);
+        static ecs::component_handle<scene> get_scene(std::string name);
 
         /**@brief Gets a scene.
          * @param name string of the scenes name that you wish to get.
          * @returns entiyt_handle The entity handle of the scene.
          */
-        static ecs::entity_handle getSceneEntity(std::string name);
+        static ecs::entity_handle get_scene_entity(std::string name);
 
        
     };

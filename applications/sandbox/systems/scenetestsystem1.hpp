@@ -109,7 +109,7 @@ public:
         if (action->pressed())
         {
             log::debug("Saving scene: Main");
-            scenemanagement::SceneManager::createScene("Main");
+            scenemanagement::SceneManager::create_scene("Main");
             log::debug("Finishded saving scene: Main");
         }
     }
@@ -118,7 +118,7 @@ public:
         if (action->pressed())
         {
             log::debug("Saving scene: Main2");
-            scenemanagement::SceneManager::createScene("Main2");
+            scenemanagement::SceneManager::create_scene("Main2");
             log::debug("Finishded saving scene: Main2");
         }
     }
@@ -127,7 +127,7 @@ public:
         if (action->pressed())
         {
             log::debug("Started loading scene: Main");
-            scenemanagement::SceneManager::loadScene("Main");
+            scenemanagement::SceneManager::load_scene("Main");
             log::debug("Finished loading a scene");
         }
     }
@@ -136,7 +136,7 @@ public:
         if (action->pressed())
         {
             log::debug("Started loading scene: Main");
-            scenemanagement::SceneManager::loadScene("Main2");
+            scenemanagement::SceneManager::load_scene("Main2");
             log::debug("Finished loading a scene");
         }
     }

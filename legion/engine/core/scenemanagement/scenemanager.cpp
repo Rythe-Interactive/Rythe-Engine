@@ -2,6 +2,7 @@
 #include <core/serialization/serializationUtil.hpp>
 #include <core/logging/logging.hpp>
 #include <core/common/string_extra.hpp>
+#include <core/defaults/defaultcomponents.hpp>
 
 
 namespace legion::core::scenemanagement
@@ -12,32 +13,41 @@ namespace legion::core::scenemanagement
     std::unordered_map<id_type, ecs::component_handle<scene>> SceneManager::sceneList;
     std::atomic_bool SceneManager::doNotCreateEntities{ false };
 
-    bool SceneManager::createScene(const std::string& name)
+    ecs::entity_handle SceneManager::create_scene_entity()
     {
         ecs::entity_handle sceneEntity;
         static ecs::EntityQuery sceneEntities = m_ecs->createQuery<scenemanagement::scene>();
         sceneEntities.queryEntities();
         if (sceneEntities.size() == 0)
         {
+            log::debug("Creating a Scene Entity");
             sceneEntity = m_ecs->createEntity();
+            sceneEntity.add_component<hierarchy>();
             std::vector<ecs::entity_handle> children;
             for (size_type i = 0; i < m_ecs->world.child_count(); i++)
             {
                 children.push_back(m_ecs->world.get_child(i));
             }
+            log::debug("Child count {}",m_ecs->world.child_count());
             for (auto child : children)
             {
                 if (child == sceneEntity)
                     continue;
-                child.set_parent(sceneEntity);
+                child.set_parent(sceneEntity,true);
             }
         }
         else
         {
-            sceneEntity == sceneEntities[0];
+            sceneEntity = sceneEntities[0];
         }
+        return sceneEntity;
+    }
 
-        if (!getScene(name))
+    bool SceneManager::create_scene(const std::string& name)
+    {
+        ecs::entity_handle sceneEntity = create_scene_entity();
+
+        if (!get_scene(name))
         {
             scene s;
             s.id = nameHash(name);
@@ -45,10 +55,10 @@ namespace legion::core::scenemanagement
             sceneEntity.add_component<scenemanagement::scene>(s);
             sceneList.emplace(nameHash(name), sceneEntity);
         }
-        return SceneManager::saveScene(name, sceneEntity);
+        return SceneManager::save_scene(name, sceneEntity);
     }
 
-    bool SceneManager::createScene(const std::string& name, ecs::entity_handle& ent)
+    bool SceneManager::create_scene(const std::string& name, ecs::entity_handle& ent)
     {
         if (!ent.has_component<scene>())
         {
@@ -59,13 +69,13 @@ namespace legion::core::scenemanagement
             sceneList.emplace(nameHash(name), sceneHandle);
             sceneCount++;
             //true if entity does not have the scene component
-            return saveScene(name, ent);
+            return save_scene(name, ent);
         }
         //false if it doesn't
         return false;
     }
 
-    bool SceneManager::loadScene(const std::string& name)
+    bool SceneManager::load_scene(const std::string& name)
     {
 
         std::string filename = name;
@@ -77,19 +87,23 @@ namespace legion::core::scenemanagement
 
 
         doNotCreateEntities = true;
-
-        for (auto child : m_ecs->world.children())
+        while (m_ecs->world.child_count() > 0)
+        {
+            log::debug("children remaining {}", m_ecs->world.child_count());
+            m_ecs->world.get_child(m_ecs->world.child_count() - 1).destroy(true);
+        }
+  /*      for (auto child : m_ecs->world.children())
         {
             child.destroy(true);
-        }
-        /*  m_ecs->getEntityLock().critical_section<async::readwrite_guard>([&]
-          {
-              while(m_ecs->world.child_count() > 0)
-              {
-                  log::debug("children remaining {}",m_ecs->world.child_count() );
-                  m_ecs->world.get_child(m_ecs->world.child_count() -1).destroy(true);
-              }
-          });*/
+        }*/
+          //m_ecs->getEntityLock().critical_section<async::readwrite_guard>([&]
+          //{
+          //        while (m_ecs->world.child_count() > 0)
+          //        {
+          //            log::debug("children remaining {}", m_ecs->world.child_count());
+          //            m_ecs->world.get_child(m_ecs->world.child_count() - 1).destroy(true);
+          //        }
+          //});
 
         log::debug("Child Count After: {}", m_ecs->world.child_count());
 
@@ -110,19 +124,19 @@ namespace legion::core::scenemanagement
         return true;
     }
 
-    bool SceneManager::saveScene(const std::string& name, ecs::entity_handle& ent)
+    bool SceneManager::save_scene(const std::string& name, ecs::entity_handle& ent)
     {
         std::ofstream outFile("assets/scenes/" + name + ".cornflake");
         serialization::SerializationUtil::JSONSerialize<ecs::entity_handle>(outFile, ent);
         return true;
     }
 
-    ecs::component_handle<scene> SceneManager::getScene(std::string name)
+    ecs::component_handle<scene> SceneManager::get_scene(std::string name)
     {
         return sceneList[nameHash(name)];
     }
 
-    ecs::entity_handle SceneManager::getSceneEntity(std::string name)
+    ecs::entity_handle SceneManager::get_scene_entity(std::string name)
     {
         return sceneList[nameHash(name)].entity;
     }
