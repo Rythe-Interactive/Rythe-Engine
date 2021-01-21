@@ -6,6 +6,7 @@
 generate(vertex, fragment)
 
 #include <stdio.shinc>
+#include <math_ext.shinc>
 
 shader(vertex)
 {
@@ -21,6 +22,12 @@ shader(fragment)
 {
     uniform vec2 scale;
     uniform float bokehRadius;
+
+    float Weigh (float coc, float radius) 
+    {
+        return clamp01((coc - radius + 2) / 2);
+    }
+
     void main(void)
     {
         const int kernelSampleCount = 22;
@@ -49,7 +56,7 @@ shader(fragment)
             vec2(0.90096885, -0.43388376),
         };
         vec3 color = SceneColor(stdin(uv)/scale).rgb;
-        float weight = 0;
+        float weight = 1;
         const vec2 texelSize = 1.0 / textureSize(lgn_sceneColor, 0);
 
         for(int k = 0; k < kernelSampleCount; k++)
@@ -59,14 +66,14 @@ shader(fragment)
             o *= texelSize;
             vec4 s = SceneColor(stdin(uv)/scale+o);
 
-            if (abs(s.a) >= radius)
-            {
-                color += s.rgb;
-                weight += 1;
-            }
+            float sw = Weigh(abs(s.a), radius);
+            color += s.rgb * sw;
+            weight += sw;
 
         }
+
         color *= 1.0 / weight;
+
 
         fragment_color = vec4(color, 1.0);
     }

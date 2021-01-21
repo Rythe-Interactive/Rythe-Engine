@@ -10,7 +10,7 @@ namespace legion::rendering
         shader_handle m_depthThresholdShader;
         shader_handle m_bokehShader;
         shader_handle m_screenShader;
-        shader_handle m_downscaleShader;
+        shader_handle m_combineShader;
         shader_handle m_postFilterShader;
         shader_handle m_preFilterShader;
         //Area of Focus pass Fbo and texture.
@@ -21,6 +21,8 @@ namespace legion::rendering
         texture_handle m_halfres1;
         texture_handle m_halfres2;
         math::ivec2 m_halfres;
+
+        float m_bokehSize;
 
         texture_import_settings settings{
               texture_type::two_dimensional,
@@ -58,7 +60,9 @@ namespace legion::rendering
 
         void postFilter(framebuffer& fbo, texture_handle& color_texture);
 
-        void renderResults(framebuffer& fbo, texture_handle& texture);
+        void combine(framebuffer& fbo, texture_handle& color_texture);
+
+        void renderResults(framebuffer& fbo, texture_handle& texture, texture_handle& color_texture);
 
         std::tuple<bool, texture_handle, texture_handle> getTextures(framebuffer& fbo);
     };

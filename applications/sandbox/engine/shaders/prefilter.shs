@@ -1,10 +1,12 @@
 #version 450
 #state CULL OFF
 #state DEPTH OFF
+#state ALPHA OFF
 
 generate(vertex, fragment)
 
-#include<stdio.shinc>
+#include <stdio.shinc>
+#include <math_ext.shinc>
 
 shader(vertex)
 {
@@ -31,7 +33,6 @@ shader(fragment)
         float cocMin = min(min(min(coc0, coc1), coc2), coc3);
         float cocMax = max(max(max(coc0, coc1), coc2), coc3);
         float coc = cocMax >= -cocMin ? cocMax : cocMin;
-
-        fragment_color = vec4(SceneColor(stdin(uv)).rgb, coc);
+        fragment_color = vec4(SceneColor(stdin(uv)/scale).rgb, coc);
     }
 }

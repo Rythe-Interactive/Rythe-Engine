@@ -1,0 +1,35 @@
+#version 450
+#state CULL OFF
+#state DEPTH OFF
+#state ALPHA OFF
+
+generate(vertex, fragment)
+
+#include<stdio.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = vec4(stdin(position), 1.0);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    uniform sampler2D dofTexture;
+    uniform sampler2D cocTexture;
+    
+    void main(void)
+    {
+        vec4 source = SceneColor(stdin(uv));
+        float coc = texture(cocTexture, stdin(uv)).r;
+        vec4 dof = texture(dofTexture, stdin(uv));
+
+
+        float dofStrength = smoothstep(0.1,1,abs(coc));
+        vec3 color = mix(source.rgb, dof.rgb, dofStrength);
+        fragment_color = vec4(color, source.a);
+    }
+}

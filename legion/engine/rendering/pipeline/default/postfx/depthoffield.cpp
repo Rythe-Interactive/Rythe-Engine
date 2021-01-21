@@ -12,7 +12,7 @@ namespace legion::rendering
         m_depthThresholdShader = rendering::ShaderCache::create_shader("depth threshold", "engine://shaders/depththreshold.shs"_view);
         m_bokehShader = rendering::ShaderCache::create_shader("dof bokeh", "engine://shaders/dofbokeh.shs"_view);
         m_screenShader = ShaderCache::create_shader("screenshader", "engine://shaders/screenshader.shs"_view);
-        m_downscaleShader = ShaderCache::create_shader("downscaleshader", "engine://shaders/downscaleshader.shs"_view);
+        m_combineShader = ShaderCache::create_shader("dofcombineshader", "engine://shaders/dofcombine.shs"_view);
         m_postFilterShader = ShaderCache::create_shader("postfiltershader", "engine://shaders/postfilter.shs"_view);
         m_preFilterShader = ShaderCache::create_shader("prefiltershader", "engine://shaders/prefilter.shs"_view);
 
@@ -26,6 +26,8 @@ namespace legion::rendering
         m_halfres = context.size()/2;
         m_halfres1 = rendering::TextureCache::create_texture("bokehhalfres1", m_halfres, settings);
         m_halfres2 = rendering::TextureCache::create_texture("bokehhalfres2", m_halfres, settings);
+
+        m_bokehSize = 4.0f;
 
         // Adding itself to the post processing renderpass.
         addRenderPass<&DepthOfField::renderPass>();
@@ -55,10 +57,11 @@ namespace legion::rendering
         bokeh(fbo, color_texture);
         //Post blur filtering.
         postFilter(fbo, color_texture);
-
+        //Combine source texture and the dof texture.
+        combine(fbo, color_texture);
 
         //Renders the resulting texture onto the screen.
-        renderResults(fbo, m_destinationTexture);
+        renderResults(fbo, color_texture, color_texture);
     }
 
     std::tuple<bool, texture_handle, texture_handle> DepthOfField::getTextures(framebuffer& fbo)
@@ -80,8 +83,9 @@ namespace legion::rendering
         return std::make_tuple(true, position_texture, color_texture);
     }
 
-    void DepthOfField::renderResults(framebuffer& fbo,texture_handle& texture)
+    void DepthOfField::renderResults(framebuffer& fbo,texture_handle& texture, texture_handle& color_texture)
     {
+        fbo.attach(color_texture, FRAGMENT_ATTACHMENT);
         //Binds and assigns.
         fbo.bind();
         m_screenShader.bind();
@@ -105,12 +109,11 @@ namespace legion::rendering
         m_depthThresholdShader.bind();
         m_depthThresholdShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(color_texture);
         m_depthThresholdShader.get_uniform_with_location<math::vec4>(SV_VIEWDIR).set_value(camInput.vdirfarz);
-        m_depthThresholdShader.get_uniform_with_location<math::vec4>(SV_CAMPOS).set_value(camInput.posnearz);
         m_depthThresholdShader.get_uniform_with_location<math::mat4>(SV_VIEW).set_value(camInput.view);
         m_depthThresholdShader.get_uniform_with_location<texture_handle>(SV_SCENEPOSITION).set_value(position_texture);
         m_depthThresholdShader.get_uniform<float>("sampleOffset").set_value(0.5f);
         m_depthThresholdShader.get_uniform<float>("focalOffset").set_value(5.f);
-        m_depthThresholdShader.get_uniform<float>("bokehRadius").set_value(4.f);
+        m_depthThresholdShader.get_uniform<float>("bokehRadius").set_value(m_bokehSize);
 
         // Render onto the quad.
         renderQuad();
@@ -121,27 +124,16 @@ namespace legion::rendering
 
     void DepthOfField::bokeh(framebuffer& fbo, texture_handle& color_texture)
     {
-        //Pre-Bokeh
-        fbo.attach(m_halfres1, FRAGMENT_ATTACHMENT);
-        fbo.bind();
-        m_downscaleShader.bind();
-        m_downscaleShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(color_texture);
-        m_downscaleShader.get_uniform<math::vec2>("scale").set_value(math::vec2(0.5f));
-        renderQuad();
-        m_downscaleShader.release();
-        fbo.release();
-
         //Bokeh blur
         fbo.attach(m_halfres2, FRAGMENT_ATTACHMENT);
         fbo.bind();
         m_bokehShader.bind();
         m_bokehShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(m_halfres1);
         m_bokehShader.get_uniform<math::vec2>("scale").set_value(math::vec2(0.5f));
-        m_bokehShader.get_uniform<float>("bokehRadius").set_value(4.0f);
+        m_bokehShader.get_uniform<float>("bokehRadius").set_value(m_bokehSize);
         renderQuad();
         m_bokehShader.release();
         fbo.release();
-        fbo.attach(color_texture, FRAGMENT_ATTACHMENT);
     }
 
     void DepthOfField::postFilter(framebuffer& fbo, texture_handle& color_texture)
@@ -150,11 +142,9 @@ namespace legion::rendering
         fbo.bind();
         m_postFilterShader.bind();
         m_postFilterShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(m_halfres2);
-        //m_postFilterShader.get_uniform<math::vec2>("scale").set_value(math::vec2(2.f));
         renderQuad();
         m_postFilterShader.release();
         fbo.release();
-        fbo.attach(color_texture, FRAGMENT_ATTACHMENT);
     }
 
     void DepthOfField::preFilter(framebuffer& fbo, texture_handle& color_texture)
@@ -168,6 +158,18 @@ namespace legion::rendering
         renderQuad();
         m_preFilterShader.release();
         fbo.release();
+    }
+
+    void DepthOfField::combine(framebuffer& fbo, texture_handle& color_texture)
+    {
         fbo.attach(color_texture, FRAGMENT_ATTACHMENT);
+        fbo.bind();
+        m_combineShader.bind();
+        m_combineShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(color_texture);
+        m_combineShader.get_uniform<texture_handle>("dofTexture").set_value(m_destinationTexture);
+        m_combineShader.get_uniform<texture_handle>("cocTexture").set_value(m_thresholdTexture);
+        renderQuad();
+        m_combineShader.release();
+        fbo.release();
     }
 }
