@@ -200,7 +200,7 @@ namespace legion::core::ecs
             return createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp).template cast<std::remove_reference_t<component_type>>();
         }
 
-        template<typename component_type, CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
+        template<typename component_type CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
         component_handle<std::remove_reference_t<component_type>> createComponent(id_type entityId, component_type& component)
         {
             std::remove_reference_t<component_type> temp = component;
