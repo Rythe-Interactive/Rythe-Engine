@@ -98,7 +98,7 @@ namespace legion::rendering
             return m_ecs->createQuery(componentTypes);
         }
 
-        template<typename event_type, typename... Arg CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
+        template<typename event_type, typename... Args CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void raiseEvent(Args... arguments)
         {
             OPTICK_EVENT();
