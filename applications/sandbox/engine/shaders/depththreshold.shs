@@ -46,7 +46,7 @@ shader(fragment)
             WorldToViewSpacePostion(ScenePosition(offsetTexels[3])).z)*0.2;
 
 
-        float actualOffset = mix(focalOffset,FrustumDepth()*0.5,clamp01(pow(averageDepth/FrustumDepth(),10.0)));
+        float actualOffset = mix(focalOffset,FarZ,clamp01(averageDepth/FarZ));
         float areaOfFocus = (depthColor - averageDepth)/actualOffset;
         areaOfFocus = clamp(areaOfFocus, -1, 1) * bokehRadius;
 
