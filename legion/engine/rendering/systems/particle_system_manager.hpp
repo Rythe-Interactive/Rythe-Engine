@@ -62,6 +62,7 @@ namespace legion::rendering
             pointCloudQuery.queryEntities();
             std::vector<math::vec4> colorData;
             int index = 0;
+           // log::debug(pointCloudQuery.size());
             for (auto pointEntities : pointCloudQuery)
             {
                 auto emitterHandle = pointEntities.get_component_handle<particle_emitter>();
@@ -71,7 +72,6 @@ namespace legion::rendering
                 auto dataHandle = pointEntities.get_component_handle<rendering::point_emitter_data>();
                 auto data = dataHandle.read();
 
-
                 index++;
                 if (index == pointCloudQuery.size())
                 {
@@ -79,12 +79,12 @@ namespace legion::rendering
                     app::context_guard guard(window);
                     if (guard.contextIsValid())
                     {
-                        //create buffer
+                        ////create buffer
                         rendering::buffer colorBuffer = rendering::buffer(GL_ARRAY_BUFFER, emitter.container->colorBufferData, GL_STREAM_DRAW);
                         particleSystem->m_particleModel.overwrite_buffer(colorBuffer, SV_COLOR, true);
-                        hasWrittenBuffer = true;
                     }
                 }
+
             }
         }
 

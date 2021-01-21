@@ -49,7 +49,7 @@ namespace legion::rendering
 
     void ModelCache::overwrite_buffer(id_type id, buffer& newBuffer, uint bufferID, bool perInstance)
     {
-        OPTICK_EVENT();
+        //OPTICK_EVENT();
         if (id == invalid_id)
             return;
         //get mesh handle
@@ -59,42 +59,11 @@ namespace legion::rendering
         //get mesh and lock
         auto [lock, mesh] = mesh_handle.get();
         async::readonly_multiguard guard(m_modelLock, lock);
-        model& model = m_models[id];
-        //set new buffer based on ID
-        switch (bufferID)
+        auto& model = m_models[id];
+        if (bufferID == SV_COLOR)
         {
-            //COLOR
-        case SV_COLOR:
-            model.colorBuffer = newBuffer;
-            model.vertexArray.setAttribPointer(model.colorBuffer, SV_COLOR, 4, GL_FLOAT, false, 0, 0);
+            model.vertexArray.setAttribPointer(newBuffer, SV_COLOR, 4, GL_FLOAT, false, 0, 0);
             model.vertexArray.setAttribDivisor(SV_COLOR, perInstance);
-            break;
-            //POSITIONS
-        case SV_POSITION:
-            model.colorBuffer = newBuffer;
-            model.vertexArray.setAttribPointer(model.colorBuffer, SV_POSITION, 4, GL_FLOAT, false, 0, 0);
-            model.vertexArray.setAttribDivisor(SV_POSITION, perInstance);
-            break;
-            //NORMALS
-        case SV_NORMAL:
-            model.colorBuffer = newBuffer;
-            model.vertexArray.setAttribPointer(model.colorBuffer, SV_NORMAL, 4, GL_FLOAT, false, 0, 0);
-            model.vertexArray.setAttribDivisor(SV_NORMAL, perInstance);
-            break;
-            //TANGENT
-        case SV_TANGENT:
-            model.colorBuffer = newBuffer;
-            model.vertexArray.setAttribPointer(model.colorBuffer, SV_TANGENT, 4, GL_FLOAT, false, 0, 0);
-            model.vertexArray.setAttribDivisor(SV_TANGENT, perInstance);
-            break;
-            //UVS
-        case SV_TEXCOORD0:
-            model.colorBuffer = newBuffer;
-            model.vertexArray.setAttribPointer(model.colorBuffer, SV_TEXCOORD0, 4, GL_FLOAT, false, 0, 0);
-            model.vertexArray.setAttribDivisor(SV_TEXCOORD0, perInstance);
-            break;
-        default:
-            break;
         }
     }
 
