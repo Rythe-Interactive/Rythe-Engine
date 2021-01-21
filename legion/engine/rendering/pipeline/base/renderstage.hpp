@@ -98,11 +98,7 @@ namespace legion::rendering
             return m_ecs->createQuery(componentTypes);
         }
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename event_type, typename... Args, inherits_from<event_type, events::event<event_type>> = 0>
-#else
-        template<typename event_type, typename... Args>
-#endif
+        template<typename event_type, typename... Arg CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void raiseEvent(Args... arguments)
         {
             OPTICK_EVENT();
@@ -121,88 +117,56 @@ namespace legion::rendering
             m_eventBus->raiseEventUnsafe(std::move(value), id);
         }
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-#else
-        template<typename event_type>
-#endif
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD bool checkEvent() const
         {
             OPTICK_EVENT();
             return m_eventBus->checkEvent<event_type>();
         }
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-#else
-        template<typename event_type>
-#endif
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD size_type getEventCount() const
         {
             OPTICK_EVENT();
             return m_eventBus->getEventCount<event_type>();
         }
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-#else
-        template<typename event_type>
-#endif
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD const event_type& getEvent(index_type index = 0) const
         {
             OPTICK_EVENT();
             return m_eventBus->getEvent<event_type>(index);
         }
         
-#if !defined(DOXY_EXCLUDE)
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-#else
-        template<typename event_type>
-#endif
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD const event_type& getLastEvent() const
         {
             OPTICK_EVENT();
             return m_eventBus->getLastEvent<event_type>();
         }
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-#else
-        template<typename event_type>
-#endif
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void clearEvent(index_type index = 0)
         {
             OPTICK_EVENT();
             m_eventBus->clearEvent<event_type>(index);
         }
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-#else
-        template<typename event_type>
-#endif
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void clearLastEvent()
         {
             OPTICK_EVENT();
             m_eventBus->clearLastEvent<event_type>();
         }
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename event_type, void(SelfType::* func_type)(event_type*), inherits_from<event_type, events::event<event_type>> = 0>
-#else
-        template<typename event_type, void(SelfType::* func_type)(event_type*)>
-#endif
+        template<typename event_type, void(SelfType::* func_type)(event_type*) CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void bindToEvent()
         {
             OPTICK_EVENT();
             m_eventBus->bindToEvent<event_type>(delegate<void(event_type*)>::template create<SelfType, func_type>(static_cast<SelfType*>(this)));
         }
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-#else
-        template<typename event_type>
-#endif
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void bindToEvent(delegate<void(event_type*)> callback)
         {
             OPTICK_EVENT();

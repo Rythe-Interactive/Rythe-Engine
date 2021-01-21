@@ -41,11 +41,7 @@ namespace legion::core
             m_scheduler->addProcessChain<charc>(name);
         }
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename SystemType, typename... Args, inherits_from<SystemType, System<SystemType>> = 0>
-#else
-        template<typename SystemType, typename... Args>
-#endif
+        template<typename SystemType, typename... Args CNDOXY(inherits_from<SystemType, System<SystemType>> = 0)>
         void reportSystem(Args&&... args)
         {
             OPTICK_EVENT();

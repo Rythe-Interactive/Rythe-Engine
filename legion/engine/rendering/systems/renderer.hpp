@@ -33,11 +33,7 @@ namespace legion::rendering
 
         void render(time::span deltatime);
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename Pipeline, typename... Args, inherits_from<Pipeline, RenderPipeline<Pipeline>> = 0>
-#else
-        template<typename Pipeline, typename... Args>
-#endif
+        template<typename Pipeline, typename... Args CNDOXY(inherits_from<Pipeline, RenderPipeline<Pipeline>> = 0)>
         static void setPipeline(Args&&... args);
 
         L_NODISCARD static RenderPipelineBase* getPipeline(app::window& context);

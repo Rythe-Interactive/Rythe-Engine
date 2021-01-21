@@ -19,11 +19,7 @@ namespace legion::rendering
 
     public:
 
-#if !defined(DOXY_EXCLUDE)
-        template<typename StageType, inherits_from<StageType, RenderStage<StageType>> = 0>
-#else
-        template<typename StageType>
-#endif
+        template<typename StageType CNDOXY(inherits_from<StageType, RenderStage<StageType>> = 0)>
         static void attachStage();
 
         static void attachStage(std::unique_ptr<RenderStageBase>&& stage);
