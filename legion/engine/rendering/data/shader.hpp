@@ -18,7 +18,7 @@ namespace legion::rendering
     struct ShaderCache;
     struct shader_handle;
 
-    using shader_ilo = std::vector<std::pair<GLuint, std::string>>; // Shader intermediate language object.
+    using shader_ilo = std::vector<std::tuple<std::string, GLuint, std::string>>; // Shader intermediate language object.
     using shader_state = std::unordered_map<GLenum, GLenum>;
 
 #pragma region shader parameters
@@ -265,6 +265,16 @@ namespace legion::rendering
 
 #pragma endregion
 
+    struct shader_variant
+    {
+        GLint programId;
+        std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
+        std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
+        std::unordered_map<GLint, id_type> idOfLocation;
+        std::string name;
+        shader_state state;
+    };
+
     /**@class shader
      * @brief Abstraction class of a shader program.
      */
@@ -273,6 +283,7 @@ namespace legion::rendering
         /**@brief Data-structure to hold mapping of context functions and parameters.
          */
         GLint programId;
+        std::unordered_map<id_type, shader_variant> variants;
         std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
         std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
         std::unordered_map<GLint, id_type> idOfLocation;

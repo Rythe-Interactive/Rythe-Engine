@@ -14,7 +14,7 @@ namespace legion::rendering
         static const std::string& get_compiler_path();
 
         static void extract_state(std::string_view source, shader_state& state);
-        static bool extract_ilo(std::string_view source, uint64 shaderType, shader_ilo& ilo);
+        static bool extract_ilo(std::string_view variant, std::string_view source, uint64 shaderType, shader_ilo& ilo);
         static std::string invoke_compiler(const fs::view& file, bitfield8 compilerSettings, const std::vector<std::string>& defines, const std::vector<std::string>& additionalIncludes);
 
     public:

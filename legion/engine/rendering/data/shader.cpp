@@ -240,6 +240,9 @@ namespace legion::rendering
 
         while (start != end)
         {
+            std::string shaderVariant;
+            retrieveBinaryData(shaderVariant, start);
+
             GLenum shaderType;
             retrieveBinaryData(shaderType, start);
 
@@ -264,7 +267,7 @@ namespace legion::rendering
             {
                 std::string source;
                 retrieveBinaryData(source, start);
-                ilo.push_back(std::make_pair(shaderType, source));
+                ilo.push_back(std::make_tuple(shaderVariant, shaderType, source));
             }
             break;
             default:
@@ -307,8 +310,9 @@ namespace legion::rendering
 
             appendBinaryData(&rawState, data);
 
-            for (auto& [shaderType, source] : ilo)
+            for (auto& [shaderVariant, shaderType, source] : ilo)
             {
+                appendBinaryData(&shaderVariant, data);
                 appendBinaryData(&shaderType, data);
                 appendBinaryData(&source, data);
             }
@@ -463,7 +467,7 @@ namespace legion::rendering
 
         std::vector<app::gl_id> shaderIds;
 
-        for (auto& [shaderType, shaderIL] : shaders)
+        for (auto& [shaderVariant, shaderType, shaderIL] : shaders)
         {
             auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
 
@@ -509,7 +513,7 @@ namespace legion::rendering
             log::error("Error linking invalid shader:\n\t{}", errorMessage);
             delete[] errorMessage;
 
-            for (auto& [shaderType, shaderIL] : shaders)
+            for (auto& [shaderVariant, shaderType, shaderIL] : shaders)
             {
                 cstring shaderTypename;
                 switch (shaderType)
@@ -746,7 +750,7 @@ namespace legion::rendering
 
         std::vector<app::gl_id> shaderIds;
 
-        for (auto& [shaderType, shaderIL] : shaders)
+        for (auto& [shaderVariant, shaderType, shaderIL] : shaders)
         {
             auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
 
@@ -792,7 +796,7 @@ namespace legion::rendering
             log::error("Error linking {} shader:\n\t{}", name, errorMessage);
             delete[] errorMessage;
 
-            for (auto& [shaderType, shaderIL] : shaders)
+            for (auto& [shaderVariant, shaderType, shaderIL] : shaders)
             {
                 cstring shaderTypename;
                 switch (shaderType)

@@ -226,7 +226,7 @@ namespace legion::rendering
         }
     }
 
-    bool ShaderCompiler::extract_ilo(std::string_view source, uint64 shaderType, shader_ilo& ilo)
+    bool ShaderCompiler::extract_ilo(std::string_view variant, std::string_view source, uint64 shaderType, shader_ilo& ilo)
     {
         OPTICK_EVENT();
         using severity = log::severity;
@@ -264,8 +264,7 @@ namespace legion::rendering
             }
         }
 
-        auto shadercode = std::string(source);
-        ilo.push_back(std::make_pair(glShaderType, shadercode));
+        ilo.push_back(std::make_tuple(std::string(variant), glShaderType, std::string(source)));
         return true;
     }
 
@@ -410,14 +409,18 @@ namespace legion::rendering
                 break;
 
             seperator = rest.substr(0, sourceLength).find_last_of('\n');
-            auto source = rest.substr(0, seperator);
+            auto source = rest.substr(0, seperator);            
             rest = rest.substr(seperator);
+
+            seperator = source.find_first_of('\n');
+            auto variant = source.substr(0, seperator);
+            source = source.substr(seperator+1);
 
             if (shaderType == 0)
             {
                 extract_state(source, state);
             }
-            else if (!extract_ilo(source, shaderType, ilo))
+            else if (!extract_ilo(variant, source, shaderType, ilo))
             {
                 return false;
             }
