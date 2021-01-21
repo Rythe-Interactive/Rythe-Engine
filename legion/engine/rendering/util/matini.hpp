@@ -64,7 +64,7 @@ namespace legion::rendering {
             {
                 auto range = pair_range(m_parsed.equal_range(section));
 
-                for (auto& [key, value] : iterator::values_only(range))
+                for (auto& [key, value] : values_only(range))
                 {
                     if (std::invoke(f, key, value)) return;
                 }
