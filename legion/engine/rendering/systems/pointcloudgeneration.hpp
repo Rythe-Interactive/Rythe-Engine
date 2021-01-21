@@ -42,8 +42,6 @@ namespace legion::rendering
         }
 
     private:
-        //hard coded seed for now
-        const int seed = 0;
         //index to index the particle system name
         int cloudGenerationCount = 0;
         //query containing point clouds
@@ -51,6 +49,8 @@ namespace legion::rendering
         //compute shader
         compute::function pointCloudGeneratorCS;
         compute::function preProcessPointCloudCS;
+
+        ParticleSystemHandle particleSystem;
         void InitComputeShader()
         {
             if (!pointCloudGeneratorCS.isValid())
@@ -127,7 +127,7 @@ namespace legion::rendering
             {
                 auto [lock2, albedo] = realPointCloud.m_AlbedoMap.get_raw_image();
                 {
-                    async::readonly_multiguard guard(lock,lock2);
+                    async::readonly_multiguard guard(lock, lock2);
 
                     auto normalMapBuffer = compute::Context::createImage(normal, compute::buffer_type::READ_BUFFER, "normalMap");
 
@@ -182,19 +182,24 @@ namespace legion::rendering
         void GenerateParticles(pointCloudParameters params, std::vector<math::vec3> input, std::vector<math::vec4> inputColor, transform trans)
         {
             //generate particle system
-            std::string name = "GeneratedPointCloud " + std::to_string(cloudGenerationCount);
-   
-            auto newPointCloud = ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>(name, params, input, inputColor);
+            std::string name = typeName<PointCloudParticleSystem>();
 
+
+
+            auto newPointCloud = ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>(name, params);
             //create entity to store particle system
             auto newEnt = createEntity();
 
             //  newEnt.add_component <rendering::lod>();
             newEnt.add_components<transform>(trans.get<position>().read(), trans.get<rotation>().read(), trans.get<scale>().read());
 
-            rendering::particle_emitter emitter = newEnt.add_component<rendering::particle_emitter>().read();
+            auto emitterHandle = newEnt.add_component<rendering::particle_emitter>();
+            auto emitter = emitterHandle.read();
             emitter.particleSystemHandle = newPointCloud;
+            emitter.pointInput = input;
+            emitter.colorInput = inputColor;
             newEnt.get_component_handle<rendering::particle_emitter>().write(emitter);
+            //newPointCloud.get()->setup(emitterHandle, input, inputColor);
 
             //increment index
             cloudGenerationCount++;

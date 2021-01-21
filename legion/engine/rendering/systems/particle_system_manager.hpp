@@ -31,8 +31,7 @@ namespace legion::rendering
             OPTICK_EVENT();
             static auto emitters = createQuery<particle_emitter>();
             emitters.queryEntities();
-            /*log::debug("emitters found: ");
-            log::debug(std::to_string(emitters.size()));*/
+            log::debug(emitters.size());
             for (auto entity : emitters)
             {
                 //Gets emitter handle and emitter.
@@ -52,7 +51,7 @@ namespace legion::rendering
                 {
                     //If it IS then it runs the emitter through the particle system update.
                     const ParticleSystemBase* particleSystem = emit.particleSystemHandle.get();
-                    particleSystem->update(emit.livingParticles, emitterHandle, deltaTime);
+                    particleSystem->update(emit.livingParticles, emitterHandle, emitters, deltaTime);
                 }
             }
 
@@ -68,12 +67,10 @@ namespace legion::rendering
                 auto emitterHandle = pointEntities.get_component_handle<particle_emitter>();
                 auto emitter = emitterHandle.read();
                 const ParticleSystemBase* particleSystem = emitter.particleSystemHandle.get();
-           //     if (!particleSystem->m_particleModel.is_buffered() ) return;
 
                 auto dataHandle = pointEntities.get_component_handle<rendering::point_emitter_data>();
                 auto data = dataHandle.read();
 
-                colorData.insert(std::end(colorData), std::begin(data.m_colorBuffer), std::end(data.m_colorBuffer));
 
                 index++;
                 if (index == pointCloudQuery.size())
@@ -83,11 +80,10 @@ namespace legion::rendering
                     if (guard.contextIsValid())
                     {
                         //create buffer
-                        rendering::buffer colorBuffer = rendering::buffer(GL_ARRAY_BUFFER, colorData, GL_STREAM_DRAW);
+                        rendering::buffer colorBuffer = rendering::buffer(GL_ARRAY_BUFFER, emitter.container->colorBufferData, GL_STREAM_DRAW);
                         particleSystem->m_particleModel.overwrite_buffer(colorBuffer, SV_COLOR, true);
                         hasWrittenBuffer = true;
                     }
-
                 }
             }
         }

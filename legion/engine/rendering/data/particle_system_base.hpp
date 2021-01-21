@@ -15,6 +15,8 @@ namespace legion::rendering
         friend class ParticleSystemManager;
     public:
         virtual ~ParticleSystemBase() = default;
+
+
         /**
          * @brief The function that is run to setup all the particles inside of the given emitter.
          * @param particle_emitter The particle emitter that holds the particles that you plan to iterate over.
@@ -25,7 +27,7 @@ namespace legion::rendering
          * @param particle_list A list of particles to iterate over.
          * @param particle_emitter The emitter component handle holding the particles.
          */
-        virtual void update(std::vector<ecs::entity_handle>& particle_list, ecs::component_handle<particle_emitter> particle_emitter, time::span delta_time) const LEGION_IMPURE;
+        virtual void update(std::vector<ecs::entity_handle>& particle_list, ecs::component_handle<particle_emitter> particle_emitter, ecs::EntityQuery& entities, time::span delta_time) const LEGION_IMPURE;
 
     protected:
         /**
@@ -43,7 +45,7 @@ namespace legion::rendering
          */
         virtual void cleanUpParticle(
             ecs::entity_handle particleHandle,
-           particle_emitter& emitterHandle) const;
+            particle_emitter& emitterHandle) const;
         /**
          * @brief Checks if the given emitter has a particle ready to be used, otherwise make a new one.
          * @param emitterHandle The emitter that is being checked for an available particle.
@@ -67,7 +69,6 @@ namespace legion::rendering
 
         material_handle m_particleMaterial;
         model_handle m_particleModel;
-        bool m_overWrittenBuffer = false;
         static ecs::EcsRegistry* m_registry;
     };
 }
