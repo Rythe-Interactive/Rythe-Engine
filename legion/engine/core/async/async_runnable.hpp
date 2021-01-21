@@ -26,7 +26,7 @@ namespace legion::core::async
 
         virtual void execute() override
         {
-            this->m_func();
+            std::invoke(*(this->m_func));
             m_progress->complete();
         }
     };
