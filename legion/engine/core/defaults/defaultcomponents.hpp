@@ -99,6 +99,11 @@ namespace legion::core
         return math::conjugate(math::normalize(math::toQuat(math::lookAt(position, center, up))));
     }
 
+    struct hierarchy
+    {
+        ecs::entity_handle parent;
+        ecs::entity_set children;
+    };
 
     struct scale : public math::vec3
     {
@@ -126,7 +131,6 @@ namespace legion::core
         }
 
     };
-
 
     struct transform : public ecs::archetype<position, rotation, scale>
     {

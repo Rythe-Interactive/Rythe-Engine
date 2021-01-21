@@ -62,7 +62,7 @@ namespace legion::rendering {
             template <class Func>
             void for_each_value_in_section(const std::string& section, Func&& f)
             {
-                auto range = iterator::pair_range(m_parsed.equal_range(section));
+                auto range = pair_range(m_parsed.equal_range(section));
 
                 for (auto& [key, value] : iterator::values_only(range))
                 {

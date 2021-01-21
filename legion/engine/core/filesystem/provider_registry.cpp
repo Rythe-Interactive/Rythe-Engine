@@ -66,7 +66,7 @@ namespace legion::core::filesystem
 
 		std::unordered_set<domain> _domains;
 
-		for(auto& key : iterator::keys_only(*driver.m_domain_resolver_map))
+		for(auto& key : keys_only(*driver.m_domain_resolver_map))
 		{
 			//unordered_sets are unique by default no need to worry about duplicates
 			_domains.insert(key);	
@@ -106,7 +106,7 @@ namespace legion::core::filesystem
 		//get range for domains
 		const auto& iterator_pair = driver.m_domain_resolver_map->equal_range(d);
 
-		for(auto& [_,value] : iterator::pair_range(iterator_pair))
+		for(auto& [_,value] : pair_range(iterator_pair))
 		{
 			resolvers.emplace_back(value.get());
 		}
@@ -184,7 +184,7 @@ namespace legion::core::filesystem
 		//get range of domains
 		auto real_iterator = driver.m_domain_resolver_map->find(iterator.inspected_domain);
 
-		if(!iterator::checked_next(real_iterator,driver.m_domain_resolver_map->end(),iterator.index))
+		if(!checked_next(real_iterator,driver.m_domain_resolver_map->end(),iterator.index))
 		{
 			return nullptr;
 		}

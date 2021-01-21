@@ -35,10 +35,10 @@
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
     <ClCompile Include="async\spinlock.cpp" />
-    <ClCompile Include="defaults\defaultcomponents.cpp" />
-    <ClCompile Include="defaults\hierarchysystem.cpp" />
     <ClCompile Include="async\async_operation.cpp" />
     <ClCompile Include="async\job_pool.cpp" />
+    <ClCompile Include="defaults\hierarchysystem.cpp" />
+    <ClCompile Include="defaults\defaultcomponents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -408,6 +408,7 @@
     <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="data\image.hpp" />
     <ClInclude Include="data\importers\image_importers.hpp" />
+    <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
@@ -424,9 +425,8 @@
     <ClInclude Include="ecs\component_pool.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="defaults\hierarchysystem.hpp" />
-    <ClInclude Include="scenemanagement\components\scene.hpp" />
-    <ClInclude Include="platform\shellinvoke.hpp" />
     <ClInclude Include="time\defaults.hpp" />
+    <ClInclude Include="async\thread_util.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

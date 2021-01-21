@@ -221,9 +221,11 @@ namespace legion::core::ecs
         auto& [localModified, localList] = m_localCopies[queryId];
         if (lastModified > localModified)
         {
-            localList.clear();
-
-            localList.assign(entityList.begin(), entityList.end());
+            {
+                OPTICK_EVENT("Get entities");
+                localList.clear();
+                localList.assign(entityList.begin(), entityList.end());
+            }
 
             auto& localComps = m_localComponents[queryId];
             auto& compTypes = m_componentTypes.at(queryId);
@@ -236,16 +238,19 @@ namespace legion::core::ecs
                     m_registry.getFamily(compType)->get_components(localList, *localComps.at(compType));
             }
 
-            std::vector<id_type> toRemove;
-
-            for (auto& [compType, compList] : localComps)
             {
-                if (!compTypes.contains(compType))
-                    toRemove.push_back(compType);
-            }
+                OPTICK_EVENT("Remove old component types");
+                std::vector<id_type> toRemove;
 
-            for (auto compType : toRemove)
-                localComps.erase(compType);
+                for (auto& [compType, compList] : localComps)
+                {
+                    if (!compTypes.contains(compType))
+                        toRemove.push_back(compType);
+                }
+
+                for (auto compType : toRemove)
+                    localComps.erase(compType);
+            }
         }
 
         return localList;

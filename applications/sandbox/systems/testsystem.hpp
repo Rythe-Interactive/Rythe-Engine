@@ -1,5 +1,6 @@
 #pragma once
 #include <core/core.hpp>
+#include <physics/halfedgeedge.hpp>
 #include <application/application.hpp>
 #include <core/math/math.hpp>
 
@@ -7,21 +8,33 @@
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/cube_collider_params.hpp>
+#include <physics/data/physics_manifold_precursor.h>
 #include <physics/systems/physicssystem.hpp>
+#include <physics/halfedgeface.hpp>
 #include <physics/data/penetrationquery.h>
 
+
+#include <core/compute/context.hpp>
+#include <core/compute/kernel.hpp>
+#include <core/compute/high_level/function.hpp>
 #include <rendering/debugrendering.hpp>
 
+#include <physics/physics_statics.hpp>
 #include <physics/data/identifier.hpp>
 #include <audio/audio.hpp>
 #include <rendering/components/renderable.hpp>
+#include <Voro++/voro++.hh>
+#include <Voro++/common.hh>
+
+#include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 
 
 #include "animation_editor.hpp"
 #include "../data/animation.hpp"
 
 using namespace legion;
-using namespace legion::core::filesystem::literals;
+
+
 
 struct sah
 {
@@ -75,7 +88,7 @@ struct activateFrictionTest : public app::input_action<activateFrictionTest> {};
 //struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
 //struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
 
-
+using namespace legion::core::filesystem::literals;
 
 class TestSystem final : public System<TestSystem>
 {
@@ -107,6 +120,7 @@ public:
     rendering::material_handle paintH;
     rendering::material_handle skyboxH;
     rendering::material_handle gnomeMH;
+    rendering::material_handle textureBillboardH;
 
     //Friction Test
     std::vector<ecs::entity_handle> physicsFrictionTestRotators;
@@ -222,7 +236,6 @@ public:
         rendering::material_handle vertexColorH;
 
         rendering::material_handle uvH;
-        rendering::material_handle textureH;
         rendering::material_handle texture2H;
         rendering::material_handle directionalLightMH;
         rendering::material_handle spotLightMH;
@@ -278,8 +291,7 @@ public:
             gizmoMH = rendering::MaterialCache::create_material("gizmo", colorshader);
             gizmoMH.set_param("color", math::colors::lightgrey);
 
-            textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
-            textureH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            textureBillboardH = rendering::MaterialCache::create_material("texture billboard", "assets://shaders/point.shs"_view);
 
             billboardMH = rendering::MaterialCache::create_material("billboard", "assets://shaders/billboard.shs"_view);
             billboardMH.set_param("_texture", rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
@@ -294,6 +306,7 @@ public:
 
             fixedSizeParticleMH = rendering::MaterialCache::create_material("fixed size particle", "assets://shaders/particle.shs"_view);
             fixedSizeParticleMH.set_param("fixedSize", true);
+
             texture2H = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
             texture2H.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
 
@@ -614,7 +627,8 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(axesH.get_mesh()), rendering::mesh_renderer(vertexColorH));
             ent.add_components<transform>();
         }
-
+        //no audio for you 
+#if !defined(SUPER_LOW_POWER)
         {
             eventAudio = createEntity();
 
@@ -626,10 +640,8 @@ public:
             
             eventAudio.add_components<transform>();
             eventAudio.add_component<audio::audio_source>(source);
-
-
         }
-
+#endif
         //position positions[1000];
         //for (int i = 0; i < 1000; i++)
         //{
@@ -746,6 +758,17 @@ public:
             pos.y = 6;
             ent2.get_component_handle<position>().write(pos);
         }
+#if defined(LEGION_DEBUG)
+        for (int i = 0; i < 2000; i++)
+#else
+        for (int i = 0; i < 20000; i++)
+#endif
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(billboardH.get_mesh()), rendering::mesh_renderer(textureBillboardH));
+            ent.add_component<sah>({});
+            ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale(0.1f));
+        }
 
         //audioSphereLeft setup
         //{
@@ -787,7 +810,7 @@ public:
         //finder.FindHalfEdge(indices, vertices, math::mat4(1.0), physics);
         //setupPhysicsFrictionUnitTest(cubeH, uvH);
 
-        //setupPhysicsStackingUnitTest(cubeH,uvH,textureH);
+        //setupPhysicsStackingUnitTest(cubeH,uvH,TextureH);
 
         //setupMeshSplitterTest(planeH,cubeH, cylinderH, magneticLowH,texture2H);
 //        setupPhysicsCompositeTest(cubeH, texture2H);
@@ -857,7 +880,7 @@ public:
 
             auto rotation = rotationH.read();
 
-            rotation *= angleAxis(math::deg2rad(-60.0f), math::vec3(1, 0, 0));
+            rotation *= math::angleAxis(math::deg2rad(-60.0f), math::vec3(1, 0, 0));
 
             splitter.write_component(rotation);
 
@@ -1038,6 +1061,8 @@ public:
         //createProcess<&TestSystem::drawInterval>("TestChain");
     }
 
+
+
     void onVoidAnimationEvent(ext::void_animation_event* evnt)
     {
         auto source = eventAudio.read_component<audio::audio_source>();
@@ -1197,8 +1222,8 @@ public:
             positionH.write(math::vec3(3.0, -3.0f, -2.0f));
 
             auto rot = rotationH.read();
-            rot *= angleAxis(45.f, math::vec3(0, 1, 0));
-            rot *= angleAxis(45.f, math::vec3(0, 0, 1));
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 0, 1));
 
             rotationH.write(rot);
 
@@ -1228,7 +1253,7 @@ public:
             positionH.write(math::vec3(0, -3.0f, -7.0f));
 
             auto rot = rotationH.read();
-            rot *= angleAxis(20.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(20.f, math::vec3(0, 1, 0));
             rotationH.write(rot);
 
             scaleH.write(math::vec3(1.0f));
@@ -1253,8 +1278,8 @@ public:
             positionH.write(math::vec3(3.0, -3.0f, -7.0f));
 
             auto rot = rotationH.read();
-            rot *= angleAxis(45.f, math::vec3(0, 1, 0));
-            rot *= angleAxis(45.f, math::vec3(0, 0, 1));
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 0, 1));
 
             rotationH.write(rot);
 
@@ -1284,7 +1309,7 @@ public:
             positionH.write(math::vec3(0, -3.0f, -12.0f));
 
             auto rot = rotationH.read();
-            rot *= angleAxis(45.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
             rotationH.write(rot);
 
             scaleH.write(math::vec3(1.0f));
@@ -1309,8 +1334,8 @@ public:
             positionH.write(math::vec3(3.0, -3.0f, -13.0f));
 
             auto rot = rotationH.read();
-            rot *= angleAxis(45.f, math::vec3(1, 0, 0));
-            rot *= angleAxis(45.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
             rotationH.write(rot);
 
             scaleH.write(math::vec3(1.0f));
@@ -1633,8 +1658,8 @@ public:
             scaleH.write(math::vec3(1.0f));
 
             auto rot = rotationH.read();
-            rot *= angleAxis(45.f, math::vec3(1, 0, 0));
-            rot *= angleAxis(45.f, math::vec3(0, 1, 0));
+            rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
+            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
             rotationH.write(rot);
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(staticToEdgeEnt);
@@ -1935,7 +1960,8 @@ public:
 
     }
     //20,0,15
-    void setupPhysicsCompositeTest(rendering::model_handle cubeH, rendering::material_handle textureH)
+
+    void setupPhysicsCompositeTest(rendering::model_handle cubeH, rendering::material_handle TextureH)
     {
         float testPos = 20.f;
         physics::cube_collider_params cubeParams;
@@ -1971,7 +1997,7 @@ public:
             id.id = "STATIC_BLOCK";
             idHandle.write(id);
 
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
         }
 
         {
@@ -1996,7 +2022,7 @@ public:
             id.id = "STATIC_BLOCK";
             idHandle.write(id);
 
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
         }
 
         {
@@ -2015,7 +2041,7 @@ public:
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
 
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
 
             auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
             auto id = idHandle.read();
@@ -2033,10 +2059,11 @@ public:
 
     }
 
+
 #pragma region input stuff
     void onLightSwitch(light_switch* action)
     {
-        size_type dispatch_size = 200;
+        size_type dispatch_size = 2000;
         std::vector<size_type> numbers;
         numbers.resize(dispatch_size);
 
@@ -2056,7 +2083,7 @@ public:
                 }).wait();
 
         auto elapsed = t.end();
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 5; i++)
         {
             log::debug(numbers[i]);
         }
@@ -2167,7 +2194,7 @@ public:
     {
         auto posH = audioSphereLeft.get_component_handle<position>();
         math::vec3 move = math::vec3(0.f, 0.f, 1.f);
-        move = normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
         posH.fetch_add(move);
     }
 
@@ -2175,7 +2202,7 @@ public:
     {
         auto posH = audioSphereLeft.get_component_handle<position>();
         math::vec3 move = math::vec3(1.f, 0.f, 0.f);
-        move = normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * 10.f;
         posH.fetch_add(move);
     }
 
@@ -2288,68 +2315,57 @@ public:
     }
 #pragma endregion
 
+
+
     void update(time::span deltaTime)
     {
-        /*static float timer = 0;
-        static id_type sphereId = nameHash("sphere");
+        static float timer = 0;
 
-        auto [entities, lock] = m_ecs->getEntities();
-        size_type entityCount;
-
+        static float avgdt = deltaTime;
+        avgdt = (avgdt + deltaTime) / 2.f;
+        timer += deltaTime;
+        if (timer > 1.f)
         {
-            async::readonly_guard guard(lock);
-            entityCount = entities.size();
-        }
+            timer -= 1.f;
+            log::debug("frametime {}ms, fps {}", avgdt, 1.f / avgdt);
+        }            
 
-        if(entityCount < 200)
-            for (int i = 0; i < 200 - entityCount; i++)
-            {
-                auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(mesh_filter(MeshCache::get_handle(sphereId)), rendering::mesh_renderer(pbrH));
-                ent.add_component<sah>({});
-                ent.add_components<transform>(position(linearRand(math::vec3(-10, -21, -10), math::vec3(10, -1, 10))), rotation(), scale());
-            }
-
-        static auto sahQuery = createQuery<sah, rotation, position, scale>();
+        //static auto sahQuery = createQuery<sah, rotation, position, scale>();
+        static auto sahQuery = createQuery<sah, position>();
         sahQuery.queryEntities();
 
-        auto& rotations = sahQuery.get<rotation>();
+        //auto& rotations = sahQuery.get<rotation>();
         auto& positions = sahQuery.get<position>();
-        auto& scales = sahQuery.get<scale>();
+        //auto& scales = sahQuery.get<scale>();
 
-        static std::vector<math::vec3> ends;
-        ends.resize(positions.size());
         float dt = deltaTime;
 
         m_scheduler->queueJobs(sahQuery.size(), [&]()
             {
                 id_type idx = async::this_job::get_id();
-                auto& rot = rotations[idx];
+                //auto& rot = rotations[idx];
                 auto& pos = positions[idx];
-                auto& scale = scales[idx];
-                scale = (math::sin(time::mainClock.elapsedTime()) * 0.25f) + 0.75f;
-                rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
-                ends[idx] = pos + rot.forward();
+                //auto& scale = scales[idx];
+                float t = time::mainClock.elapsedTime();
+                pos += math::vec3(math::sin(t) * 0.01f, math::sin(t + 1.f) * 0.01f, math::sin(t - 1.f) * 0.01f);
+                //rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
             }).wait();
-        sahQuery.submit<scale>();
-        sahQuery.submit<rotation>();
+        sahQuery.submit<position>();
+        //sahQuery.submit<rotation>();
 
-        for(int i = 0; i < positions.size(); i++)
-            debug::drawLine(positions[i], ends[i], math::colors::magenta);
+        //if (rotate && !physics::PhysicsSystem::IsPaused)
+        //{
+        //    for (auto entity : physicsFrictionTestRotators)
+        //    {
+        //        auto rot = entity.read_component<rotation>();
 
-        if (rotate && !physics::PhysicsSystem::IsPaused)
-        {
-            for (auto entity : physicsFrictionTestRotators)
-            {
-                auto rot = entity.read_component<rotation>();
+        //        rot *= math::angleAxis(math::deg2rad(-20.f * deltaTime), math::vec3(0, 0, 1));
 
-                rot *= angleAxis(math::deg2rad(-20.f * deltaTime), math::vec3(0, 0, 1));
+        //        entity.write_component(rot);
+        //    }
+        //}
 
-                entity.write_component(rot);
-            }
-        }
-
-        static auto posQuery = createQuery<position>();*/
+        //static auto posQuery = createQuery<position>();
 
         //posQuery.queryEntities();
         //for (auto entity : posQuery)

@@ -117,13 +117,14 @@ del ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="async\async.hpp" />
     <ClInclude Include="async\async_operation.hpp" />
     <ClInclude Include="async\async_runnable.hpp" />
     <ClInclude Include="async\job_pool.hpp" />
     <ClInclude Include="async\ring_sync_lock.hpp" />
+    <ClInclude Include="async\thread_util.hpp" />
     <ClInclude Include="async\wait_priority.hpp" />
     <ClInclude Include="containers\runnable.hpp" />
-    <ClInclude Include="async\async.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
@@ -159,8 +160,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="defaults\hierarchysystem.hpp" />
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\archetype.hpp" />
-    <ClInclude Include="ecs\component_meta.hpp" />
     <ClInclude Include="ecs\component_container.hpp" />
+    <ClInclude Include="ecs\component_meta.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\component_pool.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
@@ -485,8 +486,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />
-    <ClInclude Include="platform\shellinvoke.hpp" />
-    <ClInclude Include="scenemanagement\components\scene.hpp" />
+    <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />

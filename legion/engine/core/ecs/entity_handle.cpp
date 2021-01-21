@@ -1,6 +1,7 @@
 #include <core/ecs/entity_handle.hpp>
 #include <core/ecs/ecsregistry.hpp>
 #include <core/ecs/component_handle.hpp>
+#include <core/defaults/defaultcomponents.hpp>
 #include <Optick/optick.h>
 
 namespace legion::core::ecs
@@ -20,19 +21,24 @@ namespace legion::core::ecs
         entity_handle clone = m_registry->createEntity();
         entity_data data = m_registry->getEntityData(get_id());
 
-        if (keep_parent)
-            clone.set_parent(data.parent);
+        if (has_component<hierarchy>())
+        {
+            hierarchy hry = read_component<hierarchy>();
+
+            if (keep_parent)
+                clone.set_parent(hry.parent, false);
+
+            if (clone_children)
+                for (const entity_handle& h : hry.children)
+                {
+                    h.clone(false, true, true).set_parent(clone, false);
+                }
+        }
 
         if (clone_components)
             for (id_type cid : data.components)
             {
                 m_registry->copyComponent(clone, *this, cid);
-            }
-
-        if (clone_children)
-            for (const entity_handle& h : data.children)
-            {
-                h.clone(false, true, true).set_parent(clone);
             }
 
         return clone;
@@ -51,7 +57,7 @@ namespace legion::core::ecs
 
     L_NODISCARD entity_set entity_handle::children() const
     {
-        return m_registry->getEntityData(m_id).children;
+        return read_component<hierarchy>().children;
     }
 
     L_NODISCARD entity_handle entity_handle::get_parent() const
@@ -60,42 +66,88 @@ namespace legion::core::ecs
         return m_registry->getEntityParent(m_id);
     }
 
-    void entity_handle::set_parent(id_type newParent)
+    void entity_handle::set_parent(id_type newParent, bool addHierarchyIfAbsent)
     {
-        OPTICK_EVENT();
-        entity_data data = m_registry->getEntityData(m_id);
-
-        id_type previousParent = invalid_id;
-
-#ifdef LGN_SAFE_MODE
-        if (m_registry->validateEntity(data.parent))
-#else
-        if (data.parent)
-#endif
+        bool hasHierarchy = true;
+        if (!has_component<hierarchy>())
         {
-            previousParent = data.parent;
-            auto parentData = m_registry->getEntityData(data.parent);
-            parentData.children.erase(*this);
-            m_registry->setEntityData(data.parent, parentData);
+            if (addHierarchyIfAbsent)
+                add_component<hierarchy>();
+            else
+                hasHierarchy = false;
         }
-#ifdef LGN_SAFE_MODE
-        if(m_registry->validateEntity(newParent))
-#else
-        if (newParent)
-#endif
+
+        if (hasHierarchy)
         {
+            OPTICK_EVENT();
+
+            hierarchy data = read_component<hierarchy>();
+            entity_handle previousParent = invalid_id;
+
+#ifdef LGN_SAFE_MODE
+            if (m_registry->validateEntity(data.parent))
+#else
+            if (data.parent.get_id())
+#endif
+            {
+                previousParent = data.parent;
+                auto parentData = data.parent.read_component<hierarchy>();
+                parentData.children.erase(*this);
+                data.parent.write_component<hierarchy>(parentData);
+            }
+
             data.parent = newParent;
 
-            auto parentData = m_registry->getEntityData(data.parent);
-            parentData.children.insert(*this);
-            m_registry->setEntityData(data.parent, parentData);
+#ifdef LGN_SAFE_MODE
+            if (m_registry->validateEntity(newParent))
+#else
+            if (newParent)
+#endif
+            {
+                if (data.parent.has_component<hierarchy>())
+                {
+                    auto parentData = data.parent.read_component<hierarchy>();
+                    parentData.children.insert(*this);
+                    data.parent.write_component<hierarchy>(parentData);
+                }
+                else if (addHierarchyIfAbsent)
+                {
+                    hierarchy parentData;;
+                    parentData.children.insert(*this);
+                    data.parent.add_component<hierarchy>(parentData);
+                }
+                else
+                    data.parent = invalid_id;
+            }
+            else
+                data.parent = invalid_id;
+
+            write_component<hierarchy>(data);
+            m_eventBus->raiseEvent<events::parent_change>(*this, previousParent, data.parent);
         }
         else
-            data.parent = invalid_id;
+        {
+            OPTICK_EVENT();
 
-        m_registry->setEntityData(m_id, data);
-        m_eventBus->raiseEvent<events::parent_change>(*this, previousParent, data.parent);
-    }
+            entity_handle parent = newParent;
+
+#ifdef LGN_SAFE_MODE
+            if (m_registry->validateEntity(newParent))
+#else
+            if (newParent && parent.has_component<hierarchy>())
+#endif
+            {
+                auto parentData = parent.read_component<hierarchy>();
+                parentData.children.insert(*this);
+                parent.write_component<hierarchy>(parentData);
+            }
+            else
+                parent = invalid_id;
+
+            m_eventBus->raiseEvent<events::parent_change>(*this, entity_handle(invalid_id), parent);
+        }
+
+        }
 
     void entity_handle::serialize(cereal::JSONOutputArchive& oarchive)
     {
@@ -107,7 +159,7 @@ namespace legion::core::ecs
         {
             components.push_back(m_registry->getComponent(m_id, composition[i]));
         }
-        for (auto child : m_registry->getEntityData(m_id).children)
+        for (auto child : read_component<hierarchy>().children)
         {
             children.push_back(child);
         }
@@ -124,7 +176,7 @@ namespace legion::core::ecs
         {
             components.push_back(m_registry->getComponent(m_id, m_registry->getEntity(m_id).component_composition()[i]));
         }
-        for (auto child : m_registry->getEntityData(m_id).children)
+        for (auto child : read_component<hierarchy>().children)
         {
             children.push_back(child);
         }
@@ -177,41 +229,50 @@ namespace legion::core::ecs
 
     L_NODISCARD entity_handle entity_handle::get_child(index_type index) const
     {
+        if (!has_component<hierarchy>())
+            return entity_handle(invalid_id);
+
         OPTICK_EVENT();
-        return m_registry->getEntityData(m_id).children[index];
+        return read_component<hierarchy>().children[index];
     }
 
     L_NODISCARD size_type entity_handle::child_count() const
     {
+        if (!has_component<hierarchy>())
+            return 0;
+
         OPTICK_EVENT();
-        return m_registry->getEntityData(m_id).children.size();
+        return read_component<hierarchy>().children.size();
     }
 
     void entity_handle::add_child(id_type childId)
     {
-        OPTICK_EVENT();
-        entity_data data = m_registry->getEntityData(m_id);
+        if (!has_component<hierarchy>())
+            return;
 
+        OPTICK_EVENT();
         entity_handle child = m_registry->getEntity(childId);
 
-        if (child.m_id && !data.children.contains(child))
+        if (child.m_id && !read_component<hierarchy>().children.contains(child))
             child.set_parent(m_id);
     }
 
     void entity_handle::remove_child(id_type childId)
     {
+        if (!has_component<hierarchy>())
+            return;
+
         OPTICK_EVENT();
-        entity_data data = m_registry->getEntityData(m_id);
         entity_handle child = m_registry->getEntity(childId);
 
-        if (child.m_id && data.children.contains(child))
-            child.set_parent(world_entity_id);
+        if (child.m_id && read_component<hierarchy>().children.contains(child))
+            child.set_parent(world_entity_id, false);
     }
 
     L_NODISCARD bool entity_handle::has_component(id_type componentTypeId) const
     {
         OPTICK_EVENT();
-        return m_registry->getEntityData(m_id).components.contains(componentTypeId);
+        return m_registry->hasComponent(m_id, componentTypeId);
     }
 
     L_NODISCARD component_handle_base entity_handle::get_component_handle(id_type componentTypeId)
@@ -256,4 +317,4 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         return m_registry->validateEntity(m_id);
     }
-}
+    }
