@@ -17,6 +17,7 @@ namespace legion::physics
     void PhysicsSystem::bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
         std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
     {
+
         manifoldPrecursorGrouping.push_back(std::move(manifoldPrecursors));
     }
 }

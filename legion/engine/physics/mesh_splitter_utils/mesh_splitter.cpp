@@ -104,7 +104,7 @@ namespace legion::physics
         const math::mat4& transform, std::vector<std::vector<SplittablePolygonPtr>>& resultingIslands, bool keepBelow, bool shouldDebug)
     {
     
-        log::debug("SplitPolygons");
+        //log::debug("SplitPolygons");
 
         //----------------------- Find out which polygons are below,above, or intersecting the splitting plane -----------------------------------//
 
@@ -114,7 +114,7 @@ namespace legion::physics
             polygon->isVisited = false;
             polygon->CalculatePolygonSplit(transform, planePosition, planeNormal, keepBelow);
 
-            switch (polygon->GetPolygonSplitState())
+           /* switch (polygon->GetPolygonSplitState())
             {
             case SplitState::Above:
                 log::debug("Above ");
@@ -131,7 +131,7 @@ namespace legion::physics
 
             default:
                 break;
-            }
+            }*/
 
         }
 

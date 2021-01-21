@@ -179,29 +179,25 @@ namespace legion::physics
                 if (manifold.isColliding)
                 {
                     log::debug("-> Collision Found");
-                    if (fractureID <= 4)
+
+                    std::vector<MeshSplitParams> splittingParams;
+                    meshToColliderPairing.GenerateSplittingParamsFromCollider(instantiatedVoronoiCollider, splittingParams);
+                    //log::debug("splittingParams {} ", splittingParams.size());
+
+                    for (size_t i = 0; i < splittingParams.size(); i++)
                     {
-                        std::vector<MeshSplitParams> splittingParams;
-                        meshToColliderPairing.GenerateSplittingParamsFromCollider(instantiatedVoronoiCollider, splittingParams);
-                        //log::debug("splittingParams {} ", splittingParams.size());
+                        float interpolant = (float)i / splittingParams.size();
 
-                        for (size_t i = 0; i < splittingParams.size(); i++)
-                        {
-                            float interpolant = (float)i / splittingParams.size();
+                        math::vec3 color = math::color(1, 0, 0) * interpolant;
 
-                            math::vec3 color = math::color(1,0,0) * interpolant;
-
-                                debug::user_projectDrawLine(splittingParams.at(i).planePostion
-                                    , splittingParams.at(i).planePostion + splittingParams.at(i).planeNormal,
-                                    math::color(color.x,color.y,color.z,1), 15.0f, FLT_MAX, true);
-                        }
-                        
-                        auto splitter = meshToColliderPairing.meshSplitterPairing.read();
-                        splitter.MultipleSplitMesh(splittingParams, entitiesGenerated,true,-1);
-                        meshToColliderPairing.meshSplitterPairing.write(splitter);
-
+                        debug::user_projectDrawLine(splittingParams.at(i).planePostion
+                            , splittingParams.at(i).planePostion + splittingParams.at(i).planeNormal,
+                            math::color(color.x, color.y, color.z, 1), 15.0f, FLT_MAX, true);
                     }
 
+                    auto splitter = meshToColliderPairing.meshSplitterPairing.read();
+                    splitter.MultipleSplitMesh(splittingParams, entitiesGenerated, true, -1);
+                    meshToColliderPairing.meshSplitterPairing.write(splitter);
 
                     fractureID++;
                 }
@@ -209,6 +205,11 @@ namespace legion::physics
         }
             
         registry->destroyEntity(fractureInstigatorEnt);
+
+        log::debug("entities generated {} ", entitiesGenerated.size());
+
+
+
 
         //for each pair list
             

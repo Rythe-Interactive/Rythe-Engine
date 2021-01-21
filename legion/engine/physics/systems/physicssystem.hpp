@@ -317,6 +317,8 @@ namespace legion::physics
         void bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
             std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping);
 
+        
+
 
         /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA
         * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list

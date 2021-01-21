@@ -90,7 +90,7 @@ namespace legion::physics
                 belowCount++;
             }
         }
-        log::debug(" above {} below {}", aboveCount, belowCount);
+        //log::debug(" above {} below {}", aboveCount, belowCount);
 
         if (aboveCount > 0 && belowCount == 0)
         {
