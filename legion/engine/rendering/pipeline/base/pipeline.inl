@@ -76,7 +76,7 @@ namespace legion::rendering
     }
 
     template<typename Self>
-    template<typename StageType, inherits_from<StageType, RenderStage<StageType>>>
+    template<typename StageType CNDOXY(inherits_from<StageType, RenderStage<StageType>>)>
     inline void RenderPipeline<Self>::attachStage()
     {
         OPTICK_EVENT();
