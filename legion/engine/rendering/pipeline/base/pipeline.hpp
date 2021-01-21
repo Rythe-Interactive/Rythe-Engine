@@ -18,7 +18,8 @@ namespace legion::rendering
         static std::multimap<priority_type, std::unique_ptr<RenderStageBase>, std::greater<>> m_stages;
 
     public:
-        template<typename StageType, inherits_from<StageType, RenderStage<StageType>> = 0>
+
+        template<typename StageType CNDOXY(inherits_from<StageType, RenderStage<StageType>> = 0)>
         static void attachStage();
 
         static void attachStage(std::unique_ptr<RenderStageBase>&& stage);

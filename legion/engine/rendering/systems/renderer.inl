@@ -2,7 +2,7 @@
 
 namespace legion::rendering
 {
-    template<typename Pipeline, typename ...Args, inherits_from<Pipeline, RenderPipeline<Pipeline>>>
+    template<typename Pipeline, typename ...Args CNDOXY(inherits_from<Pipeline, RenderPipeline<Pipeline>>)>
     inline void Renderer::setPipeline(Args&&... args)
     {
         OPTICK_EVENT();

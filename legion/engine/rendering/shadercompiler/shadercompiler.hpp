@@ -35,7 +35,7 @@ namespace legion::rendering
             m_callback = func;
         }
 
-        template<typename lambda_type, std::enable_if_t<!std::is_same_v<std::remove_reference_t<lambda_type>, delegate<void(const std::string&, log::severity)>>, int> = 0>
+        template<typename lambda_type CNDOXY(std::enable_if_t<!std::is_same_v<std::remove_reference_t<lambda_type>, delegate<void(const std::string&, log::severity)>>, int> = 0)>
         static void setErrorCallback(const lambda_type& lambda)
         {
             m_callback = delegate<void(const std::string&, log::severity)>::template create<lambda_type>(lambda);
