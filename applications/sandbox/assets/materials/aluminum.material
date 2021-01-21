@@ -8,9 +8,9 @@ shader= assets:\\shaders\pbr.shs
 ; if you _really_ need to edit this file, it is probably something here!
 [custom]
 discardExcess= false 
-material_input.emissive= assets:\\textures\aluminum\aluminum-emissive-512.png 
-material_input.normalHeight= assets:\\textures\aluminum\aluminum-normalHeight-512.png 
-material_input.albedo= assets:\\textures\aluminum\aluminum-albedo-512.png 
-material_input.MRDAo= assets:\\textures\aluminum\aluminum-MRDAo-512.png 
-material_input.heightScale= 1.000000 
 skycolor= 0.100000 0.300000 1.000000 1.000000 
+material_input.heightScale= 1.000000 
+material_input.albedo= assets:\\textures\aluminum\aluminum-albedo-512.png 
+material_input.normalHeight= assets:\\textures\aluminum\aluminum-normalHeight-512.png 
+material_input.MRDAo= assets:\\textures\aluminum\aluminum-MRDAo-512.png 
+material_input.emissive= assets:\\textures\aluminum\aluminum-emissive-512.png 

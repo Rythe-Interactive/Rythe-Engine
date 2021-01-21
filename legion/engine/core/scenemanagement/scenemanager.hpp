@@ -8,8 +8,6 @@
 /**
 *@file scenemanager.hpp
 */
-
-
 namespace legion::core::scenemanagement
 {
     struct scene;

@@ -7,5 +7,5 @@ shader= assets:\\shaders\billboard.shs
 ; Custom Parameters contains dynamic information about the material
 ; if you _really_ need to edit this file, it is probably something here!
 [custom]
-_texture= engine:\\resources\default\albedo 
 fixedSize= true 
+_texture= engine:\\resources\default\albedo 

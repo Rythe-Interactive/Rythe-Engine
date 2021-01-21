@@ -1038,8 +1038,6 @@ public:
         //createProcess<&TestSystem::drawInterval>("TestChain");
     }
 
-
-
     void onVoidAnimationEvent(ext::void_animation_event* evnt)
     {
         auto source = eventAudio.read_component<audio::audio_source>();
@@ -1937,7 +1935,6 @@ public:
 
     }
     //20,0,15
-
     void setupPhysicsCompositeTest(rendering::model_handle cubeH, rendering::material_handle textureH)
     {
         float testPos = 20.f;
@@ -2035,7 +2032,6 @@ public:
 
 
     }
-
 
 #pragma region input stuff
     void onLightSwitch(light_switch* action)
@@ -2292,11 +2288,9 @@ public:
     }
 #pragma endregion
 
-
-
     void update(time::span deltaTime)
     {
-        static float timer = 0;
+        /*static float timer = 0;
         static id_type sphereId = nameHash("sphere");
 
         auto [entities, lock] = m_ecs->getEntities();
@@ -2355,7 +2349,7 @@ public:
             }
         }
 
-        static auto posQuery = createQuery<position>();
+        static auto posQuery = createQuery<position>();*/
 
         //posQuery.queryEntities();
         //for (auto entity : posQuery)
