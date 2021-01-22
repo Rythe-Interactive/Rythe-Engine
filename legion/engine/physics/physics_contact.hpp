@@ -44,8 +44,6 @@ namespace legion::physics
 
         int contactCount = 0;
 
-        
-
         void ApplyWarmStarting()
         {
             math::vec3 Ra = RefWorldContact - refRBCentroid;

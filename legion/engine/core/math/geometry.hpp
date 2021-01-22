@@ -173,17 +173,7 @@ namespace legion::core::math
         // If the area of q to each set of two points is equal to the triangle surface area, q is on the triangle
         if (abs(q01Area + q02Area + q12Area) - triangleSurface(triPoint0, triPoint1, triPoint2) < math::epsilon<float>())
         {
-            if (debug)
-            {
-                std::cout << "\t\t\t\t\t\t\t" << " point q is on triangle surface " << math::to_string(q) << std::endl;
-            }
-           
             return projectionLength;
-        }
-
-        if (debug)
-        {
-            std::cout << "\t\t\t\t\t\t\t" << " point q is NOT on triangle surface " << math::to_string(q) << std::endl;
         }
         //Point q is not inside the triangle, check distance toward each edge of the triangle
         // therefore the smallest distance is distance toward a side or end point

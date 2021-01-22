@@ -193,14 +193,6 @@ namespace legion::physics
     {
         minMaxWorldAABB = PhysicsStatics::ConstructAABBFromTransformedVertices
         (vertices, transform);
-
-        //math::vec3 min = std::get<0>(minMaxWorldAABB);
-        //math::vec3 max = std::get<1>(minMaxWorldAABB);
-        //math::vec3 difference = max - min;
-
-      /*  debug::user_projectDrawLine(min, min + math::vec3(difference.x,0,0), math::colors::red, 5.0f);
-        debug::user_projectDrawLine(min, min + math::vec3(0,difference.y,0), math::colors::red, 5.0f);
-        debug::user_projectDrawLine(min, min + math::vec3(0,0,difference.z), math::colors::red, 5.0f);*/
     }
 
     void ConvexCollider::UpdateLocalAABB()
