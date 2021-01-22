@@ -31,7 +31,6 @@ namespace legion::rendering
             OPTICK_EVENT();
             static auto emitters = createQuery<particle_emitter>();
             emitters.queryEntities();
-            log::debug(emitters.size());
             for (auto entity : emitters)
             {
                 //Gets emitter handle and emitter.
@@ -62,7 +61,6 @@ namespace legion::rendering
             pointCloudQuery.queryEntities();
             std::vector<math::vec4> colorData;
             int index = 0;
-           // log::debug(pointCloudQuery.size());
             for (auto pointEntities : pointCloudQuery)
             {
                 auto emitterHandle = pointEntities.get_component_handle<particle_emitter>();
@@ -82,6 +80,8 @@ namespace legion::rendering
                         ////create buffer
                         rendering::buffer colorBuffer = rendering::buffer(GL_ARRAY_BUFFER, emitter.container->colorBufferData, GL_STREAM_DRAW);
                         particleSystem->m_particleModel.overwrite_buffer(colorBuffer, SV_COLOR, true);
+                        log::debug(std::to_string(emitter.container->colorBufferData.size()));
+
                     }
                 }
 

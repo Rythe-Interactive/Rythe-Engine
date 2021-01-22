@@ -59,7 +59,7 @@ public:
 
 
 
-            auto billBoardsh = rendering::ShaderCache::create_shader("billboard", "assets://shaders/pointShader.shs"_view);
+            auto billBoardsh = rendering::ShaderCache::create_shader("billboard", "assets://shaders/point.shs"_view);
             billboardMat = rendering::MaterialCache::create_material("billboardMat", billBoardsh);
             billboardMat.set_param("fixedSize", false);
             billboardMat.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/sphere.png"_view));
@@ -80,11 +80,11 @@ public:
         mesh_handle sponzaMesh = MeshCache::get_handle("sponza");
         //mesh_handle CarnegieMansion = MeshCache::get_handle("CarnegieMansion");
         auto ent2 = createEntity();
-        auto trans2 = ent2.add_components<transform>(position(0, 1, 0), rotation(), scale(0.5f));
+        auto trans2 = ent2.add_components<transform>(position(0, 1, 5), rotation(), scale(0.5f));
         ent2.add_component<point_cloud>(point_cloud(sphereMesh, trans2, billboardMat, albedo, normal, 20000, 0.025f));
 
         auto ent1 = createEntity();
-        auto trans1 = ent1.add_components<transform>(position(1.5f, 1, 0), rotation(), scale(0.5f));
+        auto trans1 = ent1.add_components<transform>(position(1.5f, 1, 5), rotation(), scale(0.5f));
         ent1.add_component<point_cloud>(point_cloud(suzanneeMesh, trans1, billboardMat, albedo2, normal, 10000, 0.025f));
 
 

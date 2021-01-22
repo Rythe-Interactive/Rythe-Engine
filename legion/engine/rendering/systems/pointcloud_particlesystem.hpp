@@ -61,11 +61,6 @@ public:
         auto emitter = emitter_handle.read();
         m_positions = emitter.pointInput;
         m_colors = emitter.colorInput;
-        //cast emitter to point emitter
-//        rendering::point_emitter* pointEmitter = dynamic_cast<rendering::point_emitter*>(emitter_handle.read());
-        /*m_positions = positions;
-        m_colors = colors;*/
-
 
         //Create data component
         auto emitterDataHandle = emitter_handle.entity.add_component<rendering::point_emitter_data>();
@@ -119,25 +114,28 @@ public:
      */
     void CreateParticles(std::vector<std::pair<math::vec3, math::color>>* inputData, rendering::particle_emitter& emitter, rendering::point_emitter_data& data) const
     {
+        OPTICK_EVENT();
+
         int index = 0;
         for (auto [newPos, newColor] : *inputData)
         {
-            ecs::component_handle<rendering::particle> particleComponent = checkContainerToRecycle(data.bufferPosition + data.emitterSize + index);
+            ecs::component_handle<transform> trans = checkContainerToRecycle();
 
-            auto ent = particleComponent.entity;
+            //auto ent = trans.entity;
 
             //Gets position, rotation and scale of entity.
-            auto trans = ent.get_component_handles<transform>();
-            auto& [pos, _, scale] = trans;
+            auto newTrans = trans.entity.get_component_handles<transform>();
+            auto& [pos, _, scale] = newTrans;
 
             //Sets the particle scale to the right scale.
+        //    transRead.position
             pos.write(newPos);
             scale.write(math::vec3(m_startingSize));
 
-            auto it = container.colorBufferData.begin() + data.bufferPosition + data.emitterSize + index;
-            container.colorBufferData.insert(it, newColor);
+            //auto it = container.colorBufferData.begin() + data.bufferPosition + data.emitterSize + index;
+            container.colorBufferData.push_back(newColor);
             //Populates the particle with the appropriate stuffs.
-            createParticle(particleComponent, trans);
+            createParticle(trans);
             index++;
 
         }
@@ -148,89 +146,93 @@ public:
     /**
      * @brief Decreases the particles detail down to the specified target LOD
      */
-    void decreaseDetail(rendering::particle_emitter& emitter, rendering::point_emitter_data& data, int targetLod, int maxLod, ecs::EntityQuery& enities) const
+    void decreaseDetail(
+        rendering::particle_emitter& emitter,
+        rendering::point_emitter_data& data,
+        int targetLod,
+        int maxLod,
+        ecs::component_handle<rendering::point_emitter_data>& dataHandle,
+        ecs::EntityQuery& enities
+    ) const
+
     {
+        OPTICK_EVENT();
+
         if (container.livingParticles.size() == 0) return;
         //get the amount of particles to remove
         int targetParticleCount = data.ElementsPerLOD.at(maxLod - targetLod);
         int delta = data.emitterSize - targetParticleCount;
-
+        auto dataToRemove = data.posRangeMap.back();
         int bufferPosition = data.bufferPosition + data.emitterSize;
+        bufferPosition = dataToRemove.first;
         //remove particles from the end of the living particles
         //living particles should be stored in order of detail
-        for (size_t i = 1; i < delta + 1; i++)
+        for (size_t i = 0; i < dataToRemove.second; i++)
         {
-            //get position to remove at, position is the buffer start position plus the size minus the current iteration
-            int bufferPosition = data.bufferPosition + data.emitterSize - i;
-
-            //erase color
-            container.colorBufferData.erase(container.colorBufferData.begin() + bufferPosition);
-            //get particle
-            auto particle = container.livingParticles.at(bufferPosition);
+            //remove first object at position for the stored size
+            container.colorBufferData.erase(container.colorBufferData.begin() + dataToRemove.first);
+            auto particle = container.livingParticles.at(dataToRemove.first);
             //remove renderer and push to dead particles
             particle.remove_component<rendering::mesh_renderer>();
             container.deadParticles.emplace_back(particle);
             //erase particle
-            container.livingParticles.erase(container.livingParticles.begin() + bufferPosition);
+            container.livingParticles.erase(container.livingParticles.begin() + dataToRemove.first);
         }
-
         data.emitterSize -= delta;
         data.CurrentLOD = targetLod;
-        //update other emitterbuffer positions
+        //pop back of point map
+        data.posRangeMap.pop_back();
 
+        //update other emitterbuffer positions
         std::vector<math::vec4> colorData;
         int index = 0;
-
         for (auto pointEntities : enities)
         {
-            auto dataHandle = pointEntities.get_component_handle<rendering::point_emitter_data>();
-            auto otherData = dataHandle.read();
-
-            //check if buffer position needs to change
-            if (otherData.bufferPosition > data.bufferPosition)
+            auto currentHandle = pointEntities.get_component_handle<rendering::point_emitter_data>();
+            //skip if entity is the same
+            if (dataHandle == currentHandle) continue;
+            auto otherData = currentHandle.read();
+            bool changes = false;
+            int index = 0;
+            for (auto pair : otherData.posRangeMap)
             {
-                otherData.bufferPosition -= delta;
-                dataHandle.write(otherData);
+                //if there is data at a higher position than the data that is beeing removed it needs to be moved back by the amount of points removed
+                if (pair.first > dataToRemove.first)
+                {
+                    log::debug("changed data!");
+                    otherData.posRangeMap.at(index).first -= dataToRemove.second;
+                    changes = true;
+                }
+                index++;
             }
+            //write data if there were changes
+            if (changes)currentHandle.write(otherData);
         }
     }
-
     /**
     * @brief Increases the particles up to the specified target LOD
     */
     void increaseDetail(rendering::particle_emitter& emitter, rendering::point_emitter_data& data, int targetLod, int maxLod, rendering::lod& lod, ecs::EntityQuery& enities) const
     {
+        OPTICK_EVENT();
+
+
         if (!data.Tree) return;
 
         //create data container
         std::vector<std::pair<math::vec3, math::color>>* newData = new std::vector<std::pair<math::vec3, math::color>>();
         //populate emitter progressively for each LOD
-        data.Tree->GetDataRangePair(lod.MaxLod - data.CurrentLOD + 1, lod.MaxLod - targetLod + 1, newData);
+        data.Tree->GetDataRangePair(lod.MaxLod - data.CurrentLOD, lod.MaxLod - targetLod, newData);
         int size = newData->size();
 
         CreateParticles(newData, emitter, data);
-        newData->clear();
         data.CurrentLOD = targetLod;
 
-
+        //store position and amount of particles generated
+        data.posRangeMap.push_back(std::make_pair<int, int>(emitter.container->livingParticles.size() - newData->size(), newData->size()));
         //push back position for higher position buffers
-
-
-        for (auto pointEntities : enities)
-        {
-            auto dataHandle = pointEntities.get_component_handle<rendering::point_emitter_data>();
-            auto otherData = dataHandle.read();
-            //    log::debug("other buffer start pos " + std::to_string(otherData.bufferPosition));
-
-                //check if buffer position needs to change
-            if (otherData.bufferPosition > data.bufferPosition)
-            {
-                otherData.bufferPosition += size;
-                dataHandle.write(otherData);
-            }
-        }
+        newData->clear();
     }
-
     /**
      * @brief populates the particle emitter with particles, creates LOD component and an Octree
      */
@@ -256,10 +258,13 @@ public:
             //exit loop if there is no new data to be found
             if (newData->size() == 0) break;
             CreateParticles(newData, emitter, emitterData);
-            newData->clear();
             LODcount++;
             //store the amount of particles for the lod so that we can later easily remove them again
             emitterData.ElementsPerLOD.push_back(particleCount);
+            //store the position and amount of particles
+            emitterData.posRangeMap.push_back(std::make_pair<int, int>(container.livingParticles.size() - newData->size(), newData->size()));
+
+            newData->clear();
 
         }
         rendering::lod lodComponent = rendering::lod(LODcount);
@@ -271,25 +276,42 @@ public:
         data.write(emitterData);
         emitter_handle.write(emitter);
     }
+    void animate(rendering::particle_emitter& emitter, rendering::point_emitter_data& data)
+    {
 
+    }
+    void SetColor(rendering::particle_emitter& emitter, rendering::point_emitter_data& data) const
+    {
+        //assign colors
+        for (auto item : data.posRangeMap)
+        {
+            std::fill(container.colorBufferData.begin() + item.first, container.colorBufferData.begin() + item.first + item.second, math::colors::red);
+        }
+
+    }
     /**
      * @brief Checks if there has been LOD changes, decreases or increases LOD
      */
     void update(std::vector<ecs::entity_handle>& entity, ecs::component_handle<rendering::particle_emitter> emitterHandle, ecs::EntityQuery& entities, time::span) const override
     {
+        OPTICK_EVENT();
         auto lodComponent = emitterHandle.entity.get_component_handle<rendering::lod>().read();
         rendering::particle_emitter emitter = emitterHandle.read();
         auto emitterDataHandle = emitterHandle.entity.get_component_handle<rendering::point_emitter_data>();
         auto emitterData = emitterDataHandle.read();
         if (emitterData.CurrentLOD != lodComponent.Level)
         {
+            if (lodComponent.Level == 0)
+            {
+                SetColor(emitter, emitterData);
+            }
             if (emitterData.CurrentLOD > lodComponent.Level)
             {
                 increaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod, lodComponent, entities);
             }
             else
             {
-                decreaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod, entities);
+                decreaseDetail(emitter, emitterData, lodComponent.Level, lodComponent.MaxLod, emitterDataHandle, entities);
             }
             emitterData.CurrentLOD = lodComponent.Level;
             emitterHandle.write(emitter);
@@ -300,8 +322,10 @@ public:
 
 
 private:
-    ecs::component_handle<rendering::particle> checkContainerToRecycle(int insertionIndex) const
+    ecs::component_handle<transform> checkContainerToRecycle() const
     {
+        OPTICK_EVENT();
+
         ecs::entity_handle particularParticle;
 
         if (!container.deadParticles.empty())
@@ -317,13 +341,12 @@ private:
             particularParticle = m_registry->createEntity();
             //give newly created particle a transform
             particularParticle.add_components<transform>();
-            particularParticle.add_component<rendering::particle>();
+            //  particularParticle.add_component<rendering::particle>();
         }
-        auto it = container.livingParticles.begin() + insertionIndex;
         //Add particle to living particle list.
-        container.livingParticles.insert(it, particularParticle);
+        container.livingParticles.push_back(particularParticle);
 
-        return particularParticle.get_component_handle<rendering::particle>();
+        return particularParticle.get_component_handle<transform>();
     }
 
     mutable  std::vector<math::vec3> m_positions;

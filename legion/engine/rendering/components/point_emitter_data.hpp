@@ -11,6 +11,8 @@ namespace legion::rendering
         int CurrentLOD = 0;
         rendering::Octree<math::color>* Tree;
         std::vector<int> ElementsPerLOD;
+        //pos, size
+        std::vector<std::pair<int, int>> posRangeMap;
         uint bufferPosition = 0;
         uint emitterSize = 0;
     };
