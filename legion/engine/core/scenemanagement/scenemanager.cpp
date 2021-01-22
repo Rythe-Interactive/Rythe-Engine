@@ -79,22 +79,22 @@ namespace legion::core::scenemanagement
 
     bool SceneManager::load_scene(const std::string& name)
     {
-
         std::string filename = name;
         if (!common::ends_with(filename, ".cornflake")) filename += ".cornflake";
 
         std::ifstream inFile("assets/scenes/" + filename);
 
-        log::debug("Child Count Before: {}", m_ecs->world.child_count());
         doNotCreateEntities = true;
-        while (m_ecs->world.child_count() > 0)
+        auto hry = world.read_component<hierarchy>();
+        log::debug("Child Count Before: {}", hry.children.size());
+        for(auto child : hry.children)
         {
-            log::debug("children remaining {}", m_ecs->world.child_count());
-            m_ecs->world.get_child(m_ecs->world.child_count() - 1).destroy(true);
+            log::debug("children remaining {}", world.child_count());
+            child.destroy(true);
         }
-        m_ecs->world.read_component<hierarchy>().children.clear();
-
-        log::debug("Child Count After: {}", m_ecs->world.child_count());
+        hry.children.clear();
+        world.write_component(hry);
+        log::debug("Child Count After: {}", world.child_count());
 
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
         currentScene = name;

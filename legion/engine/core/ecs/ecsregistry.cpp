@@ -229,6 +229,13 @@ namespace legion::core::ecs
             m_entities.erase(entity); // Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.
         }
 
+        auto children = entity.children();
+        for (entity_handle& child : children.reverse_range())
+            if (recurse)
+                recursiveDestroyEntityInternal(child); // Recursively destroy all children
+            else
+                child.set_parent(invalid_id, false); // Remove parent from children.
+
         entity_data data = {};
 
         {
@@ -243,14 +250,7 @@ namespace legion::core::ecs
             {
                 m_families[componentTypeId]->destroy_component(entityId);
             }
-        }
-
-        auto children = entity.children();
-        for (entity_handle& child : children.reverse_range())
-            if (recurse)
-                recursiveDestroyEntityInternal(child); // Recursively destroy all children
-            else
-                child.set_parent(invalid_id, false); // Remove parent from children.
+        }        
     }
 
     L_NODISCARD entity_handle EcsRegistry::getEntity(id_type entityId)
