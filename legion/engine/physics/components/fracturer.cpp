@@ -172,10 +172,10 @@ namespace legion::physics
                     entity;
                 auto [posH,rotH,scaleH] = ownerEntity.get_component_handles<transform>();
                 
-                if (!ownerEntity)
+     /*           if (!ownerEntity)
                 {
                     DebugBreak();
-                }
+                }*/
 
                 auto transformB = math::compose(scaleH.read(), rotH.read(), posH.read());
 
