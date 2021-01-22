@@ -76,11 +76,14 @@ class GuiTestSystem : public System<GuiTestSystem>
     void BuildTree(ecs::entity_handle handle)
     {
         if (ImGui::TreeNode(reinterpret_cast<void*>(handle.get_id()), "%llu", handle.get_id())) {
-            for (size_type i = 0; i < handle.children().size(); ++i)
+            if (handle.has_component<hierarchy>())
             {
-                BuildTree(handle.get_child(i));
+                auto hry = handle.read_component<hierarchy>();
+                for (auto child : hry.children)
+                {
+                    BuildTree(child);
+                }
             }
-
 
             if (ImGui::TreeNode("Components")) {
                 for (id_type id : handle.component_composition())
@@ -91,7 +94,6 @@ class GuiTestSystem : public System<GuiTestSystem>
                 ImGui::TreePop();
             }
             ImGui::TreePop();
-
         }
     }
 
