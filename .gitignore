@@ -116,3 +116,4 @@ lib/*
 
 # Legion Includes
 include/**
+*/**/Thumbs.db

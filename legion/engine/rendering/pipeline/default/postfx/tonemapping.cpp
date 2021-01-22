@@ -53,9 +53,9 @@ namespace legion::rendering
     {
         OPTICK_EVENT();
         static id_type exposureId = nameHash("exposure");
-        static bool firstFrame = true;
+        //static bool firstFrame = true;
 
-        auto tex = std::get<texture_handle>(fbo.getAttachment(GL_COLOR_ATTACHMENT0)).get_texture();
+        /*auto tex = std::get<texture_handle>(fbo.getAttachment(GL_COLOR_ATTACHMENT0)).get_texture();
 
         auto size = tex.size();
 
@@ -71,16 +71,16 @@ namespace legion::rendering
             glBindTexture(static_cast<GLenum>(tex.type), 0);
         }
         else
-            firstFrame = false;
+            firstFrame = false;*/
 
-        float luminance = math::dot(math::vec3(colors[0].r, colors[0].g, colors[0].b), math::vec3(0.2126f, 0.7152f, 0.0722f));
+        /*float luminance = math::dot(math::vec3(colors[0].r, colors[0].g, colors[0].b), math::vec3(0.2126f, 0.7152f, 0.0722f));
 
         float newExposure = math::clamp(math::pow(math::max((1.0f - luminance), 0.f), 2.2f) * 10.f, 0.f, 10.f);
 
         if (newExposure < exposure)
             exposure = math::lerp(exposure, newExposure, deltaTime.seconds());
         else
-            exposure = math::lerp(exposure, newExposure, deltaTime.seconds() * 0.5f);
+            exposure = math::lerp(exposure, newExposure, deltaTime.seconds() * 0.5f);*/
 
         auto shader = ShaderCache::get_handle(m_currentShader.load(std::memory_order_relaxed));
 
@@ -94,10 +94,10 @@ namespace legion::rendering
         shader.release();
         fbo.release();
 
-        {
-            OPTICK_EVENT("Generate scene color mipmaps");
-            glGenerateTextureMipmap(tex.textureId);
-        }
+        //{
+        //    OPTICK_EVENT("Generate scene color mipmaps");
+        //    glGenerateTextureMipmap(tex.textureId);
+        //}
     }
 
 }

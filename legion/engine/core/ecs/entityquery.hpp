@@ -5,6 +5,7 @@
 #include <core/containers/hashed_sparse_set.hpp>
 #include <core/ecs/entity_handle.hpp>
 #include <core/ecs/archetype.hpp>
+#include <core/ecs/component_container.hpp>
 
 /**
  * @file entityquery.hpp
@@ -14,6 +15,7 @@ namespace legion::core::ecs
 {
     class QueryRegistry;
     class EcsRegistry;
+    using entity_container = std::vector<entity_handle>;
 
     /**@class EntityQuery
      * @brief Handle to an entity query. Allows you to acquire a list all of entities with a certain component combination.
@@ -24,7 +26,7 @@ namespace legion::core::ecs
         QueryRegistry* m_registry;
         EcsRegistry* m_ecsRegistry;
         id_type m_id;
-        entity_set m_localcopy;
+        const entity_container* m_localcopy;
 
     public:
         EntityQuery(id_type id, QueryRegistry* registry, EcsRegistry* ecsRegistry);
@@ -37,17 +39,33 @@ namespace legion::core::ecs
         EntityQuery operator=(EntityQuery&& other);
         EntityQuery operator=(const EntityQuery& other);
 
+        component_container_base& get(id_type componentTypeId);
+
+        template<typename component_type>
+        component_container<component_type>& get()
+        {
+            return get(typeHash<component_type>()).template cast<component_type>();
+        }
+
+        void submit(id_type componentTypeId);
+
+        template<typename component_type>
+        void submit()
+        {
+            submit(typeHash<component_type>());
+        }
+
         /**@brief Update the local copy of the entity list according to the query.
          */
         void queryEntities();
 
         /**@brief Get begin iterator for entity handles to the queried entities.
          */
-        entity_set::const_iterator begin() const;
+        entity_container::const_iterator begin() const;
 
         /**@brief Get end iterator for entity handles to the queried entities.
          */
-        entity_set::const_iterator end() const;
+        entity_container::const_iterator end() const;
 
         /**@brief Get query id.
          */

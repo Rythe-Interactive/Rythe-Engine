@@ -13,12 +13,13 @@ namespace legion::audio
     public:
         enum sound_properties
         {
-            pitch = 1,
-            gain = 2,
-            playState = 4,
-            doRewind = 8,
-            audioHandle = 16,
-            rollOffFactor = 32,
+            pitch = 1 << 0,
+            gain = 1 << 1,
+            playState = 1 << 2,
+            doRewind = 1 << 3,
+            audioHandle = 1 << 4,
+            rollOffFactor = 1 << 5,
+            looping = 1 << 6
         };
 
         enum playstate
@@ -29,64 +30,64 @@ namespace legion::audio
         };
 
         /**
-        * @brief Function to set the pitch for the audio source
-        * @param const float pitch: new pitch value
-        */
-        void setPitch(const float pitch)
+         * @brief Function to set the pitch for the audio source
+         * @param pitch new pitch value
+         */
+        void setPitch(float pitch) noexcept
         {
             m_changes |= sound_properties::pitch; // set b0
             m_pitch = legion::math::max(0.0f, pitch);
         }
         /**
-        * @brief Function to get the current pitch
-        */
-        float getPitch() const { return m_pitch; }
+         * @brief Function to get the current pitch
+         */
+        float getPitch() const noexcept { return m_pitch; }
         /**
-        * @brief Function to set the gain for the audio source
-        * @param const float gain: new gain value
-        */
-        void setGain(const float gain)
+         * @brief Function to set the gain for the audio source
+         * @param gain new gain value
+         */
+        void setGain(float gain) noexcept
         {
             m_changes |= sound_properties::gain; // set b1
             m_gain = legion::math::max(0.0f, gain);
         }
         /**
-        * @brief Function to get the current gain
-        */
-        float getGain() const { return m_gain; };
+         * @brief Function to get the current gain
+         */
+        float getGain() const noexcept { return m_gain; }
 
         /**
-        * @brief Function to set the roll off factor for 3D audio
-        * @brief Rolloff factor only works for mono audio
-        */
-        void setRollOffFactor(float factor)
+         * @brief Function to set the roll off factor for 3D audio
+         * @param factor only works for mono audio
+         */
+        void setRollOffFactor(float factor) noexcept
         {
             m_changes = sound_properties::rollOffFactor;
             m_rolloffFactor = factor;
         }
 
         /**
-        * @brief Function to disable spatial (3D) 
-        * @brief Calls setRtollOffFactor(0.0f)
-        */
-        void disableSpatialAudio()
+         * @brief Function to disable spatial (3D)
+         * Calls setRollOffFactor(0.0f)
+         */
+        void disableSpatialAudio() noexcept
         {
             setRollOffFactor(0.0f);
         }
 
         /**
-        * @brief Function to enable spatial (3D)
-        * @brief Calls setRtollOffFactor(1.0f)
-        */
-        void enableSpatialAudio()
+         * @brief Function to enable spatial (3D)
+         * Calls setRollOffFactor(1.0f)
+         */
+        void enableSpatialAudio() noexcept
         {
             setRollOffFactor(1.0f);
         }
 
         /**
-        * @brief Plays audio 
-        */
-        void play()
+         * @brief Plays audio
+         */
+        void play() noexcept
         {
             // If the file is already playing or if the file will be played on next update > return
             if (m_nextPlayState == playstate::playing) return;
@@ -96,9 +97,9 @@ namespace legion::audio
         }
 
         /**
-        * @brief Pauses audio
-        */
-        void pause()
+         * @brief Pauses audio
+         */
+        void pause() noexcept
         {
             // If the file is already playing or if the file will be played on next update > return
             if (m_nextPlayState == playstate::paused) return;
@@ -108,10 +109,10 @@ namespace legion::audio
         }
 
         /**
-        * @brief Stops audio
-        * @brief Stopping means that the audio will stop playing (pausing) and rewind
-        */
-        void stop()
+         * @brief Stops audio
+         * Stopping means that the audio will stop playing (pausing) and rewind
+         */
+        void stop() noexcept
         {
             // If the file is already playing or if the file will be played on next update > return
             if (m_nextPlayState == playstate::stopped) return;
@@ -121,33 +122,33 @@ namespace legion::audio
         }
 
         /**
-        * @brief Returns whether the audio is playing
-        * @brief If false the audio can be paused (isPaused()) or stopped (isStopped())
-        */
-        bool isPlaying() const
+         * @brief Returns whether the audio is playing
+         * If false the audio can be paused (isPaused()) or stopped (isStopped())
+         */
+        bool isPlaying() const noexcept
         {
             return m_playState == playstate::playing;
         }
 
         /**
-        * @brief Returns whether the audio is paused
-        * @brief If false the audio can be playing (isPlaying()) or stopped (isStopped())
-        */
-        bool isPaused() const
+         * @brief Returns whether the audio is paused
+         * If false the audio can be playing (isPlaying()) or stopped (isStopped())
+         */
+        bool isPaused() const noexcept
         {
             return m_playState == playstate::paused;
         }
 
         /**
-        * @brief Returns whether the audio is stopped
-        * @brief If false the audio can be playing (isPlaying()) or paused (isPaused())
-        */
-        bool isStopped() const
+         * @brief Returns whether the audio is stopped
+         *  If false the audio can be playing (isPlaying()) or paused (isPaused())
+         */
+        bool isStopped() const noexcept
         {
             return m_playState == playstate::stopped;
         }
 
-        void setAudioHandle(audio_segment_handle handle)
+        void setAudioHandle(audio_segment_handle handle) noexcept
         {
             if (handle == m_audio_handle) return;
             m_changes |= sound_properties::audioHandle;
@@ -155,38 +156,70 @@ namespace legion::audio
         }
 
         /**
-        * @brief Rewinds the audio
-        * @brief If the audio is playing it will stop/pause
-        * @brief If the audio was playing the audio source needs to be stopped or paused before it can play
-        */
-        void rewind()
+         * @brief Rewinds the audio
+         * If the audio is playing it will stop/pause
+         * If the audio was playing the audio source needs to be stopped or paused before it can play
+         */
+        void rewind() noexcept
         {
             m_changes |= sound_properties::doRewind;
         }
 
-        audio_segment_handle getAudioHandle() const
+        audio_segment_handle getAudioHandle() const noexcept
         {
             return m_audio_handle;
         }
 
-        int getChannels()
+        /**
+         * @brief Gets the amount of channels in this audio source
+         */
+        int getChannels() const
         {
-            int channels = 0;
-            {
-                async::readonly_guard guard(m_audio_handle.get().first);
-                channels = m_audio_handle.get().second.channels;
-            }
-            return channels;
+            async::readonly_guard guard(m_audio_handle.get().first);
+            return m_audio_handle.get().second.channels;
         }
 
-        bool isStereo()
+        /**
+         * @brief Returns whether the audio-source is stereo (channels=2)
+         */
+        bool isStereo() const noexcept
         {
             return getChannels() == 2;
         }
-
-        bool isMono()
+        /**
+         * @brief Returns whether the audio-source is mono (channels=1)
+         */
+        bool isMono() const noexcept
         {
             return getChannels() == 1;
+        }
+
+        /**
+         * @brief Sets the looping state of the audio-source (true=looping)
+         */
+        void setLooping(bool state = false) noexcept
+        {
+            if (state != m_looping) {
+                m_looping = state;
+                m_changes |= looping;
+            }
+        }
+
+        /**
+         * @brief Gets the looping state of the audio-source (true=looping)
+         */
+        bool isLooping() const noexcept
+        {
+            return m_looping;
+        }
+
+
+        /**
+         * @brief Helper to implicitly convert to OpenAL source
+         */
+        operator ALuint() const
+        {
+            return m_sourceId;
         }
 
     private:
@@ -197,7 +230,7 @@ namespace legion::audio
         {
             m_changes ^= m_changes; // Reset
             // The next play state also needs to be reset to be able to properly switch play states
-            m_nextPlayState = m_playState; 
+            m_nextPlayState = m_playState;
         }
 
         ALuint m_sourceId;
@@ -205,6 +238,8 @@ namespace legion::audio
 
         float m_pitch = 1.0f;
         float m_gain = 1.0f;
+
+        bool m_looping = false;
 
         playstate m_playState = playstate::stopped;
         playstate m_nextPlayState = playstate::stopped;

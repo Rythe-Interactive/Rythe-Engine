@@ -9,58 +9,51 @@ namespace legion::rendering
 
     void ParticleSystemBase::createParticle(ecs::component_handle<particle> particleHandle, transform transformHandle) const
     {
+        OPTICK_EVENT();
         ecs::entity_handle particularParticle = particleHandle.entity;
 
         //Handle model and material assigning.
         particularParticle.add_component<mesh_renderer>(rendering::mesh_renderer(m_particleMaterial, m_particleModel));
     }
 
-    void ParticleSystemBase::cleanUpParticle(const ecs::entity_handle& particleHandle, ecs::component_handle<particle_emitter>& emitterHandle) const
+    void ParticleSystemBase::cleanUpParticle(ecs::entity_handle particleHandle, particle_emitter& emitter) const
     {
+        OPTICK_EVENT();
         //Read emitter
-        particle_emitter emitter = emitterHandle.read();
-        const auto particle = std::find(emitter.livingParticles.begin(), emitter.livingParticles.end(), particleHandle);
-        if (particle != emitter.livingParticles.end())
+        auto it = std::find(emitter.livingParticles.begin(), emitter.livingParticles.end(), particleHandle);
+        if (it != emitter.livingParticles.end())
         {
-            ecs::entity_handle particularParticle = *particle;
             //Remove from living
-            const auto iterator = std::remove(emitter.livingParticles.begin(), emitter.livingParticles.end(), particularParticle);
-            emitter.livingParticles.erase(iterator);
+            emitter.livingParticles.erase(it);
             //Add to dead
-            emitter.deadParticles.emplace_back(particularParticle);
+            emitter.deadParticles.emplace_back(particleHandle);
             //Remove renderable to stop them from being rendered
-            particularParticle.remove_component<mesh_renderer>();
-            particularParticle.remove_component<mesh_filter>();
+            particleHandle.remove_component<mesh_renderer>();
         }
-        //Write to emitter
-        emitterHandle.write(emitter);
     }
 
-    ecs::component_handle<particle> ParticleSystemBase::checkToRecycle(ecs::component_handle<particle_emitter> emitterHandle) const
+    ecs::component_handle<particle> ParticleSystemBase::checkToRecycle(rendering::particle_emitter& emitter) const
     {
-        particle_emitter emitter = emitterHandle.read();
         ecs::entity_handle particularParticle;
 
         if (!emitter.deadParticles.empty())
         {
             //Get particle from dead particle list.
-            particularParticle = emitter.deadParticles[emitter.deadParticles.back()];
-            //Remove particle from dead particle list.
-            const auto iterator = std::remove(emitter.deadParticles.begin(), emitter.deadParticles.end(), particularParticle);
-            emitter.deadParticles.erase(iterator);
-            //Add particle to living particle list.
-            emitter.livingParticles.emplace_back(particularParticle);
+            particularParticle = emitter.deadParticles.back();
+            //remove last item
+            emitter.deadParticles.pop_back();
         }
         else
         {
             //Create new particle entity.
             particularParticle = m_registry->createEntity();
+            //give newly created particle a transform
+            particularParticle.add_components<transform>();
             particularParticle.add_component<particle>();
-
-            //Add new particle to living particle list.
-            emitter.livingParticles.emplace_back(particularParticle);
         }
-        emitterHandle.write(emitter);
+        //Add particle to living particle list.
+        emitter.livingParticles.push_back(particularParticle);
+
         return particularParticle.get_component_handle<particle>();
     }
 }

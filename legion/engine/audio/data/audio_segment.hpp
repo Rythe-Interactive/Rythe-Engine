@@ -90,7 +90,7 @@ namespace legion::audio
     struct audio_segment_handle
     {
         id_type id;
-        std::pair<async::rw_spinlock&, audio_segment&> get();
+        std::pair<async::rw_spinlock&, audio_segment&> get() const;
 
         operator id_type () { return id; }
     };

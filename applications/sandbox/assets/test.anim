@@ -1,5 +1,12 @@
 {
     "animation": {
+        "events": [
+            {
+                "id": "VoidAnimationEvent",
+                "trigger": 5.0,
+                "type": "explosion"
+            }
+        ],
         "looping": true,
         "positions": [
             {

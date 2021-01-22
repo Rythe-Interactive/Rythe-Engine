@@ -19,6 +19,14 @@
 #define LEGION_DEBUG_VALUE 1
 #define LEGION_RELEASE_VALUE 2
 
+#if defined(DOXY_EXCLUDE)
+#define NDOXY(...)
+#define CNDOXY(...)
+#else
+#define NDOXY(args...) args
+#define CNDOXY(args...) , args
+#endif
+
 #if defined(_DEBUG) || defined(DEBUG)
     /**@def LEGION_DEBUG
      * @brief Defined in debug mode.
@@ -62,6 +70,7 @@
      */
     #define LEGION_LINUX
 
+    #include <sys/prctl.h>
     #include <sys/resource.h>
     #include <sys/types.h>
     #include <sys/wait.h>

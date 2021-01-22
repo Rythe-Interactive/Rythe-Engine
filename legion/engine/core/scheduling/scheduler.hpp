@@ -7,6 +7,9 @@
 #include <core/async/async.hpp>
 #include <core/common/exception.hpp>
 #include <core/events/events.hpp>
+#include <core/async/job_pool.hpp>
+#include <core/async/async_runnable.hpp>
+#include <core/async/thread_util.hpp>
 
 #include <Optick/optick.h>
 
@@ -32,26 +35,8 @@ namespace legion::core::scheduling
      */
     class Scheduler
     {
-    public:
-        /**@class runnable
-         * @brief A data structure encapsulating commands and jobs sent to any thread and it's parameters.
-         */
-        struct runnable
-        {
-            runnable() = default;
-            runnable(const delegate<void(void*)>& func, void* param) : func(func), param(param) {}
-
-            delegate<void(void*)> func;
-            void* param;
-
-            void operator()(void)
-            {
-                if (func != nullptr)
-                    func(param);
-            }
-        };
-
     private:
+        friend struct legion::core::async::job_pool_base;
         struct thread_error
         {
             std::string message;
@@ -76,7 +61,7 @@ namespace legion::core::scheduling
         std::atomic_bool m_requestSync;
         async::ring_sync_lock m_syncLock;
 
-        std::atomic<float> m_timeScale = 1.f;
+        std::atomic<float> m_timeScale { 1.f };
 
         events::EventBus* m_eventBus;
 
@@ -92,13 +77,16 @@ namespace legion::core::scheduling
         static uint m_availableThreads;
 
         static async::rw_spinlock m_jobQueueLock;
-        static std::queue<runnable> m_jobs;
-        static sparse_map<std::thread::id, async::rw_spinlock> m_commandLocks;
-        static sparse_map<std::thread::id, std::queue<Scheduler::runnable>> m_commands;
+        static std::queue<std::shared_ptr<async::job_pool_base>> m_jobs;
+        static std::unordered_map<std::thread::id, async::rw_spinlock> m_commandLocks;
+        static std::unordered_map<std::thread::id, std::queue<std::unique_ptr<runnable_base>>> m_commands;
 
         static void threadMain(bool* exit, bool* start, bool lowPower);
 
+        static void tryCompleteJobPool();
+
     public:
+
         Scheduler(events::EventBus* eventBus, bool lowPower, uint minThreads);
 
         ~Scheduler();
@@ -156,9 +144,31 @@ namespace legion::core::scheduling
             return m_chainThreads[chainId];
         }
 
-        void sendCommand(std::thread::id id, delegate<void(void*)> command, void* parameter = nullptr);
+        template<typename Func>
+        auto sendCommand(std::thread::id id, const Func& func)
+        {
+            OPTICK_EVENT("legion::core::scheduling::Scheduler::sendCommand<T>");
+            async::async_runnable<Func>* command = new async::async_runnable<Func>(func);
+            async::readwrite_guard guard(m_commandLocks[id]);
+            m_commands[id].push(std::unique_ptr<runnable_base>(command));
+            return command->getOperation([&](std::thread::id id, auto func) { return sendCommand(id, func); });
+        }
 
-        void queueJob(delegate<void(void*)> job, void* parameter);
+        template<typename Func>
+        auto queueJobs(size_type count, const Func& func)
+        {
+            auto repeater = [&](size_type count, auto func) { return queueJobs(count, func); };
+            auto onComplete = [&]() {tryCompleteJobPool(); };
+
+            if (!count)
+                return async::job_operation<decltype(repeater), decltype(onComplete)>(std::shared_ptr<async::async_progress>(nullptr), std::shared_ptr<async::job_pool_base>(nullptr), repeater, onComplete);
+
+            OPTICK_EVENT("legion::core::scheduling::Scheduler::queueJobs<T>");
+            std::shared_ptr<async::job_pool_base> jobPool = std::shared_ptr<async::job_pool_base>(new async::job_pool<Func>(count, func));
+            async::readwrite_guard guard(m_jobQueueLock);
+            m_jobs.push(jobPool);
+            return async::job_operation<decltype(repeater), decltype(onComplete)>(jobPool->get_progress(), jobPool, repeater, onComplete);
+        }
 
         /**@brief Destroy a thread.
          * @warning DON'T USE UNLESS YOU KNOW WHAT YOU ARE DOING.
@@ -189,7 +199,7 @@ namespace legion::core::scheduling
         {
             m_syncLock.subscribe();
         }
-        
+
         void unsubscribeFromSync()
         {
             m_syncLock.unsubscribe();
@@ -211,7 +221,7 @@ namespace legion::core::scheduling
             id_type id = nameHash<charc>(name);
             async::readonly_guard guard(m_processChainsLock);
             if (m_processChains.contains(id))
-                return &m_processChains.get(id);
+                return &m_processChains.at(id);
             return nullptr;
         }
 
@@ -239,20 +249,20 @@ namespace legion::core::scheduling
 
             log::impl::thread_names[chainThreadId] = std::string(name);
 #if USE_OPTICK
-            sendCommand(chainThreadId, [&](void* param)
+            sendCommand(chainThreadId, [&name = name, &m_threadScopesLock = m_threadScopesLock, &m_threadScopes = m_threadScopes]()
                 {
-                    (void)param;
                     log::info("Thread {} assigned.", std::this_thread::get_id());
+                    async::set_thread_name(name);
 
                     std::lock_guard guard(m_threadScopesLock);
                     m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
                     OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
                 });
 #else
-            sendCommand(chainThreadId, [](void* param)
+            sendCommand(chainThreadId, [&name = name]()
                 {
-                    (void)param;
                     log::info("Thread {} assigned.", std::this_thread::get_id());
+                    async::set_thread_name(name);
                 });
 #endif
             async::readwrite_guard guard(m_processChainsLock);

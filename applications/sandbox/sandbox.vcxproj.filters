@@ -32,9 +32,6 @@
     <ClInclude Include="systems\testsystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="module\testmodule.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -65,9 +62,6 @@
     <ClInclude Include="systems\testsystemconvexhull.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test_filesystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\animation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -77,7 +71,13 @@
     <ClInclude Include="systems\animation_editor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data\animation_events.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="data\pp_bloom.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="module\testmodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

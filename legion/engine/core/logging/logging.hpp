@@ -192,6 +192,29 @@ namespace fmt
     };
 
     template <>
+    struct fmt::formatter<legion::core::math::color> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const legion::core::math::color& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e}, {:.1e})",
+                p.r, p.g, p.b, p.a);
+        }
+    };
+
+    template <>
     struct fmt::formatter<legion::core::math::quat> {
         char presentation = 'f';
 
