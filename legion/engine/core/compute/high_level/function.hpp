@@ -41,8 +41,9 @@ namespace legion::core::compute {
     struct karg
     {
 
-        karg(invalid_karg_type){}
-        template <class T, std::enable_if_t<!std::is_same_v<std::remove_reference_t<T>, karg>, int > = 0>
+        karg(invalid_karg_type) : container(std::make_pair<void*, size_type>(nullptr, 0)) {}
+
+        template <class T CNDOXY(std::enable_if_t<!std::is_same_v<std::remove_reference_t<T>, karg>, int > = 0)>
         karg(T& v, const std::string& n = "") : container(&v, sizeof(T)), name(n){}
         karg(const karg&) = default;
         karg(karg&&) noexcept = default;

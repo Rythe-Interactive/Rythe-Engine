@@ -33,7 +33,7 @@ namespace legion::rendering
 
         void render(time::span deltatime);
 
-        template<typename Pipeline, typename... Args, inherits_from<Pipeline, RenderPipeline<Pipeline>> = 0>
+        template<typename Pipeline, typename... Args CNDOXY(inherits_from<Pipeline, RenderPipeline<Pipeline>> = 0)>
         static void setPipeline(Args&&... args);
 
         L_NODISCARD static RenderPipelineBase* getPipeline(app::window& context);

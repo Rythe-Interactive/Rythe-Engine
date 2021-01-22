@@ -1,0 +1,21 @@
+
+name: docs-action
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+ docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: doxygen run
+      run: "sudo apt-get update -yqq && sudo apt-get install doxygen && cd docs && doxygen"
+
+    - uses: Algo-ryth-mix/sphinx-action@master
+      with:
+        docs-folder: "docs/"
+
+
