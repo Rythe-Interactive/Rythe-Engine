@@ -29,6 +29,7 @@ shader(fragment)
     {
         void main(void)
         {
+            fragment_color = vec4(0.0);
         }
     }
 

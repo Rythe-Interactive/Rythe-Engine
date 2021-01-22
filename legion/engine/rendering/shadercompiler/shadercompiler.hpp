@@ -12,6 +12,7 @@ namespace legion::rendering
         static std::string get_view_path(const fs::view& view, bool mustBeFile = false);
         static const std::string& get_shaderlib_path();
         static const std::string& get_compiler_path();
+        static const std::string& get_cachecleaner_path();
 
         static void extract_state(std::string_view source, shader_state& state);
         static bool extract_ilo(const std::string& variant, std::string_view source, uint64 shaderType, shader_ilo& ilo);
@@ -46,6 +47,8 @@ namespace legion::rendering
         {
             m_callback = delegate<void(const std::string&, log::severity)>::template create<func_type>();
         }
+
+        static void cleanCache();
 
         static bool process(const fs::view& file, bitfield8 compilerSettings, shader_ilo& ilo, std::unordered_map<std::string, shader_state>& state);
         static bool process(const fs::view& file, bitfield8 compilerSettings, shader_ilo& ilo, std::unordered_map<std::string, shader_state>& state, const std::vector<std::string>& defines);

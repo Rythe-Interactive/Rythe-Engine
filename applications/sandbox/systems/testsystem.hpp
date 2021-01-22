@@ -319,6 +319,7 @@ public:
             pbrH.set_param(SV_HEIGHTSCALE, 1.f);
             pbrH.set_param("discardExcess", false);
             pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+            pbrH.set_variant("shadow_pass");
 
             copperH = rendering::MaterialCache::create_material("copper", pbrShader);
             copperH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo-512.png"_view));

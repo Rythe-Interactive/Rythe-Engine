@@ -66,7 +66,16 @@ namespace legion::rendering
         OPTICK_EVENT();
         static std::string compPath;
         if (compPath.empty())
-            compPath = get_view_path(fs::view("engine://tools"), false) + fs::strpath_manip::separator() + "lgnspre";
+            compPath = get_view_path(fs::view("engine://tools"), false) + fs::strpath_manip::separator() + "lgnspre" + fs::strpath_manip::separator() + "lgnspre";
+        return compPath;
+    }
+
+    const std::string& ShaderCompiler::get_cachecleaner_path()
+    {
+        OPTICK_EVENT();
+        static std::string compPath;
+        if (compPath.empty())
+            compPath = get_view_path(fs::view("engine://tools"), false) + fs::strpath_manip::separator() + "lgnspre" + fs::strpath_manip::separator() + "lgncleancache";
         return compPath;
     }
 
@@ -349,6 +358,20 @@ namespace legion::rendering
         out.erase(std::remove(out.begin(), out.end(), '\r'), out.end());
 
         return out;
+    }
+
+    void ShaderCompiler::cleanCache()
+    {
+        OPTICK_EVENT();
+        using severity = log::severity;
+        std::string out, err;
+
+        std::string command = "\"" + get_cachecleaner_path() + "\" -I \"" + get_shaderlib_path() + "\" ./ --filter=shil";
+
+        if (!ShellInvoke(command, out, err))
+        {
+            m_callback("Shader processor error: " + err, severity::error);
+        }
     }
 
     bool ShaderCompiler::process(const fs::view& file, bitfield8 compilerSettings, shader_ilo& ilo, std::unordered_map<std::string, shader_state>& state)

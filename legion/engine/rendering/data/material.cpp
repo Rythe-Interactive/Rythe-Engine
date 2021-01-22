@@ -84,6 +84,13 @@ namespace legion::rendering
         }
 
         m_materials[id].init(shader);
+
+        if (!m_materials[id].m_variants.size())
+        {
+            m_materials.erase(id);
+            return { invalid_id };
+        }
+
         m_materials[id].m_name = name;
 
         log::debug("Created material {} with shader: {}", name, shader.get_name());

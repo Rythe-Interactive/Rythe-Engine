@@ -289,8 +289,8 @@ namespace legion::rendering
         friend class ShaderCache;
         friend struct shader_handle;
     private:
-        static shader_variant* m_currentShaderVariant;
-        std::unordered_map<id_type, shader_variant> m_variants;
+        mutable shader_variant* m_currentShaderVariant;
+        mutable std::unordered_map<id_type, shader_variant> m_variants;
     public:
         std::string name;
 
@@ -305,8 +305,8 @@ namespace legion::rendering
 
         bool has_variant(id_type variantId) const;
         bool has_variant(const std::string& variant) const;
-        void configure_variant(id_type variantId);
-        void configure_variant(const std::string& variant);
+        void configure_variant(id_type variantId) const;
+        void configure_variant(const std::string& variant) const;
 
         shader_variant& get_variant(id_type variantId);
         shader_variant& get_variant(const std::string& variant);

@@ -8,8 +8,6 @@ namespace legion::rendering
     sparse_map<id_type, shader> ShaderCache::m_shaders;
     async::rw_spinlock ShaderCache::m_shaderLock;
 
-    shader_variant* shader::m_currentShaderVariant;
-
     shader* ShaderCache::get_shader(id_type id)
     {
         async::readonly_guard guard(m_shaderLock);
@@ -340,6 +338,13 @@ namespace legion::rendering
             }
         }
 
+        ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
+            {
+                log::println(severity, errormsg);
+            });
+
+        ShaderCompiler::cleanCache();
+
         std::unordered_map<std::string, shader_state> state;
         shader_ilo shaders;
 
@@ -375,11 +380,6 @@ namespace legion::rendering
             L_FALLTHROUGH;
             default:
             {
-                ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
-                    {
-                        log::println(severity, errormsg);
-                    });
-
                 byte compilerSettings = 0;
                 compilerSettings |= settings.api;
                 if (settings.debug)
@@ -409,7 +409,7 @@ namespace legion::rendering
         for (auto& [shaderVariant, variantSource] : shaders)
         {
             shader_variant& variant = shader.m_variants[nameHash(shaderVariant)];
-
+            variant.name = shaderVariant;
             GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
 
             for (auto& [func, param] : variant.state)
@@ -607,6 +607,7 @@ namespace legion::rendering
         {
             async::readwrite_guard guard(m_shaderLock);
             m_shaders[invalid_id] = std::move(shader);
+            m_shaders[invalid_id].configure_variant(0);
         }
 
         if (compiledFromScratch && settings.storePrecompiled)
@@ -670,11 +671,6 @@ namespace legion::rendering
             L_FALLTHROUGH;
             default:
             {
-                ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
-                    {
-                        log::println(severity, errormsg);
-                    });
-
                 byte compilerSettings = 0;
                 compilerSettings |= settings.api;
                 if (settings.debug)
@@ -896,9 +892,13 @@ namespace legion::rendering
 
         process_io(shader, id);
 
+        if (!shader.m_variants.size())
+            return { invalid_id };
+
         {
             async::readwrite_guard guard(m_shaderLock);
             m_shaders.insert(id, std::move(shader));
+            m_shaders[id].configure_variant(0);
         }
 
         if (compiledFromScratch && settings.storePrecompiled)
@@ -1026,7 +1026,7 @@ namespace legion::rendering
     bool shader::has_variant(id_type variantId) const
     {
         if (variantId == 0)
-            return true;
+            return m_variants.count(nameHash("default"));
         return m_variants.count(variantId);
     }
 
@@ -1035,7 +1035,7 @@ namespace legion::rendering
         return m_variants.count(nameHash(variant));
     }
 
-    void shader::configure_variant(id_type variantId)
+    void shader::configure_variant(id_type variantId) const
     {
         if (variantId == 0)
             m_currentShaderVariant = &m_variants.at(nameHash("default"));
@@ -1043,7 +1043,7 @@ namespace legion::rendering
             m_currentShaderVariant = &m_variants.at(variantId);
     }
 
-    void shader::configure_variant(const std::string& variant)
+    void shader::configure_variant(const std::string& variant) const
     {
         id_type variantId = nameHash(variant);
         if (m_variants.count(variantId))
@@ -1078,8 +1078,8 @@ namespace legion::rendering
     {
         if (!m_currentShaderVariant)
         {
-            log::error("No current shader variant configured for shader {}", name);
-            return;
+            log::warn("No current shader variant configured for shader {}", name);
+            configure_variant(0);
         }
 
         GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
@@ -1154,7 +1154,6 @@ namespace legion::rendering
 
     void shader::release()
     {
-        m_currentShaderVariant = nullptr;
         glUseProgram(0);
     }
 
@@ -1162,8 +1161,8 @@ namespace legion::rendering
     {
         if (!m_currentShaderVariant)
         {
-            log::error("No current shader variant configured for shader {}", name);
-            return -1;
+            log::warn("No current shader variant configured for shader {}", name);
+            configure_variant(0);
         }
 
         return glGetUniformBlockIndex(m_currentShaderVariant->programId, name.c_str());
@@ -1173,8 +1172,8 @@ namespace legion::rendering
     {
         if (!m_currentShaderVariant)
         {
-            log::error("No current shader variant configured for shader {}", name);
-            return;
+            log::warn("No current shader variant configured for shader {}", name);
+            configure_variant(0);
         }
 
         glUniformBlockBinding(m_currentShaderVariant->programId, uniformBlockIndex, uniformBlockBinding);

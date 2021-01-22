@@ -308,6 +308,9 @@ namespace legion::rendering
     template<>
     inline void material::set_param<math::color>(const std::string& name, const math::color& value)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         id_type id = nameHash(name);
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
@@ -319,6 +322,9 @@ namespace legion::rendering
     template<>
     L_NODISCARD inline bool material::has_param<math::color>(const std::string& name)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         id_type id = nameHash(name);
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         return submaterial.parameters.count(id) && submaterial.parameters.at(id)->type() == typeHash<math::vec4>();
@@ -327,6 +333,9 @@ namespace legion::rendering
     template<>
     L_NODISCARD inline math::color material::get_param<math::color>(const std::string& name)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         id_type id = nameHash(name);
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
@@ -339,6 +348,9 @@ namespace legion::rendering
     template<>
     inline void material::set_param<math::color>(GLint location, const math::color& value)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
             log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
@@ -354,6 +366,9 @@ namespace legion::rendering
     template<>
     L_NODISCARD inline math::color material::get_param<math::color>(GLint location)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
             log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
@@ -369,6 +384,9 @@ namespace legion::rendering
     template<>
     L_NODISCARD inline bool material::has_param<math::color>(GLint location)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
             return false;
@@ -380,6 +398,9 @@ namespace legion::rendering
     template<typename T>
     void material::set_param(const std::string& name, const T& value)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         id_type id = nameHash(name);
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
@@ -391,6 +412,9 @@ namespace legion::rendering
     template<typename T>
     L_NODISCARD bool material::has_param(const std::string& name)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         id_type id = nameHash(name);
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         return submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>();
@@ -399,6 +423,9 @@ namespace legion::rendering
     template<typename T>
     L_NODISCARD T material::get_param(const std::string& name)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         id_type id = nameHash(name);
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
@@ -411,6 +438,9 @@ namespace legion::rendering
     template<typename T>
     void material::set_param(GLint location, const T& value)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
             log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
@@ -426,6 +456,9 @@ namespace legion::rendering
     template<typename T>
     L_NODISCARD T material::get_param(GLint location)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
             log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
@@ -441,6 +474,9 @@ namespace legion::rendering
     template<typename T>
     L_NODISCARD bool material::has_param(GLint location)
     {
+        if (m_currentVariant == 0)
+            m_currentVariant = nameHash("default");
+
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
             return false;
