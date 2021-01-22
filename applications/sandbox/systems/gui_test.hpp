@@ -80,7 +80,7 @@ class GuiTestSystem : public System<GuiTestSystem>
             {
                 BuildTree(handle.get_child(i));
             }
-            ImGui::TreePop();
+
 
             if (ImGui::TreeNode("Components")) {
                 for (id_type id : handle.component_composition())
@@ -90,6 +90,7 @@ class GuiTestSystem : public System<GuiTestSystem>
 
                 ImGui::TreePop();
             }
+            ImGui::TreePop();
 
         }
     }
@@ -122,6 +123,7 @@ class GuiTestSystem : public System<GuiTestSystem>
                     }
                     ImGui::EndMenu();
                 }
+
                 if (ImGui::BeginMenu("Load Scene"))
                 {
                     auto sceneNames = scenemanagement::SceneManager::sceneNames;

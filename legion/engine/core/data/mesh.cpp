@@ -5,6 +5,7 @@ namespace legion::core
 {
     std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>> MeshCache::m_meshes;
     async::rw_spinlock MeshCache::m_meshesLock;
+    id_type MeshCache::debugId;
 
     void mesh::to_resource(filesystem::basic_resource* resource, const mesh& value)
     {

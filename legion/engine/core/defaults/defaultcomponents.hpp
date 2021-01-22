@@ -101,7 +101,7 @@ namespace legion::core
 
     struct hierarchy
     {
-        ecs::entity_handle parent;
+        ecs::entity_handle parent = world_entity_id;
         ecs::entity_set children;
     };
 
@@ -194,25 +194,30 @@ namespace legion::core
         template<class Archive>
         void save(Archive& oa)
         {
-            if(id != invalid_id)
-                oa(id, cereal::make_nvp("Filepath", get().second.filePath));
+            bool debug = false;
+            if (id != invalid_id)
+                oa(id, cereal::make_nvp("Debug", debug), cereal::make_nvp("Filepath", get().second.filePath));
             else
             {
                 log::error("Deserialized Mesh was missing!");
                 std::string missing = "engine://resources/invalid/missing_mesh.obj";
-                oa(id,cereal::make_nvp("Filepath",missing));
+                oa(id, cereal::make_nvp("Debug", debug), cereal::make_nvp("Filepath", missing));
             }
         }
 
         template<class Archive>
         void load(Archive& oa)
         {
+            bool debug;
             std::string filepath;
-            oa(id, cereal::make_nvp("Filepath", filepath));
-
+            oa(id, cereal::make_nvp("Debug", debug),cereal::make_nvp("Filepath", filepath));
             auto copy = default_mesh_settings;
             copy.contextFolder = fs::view(filepath).parent();
-            id = MeshCache::create_mesh(filepath, fs::view(filepath),copy).id;
+            id = MeshCache::create_mesh(filepath, fs::view(filepath), copy).id;
+            if (debug)
+            {
+                MeshCache::debugId = id;
+            }
         }
 
     };

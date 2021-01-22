@@ -70,7 +70,7 @@ namespace legion::rendering
 
         texture_handle sceneDepth;
         auto depthAttachment = fbo->getAttachment(GL_DEPTH_ATTACHMENT);
-        if(std::holds_alternative<std::monostate>(depthAttachment))
+        if (std::holds_alternative<std::monostate>(depthAttachment))
             depthAttachment = fbo->getAttachment(GL_DEPTH_STENCIL_ATTACHMENT);
         if (std::holds_alternative<texture_handle>(depthAttachment))
             sceneDepth = std::get<texture_handle>(depthAttachment);
@@ -121,6 +121,7 @@ namespace legion::rendering
 
             for (auto [modelHandle, instances] : instancesPerMaterial)
             {
+                ModelCache::create_model(modelHandle.id);
                 auto modelName = ModelCache::get_model_name(modelHandle.id);
                 OPTICK_EVENT("Rendering instances");
                 OPTICK_TAG("Model", modelName.c_str());
@@ -131,7 +132,10 @@ namespace legion::rendering
 
                 if (mesh.submeshes.empty())
                 {
-                    log::warn("Empty mesh found.");
+                    if (MeshCache::debugId == modelHandle.id)
+                        __debugbreak();
+
+                    log::warn("Empty mesh found. Model name: {},  Model ID {}", modelName, modelHandle.get_mesh().id);
                     continue;
                 }
 

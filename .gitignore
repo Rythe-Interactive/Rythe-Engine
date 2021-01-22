@@ -117,3 +117,4 @@ lib/*
 # Legion Includes
 include/**
 */**/Thumbs.db
+applications/sandbox/imgui.ini

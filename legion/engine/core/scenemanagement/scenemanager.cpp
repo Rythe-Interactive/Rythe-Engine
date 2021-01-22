@@ -3,6 +3,7 @@
 #include <core/logging/logging.hpp>
 #include <core/common/string_extra.hpp>
 #include <core/defaults/defaultcomponents.hpp>
+//#include <rendering/components/camera.hpp>
 
 
 namespace legion::core::scenemanagement
@@ -23,6 +24,7 @@ namespace legion::core::scenemanagement
             log::debug("Creating a Scene Entity");
             sceneEntity = m_ecs->createEntity();
             sceneEntity.add_component<hierarchy>();
+            sceneEntity.add_component<scene>();
             std::vector<ecs::entity_handle> children;
             for (size_type i = 0; i < m_ecs->world.child_count(); i++)
             {
@@ -35,6 +37,7 @@ namespace legion::core::scenemanagement
                     continue;
                 child.set_parent(sceneEntity,true);
             }
+            m_ecs->world.read_component<hierarchy>().children.clear();
         }
         else
         {
@@ -52,7 +55,6 @@ namespace legion::core::scenemanagement
             scene s;
             s.id = nameHash(name);
             sceneNames.emplace(s.id, name);
-            sceneEntity.add_component<scenemanagement::scene>(s);
             sceneList.emplace(nameHash(name), sceneEntity);
         }
         return SceneManager::save_scene(name, sceneEntity);
@@ -84,36 +86,15 @@ namespace legion::core::scenemanagement
         std::ifstream inFile("assets/scenes/" + filename);
 
         log::debug("Child Count Before: {}", m_ecs->world.child_count());
-
-
         doNotCreateEntities = true;
         while (m_ecs->world.child_count() > 0)
         {
             log::debug("children remaining {}", m_ecs->world.child_count());
             m_ecs->world.get_child(m_ecs->world.child_count() - 1).destroy(true);
         }
-  /*      for (auto child : m_ecs->world.children())
-        {
-            child.destroy(true);
-        }*/
-          //m_ecs->getEntityLock().critical_section<async::readwrite_guard>([&]
-          //{
-          //        while (m_ecs->world.child_count() > 0)
-          //        {
-          //            log::debug("children remaining {}", m_ecs->world.child_count());
-          //            m_ecs->world.get_child(m_ecs->world.child_count() - 1).destroy(true);
-          //        }
-          //});
+        m_ecs->world.read_component<hierarchy>().children.clear();
 
         log::debug("Child Count After: {}", m_ecs->world.child_count());
-
-        /*
-        for(size_type i = m_ecs->world.child_count(); i != 0; i--)
-        {
-            m_ecs->world.get_child(i-1).destroy(true);
-        }
-        */
-
 
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
         currentScene = name;
