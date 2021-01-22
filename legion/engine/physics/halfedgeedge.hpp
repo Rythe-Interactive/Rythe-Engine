@@ -61,7 +61,7 @@ namespace legion::physics
             float distanceToPlane =
                 math::pointToPlane(vert, edgePosition, face->normal);
 
-            return distanceToPlane > math::epsilon<float>();
+            return distanceToPlane > math::sqrt(math::epsilon<float>());
         }
 
         bool isEdgeHorizonFromVertex(const math::vec3& vert)

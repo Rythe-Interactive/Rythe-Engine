@@ -25,7 +25,7 @@ namespace legion::physics
 
         std::vector<SplittablePolygonPtr> meshPolygons;
 
-        MeshSplitterDebugHelper debugHelper;
+        //MeshSplitterDebugHelper debugHelper;
 
       
 
@@ -148,7 +148,6 @@ namespace legion::physics
         void MultipleSplitMesh(const std::vector<MeshSplitParams>& splittingPlanes, std::vector<ecs::entity_handle>& entitiesGenerated,
             bool keepBelow = true,int debugAt = -1);
        
-
         /** @brief Given a list of polygons to split in 'polygonsToSplit', splits them based on a splitting plane defined by
         * 'planePosition' and 'planeNormal'. The result is then placed in 'resultingIslands.
         */
@@ -183,56 +182,8 @@ namespace legion::physics
         * detects if there are sets of polygons that are disconected from each other
         */
         void DetectIntersectionIsland(std::vector<SplittablePolygonPtr>& splitPolygons,
-            std::vector<std::vector<SplittablePolygonPtr>>& intersectionIslands)
-        {
-            for (auto pol : splitPolygons) { pol->isVisited = false; }
-
-            //find first intersection polygon
-            SplittablePolygonPtr initialPolygon;
-            bool foundUnvisited = FindFirstUnivistedIntersectionPolygon(splitPolygons, initialPolygon);
-
-            //while can find intersection polygon
-            while (foundUnvisited)
-            {
-                std::vector< math::vec3> DEBUG_ONLY_polygonPositions;
-                std::vector< SplittablePolygonPtr> intersectionIsland;
-                std::queue< SplittablePolygonPtr> unvisitedPolygons;
-                unvisitedPolygons.push(initialPolygon);
-
-                while (!unvisitedPolygons.empty())
-                {
-                    auto polygon = unvisitedPolygons.front();
-                    unvisitedPolygons.pop();
-
-                    if (!polygon->isVisited && polygon->GetPolygonSplitState() == SplitState::Split)
-                    {
-                        polygon->isVisited = true;
-                        intersectionIsland.push_back(polygon);
-                        DEBUG_ONLY_polygonPositions.push_back(polygon->localCentroid);
-
-                        for (auto edge : polygon->GetMeshEdges())
-                        {
-                            auto pairingEdge = edge->pairingEdge;
-
-                            if (edge->isBoundary && pairingEdge)
-                            {
-                                if (auto pairingPolygon = pairingEdge->owner.lock())
-                                {
-                                    unvisitedPolygons.push(pairingPolygon);
-                                }
-
-                            }
-                        }
-                    }
-                }
-
-                intersectionIslands.push_back(intersectionIsland);
-                debugHelper.intersectionIslands.push_back(DEBUG_ONLY_polygonPositions);
-
-                foundUnvisited = FindFirstUnivistedIntersectionPolygon(splitPolygons, initialPolygon);
-
-            }
-        }
+            std::vector<std::vector<SplittablePolygonPtr>>& intersectionIslands);
+       
 
         /** @brief Creates an IntersectingPolygonOrganizer thats splits a 
         * given a SplittablePolygon along a plane located at 'planePosition' with a normal equal to 'planeNormal'.

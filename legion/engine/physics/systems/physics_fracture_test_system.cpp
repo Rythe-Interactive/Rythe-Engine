@@ -8,6 +8,7 @@
 
 namespace legion::physics
 {
+
     void PhysicsFractureTestSystem::setup()
     {
         using namespace legion::core::fs::literals;
@@ -21,6 +22,9 @@ namespace legion::physics
         #pragma region Material Setup
         textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
         textureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
+
+        woodTextureH = rendering::MaterialCache::create_material("texture2", "assets://shaders/texture.shs"_view);
+        woodTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/test-albedo.png"_view));
         #pragma endregion
 
         #pragma region Model Setup
@@ -50,8 +54,8 @@ namespace legion::physics
         //compositeColliderTest();
         fractureTest();
 
-        meshSplittingTest(planeH, cubeH
-            , cylinderH, complexH, textureH);
+        /*meshSplittingTest(planeH, cubeH
+            , cylinderH, complexH, textureH);*/
 
         createProcess<&PhysicsFractureTestSystem::colliderDraw>("Update");
 
@@ -749,6 +753,8 @@ namespace legion::physics
         cubeParams.width = 1.0f;
         cubeParams.height = 1.0f;
 
+
+        physics::cube_collider_params scaledCubeParams(5.0f,5.0f,1.0f);
         //-------------------------------------------------------------------------------------------------------------------------------//
                                                        //WALL
         //-------------------------------------------------------------------------------------------------------------------------------//
@@ -772,7 +778,7 @@ namespace legion::physics
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(wall);
             positionH.write(math::vec3(0, 2.0f, 10.0f));
-            scaleH.write(math::vec3(1.0f, 3.0f, 5.0f));
+            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
 
             auto rotation = rotationH.read();
 
@@ -830,12 +836,39 @@ namespace legion::physics
 
         }
 
+        ecs::entity_handle floor;
+        {
+            floor = m_ecs->createEntity();
+            auto entPhyHande = floor.add_component<physics::physicsComponent>();
+
+            physics::physicsComponent physicsComponent2;
+            physics::physicsComponent::init(physicsComponent2);
+            physicsComponent2.AddBox(scaledCubeParams);
+            entPhyHande.write(physicsComponent2);
+
+            //floor.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(woodTextureH));
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(floor);
+            positionH.write(math::vec3(0, 1.0f, 10.0f));
+            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
+        }
+
+        ecs::entity_handle floor2;
+        {
+            floor2 = m_ecs->createEntity();
+
+            floor2.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(woodTextureH));
+
+            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(floor2);
+            positionH.write(math::vec3(0, 1.0f, 10.0f));
+            scaleH.write(math::vec3(5.0f, 1.0f, 5.0f));
+        }
+
     }
 
     void PhysicsFractureTestSystem::OnSplit(physics_split_test* action)
     {
-  
-
+ 
         static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
 
         if (action->value)

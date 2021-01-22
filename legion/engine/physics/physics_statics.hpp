@@ -208,8 +208,8 @@ namespace legion::physics
                     }
                 }
             }
-            assert(refEdge.ptr);
-            assert(incEdge.ptr);
+            /*assert(refEdge.ptr);
+            assert(incEdge.ptr);*/
             //log::debug("a id  {}  b id {} combination {} ", std::get<0>(ids), std::get<1>(ids), std::get<2>(ids));
             //refEdge.ptr->DEBUG_drawEdge(transformA, math::colors::red);
             //incEdge.ptr->DEBUG_drawEdge(transformB, math::colors::red);

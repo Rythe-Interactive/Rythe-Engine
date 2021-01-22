@@ -12,9 +12,8 @@ namespace legion::physics
     */
     struct IntersectingPolygonOrganizer
     {
-        MeshSplitterDebugHelper* debugHelper = nullptr;
 
-        IntersectingPolygonOrganizer(MeshSplitterDebugHelper* pDebugHelper) : debugHelper(pDebugHelper)
+        IntersectingPolygonOrganizer()
         {
 
         }
@@ -61,15 +60,6 @@ namespace legion::physics
 
             }
 
-            for (auto edge : splitPolygon->GetMeshEdges())
-            {
-                if (shouldeDebug)
-                {
-                    math::color color = edge->isBoundary ? math::colors::blue : math::colors::cyan;
-                    auto [first, second] = edge->getEdgeWorldPositions(transform);
-                    debug::user_projectDrawLine(first, second, color, 15.0f, FLT_MAX, true);
-                }
-            }
 
             if (shouldeDebug)
             {
@@ -85,6 +75,15 @@ namespace legion::physics
                 , cutNormal, keepAbove);
 
         
+            for (auto edge : effectedUsedEdges)
+            {
+                if (shouldeDebug)
+                {
+                    math::color color = edge->isBoundary ? math::colors::blue : math::colors::cyan;
+                    auto [first, second] = edge->getEdgeWorldPositions(transform);
+                    //debug::user_projectDrawLine(first, second, color, 15.0f, FLT_MAX, true);
+                }
+            }
 
 
             //----------------------------- [3] Sort Edges ---------------------------------------------------------------------------------------//
@@ -100,11 +99,19 @@ namespace legion::physics
 
             for (auto edge : effectedUsedEdges)
             {
-                
-
                 if (edge->isSplitByPlane(transform, cutPosition, cutNormal))
                 {
                     splitEdges.push_back(edge);
+                }
+            }
+
+            for (auto edge : splitEdges)
+            {
+                if (shouldeDebug)
+                {
+                    math::color color = math::colors::blue;
+                    auto [first, second] = edge->getEdgeWorldPositions(transform);
+                    //debug::user_projectDrawLine(first, second, color, 15.0f, FLT_MAX, true);
                 }
             }
 
@@ -175,9 +182,17 @@ namespace legion::physics
                     secondIndex = i;
                 }
             }
+            if (shouldeDebug)
+            {
+                log::debug("firstIndex {} secondIndex {} ", firstIndex, secondIndex);
+
+
+            }
            
+            //I am aware of how horrible this is but I really want to get this done
+            int offset = firstIndex < secondIndex ? -1 : 0;
             effectedUsedEdges.erase(effectedUsedEdges.begin() + firstIndex);
-            effectedUsedEdges.erase(effectedUsedEdges.begin() + math::clamp(secondIndex-1,0,999));
+            effectedUsedEdges.erase(effectedUsedEdges.begin() + math::clamp(secondIndex + offset,0,999));
             //previous sorting direction is dependent on cut tangent.
             //use centroids of first and last split edge as the new sorting direction
 
@@ -212,18 +227,21 @@ namespace legion::physics
             {
                 float max = effectedUsedEdges.size();
                 int i = 0;
+
+                log::debug("effectedUsedEdges {} ", effectedUsedEdges.size());
+
                 for (auto meshHalfEdgePtr : effectedUsedEdges)
                 {
                     auto [first,second]=  meshHalfEdgePtr->getEdgeWorldPositions(transform);
                     float interpolant = (float)i / max;
-                    math::vec3 white = math::vec3(1, 1, 1) * interpolant;
-                    debug::user_projectDrawLine(first, second, math::color(white.x, white.y, white.z, 1), 12.0f, FLT_MAX, true);
+                    math::vec3 white = math::vec3(1, 0, 0) * interpolant;
+                    //debug::user_projectDrawLine(first, second, math::color(white.x, white.y, white.z, 1), 12.0f, FLT_MAX, true);
                     
                     i++;
                 }
 
-                debug::user_projectDrawLine(sortingCentroid, sortingCentroid + sortingDirection
-                    , math::colors::cyan, 12.0f, FLT_MAX, true);
+               /* debug::user_projectDrawLine(sortingCentroid, sortingCentroid + sortingDirection
+                    , math::colors::cyan, 12.0f, FLT_MAX, true);*/
 
             }
       
@@ -289,7 +307,7 @@ namespace legion::physics
                 generatedHalfEdges.end());
             //-------------------------------------//
 
-            debugHelper->boundaryEdgesForPolygon.push_back(polygonDebugInfo);
+            //debugHelper->boundaryEdgesForPolygon.push_back(polygonDebugInfo);
 
             //------------------------------------- [6] Add regenerated edges to the polygon -----------------------------------------------------------------------------------//
 
@@ -299,7 +317,7 @@ namespace legion::physics
 
             splitPolygon->CalculateLocalCentroid();
             splitPolygon->AssignEdgeOwnership();
-            debugHelper->polygonCount++;
+            //debugHelper->polygonCount++;
         }
 
         //------------------------------------------------------ Edge Categorization Helper Functions ----------------------------------------------------------------//

@@ -28,12 +28,6 @@ namespace legion::physics
         static bool IsPaused;
         static bool oneTimeRunActive;
 
-        static std::vector<std::shared_ptr<physics::PenetrationQuery>> penetrationQueries;
-        static std::vector<physics_contact> contactPoints;
-        static std::vector<math::vec3 > aPoint;
-        static std::vector<math::vec3> bPoint;
-        static std::vector<MeshLine> meshLines;
-
         ecs::EntityQuery rigidbodyIntegrationQuery;
 
         //TODO move implementation to a seperate cpp file
@@ -235,23 +229,23 @@ namespace legion::physics
 
                 bool currentManifoldValidity = manifoldValidity.at(i);
 
-                log::debug("- A Fracture Check");
+                //log::debug("- A Fracture Check");
 
                 if (fracturerHandleA)
                 {
                     auto fracturerA = fracturerHandleA.read();
-                    log::debug(" A is fracturable");
+                    //log::debug(" A is fracturable");
                     fracturerA.HandleFracture(manifold, currentManifoldValidity, true);
 
                     fracturerHandleA.write(fracturerA);
                 }
 
-                log::debug("- B Fracture Check");
+                //log::debug("- B Fracture Check");
 
                 if (fracturerHandleB)
                 {
                     auto fracturerB = fracturerHandleB.read();
-                    log::debug(" B is fracturable");
+                    //log::debug(" B is fracturable");
                     fracturerB.HandleFracture(manifold, currentManifoldValidity,false);
 
                     fracturerHandleB.write(fracturerB);

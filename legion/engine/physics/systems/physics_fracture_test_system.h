@@ -36,12 +36,14 @@ namespace legion::physics
             
         void fractureTest();
         rendering::material_handle textureH;
+        rendering::material_handle woodTextureH;
 
         rendering::model_handle cubeH;
         rendering::model_handle concaveTestObject;
         rendering::model_handle planeH;
         rendering::model_handle cylinderH;
         rendering::model_handle complexH;
+
 
         ecs::entity_handle staticToAABBEntLinear, staticToAABBEntRotation, staticToOBBEnt, staticToEdgeEnt;
 

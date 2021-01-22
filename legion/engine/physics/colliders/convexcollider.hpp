@@ -67,7 +67,7 @@ namespace legion::physics
        */
         void UpdateLocalAABB() override;
        
-        virtual void DrawColliderRepresentation(const math::mat4& transform, math::color usedColor, float width,float time) override;
+        virtual void DrawColliderRepresentation(const math::mat4& transform, math::color usedColor, float width,float time,bool ignoreDepth = false) override;
         
 
         /**@brief Does one step of the convex hull generation
@@ -98,7 +98,7 @@ namespace legion::physics
         /**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh.
         * @param meshHandle - The mesh handle to lock the mesh and the mesh to create a hull from
         */
-        void ConstructConvexHullWithMesh(legion::core::mesh_handle& meshHandle)
+        void ConstructConvexHullWithMesh(legion::core::mesh_handle& meshHandle,bool shouldDebug = true)
         {
             auto meshLockPair = meshHandle.get();
 
@@ -106,10 +106,10 @@ namespace legion::physics
             async::readonly_guard guard(meshLockPair.first);
             auto mesh = meshLockPair.second;
 
-            ConstructConvexHullWithMesh(mesh);
+            ConstructConvexHullWithMesh(mesh,math::vec3(),shouldDebug);
         }
 
-        void  ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount = math::vec3());
+        void  ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount = math::vec3(), bool shouldDebug = false);
        
         /**@brief Constructs a box-shaped convex hull that encompasses the given mesh.
         */
@@ -600,7 +600,7 @@ namespace legion::physics
             HalfEdgeEdge* originEdge = nullptr, std::shared_ptr<std::unordered_set<HalfEdgeFace*>> visited = nullptr);
         //TODO add documentation 
         void ConstructHorizonByEdgeJumping(math::vec3 vert, std::deque<HalfEdgeEdge*>& edges,
-            std::vector<HalfEdgeFace*>& faces,math::vec3 spacing = math::vec3());
+            std::vector<HalfEdgeFace*>& faces,math::vec3 spacing = math::vec3(),  bool shouldDebug =false);
 
 
 

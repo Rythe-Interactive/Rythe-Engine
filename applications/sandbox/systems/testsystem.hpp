@@ -2293,7 +2293,7 @@ public:
 
             auto getEdge = entity.get_component_handle<physics::identifier>();
 
-            for (size_t i = 0; i < splitter.debugHelper.intersectionIslands.size(); i++)
+            /*for (size_t i = 0; i < splitter.debugHelper.intersectionIslands.size(); i++)
             {
                 auto maxColor = splitter.debugHelper.colors.size();
                 math::color color = splitter.debugHelper.colors[i % maxColor];
@@ -2307,7 +2307,7 @@ public:
                 }
 
 
-            }
+            }*/
 
             /* for (auto intersectingPosition : edgeFinder.debugHelper.intersectionsPolygons)
              {
@@ -2315,11 +2315,11 @@ public:
                  debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::blue, 10.0f, 0.0f);
              }*/
 
-            for (auto intersectingPosition : splitter.debugHelper.nonIntersectionPolygons)
-            {
-                math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
-                debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::yellow, 10.0f, 0.0f);
-            }
+            //for (auto intersectingPosition : splitter.debugHelper.nonIntersectionPolygons)
+            //{
+            //    math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
+            //    debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::yellow, 10.0f, 0.0f);
+            //}
 
 
             //log::debug("Count boundary polygon {} ");
@@ -2353,14 +2353,14 @@ public:
 
             }
 
-            auto& boundaryInfoList = splitter.debugHelper.boundaryEdgesForPolygon;
+            //auto& boundaryInfoList = splitter.debugHelper.boundaryEdgesForPolygon;
 
            /* debug::drawLine(splitter.debugHelper.cuttingSetting.first
                 , splitter.debugHelper.cuttingSetting.first + (splitter.debugHelper.cuttingSetting.second) * 2.0f, math::colors::cyan, 5.0f, 0.0f, false);*/
 
             
 
-            for (size_t i = 0; i < boundaryInfoList.size(); i++)
+          /*  for (size_t i = 0; i < boundaryInfoList.size(); i++)
             {
                 auto& boundaryInfo = boundaryInfoList[i];
                 math::color color = boundaryInfo.drawColor;
@@ -2398,7 +2398,7 @@ public:
 
                 debug::drawLine(boundaryInfo.intersectionEdge + polygonNormalOffset
                     , boundaryInfo.intersectionEdge + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::magenta, 10.0f, 0.0f, false);
-            }
+            }*/
 
         }
     }
@@ -2464,60 +2464,20 @@ public:
 
         float duration = 0.02f;
 
-        for (auto penetration : physics::PhysicsSystem::penetrationQueries)
+      /*  for (auto penetration : physics::PhysicsSystem::penetrationQueries)
         {
             debug::drawLine(penetration->faceCentroid
                 , penetration->faceCentroid + penetration->normal, math::vec4(1, 0, 1, 1), 15.0f, duration);
             auto x = 1;
-        }
+        }*/
 
 
         //--------------------------------------- Draw contact points ---------------------------------------//
 
 
 
-        for (int i = 0; i < physics::PhysicsSystem::contactPoints.size(); i++)
-        {
-            //ref is red
-            //inc is blue
-
-            auto& contact = physics::PhysicsSystem::contactPoints.at(i);
-
-            debug::drawLine(contact.refRBCentroid
-                , contact.RefWorldContact, math::vec4(1, 0, 0, 1), 5.0f, duration, true);
-
-            debug::drawLine(contact.incRBCentroid
-                , contact.IncWorldContact, math::vec4(0, 0, 1, 1), 5.0f, duration, true);
-
-            debug::drawLine(contact.IncWorldContact
-                , contact.IncWorldContact + math::vec3(0, 0.1f, 0), math::vec4(0.5, 0.5, 0.5, 1), 5.0f, duration, true);
-
-            debug::drawLine(contact.refRBCentroid
-                , contact.refRBCentroid + math::vec3(0, 0.1f, 0), math::vec4(0, 0, 0, 1), 5.0f, duration, true);
-
-        }
 
         //--------------------------------------- Draw extreme points ---------------------------------------//
-
-        i = 0;
-        for (auto penetration : physics::PhysicsSystem::aPoint)
-        {
-            debug::drawLine(penetration
-                , penetration + math::vec3(0, 0.2, 0), math::vec4(1, 0, 0, 1), 15.0f);
-
-        }
-        i = 0;
-        for (auto penetration : physics::PhysicsSystem::bPoint)
-        {
-            debug::drawLine(penetration
-                , penetration + math::vec3(0, 0.2, 0), math::vec4(0, 0, 1, 1), 15.0f);
-
-        }
-
-        physics::PhysicsSystem::contactPoints.clear();
-        physics::PhysicsSystem::penetrationQueries.clear();
-        physics::PhysicsSystem::aPoint.clear();
-        physics::PhysicsSystem::bPoint.clear();
 
         physicsQuery.queryEntities();
         auto size = physicsQuery.size();

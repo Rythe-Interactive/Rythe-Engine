@@ -80,7 +80,7 @@ namespace legion::physics
         * of the collider.
         * @note This is called internally by PhysicsSysten
         */
-        virtual void DrawColliderRepresentation(const math::mat4& transform, math::color usedColor, float width, float time) {};
+        virtual void DrawColliderRepresentation(const math::mat4& transform, math::color usedColor, float width, float time, bool ignoreDepth = false) {};
 
         virtual void UpdateTransformedTightBoundingVolume(const math::mat4& transform) {};
 
