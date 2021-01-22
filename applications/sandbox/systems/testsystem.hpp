@@ -2362,7 +2362,6 @@ public:
 
     void update(time::span deltaTime)
     {
-        scenemanagement::SceneManager::create_scene_entity();
         //static float timer = 0;
 
         //static float avgdt = deltaTime;

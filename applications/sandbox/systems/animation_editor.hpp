@@ -163,8 +163,8 @@ namespace ext
         }
 
 
-        void onGUI(application::window&, rendering::
-            & cam, const rendering::camera::camera_input& cInput,
+        void onGUI(application::window&, rendering::camera
+            &cam, const rendering::camera::camera_input& cInput,
             time::span);
 
     public:

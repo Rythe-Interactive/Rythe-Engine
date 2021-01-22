@@ -98,6 +98,9 @@ class GuiTestSystem : public System<GuiTestSystem>
 
     void onGUI(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+
+        scenemanagement::SceneManager::create_scene_entity();
+
         ImGuiIO& io = ImGui::GetIO();
 
         setProjectionAndView(io.DisplaySize.x / io.DisplaySize.y, cam, camInput);
