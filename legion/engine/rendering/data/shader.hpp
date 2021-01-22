@@ -407,7 +407,7 @@ namespace legion::rendering
                 return false;
             }
 
-            return m_currentShaderVariant->uniforms.count(idOfLocation[location]) && dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[idOfLocation[location]].get()) != nullptr;
+            return m_currentShaderVariant->uniforms.count(m_currentShaderVariant->idOfLocation[location]) && dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[m_currentShaderVariant->idOfLocation[location]].get()) != nullptr;
         }
 
         attribute get_attribute(const std::string& name);
