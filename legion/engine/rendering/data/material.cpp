@@ -134,6 +134,32 @@ namespace legion::rendering
         return invalid_material_handle;
     }
 
+    bool material_handle::has_variant(id_type variantId) const
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        return MaterialCache::m_materials[id].has_variant(variantId);
+    }
+
+    bool material_handle::has_variant(const std::string& variant) const
+    {
+        id_type variantId = nameHash(variant);
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        return MaterialCache::m_materials[id].has_variant(variantId);
+    }
+
+    void material_handle::set_variant(id_type variantId)
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        MaterialCache::m_materials[id].set_variant(variantId);
+    }
+
+    void material_handle::set_variant(const std::string& variant)
+    {
+        id_type variantId = nameHash(variant);
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        MaterialCache::m_materials[id].set_variant(variantId);
+    }
+
     void material_handle::bind()
     {
         OPTICK_EVENT();
@@ -153,10 +179,38 @@ namespace legion::rendering
         return MaterialCache::m_materials[id].m_shader.get_attribute(name);
     }
 
+    bool material::has_variant(id_type variantId) const
+    {
+        return m_shader.has_variant(variantId);
+    }
+
+	bool material::has_variant(const std::string& variant) const
+	{
+        return m_shader.has_variant(variant);
+    }
+
+    void material::set_variant(id_type variantId)
+    {
+        if (m_shader.has_variant(variantId))
+            m_currentVariant = variantId;
+        else
+            m_currentVariant = 0;
+    }
+
+    void material::set_variant(const std::string& variant)
+    {
+        id_type variantId = nameHash(variant);
+        if (m_shader.has_variant(variantId))
+            m_currentVariant = variantId;
+        else
+            m_currentVariant = 0;
+    }
+
     void material::bind()
     {
+        m_shader.configure_variant(m_currentVariant);
         m_shader.bind();
-        for (auto& [_, param] : m_parameters)
+        for (auto& [_, param] : m_variants[m_currentVariant].parameters)
             param->apply(m_shader);
     }
 }
