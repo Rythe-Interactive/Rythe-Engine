@@ -14,6 +14,7 @@ Derived Types
 
 - ``public legion::rendering::attribute`` (:ref:`exhale_class_structlegion_1_1rendering_1_1attribute`)
 - ``public legion::rendering::uniform< T >`` (:ref:`exhale_class_structlegion_1_1rendering_1_1uniform`)
+- ``public legion::rendering::uniform< texture_handle >`` (:ref:`exhale_struct_structlegion_1_1rendering_1_1uniform_3_01texture__handle_01_4`)
 
 
 Class Documentation

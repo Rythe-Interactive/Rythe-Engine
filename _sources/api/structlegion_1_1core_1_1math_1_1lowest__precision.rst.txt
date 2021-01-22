@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1math_1_1lowest__precision:
+
+Template Struct lowest_precision
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_close_enough.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::math::lowest_precision
+   :members:
+   :protected-members:
+   :undoc-members:

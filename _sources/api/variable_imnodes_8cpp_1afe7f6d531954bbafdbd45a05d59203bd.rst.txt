@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1afe7f6d531954bbafdbd45a05d59203bd:
+
+Variable attribute_flag_stack
+=============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: attribute_flag_stack

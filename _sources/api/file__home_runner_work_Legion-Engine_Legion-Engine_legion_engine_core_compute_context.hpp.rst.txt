@@ -29,9 +29,15 @@ Includes
 --------
 
 
+- ``Optick/optick.h``
+
 - ``core/compute/program.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.hpp`)
 
+- ``core/data/image.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`)
+
 - ``core/filesystem/resource.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_resource.hpp`)
+
+- ``utility``
 
 
 
@@ -48,6 +54,10 @@ Included By
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_coremodule.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_point_cloud.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_pointcloudgeneration.hpp`
 
 
 

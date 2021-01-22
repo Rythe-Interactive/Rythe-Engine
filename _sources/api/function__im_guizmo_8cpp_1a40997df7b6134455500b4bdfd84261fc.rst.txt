@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a40997df7b6134455500b4bdfd84261fc:
+
+Function imgui::gizmo::CanActivate
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::CanActivate()

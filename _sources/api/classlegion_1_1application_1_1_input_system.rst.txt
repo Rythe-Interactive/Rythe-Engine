@@ -14,6 +14,7 @@ Nested Types
 ************
 
 - :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1action__data`
+- :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1axis__command__queue`
 - :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1axis__data`
 
 

@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File screen_quad.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File screen_quad.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-screen-quad-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-screen-quad-hpp"></span><h1>Program Listing for File screen_quad.hpp<a class="headerlink" href="#program-listing-for-file-screen-quad-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_screen_quad.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-screen-quad-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/screen_quad.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/buffer.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/vertexarray.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">screen_quad</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">screen_quad</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="k">explicit</span> <span class="nf">screen_quad</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="p">)</span>
+        <span class="p">{</span>
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to create screen quad with.&quot;</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+<span class="cp">#endif</span>
+
+            <span class="k">static</span> <span class="kt">float</span> <span class="n">quadVertices</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="c1">// vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.</span>
+              <span class="c1">// positions         // texCoords</span>
+              <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span>
+              <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>
+               <span class="mf">1.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>
+
+              <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span>
+               <span class="mf">1.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>
+               <span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span>
+            <span class="p">};</span>
+
+            <span class="n">m_quadVAO</span> <span class="o">=</span> <span class="n">vertexarray</span><span class="o">::</span><span class="n">generate</span><span class="p">();</span>
+            <span class="n">m_quadVBO</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">quadVertices</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">quadVertices</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+            <span class="n">m_quadVAO</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">m_quadVBO</span><span class="p">,</span> <span class="n">SV_POSITION</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">m_quadVAO</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">m_quadVBO</span><span class="p">,</span> <span class="n">SV_TEXCOORD0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="mi">3</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="n">screen_quad</span> <span class="nf">generate</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">screen_quad</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">render</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to work with.&quot;</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+<span class="cp">#endif</span>
+
+            <span class="n">m_quadVAO</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+            <span class="n">glDrawArrays</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+            <span class="n">m_quadVAO</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+
+        <span class="n">vertexarray</span> <span class="n">m_quadVAO</span><span class="p">;</span>
+        <span class="n">buffer</span> <span class="n">m_quadVBO</span><span class="p">;</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_screen_quad.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__demo_8cpp_1aa9e4f5130b74080ea2d97916a91b3b3c:
+
+Function ShowExampleAppDocuments
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_demo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ShowExampleAppDocuments(bool *)

@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1a294857d9864178e0005adf73a76f1820:
+
+Function ImStb::STB_TEXTEDIT_KEYTOTEXT
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStb::STB_TEXTEDIT_KEYTOTEXT(int)

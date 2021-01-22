@@ -67,12 +67,12 @@
         <span class="n">id_type</span> <span class="n">m_nameHash</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">m_threadId</span><span class="p">;</span>
         <span class="n">Scheduler</span><span class="o">*</span> <span class="n">m_scheduler</span><span class="p">;</span>
-        <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_processesLock</span><span class="p">;</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_processesLock</span><span class="p">;</span>
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">Process</span><span class="o">*&gt;</span> <span class="n">m_processes</span><span class="p">;</span>
         <span class="n">async</span><span class="o">::</span><span class="n">transferable_atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">m_exit</span><span class="p">;</span>
         <span class="kt">bool</span> <span class="n">m_low_power</span><span class="p">;</span>
 
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_callbackLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_callbackLock</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">m_onFrameStart</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">m_onFrameEnd</span><span class="p">;</span>
 

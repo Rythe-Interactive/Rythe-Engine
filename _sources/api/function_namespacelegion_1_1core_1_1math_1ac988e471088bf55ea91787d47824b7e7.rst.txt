@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1math_1ac988e471088bf55ea91787d47824b7e7:
+
+Template Function legion::core::math::euler
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_constants.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::euler()

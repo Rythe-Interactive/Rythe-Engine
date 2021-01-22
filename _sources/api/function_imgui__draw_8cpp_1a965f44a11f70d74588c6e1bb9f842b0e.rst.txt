@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__draw_8cpp_1a965f44a11f70d74588c6e1bb9f842b0e:
+
+Function PathBezierToCasteljau
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: PathBezierToCasteljau(ImVector<ImVec2> *, float, float, float, float, float, float, float, float, float, int)

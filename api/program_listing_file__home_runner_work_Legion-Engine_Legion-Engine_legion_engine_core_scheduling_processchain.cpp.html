@@ -56,7 +56,7 @@
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">scheduling</span>
 <span class="p">{</span>
-    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">m_callbackLock</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">m_callbackLock</span><span class="p">;</span>
     <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">m_onFrameStart</span><span class="p">;</span>
     <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">m_onFrameEnd</span><span class="p">;</span>
 
@@ -64,29 +64,56 @@
     <span class="p">{</span>
         <span class="n">log</span><span class="o">::</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Chain started.&quot;</span><span class="p">);</span>
         <span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">subscribeToSync</span><span class="p">();</span>
-       <span class="cm">/* try</span>
-<span class="cm">        {*/</span>
-            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_exit</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span> <span class="c1">// Check for exit flag.</span>
+
+<span class="cp">#if USE_OPTICK</span>
+        <span class="n">Optick</span><span class="o">::</span><span class="n">Event</span><span class="o">*</span> <span class="n">frameEvent</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_exit</span><span class="o">-&gt;</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span> <span class="c1">// Check for exit flag.</span>
+        <span class="p">{</span>
+<span class="cp">#if USE_OPTICK</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">frameEvent</span><span class="p">)</span>
+                <span class="k">delete</span> <span class="n">frameEvent</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_name</span> <span class="o">==</span> <span class="s">&quot;Rendering&quot;</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="n">chain</span><span class="o">-&gt;</span><span class="n">runInCurrentThread</span><span class="p">();</span> <span class="c1">// Execute all processes.</span>
+                <span class="k">static</span> <span class="n">Optick</span><span class="o">::</span><span class="n">ThreadScope</span> <span class="n">mainThreadScope</span><span class="p">(</span><span class="s">&quot;Rendering&quot;</span><span class="p">);</span>
+                <span class="n">OPTICK_UNUSED</span><span class="p">(</span><span class="n">mainThreadScope</span><span class="p">);</span>
+                <span class="n">Optick</span><span class="o">::</span><span class="n">EndFrame</span><span class="p">();</span>
+                <span class="n">Optick</span><span class="o">::</span><span class="n">Update</span><span class="p">();</span>
+                <span class="kt">uint32_t</span> <span class="n">frameNumber</span> <span class="o">=</span> <span class="o">::</span><span class="n">Optick</span><span class="o">::</span><span class="n">BeginFrame</span><span class="p">();</span>
 
-                <span class="k">if</span> <span class="p">(</span><span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">syncRequested</span><span class="p">())</span> <span class="c1">// Sync if requested.</span>
-                    <span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">waitForProcessSync</span><span class="p">();</span>
+                <span class="n">frameEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Optick</span><span class="o">::</span><span class="n">Event</span><span class="p">(</span><span class="o">*::</span><span class="n">Optick</span><span class="o">::</span><span class="n">GetFrameDescription</span><span class="p">());</span>
 
-                <span class="k">if</span> <span class="p">(</span><span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_low_power</span><span class="p">)</span>
-                    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+                <span class="n">OPTICK_TAG</span><span class="p">(</span><span class="s">&quot;Frame&quot;</span><span class="p">,</span> <span class="n">frameNumber</span><span class="p">);</span>
             <span class="p">}</span>
-            <span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">unsubscribeFromSync</span><span class="p">();</span>
-            <span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">reportExit</span><span class="p">(</span><span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_threadId</span><span class="p">);</span> <span class="c1">// Mark Exit.</span>
-       <span class="c1">// catch (const legion::core::exception&amp; e)</span>
-       <span class="c1">// {*/</span>
-       <span class="c1">//     chain-&gt;m_scheduler-&gt;unsubscribeFromSync();</span>
-       <span class="c1">//     chain-&gt;m_scheduler-&gt;reportExitWithError(chain-&gt;m_name, std::this_thread::get_id(), e); // Mark error.</span>
-       <span class="c1">// catch (const std::exception&amp; e)</span>
-       <span class="c1">// {*/</span>
-       <span class="c1">//     chain-&gt;m_scheduler-&gt;unsubscribeFromSync();</span>
-       <span class="c1">//     chain-&gt;m_scheduler-&gt;reportExitWithError(chain-&gt;m_name, std::this_thread::get_id(), e); // Mark error.</span>
-       <span class="c1">// //}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">static</span> <span class="n">Optick</span><span class="o">::</span><span class="n">EventDescription</span><span class="o">*</span> <span class="n">frameEventDesc</span> <span class="o">=</span> <span class="n">Optick</span><span class="o">::</span><span class="n">CreateDescription</span><span class="p">(</span><span class="n">OPTICK_FUNC</span><span class="p">,</span> <span class="n">__FILE__</span><span class="p">,</span> <span class="n">__LINE__</span><span class="p">);</span>
+
+                <span class="n">frameEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Optick</span><span class="o">::</span><span class="n">Event</span><span class="p">(</span><span class="o">*</span><span class="n">frameEventDesc</span><span class="p">);</span>
+            <span class="p">}</span>
+<span class="cp">#endif</span>
+
+            <span class="n">chain</span><span class="o">-&gt;</span><span class="n">runInCurrentThread</span><span class="p">();</span> <span class="c1">// Execute all processes.</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">syncRequested</span><span class="p">())</span> <span class="c1">// Sync if requested.</span>
+                <span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">waitForProcessSync</span><span class="p">();</span>
+
+            <span class="p">{</span>
+                <span class="n">OPTICK_CATEGORY</span><span class="p">(</span><span class="s">&quot;Relieve LSU contention&quot;</span><span class="p">,</span> <span class="n">Optick</span><span class="o">::</span><span class="n">Category</span><span class="o">::</span><span class="n">Wait</span><span class="p">);</span>
+                <span class="n">L_PAUSE_INSTRUCTION</span><span class="p">();</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+<span class="cp">#if USE_OPTICK</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">frameEvent</span><span class="p">)</span>
+            <span class="k">delete</span> <span class="n">frameEvent</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+        <span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">unsubscribeFromSync</span><span class="p">();</span>
+        <span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">reportExit</span><span class="p">(</span><span class="n">chain</span><span class="o">-&gt;</span><span class="n">m_threadId</span><span class="p">);</span> <span class="c1">// Mark Exit.</span>
     <span class="p">}</span>
 
     <span class="kt">bool</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">run</span><span class="p">(</span><span class="kt">bool</span> <span class="n">low_power</span><span class="p">)</span>
@@ -98,7 +125,7 @@
         <span class="p">{</span>
             <span class="n">m_threadId</span> <span class="o">=</span> <span class="n">threadId</span><span class="p">;</span>
 
-            <span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">sendCommand</span><span class="p">(</span><span class="n">threadId</span><span class="p">,</span> <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">param</span><span class="p">)</span> <span class="p">{</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">threadedRun</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">ProcessChain</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">param</span><span class="p">));</span> <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+            <span class="n">m_scheduler</span><span class="o">-&gt;</span><span class="n">sendCommand</span><span class="p">(</span><span class="n">threadId</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]()</span> <span class="p">{</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">threadedRun</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">ProcessChain</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">));</span> <span class="p">});</span>
 
             <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
         <span class="p">}</span>
@@ -112,6 +139,9 @@
 
     <span class="kt">void</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">runInCurrentThread</span><span class="p">()</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Run process chain&quot;</span><span class="p">);</span>
+        <span class="n">OPTICK_TAG</span><span class="p">(</span><span class="s">&quot;Process chain&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_callbackLock</span><span class="p">);</span>
             <span class="n">m_onFrameStart</span><span class="p">();</span>
@@ -136,6 +166,7 @@
 
     <span class="kt">void</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">addProcess</span><span class="p">(</span><span class="n">Process</span><span class="o">*</span> <span class="n">process</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_processesLock</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">m_processes</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">process</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">(),</span> <span class="n">process</span><span class="p">).</span><span class="n">second</span><span class="p">)</span>
             <span class="n">process</span><span class="o">-&gt;</span><span class="n">m_hooks</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">m_nameHash</span><span class="p">);</span>
@@ -143,6 +174,7 @@
 
     <span class="kt">void</span> <span class="n">ProcessChain</span><span class="o">::</span><span class="n">removeProcess</span><span class="p">(</span><span class="n">Process</span><span class="o">*</span> <span class="n">process</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_processesLock</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">m_processes</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">process</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">()))</span>
             <span class="n">process</span><span class="o">-&gt;</span><span class="n">m_hooks</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_nameHash</span><span class="p">);</span>

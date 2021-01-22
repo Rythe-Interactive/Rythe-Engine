@@ -31,6 +31,10 @@ Includes
 
 - ``application/application.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp`)
 
+- ``rendering/data/buffer.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_buffer.hpp`)
+
+- ``rendering/data/vertexarray.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_vertexarray.hpp`)
+
 - ``rendering/util/bindings.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`)
 
 - ``set`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_assetimporter.cpp`)
@@ -51,11 +55,7 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipeline.hpp`
-
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_rendering.hpp`
-
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_renderer.hpp`
 
 
 

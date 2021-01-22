@@ -1,0 +1,13 @@
+.. _exhale_enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233:
+
+Enum wait_priority
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_wait_priority.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::core::async::wait_priority

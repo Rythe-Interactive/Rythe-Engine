@@ -18,11 +18,19 @@ Program Listing for File physicssystem.hpp
    #include <physics/physics_contact.hpp>
    #include <physics/components/physics_component.hpp>
    #include <physics/data/identifier.hpp>
-   #include <physics/events/trigger_event.hpp>
+   #include <physics/events/events.hpp>
    #include <memory>
+   #include <rendering/debugrendering.hpp>
    
    namespace legion::physics
    {
+       struct MeshLine
+       {
+           math::vec3 start;
+           math::vec3 end;
+           math::color Color;
+       };
+   
        typedef std::shared_ptr<PhysicsCollider> PhysicsColliderPtr;
    
        class PhysicsSystem final : public System<PhysicsSystem>
@@ -35,6 +43,7 @@ Program Listing for File physicssystem.hpp
            static std::vector<physics_contact> contactPoints;
            static std::vector<math::vec3 > aPoint;
            static std::vector<math::vec3> bPoint;
+           static std::vector<MeshLine> meshLines;
    
            ecs::EntityQuery  rigidbodyIntegrationQuery;
    
@@ -59,6 +68,7 @@ Program Listing for File physicssystem.hpp
    
            void fixedUpdate(time::time_span<fast_time> deltaTime)
            {
+               rigidbodyIntegrationQuery.queryEntities();
                if (!IsPaused)
                {
                    integrateRigidbodies(deltaTime);
@@ -203,6 +213,9 @@ Program Listing for File physicssystem.hpp
                    }
                }
    
+               //------------------------------------------------ Pre Colliison Solve Event --------------------------------------------//
+   
+   
                //-------------------------------------------------- Collision Solver ---------------------------------------------------//
                //for both contact and friction resolution, an iterative algorithm is used.
                //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
@@ -212,17 +225,42 @@ Program Listing for File physicssystem.hpp
                //the effective mass remains the same for every iteration of the solver. This means that we can precalculate it before
                //we start the solver
    
+               //log::debug("--------------Logging contacts for manifold -------------------");
+   
                for (auto& manifold : manifoldsToSolve)
                {
-                   //log::debug("----------Logging contacts for manifold ");
-   
                    for (auto& contact : manifold.contacts)
                    {
                        contact.preCalculateEffectiveMass();
    
                        contact.ApplyWarmStarting();
+   
                    }
                }
+   
+               /*for (auto& manifold : manifoldsToSolve)
+               {
+                   for (auto& contact : manifold.contacts)
+                   {
+                       debug::user_projectdrawLine
+                       (contact.RefWorldContact, contact.RefWorldContact + math::vec3(0,0.1f,0),math::colors::red,2.0f,5.0f,true);
+   
+                       debug::user_projectdrawLine
+                       (contact.IncWorldContact, contact.IncWorldContact + math::vec3(0, 0.1f, 0), math::colors::blue, 2.0f, 5.0f, true);
+   
+                       debug::user_projectdrawLine
+                       (contact.IncWorldContact, contact.RefWorldContact , math::colors::magenta, 2.0f, 5.0f, true);
+                   }
+               }*/
+   
+   
+               for (auto& manifold : manifoldsToSolve)
+               {
+                   log::debug("----> InitialVelocity");
+                   //manifold.contacts.at(0).logRigidbodyState();
+               }
+   
+   
    
                //resolve contact constraint
                for (size_t i = 0; i < constants::contactSolverIterationCount; i++)
@@ -237,7 +275,14 @@ Program Listing for File physicssystem.hpp
                }
    
                
+               for (auto& manifold : manifoldsToSolve)
+               {
+                   log::debug("----> Final Velocity");
+                   //manifold.contacts.at(0).logRigidbodyState();
+               }
+               
                //resolve friction constraint
+              
                for (size_t i = 0; i < constants::frictionSolverIterationCount; i++)
                {
                    for (auto& manifold : manifoldsToSolve)
@@ -249,15 +294,21 @@ Program Listing for File physicssystem.hpp
                    }
                }
    
+              
                //reset convergance identifiers for all colliders
                for (auto& manifold : manifoldsToSolve)
                {
+                   manifold.colliderA->converganceIdentifiers.clear();
+                   manifold.colliderB->converganceIdentifiers.clear();
+   
                    for (auto& contact : manifold.contacts)
                    {
-                       contact.refCollider->converganceIdentifiers.clear();
+                       
+                      // PhysicsSystem::contactPoints.push_back(contact);
                    }
                }
    
+               log::debug("*END IMPULSE");
                //using the known lambdas of this time step, add it as a convergance identifier
                for (auto& manifold : manifoldsToSolve)
                {
@@ -301,18 +352,13 @@ Program Listing for File physicssystem.hpp
                        if (isRigidbodyInvolved && !isTriggerInvolved)
                        {
                            manifoldsToSolve.push_back(m);
+                           raiseEvent<collision_event>(m,m_timeStep);
                        }
    
                        if (isTriggerInvolved)
                        {
-   
-                           //TODO:(algo-ryth-mix,Developer-The-Great):
-                           //TODO:(cont.) The second paramenter here is supposed to be the delta-time of the physics-system
-                           //TODO:(cont.) A: do we need that? and B: it currently is not.
-                           //
-   
                            //notify the event-bus
-                           raiseEvent<TriggerEvent>(m,1.0f);
+                           raiseEvent<trigger_event>(m,m_timeStep);
                            //notify both the trigger and triggerer
                            //TODO:(Developer-The-Great): the triggerer and trigger should probably received this event
                            //TODO:(cont.) through the event bus, we should probably create a filterable system here to

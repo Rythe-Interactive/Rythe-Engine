@@ -1,0 +1,13 @@
+.. _exhale_define_bindings_8hpp_1a9e6afb995ad706dc88e250606c0370e8:
+
+Define SV_SCENEDEPTH
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_SCENEDEPTH

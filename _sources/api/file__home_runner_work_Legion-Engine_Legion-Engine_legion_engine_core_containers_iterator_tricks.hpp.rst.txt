@@ -43,6 +43,8 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_hashed_sparse_set.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_map.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_artifact_cache.cpp`
@@ -56,29 +58,29 @@ Namespaces
 ----------
 
 
-- :ref:`namespace_legion__core__iterator`
+- :ref:`namespace_legion__core`
 
 
 Classes
 -------
 
 
-- :ref:`exhale_struct_structlegion_1_1core_1_1iterator_1_1pair__range`
+- :ref:`exhale_struct_structlegion_1_1core_1_1pair__range`
 
-- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1key__only__iterator`
+- :ref:`exhale_class_classlegion_1_1core_1_1key__only__iterator`
 
-- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1key__value__pair__iterator`
+- :ref:`exhale_class_classlegion_1_1core_1_1key__value__pair__iterator`
 
-- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1keys__only`
+- :ref:`exhale_class_classlegion_1_1core_1_1keys__only`
 
-- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1value__only__iterator`
+- :ref:`exhale_class_classlegion_1_1core_1_1value__only__iterator`
 
-- :ref:`exhale_class_classlegion_1_1core_1_1iterator_1_1values__only`
+- :ref:`exhale_class_classlegion_1_1core_1_1values__only`
 
 
 Functions
 ---------
 
 
-- :ref:`exhale_function_iterator__tricks_8hpp_1ab1378f0ad3a830ee0f93ed9eb99b6827`
+- :ref:`exhale_function_iterator__tricks_8hpp_1afe69b8e14d97a5622bf6df7220b10054`
 

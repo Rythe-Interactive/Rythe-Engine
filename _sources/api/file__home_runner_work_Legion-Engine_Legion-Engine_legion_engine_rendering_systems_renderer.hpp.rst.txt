@@ -29,19 +29,13 @@ Includes
 --------
 
 
-- ``rendering/components/camera.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_camera.hpp`)
+- ``rendering/pipeline/base/pipeline.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipeline.hpp`)
 
-- ``rendering/components/light.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_light.hpp`)
+- ``rendering/pipeline/default/defaultpipeline.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_defaultpipeline.hpp`)
 
-- ``rendering/components/renderable.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp`)
+- ``rendering/systems/renderer.inl`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_renderer.inl`)
 
-- ``rendering/data/model.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_model.hpp`)
-
-- ``rendering/data/shader.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.hpp`)
-
-- ``rendering/debugrendering.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_debugrendering.hpp`)
-
-- ``unordered_set``
+- ``unordered_map``
 
 
 
@@ -50,6 +44,8 @@ Included By
 
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_module_renderingmodule.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_bloom.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_rendering.hpp`
 
@@ -63,8 +59,6 @@ Namespaces
 
 
 - :ref:`namespace_legion__rendering`
-
-- :ref:`namespace_std__literals__chrono_literals`
 
 
 Classes

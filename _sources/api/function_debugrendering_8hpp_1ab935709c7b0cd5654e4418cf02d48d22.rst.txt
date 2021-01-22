@@ -1,0 +1,13 @@
+.. _exhale_function_debugrendering_8hpp_1ab935709c7b0cd5654e4418cf02d48d22:
+
+Function legion::debug::CONCAT_DEFINE(PROJECT_NAME, DrawCube)
+=============================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_debugrendering.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::debug::CONCAT_DEFINE(PROJECT_NAME, DrawCube)

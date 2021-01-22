@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1afe184358c919f2e68ea82f441ebe4577:
+
+Function imgui::nodes::IsEditorHovered
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::IsEditorHovered()

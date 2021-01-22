@@ -57,6 +57,16 @@
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-kernel-hpp"><span class="std std-ref">File kernel.hpp</span></a></p></li>
 </ul>
+<div class="section" id="nested-relationships">
+<h2>Nested Relationships<a class="headerlink" href="#nested-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="nested-types">
+<h3>Nested Types<a class="headerlink" href="#nested-types" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="structlegion_1_1core_1_1compute_1_1_kernel_1_1d2.html#exhale-struct-structlegion-1-1core-1-1compute-1-1-kernel-1-1d2"><span class="std std-ref">Struct Kernel::d2</span></a></p></li>
+<li><p><a class="reference internal" href="structlegion_1_1core_1_1compute_1_1_kernel_1_1d3.html#exhale-struct-structlegion-1-1core-1-1compute-1-1-kernel-1-1d3"><span class="std std-ref">Struct Kernel::d3</span></a></p></li>
+</ul>
+</div>
+</div>
 <div class="section" id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
@@ -64,10 +74,43 @@
 <span id="_CPPv3N6legion4core7compute6KernelE"></span><span id="_CPPv2N6legion4core7compute6KernelE"></span><span id="legion::core::compute::Kernel"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::compute<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">Kernel</code><a class="headerlink" href="#_CPPv4N6legion4core7compute6KernelE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Wraps a cl_kernel, allows you to parametrize an OpenCL kernel without worrying about the CommandQueue. </p>
 <div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="cpp type">
+<dt id="_CPPv4N6legion4core7compute6Kernel9dimensionE">
+<span id="_CPPv3N6legion4core7compute6Kernel9dimensionE"></span><span id="_CPPv2N6legion4core7compute6Kernel9dimensionE"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a1cdf8c0a793fbc74beb75528dea9bff5"></span><em class="property">using </em><code class="sig-name descname">dimension</code> = std::variant&lt;<a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a>, <a class="reference internal" href="#_CPPv4N6legion4core7compute6Kernel2d2E" title="legion::core::compute::Kernel::d2">d2</a>, <a class="reference internal" href="#_CPPv4N6legion4core7compute6Kernel2d3E" title="legion::core::compute::Kernel::d3">d3</a>&gt;<a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel9dimensionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core7compute6Kernel6KernelEP7Program9cl_kernel">
 <span id="_CPPv3N6legion4core7compute6Kernel6KernelEP7Program9cl_kernel"></span><span id="_CPPv2N6legion4core7compute6Kernel6KernelEP7Program9cl_kernel"></span><span id="legion::core::compute::Kernel::Kernel__ProgramP.cl_kernel"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a6da983d938cff16305f3906f77d101fc"></span><code class="sig-name descname">Kernel</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_program.html#_CPPv4N6legion4core7compute7ProgramE" title="legion::core::compute::Program">Program</a>*, cl_kernel<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel6KernelEP7Program9cl_kernel" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel6KernelERK6Kernel">
+<span id="_CPPv3N6legion4core7compute6Kernel6KernelERK6Kernel"></span><span id="_CPPv2N6legion4core7compute6Kernel6KernelERK6Kernel"></span><span id="legion::core::compute::Kernel::Kernel__KernelCR"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a38b274b944570e20f4ea87b63ecf0b12"></span><code class="sig-name descname">Kernel</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core7compute6Kernel6KernelERK6Kernel" title="legion::core::compute::Kernel::Kernel">Kernel</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel6KernelERK6Kernel" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel6KernelERR6Kernel">
+<span id="_CPPv3N6legion4core7compute6Kernel6KernelERR6Kernel"></span><span id="_CPPv2N6legion4core7compute6Kernel6KernelERR6Kernel"></span><span id="legion::core::compute::Kernel::Kernel__KernelRR"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1ad1cb8e81db7023e6514434ba6764d295"></span><code class="sig-name descname">Kernel</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core7compute6Kernel6KernelERR6Kernel" title="legion::core::compute::Kernel::Kernel">Kernel</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel6KernelERR6Kernel" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6KernelaSERK6Kernel">
+<span id="_CPPv3N6legion4core7compute6KernelaSERK6Kernel"></span><span id="_CPPv2N6legion4core7compute6KernelaSERK6Kernel"></span><span id="legion::core::compute::Kernel::assign-operator__KernelCR"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a15bd32fd0b2fa611aae9246e84521934"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6KernelaSERK6Kernel" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6KernelaSERR6Kernel">
+<span id="_CPPv3N6legion4core7compute6KernelaSERR6Kernel"></span><span id="_CPPv2N6legion4core7compute6KernelaSERR6Kernel"></span><span id="legion::core::compute::Kernel::assign-operator__KernelRR"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a6f6cef6296e0b5609c1a403014182cb6"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;&amp;<em>other</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core7compute6KernelaSERR6Kernel" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6KernelD0Ev">
+<span id="_CPPv3N6legion4core7compute6KernelD0Ev"></span><span id="_CPPv2N6legion4core7compute6KernelD0Ev"></span><span id="legion::core::compute::Kernel::~Kernel"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a88d1cec688bbae8d9ba7aa3d89e2d163"></span><code class="sig-name descname">~Kernel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6KernelD0Ev" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -77,10 +120,20 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core7compute6Kernel6globalE9size_type">
-<span id="_CPPv3N6legion4core7compute6Kernel6globalE9size_type"></span><span id="_CPPv2N6legion4core7compute6Kernel6globalE9size_type"></span><span id="legion::core::compute::Kernel::global__size_type"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1ad88940e05790ed9ab629427265b76d34"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">global</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel6globalE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion4core7compute6Kernel6globalE9dimension">
+<span id="_CPPv3N6legion4core7compute6Kernel6globalE9dimension"></span><span id="_CPPv2N6legion4core7compute6Kernel6globalE9dimension"></span><span id="legion::core::compute::Kernel::global__dimension"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1aea5d8371449b9cfefae4b1afdbe16af0"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">global</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core7compute6Kernel9dimensionE" title="legion::core::compute::Kernel::dimension">dimension</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel6globalE9dimension" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Determines the “Global Work Size”, aka how many Kernels should run in total This number should match your input arrays (but not exceed it!) </p>
 </dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel6globalE9size_type9size_type">
+<span id="_CPPv3N6legion4core7compute6Kernel6globalE9size_type9size_type"></span><span id="_CPPv2N6legion4core7compute6Kernel6globalE9size_type9size_type"></span><span id="legion::core::compute::Kernel::global__size_type.size_type"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1ad1f50933a1cb9bac79ccd3aabe361e88"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">global</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a>, <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel6globalE9size_type9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel6globalE9size_type9size_type9size_type">
+<span id="_CPPv3N6legion4core7compute6Kernel6globalE9size_type9size_type9size_type"></span><span id="_CPPv2N6legion4core7compute6Kernel6globalE9size_type9size_type9size_type"></span><span id="legion::core::compute::Kernel::global__size_type.size_type.size_type"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a022346122cd43258c74ac02021a901e3"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">global</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a>, <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a>, <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel6globalE9size_type9size_type9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core7compute6Kernel16buildBufferNamesEv">
@@ -98,7 +151,7 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core7compute6Kernel13readWriteModeE11buffer_type">
-<span id="_CPPv3N6legion4core7compute6Kernel13readWriteModeE11buffer_type"></span><span id="_CPPv2N6legion4core7compute6Kernel13readWriteModeE11buffer_type"></span><span id="legion::core::compute::Kernel::readWriteMode__buffer_type"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a876d25992e6d9c2b05afb958a9d48426"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">readWriteMode</code><span class="sig-paren">(</span><a class="reference internal" href="enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0.html#_CPPv4N6legion4core7compute11buffer_typeE" title="legion::core::compute::buffer_type">buffer_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel13readWriteModeE11buffer_type" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion4core7compute6Kernel13readWriteModeE11buffer_type"></span><span id="_CPPv2N6legion4core7compute6Kernel13readWriteModeE11buffer_type"></span><span id="legion::core::compute::Kernel::readWriteMode__buffer_type"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a876d25992e6d9c2b05afb958a9d48426"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">readWriteMode</code><span class="sig-paren">(</span><a class="reference internal" href="enum_core_2compute_2buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0.html#_CPPv4N6legion4core7compute11buffer_typeE" title="legion::core::compute::buffer_type">buffer_type</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel13readWriteModeE11buffer_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Sets the modus operandi for Read-Write Buffers: </p>
 <p><ul class="simple">
 <li><p>if you set read_write_mode to READ_BUFFER the next Read-Write <a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#classlegion_1_1core_1_1compute_1_1_buffer"><span class="std std-ref">Buffer</span></a> will be read</p></li>
@@ -179,20 +232,86 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core7compute6Kernel17setAndEnqueBufferE6Buffer10block_mode">
-<span id="_CPPv3N6legion4core7compute6Kernel17setAndEnqueBufferE6Buffer10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel17setAndEnqueBufferE6Buffer10block_mode"></span><span id="legion::core::compute::Kernel::setAndEnqueBuffer__Buffer.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a950e5b31b996d4e5668bf9ba2092fda9"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setAndEnqueBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel17setAndEnqueBufferE6Buffer10block_mode" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN6legion4core7compute6Kernel12setKernelArgER6KernelP1TRKNSt6stringE">
+<span id="_CPPv3I0EN6legion4core7compute6Kernel12setKernelArgEP1TRKNSt6stringE"></span><span id="_CPPv2I0EN6legion4core7compute6Kernel12setKernelArgEP1TRKNSt6stringE"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1ab9f6c77fe2abc814330ac27068fc9764"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setKernelArg</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core7compute6Kernel12setKernelArgER6KernelP1TRKNSt6stringE" title="legion::core::compute::Kernel::setKernelArg::T">T</a> *<em>value</em>, <em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core7compute6Kernel12setKernelArgER6KernelP1TRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets a <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Parameter that is the same for all invocations of the kernel. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">T</span></code>: The type of the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Argument. </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: A pointer to the value of the kernel Argument. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: The name of the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Argument as it appears in the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a>. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core7compute6Kernel12setKernelArgER6KernelP1T7cl_uint">
+<span id="_CPPv3I0EN6legion4core7compute6Kernel12setKernelArgEP1T7cl_uint"></span><span id="_CPPv2I0EN6legion4core7compute6Kernel12setKernelArgEP1T7cl_uint"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1ae8145150c91189d0aebe5da1400354f6"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setKernelArg</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core7compute6Kernel12setKernelArgER6KernelP1T7cl_uint" title="legion::core::compute::Kernel::setKernelArg::T">T</a> *<em>value</em>, cl_uint <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core7compute6Kernel12setKernelArgER6KernelP1T7cl_uint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets a <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Parameter that is the same for all invocations of the kernel. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">T</span></code>: The type of the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Argument. </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: A pointer to the value of the kernel Argument. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: The index of the parameter. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel12setKernelArgEPv9size_typeRKNSt6stringE">
+<span id="_CPPv3N6legion4core7compute6Kernel12setKernelArgEPv9size_typeRKNSt6stringE"></span><span id="_CPPv2N6legion4core7compute6Kernel12setKernelArgEPv9size_typeRKNSt6stringE"></span><span id="legion::core::compute::Kernel::setKernelArg__voidP.size_type.ssCR"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a7d7f054f90787b396af1a2b3740db640"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setKernelArg</code><span class="sig-paren">(</span>void *<em>value</em>, <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>size</em>, <em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel12setKernelArgEPv9size_typeRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>See above. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value of the parameter. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: Sizeof of the parameter. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: The name of the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a> Argument as it appears in the <a class="reference internal" href="#classlegion_1_1core_1_1compute_1_1_kernel"><span class="std std-ref">Kernel</span></a>. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel12setKernelArgEPv9size_type7cl_uint">
+<span id="_CPPv3N6legion4core7compute6Kernel12setKernelArgEPv9size_type7cl_uint"></span><span id="_CPPv2N6legion4core7compute6Kernel12setKernelArgEPv9size_type7cl_uint"></span><span id="legion::core::compute::Kernel::setKernelArg__voidP.size_type.cl_uint"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a6e3fd315f57c59b6d89ffc72a2004f60"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setKernelArg</code><span class="sig-paren">(</span>void *<em>value</em>, <a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>size</em>, cl_uint <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel12setKernelArgEPv9size_type7cl_uint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>See above. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Value of the parameter. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: Sizeof of the parameter. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: The index of the parameter. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core7compute6Kernel19setAndEnqueueBufferE6Buffer10block_mode">
+<span id="_CPPv3N6legion4core7compute6Kernel19setAndEnqueueBufferE6Buffer10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel19setAndEnqueueBufferE6Buffer10block_mode"></span><span id="legion::core::compute::Kernel::setAndEnqueueBuffer__Buffer.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a0eb0a97ac65a34fae028581450d365ca"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setAndEnqueueBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel19setAndEnqueueBufferE6Buffer10block_mode" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>same as informing the kernel about a buffer and then enqueueing it </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core7compute6Kernel17setAndEnqueBufferE6BufferRKNSt6stringE10block_mode">
-<span id="_CPPv3N6legion4core7compute6Kernel17setAndEnqueBufferE6BufferRKNSt6stringE10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel17setAndEnqueBufferE6BufferRKNSt6stringE10block_mode"></span><span id="legion::core::compute::Kernel::setAndEnqueBuffer__Buffer.ssCR.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a662c463134f59cf8745d08a4868d5003"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setAndEnqueBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, <em class="property">const</em> std::string&amp;, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel17setAndEnqueBufferE6BufferRKNSt6stringE10block_mode" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion4core7compute6Kernel19setAndEnqueueBufferE6BufferRKNSt6stringE10block_mode">
+<span id="_CPPv3N6legion4core7compute6Kernel19setAndEnqueueBufferE6BufferRKNSt6stringE10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel19setAndEnqueueBufferE6BufferRKNSt6stringE10block_mode"></span><span id="legion::core::compute::Kernel::setAndEnqueueBuffer__Buffer.ssCR.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1ae197e170ce37ebca6b28fbba1ec62cfa"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setAndEnqueueBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, <em class="property">const</em> std::string&amp;, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel19setAndEnqueueBufferE6BufferRKNSt6stringE10block_mode" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>same as informing the kernel about a buffer and then enqueueing it </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core7compute6Kernel17setAndEnqueBufferE6Buffer7cl_uint10block_mode">
-<span id="_CPPv3N6legion4core7compute6Kernel17setAndEnqueBufferE6Buffer7cl_uint10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel17setAndEnqueBufferE6Buffer7cl_uint10block_mode"></span><span id="legion::core::compute::Kernel::setAndEnqueBuffer__Buffer.cl_uint.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a389b8d23c8992ff2ad38ecd711d61b74"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setAndEnqueBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, cl_uint <em>index</em>, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel17setAndEnqueBufferE6Buffer7cl_uint10block_mode" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion4core7compute6Kernel19setAndEnqueueBufferE6Buffer7cl_uint10block_mode">
+<span id="_CPPv3N6legion4core7compute6Kernel19setAndEnqueueBufferE6Buffer7cl_uint10block_mode"></span><span id="_CPPv2N6legion4core7compute6Kernel19setAndEnqueueBufferE6Buffer7cl_uint10block_mode"></span><span id="legion::core::compute::Kernel::setAndEnqueueBuffer__Buffer.cl_uint.block_mode"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1a2c7582d8b49426e0445fef72e53d415a"></span><a class="reference internal" href="#_CPPv4N6legion4core7compute6KernelE" title="legion::core::compute::Kernel">Kernel</a> &amp;<code class="sig-name descname">setAndEnqueueBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1compute_1_1_buffer.html#_CPPv4N6legion4core7compute6BufferE" title="legion::core::compute::Buffer">Buffer</a> <em>buffer</em>, cl_uint <em>index</em>, <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a> <em>blocking</em> = <a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_modeE" title="legion::core::compute::block_mode">block_mode</a>::<a class="reference internal" href="enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede.html#_CPPv4N6legion4core7compute10block_mode8BLOCKINGE" title="legion::core::compute::block_mode::BLOCKING">BLOCKING</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel19setAndEnqueueBufferE6Buffer7cl_uint10block_mode" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>same as informing the kernel about a buffer and then enqueueing it </p>
 </dd></dl>
 
@@ -230,11 +349,52 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4NK6legion4core7compute6Kernel14getMaxWorkSizeEv">
-<span id="_CPPv3NK6legion4core7compute6Kernel14getMaxWorkSizeEv"></span><span id="_CPPv2NK6legion4core7compute6Kernel14getMaxWorkSizeEv"></span><span id="legion::core::compute::Kernel::getMaxWorkSizeC"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1aaa8edec4dd32d130ad3e77b05e290f5c"></span>size_t <code class="sig-name descname">getMaxWorkSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core7compute6Kernel14getMaxWorkSizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK6legion4core7compute6Kernel14getMaxWorkSizeEv"></span><span id="_CPPv2NK6legion4core7compute6Kernel14getMaxWorkSizeEv"></span><span id="legion::core::compute::Kernel::getMaxWorkSizeC"></span><span class="target" id="classlegion_1_1core_1_1compute_1_1_kernel_1aaa8edec4dd32d130ad3e77b05e290f5c"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">getMaxWorkSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core7compute6Kernel14getMaxWorkSizeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Gets the maximum parallel work size for this kernel. </p>
 </dd></dl>
 
 </div>
+<dl class="cpp struct">
+<dt id="_CPPv4N6legion4core7compute6Kernel2d2E">
+<span id="_CPPv3N6legion4core7compute6Kernel2d2E"></span><span id="_CPPv2N6legion4core7compute6Kernel2d2E"></span><span id="legion::core::compute::Kernel::d2"></span><span class="target" id="structlegion_1_1core_1_1compute_1_1_kernel_1_1d2"></span><em class="property">struct </em><code class="sig-name descname">d2</code><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel2d2E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core7compute6Kernel2d22s0E">
+<span id="_CPPv3N6legion4core7compute6Kernel2d22s0E"></span><span id="_CPPv2N6legion4core7compute6Kernel2d22s0E"></span><span id="legion::core::compute::Kernel::d2::s0__size_type"></span><span class="target" id="structlegion_1_1core_1_1compute_1_1_kernel_1_1d2_1aea9ccab971681b3c29f232f8b3275b8e"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">s0</code><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel2d22s0E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core7compute6Kernel2d22s1E">
+<span id="_CPPv3N6legion4core7compute6Kernel2d22s1E"></span><span id="_CPPv2N6legion4core7compute6Kernel2d22s1E"></span><span id="legion::core::compute::Kernel::d2::s1__size_type"></span><span class="target" id="structlegion_1_1core_1_1compute_1_1_kernel_1_1d2_1a660f4fe8a2a7c816dc7482327559dde2"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">s1</code><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel2d22s1E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt id="_CPPv4N6legion4core7compute6Kernel2d3E">
+<span id="_CPPv3N6legion4core7compute6Kernel2d3E"></span><span id="_CPPv2N6legion4core7compute6Kernel2d3E"></span><span id="legion::core::compute::Kernel::d3"></span><span class="target" id="structlegion_1_1core_1_1compute_1_1_kernel_1_1d3"></span><em class="property">struct </em><code class="sig-name descname">d3</code><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel2d3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core7compute6Kernel2d32s0E">
+<span id="_CPPv3N6legion4core7compute6Kernel2d32s0E"></span><span id="_CPPv2N6legion4core7compute6Kernel2d32s0E"></span><span id="legion::core::compute::Kernel::d3::s0__size_type"></span><span class="target" id="structlegion_1_1core_1_1compute_1_1_kernel_1_1d3_1a24cf0c8a1965106b2e9247979356592f"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">s0</code><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel2d32s0E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core7compute6Kernel2d32s1E">
+<span id="_CPPv3N6legion4core7compute6Kernel2d32s1E"></span><span id="_CPPv2N6legion4core7compute6Kernel2d32s1E"></span><span id="legion::core::compute::Kernel::d3::s1__size_type"></span><span class="target" id="structlegion_1_1core_1_1compute_1_1_kernel_1_1d3_1a22d50986a16d9e2f8acf6468f4fb04cc"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">s1</code><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel2d32s1E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core7compute6Kernel2d32s3E">
+<span id="_CPPv3N6legion4core7compute6Kernel2d32s3E"></span><span id="_CPPv2N6legion4core7compute6Kernel2d32s3E"></span><span id="legion::core::compute::Kernel::d3::s3__size_type"></span><span class="target" id="structlegion_1_1core_1_1compute_1_1_kernel_1_1d3_1adf148dd0850d7dab5e2ff0de57185d82"></span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">s3</code><a class="headerlink" href="#_CPPv4N6legion4core7compute6Kernel2d32s3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -250,6 +410,10 @@
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Class Kernel</a><ul>
+<li><a class="reference internal" href="#nested-relationships">Nested Relationships</a><ul>
+<li><a class="reference internal" href="#nested-types">Nested Types</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
 </ul>
 </li>

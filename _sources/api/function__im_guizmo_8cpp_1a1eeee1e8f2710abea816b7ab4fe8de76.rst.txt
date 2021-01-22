@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a1eeee1e8f2710abea816b7ab4fe8de76:
+
+Function imgui::gizmo::HandleAndDrawLocalBounds
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::HandleAndDrawLocalBounds(const float *, matrix_t *, const float *, OPERATION)

@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a7f02eb7f42865f8a7e6ff710f14cb838:
+
+Function imgui::gizmo::Cross(const vec_t&, const vec_t&)
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::Cross(const vec_t&, const vec_t&)

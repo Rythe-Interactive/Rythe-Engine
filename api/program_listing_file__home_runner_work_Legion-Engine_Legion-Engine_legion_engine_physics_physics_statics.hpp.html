@@ -51,6 +51,8 @@
 <span class="cp">#include</span> <span class="cpf">&lt;physics/colliders/convexcollider.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/data/pointer_encapsulator.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/data/contact_vertex.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;Voro++/voro++.hh&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/debugrendering.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
@@ -79,6 +81,9 @@
                     <span class="n">worldSupportPoint</span> <span class="o">=</span> <span class="n">transformedVert</span><span class="p">;</span>
                 <span class="p">}</span>
             <span class="p">}</span>
+
+
+
         <span class="p">}</span>
 
         <span class="k">static</span> <span class="kt">bool</span> <span class="n">FindSeperatingAxisByExtremePointProjection</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexA</span>
@@ -86,11 +91,12 @@
         <span class="p">{</span>
             <span class="kt">float</span> <span class="n">currentMaximumSeperation</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">lowest</span><span class="p">();</span>
 
-
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">face</span> <span class="p">:</span> <span class="n">convexB</span><span class="o">-&gt;</span><span class="n">GetHalfEdgeFaces</span><span class="p">())</span>
             <span class="p">{</span>
+
+                <span class="c1">//og::debug(&quot;face-&gt;normal {} &quot;, math::to_string( face-&gt;normal));</span>
                 <span class="c1">//get inverse normal</span>
-                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">seperatingAxis</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">seperatingAxis</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">),</span> <span class="mi">0</span><span class="p">));</span>
 
                 <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedPositionB</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">centroid</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
@@ -124,14 +130,13 @@
             <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformA</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformB</span><span class="p">,</span> <span class="n">PointerEncapsulator</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">&gt;&amp;</span> <span class="n">refEdge</span><span class="p">,</span> <span class="n">PointerEncapsulator</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">&gt;&amp;</span> <span class="n">incEdge</span><span class="p">,</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">seperatingAxisFound</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">maximumSeperation</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="kt">float</span> <span class="n">currentMaximumSeperation</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">lowest</span><span class="p">();</span>
+            <span class="kt">float</span> <span class="n">currentMinimumSeperation</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
 
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">positionA</span> <span class="o">=</span> <span class="n">transformA</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
 
             <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="nl">faceA</span> <span class="p">:</span> <span class="n">convexA</span><span class="o">-&gt;</span><span class="n">GetHalfEdgeFaces</span><span class="p">())</span>
             <span class="p">{</span>
                 <span class="c1">//----------------- Get all edges of faceA ------------//</span>
-
                 <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">*&gt;</span> <span class="n">convexAHalfEdges</span><span class="p">;</span>
 
                 <span class="k">auto</span> <span class="n">lambda</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">convexAHalfEdges</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
@@ -144,7 +149,6 @@
                 <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="nl">faceB</span> <span class="p">:</span> <span class="n">convexB</span><span class="o">-&gt;</span><span class="n">GetHalfEdgeFaces</span><span class="p">())</span>
                 <span class="p">{</span>
                     <span class="c1">//----------------- Get all edges of faceB ------------//</span>
-
                     <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">*&gt;</span> <span class="n">convexBHalfEdges</span><span class="p">;</span>
 
                     <span class="k">auto</span> <span class="n">lambda</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">convexBHalfEdges</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
@@ -162,12 +166,12 @@
                             <span class="k">if</span> <span class="p">(</span><span class="n">attemptBuildMinkowskiFace</span><span class="p">(</span><span class="n">edgeA</span><span class="p">,</span> <span class="n">edgeB</span><span class="p">,</span> <span class="n">transformA</span><span class="p">,</span> <span class="n">transformB</span><span class="p">))</span>
                             <span class="p">{</span>
                                 <span class="c1">//get world edge direction</span>
-                                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeADirection</span><span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span>
-                                    <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeADirection</span><span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span>
+                                    <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
 
-                                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeBDirection</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span>
-                                    <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeBDirection</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span>
+                                    <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
                                 <span class="n">edgeADirection</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">edgeADirection</span><span class="p">);</span>
                                 <span class="n">edgeBDirection</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">edgeBDirection</span><span class="p">);</span>
@@ -183,8 +187,8 @@
                                 <span class="n">seperatingAxis</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">seperatingAxis</span><span class="p">);</span>
 
                                 <span class="c1">//get world edge position</span>
-                                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeAtransformedPosition</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-                                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeBtransformedPosition</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeAtransformedPosition</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeBtransformedPosition</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
                                 <span class="c1">//check if its pointing in the right direction</span>
                                 <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">seperatingAxis</span><span class="p">,</span> <span class="n">edgeAtransformedPosition</span> <span class="o">-</span> <span class="n">positionA</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
@@ -195,28 +199,24 @@
                                 <span class="c1">//check if given edges create a seperating axis</span>
                                 <span class="kt">float</span> <span class="n">distance</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">seperatingAxis</span><span class="p">,</span> <span class="n">edgeBtransformedPosition</span> <span class="o">-</span> <span class="n">edgeAtransformedPosition</span><span class="p">);</span>
 
-                                <span class="k">if</span> <span class="p">(</span><span class="n">distance</span> <span class="o">&gt;</span> <span class="n">currentMaximumSeperation</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="p">(</span><span class="n">distance</span> <span class="o">&lt;</span> <span class="n">currentMinimumSeperation</span><span class="p">)</span>
                                 <span class="p">{</span>
                                     <span class="n">refEdge</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">edgeA</span><span class="p">;</span>
                                     <span class="n">incEdge</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">edgeB</span><span class="p">;</span>
 
                                     <span class="n">seperatingAxisFound</span> <span class="o">=</span> <span class="n">seperatingAxis</span><span class="p">;</span>
-                                    <span class="n">currentMaximumSeperation</span> <span class="o">=</span> <span class="n">distance</span><span class="p">;</span>
+                                    <span class="n">currentMinimumSeperation</span> <span class="o">=</span> <span class="n">distance</span><span class="p">;</span>
                                 <span class="p">}</span>
 
-                                <span class="k">if</span> <span class="p">(</span><span class="n">distance</span> <span class="o">&gt;</span> <span class="mf">0.0f</span><span class="p">)</span>
-                                <span class="p">{</span>
-                                    <span class="n">maximumSeperation</span> <span class="o">=</span> <span class="n">currentMaximumSeperation</span><span class="p">;</span>
-                                    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-                                <span class="p">}</span>
                             <span class="p">}</span>
                         <span class="p">}</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
 
-            <span class="n">maximumSeperation</span> <span class="o">=</span> <span class="n">currentMaximumSeperation</span><span class="p">;</span>
-            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="c1">//log::debug(&quot;a id  {}  b id {} combination {} &quot;, std::get&lt;0&gt;(ids), std::get&lt;1&gt;(ids), std::get&lt;2&gt;(ids));</span>
+            <span class="n">maximumSeperation</span> <span class="o">=</span> <span class="n">currentMinimumSeperation</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">currentMinimumSeperation</span> <span class="o">&gt;</span> <span class="mf">0.0f</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="c1">//---------------------------------------------------------- Polyhedron Clipping ----------------------------------------------------------------------------//</span>
@@ -289,10 +289,6 @@
                         <span class="n">outputList</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ContactVertex</span><span class="p">(</span><span class="n">intersectionPoint</span><span class="p">,</span> <span class="n">label</span><span class="p">));</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
-
-
-
-
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -395,15 +391,64 @@
 
             <span class="kt">float</span> <span class="n">t</span> <span class="o">=</span> <span class="n">FindLineToPointInterpolant</span><span class="p">(</span><span class="n">startPoint</span><span class="p">,</span> <span class="n">endPoint</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">);</span>
 
-            <span class="n">intersectionPoint</span> <span class="o">=</span> <span class="n">startPoint</span> <span class="o">+</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span><span class="p">;</span>
+            <span class="n">intersectionPoint</span> <span class="o">=</span> <span class="n">startPoint</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="n">t</span><span class="p">;</span>
 
             <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
         <span class="p">}</span>
 
+        <span class="k">static</span> <span class="kt">bool</span> <span class="n">FindLineToPlaneIntersectionPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">startPoint</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">endPoint</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">intersectionPoint</span><span class="p">,</span><span class="kt">float</span><span class="o">&amp;</span> <span class="n">interpolant</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">direction</span> <span class="o">=</span> <span class="n">endPoint</span> <span class="o">-</span> <span class="n">startPoint</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">epsilonEqual</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">),</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()))</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">interpolant</span> <span class="o">=</span> <span class="n">FindLineToPointInterpolant</span><span class="p">(</span><span class="n">startPoint</span><span class="p">,</span> <span class="n">endPoint</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">);</span>
+
+
+            <span class="n">intersectionPoint</span> <span class="o">=</span> <span class="n">startPoint</span> <span class="o">+</span> <span class="n">direction</span> <span class="o">*</span> <span class="n">interpolant</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+
         <span class="k">static</span> <span class="kt">float</span> <span class="n">FindLineToPointInterpolant</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">startPoint</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">endPoint</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span><span class="p">,</span>
             <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">planePosition</span> <span class="o">-</span> <span class="n">startPoint</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">endPoint</span> <span class="o">-</span> <span class="n">startPoint</span><span class="p">),</span> <span class="n">planeNormal</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">planePosition</span> <span class="o">-</span> <span class="n">startPoint</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">endPoint</span> <span class="o">-</span> <span class="n">startPoint</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;&gt;</span> <span class="n">GenerateVoronoi</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">points</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">xRange</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">yRange</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">zRange</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">containerResolution</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">xPeriodic</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">yPeriodic</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">zPeriodic</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="kt">int</span> <span class="n">initMem</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">GenerateVoronoi</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">xRange</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">xRange</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="n">yRange</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">yRange</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="n">zRange</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">zRange</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="n">containerResolution</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">containerResolution</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="n">containerResolution</span><span class="p">.</span><span class="n">z</span><span class="p">,</span><span class="n">xPeriodic</span><span class="p">,</span><span class="n">yPeriodic</span><span class="p">,</span><span class="n">zPeriodic</span><span class="p">,</span><span class="n">initMem</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;&gt;</span> <span class="n">GenerateVoronoi</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">points</span><span class="p">,</span><span class="k">const</span> <span class="kt">double</span> <span class="n">xMin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="n">xMax</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="n">yMin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="n">yMax</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="n">zMin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="n">zMax</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span><span class="k">const</span> <span class="kt">double</span> <span class="n">conResX</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span><span class="k">const</span> <span class="kt">double</span> <span class="n">conResY</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="n">conResZ</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span><span class="kt">bool</span> <span class="n">xPeriodic</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span><span class="kt">bool</span> <span class="n">yPeriodic</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span><span class="kt">bool</span> <span class="n">zPeriodic</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span><span class="kt">int</span> <span class="n">initMem</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">voro</span><span class="o">::</span><span class="n">container</span> <span class="n">con</span><span class="p">(</span><span class="n">xMin</span><span class="p">,</span> <span class="n">xMax</span><span class="p">,</span> <span class="n">yMin</span><span class="p">,</span> <span class="n">yMax</span><span class="p">,</span> <span class="n">zMin</span><span class="p">,</span> <span class="n">zMax</span><span class="p">,</span> <span class="n">conResX</span><span class="p">,</span> <span class="n">conResY</span><span class="p">,</span> <span class="n">conResZ</span><span class="p">,</span> <span class="n">xPeriodic</span><span class="p">,</span> <span class="n">yPeriodic</span><span class="p">,</span> <span class="n">zPeriodic</span><span class="p">,</span> <span class="n">initMem</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nf">GenerateVoronoi</span><span class="p">(</span><span class="n">con</span><span class="p">,</span><span class="n">points</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;&gt;</span> <span class="n">GenerateVoronoi</span><span class="p">(</span><span class="n">voro</span><span class="o">::</span><span class="n">container</span><span class="o">&amp;</span> <span class="n">con</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">points</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="nl">point</span> <span class="p">:</span> <span class="n">points</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">con</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">point</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="n">point</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="n">point</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+                <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">GenerateVoronoi</span><span class="p">(</span><span class="n">con</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;&gt;</span> <span class="n">GenerateVoronoi</span><span class="p">(</span><span class="n">voro</span><span class="o">::</span><span class="n">container</span><span class="o">&amp;</span> <span class="n">con</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">con</span><span class="p">.</span><span class="n">draw_cells_json</span><span class="p">(</span><span class="s">&quot;assets/voronoi/output/cells.json&quot;</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">f</span><span class="p">(</span><span class="s">&quot;assets/voronoi/output/cells.json&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">serialization</span><span class="o">::</span><span class="n">SerializationUtil</span><span class="o">::</span><span class="n">JSONDeserialize</span><span class="o">&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
         <span class="p">}</span>
 
     <span class="k">private</span><span class="o">:</span>
@@ -413,21 +458,26 @@
         <span class="p">{</span>
             <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedA1</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">getLocalNormal</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
             <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedA2</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">getLocalNormal</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedEdgeDirectionA</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">getLocalEdgeDirection</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
 
             <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedB1</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">getLocalNormal</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
             <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedB2</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">getLocalNormal</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedEdgeDirectionB</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">getLocalEdgeDirection</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
 
-            <span class="k">return</span> <span class="nf">isMinkowskiFace</span><span class="p">(</span><span class="n">transformedA1</span><span class="p">,</span> <span class="n">transformedA2</span><span class="p">,</span> <span class="o">-</span><span class="n">transformedB1</span><span class="p">,</span> <span class="o">-</span><span class="n">transformedB2</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">positionA</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="nf">isMinkowskiFace</span><span class="p">(</span><span class="n">transformedA1</span><span class="p">,</span> <span class="n">transformedA2</span><span class="p">,</span> <span class="o">-</span><span class="n">transformedB1</span><span class="p">,</span> <span class="o">-</span><span class="n">transformedB2</span>
+                <span class="p">,</span> <span class="n">transformedEdgeDirectionA</span><span class="p">,</span> <span class="n">transformedEdgeDirectionB</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="k">static</span> <span class="kt">bool</span> <span class="n">isMinkowskiFace</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedA1</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedA2</span><span class="p">,</span>
-            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedB1</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedB2</span><span class="p">)</span>
+        <span class="k">static</span> <span class="kt">bool</span> <span class="n">isMinkowskiFace</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">transformedA1</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">transformedA2</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">transformedB1</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">transformedB2</span>
+            <span class="p">,</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeANormal</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeBNormal</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="c1">//------------------------ Check if normals created by arcA seperate normals of B --------------------------------------//</span>
-
-            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">planeANormal</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">transformedA1</span><span class="p">,</span> <span class="n">transformedA2</span><span class="p">);</span>
-
+            <span class="c1">//CBA</span>
             <span class="kt">float</span> <span class="n">planeADotB1</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">planeANormal</span><span class="p">,</span> <span class="n">transformedB1</span><span class="p">);</span>
+            <span class="c1">//DBA</span>
             <span class="kt">float</span> <span class="n">planeADotB2</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">planeANormal</span><span class="p">,</span> <span class="n">transformedB2</span><span class="p">);</span>
 
             <span class="kt">float</span> <span class="n">dotMultiplyResultA</span> <span class="o">=</span>
@@ -440,9 +490,9 @@
 
             <span class="c1">//------------------------ Check if normals created by arcB seperate normals of A --------------------------------------//</span>
 
-            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">planeBNormal</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">transformedB1</span><span class="p">,</span> <span class="n">transformedB2</span><span class="p">);</span>
-
+            <span class="c1">//ADC</span>
             <span class="kt">float</span> <span class="n">planeBDotA1</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">planeBNormal</span><span class="p">,</span> <span class="n">transformedA1</span><span class="p">);</span>
+            <span class="c1">//BDC</span>
             <span class="kt">float</span> <span class="n">planeBDotA2</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">planeBNormal</span><span class="p">,</span> <span class="n">transformedA2</span><span class="p">);</span>
 
             <span class="kt">float</span>  <span class="n">dotMultiplyResultB</span> <span class="o">=</span> <span class="n">planeBDotA1</span> <span class="o">*</span> <span class="n">planeBDotA2</span><span class="p">;</span>
@@ -454,14 +504,9 @@
 
             <span class="c1">//------------------------ Check if arcA and arcB are in the same hemisphere --------------------------------------------//</span>
 
-            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">abNormal</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">transformedA2</span><span class="p">,</span> <span class="n">transformedB2</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">dotMultiplyResultAB</span> <span class="o">=</span> <span class="n">planeADotB1</span> <span class="o">*</span> <span class="n">planeBDotA2</span><span class="p">;</span>
 
-            <span class="kt">float</span> <span class="n">planeABDotA1</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">abNormal</span><span class="p">,</span> <span class="n">transformedA1</span><span class="p">);</span>
-            <span class="kt">float</span> <span class="n">planeABDotB1</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">abNormal</span><span class="p">,</span> <span class="n">transformedB1</span><span class="p">);</span>
-
-            <span class="kt">float</span> <span class="n">dotMultiplyResultAB</span> <span class="o">=</span> <span class="n">planeABDotA1</span> <span class="o">*</span> <span class="n">planeABDotB1</span><span class="p">;</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">dotMultiplyResultAB</span> <span class="o">&lt;</span> <span class="mf">0.0f</span> <span class="o">||</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilonEqual</span><span class="p">(</span><span class="n">dotMultiplyResultAB</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">planeADotB1</span>  <span class="o">*</span> <span class="n">planeBDotA2</span>  <span class="o">&lt;</span> <span class="mf">0.0f</span> <span class="o">||</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilonEqual</span><span class="p">(</span><span class="n">dotMultiplyResultAB</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()))</span>
             <span class="p">{</span>
                 <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
             <span class="p">}</span>

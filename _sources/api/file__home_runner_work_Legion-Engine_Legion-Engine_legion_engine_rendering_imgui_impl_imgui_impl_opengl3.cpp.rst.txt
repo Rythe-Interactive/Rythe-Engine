@@ -1,0 +1,103 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp:
+
+File imgui_impl_opengl3.cpp
+===========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_impl_opengl3.cpp``)
+------------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``IMGUI_IMPL_OPENGL_LOADER_CUSTOM``
+
+- ``imgui/backends/imgui_impl_opengl3.h``
+
+- ``imgui/imgui.h``
+
+- ``stdint.h``
+
+- ``stdio.h``
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1a22f46b7ed68c385f411c4b2dc25c50e8`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1a11601584c987e4aeae774985e1177d74`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1ab27f12289d6fe9fcd412f92af280b398`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1a3dc4f80532d710de41d4075214eb363e`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1a605e340c346791d9c9e927add2392d0e`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1a539aaad4aa185838297fb13b2409c405`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1a0475f257dc97d1daceee89cb4b19744d`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1a900e74add4e56e74f97a210eb329aa91`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1ad215190229f4f300593911aa7b3821de`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1a328d27e0d40312d064adbc45c0cf240b`
+
+- :ref:`exhale_function_imgui__impl__opengl3_8cpp_1acbd53376e6135ad71e7bcd9879278e37`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1a7f9b5a4489b250ca33fd1fcca893a48f`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1a0748bbfa60bb086a8e23948206c68bbc`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1a0bdf58ccf08ae86319ad30ba137fe19e`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1af9a80727c42ddc4bab83ad22952a8755`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1ad002357bcd4fdc132ccd39ace695ccd4`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1a26abda8950dc2d4adf6e2a5171c2445a`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1a76694bfc1e27296421f914cfe8246635`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1a8bd0b9474bb0923002b18894944e45fe`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1a080be4f3f916ccafcbe99a70cba44e08`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1ae616a8d5b513f4effd4c43dce2dfd941`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1ae1b73cef0bc055e139fff6b0e1768a4f`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1a137cb22f50258ade706c87cd18d7da60`
+
+- :ref:`exhale_variable_imgui__impl__opengl3_8cpp_1a5010daecbe2e956c15b02203ed7cdfd3`
+

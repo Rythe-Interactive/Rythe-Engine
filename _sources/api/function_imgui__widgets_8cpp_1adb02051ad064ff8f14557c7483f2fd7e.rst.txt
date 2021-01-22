@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1adb02051ad064ff8f14557c7483f2fd7e:
+
+Template Function DataTypeClampT
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: DataTypeClampT(T *, const T *, const T *)

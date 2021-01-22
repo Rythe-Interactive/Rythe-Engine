@@ -1,0 +1,28 @@
+
+.. _namespace_imgui:
+
+Namespace imgui
+===============
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_imgui__base`
+
+- :ref:`namespace_imgui__filebrowser`
+
+- :ref:`namespace_imgui__gizmo`
+
+- :ref:`namespace_imgui__nodes`
+
+- :ref:`namespace_imgui__sequencer`

@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class component_pool &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class component_pool_base" href="classlegion_1_1core_1_1ecs_1_1component__pool__base.html" />
+    <link rel="prev" title="Class component_handle_base" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1ecs_1_1component__pool__base.html" title="Class component_pool_base"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" title="Class component_handle_base"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class component_pool</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-component-pool">
+<span id="exhale-class-classlegion-1-1core-1-1ecs-1-1component-pool"></span><h1>Template Class component_pool<a class="headerlink" href="#template-class-component-pool" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_pool.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-ecs-component-pool-hpp"><span class="std std-ref">File component_pool.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::core::ecs::component_pool_base</span></code> (<a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__pool__base.html#exhale-class-classlegion-1-1core-1-1ecs-1-1component-pool-base"><span class="std std-ref">Class component_pool_base</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I0EN6legion4core3ecs14component_poolE">
+<span id="_CPPv3I0EN6legion4core3ecs14component_poolE"></span><span id="_CPPv2I0EN6legion4core3ecs14component_poolE"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::ecs<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">component_pool</code> : <em class="property">public</em> legion::core::ecs::<a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__pool__base.html#_CPPv4N6legion4core3ecs19component_pool_baseE" title="legion::core::ecs::component_pool_base">component_pool_base</a><a class="headerlink" href="#_CPPv4I0EN6legion4core3ecs14component_poolE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe container to store a component family in. </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of component. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool14component_poolEv">
+<span id="_CPPv3N6legion4core3ecs14component_pool14component_poolEv"></span><span id="_CPPv2N6legion4core3ecs14component_pool14component_poolEv"></span><span id="legion::core::ecs::component_pool::component_pool"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a2b39a9ed3043d1ed0ab0b108dd53979a"></span><code class="sig-name descname">component_pool</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool14component_poolEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool14component_poolEP11EcsRegistryPN6events8EventBusE">
+<span id="_CPPv3N6legion4core3ecs14component_pool14component_poolEP11EcsRegistryPN6events8EventBusE"></span><span id="_CPPv2N6legion4core3ecs14component_pool14component_poolEP11EcsRegistryPN6events8EventBusE"></span><span id="legion::core::ecs::component_pool::component_pool__EcsRegistryP.events::EventBusP"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a32c84fae396c78eca881c0478de25417"></span><code class="sig-name descname">component_pool</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1_ecs_registry.html#_CPPv4N6legion4core3ecs11EcsRegistryE" title="legion::core::ecs::EcsRegistry">EcsRegistry</a> *<em>registry</em>, events::<a class="reference internal" href="classlegion_1_1core_1_1events_1_1_event_bus.html#_CPPv4N6legion4core6events8EventBusE" title="legion::core::events::EventBus">EventBus</a> *<em>eventBus</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool14component_poolEP11EcsRegistryPN6events8EventBusE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool9serializeERN6cereal17JSONOutputArchiveE7id_type">
+<span id="_CPPv3N6legion4core3ecs14component_pool9serializeERN6cereal17JSONOutputArchiveE7id_type"></span><span id="_CPPv2N6legion4core3ecs14component_pool9serializeERN6cereal17JSONOutputArchiveE7id_type"></span><span id="legion::core::ecs::component_pool::serialize__cereal::JSONOutputArchiveR.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a9342e3bd3455f419695dde5c49e7164f"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span>cereal::JSONOutputArchive &amp;<em>oarchive</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool9serializeERN6cereal17JSONOutputArchiveE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool9serializeERN6cereal19BinaryOutputArchiveE7id_type">
+<span id="_CPPv3N6legion4core3ecs14component_pool9serializeERN6cereal19BinaryOutputArchiveE7id_type"></span><span id="_CPPv2N6legion4core3ecs14component_pool9serializeERN6cereal19BinaryOutputArchiveE7id_type"></span><span id="legion::core::ecs::component_pool::serialize__cereal::BinaryOutputArchiveR.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1acff3a3eaddd182eec0dd321284b9218a"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span>cereal::BinaryOutputArchive &amp;<em>oarchive</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool9serializeERN6cereal19BinaryOutputArchiveE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool9serializeERN6cereal16JSONInputArchiveE7id_type">
+<span id="_CPPv3N6legion4core3ecs14component_pool9serializeERN6cereal16JSONInputArchiveE7id_type"></span><span id="_CPPv2N6legion4core3ecs14component_pool9serializeERN6cereal16JSONInputArchiveE7id_type"></span><span id="legion::core::ecs::component_pool::serialize__cereal::JSONInputArchiveR.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a24353a465b5ab6bb599793765d6256c8"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span>cereal::JSONInputArchive &amp;<em>oarchive</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool9serializeERN6cereal16JSONInputArchiveE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool9serializeERN6cereal18BinaryInputArchiveE7id_type">
+<span id="_CPPv3N6legion4core3ecs14component_pool9serializeERN6cereal18BinaryInputArchiveE7id_type"></span><span id="_CPPv2N6legion4core3ecs14component_pool9serializeERN6cereal18BinaryInputArchiveE7id_type"></span><span id="legion::core::ecs::component_pool::serialize__cereal::BinaryInputArchiveR.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a14061ff7c16c98bddb2ee28725238472"></span>void <code class="sig-name descname">serialize</code><span class="sig-paren">(</span>cereal::BinaryInputArchive &amp;<em>oarchive</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool9serializeERN6cereal18BinaryInputArchiveE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core3ecs14component_pool8get_lockEv">
+<span id="_CPPv3NK6legion4core3ecs14component_pool8get_lockEv"></span><span id="_CPPv2NK6legion4core3ecs14component_pool8get_lockEv"></span><span id="legion::core::ecs::component_pool::get_lockC"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a8f6331c4121e4f89d46b8d48d9aa7033"></span>async::<a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#_CPPv4N6legion4core5async11rw_spinlockE" title="legion::core::async::rw_spinlock">rw_spinlock</a> &amp;<code class="sig-name descname">get_lock</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion4core3ecs14component_pool8get_lockEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the rw_spinlock of this container. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core3ecs14component_pool14get_componentsERK16entity_container">
+<span id="_CPPv3NK6legion4core3ecs14component_pool14get_componentsERK16entity_container"></span><span id="_CPPv2NK6legion4core3ecs14component_pool14get_componentsERK16entity_container"></span><span id="legion::core::ecs::component_pool::get_components__entity_containerCRC"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1aa2dbe6bea4a449b5c45a13101d6a354f"></span><a class="reference internal" href="structlegion_1_1core_1_1ecs_1_1component__container__base.html#_CPPv4N6legion4core3ecs24component_container_baseE" title="legion::core::ecs::component_container_base">component_container_base</a> *<code class="sig-name descname">get_components</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_component__pool_8hpp_1a9d9862a245e6da11b2f93cfc234727bf.html#_CPPv4N6legion4core3ecs16entity_containerE" title="legion::core::ecs::entity_container">entity_container</a> &amp;<em>entities</em><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">override</em><a class="headerlink" href="#_CPPv4NK6legion4core3ecs14component_pool14get_componentsERK16entity_container" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core3ecs14component_pool14get_componentsERK16entity_containerR24component_container_base">
+<span id="_CPPv3NK6legion4core3ecs14component_pool14get_componentsERK16entity_containerR24component_container_base"></span><span id="_CPPv2NK6legion4core3ecs14component_pool14get_componentsERK16entity_containerR24component_container_base"></span><span id="legion::core::ecs::component_pool::get_components__entity_containerCR.component_container_baseRC"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a859eaa5b9912648f553be9a55da4f1d6"></span>void <code class="sig-name descname">get_components</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_component__pool_8hpp_1a9d9862a245e6da11b2f93cfc234727bf.html#_CPPv4N6legion4core3ecs16entity_containerE" title="legion::core::ecs::entity_container">entity_container</a> &amp;<em>entities</em>, <a class="reference internal" href="structlegion_1_1core_1_1ecs_1_1component__container__base.html#_CPPv4N6legion4core3ecs24component_container_baseE" title="legion::core::ecs::component_container_base">component_container_base</a> &amp;<em>comps</em><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">override</em><a class="headerlink" href="#_CPPv4NK6legion4core3ecs14component_pool14get_componentsERK16entity_containerR24component_container_base" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool14set_componentsERK16entity_containerRK24component_container_base">
+<span id="_CPPv3N6legion4core3ecs14component_pool14set_componentsERK16entity_containerRK24component_container_base"></span><span id="_CPPv2N6legion4core3ecs14component_pool14set_componentsERK16entity_containerRK24component_container_base"></span><span id="legion::core::ecs::component_pool::set_components__entity_containerCR.component_container_baseCR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a54191d5ff55b4e69912385fe0d7065d2"></span>void <code class="sig-name descname">set_components</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="typedef_component__pool_8hpp_1a9d9862a245e6da11b2f93cfc234727bf.html#_CPPv4N6legion4core3ecs16entity_containerE" title="legion::core::ecs::entity_container">entity_container</a> &amp;<em>entities</em>, <em class="property">const</em> <a class="reference internal" href="structlegion_1_1core_1_1ecs_1_1component__container__base.html#_CPPv4N6legion4core3ecs24component_container_baseE" title="legion::core::ecs::component_container_base">component_container_base</a> &amp;<em>comps</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool14set_componentsERK16entity_containerRK24component_container_base" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core3ecs14component_pool13has_componentE7id_type">
+<span id="_CPPv3NK6legion4core3ecs14component_pool13has_componentE7id_type"></span><span id="_CPPv2NK6legion4core3ecs14component_pool13has_componentE7id_type"></span><span id="legion::core::ecs::component_pool::has_component__id_typeC"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1ae3a94f05f3ba410c1206b04ee04f1682"></span>bool <code class="sig-name descname">has_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">override</em><a class="headerlink" href="#_CPPv4NK6legion4core3ecs14component_pool13has_componentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread-safe check for whether an entity has the component. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: ID of the entity you wish to check for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool13get_componentE7id_type">
+<span id="_CPPv3N6legion4core3ecs14component_pool13get_componentE7id_type"></span><span id="_CPPv2N6legion4core3ecs14component_pool13get_componentE7id_type"></span><span id="legion::core::ecs::component_pool::get_component__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a56ff2d51055f95ccd0686613329001c7"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs14component_poolE" title="legion::core::ecs::component_pool::component_type">component_type</a> &amp;<code class="sig-name descname">get_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool13get_componentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread unsafe component fetch, use <a class="reference internal" href="#classlegion_1_1core_1_1ecs_1_1component__pool_1a8f6331c4121e4f89d46b8d48d9aa7033"><span class="std std-ref">component_pool::get_lock</span></a> and lock for at least read_only before calling this function. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: ID of entity you want to get the component from. <a class="reference internal" href="#classlegion_1_1core_1_1ecs_1_1component__pool_1a8f6331c4121e4f89d46b8d48d9aa7033"><span class="std std-ref">component_pool::get_lock()</span></a> <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#structlegion_1_1core_1_1async_1_1rw__spinlock"><span class="std std-ref">legion::core::async::rw_spinlock</span></a> </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core3ecs14component_pool13get_componentE7id_type">
+<span id="_CPPv3NK6legion4core3ecs14component_pool13get_componentE7id_type"></span><span id="_CPPv2NK6legion4core3ecs14component_pool13get_componentE7id_type"></span><span id="legion::core::ecs::component_pool::get_component__id_typeC"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1abafc16175b0e133aa9e0476578cb2e3b"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs14component_poolE" title="legion::core::ecs::component_pool::component_type">component_type</a> &amp;<code class="sig-name descname">get_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core3ecs14component_pool13get_componentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Thread unsafe component fetch, use <a class="reference internal" href="#classlegion_1_1core_1_1ecs_1_1component__pool_1a8f6331c4121e4f89d46b8d48d9aa7033"><span class="std std-ref">component_pool::get_lock</span></a> and lock for at least read_only before calling this function. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: ID of entity you want to get the component from. <a class="reference internal" href="#classlegion_1_1core_1_1ecs_1_1component__pool_1a8f6331c4121e4f89d46b8d48d9aa7033"><span class="std std-ref">component_pool::get_lock()</span></a> <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#structlegion_1_1core_1_1async_1_1rw__spinlock"><span class="std std-ref">legion::core::async::rw_spinlock</span></a> </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool16create_componentE7id_type">
+<span id="_CPPv3N6legion4core3ecs14component_pool16create_componentE7id_type"></span><span id="_CPPv2N6legion4core3ecs14component_pool16create_componentE7id_type"></span><span id="legion::core::ecs::component_pool::create_component__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a89334927804cbf9154cbcab4a76adbbf"></span>void <code class="sig-name descname">create_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool16create_componentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates component in a thread-safe way. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Calls component_type::init if it exists. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Raises the events::component_creation&lt;component_type&gt;&gt; event. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: ID of entity you wish to add the component to. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool16create_componentE7id_typePv">
+<span id="_CPPv3N6legion4core3ecs14component_pool16create_componentE7id_typePv"></span><span id="_CPPv2N6legion4core3ecs14component_pool16create_componentE7id_typePv"></span><span id="legion::core::ecs::component_pool::create_component__id_type.voidP"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a160c36b6bfcd0d599f38cfc697d20ac2"></span>void <code class="sig-name descname">create_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, void *<em>value</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool16create_componentE7id_typePv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates component in a thread-safe way and initializes it with the given value. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Does NOT call component_type::init. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Raises the events::component_creation&lt;component_type&gt;&gt; event. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: ID of entity you wish to add the component to. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: Pointer to component_type that has the starting value you require. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool17destroy_componentE7id_type">
+<span id="_CPPv3N6legion4core3ecs14component_pool17destroy_componentE7id_type"></span><span id="_CPPv2N6legion4core3ecs14component_pool17destroy_componentE7id_type"></span><span id="legion::core::ecs::component_pool::destroy_component__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a19cab6cad12ee4e10cf82de3558baeb4"></span>void <code class="sig-name descname">destroy_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool17destroy_componentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destroys component in a thread-safe way. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Calls component_type::destroy if it exists. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Raises the events::component_destruction&lt;component_type&gt;&gt; event. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: ID of entity you wish to remove the component from. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs14component_pool15clone_componentE7id_type7id_type">
+<span id="_CPPv3N6legion4core3ecs14component_pool15clone_componentE7id_type7id_type"></span><span id="_CPPv2N6legion4core3ecs14component_pool15clone_componentE7id_type7id_type"></span><span id="legion::core::ecs::component_pool::clone_component__id_type.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__pool_1a6c6317d871c84b9b346ab0f16775c471"></span>void <code class="sig-name descname">clone_component</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>dst</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>src</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core3ecs14component_pool15clone_componentE7id_type7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>clones a component from a source to a destination entity </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class component_pool</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" title="previous chapter">Class component_handle_base</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1ecs_1_1component__pool__base.html" title="next chapter">Class component_pool_base</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1core_1_1ecs_1_1component__pool.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

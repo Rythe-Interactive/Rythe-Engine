@@ -49,7 +49,13 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/data/importers/texture_importers.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/systems/renderer.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/components/renderable.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/components/light.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/systems/particle_system_manager.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/components/point_cloud.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/systems/pointcloudgeneration.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/systems/lod_manager.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/components/point_emitter_data.hpp&gt;</span><span class="cp"></span>
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
 <span class="p">{</span>
     <span class="k">class</span> <span class="nc">RenderingModule</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Module</span>
@@ -61,9 +67,20 @@
                 <span class="n">fs</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">reportConverter</span><span class="o">&lt;</span><span class="n">stbi_texture_loader</span><span class="o">&gt;</span><span class="p">(</span><span class="n">extension</span><span class="p">);</span>
 
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">camera</span><span class="o">&gt;</span><span class="p">();</span>
-            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">renderable</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">mesh_renderer</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">light</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportSystem</span><span class="o">&lt;</span><span class="n">Renderer</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">particle</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">particle_emitter</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">point_emitter_data</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">reportSystem</span><span class="o">&lt;</span><span class="n">ParticleSystemManager</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">point_cloud</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">lod</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportSystem</span><span class="o">&lt;</span><span class="n">PointCloudGeneration</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportSystem</span><span class="o">&lt;</span><span class="n">LODManager</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="n">priority_type</span> <span class="n">priority</span><span class="p">()</span> <span class="k">override</span>

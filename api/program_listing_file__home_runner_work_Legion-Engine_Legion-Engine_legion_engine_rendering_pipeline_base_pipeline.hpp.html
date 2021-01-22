@@ -47,22 +47,39 @@
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-pipeline-hpp"></span><h1>Program Listing for File pipeline.hpp<a class="headerlink" href="#program-listing-for-file-pipeline-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipeline.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-pipeline-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/base/pipeline.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/model.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/shader.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;rendering/components/renderable.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/framebuffer.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/components/camera.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/base/pipelinebase.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/base/renderstage.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/application.hpp&gt;</span><span class="cp"></span>
 
-<span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;any&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
 <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">ARGS_API</span> <span class="n">Pipeline</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Self</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">RenderPipeline</span> <span class="o">:</span> <span class="k">public</span> <span class="n">RenderPipelineBase</span>
     <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">priority_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">RenderStage</span><span class="o">&gt;&gt;</span> <span class="n">m_stages</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="k">class</span> <span class="nc">Renderer</span><span class="p">;</span>
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">multimap</span><span class="o">&lt;</span><span class="n">priority_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">RenderStageBase</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">greater</span><span class="o">&lt;&gt;&gt;</span> <span class="n">m_stages</span><span class="p">;</span>
+
+    <span class="k">public</span><span class="o">:</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">StageType</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">StageType</span><span class="p">,</span> <span class="n">RenderStage</span><span class="o">&lt;</span><span class="n">StageType</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">attachStage</span><span class="p">();</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">attachStage</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">RenderStageBase</span><span class="o">&gt;&amp;&amp;</span> <span class="n">stage</span><span class="p">);</span>
+
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">setup</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
+
+        <span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">render</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">,</span> <span class="n">camera</span><span class="o">&amp;</span> <span class="n">cam</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
     <span class="p">};</span>
 <span class="p">}</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/base/pipeline.inl&gt;</span><span class="cp"></span>
 </pre></div>
 </div>
 </div>

@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a2bbbbc51af7ad094958521233b053c48:
+
+Function SetCursorPosYAndSetupForPrevLine
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: SetCursorPosYAndSetupForPrevLine(float, float)

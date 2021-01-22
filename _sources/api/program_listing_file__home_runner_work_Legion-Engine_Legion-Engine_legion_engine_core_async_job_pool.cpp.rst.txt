@@ -1,0 +1,24 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_job_pool.cpp:
+
+Program Listing for File job_pool.cpp
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_job_pool.cpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async/job_pool.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <core/async/job_pool.hpp>
+   
+   namespace legion::core::async
+   {
+       thread_local id_type this_job::m_id;
+   
+       id_type this_job::get_id() noexcept
+       {
+           return m_id;
+       }
+   
+   }

@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__draw_8cpp_1afaa2f2d0d9d6726cfae6da070e736347:
+
+Define STB_TRUETYPE_IMPLEMENTATION
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STB_TRUETYPE_IMPLEMENTATION

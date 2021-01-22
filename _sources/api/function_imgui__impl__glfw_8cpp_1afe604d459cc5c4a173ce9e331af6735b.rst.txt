@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__impl__glfw_8cpp_1afe604d459cc5c4a173ce9e331af6735b:
+
+Function ImGui_ImplGlfw_CharCallback
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGui_ImplGlfw_CharCallback(GLFWwindow *, unsigned int)

@@ -16,6 +16,8 @@ Program Listing for File assetimporter.hpp
    #include <core/filesystem/view.hpp>
    #include <core/logging/logging.hpp>
    
+   #include <Optick/optick.h>
+   
    namespace legion::core::filesystem
    {
        namespace detail
@@ -54,23 +56,25 @@ Program Listing for File assetimporter.hpp
            template<typename T>
            static void reportConverter(cstring extension)
            {
+               OPTICK_EVENT();
                m_converters[nameHash(extension)].push_back(new T());
            }
    
            template<typename T, typename... Settings>
            static common::result_decay_more<T, fs_error> tryLoad(const view& view, Settings&&... settings)
            {
+               OPTICK_EVENT();
                using common::Err, common::Ok;
                // Decay overloads the operator of ok_type and operator== for valid_t.
                using decay = common::result_decay_more<T, fs_error>;
    
                // Debug log the settings used for loading the files so that you can track down why something got loaded wrong if it did.
                if constexpr (sizeof...(settings) == 0)
-                   log::trace("Tried to load asset of type{}", undecoratedTypeName<T>());
+                   log::trace("Tried to load asset of type{}", typeName<T>());
                else if constexpr (sizeof...(settings) == 1)
-                   log::trace("Tried to load asset of type{} with settings of type:{}", undecoratedTypeName<T>(), (std::string(undecoratedTypeName<Settings>()) + ...));
+                   log::trace("Tried to load asset of type{} with settings of type:{}", typeName<T>(), (std::string(typeName<Settings>()) + ...));
                else
-                   log::trace("Tried to load asset of type{} with settings of types:{}", undecoratedTypeName<T>(), ((std::string(undecoratedTypeName<Settings>()) + ", ") + ...));
+                   log::trace("Tried to load asset of type{} with settings of types:{}", typeName<T>(), ((std::string(typeName<Settings>()) + ", ") + ...));
    
                // Check if the view is valid to load as a file.
                if (!view.is_valid() || !view.file_info().is_file)

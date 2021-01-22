@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class entity_data" href="class_structlegion_1_1core_1_1ecs_1_1entity__data.html" />
-    <link rel="prev" title="Class component_handle_base" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" />
+    <link rel="prev" title="Class component_pool_base" href="classlegion_1_1core_1_1ecs_1_1component__pool__base.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="class_structlegion_1_1core_1_1ecs_1_1entity__data.html" title="Class entity_data"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" title="Class component_handle_base"
+          <a href="classlegion_1_1core_1_1ecs_1_1component__pool__base.html" title="Class component_pool_base"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -93,11 +93,11 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4I0EN6legion4core3ecs11EcsRegistry9getFamilyEP19component_containerI14component_typeEv">
-<span id="_CPPv3I0EN6legion4core3ecs11EcsRegistry9getFamilyEv"></span><span id="_CPPv2I0EN6legion4core3ecs11EcsRegistry9getFamilyEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a502948e4a33bd57e675d8f6c202cee2b"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__container.html#_CPPv4I0EN6legion4core3ecs19component_containerE" title="legion::core::ecs::component_container">component_container</a>&lt;<a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs11EcsRegistry9getFamilyEP19component_containerI14component_typeEv" title="legion::core::ecs::EcsRegistry::getFamily::component_type">component_type</a>&gt; *<code class="sig-name descname">getFamily</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core3ecs11EcsRegistry9getFamilyEP19component_containerI14component_typeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN6legion4core3ecs11EcsRegistry9getFamilyEP14component_poolI14component_typeEv">
+<span id="_CPPv3I0EN6legion4core3ecs11EcsRegistry9getFamilyEv"></span><span id="_CPPv2I0EN6legion4core3ecs11EcsRegistry9getFamilyEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1aa39d3e864b3f5cf998d52a030c2e004b"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__pool.html#_CPPv4I0EN6legion4core3ecs14component_poolE" title="legion::core::ecs::component_pool">component_pool</a>&lt;<a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs11EcsRegistry9getFamilyEP14component_poolI14component_typeEv" title="legion::core::ecs::EcsRegistry::getFamily::component_type">component_type</a>&gt; *<code class="sig-name descname">getFamily</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core3ecs11EcsRegistry9getFamilyEP14component_poolI14component_typeEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get component storage of a certain type. </p>
 <p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>component_container&lt;component_type&gt;* Pointer to the component container that contains all components of the requested type. </p>
+<dt><strong>Return</strong></dt><dd><p>component_pool&lt;component_type&gt;* Pointer to the component container that contains all components of the requested type. </p>
 </dd>
 <dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of the component you wish to fetch. </p></li>
@@ -113,10 +113,10 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core3ecs11EcsRegistry9getFamilyE7id_type">
-<span id="_CPPv3N6legion4core3ecs11EcsRegistry9getFamilyE7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry9getFamilyE7id_type"></span><span id="legion::core::ecs::EcsRegistry::getFamily__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a7d28aa329b07f90a3f57d3882b075552"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__container__base.html#_CPPv4N6legion4core3ecs24component_container_baseE" title="legion::core::ecs::component_container_base">component_container_base</a> *<code class="sig-name descname">getFamily</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry9getFamilyE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion4core3ecs11EcsRegistry9getFamilyE7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry9getFamilyE7id_type"></span><span id="legion::core::ecs::EcsRegistry::getFamily__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1ae07100eadf62091321a4ed4d34cd630a"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__pool__base.html#_CPPv4N6legion4core3ecs19component_pool_baseE" title="legion::core::ecs::component_pool_base">component_pool_base</a> *<code class="sig-name descname">getFamily</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry9getFamilyE7id_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get component storage of a certain type. </p>
 <p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>component_container_base* Pointer to the component container that contains all components of the requested type. (needs to be cast to original type to use) </p>
+<dt><strong>Return</strong></dt><dd><p>component_pool_base* Pointer to the component container that contains all components of the requested type. (needs to be cast to original type to use) </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: Type id of the component you wish to fetch. </p></li>
@@ -149,10 +149,16 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry12hasComponentEb7id_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry12hasComponentE7id_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry12hasComponentE7id_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry12hasComponentEb7id_type" title="legion::core::ecs::EcsRegistry::hasComponent::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a475a1ccb4cb9a892be670d78dcabba65"></span>bool <code class="sig-name descname">hasComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry12hasComponentEb7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dt>
+<span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a7ef1babfa3c2a9b43dd77dc1ccb91b19"></span><code class="sig-name descname">template&lt;typename component_type archetype_base&gt; component_handle_base createComponent (id_type entityId, id_type componentTypeId, void *value)</code></dt>
 <dd><p>Check if an entity has a certain component. </p>
 <p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>component_handle&lt;component_type&gt; Component handle to the requested component. (may be invalid if the entity does not have this component type) </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#classlegion_1_1core_1_1ecs_1_1component__handle__base"><span class="std std-ref">component_handle_base</span></a> Component handle to the created component. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Handle needs to force_cast to component_handle&lt;T&gt; in order to use correctly. </p>
+</dd>
 <dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of the component to check for. </p></li>
 </ul>
@@ -162,84 +168,8 @@
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity.Get component handle of a certain type attached to a certain entity. </p></li>
 </ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry13hasComponentsEb7id_type">
-<span id="_CPPv3I0Dp0EN6legion4core3ecs11EcsRegistry13hasComponentsE7id_type"></span><span id="_CPPv2I0Dp0EN6legion4core3ecs11EcsRegistry13hasComponentsE7id_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename ...<code class="sig-name descname">component_types</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry13hasComponentsEb7id_type" title="legion::core::ecs::EcsRegistry::hasComponents::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a4dc8dcd05b6dead8d627607889cd4ce0"></span>bool <code class="sig-name descname">hasComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry13hasComponentsEb7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Check if an entity has a certain component combination. </p>
-<p><dl class="simple">
-<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of the first component to check for. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">component_types</span></code>: Types of the other components to check for. </p></li>
-</ul>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: Id of the entity. </p></li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry13hasComponentsEb7id_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry13hasComponentsE7id_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry13hasComponentsE7id_type"></span>template&lt;typename <code class="sig-name descname">archetype_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry13hasComponentsEb7id_type" title="legion::core::ecs::EcsRegistry::hasComponents::archetype_type">archetype_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a4311a0a847d1c77389418c12fe7d8125"></span>bool <code class="sig-name descname">hasComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry13hasComponentsEb7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Check if an entity has a certain component combination using an archetype. </p>
-<p><dl class="simple">
-<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">archetype_type</span></code>: Type of the archetype to check for. </p></li>
-</ul>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: Id of the entity. </p></li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4N6legion4core3ecs11EcsRegistry12getComponentE7id_type7id_type">
-<span id="_CPPv3N6legion4core3ecs11EcsRegistry12getComponentE7id_type7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry12getComponentE7id_type7id_type"></span><span id="legion::core::ecs::EcsRegistry::getComponent__id_type.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a346ab860513d186170ba913de0500e0b"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#_CPPv4N6legion4core3ecs21component_handle_baseE" title="legion::core::ecs::component_handle_base">component_handle_base</a> <code class="sig-name descname">getComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry12getComponentE7id_type7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get component handle of a certain type attached to a certain entity. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#classlegion_1_1core_1_1ecs_1_1component__handle__base"><span class="std std-ref">component_handle_base</span></a> Component handle to the requested component. (may be invalid if the entity does not have this component type) </p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>Handle needs to force_cast to component_handle&lt;T&gt; in order to use correctly. </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: Id of entity to get the component from. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: Type id of component to get handle of. </p></li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry12getComponentE16component_handleI14component_typeE7id_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry12getComponentE7id_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry12getComponentE7id_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry12getComponentE16component_handleI14component_typeE7id_type" title="legion::core::ecs::EcsRegistry::getComponent::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1ab85143a4b002b1a7769e0259a17f806f"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry12getComponentE16component_handleI14component_typeE7id_type" title="legion::core::ecs::EcsRegistry::getComponent::component_type">component_type</a>&gt; <code class="sig-name descname">getComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry12getComponentE16component_handleI14component_typeE7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get component handle of a certain type attached to a certain entity. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>component_handle&lt;component_type&gt; Component handle to the requested component. (may be invalid if the entity does not have this component type) </p>
 </dd>
 <dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of component to get handle of. </p></li>
@@ -250,125 +180,8 @@
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity.Create component of a certain type attached to a certain entity. </p></li>
 </ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry13getComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type">
-<span id="_CPPv3I0Dp0EN6legion4core3ecs11EcsRegistry13getComponentsE7id_type"></span><span id="_CPPv2I0Dp0EN6legion4core3ecs11EcsRegistry13getComponentsE7id_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename ...<code class="sig-name descname">component_types</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry13getComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type" title="legion::core::ecs::EcsRegistry::getComponents::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1acee69aa4de3ff58a8bf6bce96e1dafa2"></span>std::tuple&lt;<a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry13getComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type" title="legion::core::ecs::EcsRegistry::getComponents::component_type">component_type</a>&gt;, <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry13getComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type" title="legion::core::ecs::EcsRegistry::getComponents::component_types">component_types</a>&gt;...&gt; <code class="sig-name descname">getComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry13getComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Get component handles of a certain types attached to a certain entity. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>component_handle&lt;component_type&gt; Component handle to the requested component. (may be invalid if the entity does not have this component type) </p>
-</dd>
-<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of the first component to get handle of. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">component_types</span></code>: Types of the other components to get the handles of. </p></li>
-</ul>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: Id of entity to get the component from. </p></li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry13getComponentsEDa7id_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry13getComponentsE7id_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry13getComponentsE7id_type"></span>template&lt;typename <code class="sig-name descname">archetype_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry13getComponentsEDa7id_type" title="legion::core::ecs::EcsRegistry::getComponents::archetype_type">archetype_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a43eb3c888b6d704aaa667120a7acd1ba"></span>auto <code class="sig-name descname">getComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry13getComponentsEDa7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleI14component_typeE7id_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry15createComponentE7id_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry15createComponentE7id_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleI14component_typeE7id_type" title="legion::core::ecs::EcsRegistry::createComponent::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a07c50023415893af3faa56719fff59da"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleI14component_typeE7id_type" title="legion::core::ecs::EcsRegistry::createComponent::component_type">component_type</a>&gt; <code class="sig-name descname">createComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleI14component_typeE7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Create component of a certain type attached to a certain entity. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>component_handle&lt;component_type&gt; Component handle to the created component. </p>
-</dd>
-<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of component you wish to create. </p></li>
-</ul>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: Id of the entity you wish to attach the component to. </p></li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeRR14component_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry15createComponentE7id_typeRR14component_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry15createComponentE7id_typeRR14component_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeRR14component_type" title="legion::core::ecs::EcsRegistry::createComponent::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a818857619cae4dc2d34f3f6456cc84a2"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;std::remove_reference_t&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeRR14component_type" title="legion::core::ecs::EcsRegistry::createComponent::component_type">component_type</a>&gt;&gt; <code class="sig-name descname">createComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeRR14component_type" title="legion::core::ecs::EcsRegistry::createComponent::component_type">component_type</a> &amp;&amp;<em>component</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeRR14component_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeR14component_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry15createComponentE7id_typeR14component_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry15createComponentE7id_typeR14component_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeR14component_type" title="legion::core::ecs::EcsRegistry::createComponent::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1ae6eb33f86c5183d73781cef293f9f680"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;std::remove_reference_t&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeR14component_type" title="legion::core::ecs::EcsRegistry::createComponent::component_type">component_type</a>&gt;&gt; <code class="sig-name descname">createComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeR14component_type" title="legion::core::ecs::EcsRegistry::createComponent::component_type">component_type</a> &amp;<em>component</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry15createComponentE16component_handleINSt18remove_reference_tI14component_typeEEE7id_typeR14component_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry16createComponentsEDa7id_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry16createComponentsE7id_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry16createComponentsE7id_type"></span>template&lt;typename <code class="sig-name descname">archetype_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry16createComponentsEDa7id_type" title="legion::core::ecs::EcsRegistry::createComponents::archetype_type">archetype_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a08c548212254d1ebd31ba4831da45067"></span>auto <code class="sig-name descname">createComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry16createComponentsEDa7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsEDa7id_typeDpRR15component_types">
-<span id="_CPPv3I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsE7id_typeDpRR15component_types"></span><span id="_CPPv2I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsE7id_typeDpRR15component_types"></span>template&lt;typename <code class="sig-name descname">archetype_type</code>, typename ...<code class="sig-name descname">component_types</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsEDa7id_typeDpRR15component_types" title="legion::core::ecs::EcsRegistry::createComponents::archetype_type">archetype_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a4981ba4fa4044a4eaed371053ca906db"></span>auto <code class="sig-name descname">createComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsEDa7id_typeDpRR15component_types" title="legion::core::ecs::EcsRegistry::createComponents::component_types">component_types</a>&amp;&amp;... <em>defaultValues</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsEDa7id_typeDpRR15component_types" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type">
-<span id="_CPPv3I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsE7id_type"></span><span id="_CPPv2I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsE7id_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename ...<code class="sig-name descname">component_types</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type" title="legion::core::ecs::EcsRegistry::createComponents::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a7e540a6071d421af89bdfa9fb79eafc3"></span>std::tuple&lt;<a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type" title="legion::core::ecs::EcsRegistry::createComponents::component_type">component_type</a>&gt;, <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type" title="legion::core::ecs::EcsRegistry::createComponents::component_types">component_types</a>&gt;...&gt; <code class="sig-name descname">createComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleI14component_typeEDp16component_handleI15component_typesEEE7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleINSt18remove_reference_tI14component_typeEEEDp16component_handleINSt18remove_reference_tI15component_typesEEEEE7id_typeRR14component_typeDpRR15component_types">
-<span id="_CPPv3I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsE7id_typeRR14component_typeDpRR15component_types"></span><span id="_CPPv2I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsE7id_typeRR14component_typeDpRR15component_types"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename ...<code class="sig-name descname">component_types</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleINSt18remove_reference_tI14component_typeEEEDp16component_handleINSt18remove_reference_tI15component_typesEEEEE7id_typeRR14component_typeDpRR15component_types" title="legion::core::ecs::EcsRegistry::createComponents::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a2986466590073578b07cc86072145646"></span>std::tuple&lt;<a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;std::remove_reference_t&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleINSt18remove_reference_tI14component_typeEEEDp16component_handleINSt18remove_reference_tI15component_typesEEEEE7id_typeRR14component_typeDpRR15component_types" title="legion::core::ecs::EcsRegistry::createComponents::component_type">component_type</a>&gt;&gt;, <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle.html#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle">component_handle</a>&lt;std::remove_reference_t&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleINSt18remove_reference_tI14component_typeEEEDp16component_handleINSt18remove_reference_tI15component_typesEEEEE7id_typeRR14component_typeDpRR15component_types" title="legion::core::ecs::EcsRegistry::createComponents::component_types">component_types</a>&gt;&gt;...&gt; <code class="sig-name descname">createComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleINSt18remove_reference_tI14component_typeEEEDp16component_handleINSt18remove_reference_tI15component_typesEEEEE7id_typeRR14component_typeDpRR15component_types" title="legion::core::ecs::EcsRegistry::createComponents::component_type">component_type</a> &amp;&amp;<em>defaultValue</em>, <a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleINSt18remove_reference_tI14component_typeEEEDp16component_handleINSt18remove_reference_tI15component_typesEEEEE7id_typeRR14component_typeDpRR15component_types" title="legion::core::ecs::EcsRegistry::createComponents::component_types">component_types</a>&amp;&amp;... <em>defaultValues</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry16createComponentsENSt5tupleI16component_handleINSt18remove_reference_tI14component_typeEEEDp16component_handleINSt18remove_reference_tI15component_typesEEEEE7id_typeRR14component_typeDpRR15component_types" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4N6legion4core3ecs11EcsRegistry15createComponentE7id_type7id_type">
-<span id="_CPPv3N6legion4core3ecs11EcsRegistry15createComponentE7id_type7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry15createComponentE7id_type7id_type"></span><span id="legion::core::ecs::EcsRegistry::createComponent__id_type.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a94d379e2b80fe298b2d684c6f01e3920"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#_CPPv4N6legion4core3ecs21component_handle_baseE" title="legion::core::ecs::component_handle_base">component_handle_base</a> <code class="sig-name descname">createComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry15createComponentE7id_type7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Create component of a certain type attached to a certain entity. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#classlegion_1_1core_1_1ecs_1_1component__handle__base"><span class="std std-ref">component_handle_base</span></a> Component handle to the created component. </p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>Handle needs to force_cast to component_handle&lt;T&gt; in order to use correctly. </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: Id of the entity you wish to attach the component to. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: Type id of component you wish to create. </p></li>
-</ul>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4N6legion4core3ecs11EcsRegistry15createComponentE7id_type7id_typePv">
-<span id="_CPPv3N6legion4core3ecs11EcsRegistry15createComponentE7id_type7id_typePv"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry15createComponentE7id_type7id_typePv"></span><span id="legion::core::ecs::EcsRegistry::createComponent__id_type.id_type.voidP"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a877bba2c6a2b24dee7028298a73bf42b"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#_CPPv4N6legion4core3ecs21component_handle_baseE" title="legion::core::ecs::component_handle_base">component_handle_base</a> <code class="sig-name descname">createComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em>, void *<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry15createComponentE7id_type7id_typePv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Create component of a certain type attached to a certain entity. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#classlegion_1_1core_1_1ecs_1_1component__handle__base"><span class="std std-ref">component_handle_base</span></a> Component handle to the created component. </p>
-</dd>
-<dt><strong>Note</strong></dt><dd><p>Handle needs to force_cast to component_handle&lt;T&gt; in order to use correctly. </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: Id of the entity you wish to attach the component to. </p></li>
@@ -378,6 +191,23 @@
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EcsRegistry13copyComponentE7id_type7id_type7id_type">
+<span id="_CPPv3N6legion4core3ecs11EcsRegistry13copyComponentE7id_type7id_type7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry13copyComponentE7id_type7id_type7id_type"></span><span id="legion::core::ecs::EcsRegistry::copyComponent__id_type.id_type.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a6b7e95f92476a86c61330500dee8f398"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#_CPPv4N6legion4core3ecs21component_handle_baseE" title="legion::core::ecs::component_handle_base">component_handle_base</a> <code class="sig-name descname">copyComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>destinationEntity</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>sourceEntity</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry13copyComponentE7id_type7id_type7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copies a component from entity to another. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html#classlegion_1_1core_1_1ecs_1_1component__handle__base"><span class="std std-ref">component_handle_base</span></a> Component handle to the copied component. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">destinationEntity</span></code>: The entity you want to copy the component onto. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sourceEntity</span></code>: The entity you want to copy the component from. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">componentTypeId</span></code>: The component you want to copy </p></li>
 </ul>
 </dd>
 </dl>
@@ -403,10 +233,12 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry16destroyComponentEv7id_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry16destroyComponentE7id_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry16destroyComponentE7id_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry16destroyComponentEv7id_type" title="legion::core::ecs::EcsRegistry::destroyComponent::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1ae8e857b82b0d33286158ec4879271be7"></span>void <code class="sig-name descname">destroyComponent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry16destroyComponentEv7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dt>
+<span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1af5395f7de83133334949327eef56fd4b"></span><code class="sig-name descname">template&lt;typename component_type archetype_base&gt; entity_handle createEntity (id_type entityId=invalid_id)</code></dt>
 <dd><p>Destroy component of a certain type attached to a certain entity. </p>
 <p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1entity__handle.html#classlegion_1_1core_1_1ecs_1_1entity__handle"><span class="std std-ref">entity_handle</span></a> Entity handle pointing to the newly created entity. </p>
+</dd>
 <dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">component_type</span></code>: Type of component you wish to destroy. </p></li>
 </ul>
@@ -416,47 +248,7 @@
 </ul>
 </dd>
 <dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry17destroyComponentsEv7id_type">
-<span id="_CPPv3I0Dp0EN6legion4core3ecs11EcsRegistry17destroyComponentsE7id_type"></span><span id="_CPPv2I0Dp0EN6legion4core3ecs11EcsRegistry17destroyComponentsE7id_type"></span>template&lt;typename <code class="sig-name descname">component_type</code>, typename ...<code class="sig-name descname">component_types</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1ad0e7bc6cd5d3b9607b4b7ecd55305bde.html#_CPPv4N6legion4core19doesnt_inherit_fromE" title="legion::core::doesnt_inherit_from">doesnt_inherit_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry17destroyComponentsEv7id_type" title="legion::core::ecs::EcsRegistry::destroyComponents::component_type">component_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1af5392f10f8b8233cd4b31468ae3ff613"></span>void <code class="sig-name descname">destroyComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN6legion4core3ecs11EcsRegistry17destroyComponentsEv7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4I00EN6legion4core3ecs11EcsRegistry17destroyComponentsEv7id_type">
-<span id="_CPPv3I00EN6legion4core3ecs11EcsRegistry17destroyComponentsE7id_type"></span><span id="_CPPv2I00EN6legion4core3ecs11EcsRegistry17destroyComponentsE7id_type"></span>template&lt;typename <code class="sig-name descname">archetype_type</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry17destroyComponentsEv7id_type" title="legion::core::ecs::EcsRegistry::destroyComponents::archetype_type">archetype_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1archetype__base.html#_CPPv4N6legion4core3ecs14archetype_baseE" title="legion::core::ecs::archetype_base">archetype_base</a>&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a4589877cf28d26035be6fc1ec3c1719d"></span>void <code class="sig-name descname">destroyComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6legion4core3ecs11EcsRegistry17destroyComponentsEv7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4N6legion4core3ecs11EcsRegistry14validateEntityE7id_type">
-<span id="_CPPv3N6legion4core3ecs11EcsRegistry14validateEntityE7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry14validateEntityE7id_type"></span><span id="legion::core::ecs::EcsRegistry::validateEntity__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a663ff461b2698b792801c9073339307f"></span>bool <code class="sig-name descname">validateEntity</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry14validateEntityE7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Check if entity exists. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>bool True if entity exists, false if it doesn’t or if the id is invalid_id. </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">entityId</span></code>: Id of entity you wish to check if it exists. </p></li>
-</ul>
-</dd>
-</dl>
-</p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4N6legion4core3ecs11EcsRegistry12createEntityE7id_type">
-<span id="_CPPv3N6legion4core3ecs11EcsRegistry12createEntityE7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry12createEntityE7id_type"></span><span id="legion::core::ecs::EcsRegistry::createEntity__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a9a0d23255f8e03ed8f49096f6f4a61c6"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1entity__handle.html#_CPPv4N6legion4core3ecs13entity_handleE" title="legion::core::ecs::entity_handle">entity_handle</a> <code class="sig-name descname">createEntity</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em> = invalid_id<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry12createEntityE7id_type" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Create new entity. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1entity__handle.html#classlegion_1_1core_1_1ecs_1_1entity__handle"><span class="std std-ref">entity_handle</span></a> Entity handle pointing to the newly created entity. </p>
-</dd>
-<dt><strong>Exceptions</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_exists_error</span></code>: When the next entity id is somehow already taken. (only possible if someone else messed with my/Glyn’s code) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">legion_entity_not_found_error</span></code>: If the entity id does not belong to a valid entity.Create new entity. </p></li>
 </ul>
 </dd>
 </dl>
@@ -496,7 +288,7 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core3ecs11EcsRegistry13getEntityDataE7id_type">
-<span id="_CPPv3N6legion4core3ecs11EcsRegistry13getEntityDataE7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry13getEntityDataE7id_type"></span><span id="legion::core::ecs::EcsRegistry::getEntityData__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a0c8a78e65de0e0e453eea4593951ebb3"></span><a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1entity__data.html#_CPPv4N6legion4core3ecs11entity_dataE" title="legion::core::ecs::entity_data">entity_data</a> &amp;<code class="sig-name descname">getEntityData</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry13getEntityDataE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion4core3ecs11EcsRegistry13getEntityDataE7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry13getEntityDataE7id_type"></span><span id="legion::core::ecs::EcsRegistry::getEntityData__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a7725d3edee1afef510abebb6a5d8ee1a"></span><a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1entity__data.html#_CPPv4N6legion4core3ecs11entity_dataE" title="legion::core::ecs::entity_data">entity_data</a> <code class="sig-name descname">getEntityData</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry13getEntityDataE7id_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get entity data for a certain entity id. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p><a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1entity__data.html#structlegion_1_1core_1_1ecs_1_1entity__data"><span class="std std-ref">entity_data</span></a>&amp; Hierarchy and composition data of the entity requested. </p>
@@ -510,8 +302,18 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EcsRegistry13setEntityDataE7id_typeRK11entity_data">
+<span id="_CPPv3N6legion4core3ecs11EcsRegistry13setEntityDataE7id_typeRK11entity_data"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry13setEntityDataE7id_typeRK11entity_data"></span><span id="legion::core::ecs::EcsRegistry::setEntityData__id_type.entity_dataCR"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1ac0195d62528415291a530565786bb133"></span>void <code class="sig-name descname">setEntityData</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em>, <em class="property">const</em> <a class="reference internal" href="class_structlegion_1_1core_1_1ecs_1_1entity__data.html#_CPPv4N6legion4core3ecs11entity_dataE" title="legion::core::ecs::entity_data">entity_data</a> &amp;<em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry13setEntityDataE7id_typeRK11entity_data" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs11EcsRegistry15getEntityParentE7id_type">
+<span id="_CPPv3N6legion4core3ecs11EcsRegistry15getEntityParentE7id_type"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry15getEntityParentE7id_type"></span><span id="legion::core::ecs::EcsRegistry::getEntityParent__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a4ee8303e9cc729ddf45c6b1d536ada07"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1entity__handle.html#_CPPv4N6legion4core3ecs13entity_handleE" title="legion::core::ecs::entity_handle">entity_handle</a> <code class="sig-name descname">getEntityParent</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>entityId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry15getEntityParentE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
 <dt id="_CPPv4N6legion4core3ecs11EcsRegistry11getEntitiesEv">
-<span id="_CPPv3N6legion4core3ecs11EcsRegistry11getEntitiesEv"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry11getEntitiesEv"></span><span id="legion::core::ecs::EcsRegistry::getEntities"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a93422a721007e2bd7c05529d27e3213f"></span>std::pair&lt;<a class="reference internal" href="typedef_entity__handle_8hpp_1a5c3759a3e30a71a9145fa5af22cbe72e.html#_CPPv4N6legion4core3ecs10entity_setE" title="legion::core::ecs::entity_set">entity_set</a>&amp;, async::<a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#_CPPv4N6legion4core5async20readonly_rw_spinlockE" title="legion::core::async::readonly_rw_spinlock">readonly_rw_spinlock</a>&amp;&gt; <code class="sig-name descname">getEntities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry11getEntitiesEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion4core3ecs11EcsRegistry11getEntitiesEv"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry11getEntitiesEv"></span><span id="legion::core::ecs::EcsRegistry::getEntities"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1a8b53f416166fe45e5bb33d66111b3f8f"></span>std::pair&lt;<a class="reference internal" href="typedef_entity__handle_8hpp_1afef46b6d5861a9d0cde22b93cefdddeb.html#_CPPv4N6legion4core3ecs10entity_setE" title="legion::core::ecs::entity_set">entity_set</a>&amp;, async::<a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#_CPPv4N6legion4core5async11rw_spinlockE" title="legion::core::async::rw_spinlock">rw_spinlock</a>&amp;&gt; <code class="sig-name descname">getEntities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry11getEntitiesEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get a container with ALL entities. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>sparse_map&lt;id_type, entity_handle&gt;&amp; Container that keeps both the id’s and corresponding entity handles for easy use. </p>
@@ -556,10 +358,10 @@
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Members</p>
+<p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="cpp var">
 <dt id="_CPPv4N6legion4core3ecs11EcsRegistry5worldE">
-<span id="_CPPv3N6legion4core3ecs11EcsRegistry5worldE"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry5worldE"></span><span id="legion::core::ecs::EcsRegistry::world__entity_handle"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1acf66308a94ccd71d3029f3bdad6ebf5c"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1entity__handle.html#_CPPv4N6legion4core3ecs13entity_handleE" title="legion::core::ecs::entity_handle">entity_handle</a> <code class="sig-name descname">world</code><a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry5worldE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion4core3ecs11EcsRegistry5worldE"></span><span id="_CPPv2N6legion4core3ecs11EcsRegistry5worldE"></span><span id="legion::core::ecs::EcsRegistry::world__entity_handle"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_ecs_registry_1acf66308a94ccd71d3029f3bdad6ebf5c"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1entity__handle.html#_CPPv4N6legion4core3ecs13entity_handleE" title="legion::core::ecs::entity_handle">entity_handle</a> <code class="sig-name descname">world</code> = <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1entity__handle.html#_CPPv4N6legion4core3ecs13entity_handleE" title="legion::core::ecs::entity_handle">entity_handle</a>(world_entity_id)<a class="headerlink" href="#_CPPv4N6legion4core3ecs11EcsRegistry5worldE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -586,7 +388,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" title="previous chapter">Class component_handle_base</a></li>
+      <li>Previous: <a href="classlegion_1_1core_1_1ecs_1_1component__pool__base.html" title="previous chapter">Class component_pool_base</a></li>
       <li>Next: <a href="class_structlegion_1_1core_1_1ecs_1_1entity__data.html" title="next chapter">Class entity_data</a></li>
   </ul></li>
   </ul></li>

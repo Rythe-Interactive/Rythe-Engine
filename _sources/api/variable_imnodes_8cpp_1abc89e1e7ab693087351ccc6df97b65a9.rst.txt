@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1abc89e1e7ab693087351ccc6df97b65a9:
+
+Variable pin_indices
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: pin_indices

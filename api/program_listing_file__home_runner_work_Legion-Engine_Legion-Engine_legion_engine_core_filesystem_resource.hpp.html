@@ -52,6 +52,8 @@
 
 #include &lt;string_view&gt;                // std::string_view
 
+#include &lt;Optick/optick.h&gt;
+
 #include &quot;detail/resource_meta.hpp&quot;   //has_to_resource&lt;T,Sig&gt;, has_from_resource&lt;T,Sig&gt;
 
 
@@ -69,10 +71,13 @@ class Test {
 
         explicit basic_resource(std::nullptr_t placeholder) : m_container{}{}
 
-        explicit basic_resource(byte_vec v) : m_container(std::move(v)) {}
+        explicit basic_resource(byte_vec v) : m_container(std::move(v)) {
+            OPTICK_EVENT();
+        }
 
-        explicit basic_resource(const std::string_view&amp; v) : basic_resource(nullptr)
+        explicit basic_resource(std::string_view v) : basic_resource(nullptr)
         {
+            OPTICK_EVENT();
             m_container.assign(v.begin(), v.end());
         }
 
@@ -152,7 +157,7 @@ class Test {
         }
 
 
-        template &lt;class T,class... Args&gt;
+        template &lt;typename T,class... Args&gt;
         L_NODISCARD T to(Args&amp;&amp;...args) const;
 
         template &lt;class T&gt;
@@ -168,6 +173,7 @@ class Test {
              typename C1 = std::enable_if&lt;detail::has_to_resource&lt;T,void(basic_resource*,const T&amp;)&gt;::value&gt;&gt;
     void to_resource(basic_resource* resource,const T&amp; value)
     {
+        OPTICK_EVENT();
         T::to_resource(resource,value);
     }
 
@@ -175,6 +181,7 @@ class Test {
              typename C1 = std::enable_if&lt;detail::has_to_resource&lt;T,void(basic_resource*,const T&amp;)&gt;::value&gt;&gt;
     basic_resource to_resource(const T&amp; value)
     {
+        OPTICK_EVENT();
         basic_resource res(nullptr);
         T::to_resource(&amp;res,value);
         return res;
@@ -184,6 +191,7 @@ class Test {
              typename C1 = std::enable_if&lt;detail::has_from_resource&lt;T,void(T*,const basic_resource&amp;)&gt;::value&gt;&gt;
     void from_resource(T* value, const basic_resource&amp; resource)
     {
+        OPTICK_EVENT();
         T::from_resource(value, resource);
     }
 
@@ -193,7 +201,8 @@ class Test {
             typename C3 = std::enable_if&lt;std::is_move_constructible&lt;T&gt;::value&gt;&gt;
     T from_resource(const basic_resource&amp; resource)
     {
-        T value;
+       OPTICK_EVENT();
+       T value;
         T::from_resource(&amp;value,resource);
         return std::move(value);
     }
@@ -204,23 +213,35 @@ class Test {
             class ... Args&gt;
     T from_resource(const basic_resource&amp; resource,Args&amp;&amp;... args)
     {
-        T value(std::forward&lt;Args&gt;(args)...);
+       OPTICK_EVENT();
+       T value(std::forward&lt;Args&gt;(args)...);
         T::from_resource(&amp;value,resource);
         return std::move(value);
     }
 
 
-    template &lt;class T,class... Args&gt;
+    template &lt;typename T,class... Args&gt;
     L_NODISCARD T basic_resource::to(Args&amp;&amp;...args) const
     {
+        OPTICK_EVENT();
         return std::move(from_resource&lt;T&gt;(*this, std::forward&lt;Args&gt;(args)...));
     }
 
     template &lt;class T&gt;
     void basic_resource::from(const T&amp; v)
     {
+        OPTICK_EVENT();
         to_resource(this,v);
     }
+    namespace literals
+    {
+       inline basic_resource operator&quot;&quot;_res(const char* str,size_type len)
+       {
+           return basic_resource(std::string_view(str,len));
+       }
+
+    }
+
     #endif
 }
 </pre></div>

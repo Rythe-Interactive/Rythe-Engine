@@ -1,0 +1,28 @@
+.. _exhale_class_classlegion_1_1rendering_1_1_post_processing_effect_base:
+
+Class PostProcessingEffectBase
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_postprocessingeffect.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public legion::rendering::PostProcessingEffect< Self >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_post_processing_effect`)
+- ``public legion::rendering::PostProcessingEffect< Bloom >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_post_processing_effect`)
+- ``public legion::rendering::PostProcessingEffect< FXAA >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_post_processing_effect`)
+- ``public legion::rendering::PostProcessingEffect< Tonemapping >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_post_processing_effect`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::PostProcessingEffectBase
+   :members:
+   :protected-members:
+   :undoc-members:

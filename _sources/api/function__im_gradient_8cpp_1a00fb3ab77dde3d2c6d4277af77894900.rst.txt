@@ -1,0 +1,13 @@
+.. _exhale_function__im_gradient_8cpp_1a00fb3ab77dde3d2c6d4277af77894900:
+
+Function ImGradient::Edit
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGradient.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGradient::Edit(Delegate&, const ImVec2&, int&)

@@ -68,11 +68,21 @@ Variables
 
 - :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a6ada5f52255df7235c4d4795d475f23b`
 
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a36fea5c1e69500a4da2c113add42458b`
+
 - :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a97bd0941e24898db2dfbb010e3370d03`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a2ea50b0a90c34a2cc1e4c19740afe1f9`
 
 - :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a7e0f1a2a5b14934dc6c7b63ccc6cab5a`
 
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a99ed82366643ae160282b973957e6251`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1adc72d531c54ae6a01a575678f32b98a1`
+
 - :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a5c881ba33f1e73ee458b601ac6c3e62c`
+
+- :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a6394d40f5c2659f821d15ff2b39e54fe`
 
 - :ref:`exhale_variable_namespacelegion_1_1core_1_1math_1_1colors_1a13ffab485f050238aeb5742500c8b9e0`
 

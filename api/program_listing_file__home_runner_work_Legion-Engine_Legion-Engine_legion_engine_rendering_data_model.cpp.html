@@ -51,28 +51,34 @@
 <span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp"></span>
-
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
 <span class="p">{</span>
     <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">model</span><span class="o">&gt;</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">m_models</span><span class="p">;</span>
-    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">m_modelLock</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">m_modelLock</span><span class="p">;</span>
 
-    <span class="kt">bool</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">is_buffered</span><span class="p">()</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">m_modelNameLock</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">m_modelNames</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">is_buffered</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model</span><span class="p">(</span><span class="n">id</span><span class="p">).</span><span class="n">buffered</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="kt">void</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">buffer_data</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">matrixBuffer</span><span class="p">)</span>
+    <span class="kt">void</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">buffer_data</span><span class="p">(</span><span class="k">const</span> <span class="n">buffer</span><span class="o">&amp;</span> <span class="n">matrixBuffer</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
-        <span class="n">ModelCache</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">matrixBuffer</span><span class="p">);</span>
+        <span class="n">ModelCache</span><span class="o">::</span><span class="n">buffer_model</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">matrixBuffer</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="n">mesh_handle</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">()</span>
+    <span class="kt">void</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">overwrite_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="o">&amp;</span> <span class="n">newBuffer</span><span class="p">,</span> <span class="n">uint</span> <span class="n">bufferID</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">perInstance</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">ModelCache</span><span class="o">::</span><span class="n">overwrite_buffer</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">newBuffer</span><span class="p">,</span> <span class="n">bufferID</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">mesh_handle</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_mesh</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_model</span><span class="p">()</span>
+    <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">get_model</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
     <span class="p">}</span>
@@ -83,7 +89,63 @@
         <span class="k">return</span> <span class="n">m_models</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
     <span class="p">}</span>
 
-    <span class="kt">void</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">matrixBuffer</span><span class="p">)</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model_name</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelNameLock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">overwrite_buffer</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="n">buffer</span><span class="o">&amp;</span> <span class="n">newBuffer</span><span class="p">,</span> <span class="n">uint</span> <span class="n">bufferID</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">perInstance</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">id</span> <span class="o">==</span> <span class="n">invalid_id</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="c1">//get mesh handle</span>
+        <span class="k">auto</span> <span class="n">mesh_handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">mesh_handle</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="c1">//get mesh and lock</span>
+        <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">mesh</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh_handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">,</span> <span class="n">lock</span><span class="p">);</span>
+        <span class="n">model</span><span class="o">&amp;</span> <span class="n">model</span> <span class="o">=</span> <span class="n">m_models</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+        <span class="c1">//set new buffer based on ID</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">bufferID</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//COLOR</span>
+        <span class="k">case</span> <span class="nl">SV_COLOR</span><span class="p">:</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_COLOR</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_COLOR</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="c1">//POSITIONS</span>
+        <span class="k">case</span> <span class="nl">SV_POSITION</span><span class="p">:</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_POSITION</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="c1">//NORMALS</span>
+        <span class="k">case</span> <span class="nl">SV_NORMAL</span><span class="p">:</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_NORMAL</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_NORMAL</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="c1">//TANGENT</span>
+        <span class="k">case</span> <span class="nl">SV_TANGENT</span><span class="p">:</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_TANGENT</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_TANGENT</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+            <span class="c1">//UVS</span>
+        <span class="k">case</span> <span class="nl">SV_TEXCOORD0</span><span class="p">:</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_TEXCOORD0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_TEXCOORD0</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">buffer_model</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">buffer</span><span class="o">&amp;</span> <span class="n">matrixBuffer</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">id</span> <span class="o">==</span> <span class="n">invalid_id</span><span class="p">)</span>
             <span class="k">return</span><span class="p">;</span>
@@ -96,56 +158,33 @@
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">,</span> <span class="n">lock</span><span class="p">);</span>
         <span class="n">model</span><span class="o">&amp;</span> <span class="n">model</span> <span class="o">=</span> <span class="n">m_models</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
 
-        <span class="n">glGenVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">vertexArrayId</span><span class="p">);</span>
-        <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">vertexArrayId</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span> <span class="o">=</span> <span class="n">vertexarray</span><span class="o">::</span><span class="n">generate</span><span class="p">();</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">indexBuffer</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">indices</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
 
-        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">indexBufferId</span><span class="p">);</span>
-        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">indexBufferId</span><span class="p">);</span>
-        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">indices</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
-        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexBuffer</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">vertexBuffer</span><span class="p">,</span> <span class="n">SV_POSITION</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">vertexBufferId</span><span class="p">);</span>
-        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">vertexBufferId</span><span class="p">);</span>
-        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
-        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">);</span>
-        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">colors</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_COLOR</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">normalBufferId</span><span class="p">);</span>
-        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">normalBufferId</span><span class="p">);</span>
-        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">normals</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">normals</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
-        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_NORMAL</span><span class="p">);</span>
-        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_NORMAL</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">normalBuffer</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">normals</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">normalBuffer</span><span class="p">,</span> <span class="n">SV_NORMAL</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">tangentBufferId</span><span class="p">);</span>
-        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">tangentBufferId</span><span class="p">);</span>
-        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">tangents</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">tangents</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
-        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_TANGENT</span><span class="p">);</span>
-        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_TANGENT</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">tangentBuffer</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">tangents</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">tangentBuffer</span><span class="p">,</span> <span class="n">SV_TANGENT</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-        <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">model</span><span class="p">.</span><span class="n">uvBufferId</span><span class="p">);</span>
-        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="n">uvBufferId</span><span class="p">);</span>
-        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uvs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uvs</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
-        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_TEXCOORD0</span><span class="p">);</span>
-        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_TEXCOORD0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">uvBuffer</span> <span class="o">=</span> <span class="n">buffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uvs</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">uvBuffer</span><span class="p">,</span> <span class="n">SV_TEXCOORD0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">matrixBuffer</span><span class="p">);</span>
-        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">);</span>
-        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
-        <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">3</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">matrixBuffer</span><span class="p">,</span> <span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="mi">0</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">));</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">matrixBuffer</span><span class="p">,</span> <span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="mi">1</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">));</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">matrixBuffer</span><span class="p">,</span> <span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="mi">2</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">));</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">matrixBuffer</span><span class="p">,</span> <span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="mi">3</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">));</span>
 
-        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)(</span><span class="mi">0</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">)));</span>
-        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)(</span><span class="mi">1</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">)));</span>
-        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)(</span><span class="mi">2</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">)));</span>
-        <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)(</span><span class="mi">3</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">::</span><span class="n">col_type</span><span class="p">)));</span>
-
-        <span class="n">glVertexAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">glVertexAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">glVertexAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">glVertexAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-
-        <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-        <span class="n">glBindVertexArray</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_MODELMATRIX</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
         <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
     <span class="p">}</span>
@@ -168,6 +207,11 @@
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">meshName</span><span class="p">;</span>
 
         <span class="p">{</span><span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">contextFolder</span><span class="p">.</span><span class="n">get_virtual_path</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">settings</span><span class="p">.</span><span class="n">contextFolder</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">parent</span><span class="p">();</span>
+            <span class="p">}</span>
+
             <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">create_mesh</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
             <span class="p">{</span>
@@ -192,7 +236,249 @@
             <span class="n">m_models</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
         <span class="p">}</span>
 
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelNameLock</span><span class="p">);</span>
+            <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Created model {} with mesh: {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">meshName</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="p">{</span><span class="c1">// Check if the model already exists.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="n">model</span> <span class="n">model</span><span class="p">{};</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">meshName</span><span class="p">;</span>
+
+        <span class="p">{</span><span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
+            <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to load model {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Copy the sub-mesh data.</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// The model still needs to be buffered on the rendering thread.</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="p">{</span> <span class="c1">// Insert the model into the model list.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="n">m_models</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelNameLock</span><span class="p">);</span>
+            <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+        <span class="p">}</span>
+
         <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Created model {} with mesh: {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">meshName</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">meshId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="p">{</span><span class="c1">// Check if the model already exists.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="n">model</span> <span class="n">model</span><span class="p">{};</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">meshName</span><span class="p">;</span>
+
+        <span class="p">{</span><span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
+            <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">meshId</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to load model {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Copy the sub-mesh data.</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// The model still needs to be buffered on the rendering thread.</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="p">{</span> <span class="c1">// Insert the model into the model list.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="n">m_models</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelNameLock</span><span class="p">);</span>
+            <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Created model {} with mesh: {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">meshName</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="p">{</span><span class="c1">// Check if the model already exists.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="n">model</span> <span class="n">model</span><span class="p">{};</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">meshName</span><span class="p">;</span>
+
+        <span class="p">{</span><span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
+            <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to load model {}&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Copy the sub-mesh data.</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// The model still needs to be buffered on the rendering thread.</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="p">{</span> <span class="c1">// Insert the model into the model list.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="n">m_models</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelNameLock</span><span class="p">);</span>
+            <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Created model {} with mesh: {}&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">meshName</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">mesh_handle</span> <span class="n">mesh</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="p">{</span><span class="c1">// Check if the model already exists.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="n">model</span> <span class="n">model</span><span class="p">{};</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">meshName</span><span class="p">;</span>
+
+        <span class="p">{</span><span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">mesh</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to load model {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Copy the sub-mesh data.</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// The model still needs to be buffered on the rendering thread.</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="p">{</span> <span class="c1">// Insert the model into the model list.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="n">m_models</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelNameLock</span><span class="p">);</span>
+            <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Created model {} with mesh: {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">meshName</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="n">mesh_handle</span> <span class="n">mesh</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
+
+        <span class="p">{</span><span class="c1">// Check if the model already exists.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="n">model</span> <span class="n">model</span><span class="p">{};</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">meshName</span><span class="p">;</span>
+
+        <span class="p">{</span><span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">mesh</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to load model {}&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Copy the sub-mesh data.</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
+                <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// The model still needs to be buffered on the rendering thread.</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="p">{</span> <span class="c1">// Insert the model into the model list.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="n">m_models</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">rawmesh</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">mixed_multiguard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelNameLock</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">lock_state_read</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">lock_state_write</span><span class="p">);</span>
+            <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rawmesh</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Created model {} with mesh: {}&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">meshName</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
     <span class="p">}</span>

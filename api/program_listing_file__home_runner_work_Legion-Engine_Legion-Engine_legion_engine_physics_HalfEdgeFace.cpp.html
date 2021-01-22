@@ -48,6 +48,7 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_HalfEdgeFace.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-halfedgeface-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/HalfEdgeFace.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/halfedgeface.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/halfedgeedge.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/debugrendering.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
@@ -56,22 +57,23 @@
         <span class="cm">/*log::debug(&quot;HalfEdgeFace::HalfEdgeFace&quot;);*/</span>
         <span class="k">static</span> <span class="kt">int</span> <span class="n">faceCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
+        <span class="n">DEBUG_color</span> <span class="o">=</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="p">(</span> <span class="n">math</span><span class="o">::</span><span class="n">linearRand</span><span class="p">(</span><span class="mf">0.25f</span><span class="p">,</span> <span class="mf">0.7f</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">linearRand</span><span class="p">(</span><span class="mf">0.25f</span><span class="p">,</span> <span class="mf">0.7f</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">linearRand</span><span class="p">(</span><span class="mf">0.25f</span><span class="p">,</span> <span class="mf">0.7f</span><span class="p">));</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">faceCenter</span><span class="p">{</span> <span class="mf">0.0f</span> <span class="p">};</span>
         <span class="kt">int</span> <span class="n">edgeCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-        <span class="k">auto</span> <span class="n">calculateFaceCentroid</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">faceCenter</span><span class="p">,</span><span class="o">&amp;</span><span class="n">edgeCount</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="k">auto</span> <span class="n">calculateFaceCentroid</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">faceCenter</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">edgeCount</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">pos</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">;</span>
             <span class="n">faceCenter</span> <span class="o">+=</span> <span class="n">pos</span><span class="p">;</span>
             <span class="n">edgeCount</span><span class="o">++</span><span class="p">;</span>
         <span class="p">};</span>
         <span class="n">forEachEdge</span><span class="p">(</span><span class="n">calculateFaceCentroid</span><span class="p">);</span>
 
-        <span class="n">centroid</span> <span class="o">=</span> <span class="n">faceCenter</span><span class="o">/</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span> <span class="n">edgeCount</span><span class="p">);</span>
+        <span class="n">centroid</span> <span class="o">=</span> <span class="n">faceCenter</span> <span class="o">/</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">edgeCount</span><span class="p">);</span>
 
         <span class="kt">int</span> <span class="n">currentEdgeId</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-        <span class="k">auto</span> <span class="n">initializeEdgeToFaceFunc</span> <span class="o">=</span> <span class="p">[</span><span class="k">this</span><span class="p">,</span><span class="o">&amp;</span><span class="n">currentEdgeId</span><span class="p">,</span><span class="n">edgeCount</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="k">auto</span> <span class="n">initializeEdgeToFaceFunc</span> <span class="o">=</span> <span class="p">[</span><span class="k">this</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">currentEdgeId</span><span class="p">,</span> <span class="n">edgeCount</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">edge</span><span class="o">-&gt;</span><span class="n">face</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
@@ -91,13 +93,35 @@
 
     <span class="p">}</span>
 
+    <span class="kt">void</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">deleteEdges</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">current</span> <span class="o">=</span> <span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">current</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">&amp;&amp;</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">==</span> <span class="n">current</span><span class="p">)</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="k">delete</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="p">;</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">current</span> <span class="o">!=</span> <span class="n">startEdge</span> <span class="o">&amp;&amp;</span> <span class="n">current</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">);</span>
+        <span class="n">startEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">setFaceForAllEdges</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">current</span> <span class="o">=</span> <span class="n">startEdge</span><span class="p">;</span>
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="n">current</span><span class="o">-&gt;</span><span class="n">face</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">current</span> <span class="o">!=</span> <span class="n">startEdge</span><span class="p">);</span>
+    <span class="p">}</span>
+
 
     <span class="kt">void</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">forEachEdge</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">delegate</span><span class="o">&lt;</span> <span class="kt">void</span><span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">functionToExecute</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">initialEdge</span> <span class="o">=</span> <span class="n">startEdge</span><span class="p">;</span>
         <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">currentEdge</span> <span class="o">=</span> <span class="n">startEdge</span><span class="p">;</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">currentEdge</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">currentEdge</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
 
         <span class="c1">//the HalfEdgeEdge* &#39;startEdge&#39; creates a ring buffer.</span>
         <span class="c1">//This means that initialEdge will eventually go back to &quot;startEdge&quot;, ending the loop.</span>
@@ -107,21 +131,193 @@
             <span class="n">currentEdge</span> <span class="o">=</span> <span class="n">currentEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
             <span class="n">functionToExecute</span><span class="p">(</span><span class="n">edgeToExecuteOn</span><span class="p">);</span>
 
-        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">initialEdge</span> <span class="o">!=</span> <span class="n">currentEdge</span> <span class="o">&amp;&amp;</span> <span class="n">currentEdge</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">initialEdge</span> <span class="o">!=</span> <span class="n">currentEdge</span> <span class="o">&amp;&amp;</span> <span class="n">currentEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">);</span>
 
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">inverse</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="o">-</span><span class="n">normal</span><span class="p">;</span> <span class="c1">// Inverse the normal</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">testConvexity</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">other</span> <span class="o">==</span> <span class="o">*</span><span class="k">this</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Testing face with itself for convexity: returning true&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">difference</span> <span class="o">=</span> <span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span> <span class="o">-</span> <span class="n">other</span><span class="p">.</span><span class="n">centroid</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">scaledAngle</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">difference</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
+
+        <span class="c1">// if the scaledAngle is smaller or equal to 0, it is not convex</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">scaledAngle</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">other</span> <span class="o">==</span> <span class="o">*</span><span class="k">this</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Make normals for face convex with itself: returning false&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">difference</span> <span class="o">=</span> <span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span> <span class="o">-</span> <span class="n">other</span><span class="p">.</span><span class="n">centroid</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">scaledAngle</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">difference</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
+
+        <span class="c1">// if the scaledAngle is smaller or equal to 0, it is not convex</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">scaledAngle</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">inverse</span><span class="p">();</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">face_angle_relation</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">getAngleRelation</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">other</span> <span class="o">==</span> <span class="o">*</span><span class="k">this</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Calculating face angle relation between the same face, returning coplanar&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">coplanar</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">float</span> <span class="n">distToPlane</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">pointToPlane</span><span class="p">(</span><span class="n">centroid</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">centroid</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">normal</span><span class="p">);</span>
+
+        <span class="c1">// if the distance to the face is negative, is it under the other face, therefore convex</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">distToPlane</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">convex</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">distToPlane</span> <span class="o">&gt;=</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">concave</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">return</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">coplanar</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">testConvexity</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">first</span> <span class="o">==</span> <span class="n">second</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Testing face with itself for convexity: returning true&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">first</span><span class="p">.</span><span class="n">testConvexity</span><span class="p">(</span><span class="n">second</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">second</span><span class="p">.</span><span class="n">testConvexity</span><span class="p">(</span><span class="n">first</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">first</span> <span class="o">==</span> <span class="n">second</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Make normals for face convex with itself: returning false&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="n">inversedNormal</span> <span class="o">=</span> <span class="n">first</span><span class="p">.</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="n">second</span><span class="p">);</span>
+        <span class="n">inversedNormal</span> <span class="o">|=</span> <span class="n">second</span><span class="p">.</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="n">first</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">inversedNormal</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">findMiddleEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">firstCurrent</span> <span class="o">=</span> <span class="n">first</span><span class="p">.</span><span class="n">startEdge</span><span class="p">;</span>
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">secondCurrent</span> <span class="o">=</span> <span class="n">second</span><span class="p">.</span><span class="n">startEdge</span><span class="p">;</span>
+            <span class="k">do</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">firstCurrent</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">==</span> <span class="n">secondCurrent</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">return</span> <span class="n">firstCurrent</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">firstCurrent</span> <span class="o">==</span> <span class="n">secondCurrent</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">return</span> <span class="n">firstCurrent</span><span class="p">;</span>
+                <span class="p">}</span>
+
+
+                <span class="n">secondCurrent</span> <span class="o">=</span> <span class="n">secondCurrent</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">secondCurrent</span> <span class="o">!=</span> <span class="n">second</span><span class="p">.</span><span class="n">startEdge</span><span class="p">);</span>
+            <span class="n">firstCurrent</span> <span class="o">=</span> <span class="n">firstCurrent</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">firstCurrent</span> <span class="o">!=</span> <span class="n">first</span><span class="p">.</span><span class="n">startEdge</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">mergeFaces</span><span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">&amp;</span> <span class="n">middleEdge</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">middleEdge</span><span class="p">.</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">startEdge</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">middleEdge</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">middleEdge</span><span class="p">.</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">startEdge</span> <span class="o">=</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// Set correct faces</span>
+        <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">end</span> <span class="o">=</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">pairingEdge</span><span class="p">;</span>
+        <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">current</span> <span class="o">=</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">pairingEdge</span><span class="p">;</span>
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="n">current</span><span class="o">-&gt;</span><span class="n">face</span> <span class="o">=</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">face</span><span class="p">;</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">current</span> <span class="o">!=</span> <span class="n">end</span><span class="p">);</span>
+
+        <span class="c1">// Link edges</span>
+        <span class="n">middleEdge</span><span class="p">.</span><span class="n">prevEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span> <span class="o">=</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+        <span class="n">middleEdge</span><span class="p">.</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">prevEdge</span> <span class="o">=</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="p">;</span>
+        <span class="n">middleEdge</span><span class="p">.</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span> <span class="o">=</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">nextEdge</span><span class="p">;</span>
+        <span class="n">middleEdge</span><span class="p">.</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">prevEdge</span> <span class="o">=</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">prevEdge</span><span class="p">;</span>
+
+        <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">face</span><span class="p">;</span>
+
+        <span class="c1">// Recalculate centroid</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">faceCenter</span><span class="p">{</span> <span class="mf">0.0f</span> <span class="p">};</span>
+            <span class="kt">int</span> <span class="n">edgeCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+            <span class="k">auto</span> <span class="n">calculateFaceCentroid</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">faceCenter</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">edgeCount</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">;</span>
+                <span class="n">faceCenter</span> <span class="o">+=</span> <span class="n">pos</span><span class="p">;</span>
+                <span class="n">edgeCount</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">};</span>
+            <span class="n">face</span><span class="o">-&gt;</span><span class="n">forEachEdge</span><span class="p">(</span><span class="n">calculateFaceCentroid</span><span class="p">);</span>
+
+            <span class="n">face</span><span class="o">-&gt;</span><span class="n">centroid</span> <span class="o">=</span> <span class="n">faceCenter</span> <span class="o">/</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">edgeCount</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">delete</span> <span class="n">middleEdge</span><span class="p">.</span><span class="n">pairingEdge</span><span class="p">;</span>
+        <span class="k">delete</span><span class="o">&amp;</span> <span class="n">middleEdge</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="n">face</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">DEBUG_DrawFace</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&amp;</span> <span class="n">debugColor</span><span class="p">,</span><span class="kt">float</span> <span class="n">time</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="k">auto</span> <span class="n">drawFunc</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">transform</span><span class="p">,</span><span class="n">debugColor</span><span class="p">,</span><span class="n">time</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">edge</span><span class="o">-&gt;</span><span class="n">DEBUG_drawEdge</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">debugColor</span><span class="p">,</span> <span class="n">time</span><span class="p">);</span>
+
+        <span class="p">};</span>
+
+        <span class="n">forEachEdge</span><span class="p">(</span><span class="n">drawFunc</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="n">HalfEdgeFace</span><span class="o">::~</span><span class="n">HalfEdgeFace</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="k">auto</span> <span class="n">deleteFunc</span> <span class="o">=</span> <span class="p">[](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span> <span class="p">{</span> <span class="k">delete</span> <span class="n">edge</span><span class="p">;</span> <span class="p">};</span>
+        <span class="k">auto</span> <span class="n">deleteFunc</span> <span class="o">=</span> <span class="p">[](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">&amp;&amp;</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">&amp;&amp;</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">==</span> <span class="n">edge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">delete</span> <span class="n">edge</span><span class="p">;</span>
+        <span class="p">};</span>
 
         <span class="n">forEachEdge</span><span class="p">(</span><span class="n">deleteFunc</span><span class="p">);</span>
 
     <span class="p">}</span>
-
-
-
-
 <span class="p">}</span>
 </pre></div>
 </div>

@@ -1,0 +1,29 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_typedefs.hpp:
+
+Program Listing for File mesh_splitter_typedefs.hpp
+===================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_typedefs.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   #include <physics/mesh_splitter_utils/mesh_half_edge.hpp>
+   #include <physics/mesh_splitter_utils/primitive_mesh.h>
+   #include <physics/mesh_splitter_utils/splittable_polygon.h>
+   
+   namespace legion::physics
+   {
+       typedef std::pair<int, int> edgeVertexIndexPair;
+   
+       typedef std::map<edgeVertexIndexPair,
+       std::shared_ptr< physics::MeshHalfEdge>> VertexIndexToHalfEdgePtr;
+   
+       typedef std::shared_ptr<MeshHalfEdge> meshHalfEdgePtr;
+       typedef std::shared_ptr<SplittablePolygon> SplittablePolygonPtr;
+   }
+   

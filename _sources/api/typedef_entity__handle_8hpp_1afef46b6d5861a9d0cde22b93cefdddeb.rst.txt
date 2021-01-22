@@ -1,0 +1,13 @@
+.. _exhale_typedef_entity__handle_8hpp_1afef46b6d5861a9d0cde22b93cefdddeb:
+
+Typedef legion::core::ecs::entity_set
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::ecs::entity_set

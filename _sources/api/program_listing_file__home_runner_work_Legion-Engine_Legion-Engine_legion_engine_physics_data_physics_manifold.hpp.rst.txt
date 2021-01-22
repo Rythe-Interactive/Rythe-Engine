@@ -21,7 +21,6 @@ Program Listing for File physics_manifold.hpp
    
    namespace legion::physics
    {
-   
        class PhysicsCollider;
        class PenetrationQuery;
    

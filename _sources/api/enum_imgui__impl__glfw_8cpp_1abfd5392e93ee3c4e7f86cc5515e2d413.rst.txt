@@ -1,0 +1,13 @@
+.. _exhale_enum_imgui__impl__glfw_8cpp_1abfd5392e93ee3c4e7f86cc5515e2d413:
+
+Enum GlfwClientApi
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: GlfwClientApi

@@ -20,7 +20,6 @@ Program Listing for File physicscollider.hpp
    
    namespace legion::physics
    {
-   
        struct physics_manifold;
        class ConvexCollider;
    
@@ -28,7 +27,7 @@ Program Listing for File physicscollider.hpp
        class PhysicsCollider
        {
        public:
-   
+           bool shouldBeDrawn = true;
            std::vector<std::unique_ptr<ConverganceIdentifier>> converganceIdentifiers;
    
            PhysicsCollider()
@@ -41,6 +40,8 @@ Program Listing for File physicscollider.hpp
    
            void AttemptFindAndCopyConverganceID(physics_contact& contact)
            {
+               if (!constants::applyWarmStarting) { return; }
+   
                for (auto&& converganceId : converganceIdentifiers)
                {
                    if (converganceId->refColliderID == contact.refCollider->GetColliderID())
@@ -73,16 +74,17 @@ Program Listing for File physicscollider.hpp
                ConvexCollider* convexCollider, physics_manifold& manifold) {};
    
    
-           inline virtual void DrawColliderRepresentation(math::mat4 transform) {};
+           virtual void DrawColliderRepresentation(math::mat4 transform) {};
+   
+           virtual void UpdateTightBoundingVolume(const math::mat4& transform) {};
+   
    
            inline virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
            {
                return dummyHalfEdges;
            }
    
-   
-   
-           math::vec3 GetLocalCentroid()
+           L_NODISCARD math::vec3 GetLocalCentroid() const noexcept
            {
                return localColliderCentroid;
            }

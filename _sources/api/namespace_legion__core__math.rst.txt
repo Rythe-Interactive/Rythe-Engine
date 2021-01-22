@@ -12,6 +12,16 @@ Namespace legion::core::math
 
 
 
+Detailed Description
+--------------------
+
+Copyright 2020 Raphael Baier
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ 
+
+
 
 Namespaces
 ----------
@@ -26,75 +36,105 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structlegion_1_1core_1_1math_1_1lowest__precision`
+
 - :ref:`exhale_struct_structlegion_1_1core_1_1math_1_1precision__chooser`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1math_1_1angle`
 
 - :ref:`exhale_class_structlegion_1_1core_1_1math_1_1color`
 
+- :ref:`exhale_class_structlegion_1_1core_1_1math_1_1line__segment`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1math_1_1plane`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1math_1_1triangle`
+
 
 Enums
 -----
 
 
-- :ref:`exhale_enum_precision_8hpp_1acc13e397d8c7884e8c3b622c1a1f3532`
+- :ref:`exhale_enum_namespacelegion_1_1core_1_1math_1acc13e397d8c7884e8c3b622c1a1f3532`
 
 
 Functions
 ---------
 
 
-- :ref:`exhale_function_trigonometry_8hpp_1a29b6979c0eacd1bc3a381ad7d8a82c2a`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ab99d1ae877ad73aaf43334d28856a0bd`
 
-- :ref:`exhale_function_trigonometry_8hpp_1ac3a9a8aeaebf10f39989a6f4e29e61aa`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a29b6979c0eacd1bc3a381ad7d8a82c2a`
 
-- :ref:`exhale_function_constants_8hpp_1ad7f39d091c1b87fa5616d17fb827c4f9`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ac3a9a8aeaebf10f39989a6f4e29e61aa`
 
-- :ref:`exhale_function_constants_8hpp_1ac988e471088bf55ea91787d47824b7e7`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ad7f39d091c1b87fa5616d17fb827c4f9`
 
-- :ref:`exhale_function_constants_8hpp_1acc561f96d138c1757da6779c21872a23`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ac988e471088bf55ea91787d47824b7e7`
 
-- :ref:`exhale_function_constants_8hpp_1a5d616ec51272af1f6a5e9ce2109e7a72`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1acc561f96d138c1757da6779c21872a23`
 
-- :ref:`exhale_function_constants_8hpp_1a99bda1bff6e43c9cc386b536514bb340`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a087fd7cabbd999debb218656e24c7c67`
 
-- :ref:`exhale_function_constants_8hpp_1a7d39cf277c04236dc21985c4d5c4deac`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a5d616ec51272af1f6a5e9ce2109e7a72`
 
-- :ref:`exhale_function_constants_8hpp_1a85adfee05b177583bc2405a52b8d4e49`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a99bda1bff6e43c9cc386b536514bb340`
 
-- :ref:`exhale_function_constants_8hpp_1a5a62400db68efd1b4150b0f1ea3f2554`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a7d39cf277c04236dc21985c4d5c4deac`
 
-- :ref:`exhale_function_constants_8hpp_1af09753c3d9ade3ae45f3b2bc8fb5d1d2`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a85adfee05b177583bc2405a52b8d4e49`
 
-- :ref:`exhale_function_constants_8hpp_1aeef4aa54ec822881d431680a167cb2f5`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a5a62400db68efd1b4150b0f1ea3f2554`
 
-- :ref:`exhale_function_constants_8hpp_1a939153bf2d0f765b9794ec4882c08395`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1af09753c3d9ade3ae45f3b2bc8fb5d1d2`
 
-- :ref:`exhale_function_constants_8hpp_1ab12ea362e005f702f7f0af6cad4fba77`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1aeef4aa54ec822881d431680a167cb2f5`
 
-- :ref:`exhale_function_constants_8hpp_1af509ea53853e82df7137bbe2542e85bf`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a939153bf2d0f765b9794ec4882c08395`
 
-- :ref:`exhale_function_constants_8hpp_1a916beecf872ff0e82e74cd82703413ca`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ab12ea362e005f702f7f0af6cad4fba77`
 
-- :ref:`exhale_function_trigonometry_8hpp_1af946cb2ac55fd4c210a3570faf5c1e1b`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1af509ea53853e82df7137bbe2542e85bf`
 
-- :ref:`exhale_function_trigonometry_8hpp_1a4d1c95cc7b687ab98b2796e8132af63c`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a828ceba59d7cd6df910e1c6fba3ac9b6`
 
-- :ref:`exhale_function_constants_8hpp_1ace10587db3e0a7edb5d5fd1b26018c55`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a2075913c8e8b334ae35b85eb2e8c291c`
 
-- :ref:`exhale_function_constants_8hpp_1a3fe56736f705ea2ede9feeefb05be16a`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a17ff9e4ac0974d811975affb03e4982c`
 
-- :ref:`exhale_function_constants_8hpp_1ab480eaa3b971466c36c2c0d35a0edeb6`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a26abd6512969c9b89293e49f3d10680a`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a4b02e7062ed41da390878e48b2a4c4c2`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ace96b6b04d3fdba65afe2db3aea2ae82`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a7fa0e58ae5dbc293be0d99290edc0be6`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ad442880c50c4ee9180cffff65748fe57`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a916beecf872ff0e82e74cd82703413ca`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1af946cb2ac55fd4c210a3570faf5c1e1b`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a4d1c95cc7b687ab98b2796e8132af63c`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ace10587db3e0a7edb5d5fd1b26018c55`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a3fe56736f705ea2ede9feeefb05be16a`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ab480eaa3b971466c36c2c0d35a0edeb6`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1adeed27e24ebcb428a98e13a3c3685fdf`
 
 
 Typedefs
 --------
 
 
-- :ref:`exhale_typedef_trigonometry_8hpp_1ac5d8857089d5702ef9b21ee78c5908b2`
+- :ref:`exhale_typedef_namespacelegion_1_1core_1_1math_1ac5d8857089d5702ef9b21ee78c5908b2`
 
-- :ref:`exhale_typedef_trigonometry_8hpp_1a6a1991ad5d23fb2e238ee55d6ab06ae8`
+- :ref:`exhale_typedef_namespacelegion_1_1core_1_1math_1a6a1991ad5d23fb2e238ee55d6ab06ae8`
 
-- :ref:`exhale_typedef_trigonometry_8hpp_1aaade6ddb5a868192aa6ce35c0c3f0bd2`
+- :ref:`exhale_typedef_namespacelegion_1_1core_1_1math_1aaade6ddb5a868192aa6ce35c0c3f0bd2`
 
-- :ref:`exhale_typedef_precision_8hpp_1a67d623335cd243607d056d780ab6bd4f`
+- :ref:`exhale_typedef_namespacelegion_1_1core_1_1math_1a67d623335cd243607d056d780ab6bd4f`

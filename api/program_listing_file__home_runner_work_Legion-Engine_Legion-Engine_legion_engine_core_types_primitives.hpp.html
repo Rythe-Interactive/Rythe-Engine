@@ -47,12 +47,8 @@
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-types-primitives-hpp"></span><h1>Program Listing for File primitives.hpp<a class="headerlink" href="#program-listing-for-file-primitives-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-types-primitives-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/types/primitives.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-<span class="cp">#ifndef _MSC_VER</span>
-<span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt; //linux std::(u)int(8-64)_t</span><span class="cp"></span>
-<span class="cp">#else</span>
-<span class="cp">#include</span> <span class="cpf">&lt;cstddef&gt; //msc   std::(u)int(8-64)_t</span><span class="cp"></span>
-<span class="cp">#endif</span>
-<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;  //      std::vector&lt;T&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;string_view&gt;</span><span class="cp"></span>
 
@@ -93,9 +89,10 @@
     <span class="k">using</span> <span class="n">bitfield32</span> <span class="o">=</span> <span class="n">uint32</span><span class="p">;</span>
     <span class="k">using</span> <span class="n">bitfield64</span> <span class="o">=</span> <span class="n">uint64</span><span class="p">;</span>
 
-    <span class="k">using</span> <span class="n">priority_type</span> <span class="o">=</span> <span class="n">uint8</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">priority_type</span> <span class="o">=</span> <span class="n">int8</span><span class="p">;</span>
 <span class="cp">#define default_priority 0</span>
-<span class="cp">#define PRIORITY_MAX UCHAR_MAX</span>
+<span class="cp">#define PRIORITY_MAX CHAR_MAX</span>
+<span class="cp">#define PRIORITY_MIN CHAR_MIN</span>
 
     <span class="k">using</span> <span class="n">id_type</span> <span class="o">=</span> <span class="n">uint_max</span><span class="p">;</span>
 

@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File ImCurveEdit.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File ImCurveEdit.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-imcurveedit-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imcurveedit-cpp"></span><h1>Program Listing for File ImCurveEdit.cpp<a class="headerlink" href="#program-listing-for-file-imcurveedit-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImCurveEdit.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imcurveedit-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/ImCurveEdit.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;imgui/ImCurveEdit.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;imgui/imgui.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;imgui/imgui_internal.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+
+<span class="cp">#if !defined(_MSC_VER)</span>
+<span class="cp">#define _malloca(x) alloca(x)</span>
+<span class="cp">#endif</span>
+
+<span class="k">namespace</span> <span class="n">ImCurveEdit</span>
+<span class="p">{</span>
+
+<span class="cp">#ifndef IMGUI_DEFINE_MATH_OPERATORS</span>
+   <span class="k">static</span> <span class="n">ImVec2</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="k">static</span> <span class="n">ImVec2</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="k">static</span> <span class="n">ImVec2</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="k">static</span> <span class="n">ImVec2</span> <span class="k">operator</span><span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="k">static</span> <span class="n">ImVec2</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="kt">float</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">b</span><span class="p">);</span>
+   <span class="p">}</span>
+<span class="cp">#endif</span>
+
+   <span class="k">static</span> <span class="kt">float</span> <span class="n">smoothstep</span><span class="p">(</span><span class="kt">float</span> <span class="n">edge0</span><span class="p">,</span> <span class="kt">float</span> <span class="n">edge1</span><span class="p">,</span> <span class="kt">float</span> <span class="n">x</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">x</span> <span class="o">=</span> <span class="n">ImClamp</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">edge0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">edge1</span> <span class="o">-</span> <span class="n">edge0</span><span class="p">),</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">);</span>
+      <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="k">static</span> <span class="kt">float</span> <span class="n">distance</span><span class="p">(</span><span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="kt">float</span> <span class="n">y</span><span class="p">,</span> <span class="kt">float</span> <span class="n">x1</span><span class="p">,</span> <span class="kt">float</span> <span class="n">y1</span><span class="p">,</span> <span class="kt">float</span> <span class="n">x2</span><span class="p">,</span> <span class="kt">float</span> <span class="n">y2</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="kt">float</span> <span class="n">A</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">B</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">y1</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">C</span> <span class="o">=</span> <span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">D</span> <span class="o">=</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span><span class="p">;</span>
+
+      <span class="kt">float</span> <span class="n">dot</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">C</span> <span class="o">+</span> <span class="n">B</span> <span class="o">*</span> <span class="n">D</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">len_sq</span> <span class="o">=</span> <span class="n">C</span> <span class="o">*</span> <span class="n">C</span> <span class="o">+</span> <span class="n">D</span> <span class="o">*</span> <span class="n">D</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">param</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.f</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">len_sq</span> <span class="o">&gt;</span> <span class="n">FLT_EPSILON</span><span class="p">)</span>
+         <span class="n">param</span> <span class="o">=</span> <span class="n">dot</span> <span class="o">/</span> <span class="n">len_sq</span><span class="p">;</span>
+
+      <span class="kt">float</span> <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">;</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">param</span> <span class="o">&lt;</span> <span class="mf">0.f</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">xx</span> <span class="o">=</span> <span class="n">x1</span><span class="p">;</span>
+         <span class="n">yy</span> <span class="o">=</span> <span class="n">y1</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">param</span> <span class="o">&gt;</span> <span class="mf">1.f</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">xx</span> <span class="o">=</span> <span class="n">x2</span><span class="p">;</span>
+         <span class="n">yy</span> <span class="o">=</span> <span class="n">y2</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span>
+         <span class="n">xx</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">+</span> <span class="n">param</span> <span class="o">*</span> <span class="n">C</span><span class="p">;</span>
+         <span class="n">yy</span> <span class="o">=</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">param</span> <span class="o">*</span> <span class="n">D</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="kt">float</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">xx</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">yy</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nf">sqrtf</span><span class="p">(</span><span class="n">dx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">dy</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="k">static</span> <span class="kt">int</span> <span class="n">DrawPoint</span><span class="p">(</span><span class="n">ImDrawList</span><span class="o">*</span> <span class="n">draw_list</span><span class="p">,</span> <span class="n">ImVec2</span> <span class="n">pos</span><span class="p">,</span> <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">offset</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">edited</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+
+      <span class="k">static</span> <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">localOffsets</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">ImVec2</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">};</span>
+      <span class="n">ImVec2</span> <span class="n">offsets</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="n">offsets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">*</span> <span class="n">size</span> <span class="o">+</span> <span class="n">localOffsets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mf">4.5f</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">center</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">*</span> <span class="n">size</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span>
+      <span class="k">const</span> <span class="n">ImRect</span> <span class="nf">anchor</span><span class="p">(</span><span class="n">center</span> <span class="o">-</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">center</span> <span class="o">+</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
+      <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddConvexPolyFilled</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mh">0xFF000000</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">anchor</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">))</span>
+      <span class="p">{</span>
+         <span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MouseDown</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">edited</span><span class="p">)</span>
+         <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddPolyline</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mh">0xFFFFFFFF</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="mf">3.0f</span><span class="p">);</span>
+      <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+         <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddPolyline</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mh">0xFF80B0FF</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">);</span>
+      <span class="k">else</span>
+         <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddPolyline</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mh">0xFF0080FF</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">);</span>
+
+      <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="kt">int</span> <span class="n">Edit</span><span class="p">(</span><span class="n">Delegate</span><span class="o">&amp;</span> <span class="n">delegate</span><span class="p">,</span> <span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">size</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">ImRect</span><span class="o">*</span> <span class="n">clippingRect</span><span class="p">,</span> <span class="n">ImVector</span><span class="o">&lt;</span><span class="n">EditPoint</span><span class="o">&gt;*</span> <span class="n">selectedPoints</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="k">static</span> <span class="kt">bool</span> <span class="n">selectingQuad</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+      <span class="k">static</span> <span class="n">ImVec2</span> <span class="n">quadSelection</span><span class="p">;</span>
+      <span class="k">static</span> <span class="kt">int</span> <span class="n">overCurve</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="k">static</span> <span class="kt">int</span> <span class="n">movingCurve</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="k">static</span> <span class="kt">bool</span> <span class="n">scrollingV</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+      <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">set</span><span class="o">&lt;</span><span class="n">EditPoint</span><span class="o">&gt;</span> <span class="n">selection</span><span class="p">;</span>
+      <span class="k">static</span> <span class="kt">bool</span> <span class="n">overSelectedPoint</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+      <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+      <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+      <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleVar</span><span class="p">(</span><span class="n">ImGuiStyleVar_FramePadding</span><span class="p">,</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+      <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_Border</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+      <span class="n">ImGui</span><span class="o">::</span><span class="n">BeginChildFrame</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+      <span class="n">delegate</span><span class="p">.</span><span class="n">focused</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">IsWindowFocused</span><span class="p">();</span>
+      <span class="n">ImDrawList</span><span class="o">*</span> <span class="n">draw_list</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetWindowDrawList</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">clippingRect</span><span class="p">)</span>
+         <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">PushClipRect</span><span class="p">(</span><span class="n">clippingRect</span><span class="o">-&gt;</span><span class="n">Min</span><span class="p">,</span> <span class="n">clippingRect</span><span class="o">-&gt;</span><span class="n">Max</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+
+      <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetCursorScreenPos</span><span class="p">()</span> <span class="o">+</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mf">0.f</span><span class="p">,</span> <span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+      <span class="k">const</span> <span class="n">ImVec2</span> <span class="nf">ssize</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+      <span class="k">const</span> <span class="n">ImRect</span> <span class="nf">container</span><span class="p">(</span><span class="n">offset</span> <span class="o">+</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mf">0.f</span><span class="p">,</span> <span class="n">ssize</span><span class="p">.</span><span class="n">y</span><span class="p">),</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">ssize</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="mf">0.f</span><span class="p">));</span>
+      <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">min</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetMin</span><span class="p">();</span>
+      <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">max</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetMax</span><span class="p">();</span>
+
+      <span class="c1">// handle zoom and VScroll</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">))</span>
+      <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">fabsf</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MouseWheel</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">FLT_EPSILON</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="k">const</span> <span class="kt">float</span> <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">offset</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">ssize</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">ratioY</span> <span class="o">=</span> <span class="n">ImLerp</span><span class="p">(</span><span class="n">min</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">max</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">scaleValue</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="kt">float</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+               <span class="n">v</span> <span class="o">-=</span> <span class="n">ratioY</span><span class="p">;</span>
+               <span class="n">v</span> <span class="o">*=</span> <span class="p">(</span><span class="mf">1.f</span> <span class="o">-</span> <span class="n">io</span><span class="p">.</span><span class="n">MouseWheel</span> <span class="o">*</span> <span class="mf">0.05f</span><span class="p">);</span>
+               <span class="n">v</span> <span class="o">+=</span> <span class="n">ratioY</span><span class="p">;</span>
+               <span class="k">return</span> <span class="n">v</span><span class="p">;</span>
+            <span class="p">};</span>
+            <span class="n">min</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">scaleValue</span><span class="p">(</span><span class="n">min</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+            <span class="n">max</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">scaleValue</span><span class="p">(</span><span class="n">max</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+         <span class="p">}</span>
+         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">scrollingV</span> <span class="o">&amp;&amp;</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">IsMouseDown</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+         <span class="p">{</span>
+            <span class="n">scrollingV</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+         <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="n">ImVec2</span> <span class="n">range</span> <span class="o">=</span> <span class="n">max</span> <span class="o">-</span> <span class="n">min</span> <span class="o">+</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mf">1.f</span><span class="p">,</span> <span class="mf">0.f</span><span class="p">);</span>  <span class="c1">// +1 because of inclusive last frame</span>
+
+      <span class="k">const</span> <span class="n">ImVec2</span> <span class="nf">viewSize</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">size</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+      <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">sizeOfPixel</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mf">1.f</span><span class="p">,</span> <span class="mf">1.f</span><span class="p">)</span> <span class="o">/</span> <span class="n">viewSize</span><span class="p">;</span>
+      <span class="k">const</span> <span class="kt">size_t</span> <span class="n">curveCount</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetCurveCount</span><span class="p">();</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">scrollingV</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="kt">float</span> <span class="n">deltaH</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">MouseDelta</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">range</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">sizeOfPixel</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+         <span class="n">min</span><span class="p">.</span><span class="n">y</span> <span class="o">-=</span> <span class="n">deltaH</span><span class="p">;</span>
+         <span class="n">max</span><span class="p">.</span><span class="n">y</span> <span class="o">-=</span> <span class="n">deltaH</span><span class="p">;</span>
+         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ImGui</span><span class="o">::</span><span class="n">IsMouseDown</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">scrollingV</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddRectFilled</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">ssize</span><span class="p">,</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetBackgroundColor</span><span class="p">());</span>
+
+      <span class="k">auto</span> <span class="n">pointToRange</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">ImVec2</span> <span class="n">pt</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">pt</span> <span class="o">-</span> <span class="n">min</span><span class="p">)</span> <span class="o">/</span> <span class="n">range</span><span class="p">;</span> <span class="p">};</span>
+      <span class="k">auto</span> <span class="n">rangeToPoint</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">ImVec2</span> <span class="n">pt</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">pt</span> <span class="o">*</span> <span class="n">range</span><span class="p">)</span> <span class="o">+</span> <span class="n">min</span><span class="p">;</span> <span class="p">};</span>
+
+      <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddLine</span><span class="p">(</span><span class="n">ImVec2</span><span class="p">(</span><span class="o">-</span><span class="mf">1.f</span><span class="p">,</span> <span class="o">-</span><span class="n">min</span><span class="p">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">range</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">viewSize</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mf">1.f</span><span class="p">,</span> <span class="o">-</span><span class="n">min</span><span class="p">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">range</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">viewSize</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="mh">0xFF000000</span><span class="p">,</span> <span class="mf">1.5f</span><span class="p">);</span>
+      <span class="kt">bool</span> <span class="n">overCurveOrPoint</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+      <span class="kt">int</span> <span class="n">localOverCurve</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="c1">// make sure highlighted curve is rendered last</span>
+      <span class="kt">int</span><span class="o">*</span> <span class="n">curvesIndex</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">_malloca</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="o">*</span> <span class="n">curveCount</span><span class="p">);</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">curveCount</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span><span class="p">)</span>
+         <span class="n">curvesIndex</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+      <span class="kt">int</span> <span class="n">highLightedCurveIndex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">overCurve</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">curveCount</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="n">ImSwap</span><span class="p">(</span><span class="n">curvesIndex</span><span class="p">[</span><span class="n">overCurve</span><span class="p">],</span> <span class="n">curvesIndex</span><span class="p">[</span><span class="n">curveCount</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+         <span class="n">highLightedCurveIndex</span> <span class="o">=</span> <span class="n">overCurve</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cur</span> <span class="o">&lt;</span> <span class="n">curveCount</span><span class="p">;</span> <span class="n">cur</span><span class="o">++</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">curvesIndex</span><span class="p">[</span><span class="n">cur</span><span class="p">];</span>
+         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">delegate</span><span class="p">.</span><span class="n">IsVisible</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+            <span class="k">continue</span><span class="p">;</span>
+         <span class="k">const</span> <span class="kt">size_t</span> <span class="n">ptCount</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetPointCount</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">ptCount</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+         <span class="n">CurveType</span> <span class="n">curveType</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetCurveType</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">curveType</span> <span class="o">==</span> <span class="n">CurveNone</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+         <span class="k">const</span> <span class="n">ImVec2</span><span class="o">*</span> <span class="n">pts</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetPoints</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+         <span class="kt">uint32_t</span> <span class="n">curveColor</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetCurveColor</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+         <span class="k">if</span> <span class="p">((</span><span class="n">c</span> <span class="o">==</span> <span class="n">highLightedCurveIndex</span> <span class="o">&amp;&amp;</span> <span class="n">selection</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">selectingQuad</span><span class="p">)</span> <span class="o">||</span> <span class="n">movingCurve</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span>
+            <span class="n">curveColor</span> <span class="o">=</span> <span class="mh">0xFFFFFFFF</span><span class="p">;</span>
+
+         <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">ptCount</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">p</span><span class="o">++</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">pointToRange</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">p</span><span class="p">]);</span>
+            <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">pointToRange</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">curveType</span> <span class="o">==</span> <span class="n">CurveSmooth</span> <span class="o">||</span> <span class="n">curveType</span> <span class="o">==</span> <span class="n">CurveLinear</span><span class="p">)</span>
+            <span class="p">{</span>
+               <span class="kt">size_t</span> <span class="n">subStepCount</span> <span class="o">=</span> <span class="p">(</span><span class="n">curveType</span> <span class="o">==</span> <span class="n">CurveSmooth</span><span class="p">)</span> <span class="o">?</span> <span class="mi">20</span> <span class="o">:</span> <span class="mi">2</span><span class="p">;</span>
+               <span class="kt">float</span> <span class="n">step</span> <span class="o">=</span> <span class="mf">1.f</span> <span class="o">/</span> <span class="kt">float</span><span class="p">(</span><span class="n">subStepCount</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+               <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">substep</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">substep</span> <span class="o">&lt;</span> <span class="n">subStepCount</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">substep</span><span class="o">++</span><span class="p">)</span>
+               <span class="p">{</span>
+                  <span class="kt">float</span> <span class="n">t</span> <span class="o">=</span> <span class="kt">float</span><span class="p">(</span><span class="n">substep</span><span class="p">)</span> <span class="o">*</span> <span class="n">step</span><span class="p">;</span>
+
+                  <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">sp1</span> <span class="o">=</span> <span class="n">ImLerp</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+                  <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">sp2</span> <span class="o">=</span> <span class="n">ImLerp</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">t</span> <span class="o">+</span> <span class="n">step</span><span class="p">);</span>
+
+                  <span class="k">const</span> <span class="kt">float</span> <span class="n">rt1</span> <span class="o">=</span> <span class="n">smoothstep</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sp1</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+                  <span class="k">const</span> <span class="kt">float</span> <span class="n">rt2</span> <span class="o">=</span> <span class="n">smoothstep</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sp2</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+
+                  <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">pos1</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">sp1</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">ImLerp</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">rt1</span><span class="p">))</span> <span class="o">*</span> <span class="n">viewSize</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span>
+                  <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">pos2</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">sp2</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">ImLerp</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p2</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">rt2</span><span class="p">))</span> <span class="o">*</span> <span class="n">viewSize</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span>
+
+                  <span class="k">if</span> <span class="p">(</span><span class="n">distance</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">pos1</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos1</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">pos2</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pos2</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">8.f</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">scrollingV</span><span class="p">)</span>
+                  <span class="p">{</span>
+                     <span class="n">localOverCurve</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                     <span class="n">overCurve</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                     <span class="n">overCurveOrPoint</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                  <span class="p">}</span>
+
+                  <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddLine</span><span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">,</span> <span class="n">curveColor</span><span class="p">,</span> <span class="mf">1.3f</span><span class="p">);</span>
+               <span class="p">}</span> <span class="c1">// substep</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">curveType</span> <span class="o">==</span> <span class="n">CurveDiscrete</span><span class="p">)</span>
+            <span class="p">{</span>
+               <span class="n">ImVec2</span> <span class="n">dp1</span> <span class="o">=</span> <span class="n">p1</span> <span class="o">*</span> <span class="n">viewSize</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span>
+               <span class="n">ImVec2</span> <span class="n">dp2</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">p2</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p1</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">viewSize</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span>
+               <span class="n">ImVec2</span> <span class="n">dp3</span> <span class="o">=</span> <span class="n">p2</span> <span class="o">*</span> <span class="n">viewSize</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span>
+               <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddLine</span><span class="p">(</span><span class="n">dp1</span><span class="p">,</span> <span class="n">dp2</span><span class="p">,</span> <span class="n">curveColor</span><span class="p">,</span> <span class="mf">1.3f</span><span class="p">);</span>
+               <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddLine</span><span class="p">(</span><span class="n">dp2</span><span class="p">,</span> <span class="n">dp3</span><span class="p">,</span> <span class="n">curveColor</span><span class="p">,</span> <span class="mf">1.3f</span><span class="p">);</span>
+
+               <span class="k">if</span> <span class="p">((</span><span class="n">distance</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dp1</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">dp1</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dp3</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">dp1</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">8.f</span> <span class="o">||</span>
+                  <span class="n">distance</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dp3</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">dp1</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">dp3</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">dp3</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">8.f</span><span class="p">)</span>
+                  <span class="cm">/*&amp;&amp; localOverCurve == -1*/</span><span class="p">)</span>
+               <span class="p">{</span>
+                  <span class="n">localOverCurve</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                  <span class="n">overCurve</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                  <span class="n">overCurveOrPoint</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+               <span class="p">}</span>
+            <span class="p">}</span>
+         <span class="p">}</span> <span class="c1">// point loop</span>
+
+         <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">ptCount</span><span class="p">;</span> <span class="n">p</span><span class="o">++</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="k">const</span> <span class="kt">int</span> <span class="n">drawState</span> <span class="o">=</span> <span class="n">DrawPoint</span><span class="p">(</span><span class="n">draw_list</span><span class="p">,</span> <span class="n">pointToRange</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">p</span><span class="p">]),</span> <span class="n">viewSize</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="p">(</span><span class="n">selection</span><span class="p">.</span><span class="n">find</span><span class="p">({</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="kt">int</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">})</span> <span class="o">!=</span> <span class="n">selection</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">movingCurve</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">scrollingV</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">drawState</span> <span class="o">&amp;&amp;</span> <span class="n">movingCurve</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">selectingQuad</span><span class="p">)</span>
+            <span class="p">{</span>
+               <span class="n">overCurveOrPoint</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+               <span class="n">overSelectedPoint</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+               <span class="n">overCurve</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+               <span class="k">if</span> <span class="p">(</span><span class="n">drawState</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+               <span class="p">{</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">io</span><span class="p">.</span><span class="n">KeyShift</span> <span class="o">&amp;&amp;</span> <span class="n">selection</span><span class="p">.</span><span class="n">find</span><span class="p">({</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="kt">int</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">})</span> <span class="o">==</span> <span class="n">selection</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+                     <span class="n">selection</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                  <span class="n">selection</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="kt">int</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">});</span>
+               <span class="p">}</span>
+            <span class="p">}</span>
+         <span class="p">}</span>
+      <span class="p">}</span> <span class="c1">// curves loop</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">localOverCurve</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+         <span class="n">overCurve</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+      <span class="c1">// move selection</span>
+      <span class="k">static</span> <span class="kt">bool</span> <span class="n">pointsMoved</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+      <span class="k">static</span> <span class="n">ImVec2</span> <span class="n">mousePosOrigin</span><span class="p">;</span>
+      <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ImVec2</span><span class="o">&gt;</span> <span class="n">originalPoints</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">overSelectedPoint</span> <span class="o">&amp;&amp;</span> <span class="n">io</span><span class="p">.</span><span class="n">MouseDown</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+      <span class="p">{</span>
+         <span class="k">if</span> <span class="p">((</span><span class="n">fabsf</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MouseDelta</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.f</span> <span class="o">||</span> <span class="n">fabsf</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MouseDelta</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.f</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">selection</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+         <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pointsMoved</span><span class="p">)</span>
+            <span class="p">{</span>
+               <span class="n">delegate</span><span class="p">.</span><span class="n">BeginEdit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+               <span class="n">mousePosOrigin</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">;</span>
+               <span class="n">originalPoints</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">selection</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+               <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+               <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">sel</span> <span class="p">:</span> <span class="n">selection</span><span class="p">)</span>
+               <span class="p">{</span>
+                  <span class="k">const</span> <span class="n">ImVec2</span><span class="o">*</span> <span class="n">pts</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetPoints</span><span class="p">(</span><span class="n">sel</span><span class="p">.</span><span class="n">curveIndex</span><span class="p">);</span>
+                  <span class="n">originalPoints</span><span class="p">[</span><span class="n">index</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[</span><span class="n">sel</span><span class="p">.</span><span class="n">pointIndex</span><span class="p">];</span>
+               <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">pointsMoved</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">prevSelection</span> <span class="o">=</span> <span class="n">selection</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">originalIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">sel</span> <span class="p">:</span> <span class="n">prevSelection</span><span class="p">)</span>
+            <span class="p">{</span>
+               <span class="k">const</span> <span class="n">ImVec2</span><span class="o">*</span> <span class="n">pts</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetPoints</span><span class="p">(</span><span class="n">sel</span><span class="p">.</span><span class="n">curveIndex</span><span class="p">);</span>
+               <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">p</span> <span class="o">=</span> <span class="n">rangeToPoint</span><span class="p">(</span><span class="n">pointToRange</span><span class="p">(</span><span class="n">originalPoints</span><span class="p">[</span><span class="n">originalIndex</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span> <span class="o">-</span> <span class="n">mousePosOrigin</span><span class="p">)</span> <span class="o">*</span> <span class="n">sizeOfPixel</span><span class="p">);</span>
+               <span class="k">const</span> <span class="kt">int</span> <span class="n">newIndex</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">EditPoint</span><span class="p">(</span><span class="n">sel</span><span class="p">.</span><span class="n">curveIndex</span><span class="p">,</span> <span class="n">sel</span><span class="p">.</span><span class="n">pointIndex</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+               <span class="k">if</span> <span class="p">(</span><span class="n">newIndex</span> <span class="o">!=</span> <span class="n">sel</span><span class="p">.</span><span class="n">pointIndex</span><span class="p">)</span>
+               <span class="p">{</span>
+                  <span class="n">selection</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">sel</span><span class="p">);</span>
+                  <span class="n">selection</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="n">sel</span><span class="p">.</span><span class="n">curveIndex</span><span class="p">,</span> <span class="n">newIndex</span> <span class="p">});</span>
+               <span class="p">}</span>
+               <span class="n">originalIndex</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+         <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">overSelectedPoint</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">io</span><span class="p">.</span><span class="n">MouseDown</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+      <span class="p">{</span>
+         <span class="n">overSelectedPoint</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">pointsMoved</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="n">pointsMoved</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">delegate</span><span class="p">.</span><span class="n">EndEdit</span><span class="p">();</span>
+         <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="c1">// add point</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">overCurve</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">io</span><span class="p">.</span><span class="n">MouseDoubleClicked</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+      <span class="p">{</span>
+         <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">np</span> <span class="o">=</span> <span class="n">rangeToPoint</span><span class="p">((</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span> <span class="o">-</span> <span class="n">offset</span><span class="p">)</span> <span class="o">/</span> <span class="n">viewSize</span><span class="p">);</span>
+         <span class="n">delegate</span><span class="p">.</span><span class="n">BeginEdit</span><span class="p">(</span><span class="n">overCurve</span><span class="p">);</span>
+         <span class="n">delegate</span><span class="p">.</span><span class="n">AddPoint</span><span class="p">(</span><span class="n">overCurve</span><span class="p">,</span> <span class="n">np</span><span class="p">);</span>
+         <span class="n">delegate</span><span class="p">.</span><span class="n">EndEdit</span><span class="p">();</span>
+         <span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="c1">// move curve</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">movingCurve</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="k">const</span> <span class="kt">size_t</span> <span class="n">ptCount</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetPointCount</span><span class="p">(</span><span class="n">movingCurve</span><span class="p">);</span>
+         <span class="k">const</span> <span class="n">ImVec2</span><span class="o">*</span> <span class="n">pts</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetPoints</span><span class="p">(</span><span class="n">movingCurve</span><span class="p">);</span>
+         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pointsMoved</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="n">mousePosOrigin</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">;</span>
+            <span class="n">pointsMoved</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">originalPoints</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">ptCount</span><span class="p">);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">ptCount</span><span class="p">;</span> <span class="n">index</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+               <span class="n">originalPoints</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+            <span class="p">}</span>
+         <span class="p">}</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">ptCount</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span>
+         <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">ptCount</span><span class="p">;</span> <span class="n">p</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+               <span class="n">delegate</span><span class="p">.</span><span class="n">EditPoint</span><span class="p">(</span><span class="n">movingCurve</span><span class="p">,</span> <span class="kt">int</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">rangeToPoint</span><span class="p">(</span><span class="n">pointToRange</span><span class="p">(</span><span class="n">originalPoints</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span> <span class="o">-</span> <span class="n">mousePosOrigin</span><span class="p">)</span> <span class="o">*</span> <span class="n">sizeOfPixel</span><span class="p">));</span>
+            <span class="p">}</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+         <span class="p">}</span>
+         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">io</span><span class="p">.</span><span class="n">MouseDown</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+         <span class="p">{</span>
+            <span class="n">movingCurve</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="n">pointsMoved</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">delegate</span><span class="p">.</span><span class="n">EndEdit</span><span class="p">();</span>
+         <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">movingCurve</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">overCurve</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">IsMouseClicked</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">selection</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">selectingQuad</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="n">movingCurve</span> <span class="o">=</span> <span class="n">overCurve</span><span class="p">;</span>
+         <span class="n">delegate</span><span class="p">.</span><span class="n">BeginEdit</span><span class="p">(</span><span class="n">overCurve</span><span class="p">);</span>
+      <span class="p">}</span>
+
+      <span class="c1">// quad selection</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">selectingQuad</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">bmin</span> <span class="o">=</span> <span class="n">ImMin</span><span class="p">(</span><span class="n">quadSelection</span><span class="p">,</span> <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">);</span>
+         <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">bmax</span> <span class="o">=</span> <span class="n">ImMax</span><span class="p">(</span><span class="n">quadSelection</span><span class="p">,</span> <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">);</span>
+         <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddRectFilled</span><span class="p">(</span><span class="n">bmin</span><span class="p">,</span> <span class="n">bmax</span><span class="p">,</span> <span class="mh">0x40FF0000</span><span class="p">,</span> <span class="mf">1.f</span><span class="p">);</span>
+         <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">AddRect</span><span class="p">(</span><span class="n">bmin</span><span class="p">,</span> <span class="n">bmax</span><span class="p">,</span> <span class="mh">0xFFFF0000</span><span class="p">,</span> <span class="mf">1.f</span><span class="p">);</span>
+         <span class="k">const</span> <span class="n">ImRect</span> <span class="nf">selectionQuad</span><span class="p">(</span><span class="n">bmin</span><span class="p">,</span> <span class="n">bmax</span><span class="p">);</span>
+         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">io</span><span class="p">.</span><span class="n">MouseDown</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+         <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">io</span><span class="p">.</span><span class="n">KeyShift</span><span class="p">)</span>
+               <span class="n">selection</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="c1">// select everythnig is quad</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">curveCount</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+               <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">delegate</span><span class="p">.</span><span class="n">IsVisible</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+                  <span class="k">continue</span><span class="p">;</span>
+
+               <span class="k">const</span> <span class="kt">size_t</span> <span class="n">ptCount</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetPointCount</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+               <span class="k">if</span> <span class="p">(</span><span class="n">ptCount</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
+                  <span class="k">continue</span><span class="p">;</span>
+
+               <span class="k">const</span> <span class="n">ImVec2</span><span class="o">*</span> <span class="n">pts</span> <span class="o">=</span> <span class="n">delegate</span><span class="p">.</span><span class="n">GetPoints</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+               <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">ptCount</span><span class="p">;</span> <span class="n">p</span><span class="o">++</span><span class="p">)</span>
+               <span class="p">{</span>
+                  <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">center</span> <span class="o">=</span> <span class="n">pointToRange</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="o">*</span> <span class="n">viewSize</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="n">selectionQuad</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">center</span><span class="p">))</span>
+                     <span class="n">selection</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="kt">int</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="kt">int</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">});</span>
+               <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="c1">// done</span>
+            <span class="n">selectingQuad</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+         <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">overCurveOrPoint</span> <span class="o">&amp;&amp;</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">IsMouseClicked</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">selectingQuad</span> <span class="o">&amp;&amp;</span> <span class="n">movingCurve</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">overSelectedPoint</span> <span class="o">&amp;&amp;</span> <span class="n">container</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">))</span>
+      <span class="p">{</span>
+         <span class="n">selectingQuad</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+         <span class="n">quadSelection</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">clippingRect</span><span class="p">)</span>
+         <span class="n">draw_list</span><span class="o">-&gt;</span><span class="n">PopClipRect</span><span class="p">();</span>
+
+      <span class="n">ImGui</span><span class="o">::</span><span class="n">EndChildFrame</span><span class="p">();</span>
+      <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleVar</span><span class="p">();</span>
+      <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleColor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="n">selectedPoints</span><span class="p">)</span>
+      <span class="p">{</span>
+         <span class="n">selectedPoints</span><span class="o">-&gt;</span><span class="n">resize</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="n">selection</span><span class="p">.</span><span class="n">size</span><span class="p">()));</span>
+         <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+         <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">point</span> <span class="p">:</span> <span class="n">selection</span><span class="p">)</span>
+            <span class="p">(</span><span class="o">*</span><span class="n">selectedPoints</span><span class="p">)[</span><span class="n">index</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">point</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImCurveEdit.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

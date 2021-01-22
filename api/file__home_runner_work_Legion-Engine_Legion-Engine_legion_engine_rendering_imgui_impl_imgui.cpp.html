@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File imgui.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">File imgui.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="file-imgui-cpp">
+<span id="file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-cpp"></span><h1>File imgui.cpp<a class="headerlink" href="#file-imgui-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl.html#dir-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl</span></code>)</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-cpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui.cpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id3">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id4">Classes</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id5">Functions</a></p></li>
+<li><p><a class="reference internal" href="#defines" id="id6">Defines</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id7">Variables</a></p></li>
+</ul>
+</div>
+<div class="section" id="definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-cpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui.cpp</span></code>)<a class="headerlink" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-cpp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp.html">Program Listing for File imgui.cpp</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ctype.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imgui.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imgui_internal.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdint.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdio.h</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_imgui.html#namespace-imgui"><span class="std std-ref">Namespace imgui</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="struct_im_gui_resize_border_def.html#exhale-struct-struct-im-gui-resize-border-def"><span class="std std-ref">Struct ImGuiResizeBorderDef</span></a></p></li>
+<li><p><a class="reference internal" href="struct_im_gui_resize_grip_def.html#exhale-struct-struct-im-gui-resize-grip-def"><span class="std std-ref">Struct ImGuiResizeGripDef</span></a></p></li>
+<li><p><a class="reference internal" href="struct_im_gui_style_var_info.html#exhale-struct-struct-im-gui-style-var-info"><span class="std std-ref">Struct ImGuiStyleVarInfo</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ab61bcc85f74e05dd59cec573fc2a8e9f.html#exhale-function-imgui-8cpp-1ab61bcc85f74e05dd59cec573fc2a8e9f"><span class="std std-ref">Function AddDrawListToDrawData</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aa1b7f477fbb6049d246a41ac0616534f.html#exhale-function-imgui-8cpp-1aa1b7f477fbb6049d246a41ac0616534f"><span class="std std-ref">Function AddRootWindowToDrawData</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ad4fc3ffd38147a034d7a6e77f0dc845c.html#exhale-function-imgui-8cpp-1ad4fc3ffd38147a034d7a6e77f0dc845c"><span class="std std-ref">Function AddWindowToDrawData</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a2b0bc4ba122704e5025907c77f313b7f.html#exhale-function-imgui-8cpp-1a2b0bc4ba122704e5025907c77f313b7f"><span class="std std-ref">Function AddWindowToSortBuffer</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a1dc50294d00308b0e87af6cace2fe04e.html#exhale-function-imgui-8cpp-1a1dc50294d00308b0e87af6cace2fe04e"><span class="std std-ref">Function ApplyWindowSettings</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a8f0fbb21b9de00f1260fd007898526cb.html#exhale-function-imgui-8cpp-1a8f0fbb21b9de00f1260fd007898526cb"><span class="std std-ref">Function BezierClosestPointCasteljauStep</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a07abb80a54115cb5cf9da03351e29533.html#exhale-function-imgui-8cpp-1a07abb80a54115cb5cf9da03351e29533"><span class="std std-ref">Function CalcNextScrollFromScrollTargetAndClamp</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ab94af6ce69cc289c81fe0c6cd501ddce.html#exhale-function-imgui-8cpp-1ab94af6ce69cc289c81fe0c6cd501ddce"><span class="std std-ref">Function CalcResizePosSizeFromAnyCorner</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a603ad6ffdfa404dd9057cdba7324f6b0.html#exhale-function-imgui-8cpp-1a603ad6ffdfa404dd9057cdba7324f6b0"><span class="std std-ref">Function CalcScrollEdgeSnap</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1acbe6338daf87dc6ab636f02f1367eb41.html#exhale-function-imgui-8cpp-1acbe6338daf87dc6ab636f02f1367eb41"><span class="std std-ref">Function CalcWindowAutoFitSize</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a4192614e5b95b319b523efde1a92a9a4.html#exhale-function-imgui-8cpp-1a4192614e5b95b319b523efde1a92a9a4"><span class="std std-ref">Function CalcWindowContentSize</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a3e6de6291eb99530bff0e8b6dceee0be.html#exhale-function-imgui-8cpp-1a3e6de6291eb99530bff0e8b6dceee0be"><span class="std std-ref">Function CalcWindowSizeAfterConstraint</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a437d1c54633f2e3c53dd775034be37ae.html#exhale-function-imgui-8cpp-1a437d1c54633f2e3c53dd775034be37ae"><span class="std std-ref">Function ChildWindowComparer</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a404bde03a9c524d44b822354c6f9ad4a.html#exhale-function-imgui-8cpp-1a404bde03a9c524d44b822354c6f9ad4a"><span class="std std-ref">Function ClampWindowRect</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a3c92847eb67e7138e6f9af0ee66d3b33.html#exhale-function-imgui-8cpp-1a3c92847eb67e7138e6f9af0ee66d3b33"><span class="std std-ref">Function CreateNewWindow</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1afa4bbdba732ac0bbd32ad37bd5bcbf21.html#exhale-function-imgui-8cpp-1afa4bbdba732ac0bbd32ad37bd5bcbf21"><span class="std std-ref">Function FindHoveredWindow</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aafe114b768af674e1c848dbd8058010d.html#exhale-function-imgui-8cpp-1aafe114b768af674e1c848dbd8058010d"><span class="std std-ref">Function FindWindowNavFocusable</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a7b0bceed6d3b18bf462a3f984377c2fa.html#exhale-function-imgui-8cpp-1a7b0bceed6d3b18bf462a3f984377c2fa"><span class="std std-ref">Function FreeWrapper</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1abd416e6de6b9a37e5e4476187b315a46.html#exhale-function-imgui-8cpp-1abd416e6de6b9a37e5e4476187b315a46"><span class="std std-ref">Function GetClipboardTextFn_DefaultImpl</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ad8ade673d24bfc66295fecf4f961d14b.html#exhale-function-imgui-8cpp-1ad8ade673d24bfc66295fecf4f961d14b"><span class="std std-ref">Function GetFallbackWindowNameForWindowingList</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a5d19a45099ec790161a49f27c074c938.html#exhale-function-imgui-8cpp-1a5d19a45099ec790161a49f27c074c938"><span class="std std-ref">Function GetResizeBorderRect</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a86d5da10dea53bf436cb9d62cc2357b0.html#exhale-function-imgui-8cpp-1a86d5da10dea53bf436cb9d62cc2357b0"><span class="std std-ref">Function GetStyleVarInfo</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a03560b4f51e08dbb54bb4b092afa53c7.html#exhale-function-imgui-8cpp-1a03560b4f51e08dbb54bb4b092afa53c7"><span class="std std-ref">Function GetViewportRect</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a4ca7883a7a86cd11793badb35921e1ee.html#exhale-function-imgui-8cpp-1a4ca7883a7a86cd11793badb35921e1ee"><span class="std std-ref">Function GetWindowBgColorIdxFromFlags</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a9bd0c67916b1c57ab0840893a2689a8e.html#exhale-function-imgui-8cpp-1a9bd0c67916b1c57ab0840893a2689a8e"><span class="std std-ref">Function ImAlphaBlendColors</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a754fd72b76f1e219494d7214813af70b.html#exhale-function-imgui-8cpp-1a754fd72b76f1e219494d7214813af70b"><span class="std std-ref">Function ImBezierClosestPoint</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aa36646e497b4672ce72dfe0bd1f24e1c.html#exhale-function-imgui-8cpp-1aa36646e497b4672ce72dfe0bd1f24e1c"><span class="std std-ref">Function ImBezierClosestPointCasteljau</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ae0232e0e9aed2d09fb5d768e3cfc396e.html#exhale-function-imgui-8cpp-1ae0232e0e9aed2d09fb5d768e3cfc396e"><span class="std std-ref">Function ImeSetInputScreenPosFn_DefaultImpl</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ac4a6194720e9d693bc9d34e97d9465aa.html#exhale-function-imgui-8cpp-1ac4a6194720e9d693bc9d34e97d9465aa"><span class="std std-ref">Function ImFileClose</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1addef8c2a01c9daaa3546469f01682c98.html#exhale-function-imgui-8cpp-1addef8c2a01c9daaa3546469f01682c98"><span class="std std-ref">Function ImFileGetSize</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a4fee1343a8e94a841135911ec7b69a1c.html#exhale-function-imgui-8cpp-1a4fee1343a8e94a841135911ec7b69a1c"><span class="std std-ref">Function ImFileLoadToMemory</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ae6a61623537c5a5de071fade1f0e8acd.html#exhale-function-imgui-8cpp-1ae6a61623537c5a5de071fade1f0e8acd"><span class="std std-ref">Function ImFileOpen</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ab3b6f7a9c730b3701e7e3bbc4158c43f.html#exhale-function-imgui-8cpp-1ab3b6f7a9c730b3701e7e3bbc4158c43f"><span class="std std-ref">Function ImFileRead</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aab6460bf5ebaa4975159cf0cd4324820.html#exhale-function-imgui-8cpp-1aab6460bf5ebaa4975159cf0cd4324820"><span class="std std-ref">Function ImFileWrite</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a75ccaf7d676b1f567ba888ae42ac3809.html#exhale-function-imgui-8cpp-1a75ccaf7d676b1f567ba888ae42ac3809"><span class="std std-ref">Function ImFormatString</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a2e0022a073d369645a0daab17f823779.html#exhale-function-imgui-8cpp-1a2e0022a073d369645a0daab17f823779"><span class="std std-ref">Function ImFormatStringV</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a38bff81ada6282254daeea397063282f.html#exhale-function-imgui-8cpp-1a38bff81ada6282254daeea397063282f"><span class="std std-ref">Function ImGetDirQuadrantFromDelta</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1af501a9de56446597afe2ae5cde18e1ba.html#exhale-function-imgui-8cpp-1af501a9de56446597afe2ae5cde18e1ba"><span class="std std-ref">Function ImGui::ErrorCheckEndFrameSanityChecks</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ab2ff55bf59d3ac2c58306bb9e353a99a.html#exhale-function-imgui-8cpp-1ab2ff55bf59d3ac2c58306bb9e353a99a"><span class="std std-ref">Function ImGui::ErrorCheckNewFrameSanityChecks</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a861004d5a1476e954abd68d6f9deaa06.html#exhale-function-imgui-8cpp-1a861004d5a1476e954abd68d6f9deaa06"><span class="std std-ref">Function ImGui::FindWindowFocusIndex</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a77326c9062d3882c55b0ec14ed4ff36a.html#exhale-function-imgui-8cpp-1a77326c9062d3882c55b0ec14ed4ff36a"><span class="std std-ref">Function ImGui::NavApplyItemToResult</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a3fedd0a136d52d72d2fd1e3139b4272c.html#exhale-function-imgui-8cpp-1a3fedd0a136d52d72d2fd1e3139b4272c"><span class="std std-ref">Function ImGui::NavCalcPreferredRefPos</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a5ae3ff143fed82b60445ce593b18cd8c.html#exhale-function-imgui-8cpp-1a5ae3ff143fed82b60445ce593b18cd8c"><span class="std std-ref">Function ImGui::NavEndFrame</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a35d7b339b0580793dc5a2a936c7aee39.html#exhale-function-imgui-8cpp-1a35d7b339b0580793dc5a2a936c7aee39"><span class="std std-ref">Function ImGui::NavProcessItem</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ae9ed208c0b64e4919e5de1cb83b2db2a.html#exhale-function-imgui-8cpp-1ae9ed208c0b64e4919e5de1cb83b2db2a"><span class="std std-ref">Function ImGui::NavRestoreLastChildNavWindow</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a100d3c85f9c5500643d741ba5124af1e.html#exhale-function-imgui-8cpp-1a100d3c85f9c5500643d741ba5124af1e"><span class="std std-ref">Function ImGui::NavSaveLastChildNavWindowIntoParent</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ad89544d8d636c019854ac52bbc59fdda.html#exhale-function-imgui-8cpp-1ad89544d8d636c019854ac52bbc59fdda"><span class="std std-ref">Function ImGui::NavScoreItem</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aab7d3ffa460af6604421e8c2d8bdef19.html#exhale-function-imgui-8cpp-1aab7d3ffa460af6604421e8c2d8bdef19"><span class="std std-ref">Function ImGui::NavUpdate</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a2cd868535661cdb5671214662f3c9388.html#exhale-function-imgui-8cpp-1a2cd868535661cdb5671214662f3c9388"><span class="std std-ref">Function ImGui::NavUpdateAnyRequestFlag</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ab23db65d89e626a7948902e11c3bf82e.html#exhale-function-imgui-8cpp-1ab23db65d89e626a7948902e11c3bf82e"><span class="std std-ref">Function ImGui::NavUpdateInitResult</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aeb0b9ea206e330f46278add8099506e1.html#exhale-function-imgui-8cpp-1aeb0b9ea206e330f46278add8099506e1"><span class="std std-ref">Function ImGui::NavUpdateMoveResult</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ac0c1591101437b98dcf2eb90bd9f74e7.html#exhale-function-imgui-8cpp-1ac0c1591101437b98dcf2eb90bd9f74e7"><span class="std std-ref">Function ImGui::NavUpdatePageUpPageDown</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ad00213b916de0bc1519d6d20259391cf.html#exhale-function-imgui-8cpp-1ad00213b916de0bc1519d6d20259391cf"><span class="std std-ref">Function ImGui::NavUpdateWindowing</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a601290fe1dbe4c3717eb7e7add3ef11f.html#exhale-function-imgui-8cpp-1a601290fe1dbe4c3717eb7e7add3ef11f"><span class="std std-ref">Function ImGui::NavUpdateWindowingOverlay</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ab4802269d29ac99243804fef0acee6df.html#exhale-function-imgui-8cpp-1ab4802269d29ac99243804fef0acee6df"><span class="std std-ref">Function ImGui::RenderWindowDecorations</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a6fead8b4ae7bacfe0cbd4f6e64a7a8f6.html#exhale-function-imgui-8cpp-1a6fead8b4ae7bacfe0cbd4f6e64a7a8f6"><span class="std std-ref">Function ImGui::RenderWindowOuterBorders</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a3f07fc97615db2b0864ce2aa3d3ee169.html#exhale-function-imgui-8cpp-1a3f07fc97615db2b0864ce2aa3d3ee169"><span class="std std-ref">Function ImGui::RenderWindowTitleBarContents</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aafb35fd3d7d0a7baac8f0590487a2594.html#exhale-function-imgui-8cpp-1aafb35fd3d7d0a7baac8f0590487a2594"><span class="std std-ref">Function ImGui::UpdateDebugToolItemPicker</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1accb45e7a4174fdc2e0d2b662c834759d.html#exhale-function-imgui-8cpp-1accb45e7a4174fdc2e0d2b662c834759d"><span class="std std-ref">Function ImGui::UpdateMouseInputs</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a45a39b3a2cfa3aa899eecb63bac79d1a.html#exhale-function-imgui-8cpp-1a45a39b3a2cfa3aa899eecb63bac79d1a"><span class="std std-ref">Function ImGui::UpdateMouseWheel</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a8bdb90b84ec6e306d312fc8bfb7caf64.html#exhale-function-imgui-8cpp-1a8bdb90b84ec6e306d312fc8bfb7caf64"><span class="std std-ref">Function ImGui::UpdateSettings</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a046623e61ba639346138d3993d4e57bb.html#exhale-function-imgui-8cpp-1a046623e61ba639346138d3993d4e57bb"><span class="std std-ref">Function ImGui::UpdateTabFocus</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1af51b875ef6c3f2e0f430873ee7605669.html#exhale-function-imgui-8cpp-1af51b875ef6c3f2e0f430873ee7605669"><span class="std std-ref">Function ImGui::UpdateWindowManualResize</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1af62448836920fc75035d6da0373fc167.html#exhale-function-imgui-8cpp-1af62448836920fc75035d6da0373fc167"><span class="std std-ref">Function ImHashData</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1acd1b12694d0365b516bf7373f182eeee.html#exhale-function-imgui-8cpp-1acd1b12694d0365b516bf7373f182eeee"><span class="std std-ref">Function ImHashStr</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a78740b7be00764a8c15b60295edc9f51.html#exhale-function-imgui-8cpp-1a78740b7be00764a8c15b60295edc9f51"><span class="std std-ref">Function ImLineClosestPoint</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a9e742332d7944d1c0e938005fdb77834.html#exhale-function-imgui-8cpp-1a9e742332d7944d1c0e938005fdb77834"><span class="std std-ref">Function ImStrbolW</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a2b5b2ff91a5980e3143141a882216fe8.html#exhale-function-imgui-8cpp-1a2b5b2ff91a5980e3143141a882216fe8"><span class="std std-ref">Function ImStrchrRange</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a079f29569de5779052f1fbf3dd283e0f.html#exhale-function-imgui-8cpp-1a079f29569de5779052f1fbf3dd283e0f"><span class="std std-ref">Function ImStrdup</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a9160bb1dc10b7b041ec647619078ee2b.html#exhale-function-imgui-8cpp-1a9160bb1dc10b7b041ec647619078ee2b"><span class="std std-ref">Function ImStrdupcpy</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a578b4ec1e004a6c9e07610720421a482.html#exhale-function-imgui-8cpp-1a578b4ec1e004a6c9e07610720421a482"><span class="std std-ref">Function ImStreolRange</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1adff1a1bf60752cd3395dae990cc2e34f.html#exhale-function-imgui-8cpp-1adff1a1bf60752cd3395dae990cc2e34f"><span class="std std-ref">Function ImStricmp</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a457a373caeddd76d58ff282da05273b4.html#exhale-function-imgui-8cpp-1a457a373caeddd76d58ff282da05273b4"><span class="std std-ref">Function ImStristr</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a66b44f8391ea7cba388700e4991a4859.html#exhale-function-imgui-8cpp-1a66b44f8391ea7cba388700e4991a4859"><span class="std std-ref">Function ImStrlenW</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aebf0117d9d0fb0f2731a94d64173b41a.html#exhale-function-imgui-8cpp-1aebf0117d9d0fb0f2731a94d64173b41a"><span class="std std-ref">Function ImStrncpy</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a603026e750e955098e8c1e99428ca8b2.html#exhale-function-imgui-8cpp-1a603026e750e955098e8c1e99428ca8b2"><span class="std std-ref">Function ImStrnicmp</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ae2af66779a69e229e9744aa9c65b77e6.html#exhale-function-imgui-8cpp-1ae2af66779a69e229e9744aa9c65b77e6"><span class="std std-ref">Function ImStrSkipBlank</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a7d087fd93eb10b876979598caae02c64.html#exhale-function-imgui-8cpp-1a7d087fd93eb10b876979598caae02c64"><span class="std std-ref">Function ImStrTrimBlanks</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a036b9dd7f0942fd34e385cc115f36631.html#exhale-function-imgui-8cpp-1a036b9dd7f0942fd34e385cc115f36631"><span class="std std-ref">Function ImTextCharFromUtf8</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a5aa67d6814b96ce1e93b089424a78173.html#exhale-function-imgui-8cpp-1a5aa67d6814b96ce1e93b089424a78173"><span class="std std-ref">Function ImTextCharToUtf8</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ac2561e31f0de066ef0bb5bfbb541c8ae.html#exhale-function-imgui-8cpp-1ac2561e31f0de066ef0bb5bfbb541c8ae"><span class="std std-ref">Function ImTextCountCharsFromUtf8</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ae1d5a0a2772f1e426f4bedbf4148235d.html#exhale-function-imgui-8cpp-1ae1d5a0a2772f1e426f4bedbf4148235d"><span class="std std-ref">Function ImTextCountUtf8BytesFromChar(const char *, const char *)</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a8b8382de51e73ae65e2ccf325024ab38.html#exhale-function-imgui-8cpp-1a8b8382de51e73ae65e2ccf325024ab38"><span class="std std-ref">Function ImTextCountUtf8BytesFromChar(unsigned int)</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ab0c1cae5ca2331c54681553722d0f72c.html#exhale-function-imgui-8cpp-1ab0c1cae5ca2331c54681553722d0f72c"><span class="std std-ref">Function ImTextCountUtf8BytesFromStr</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aeb054c43ad8aae45de24efc759a0ff7a.html#exhale-function-imgui-8cpp-1aeb054c43ad8aae45de24efc759a0ff7a"><span class="std std-ref">Function ImTextStrFromUtf8</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a6c310426654de2fac6776408bdfd1f01.html#exhale-function-imgui-8cpp-1a6c310426654de2fac6776408bdfd1f01"><span class="std std-ref">Function ImTextStrToUtf8</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a42ba83efd4d19e4a61898dc8f8632ff1.html#exhale-function-imgui-8cpp-1a42ba83efd4d19e4a61898dc8f8632ff1"><span class="std std-ref">Function ImTriangleBarycentricCoords</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1af48be8bc196ebaf2129062bd67007387.html#exhale-function-imgui-8cpp-1af48be8bc196ebaf2129062bd67007387"><span class="std std-ref">Function ImTriangleClosestPoint</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aa53a4a0b963d2d35b8e58442247e1239.html#exhale-function-imgui-8cpp-1aa53a4a0b963d2d35b8e58442247e1239"><span class="std std-ref">Function ImTriangleContainsPoint</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a0d4bfbfc89237377e7ac93b9a59fb121.html#exhale-function-imgui-8cpp-1a0d4bfbfc89237377e7ac93b9a59fb121"><span class="std std-ref">Function IsWindowActiveAndVisible</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ad581ae633599c54e64b25f483de70322.html#exhale-function-imgui-8cpp-1ad581ae633599c54e64b25f483de70322"><span class="std std-ref">Function IsWindowContentHoverable</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ac5bd9140ccc0a8bab21f9c3b8395146e.html#exhale-function-imgui-8cpp-1ac5bd9140ccc0a8bab21f9c3b8395146e"><span class="std std-ref">Function LowerBound</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1afccc7c348da26a7fad81cb47712c0efb.html#exhale-function-imgui-8cpp-1afccc7c348da26a7fad81cb47712c0efb"><span class="std std-ref">Function MallocWrapper</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1aa02564f7a526e53bfe3c4062acd6f0f2.html#exhale-function-imgui-8cpp-1aa02564f7a526e53bfe3c4062acd6f0f2"><span class="std std-ref">Function MetricsHelpMarker</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1ab172b759f70219fff17c9e1445ac6a15.html#exhale-function-imgui-8cpp-1ab172b759f70219fff17c9e1445ac6a15"><span class="std std-ref">Function NavClampRectToVisibleAreaForMoveDir</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1abf3223633b98dbd579a7ed8ec842a3e8.html#exhale-function-imgui-8cpp-1abf3223633b98dbd579a7ed8ec842a3e8"><span class="std std-ref">Function NavRestoreLayer</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a740720398cccbdf1fd1ae6ffef8f7971.html#exhale-function-imgui-8cpp-1a740720398cccbdf1fd1ae6ffef8f7971"><span class="std std-ref">Function NavScoreItemDistInterval</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a24ca0e08c6e33315fd201b557aec2598.html#exhale-function-imgui-8cpp-1a24ca0e08c6e33315fd201b557aec2598"><span class="std std-ref">Function NavUpdateWindowingHighlightWindow</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a3d6a7cb771e0291bcdd2160c4c91b0ad.html#exhale-function-imgui-8cpp-1a3d6a7cb771e0291bcdd2160c4c91b0ad"><span class="std std-ref">Function SetClipboardTextFn_DefaultImpl</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a5c592415f88804e2f907477767d3dda1.html#exhale-function-imgui-8cpp-1a5c592415f88804e2f907477767d3dda1"><span class="std std-ref">Function SetCurrentWindow</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a2bbbbc51af7ad094958521233b053c48.html#exhale-function-imgui-8cpp-1a2bbbbc51af7ad094958521233b053c48"><span class="std std-ref">Function SetCursorPosYAndSetupForPrevLine</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a116c105198e1e942a2ade0e7d9855969.html#exhale-function-imgui-8cpp-1a116c105198e1e942a2ade0e7d9855969"><span class="std std-ref">Function SetupDrawData</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a9924fbe297e670b0a477e2844f1a53c8.html#exhale-function-imgui-8cpp-1a9924fbe297e670b0a477e2844f1a53c8"><span class="std std-ref">Function SetWindowConditionAllowFlags</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a7a755b69bbb9d88876e70a29397c1a31.html#exhale-function-imgui-8cpp-1a7a755b69bbb9d88876e70a29397c1a31"><span class="std std-ref">Function StartLockWheelingWindow</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a4f345909ba493da1c34b89bb89ac4475.html#exhale-function-imgui-8cpp-1a4f345909ba493da1c34b89bb89ac4475"><span class="std std-ref">Function WindowSettingsHandler_ApplyAll</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a942052dc32d118a3455ea9cc244c41ad.html#exhale-function-imgui-8cpp-1a942052dc32d118a3455ea9cc244c41ad"><span class="std std-ref">Function WindowSettingsHandler_ClearAll</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a8f46722f3d3b6a30f8f8256aaa34f274.html#exhale-function-imgui-8cpp-1a8f46722f3d3b6a30f8f8256aaa34f274"><span class="std std-ref">Function WindowSettingsHandler_ReadLine</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a96167b8831eaf55d73bfd79411b01fd6.html#exhale-function-imgui-8cpp-1a96167b8831eaf55d73bfd79411b01fd6"><span class="std std-ref">Function WindowSettingsHandler_ReadOpen</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui_8cpp_1a24623093a2b9a7babcc73f502bfabad0.html#exhale-function-imgui-8cpp-1a24623093a2b9a7babcc73f502bfabad0"><span class="std std-ref">Function WindowSettingsHandler_WriteAll</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="defines">
+<h2>Defines<a class="headerlink" href="#defines" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="define_imgui_8cpp_1a34b37472609811e1f0f1a48a0149b4ed.html#exhale-define-imgui-8cpp-1a34b37472609811e1f0f1a48a0149b4ed"><span class="std std-ref">Define IMGUI_DEBUG_INI_SETTINGS</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui_8cpp_1aee6443348cf59f4769b271e36febc80c.html#exhale-define-imgui-8cpp-1aee6443348cf59f4769b271e36febc80c"><span class="std std-ref">Define IMGUI_DEBUG_NAV_RECTS</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui_8cpp_1aaedc8fff290d4893a84c62411b0ddeed.html#exhale-define-imgui-8cpp-1aaedc8fff290d4893a84c62411b0ddeed"><span class="std std-ref">Define IMGUI_DEBUG_NAV_SCORING</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui_8cpp_1adf4d73301961430d50d7edd96f92ce38.html#exhale-define-imgui-8cpp-1adf4d73301961430d50d7edd96f92ce38"><span class="std std-ref">Define IMGUI_DEFINE_MATH_OPERATORS</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui_8cpp_1ac31befbe0bea7809852786485c77b3f9.html#exhale-define-imgui-8cpp-1ac31befbe0bea7809852786485c77b3f9"><span class="std std-ref">Define NAV_MAP_KEY</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui_8cpp_1a19fd5658c088617859d4a89c657ec5cc.html#exhale-define-imgui-8cpp-1a19fd5658c088617859d4a89c657ec5cc"><span class="std std-ref">Define va_copy</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1afbe703729b56cf3c55213055de7f5004.html#exhale-variable-imgui-8cpp-1afbe703729b56cf3c55213055de7f5004"><span class="std std-ref">Variable GCrc32LookupTable</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a25a3ba7c77ba636cc6c9cfc0516fd643.html#exhale-variable-imgui-8cpp-1a25a3ba7c77ba636cc6c9cfc0516fd643"><span class="std std-ref">Variable GImAllocatorAllocFunc</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a52840ef95faf1287593024477d206cbc.html#exhale-variable-imgui-8cpp-1a52840ef95faf1287593024477d206cbc"><span class="std std-ref">Variable GImAllocatorFreeFunc</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a42e3a0e8feed1a6b8fb9ffe79af9d706.html#exhale-variable-imgui-8cpp-1a42e3a0e8feed1a6b8fb9ffe79af9d706"><span class="std std-ref">Variable GImAllocatorUserData</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a26aa67b834c0453a50c5e3970a8eba07.html#exhale-variable-imgui-8cpp-1a26aa67b834c0453a50c5e3970a8eba07"><span class="std std-ref">Variable GImGui</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a5786dd02b435b7de611cb7cbff7f097c.html#exhale-variable-imgui-8cpp-1a5786dd02b435b7de611cb7cbff7f097c"><span class="std std-ref">Variable GStyleVarInfo</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a1ab13424fcaf0fcd8952d6f47beb8b9d.html#exhale-variable-imgui-8cpp-1a1ab13424fcaf0fcd8952d6f47beb8b9d"><span class="std std-ref">Variable NAV_WINDOWING_HIGHLIGHT_DELAY</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1ac766f5145198e91333f86ef48e8fa8b6.html#exhale-variable-imgui-8cpp-1ac766f5145198e91333f86ef48e8fa8b6"><span class="std std-ref">Variable NAV_WINDOWING_LIST_APPEAR_DELAY</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a80f601256308bd185d2d25e71f1e320a.html#exhale-variable-imgui-8cpp-1a80f601256308bd185d2d25e71f1e320a"><span class="std std-ref">Variable resize_border_def</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a4172a86a71ad90be6fb63c63f362222d.html#exhale-variable-imgui-8cpp-1a4172a86a71ad90be6fb63c63f362222d"><span class="std std-ref">Variable resize_grip_def</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a8a1884294fd35bf48679533083c54f64.html#exhale-variable-imgui-8cpp-1a8a1884294fd35bf48679533083c54f64"><span class="std std-ref">Variable WINDOWS_MOUSE_WHEEL_SCROLL_LOCK_TIMER</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1ab6bee9ea01e0feab33c8263be3f58bca.html#exhale-variable-imgui-8cpp-1ab6bee9ea01e0feab33c8263be3f58bca"><span class="std std-ref">Variable WINDOWS_RESIZE_FROM_EDGES_FEEDBACK_TIMER</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui_8cpp_1a32e2d4a858825732297e5fcedfbd1856.html#exhale-variable-imgui-8cpp-1a32e2d4a858825732297e5fcedfbd1856"><span class="std std-ref">Variable WINDOWS_RESIZE_FROM_EDGES_HALF_THICKNESS</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">File imgui.cpp</a><ul>
+<li><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui.cpp</span></code>)</a></li>
+<li><a class="reference internal" href="#includes">Includes</a></li>
+<li><a class="reference internal" href="#namespaces">Namespaces</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#defines">Defines</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a4f345909ba493da1c34b89bb89ac4475:
+
+Function WindowSettingsHandler_ApplyAll
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: WindowSettingsHandler_ApplyAll(ImGuiContext *, ImGuiSettingsHandler *)

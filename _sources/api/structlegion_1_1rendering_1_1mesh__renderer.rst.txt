@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1rendering_1_1mesh__renderer:
+
+Struct mesh_renderer
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::rendering::mesh_renderer
+   :members:
+   :protected-members:
+   :undoc-members:

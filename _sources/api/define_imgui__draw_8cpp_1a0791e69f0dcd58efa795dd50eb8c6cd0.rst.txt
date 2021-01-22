@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__draw_8cpp_1a0791e69f0dcd58efa795dd50eb8c6cd0:
+
+Define STB_RECT_PACK_IMPLEMENTATION
+===================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STB_RECT_PACK_IMPLEMENTATION

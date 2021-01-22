@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1addef8c2a01c9daaa3546469f01682c98:
+
+Function ImFileGetSize
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImFileGetSize(ImFileHandle)

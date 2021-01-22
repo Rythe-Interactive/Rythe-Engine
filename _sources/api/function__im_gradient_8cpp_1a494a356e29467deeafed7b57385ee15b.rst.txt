@@ -1,0 +1,13 @@
+.. _exhale_function__im_gradient_8cpp_1a494a356e29467deeafed7b57385ee15b:
+
+Function ImGradient::DrawPoint
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGradient.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGradient::DrawPoint(ImDrawList *, ImVec4, const ImVec2, bool, ImVec2)

@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File rw_spinlock.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File rw_spinlock.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-rw-spinlock-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-rw-spinlock-cpp"></span><h1>Program Listing for File rw_spinlock.cpp<a class="headerlink" href="#program-listing-for-file-rw-spinlock-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-rw-spinlock-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async/rw_spinlock.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/async/rw_spinlock.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;Optick/optick.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;sstream&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">async</span>
+<span class="p">{</span>
+    <span class="kt">bool</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">m_forceRelease</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">atomic_uint</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">m_lastId</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span> <span class="p">};</span>
+
+    <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">m_localWriters</span><span class="p">;</span>
+    <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">m_localReaders</span><span class="p">;</span>
+    <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="n">lock_state</span><span class="o">&gt;</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">m_localState</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">read_lock</span><span class="p">(</span><span class="n">wait_priority</span> <span class="n">priority</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">!=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">)</span> <span class="c1">// If we&#39;re either already reading or writing then the lock doesn&#39;t need to be reacquired.</span>
+        <span class="p">{</span>
+            <span class="c1">// Report another local reader to the lock.</span>
+            <span class="n">m_localReaders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">int</span> <span class="n">state</span><span class="p">;</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Read the current value and continue waiting until we&#39;re in a lockable state.</span>
+            <span class="k">while</span> <span class="p">((</span><span class="n">state</span> <span class="o">=</span> <span class="n">m_lockState</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Acquire read lock&quot;</span><span class="p">);</span>
+
+                <span class="k">switch</span> <span class="p">(</span><span class="n">priority</span><span class="p">)</span>
+                <span class="p">{</span>
+                <span class="k">case</span> <span class="n">wait_priority</span><span class="o">::</span><span class="nl">sleep</span><span class="p">:</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">microseconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="n">wait_priority</span><span class="o">::</span><span class="nl">normal</span><span class="p">:</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="n">wait_priority</span><span class="o">::</span><span class="nl">real_time</span><span class="p">:</span>
+                <span class="k">default</span><span class="o">:</span>
+                    <span class="n">L_PAUSE_INSTRUCTION</span><span class="p">();</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Try to add a reader to the lock state. If the lock succeeded then we can continue.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">state</span> <span class="o">+</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Report another reader to the lock.</span>
+        <span class="n">m_localReaders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span> <span class="c1">// Set thread_local state to read.</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">read_try_lock</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">!=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">)</span> <span class="c1">// If we&#39;re either already reading or writing then the lock doesn&#39;t need to be reacquired.</span>
+        <span class="p">{</span>
+            <span class="c1">// Report another local reader to the lock.</span>
+            <span class="n">m_localReaders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Expect idle as default.</span>
+        <span class="kt">int</span> <span class="n">state</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">((</span><span class="n">state</span> <span class="o">=</span> <span class="n">m_lockState</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">write</span> <span class="o">||</span> <span class="c1">// Check if we can lock at all first to reduce LSU abuse on SMT CPUs if this occurs in a try_lock loop.</span>
+            <span class="o">!</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">compare_exchange_strong</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">state</span> <span class="o">+</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span> <span class="c1">// Try to add a reader to the lock state.</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="c1">// Report another reader to the lock.</span>
+        <span class="n">m_localReaders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span> <span class="c1">// Set thread_local state to read.</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">write_lock</span><span class="p">(</span><span class="n">wait_priority</span> <span class="n">priority</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">)</span> <span class="c1">// If we&#39;re currently only acquired for read we need to stop reading before requesting rw.</span>
+        <span class="p">{</span>
+            <span class="n">read_unlock</span><span class="p">();</span>
+            <span class="n">m_localReaders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">)</span> <span class="c1">// If we&#39;re already writing then we don&#39;t need to reacquire the lock.</span>
+        <span class="p">{</span>
+            <span class="n">m_localWriters</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">int</span> <span class="n">state</span><span class="p">;</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Read the current value and continue waiting until we&#39;re in a lockable state.</span>
+            <span class="k">while</span> <span class="p">((</span><span class="n">state</span> <span class="o">=</span> <span class="n">m_lockState</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span> <span class="o">!=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Acquire write lock&quot;</span><span class="p">);</span>
+
+                <span class="k">switch</span> <span class="p">(</span><span class="n">priority</span><span class="p">)</span>
+                <span class="p">{</span>
+                <span class="k">case</span> <span class="n">wait_priority</span><span class="o">::</span><span class="nl">sleep</span><span class="p">:</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">microseconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="n">wait_priority</span><span class="o">::</span><span class="nl">normal</span><span class="p">:</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="n">wait_priority</span><span class="o">::</span><span class="nl">real_time</span><span class="p">:</span>
+                <span class="k">default</span><span class="o">:</span>
+                    <span class="n">L_PAUSE_INSTRUCTION</span><span class="p">();</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Try to set the lock state to write. If the lock succeeded then we can continue.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+        <span class="n">m_writer</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">();</span>
+        <span class="n">m_localWriters</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">;</span> <span class="c1">// Set thread_local state to write.</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">write_try_lock</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="kt">bool</span> <span class="n">relock</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">)</span> <span class="c1">// If we&#39;re currently only acquired for read we need to stop reading before requesting rw.</span>
+        <span class="p">{</span>
+            <span class="n">relock</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">read_unlock</span><span class="p">();</span>
+            <span class="n">m_localReaders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">==</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">)</span> <span class="c1">// If we&#39;re already writing then we don&#39;t need to reacquire the lock.</span>
+        <span class="p">{</span>
+            <span class="n">m_localWriters</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Expect idle as default.</span>
+        <span class="kt">int</span> <span class="n">state</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">((</span><span class="n">state</span> <span class="o">=</span> <span class="n">m_lockState</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span> <span class="o">!=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span> <span class="o">||</span> <span class="c1">// Check if we can lock at all first to reduce LSU abuse on SMT CPUs if this occurs in a try_lock loop.</span>
+            <span class="o">!</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">compare_exchange_strong</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span> <span class="c1">// Try to set the lock state to write.</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">relock</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">m_localReaders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">--</span><span class="p">;</span>
+                <span class="n">read_lock</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">m_writer</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">();</span>
+        <span class="n">m_localWriters</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">write</span><span class="p">;</span> <span class="c1">// Set thread_local state to write.</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">read_unlock</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">localReaders</span> <span class="o">=</span> <span class="n">m_localReaders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+        <span class="n">localReaders</span><span class="o">--</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">localReaders</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">m_localWriters</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// Another local guard is still alive that will unlock the lock for this thread.</span>
+        <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">m_lockState</span><span class="p">.</span><span class="n">fetch_sub</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+
+        <span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span> <span class="c1">// Set thread_local state to idle.</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">write_unlock</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">localWriters</span> <span class="o">=</span> <span class="n">m_localWriters</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
+        <span class="n">localWriters</span><span class="o">--</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">localWriters</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">// Another local guard is still alive that will unlock the lock for this thread.</span>
+        <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">m_localReaders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+            <span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">read</span><span class="p">;</span> <span class="c1">// Set thread_local state to idle.</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">m_lockState</span><span class="p">.</span><span class="n">store</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+        <span class="n">m_localState</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">m_id</span><span class="p">)</span> <span class="o">=</span> <span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">;</span> <span class="c1">// Set thread_local state to idle.</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">force_release</span><span class="p">(</span><span class="kt">bool</span> <span class="n">release</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">m_forceRelease</span> <span class="o">=</span> <span class="n">release</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">(</span><span class="n">rw_spinlock</span><span class="o">&amp;&amp;</span> <span class="n">source</span><span class="p">)</span> <span class="k">noexcept</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="n">assert_msg</span><span class="p">(</span><span class="s">&quot;Attempted to move a rw_spinlock that was locked.&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">.</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">);</span>
+        <span class="n">m_id</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">m_id</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">rw_spinlock</span><span class="o">&amp;</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">rw_spinlock</span><span class="o">&amp;&amp;</span> <span class="n">source</span><span class="p">)</span> <span class="k">noexcept</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+
+        <span class="n">assert_msg</span><span class="p">(</span><span class="s">&quot;Attempted to move a rw_spinlock that was locked.&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">.</span><span class="n">m_lockState</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">lock_state</span><span class="o">::</span><span class="n">idle</span><span class="p">);</span>
+        <span class="n">m_id</span> <span class="o">=</span> <span class="n">source</span><span class="p">.</span><span class="n">m_id</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">lock</span><span class="p">(</span><span class="n">lock_state</span> <span class="n">permissionLevel</span><span class="p">,</span> <span class="n">wait_priority</span> <span class="n">priority</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_localState</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">m_id</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">m_localWriters</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">m_localReaders</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">m_localState</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">lock_state_idle</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">switch</span> <span class="p">(</span><span class="n">permissionLevel</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="k">case</span> <span class="n">lock_state</span><span class="o">::</span><span class="nl">read</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">read_lock</span><span class="p">(</span><span class="n">priority</span><span class="p">);</span>
+        <span class="k">case</span> <span class="n">lock_state</span><span class="o">::</span><span class="nl">write</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">write_lock</span><span class="p">(</span><span class="n">priority</span><span class="p">);</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">try_lock</span><span class="p">(</span><span class="n">lock_state</span> <span class="n">permissionLevel</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_localState</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">m_id</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">m_localWriters</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">m_localReaders</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">m_localState</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">lock_state_idle</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">switch</span> <span class="p">(</span><span class="n">permissionLevel</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="k">case</span> <span class="n">lock_state</span><span class="o">::</span><span class="nl">read</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">read_try_lock</span><span class="p">();</span>
+        <span class="k">case</span> <span class="n">lock_state</span><span class="o">::</span><span class="nl">write</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">write_try_lock</span><span class="p">();</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">unlock</span><span class="p">(</span><span class="n">lock_state</span> <span class="n">permissionLevel</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">switch</span> <span class="p">(</span><span class="n">permissionLevel</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="k">case</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">async</span><span class="o">::</span><span class="n">lock_state</span><span class="o">::</span><span class="nl">read</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">read_unlock</span><span class="p">();</span>
+        <span class="k">case</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">async</span><span class="o">::</span><span class="n">lock_state</span><span class="o">::</span><span class="nl">write</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">write_unlock</span><span class="p">();</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">lock_shared</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="nf">read_lock</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">try_lock_shared</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="nf">read_try_lock</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">rw_spinlock</span><span class="o">::</span><span class="n">unlock_shared</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_forceRelease</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="nf">read_unlock</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -31,6 +31,8 @@ Includes
 
 - ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
 
+- ``limits``
+
 - ``physics/colliders/physicscollider.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_physicscollider.hpp`)
 
 - ``physics/cube_collider_params.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_cube_collider_params.hpp`)

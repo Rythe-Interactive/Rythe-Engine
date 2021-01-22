@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File framebuffer.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File framebuffer.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-framebuffer-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-framebuffer-cpp"></span><h1>Program Listing for File framebuffer.cpp<a class="headerlink" href="#program-listing-for-file-framebuffer-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_framebuffer.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-framebuffer-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/framebuffer.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;rendering/data/framebuffer.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="n">framebuffer</span><span class="o">::</span><span class="n">framebuffer</span><span class="p">(</span><span class="n">GLenum</span> <span class="n">target</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">m_id</span><span class="p">([](</span><span class="n">app</span><span class="o">::</span><span class="n">gl_id</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Assign logic for framebuffer deletion to managed resource.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">initialized</span><span class="p">())</span>
+                <span class="k">return</span><span class="p">;</span>
+
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to delete framebuffer with.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">glDeleteFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>
+            <span class="p">},</span> <span class="n">invalid_id</span><span class="p">),</span>
+        <span class="n">m_target</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+    <span class="p">{</span>
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to create framebuffer with.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+        <span class="n">glGenFramebuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_id</span><span class="p">);</span> <span class="c1">// Generate framebuffer</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">verify</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to work with.&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;No context made current.&quot;</span> <span class="p">};</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+        <span class="c1">// Check if the framebuffer was ever even generated.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Framebuffer has not been generated yet.&quot;</span> <span class="p">};</span>
+
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">m_id</span><span class="p">);</span>
+        <span class="k">const</span> <span class="k">auto</span> <span class="n">verification</span> <span class="o">=</span> <span class="n">glCheckNamedFramebufferStatus</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">m_target</span><span class="p">);</span> <span class="c1">// Fetch the framebuffer status.</span>
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+        <span class="c1">// Initialize to success so no extra allocations need to happen when everything is good.</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Framebuffer is complete.&quot;</span><span class="p">));</span>
+
+        <span class="c1">// Check the verification status.</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">verification</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_COMPLETE</span><span class="p">:</span> <span class="c1">// Leave the preinitialized values be.</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_UNDEFINED</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Id: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; Framebuffer set to default but default does not exist.&quot;</span> <span class="p">};</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Id: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; One or more attachments of the framebuffer are incomplete.&quot;</span> <span class="p">};</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Id: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; Framebuffer does not have atleast one image attached to it.&quot;</span> <span class="p">};</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Id: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; Value of GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE is GL_NONE for any color attachment point(s) named by GL_DRAW_BUFFERi&quot;</span> <span class="p">};</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Id: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; GL_READ_BUFFER is not GL_NONE and the value of GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE is GL_NONE for the color attachment point named by GL_READ_BUFFER&quot;</span> <span class="p">};</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_UNSUPPORTED</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Id: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; The combination of internal formats of the attached images violates an implementation-dependent set of restrictions&quot;</span> <span class="p">};</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Id: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; The value of GL_RENDERBUFFER_SAMPLES is not the same for all attached renderbuffers; if the value of GL_TEXTURE_SAMPLES is the not same for all attached textures; If the attached images are a mix of renderbuffers and textures, the value of GL_RENDERBUFFER_SAMPLES does not match the value of GL_TEXTURE_SAMPLES; or, the value of GL_TEXTURE_FIXED_SAMPLE_LOCATIONS is not the same for all attached textures; or, if the attached images are a mix of renderbuffers and textures, the value of GL_TEXTURE_FIXED_SAMPLE_LOCATIONS is not GL_TRUE for all attached textures.&quot;</span> <span class="p">};</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Id: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; If any framebuffer attachment is layered, and any populated attachment is not layered, or if all populated color attachments are not from textures of the same target.&quot;</span> <span class="p">};</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;Id: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; Unkown framebuffer error: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">verification</span><span class="p">)</span> <span class="p">};</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">result</span><span class="p">.</span><span class="n">first</span><span class="p">)</span> <span class="c1">// If the framebuffer isn&#39;t complete we might want to know what the state of the framebuffer is, so we print the attachments.</span>
+        <span class="p">{</span>
+            <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">m_id</span><span class="p">);</span>
+            <span class="n">GLint</span> <span class="n">value</span><span class="p">;</span>
+            <span class="n">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">GL_COLOR_ATTACHMENT0</span><span class="p">,</span> <span class="n">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">GL_NONE</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Color attachment is of type GL_NONE&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_DEFAULT</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Color attachment is of type GL_FRAMEBUFFER_DEFAULT&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_TEXTURE</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Color attachment is of type GL_TEXTURE&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_RENDERBUFFER</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Color attachment is of type GL_RENDERBUFFER&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Color attachment is of unknown type: {}&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">GL_DEPTH_ATTACHMENT</span><span class="p">,</span> <span class="n">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">GL_NONE</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Depth attachment is of type GL_NONE&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_DEFAULT</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Depth attachment is of type GL_FRAMEBUFFER_DEFAULT&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_TEXTURE</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Depth attachment is of type GL_TEXTURE&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_RENDERBUFFER</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Depth attachment is of type GL_RENDERBUFFER&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Depth attachment is of unknown type: {}&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">glGetFramebufferAttachmentParameteriv</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">GL_STENCIL_ATTACHMENT</span><span class="p">,</span> <span class="n">GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">);</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">{</span>
+            <span class="k">case</span> <span class="nl">GL_NONE</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Stencil attachment is of type GL_NONE&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_FRAMEBUFFER_DEFAULT</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Stencil attachment is of type GL_FRAMEBUFFER_DEFAULT&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_TEXTURE</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Stencil attachment is of type GL_TEXTURE&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="nl">GL_RENDERBUFFER</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Stencil attachment is of type GL_RENDERBUFFER&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="o">:</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Stencil attachment is of unknown type: {}&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="cp">#else</span>
+        <span class="c1">// In release we skip all checks and only check if it&#39;s actually valid. For more debug information the engine should be ran in debug mode.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">verification</span> <span class="o">==</span> <span class="n">GL_FRAMEBUFFER_COMPLETE</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span> <span class="nb">true</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Framebuffer is complete.&quot;</span><span class="p">)</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="p">{</span> <span class="nb">false</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;Framebuffer isn&#39;t complete.&quot;</span><span class="p">)</span> <span class="p">};</span>
+<span class="cp">#endif</span>
+    <span class="p">}</span>
+
+    <span class="n">GLenum</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">target</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_target</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">id</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_id</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">bind</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to work with.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">m_id</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">attach</span><span class="p">(</span><span class="n">renderbuffer</span> <span class="n">rbo</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">attachment</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to work with.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Attempting to attach render targets to default framebuffer.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">m_id</span><span class="p">);</span>
+        <span class="n">glNamedFramebufferRenderbuffer</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">attachment</span><span class="p">,</span> <span class="n">GL_RENDERBUFFER</span><span class="p">,</span> <span class="n">rbo</span><span class="p">.</span><span class="n">id</span><span class="p">());</span> <span class="c1">// Attach the renderbuffer.</span>
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">m_attachments</span><span class="p">[</span><span class="n">attachment</span><span class="p">]</span> <span class="o">=</span> <span class="n">rbo</span><span class="p">;</span> <span class="c1">// Insert the renderbuffer into the map of attachments.</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">attach</span><span class="p">(</span><span class="n">texture_handle</span> <span class="n">texture</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">attachment</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to work with.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Attempting to attach render targets to default framebuffer.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">m_id</span><span class="p">);</span>
+        <span class="n">glNamedFramebufferTexture</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">attachment</span><span class="p">,</span> <span class="n">texture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">textureId</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// Attach the texture.</span>
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">m_attachments</span><span class="p">[</span><span class="n">attachment</span><span class="p">]</span> <span class="o">=</span> <span class="n">texture</span><span class="p">;</span> <span class="c1">// Insert the texture into the map of attachments.</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">detach</span><span class="p">(</span><span class="n">GLenum</span> <span class="n">attachment</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Attempting to detach render targets to default framebuffer.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_attachments</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">attachment</span><span class="p">))</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">att</span> <span class="o">=</span> <span class="n">m_attachments</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">attachment</span><span class="p">);</span> <span class="c1">// Otherwise return the active attachment.</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">monostate</span><span class="o">&gt;</span><span class="p">(</span><span class="n">att</span><span class="p">))</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">m_id</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">att</span><span class="p">))</span>
+            <span class="n">glNamedFramebufferTexture</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">attachment</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// Attach the texture.</span>
+        <span class="k">else</span>
+            <span class="nf">glNamedFramebufferRenderbuffer</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">attachment</span><span class="p">,</span> <span class="n">GL_RENDERBUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// Attach the renderbuffer.</span>
+
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">m_attachments</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">attachment</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">attach</span><span class="p">(</span><span class="n">attachment</span> <span class="n">att</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">attachment</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to work with.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Attempting to attach render targets to default framebuffer.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">monostate</span><span class="o">&gt;</span><span class="p">(</span><span class="n">att</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Attempting to attach empty attachment to framebuffer.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="n">m_id</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">att</span><span class="p">))</span>
+            <span class="n">glNamedFramebufferTexture</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">attachment</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">att</span><span class="p">).</span><span class="n">get_texture</span><span class="p">().</span><span class="n">textureId</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// Attach the texture.</span>
+        <span class="k">else</span>
+            <span class="nf">glNamedFramebufferRenderbuffer</span><span class="p">(</span><span class="n">m_id</span><span class="p">,</span> <span class="n">attachment</span><span class="p">,</span> <span class="n">GL_RENDERBUFFER</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">renderbuffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">att</span><span class="p">).</span><span class="n">id</span><span class="p">());</span> <span class="c1">// Attach the renderbuffer.</span>
+
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">m_attachments</span><span class="p">[</span><span class="n">attachment</span><span class="p">]</span> <span class="o">=</span> <span class="n">att</span><span class="p">;</span> <span class="c1">// Insert the attachment into the map of attachments.</span>
+    <span class="p">}</span>
+
+    <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">attachment</span><span class="o">&amp;</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">GLenum</span> <span class="n">attachment</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Attempting to attach render targets to default framebuffer.&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">invalid_attachment</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_attachments</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">attachment</span><span class="p">))</span> <span class="c1">// Return an empty std::any if the attachment wasn&#39;t active.</span>
+            <span class="k">return</span> <span class="n">invalid_attachment</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">m_attachments</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">attachment</span><span class="p">);</span> <span class="c1">// Otherwise return the active attachment.</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">framebuffer</span><span class="o">::</span><span class="n">release</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+<span class="cp">#if defined(LEGION_DEBUG)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">app</span><span class="o">::</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current context to work with.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+
+        <span class="n">glBindFramebuffer</span><span class="p">(</span><span class="n">m_target</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">L_NODISCARD</span> <span class="n">framebuffer</span><span class="o">::</span><span class="k">operator</span> <span class="kt">bool</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_id</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_framebuffer.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

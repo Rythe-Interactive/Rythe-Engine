@@ -1,0 +1,76 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.h:
+
+File splittable_polygon.h
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/splittable_polygon.h``)
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersecting_polygon_organizer.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_half_edge.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_typedefs.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.h`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physics_fracture_test_system.cpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classlegion_1_1physics_1_1_splittable_polygon`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_splittable__polygon_8h_1a055b4a8ae65fc48792424145dbede841`
+

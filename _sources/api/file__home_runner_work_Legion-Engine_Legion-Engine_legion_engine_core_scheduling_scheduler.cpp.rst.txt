@@ -33,6 +33,8 @@ Includes
 
 - ``core/scheduling/scheduler.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.hpp`)
 
+- ``core/time/clock.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp`)
+
 
 
 

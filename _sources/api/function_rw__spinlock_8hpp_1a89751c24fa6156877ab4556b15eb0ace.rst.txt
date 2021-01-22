@@ -1,0 +1,13 @@
+.. _exhale_function_rw__spinlock_8hpp_1a89751c24fa6156877ab4556b15eb0ace:
+
+Template Function legion::core::async::mixed_multiguard
+=======================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::async::mixed_multiguard(types...)

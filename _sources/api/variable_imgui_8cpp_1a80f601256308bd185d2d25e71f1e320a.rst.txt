@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui_8cpp_1a80f601256308bd185d2d25e71f1e320a:
+
+Variable resize_border_def
+==========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: resize_border_def

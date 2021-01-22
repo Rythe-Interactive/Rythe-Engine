@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__impl__opengl3_8cpp_1a137cb22f50258ade706c87cd18d7da60:
+
+Variable g_VboHandle
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: g_VboHandle

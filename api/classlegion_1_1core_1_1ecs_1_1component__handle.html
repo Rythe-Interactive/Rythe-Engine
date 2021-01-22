@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class component_handle_base" href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" />
-    <link rel="prev" title="Class component_container_base" href="classlegion_1_1core_1_1ecs_1_1component__container__base.html" />
+    <link rel="prev" title="Template Class component_container" href="class_structlegion_1_1core_1_1ecs_1_1component__container.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" title="Class component_handle_base"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classlegion_1_1core_1_1ecs_1_1component__container__base.html" title="Class component_container_base"
+          <a href="class_structlegion_1_1core_1_1ecs_1_1component__container.html" title="Template Class component_container"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -163,8 +163,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE">
-<span id="_CPPv3N6legion4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE"></span><span id="_CPPv2N6legion4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a0d98db6ecca17970aa12c584fe157e9b"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">read_modify_write</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> &amp;&amp;<em>value</em>, <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> (*<em>modifier</em>)<span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a>&amp;, <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a>&amp;&amp;<span class="sig-paren">)</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle17read_modify_writeERR14component_typePF14component_typeRK14component_typeRR14component_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN6legion4core3ecs16component_handle17read_modify_writeE14component_typeRR4Func">
+<span id="_CPPv3I0EN6legion4core3ecs16component_handle17read_modify_writeERR4Func"></span><span id="_CPPv2I0EN6legion4core3ecs16component_handle17read_modify_writeERR4Func"></span>template&lt;typename <code class="sig-name descname">Func</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1ab5ac292c778a48e8a1ba52105d5878d0"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">read_modify_write</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handle17read_modify_writeE14component_typeRR4Func" title="legion::core::ecs::component_handle::read_modify_write::Func">Func</a> &amp;&amp;<em>modifier</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core3ecs16component_handle17read_modify_writeE14component_typeRR4Func" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Thread-safe read modify write with a custom modification on component. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>component_type Current value of component. </p>
@@ -176,6 +176,11 @@
 </dl>
 </p>
 </dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core3ecs16component_handle17read_modify_writeE14component_typeRK4Func">
+<span id="_CPPv3I0EN6legion4core3ecs16component_handle17read_modify_writeERK4Func"></span><span id="_CPPv2I0EN6legion4core3ecs16component_handle17read_modify_writeERK4Func"></span>template&lt;typename <code class="sig-name descname">Func</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1a57e7d787adeb60888c9fdbc0cd99c902"></span><a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handleE" title="legion::core::ecs::component_handle::component_type">component_type</a> <code class="sig-name descname">read_modify_write</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core3ecs16component_handle17read_modify_writeE14component_typeRK4Func" title="legion::core::ecs::component_handle::read_modify_write::Func">Func</a> &amp;<em>modifier</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core3ecs16component_handle17read_modify_writeE14component_typeRK4Func" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core3ecs16component_handle9fetch_addERR14component_type">
@@ -240,7 +245,7 @@
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core3ecs16component_handle7destroyEv">
 <span id="_CPPv3N6legion4core3ecs16component_handle7destroyEv"></span><span id="_CPPv2N6legion4core3ecs16component_handle7destroyEv"></span><span id="legion::core::ecs::component_handle::destroy"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle_1af80545628fae7d690cf6f25f333e576b"></span>void <code class="sig-name descname">destroy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs16component_handle7destroyEv" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Locks component family and destroys component. <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__container.html#classlegion_1_1core_1_1ecs_1_1component__container_1a964447c6412c229aef2e9b8890781f4b"><span class="std std-ref">legion::core::ecs::component_container::destroy_component</span></a>. </p>
+<dd><p>Locks component family and destroys component. <a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1component__pool.html#classlegion_1_1core_1_1ecs_1_1component__pool_1a19cab6cad12ee4e10cf82de3558baeb4"><span class="std std-ref">legion::core::ecs::component_pool::destroy_component</span></a>. </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -285,7 +290,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="classlegion_1_1core_1_1ecs_1_1component__container__base.html" title="previous chapter">Class component_container_base</a></li>
+      <li>Previous: <a href="class_structlegion_1_1core_1_1ecs_1_1component__container.html" title="previous chapter">Template Class component_container</a></li>
       <li>Next: <a href="classlegion_1_1core_1_1ecs_1_1component__handle__base.html" title="next chapter">Class component_handle_base</a></li>
   </ul></li>
   </ul></li>

@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1af3fc6696890f59b0b2fdec1de2534f2d:
+
+Variable draggable
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: draggable

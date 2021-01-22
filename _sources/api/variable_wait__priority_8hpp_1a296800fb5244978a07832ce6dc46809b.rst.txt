@@ -1,0 +1,13 @@
+.. _exhale_variable_wait__priority_8hpp_1a296800fb5244978a07832ce6dc46809b:
+
+Variable legion::core::async::wait_priority_normal
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_wait_priority.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::async::wait_priority_normal

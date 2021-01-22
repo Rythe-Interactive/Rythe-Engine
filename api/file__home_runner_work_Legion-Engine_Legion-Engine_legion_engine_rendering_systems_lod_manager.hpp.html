@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File lod_manager.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">File lod_manager.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="file-lod-manager-hpp">
+<span id="file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-systems-lod-manager-hpp"></span><h1>File lod_manager.hpp<a class="headerlink" href="#file-lod-manager-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems.html#dir-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-systems"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/systems</span></code>)</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-systems-lod-manager-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/systems/lod_manager.hpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id4">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id5">Classes</a></p></li>
+</ul>
+</div>
+<div class="section" id="definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-systems-lod-manager-hpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/systems/lod_manager.hpp</span></code>)<a class="headerlink" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-systems-lod-manager-hpp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_lod_manager.hpp.html">Program Listing for File lod_manager.hpp</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">core/core.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-editor-editor-core-core-hpp"><span class="std std-ref">File core.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">math.h</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-math-math-hpp"><span class="std std-ref">File math.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rendering/components/camera.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_camera.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-components-camera-hpp"><span class="std std-ref">File camera.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rendering/components/lod.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_lod.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-components-lod-hpp"><span class="std std-ref">File lod.hpp</span></a>)</p></li>
+</ul>
+</div>
+<div class="section" id="included-by">
+<h2>Included By<a class="headerlink" href="#included-by" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_module_renderingmodule.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-module-renderingmodule-hpp"><span class="std std-ref">File renderingmodule.hpp</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_legion__rendering.html#namespace-legion-rendering"><span class="std std-ref">Namespace legion::rendering</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="classlegion_1_1rendering_1_1_l_o_d_manager.html#exhale-class-classlegion-1-1rendering-1-1-l-o-d-manager"><span class="std std-ref">Class LODManager</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">File lod_manager.hpp</a><ul>
+<li><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-systems-lod-manager-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/systems/lod_manager.hpp</span></code>)</a></li>
+<li><a class="reference internal" href="#includes">Includes</a></li>
+<li><a class="reference internal" href="#included-by">Included By</a></li>
+<li><a class="reference internal" href="#namespaces">Namespaces</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_lod_manager.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

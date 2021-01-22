@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Bloom &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class buffer" href="class_structlegion_1_1rendering_1_1buffer.html" />
+    <link rel="prev" title="Class attribute" href="class_structlegion_1_1rendering_1_1attribute.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1rendering_1_1buffer.html" title="Class buffer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structlegion_1_1rendering_1_1attribute.html" title="Class attribute"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class Bloom</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-bloom">
+<span id="exhale-class-classlegion-1-1rendering-1-1-bloom"></span><h1>Class Bloom<a class="headerlink" href="#class-bloom" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_bloom.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-postfx-bloom-hpp"><span class="std std-ref">File bloom.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::PostProcessingEffect&lt;</span> <span class="pre">Bloom</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_post_processing_effect.html#exhale-class-classlegion-1-1rendering-1-1-post-processing-effect"><span class="std std-ref">Template Class PostProcessingEffect</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion9rendering5BloomE">
+<span id="_CPPv3N6legion9rendering5BloomE"></span><span id="_CPPv2N6legion9rendering5BloomE"></span><span id="legion::rendering::Bloom"></span><span class="target" id="classlegion_1_1rendering_1_1_bloom"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">Bloom</code> : <em class="property">public</em> <a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering::PostProcessingEffect&lt;<a class="reference internal" href="#_CPPv4N6legion9rendering5BloomE" title="legion::rendering::Bloom">Bloom</a>&gt;<a class="headerlink" href="#_CPPv4N6legion9rendering5BloomE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A bloom post processing effect. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering5Bloom5setupERN3app6windowE">
+<span id="_CPPv3N6legion9rendering5Bloom5setupERN3app6windowE"></span><span id="_CPPv2N6legion9rendering5Bloom5setupERN3app6windowE"></span><span id="legion::rendering::Bloom::setup__app::windowR"></span><span class="target" id="classlegion_1_1rendering_1_1_bloom_1a90e11028631bae7ecd4be9700a24f15f"></span>void <code class="sig-name descname">setup</code><span class="sig-paren">(</span>app::window &amp;<em>context</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion9rendering5Bloom5setupERN3app6windowE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>setup The setup function of the post processing effect. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">context</span></code>: The current context that is being used inside of the effect. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering5Bloom16seperateOverdrawER11framebuffer14texture_handle14texture_handle">
+<span id="_CPPv3N6legion9rendering5Bloom16seperateOverdrawER11framebuffer14texture_handle14texture_handle"></span><span id="_CPPv2N6legion9rendering5Bloom16seperateOverdrawER11framebuffer14texture_handle14texture_handle"></span><span id="legion::rendering::Bloom::seperateOverdraw__framebufferR.texture_handle.texture_handle"></span><span class="target" id="classlegion_1_1rendering_1_1_bloom_1a0c3c80bdc2206612cd646e084301b2e3"></span>void <code class="sig-name descname">seperateOverdraw</code><span class="sig-paren">(</span><a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a> &amp;<em>fbo</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <em>colortexture</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <em>overdrawtexture</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering5Bloom16seperateOverdrawER11framebuffer14texture_handle14texture_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering5Bloom12blurOverdrawERKN4math5ivec2E14texture_handle">
+<span id="_CPPv3N6legion9rendering5Bloom12blurOverdrawERKN4math5ivec2E14texture_handle"></span><span id="_CPPv2N6legion9rendering5Bloom12blurOverdrawERKN4math5ivec2E14texture_handle"></span><span id="legion::rendering::Bloom::blurOverdraw__math::ivec2CR.texture_handle"></span><span class="target" id="classlegion_1_1rendering_1_1_bloom_1a22a9e2efc178c624731a498a15c78391"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">blurOverdraw</code><span class="sig-paren">(</span><em class="property">const</em> math::ivec2 &amp;<em>framebufferSize</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <em>overdrawtexture</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering5Bloom12blurOverdrawERKN4math5ivec2E14texture_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering5Bloom18historyMixOverdrawER11framebuffer14texture_handle">
+<span id="_CPPv3N6legion9rendering5Bloom18historyMixOverdrawER11framebuffer14texture_handle"></span><span id="_CPPv2N6legion9rendering5Bloom18historyMixOverdrawER11framebuffer14texture_handle"></span><span id="legion::rendering::Bloom::historyMixOverdraw__framebufferR.texture_handle"></span><span class="target" id="classlegion_1_1rendering_1_1_bloom_1af347a867e082acdc7e73a6940263ddf1"></span>void <code class="sig-name descname">historyMixOverdraw</code><span class="sig-paren">(</span><a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a> &amp;<em>fbo</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <em>overdrawtexture</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering5Bloom18historyMixOverdrawER11framebuffer14texture_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering5Bloom13combineImagesER11framebuffer14texture_handle14texture_handle">
+<span id="_CPPv3N6legion9rendering5Bloom13combineImagesER11framebuffer14texture_handle14texture_handle"></span><span id="_CPPv2N6legion9rendering5Bloom13combineImagesER11framebuffer14texture_handle14texture_handle"></span><span id="legion::rendering::Bloom::combineImages__framebufferR.texture_handle.texture_handle"></span><span class="target" id="classlegion_1_1rendering_1_1_bloom_1a54c5c6ebd7237373bb86b64e8af056ed"></span>void <code class="sig-name descname">combineImages</code><span class="sig-paren">(</span><a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a> &amp;<em>fbo</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <em>colortexture</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <em>overdrawtexture</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering5Bloom13combineImagesER11framebuffer14texture_handle14texture_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering5Bloom10renderPassER11framebuffer14texture_handle14texture_handleN4time4spanE">
+<span id="_CPPv3N6legion9rendering5Bloom10renderPassER11framebuffer14texture_handle14texture_handleN4time4spanE"></span><span id="_CPPv2N6legion9rendering5Bloom10renderPassER11framebuffer14texture_handle14texture_handleN4time4spanE"></span><span id="legion::rendering::Bloom::renderPass__framebufferR.texture_handle.texture_handle.time::span"></span><span class="target" id="classlegion_1_1rendering_1_1_bloom_1ade53dc666811a4a677a43c0d7245a73c"></span>void <code class="sig-name descname">renderPass</code><span class="sig-paren">(</span><a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a> &amp;<em>fbo</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <em>colortexture</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <em>depthtexture</em>, time::span <em>deltaTime</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering5Bloom10renderPassER11framebuffer14texture_handle14texture_handleN4time4spanE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>renderPass The function that is called every frame. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fbo</span></code>: The framebuffer used for this particular effect. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">colortexture</span></code>: The lighting data gathered from previous renderpasses. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">depthtexture</span></code>: The depth data gathered from previous renderpasses. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deltaTime</span></code>: Current delta time. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class Bloom</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="class_structlegion_1_1rendering_1_1attribute.html" title="previous chapter">Class attribute</a></li>
+      <li>Next: <a href="class_structlegion_1_1rendering_1_1buffer.html" title="next chapter">Class buffer</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1rendering_1_1_bloom.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

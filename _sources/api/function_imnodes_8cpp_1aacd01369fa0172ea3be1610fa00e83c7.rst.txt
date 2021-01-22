@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1aacd01369fa0172ea3be1610fa00e83c7:
+
+Function imgui::nodes::GetSelectedNodes
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::GetSelectedNodes(int *)

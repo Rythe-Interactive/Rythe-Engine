@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File thread_util.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File thread_util.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-thread-util-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-thread-util-hpp"></span><h1>Program Listing for File thread_util.hpp<a class="headerlink" href="#program-listing-for-file-thread-util-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_thread_util.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-thread-util-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async/thread_util.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">async</span>
+<span class="p">{</span>
+<span class="cp">#ifdef LEGION_WINDOWS</span>
+    <span class="k">const</span> <span class="n">DWORD</span> <span class="n">MS_VC_EXCEPTION</span> <span class="o">=</span> <span class="mh">0x406D1388</span><span class="p">;</span>
+
+<span class="cp">#pragma pack(push,8)</span>
+    <span class="k">typedef</span> <span class="k">struct</span> <span class="n">tagTHREADNAME_INFO</span>
+    <span class="p">{</span>
+        <span class="n">DWORD</span> <span class="n">dwType</span><span class="p">;</span> <span class="c1">// Must be 0x1000.</span>
+        <span class="n">LPCSTR</span> <span class="n">szName</span><span class="p">;</span> <span class="c1">// Pointer to name (in user addr space).</span>
+        <span class="n">DWORD</span> <span class="n">dwThreadID</span><span class="p">;</span> <span class="c1">// Thread ID (-1=caller thread).</span>
+        <span class="n">DWORD</span> <span class="n">dwFlags</span><span class="p">;</span> <span class="c1">// Reserved for future use, must be zero.</span>
+    <span class="p">}</span> <span class="n">THREADNAME_INFO</span><span class="p">;</span>
+<span class="cp">#pragma pack(pop)</span>
+
+
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">set_thread_name</span><span class="p">(</span><span class="kt">uint32_t</span> <span class="n">dwThreadID</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">threadName</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="c1">// DWORD dwThreadID = ::GetThreadId( static_cast&lt;HANDLE&gt;( t.native_handle() ) );</span>
+
+        <span class="n">THREADNAME_INFO</span> <span class="n">info</span><span class="p">;</span>
+        <span class="n">info</span><span class="p">.</span><span class="n">dwType</span> <span class="o">=</span> <span class="mh">0x1000</span><span class="p">;</span>
+        <span class="n">info</span><span class="p">.</span><span class="n">szName</span> <span class="o">=</span> <span class="n">threadName</span><span class="p">;</span>
+        <span class="n">info</span><span class="p">.</span><span class="n">dwThreadID</span> <span class="o">=</span> <span class="n">dwThreadID</span><span class="p">;</span>
+        <span class="n">info</span><span class="p">.</span><span class="n">dwFlags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="kr">__try</span>
+        <span class="p">{</span>
+            <span class="n">RaiseException</span><span class="p">(</span><span class="n">MS_VC_EXCEPTION</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ULONG_PTR</span><span class="p">),</span> <span class="p">(</span><span class="n">ULONG_PTR</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">info</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kr">__except</span> <span class="p">(</span><span class="n">EXCEPTION_EXECUTE_HANDLER</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">set_thread_name</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">threadName</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">set_thread_name</span><span class="p">(</span><span class="n">GetCurrentThreadId</span><span class="p">(),</span> <span class="n">threadName</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">set_thread_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&amp;</span> <span class="kr">thread</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">threadName</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">DWORD</span> <span class="n">threadId</span> <span class="o">=</span> <span class="o">::</span><span class="n">GetThreadId</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">HANDLE</span><span class="o">&gt;</span><span class="p">(</span><span class="kr">thread</span><span class="p">.</span><span class="n">native_handle</span><span class="p">()));</span>
+        <span class="n">set_thread_name</span><span class="p">(</span><span class="n">threadId</span><span class="p">,</span> <span class="n">threadName</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="cp">#elif defined(LEGION_LINUX)</span>
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">set_thread_name</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">threadName</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">prctl</span><span class="p">(</span><span class="n">PR_SET_NAME</span><span class="p">,</span> <span class="n">threadName</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">set_thread_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&amp;</span> <span class="kr">thread</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">threadName</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="kr">thread</span><span class="p">.</span><span class="n">native_handle</span><span class="p">();</span>
+        <span class="n">pthread_setname_np</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">threadName</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="cp">#endif</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_thread_util.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -37,7 +37,11 @@ Includes
 
 - ``cereal/types/unordered_map.hpp``
 
+- ``core/data/mesh.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`)
+
 - ``core/ecs/archetype.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`)
+
+- ``core/ecs/component_handle.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`)
 
 - ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`)
 
@@ -50,6 +54,14 @@ Included By
 
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_coremodule.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_defaultcomponents.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_hierarchysystem.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.cpp`
 
 
 
@@ -65,6 +77,10 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structlegion_1_1core_1_1hierarchy`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1mesh__filter`
+
 - :ref:`exhale_struct_structlegion_1_1core_1_1position`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1rotation`
@@ -72,4 +88,6 @@ Classes
 - :ref:`exhale_struct_structlegion_1_1core_1_1scale`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1transform`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1velocity`
 

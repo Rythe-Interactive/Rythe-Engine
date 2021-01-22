@@ -50,7 +50,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/containers/sparse_map.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/math/color.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/async/readonly_rw_spinlock.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/async/rw_spinlock.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/view.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;mutex&gt;</span><span class="cp"></span>
 
@@ -58,6 +58,7 @@
 <span class="p">{</span>
     <span class="k">enum</span> <span class="k">struct</span> <span class="nl">channel_format</span> <span class="p">:</span> <span class="n">uint</span>
     <span class="p">{</span>
+        <span class="n">depth_stencil</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">eight_bit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
         <span class="n">sixteen_bit</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">float_hdr</span> <span class="o">=</span> <span class="mi">4</span>
@@ -68,7 +69,10 @@
         <span class="n">grey</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
         <span class="n">grey_alpha</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">rgb</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-        <span class="n">rgba</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="n">rgba</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">depth</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">stencil</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="n">depth_stencil</span> <span class="o">=</span> <span class="mi">7</span>
     <span class="p">};</span>
 
     <span class="k">struct</span> <span class="n">image</span> <span class="k">final</span>
@@ -243,7 +247,7 @@
 
         <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">read_colors</span><span class="p">();</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">image</span><span class="o">&amp;&gt;</span> <span class="n">get_raw_image</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">image</span><span class="o">&amp;&gt;</span> <span class="n">get_raw_image</span><span class="p">();</span>
 
         <span class="kt">void</span> <span class="nf">destroy</span><span class="p">();</span>
 
@@ -269,17 +273,17 @@
         <span class="k">friend</span> <span class="k">struct</span> <span class="n">image_handle</span><span class="p">;</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">static</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;</span> <span class="n">m_nullColors</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_nullLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_nullLock</span><span class="p">;</span>
 
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">image</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_images</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_imagesLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">image</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_images</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_imagesLock</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_colors</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_colorsLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_colorsLock</span><span class="p">;</span>
 
         <span class="k">static</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">process_raw</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&amp;</span> <span class="n">read_colors</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">image</span><span class="o">&amp;&gt;</span> <span class="n">get_raw_image</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">image</span><span class="o">&amp;&gt;</span> <span class="n">get_raw_image</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
 
     <span class="k">public</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">image_handle</span> <span class="n">create_image</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">image_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_image_settings</span><span class="p">);</span>

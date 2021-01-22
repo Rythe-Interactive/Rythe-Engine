@@ -18,7 +18,7 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class EcsRegistry" href="classlegion_1_1core_1_1ecs_1_1_ecs_registry.html" />
+    <link rel="next" title="Template Class component_pool" href="classlegion_1_1core_1_1ecs_1_1component__pool.html" />
     <link rel="prev" title="Template Class component_handle" href="classlegion_1_1core_1_1ecs_1_1component__handle.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="classlegion_1_1core_1_1ecs_1_1_ecs_registry.html" title="Class EcsRegistry"
+          <a href="classlegion_1_1core_1_1ecs_1_1component__pool.html" title="Template Class component_pool"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="classlegion_1_1core_1_1ecs_1_1component__handle.html" title="Template Class component_handle"
@@ -162,11 +162,6 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Protected Attributes</p>
 <dl class="cpp var">
-<dt id="_CPPv4N6legion4core3ecs21component_handle_base9m_ownerIdE">
-<span id="_CPPv3N6legion4core3ecs21component_handle_base9m_ownerIdE"></span><span id="_CPPv2N6legion4core3ecs21component_handle_base9m_ownerIdE"></span><span id="legion::core::ecs::component_handle_base::m_ownerId__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle__base_1ae4843ae429e23e9069165661bc69b27a"></span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <code class="sig-name descname">m_ownerId</code><a class="headerlink" href="#_CPPv4N6legion4core3ecs21component_handle_base9m_ownerIdE" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp var">
 <dt id="_CPPv4N6legion4core3ecs21component_handle_base8m_typeIdE">
 <span id="_CPPv3N6legion4core3ecs21component_handle_base8m_typeIdE"></span><span id="_CPPv2N6legion4core3ecs21component_handle_base8m_typeIdE"></span><span id="legion::core::ecs::component_handle_base::m_typeId__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle__base_1ab71c994c0adb5d4275594de901581ef4"></span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <code class="sig-name descname">m_typeId</code><a class="headerlink" href="#_CPPv4N6legion4core3ecs21component_handle_base8m_typeIdE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
@@ -177,6 +172,11 @@
 <dl class="cpp var">
 <dt id="_CPPv4N6legion4core3ecs21component_handle_base10m_registryE">
 <span id="_CPPv3N6legion4core3ecs21component_handle_base10m_registryE"></span><span id="_CPPv2N6legion4core3ecs21component_handle_base10m_registryE"></span><span id="legion::core::ecs::component_handle_base::m_registry__EcsRegistryP"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle__base_1a0208ef864353b118ce6225f17229404f"></span><a class="reference internal" href="classlegion_1_1core_1_1ecs_1_1_ecs_registry.html#_CPPv4N6legion4core3ecs11EcsRegistryE" title="legion::core::ecs::EcsRegistry">EcsRegistry</a> *<code class="sig-name descname">m_registry</code> = nullptr<a class="headerlink" href="#_CPPv4N6legion4core3ecs21component_handle_base10m_registryE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core3ecs21component_handle_base10m_eventBusE">
+<span id="_CPPv3N6legion4core3ecs21component_handle_base10m_eventBusE"></span><span id="_CPPv2N6legion4core3ecs21component_handle_base10m_eventBusE"></span><span id="legion::core::ecs::component_handle_base::m_eventBus__events::EventBusP"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1component__handle__base_1a40fb085e0c1acfee136e9ab5033f78c1"></span>events::<a class="reference internal" href="classlegion_1_1core_1_1events_1_1_event_bus.html#_CPPv4N6legion4core6events8EventBusE" title="legion::core::events::EventBus">EventBus</a> *<code class="sig-name descname">m_eventBus</code> = nullptr<a class="headerlink" href="#_CPPv4N6legion4core3ecs21component_handle_base10m_eventBusE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -216,7 +216,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
       <li>Previous: <a href="classlegion_1_1core_1_1ecs_1_1component__handle.html" title="previous chapter">Template Class component_handle</a></li>
-      <li>Next: <a href="classlegion_1_1core_1_1ecs_1_1_ecs_registry.html" title="next chapter">Class EcsRegistry</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1ecs_1_1component__pool.html" title="next chapter">Template Class component_pool</a></li>
   </ul></li>
   </ul></li>
 </ul>

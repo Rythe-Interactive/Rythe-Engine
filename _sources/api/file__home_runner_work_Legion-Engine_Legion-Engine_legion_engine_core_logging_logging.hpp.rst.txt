@@ -33,17 +33,21 @@ Includes
 
 - ``core/math/math.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp`)
 
-- ``core/types/type_util.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`)
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
 
 - ``sstream``
 
-- ``thread``
+- ``thread`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_thread_util.hpp`)
 
 
 
 Included By
 -----------
 
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_operation.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_spinlock.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.cpp`
 
@@ -72,6 +76,10 @@ Included By
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_point_cloud.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_pointcloudgeneration.hpp`
 
 
 
@@ -129,8 +137,6 @@ Functions
 Defines
 -------
 
-
-- :ref:`exhale_define_logging_8hpp_1a69d4676733f5e850f451942b6d901382`
 
 - :ref:`exhale_define_logging_8hpp_1ab69de76884dab62f7806d8802f7f64e0`
 

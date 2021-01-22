@@ -12,7 +12,7 @@ Inheritance Relationships
 Base Types
 **********
 
-- ``public legion::core::common::result_impl< ok_proxy< OkType >, err_proxy< ErrType >, OkType, ErrType >`` (:ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__impl`)
+- ``public result_impl< ok_proxy< OkType >, err_proxy< ErrType >, OkType, ErrType >``
 - ``public legion::core::common::result_ident`` (:ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__ident`)
 
 

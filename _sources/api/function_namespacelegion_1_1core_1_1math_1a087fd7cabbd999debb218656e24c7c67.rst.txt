@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1math_1a087fd7cabbd999debb218656e24c7c67:
+
+Template Function legion::core::math::get_highest_epsilon
+=========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_close_enough.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::get_highest_epsilon(FLTS...)

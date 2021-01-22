@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File geometry.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File geometry.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-geometry-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-math-geometry-hpp"></span><h1>Program Listing for File geometry.hpp<a class="headerlink" href="#program-listing-for-file-geometry-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_geometry.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-math-geometry-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math/geometry.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/math/glm/glm_include.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/math/glm/gtx/string_cast.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/math/close_enough.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span>
+<span class="p">{</span>
+    <span class="kr">inline</span> <span class="kt">float</span> <span class="n">pointToLineSegment2D</span><span class="p">(</span><span class="k">const</span> <span class="n">vec2</span><span class="o">&amp;</span> <span class="n">point</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec2</span><span class="o">&amp;</span> <span class="n">lineOrigin</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec2</span><span class="o">&amp;</span> <span class="n">lineEnd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">point</span> <span class="o">==</span> <span class="n">lineOrigin</span> <span class="o">||</span> <span class="n">point</span> <span class="o">==</span> <span class="n">lineEnd</span><span class="p">)</span> <span class="k">return</span> <span class="mf">0.0f</span><span class="p">;</span>
+        <span class="n">vec2</span> <span class="n">lineDirection</span> <span class="o">=</span> <span class="n">lineEnd</span> <span class="o">-</span> <span class="n">lineOrigin</span><span class="p">;</span>
+        <span class="n">vec2</span> <span class="n">lineNormal</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="o">-</span><span class="n">lineDirection</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">lineDirection</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+
+        <span class="n">vec2</span> <span class="n">toLineOrigin</span> <span class="o">=</span> <span class="n">point</span> <span class="o">-</span> <span class="n">lineOrigin</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">toLineOrigin</span><span class="p">,</span> <span class="n">lineDirection</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Point is before the start of the line</span>
+            <span class="c1">// Return to line start</span>
+            <span class="k">return</span> <span class="n">length</span><span class="p">(</span><span class="n">toLineOrigin</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">vec2</span> <span class="n">toLineEnd</span> <span class="o">=</span> <span class="n">point</span> <span class="o">-</span> <span class="n">lineEnd</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">toLineEnd</span><span class="p">,</span> <span class="n">lineDirection</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Point is after the end of the line</span>
+            <span class="c1">// Return to line start</span>
+            <span class="k">return</span> <span class="n">length</span><span class="p">(</span><span class="n">toLineEnd</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Calculate and return point to line projection length</span>
+        <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">lineOrigin</span><span class="p">,</span> <span class="n">normalize</span><span class="p">(</span><span class="n">lineNormal</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">float</span> <span class="n">pointToLine2D</span><span class="p">(</span><span class="k">const</span> <span class="n">vec2</span><span class="o">&amp;</span> <span class="n">point</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec2</span><span class="o">&amp;</span> <span class="n">lineOrigin</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec2</span><span class="o">&amp;</span> <span class="n">lineEnd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">point</span> <span class="o">==</span> <span class="n">lineOrigin</span> <span class="o">||</span> <span class="n">point</span> <span class="o">==</span> <span class="n">lineEnd</span><span class="p">)</span> <span class="k">return</span> <span class="mf">0.0f</span><span class="p">;</span>
+        <span class="n">vec2</span> <span class="n">lineDirection</span> <span class="o">=</span> <span class="n">lineEnd</span> <span class="o">-</span> <span class="n">lineOrigin</span><span class="p">;</span>
+        <span class="n">vec2</span> <span class="n">lineNormal</span> <span class="o">=</span> <span class="n">vec2</span><span class="p">(</span><span class="o">-</span><span class="n">lineDirection</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">lineDirection</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nf">dot</span><span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">lineOrigin</span><span class="p">,</span> <span class="n">normalize</span><span class="p">(</span><span class="n">lineNormal</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">float</span> <span class="n">pointToLineSegment</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">point</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">lineOrigin</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">lineEnd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Check if the point is equal to the start or end of the line</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">point</span> <span class="o">==</span> <span class="n">lineOrigin</span> <span class="o">||</span> <span class="n">point</span> <span class="o">==</span> <span class="n">lineEnd</span><span class="p">)</span> <span class="k">return</span> <span class="mf">0.0f</span><span class="p">;</span>
+        <span class="n">vec3</span> <span class="n">dir</span> <span class="o">=</span> <span class="n">lineEnd</span> <span class="o">-</span> <span class="n">lineOrigin</span><span class="p">;</span>
+        <span class="n">vec3</span> <span class="n">toLineOrigin</span> <span class="o">=</span> <span class="n">point</span> <span class="o">-</span> <span class="n">lineOrigin</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">toLineOrigin</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Projected point is before the start of the line</span>
+            <span class="c1">// Use distance to start of the line</span>
+            <span class="k">return</span> <span class="n">length</span><span class="p">(</span><span class="n">toLineOrigin</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">vec3</span> <span class="n">toLineEnd</span> <span class="o">=</span> <span class="n">point</span> <span class="o">-</span> <span class="n">lineEnd</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">toLineEnd</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.0f</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Projected point is beyond end of line</span>
+            <span class="c1">// Use distance toward end of line</span>
+            <span class="k">return</span> <span class="n">length</span><span class="p">(</span><span class="n">toLineEnd</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">length</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">toLineOrigin</span><span class="p">))</span> <span class="o">/</span> <span class="n">length</span><span class="p">(</span><span class="n">dir</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">struct</span> <span class="n">line_segment</span>
+    <span class="p">{</span>
+        <span class="n">line_segment</span><span class="p">(</span><span class="n">vec3</span> <span class="n">origin</span><span class="p">,</span> <span class="n">vec3</span> <span class="n">end</span><span class="p">)</span> <span class="o">:</span>
+            <span class="n">origin</span><span class="p">(</span><span class="n">origin</span><span class="p">),</span> <span class="n">end</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Line origin, line start</span>
+        <span class="n">vec3</span> <span class="n">origin</span><span class="p">;</span>
+        <span class="c1">// Line end</span>
+        <span class="n">vec3</span> <span class="n">end</span><span class="p">;</span>
+
+        <span class="kr">inline</span> <span class="n">vec3</span> <span class="nf">direction</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">end</span> <span class="o">-</span> <span class="n">origin</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">float</span> <span class="nf">distanceToPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="n">origin</span> <span class="o">||</span> <span class="n">p</span> <span class="o">==</span> <span class="n">end</span><span class="p">)</span> <span class="k">return</span> <span class="mf">0.0f</span><span class="p">;</span>
+            <span class="n">vec3</span> <span class="n">dir</span> <span class="o">=</span> <span class="n">direction</span><span class="p">();</span>
+            <span class="n">vec3</span> <span class="n">toLineOrigin</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="n">origin</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">toLineOrigin</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">// Projected point is before the start of the line</span>
+                <span class="c1">// Use distance to start of the line</span>
+                <span class="k">return</span> <span class="n">length</span><span class="p">(</span><span class="n">toLineOrigin</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">vec3</span> <span class="n">toLineEnd</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="n">end</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">toLineEnd</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.0f</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">// Projected point is beyond end of line</span>
+                <span class="c1">// Use distance toward end of line</span>
+                <span class="k">return</span> <span class="n">length</span><span class="p">(</span><span class="n">toLineEnd</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">length</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">toLineOrigin</span><span class="p">))</span> <span class="o">/</span> <span class="n">length</span><span class="p">(</span><span class="n">dir</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="kr">inline</span> <span class="kt">float</span> <span class="nf">triangleSurface</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p1</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p0</span> <span class="o">==</span> <span class="n">p1</span> <span class="o">||</span> <span class="n">p0</span> <span class="o">==</span> <span class="n">p2</span> <span class="o">||</span> <span class="n">p1</span> <span class="o">==</span> <span class="n">p2</span><span class="p">)</span> <span class="k">return</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="c1">// side lengths</span>
+        <span class="kt">float</span> <span class="n">a</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">p0</span> <span class="o">-</span> <span class="n">p1</span><span class="p">));</span>
+        <span class="kt">float</span> <span class="n">b</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p2</span><span class="p">));</span>
+        <span class="kt">float</span> <span class="n">c</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">p2</span> <span class="o">-</span> <span class="n">p0</span><span class="p">));</span>
+        <span class="kt">float</span> <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">c</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">float</span> <span class="nf">pointToTriangle</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint2</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triNormal</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="n">triPoint0</span> <span class="o">||</span>
+            <span class="n">p</span> <span class="o">==</span> <span class="n">triPoint1</span> <span class="o">||</span>
+            <span class="n">p</span> <span class="o">==</span> <span class="n">triPoint2</span><span class="p">)</span> <span class="k">return</span> <span class="mf">0.f</span><span class="p">;</span>
+
+        <span class="c1">// Get the angle between the triangle normal and p to triPoint0</span>
+        <span class="kt">float</span> <span class="n">cosAngle</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">triNormal</span><span class="p">,</span> <span class="n">p</span> <span class="o">-</span> <span class="n">triPoint0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">)</span> <span class="o">*</span> <span class="n">length</span><span class="p">(</span><span class="n">triNormal</span><span class="p">));</span>
+        <span class="c1">// Get the length of the projection of point p onto the triangle</span>
+        <span class="kt">float</span> <span class="n">projectionLength</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">triPoint0</span><span class="p">)</span> <span class="o">*</span> <span class="n">cosAngle</span><span class="p">;</span>
+        <span class="c1">// From the projectionLength we can determine if the point is above or under the triangle plane</span>
+        <span class="kt">float</span> <span class="n">positive</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">projectionLength</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">positive</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="c1">// A vector when added to p gives the projected point</span>
+        <span class="n">vec3</span> <span class="n">towardProjection</span> <span class="o">=</span> <span class="o">-</span><span class="n">projectionLength</span> <span class="o">*</span> <span class="p">(</span><span class="n">triNormal</span> <span class="o">/</span> <span class="n">length</span><span class="p">(</span><span class="n">triNormal</span><span class="p">));</span>
+        <span class="c1">// Q is the projection of p onto the plane</span>
+        <span class="n">vec3</span> <span class="n">q</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">towardProjection</span><span class="p">;</span>
+
+        <span class="c1">// We need to determine if projected p is inside the triangle.</span>
+        <span class="c1">// By putting point q (projected point p) on the triangle, three new triangles are created</span>
+        <span class="c1">// If point q is in fact inside the triangle, the areas of the three triangles will add up to same area as the original triangle</span>
+
+        <span class="kt">double</span> <span class="n">q01Area</span> <span class="o">=</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">q02Area</span> <span class="o">=</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="n">triPoint2</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">q12Area</span> <span class="o">=</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="n">triPoint2</span><span class="p">);</span>
+
+        <span class="c1">// If the area of q to each set of two points is equal to the triangle surface area, q is on the triangle</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">q01Area</span> <span class="o">+</span> <span class="n">q02Area</span> <span class="o">+</span> <span class="n">q12Area</span><span class="p">)</span> <span class="o">-</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">triPoint0</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="n">triPoint2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">projectionLength</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//Point q is not inside the triangle, check distance toward each edge of the triangle</span>
+        <span class="c1">// therefore the smallest distance is distance toward a side or end point</span>
+        <span class="kt">float</span> <span class="n">distance01</span> <span class="o">=</span> <span class="n">pointToLineSegment</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">);</span>
+        <span class="kt">float</span> <span class="n">distance02</span> <span class="o">=</span> <span class="n">pointToLineSegment</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">triPoint2</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">);</span>
+        <span class="kt">float</span> <span class="n">distance12</span> <span class="o">=</span> <span class="n">pointToLineSegment</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">triPoint2</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">);</span>
+
+        <span class="c1">// Assume the shortest distance is sqDistance01</span>
+        <span class="c1">// Then check if this is true</span>
+        <span class="kt">float</span> <span class="n">shortestDistance</span> <span class="o">=</span> <span class="n">distance01</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">distance02</span> <span class="o">&lt;</span> <span class="n">distance12</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">distance02</span> <span class="o">&lt;</span> <span class="n">distance01</span><span class="p">)</span> <span class="n">shortestDistance</span> <span class="o">=</span> <span class="n">distance02</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">distance12</span> <span class="o">&lt;</span> <span class="n">distance01</span><span class="p">)</span> <span class="n">shortestDistance</span> <span class="o">=</span> <span class="n">distance12</span><span class="p">;</span>
+
+        <span class="c1">// Return the shortest distance toward one of the sides, either positive or negative, which was determined before</span>
+        <span class="k">return</span> <span class="n">shortestDistance</span><span class="o">*</span><span class="n">positive</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">float</span> <span class="nf">pointToTriangle</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">vec3</span> <span class="n">normal</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">triPoint1</span> <span class="o">-</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="n">triPoint2</span> <span class="o">-</span> <span class="n">triPoint0</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">pointToTriangle</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="n">triPoint2</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">pointProjectionOntoTriangle</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint2</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triNormal</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="n">triPoint0</span> <span class="o">||</span>
+            <span class="n">p</span> <span class="o">==</span> <span class="n">triPoint1</span> <span class="o">||</span>
+            <span class="n">p</span> <span class="o">==</span> <span class="n">triPoint2</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="kt">float</span> <span class="n">cosAngle</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">triNormal</span><span class="p">,</span> <span class="n">p</span> <span class="o">-</span> <span class="n">triPoint0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">)</span> <span class="o">*</span> <span class="n">length</span><span class="p">(</span><span class="n">triNormal</span><span class="p">));</span>
+        <span class="kt">float</span> <span class="n">projectionLength</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">triPoint0</span><span class="p">)</span> <span class="o">*</span> <span class="n">cosAngle</span><span class="p">;</span>
+        <span class="n">vec3</span> <span class="n">towardProjection</span> <span class="o">=</span> <span class="o">-</span><span class="n">projectionLength</span> <span class="o">*</span> <span class="p">(</span><span class="n">triNormal</span> <span class="o">/</span> <span class="n">length</span><span class="p">(</span><span class="n">triNormal</span><span class="p">));</span>
+        <span class="c1">// Q is the projection of p onto the plane</span>
+        <span class="n">vec3</span> <span class="n">q</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">towardProjection</span><span class="p">;</span>
+
+        <span class="c1">// Old way of finding if the point is in the triangle</span>
+        <span class="kt">double</span> <span class="n">q01Area</span> <span class="o">=</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">q02Area</span> <span class="o">=</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="n">triPoint2</span><span class="p">);</span>
+        <span class="kt">double</span> <span class="n">q12Area</span> <span class="o">=</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="n">triPoint2</span><span class="p">);</span>
+
+        <span class="c1">// If the area of q to each set of two points is equal to the triangle surface area, q is on the triangle</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">close_enough</span><span class="p">((</span><span class="n">q01Area</span> <span class="o">+</span> <span class="n">q02Area</span> <span class="o">+</span> <span class="n">q12Area</span><span class="p">),</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">triPoint0</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="n">triPoint2</span><span class="p">)))</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">struct</span> <span class="n">triangle</span>
+    <span class="p">{</span>
+        <span class="n">triangle</span><span class="p">(</span><span class="n">vec3</span> <span class="n">p0</span><span class="p">,</span> <span class="n">vec3</span> <span class="n">p1</span><span class="p">,</span> <span class="n">vec3</span> <span class="n">p2</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p0</span><span class="p">;</span>
+            <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>
+            <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span><span class="p">;</span>
+            <span class="n">normal</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p2</span> <span class="o">-</span> <span class="n">p0</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="n">triangle</span><span class="p">(</span><span class="n">vec3</span> <span class="n">p0</span><span class="p">,</span> <span class="n">vec3</span> <span class="n">p1</span><span class="p">,</span> <span class="n">vec3</span> <span class="n">p2</span><span class="p">,</span> <span class="n">vec3</span> <span class="n">normal</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p0</span><span class="p">;</span>
+            <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>
+            <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">p2</span><span class="p">;</span>
+            <span class="n">normal</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">normal</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// The three points of the triangle</span>
+        <span class="n">vec3</span> <span class="n">points</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+        <span class="c1">// The normalized normal of the triangle plane</span>
+        <span class="n">vec3</span> <span class="n">normal</span><span class="p">;</span>
+
+        <span class="kt">float</span> <span class="nf">distanceToPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span>
+                <span class="n">p</span> <span class="o">==</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">||</span>
+                <span class="n">p</span> <span class="o">==</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">return</span> <span class="mf">0.f</span><span class="p">;</span>
+
+            <span class="kt">float</span> <span class="n">cosAngle</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">p</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">distance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">length</span><span class="p">(</span><span class="n">normal</span><span class="p">));</span>
+            <span class="kt">float</span> <span class="n">projectionLength</span> <span class="o">=</span> <span class="n">length</span><span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">cosAngle</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">positive</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">projectionLength</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">positive</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="n">vec3</span> <span class="n">towardProjection</span> <span class="o">=</span> <span class="o">-</span><span class="n">projectionLength</span> <span class="o">*</span> <span class="p">(</span><span class="n">normal</span> <span class="o">/</span> <span class="n">length</span><span class="p">(</span><span class="n">normal</span><span class="p">));</span>
+            <span class="c1">// Q is the projection of p onto the plane</span>
+            <span class="n">vec3</span> <span class="n">q</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">towardProjection</span><span class="p">;</span>
+
+            <span class="c1">// Old way of finding if the point is in the triangle</span>
+            <span class="kt">double</span> <span class="n">q01Area</span> <span class="o">=</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="kt">double</span> <span class="n">q02Area</span> <span class="o">=</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+            <span class="kt">double</span> <span class="n">q12Area</span> <span class="o">=</span> <span class="n">triangleSurface</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+
+            <span class="c1">// If the area of q to each set of two points is equal to the triangle surface area, q is on the triangle</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">close_enough</span><span class="p">((</span><span class="n">q01Area</span> <span class="o">+</span> <span class="n">q02Area</span> <span class="o">+</span> <span class="n">q12Area</span><span class="p">),</span> <span class="n">surface</span><span class="p">()))</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">projectionLength</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">//Point q is not on the triangle, check distance toward each edge of the triangle</span>
+            <span class="kt">float</span> <span class="n">distance01</span> <span class="o">=</span> <span class="n">pointToLineSegment</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="kt">float</span> <span class="n">distance02</span> <span class="o">=</span> <span class="n">pointToLineSegment</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="kt">float</span> <span class="n">distance12</span> <span class="o">=</span> <span class="n">pointToLineSegment</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+
+            <span class="c1">// Assume the shortest distance is sqDistance01</span>
+            <span class="c1">// Then check if this is true</span>
+            <span class="kt">float</span> <span class="n">shortestDistance</span> <span class="o">=</span> <span class="n">distance01</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">distance02</span> <span class="o">&lt;</span> <span class="n">distance12</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">distance02</span> <span class="o">&lt;</span> <span class="n">distance01</span><span class="p">)</span> <span class="n">shortestDistance</span> <span class="o">=</span> <span class="n">distance02</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">distance12</span> <span class="o">&lt;</span> <span class="n">distance01</span><span class="p">)</span> <span class="n">shortestDistance</span> <span class="o">=</span> <span class="n">distance12</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="n">shortestDistance</span> <span class="o">*</span> <span class="n">positive</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">float</span> <span class="nf">surface</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="c1">// side lengths</span>
+            <span class="kt">float</span> <span class="n">a</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]));</span>
+            <span class="kt">float</span> <span class="n">b</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]));</span>
+            <span class="kt">float</span> <span class="n">c</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]));</span>
+            <span class="kt">float</span> <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">c</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="kr">inline</span> <span class="kt">float</span> <span class="nf">pointToPlane</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">point</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">planeNormal</span><span class="p">),</span> <span class="n">point</span> <span class="o">-</span> <span class="n">planePosition</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">struct</span> <span class="n">plane</span>
+    <span class="p">{</span>
+        <span class="n">plane</span><span class="p">(</span><span class="n">vec3</span> <span class="n">position</span><span class="p">,</span> <span class="n">vec3</span> <span class="n">normal</span><span class="p">)</span> <span class="o">:</span>
+            <span class="n">position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">normal</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">normal</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">plane</span><span class="p">(</span><span class="n">vec3</span> <span class="n">p0</span><span class="p">,</span> <span class="n">vec3</span> <span class="n">p1</span><span class="p">,</span> <span class="n">vec3</span> <span class="n">p2</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">p0</span><span class="p">;</span>
+            <span class="n">normal</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">cross</span><span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p2</span> <span class="o">-</span> <span class="n">p0</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Position on the plane, or a point on the plane</span>
+        <span class="n">vec3</span> <span class="n">position</span><span class="p">;</span>
+        <span class="c1">// Normalized normal of the plane</span>
+        <span class="n">vec3</span> <span class="n">normal</span><span class="p">;</span>
+
+        <span class="kt">float</span> <span class="nf">distanceToPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">p</span><span class="o">-</span><span class="n">position</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="kr">inline</span> <span class="n">mat4</span> <span class="nf">planeMatrix</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p1</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p2</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">centroid</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">vec3</span> <span class="n">xAxis</span> <span class="o">=</span> <span class="n">p2</span> <span class="o">-</span> <span class="n">p0</span><span class="p">;</span>
+        <span class="n">vec3</span> <span class="n">zAxis</span> <span class="o">=</span> <span class="n">p1</span> <span class="o">-</span> <span class="n">p0</span><span class="p">;</span>
+
+        <span class="n">mat4</span> <span class="n">scale</span><span class="p">(</span>
+            <span class="n">length</span><span class="p">(</span><span class="n">xAxis</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">(</span><span class="n">zAxis</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+            <span class="p">);</span>
+
+        <span class="n">vec3</span> <span class="n">rotX</span> <span class="o">=</span> <span class="n">xAxis</span> <span class="o">/</span> <span class="n">length</span><span class="p">(</span><span class="n">xAxis</span><span class="p">);</span>
+        <span class="n">vec3</span> <span class="n">rotZ</span> <span class="o">=</span> <span class="n">zAxis</span> <span class="o">/</span> <span class="n">length</span><span class="p">(</span><span class="n">zAxis</span><span class="p">);</span>
+        <span class="n">vec3</span> <span class="n">rotY</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">rotX</span><span class="p">,</span> <span class="n">rotZ</span><span class="p">);</span>
+
+        <span class="n">mat4</span> <span class="n">rot</span><span class="p">(</span>
+            <span class="n">rotX</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">rotX</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">rotX</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">rotY</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">rotY</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">rotY</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">rotZ</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">rotZ</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">rotZ</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+        <span class="p">);</span>
+
+        <span class="n">mat4</span> <span class="n">translation</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">centroid</span><span class="p">.</span><span class="n">x</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">centroid</span><span class="p">.</span><span class="n">y</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">centroid</span><span class="p">.</span><span class="n">z</span><span class="p">,</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+        <span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">translation</span> <span class="o">*</span> <span class="n">rot</span> <span class="o">*</span> <span class="n">scale</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_geometry.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

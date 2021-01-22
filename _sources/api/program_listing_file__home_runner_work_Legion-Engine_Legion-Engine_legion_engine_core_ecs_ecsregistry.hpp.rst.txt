@@ -15,7 +15,7 @@ Program Listing for File ecsregistry.hpp
    #include <core/types/types.hpp>
    #include <core/common/common.hpp>
    #include <core/async/async.hpp>
-   #include <core/ecs/component_container.hpp>
+   #include <core/ecs/component_pool.hpp>
    #include <core/ecs/queryregistry.hpp>
    #include <core/ecs/entityquery.hpp>
    #include <core/ecs/entity_handle.hpp>
@@ -23,6 +23,7 @@ Program Listing for File ecsregistry.hpp
    
    #include <utility>
    #include <memory>
+   #include <unordered_map>
    
    namespace legion::core::ecs
    {
@@ -35,8 +36,6 @@ Program Listing for File ecsregistry.hpp
    
        struct entity_data
        {
-           id_type parent;
-           entity_set children;
            hashed_sparse_set<id_type> components;
        };
    
@@ -45,14 +44,13 @@ Program Listing for File ecsregistry.hpp
        private:
            static id_type m_nextEntityId;
    
-           mutable async::readonly_rw_spinlock m_familyLock;
-           sparse_map<id_type, std::unique_ptr<component_container_base>> m_families;
+           mutable async::rw_spinlock m_familyLock;
+           std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_families;
    
-           mutable async::readonly_rw_spinlock m_entityDataLock;
-           sparse_map<id_type, entity_data> m_entityData;
+           mutable async::rw_spinlock m_entityDataLock;
+           std::unordered_map<id_type, entity_data> m_entityData;
    
-           mutable async::readonly_rw_spinlock m_entityLock;
-           sparse_set<id_type> m_containedEntities;
+           mutable async::rw_spinlock m_entityLock;
            entity_set m_entities;
    
            QueryRegistry m_queryRegistry;
@@ -61,41 +59,42 @@ Program Listing for File ecsregistry.hpp
            void recursiveDestroyEntityInternal(id_type entityId);
    
        public:
-           entity_handle world;
+           static entity_handle world;
    
            EcsRegistry(events::EventBus* eventBus);
    
            template<typename component_type>
            void reportComponentType()
            {
+               OPTICK_EVENT();
                async::readwrite_guard guard(m_familyLock);
-               if (!m_families.contains(typeHash<component_type>()))
-                   m_families[typeHash<component_type>()] = std::make_unique<component_container<component_type>>(this, m_eventBus);
+               if (!m_families.count(typeHash<component_type>()))
+                   m_families[typeHash<component_type>()] = std::make_unique<component_pool<component_type>>(this, m_eventBus);
            }
    
            template<typename component_type>
-           L_NODISCARD component_container<component_type>* getFamily()
+           L_NODISCARD component_pool<component_type>* getFamily()
            {
-               return static_cast<component_container<component_type>*>(getFamily(typeHash<component_type>()));
+               return static_cast<component_pool<component_type>*>(getFamily(typeHash<component_type>()));
            }
    
-           L_NODISCARD component_container_base* getFamily(id_type componentTypeId);
+           L_NODISCARD component_pool_base* getFamily(id_type componentTypeId);
    
            L_NODISCARD bool hasComponent(id_type entityId, id_type componentTypeId);
    
-           template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            L_NODISCARD bool hasComponent(id_type entityId)
            {
                return hasComponent(entityId, typeHash<component_type>());
            }
    
-           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type, typename... component_types CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            L_NODISCARD bool hasComponents(id_type entityId)
            {
                return hasComponent<component_type>(entityId) && (hasComponent<component_types>(entityId) && ...);
            }
    
-           template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+           template<typename archetype_type CNDOXY(inherits_from<archetype_type, archetype_base> = 0)>
            L_NODISCARD bool hasComponents(id_type entityId)
            {
                return archetype_type::has(this, entityId);
@@ -103,63 +102,63 @@ Program Listing for File ecsregistry.hpp
    
            L_NODISCARD component_handle_base getComponent(id_type entityId, id_type componentTypeId);
    
-           template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            L_NODISCARD component_handle<component_type> getComponent(id_type entityId)
            {
                return getComponent(entityId, typeHash<component_type>()).template cast<component_type>();
            }
    
-           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type, typename... component_types CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            L_NODISCARD std::tuple<component_handle<component_type>, component_handle<component_types>...> getComponents(id_type entityId)
            {
                return std::make_tuple(getComponent<component_type>(entityId), getComponent<component_types>(entityId)...);
            }
    
-           template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+           template<typename archetype_type, typename... component_types CNDOXY(inherits_from<archetype_type, archetype_base> = 0)>
            L_NODISCARD auto getComponents(id_type entityId)
            {
                return archetype_type::get(this, entityId);
            }
    
-           template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            component_handle<component_type> createComponent(id_type entityId)
            {
                return createComponent(entityId, typeHash<component_type>()).template cast<component_type>();
            }
    
-           template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            component_handle<std::remove_reference_t<component_type>> createComponent(id_type entityId, component_type&& component)
            {
                std::remove_reference_t<component_type> temp = component;
                return createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp).template cast<std::remove_reference_t<component_type>>();
            }
    
-           template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            component_handle<std::remove_reference_t<component_type>> createComponent(id_type entityId, component_type& component)
            {
                std::remove_reference_t<component_type> temp = component;
                return createComponent(entityId, typeHash<std::remove_reference_t<component_type>>(), &temp).template cast<std::remove_reference_t<component_type>>();
            }
    
-           template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+           template<typename archetype_type CNDOXY(inherits_from<archetype_type, archetype_base> = 0)>
            auto createComponents(id_type entityId)
            {
                return archetype_type::create(this, entityId);
            }
-           
-           template<typename archetype_type, typename... component_types, typename = inherits_from<archetype_type, archetype_base>>
+   
+           template<typename archetype_type, typename... component_types CNDOXY(inherits_from<archetype_type, archetype_base> = 0)>
            auto createComponents(id_type entityId, component_types&&... defaultValues)
            {
                return archetype_type::create(this, entityId, std::move(defaultValues)...);
            }
    
-           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type, typename... component_types CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            std::tuple<component_handle<component_type>, component_handle<component_types>...> createComponents(id_type entityId)
            {
                return std::make_tuple(createComponent<component_type>(entityId), createComponent<component_types>(entityId)...);
            }
    
-           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type, typename... component_types CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            std::tuple<component_handle<std::remove_reference_t<component_type>>, component_handle<std::remove_reference_t<component_types>>...> createComponents(id_type entityId, component_type&& defaultValue, component_types&&... defaultValues)
            {
                return std::make_tuple(createComponent<std::remove_reference_t<component_type>>(entityId, std::forward<component_type>(defaultValue)), createComponent<std::remove_reference_t<component_types>>(entityId, std::forward<component_types>(defaultValues))...);
@@ -169,22 +168,24 @@ Program Listing for File ecsregistry.hpp
    
            component_handle_base createComponent(id_type entityId, id_type componentTypeId, void* value);
    
+           component_handle_base copyComponent(id_type destinationEntity, id_type sourceEntity, id_type componentTypeId);
+   
            void destroyComponent(id_type entityId, id_type componentTypeId);
    
-           template<typename component_type, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            void destroyComponent(id_type entityId)
            {
                destroyComponent(entityId, typeHash<component_type>());
            }
    
-           template<typename component_type, typename... component_types, typename = doesnt_inherit_from<component_type, archetype_base>>
+           template<typename component_type, typename... component_types CNDOXY(doesnt_inherit_from<component_type, archetype_base> = 0)>
            void destroyComponents(id_type entityId)
            {
                destroyComponent(entityId, typeHash<component_type>());
                (destroyComponent(entityId, typeHash<component_types>()), ...);
            }
    
-           template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
+           template<typename archetype_type CNDOXY(inherits_from<archetype_type, archetype_base> = 0)>
            void destroyComponents(id_type entityId)
            {
                archetype_type::destroy(this, entityId);
@@ -198,9 +199,12 @@ Program Listing for File ecsregistry.hpp
    
            L_NODISCARD entity_handle getEntity(id_type entityId);
    
-           L_NODISCARD entity_data& getEntityData(id_type entityId);
+           L_NODISCARD entity_data getEntityData(id_type entityId);
+           void setEntityData(id_type entityId, const entity_data& data);
    
-           L_NODISCARD std::pair<entity_set&, async::readonly_rw_spinlock&>  getEntities();
+           L_NODISCARD entity_handle getEntityParent(id_type entityId);
+   
+           L_NODISCARD std::pair<entity_set&, async::rw_spinlock&> getEntities();
    
            template<typename... component_types>
            L_NODISCARD EntityQuery createQuery()

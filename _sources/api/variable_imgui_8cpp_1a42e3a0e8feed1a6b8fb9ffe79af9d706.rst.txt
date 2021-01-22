@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui_8cpp_1a42e3a0e8feed1a6b8fb9ffe79af9d706:
+
+Variable GImAllocatorUserData
+=============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: GImAllocatorUserData

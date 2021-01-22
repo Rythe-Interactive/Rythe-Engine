@@ -1,0 +1,88 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_geometry.hpp:
+
+File geometry.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math/geometry.hpp``)
+---------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_geometry.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/math/close_enough.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_close_enough.hpp`)
+
+- ``core/math/glm/glm_include.hpp``
+
+- ``core/math/glm/gtx/string_cast.hpp``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__math`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_structlegion_1_1core_1_1math_1_1line__segment`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1math_1_1plane`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1math_1_1triangle`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a828ceba59d7cd6df910e1c6fba3ac9b6`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a2075913c8e8b334ae35b85eb2e8c291c`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a17ff9e4ac0974d811975affb03e4982c`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a26abd6512969c9b89293e49f3d10680a`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a4b02e7062ed41da390878e48b2a4c4c2`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ace96b6b04d3fdba65afe2db3aea2ae82`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a7fa0e58ae5dbc293be0d99290edc0be6`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ad442880c50c4ee9180cffff65748fe57`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1adeed27e24ebcb428a98e13a3c3685fdf`
+

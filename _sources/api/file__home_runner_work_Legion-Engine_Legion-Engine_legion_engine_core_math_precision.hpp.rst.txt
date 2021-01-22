@@ -60,12 +60,12 @@ Enums
 -----
 
 
-- :ref:`exhale_enum_precision_8hpp_1acc13e397d8c7884e8c3b622c1a1f3532`
+- :ref:`exhale_enum_namespacelegion_1_1core_1_1math_1acc13e397d8c7884e8c3b622c1a1f3532`
 
 
 Typedefs
 --------
 
 
-- :ref:`exhale_typedef_precision_8hpp_1a67d623335cd243607d056d780ab6bd4f`
+- :ref:`exhale_typedef_namespacelegion_1_1core_1_1math_1a67d623335cd243607d056d780ab6bd4f`
 

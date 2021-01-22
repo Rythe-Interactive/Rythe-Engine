@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1a51cf7a63a96cae21cbf2f7d42194f359:
+
+Define CNDOXY
+=============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: CNDOXY

@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1aaf6eb9fc3bf1724c2c764550e58d539e:
+
+Function imgui::gizmo::IsInContextRect
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::IsInContextRect(ImVec2)

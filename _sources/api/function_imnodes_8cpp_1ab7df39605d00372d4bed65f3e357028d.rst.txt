@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1ab7df39605d00372d4bed65f3e357028d:
+
+Function imgui::nodes::BeginOutputAttribute
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::BeginOutputAttribute(const int, const PinShape)

@@ -1,0 +1,33 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_lod.hpp:
+
+Program Listing for File lod.hpp
+================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_lod.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/components/lod.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   #include <math.h>
+   namespace legion::rendering
+   {
+       struct lod
+       {
+           // lod() = default;
+           lod(int maxLevel = 5, float maxDistance = 50.0f) : MaxLod(maxLevel), m_maxDistance(maxDistance)
+           {
+           //    UpdateThresholdLinear();
+           }
+           int MaxLod;
+           int Level = 0;
+           int MaxTreeLevel = 0;
+   
+           bool isInitialized = false;
+           float m_maxDistance;
+           std::vector<float> m_thresholdLevels;
+       };
+   }

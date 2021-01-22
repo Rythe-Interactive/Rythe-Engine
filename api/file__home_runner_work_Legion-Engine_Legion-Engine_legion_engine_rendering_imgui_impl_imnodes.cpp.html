@@ -1,0 +1,330 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File imnodes.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">File imnodes.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="file-imnodes-cpp">
+<span id="file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imnodes-cpp"></span><h1>File imnodes.cpp<a class="headerlink" href="#file-imnodes-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl.html#dir-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl</span></code>)</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imnodes-cpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imnodes.cpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id3">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id4">Classes</a></p></li>
+<li><p><a class="reference internal" href="#enums" id="id5">Enums</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id6">Functions</a></p></li>
+<li><p><a class="reference internal" href="#defines" id="id7">Defines</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id8">Variables</a></p></li>
+</ul>
+</div>
+<div class="section" id="definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imnodes-cpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imnodes.cpp</span></code>)<a class="headerlink" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imnodes-cpp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp.html">Program Listing for File imnodes.cpp</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">assert.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imgui.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imgui_internal.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imnodes.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">limits.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">math.h</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-math-math-hpp"><span class="std std-ref">File math.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">new</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdint.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdio.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdlib.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">string.h</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_imgui.html#namespace-imgui"><span class="std std-ref">Namespace imgui</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_imgui__nodes.html#namespace-imgui-nodes"><span class="std std-ref">Namespace imgui::nodes</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="structimgui_1_1nodes_1_1_editor_context.html#exhale-struct-structimgui-1-1nodes-1-1-editor-context"><span class="std std-ref">Struct EditorContext</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="enums">
+<h2>Enums<a class="headerlink" href="#enums" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="enum_imnodes_8cpp_1af590db812ee109992350ddb81c99ed64.html#exhale-enum-imnodes-8cpp-1af590db812ee109992350ddb81c99ed64"><span class="std std-ref">Enum AttributeType</span></a></p></li>
+<li><p><a class="reference internal" href="enum_imnodes_8cpp_1a494ab5d1b9043945ff353adcf0db91c5.html#exhale-enum-imnodes-8cpp-1a494ab5d1b9043945ff353adcf0db91c5"><span class="std std-ref">Enum ClickInteractionType</span></a></p></li>
+<li><p><a class="reference internal" href="enum_imnodes_8cpp_1a2e4a62e89a5c7474c936e0880bae333d.html#exhale-enum-imnodes-8cpp-1a2e4a62e89a5c7474c936e0880bae333d"><span class="std std-ref">Enum ElementStateChange</span></a></p></li>
+<li><p><a class="reference internal" href="enum_imnodes_8cpp_1a22d4c87831db55a713b71a92c32a573d.html#exhale-enum-imnodes-8cpp-1a22d4c87831db55a713b71a92c32a573d"><span class="std std-ref">Enum LinkCreationType</span></a></p></li>
+<li><p><a class="reference internal" href="enum_imnodes_8cpp_1ab718acbfe874ecaf7b2648d68abda136.html#exhale-enum-imnodes-8cpp-1ab718acbfe874ecaf7b2648d68abda136"><span class="std std-ref">Enum ScopeFlags</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a425880841178607ccdc9a50e4e67082a.html#exhale-function-imnodes-8cpp-1a425880841178607ccdc9a50e4e67082a"><span class="std std-ref">Function imgui::nodes::BeginInputAttribute</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a3a60b171cd558d728361702f4aac5596.html#exhale-function-imnodes-8cpp-1a3a60b171cd558d728361702f4aac5596"><span class="std std-ref">Function imgui::nodes::BeginNode</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a6c586d3c746558deeba9acba982b8abf.html#exhale-function-imnodes-8cpp-1a6c586d3c746558deeba9acba982b8abf"><span class="std std-ref">Function imgui::nodes::BeginNodeEditor</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ae4f730eb4b367a64f482b6fb8fa9adaa.html#exhale-function-imnodes-8cpp-1ae4f730eb4b367a64f482b6fb8fa9adaa"><span class="std std-ref">Function imgui::nodes::BeginNodeTitleBar</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ab7df39605d00372d4bed65f3e357028d.html#exhale-function-imnodes-8cpp-1ab7df39605d00372d4bed65f3e357028d"><span class="std std-ref">Function imgui::nodes::BeginOutputAttribute</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a250d9ee9bf87c63a088b118533bfdfd0.html#exhale-function-imnodes-8cpp-1a250d9ee9bf87c63a088b118533bfdfd0"><span class="std std-ref">Function imgui::nodes::BeginStaticAttribute</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a1d92c9ef4b59aef40a5cdbda39ec5c95.html#exhale-function-imnodes-8cpp-1a1d92c9ef4b59aef40a5cdbda39ec5c95"><span class="std std-ref">Function imgui::nodes::ClearLinkSelection</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1adb5e2ff8da13682b22d27afe6cb58c84.html#exhale-function-imnodes-8cpp-1adb5e2ff8da13682b22d27afe6cb58c84"><span class="std std-ref">Function imgui::nodes::ClearNodeSelection</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a8ec10991c952ddca4fb88efc792bc864.html#exhale-function-imnodes-8cpp-1a8ec10991c952ddca4fb88efc792bc864"><span class="std std-ref">Function imgui::nodes::EditorContextCreate</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a1980766cf35a58650d92b09a29432c4f.html#exhale-function-imnodes-8cpp-1a1980766cf35a58650d92b09a29432c4f"><span class="std std-ref">Function imgui::nodes::EditorContextFree</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aa73b76e6b90d1782387212421550f9d5.html#exhale-function-imnodes-8cpp-1aa73b76e6b90d1782387212421550f9d5"><span class="std std-ref">Function imgui::nodes::EditorContextGetPanning</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1af5b25356ef394e7c05e3f088a1f6e893.html#exhale-function-imnodes-8cpp-1af5b25356ef394e7c05e3f088a1f6e893"><span class="std std-ref">Function imgui::nodes::EditorContextMoveToNode</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1afef6910eb2050abd943dccfe658bdbc2.html#exhale-function-imnodes-8cpp-1afef6910eb2050abd943dccfe658bdbc2"><span class="std std-ref">Function imgui::nodes::EditorContextResetPanning</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a07a4c9ea00319f4f8849399996c2368d.html#exhale-function-imnodes-8cpp-1a07a4c9ea00319f4f8849399996c2368d"><span class="std std-ref">Function imgui::nodes::EditorContextSet</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a04350f13a0c942aa83b03057797d805b.html#exhale-function-imnodes-8cpp-1a04350f13a0c942aa83b03057797d805b"><span class="std std-ref">Function imgui::nodes::EndInputAttribute</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ae500aab8eb9d2d40b103c53aedd32da7.html#exhale-function-imnodes-8cpp-1ae500aab8eb9d2d40b103c53aedd32da7"><span class="std std-ref">Function imgui::nodes::EndNode</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aafc5abfbe3a23074f54b15df15eef3d0.html#exhale-function-imnodes-8cpp-1aafc5abfbe3a23074f54b15df15eef3d0"><span class="std std-ref">Function imgui::nodes::EndNodeEditor</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a5207602d76eb0dd2223c2c62153132c5.html#exhale-function-imnodes-8cpp-1a5207602d76eb0dd2223c2c62153132c5"><span class="std std-ref">Function imgui::nodes::EndNodeTitleBar</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ae1df0bc63ff96a75894fe3b4c485ce5d.html#exhale-function-imnodes-8cpp-1ae1df0bc63ff96a75894fe3b4c485ce5d"><span class="std std-ref">Function imgui::nodes::EndOutputAttribute</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aa21fbf7266b5aa1d675ab958126bc2b8.html#exhale-function-imnodes-8cpp-1aa21fbf7266b5aa1d675ab958126bc2b8"><span class="std std-ref">Function imgui::nodes::EndStaticAttribute</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1afbfc70d5344b6c8f091339fa32df1a7d.html#exhale-function-imnodes-8cpp-1afbfc70d5344b6c8f091339fa32df1a7d"><span class="std std-ref">Function imgui::nodes::GetIO</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a14c5d2032817a0cd6605246c60b1f3de.html#exhale-function-imnodes-8cpp-1a14c5d2032817a0cd6605246c60b1f3de"><span class="std std-ref">Function imgui::nodes::GetNodeDimensions</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ad62386ef2a938c243022b615215be50b.html#exhale-function-imnodes-8cpp-1ad62386ef2a938c243022b615215be50b"><span class="std std-ref">Function imgui::nodes::GetNodeEditorSpacePos</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1abd75a1a2c2a8ffb9fba641fc9a1c6a99.html#exhale-function-imnodes-8cpp-1abd75a1a2c2a8ffb9fba641fc9a1c6a99"><span class="std std-ref">Function imgui::nodes::GetNodeGridSpacePos</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a297b3b4c394873dc34ea15b546700752.html#exhale-function-imnodes-8cpp-1a297b3b4c394873dc34ea15b546700752"><span class="std std-ref">Function imgui::nodes::GetNodeScreenSpacePos</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ac858415ff051da4bae7d67bda5d7be90.html#exhale-function-imnodes-8cpp-1ac858415ff051da4bae7d67bda5d7be90"><span class="std std-ref">Function imgui::nodes::GetSelectedLinks</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aacd01369fa0172ea3be1610fa00e83c7.html#exhale-function-imnodes-8cpp-1aacd01369fa0172ea3be1610fa00e83c7"><span class="std std-ref">Function imgui::nodes::GetSelectedNodes</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a998f99fc130270c62004d28860fb3cec.html#exhale-function-imnodes-8cpp-1a998f99fc130270c62004d28860fb3cec"><span class="std std-ref">Function imgui::nodes::GetStyle</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a5a23fb13bddc2b8c63f9e11992f9d4cc.html#exhale-function-imnodes-8cpp-1a5a23fb13bddc2b8c63f9e11992f9d4cc"><span class="std std-ref">Function imgui::nodes::Initialize</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ac707049c832cefb3a509abf193aeca17.html#exhale-function-imnodes-8cpp-1ac707049c832cefb3a509abf193aeca17"><span class="std std-ref">Function imgui::nodes::IsAnyAttributeActive</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1af689a90652cf62f5a45903e62d162cb4.html#exhale-function-imnodes-8cpp-1af689a90652cf62f5a45903e62d162cb4"><span class="std std-ref">Function imgui::nodes::IsAttributeActive</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1afe184358c919f2e68ea82f441ebe4577.html#exhale-function-imnodes-8cpp-1afe184358c919f2e68ea82f441ebe4577"><span class="std std-ref">Function imgui::nodes::IsEditorHovered</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a5e6290a3d1b10cbef1284b3a08689cd3.html#exhale-function-imnodes-8cpp-1a5e6290a3d1b10cbef1284b3a08689cd3"><span class="std std-ref">Function imgui::nodes::IsLinkCreated(int *const, int *const, bool *const)</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a41a3685ef7a303bb8c56f0666ebd1d49.html#exhale-function-imnodes-8cpp-1a41a3685ef7a303bb8c56f0666ebd1d49"><span class="std std-ref">Function imgui::nodes::IsLinkCreated(int *, int *, int *, int *, bool *)</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aa51e2dcd9e607022f6366b8353877865.html#exhale-function-imnodes-8cpp-1aa51e2dcd9e607022f6366b8353877865"><span class="std std-ref">Function imgui::nodes::IsLinkDestroyed</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a97bb3495488e147224a9740cdc0eaf7e.html#exhale-function-imnodes-8cpp-1a97bb3495488e147224a9740cdc0eaf7e"><span class="std std-ref">Function imgui::nodes::IsLinkDropped</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ad04d6ca9d08faf4c988dd14e0e9de72d.html#exhale-function-imnodes-8cpp-1ad04d6ca9d08faf4c988dd14e0e9de72d"><span class="std std-ref">Function imgui::nodes::IsLinkHovered</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a5069e621acd80952919a3a72c669ba2a.html#exhale-function-imnodes-8cpp-1a5069e621acd80952919a3a72c669ba2a"><span class="std std-ref">Function imgui::nodes::IsLinkStarted</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aa5d8df6fcb8101ce4923ee1df0cbfbcc.html#exhale-function-imnodes-8cpp-1aa5d8df6fcb8101ce4923ee1df0cbfbcc"><span class="std std-ref">Function imgui::nodes::IsNodeHovered</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aa0583220e4fede9d3e12089eff212673.html#exhale-function-imnodes-8cpp-1aa0583220e4fede9d3e12089eff212673"><span class="std std-ref">Function imgui::nodes::IsPinHovered</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a75b6d11b6fbbf218ac5f83662b006c88.html#exhale-function-imnodes-8cpp-1a75b6d11b6fbbf218ac5f83662b006c88"><span class="std std-ref">Function imgui::nodes::Link</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1abe03f8effa1f2ad2f93567ce6383f1a5.html#exhale-function-imnodes-8cpp-1abe03f8effa1f2ad2f93567ce6383f1a5"><span class="std std-ref">Function imgui::nodes::LoadCurrentEditorStateFromIniFile</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aaba561c1fee859518d985e6f75dcd875.html#exhale-function-imnodes-8cpp-1aaba561c1fee859518d985e6f75dcd875"><span class="std std-ref">Function imgui::nodes::LoadCurrentEditorStateFromIniString</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a59a896d6afb874f020a82cfb3e3cd34f.html#exhale-function-imnodes-8cpp-1a59a896d6afb874f020a82cfb3e3cd34f"><span class="std std-ref">Function imgui::nodes::LoadEditorStateFromIniFile</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a54cac67bd5e1a495e021480027093970.html#exhale-function-imnodes-8cpp-1a54cac67bd5e1a495e021480027093970"><span class="std std-ref">Function imgui::nodes::LoadEditorStateFromIniString</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ac09a07ad26b5c897ab83d6dc53d9ac02.html#exhale-function-imnodes-8cpp-1ac09a07ad26b5c897ab83d6dc53d9ac02"><span class="std std-ref">Function imgui::nodes::lookup_style_var</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aa8490119a64fa9a124ec480f78db367c.html#exhale-function-imnodes-8cpp-1aa8490119a64fa9a124ec480f78db367c"><span class="std std-ref">Function imgui::nodes::NumSelectedLinks</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aa8698b67f2214513ee5da3816c437ea7.html#exhale-function-imnodes-8cpp-1aa8698b67f2214513ee5da3816c437ea7"><span class="std std-ref">Function imgui::nodes::NumSelectedNodes</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a3fbf55885edaf4bdc5e5bbf30cbc742b.html#exhale-function-imnodes-8cpp-1a3fbf55885edaf4bdc5e5bbf30cbc742b"><span class="std std-ref">Function imgui::nodes::PopAttributeFlag</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a27fdacc03ebe01dcea58eba5018313a2.html#exhale-function-imnodes-8cpp-1a27fdacc03ebe01dcea58eba5018313a2"><span class="std std-ref">Function imgui::nodes::PopColorStyle</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1af9e4ba29c5c34bd2a70aab23997ba473.html#exhale-function-imnodes-8cpp-1af9e4ba29c5c34bd2a70aab23997ba473"><span class="std std-ref">Function imgui::nodes::PopStyleVar</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a131b444e7fbd17c2a8fe9588d75a3ce7.html#exhale-function-imnodes-8cpp-1a131b444e7fbd17c2a8fe9588d75a3ce7"><span class="std std-ref">Function imgui::nodes::PushAttributeFlag</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ae3d343e0160c9db566bd25bed630ecf5.html#exhale-function-imnodes-8cpp-1ae3d343e0160c9db566bd25bed630ecf5"><span class="std std-ref">Function imgui::nodes::PushColorStyle</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a89d5c03aa66090cae64b7fbf554eb1e5.html#exhale-function-imnodes-8cpp-1a89d5c03aa66090cae64b7fbf554eb1e5"><span class="std std-ref">Function imgui::nodes::PushStyleVar</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a94fbd232354591af4e5f06f2397140bb.html#exhale-function-imnodes-8cpp-1a94fbd232354591af4e5f06f2397140bb"><span class="std std-ref">Function imgui::nodes::SaveCurrentEditorStateToIniFile</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1aa35c0cec89ec78a60d70fe26d500a1b6.html#exhale-function-imnodes-8cpp-1aa35c0cec89ec78a60d70fe26d500a1b6"><span class="std std-ref">Function imgui::nodes::SaveCurrentEditorStateToIniString</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a2a3522240fec5823ce30c968164d95cd.html#exhale-function-imnodes-8cpp-1a2a3522240fec5823ce30c968164d95cd"><span class="std std-ref">Function imgui::nodes::SaveEditorStateToIniFile</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a0958c837a7d1a7f3e3d363eade14479a.html#exhale-function-imnodes-8cpp-1a0958c837a7d1a7f3e3d363eade14479a"><span class="std std-ref">Function imgui::nodes::SaveEditorStateToIniString</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ae0a6ee05c1dd35823de03842724479d6.html#exhale-function-imnodes-8cpp-1ae0a6ee05c1dd35823de03842724479d6"><span class="std std-ref">Function imgui::nodes::SetNodeDraggable</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ac5ee9332659dc64a89e87a7fcf4a6432.html#exhale-function-imnodes-8cpp-1ac5ee9332659dc64a89e87a7fcf4a6432"><span class="std std-ref">Function imgui::nodes::SetNodeEditorSpacePos</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1af380f3b2fe99873fcbbb00074ee8f5a1.html#exhale-function-imnodes-8cpp-1af380f3b2fe99873fcbbb00074ee8f5a1"><span class="std std-ref">Function imgui::nodes::SetNodeGridSpacePos</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1ae5c1ead4d6809eb583d232fb866c4f46.html#exhale-function-imnodes-8cpp-1ae5c1ead4d6809eb583d232fb866c4f46"><span class="std std-ref">Function imgui::nodes::SetNodeScreenSpacePos</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a2b7bc5d62997cbcbd233f4681b82046a.html#exhale-function-imnodes-8cpp-1a2b7bc5d62997cbcbd233f4681b82046a"><span class="std std-ref">Function imgui::nodes::Shutdown</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1af85b845b28a4a7eadbffcfa20ad63b0e.html#exhale-function-imnodes-8cpp-1af85b845b28a4a7eadbffcfa20ad63b0e"><span class="std std-ref">Function imgui::nodes::StyleColorsClassic</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a9e846195cf7e5f781093b18caf75d048.html#exhale-function-imnodes-8cpp-1a9e846195cf7e5f781093b18caf75d048"><span class="std std-ref">Function imgui::nodes::StyleColorsDark</span></a></p></li>
+<li><p><a class="reference internal" href="function_imnodes_8cpp_1a2e8b9565c6b479b108716e221f42c7f6.html#exhale-function-imnodes-8cpp-1a2e8b9565c6b479b108716e221f42c7f6"><span class="std std-ref">Function imgui::nodes::StyleColorsLight</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="defines">
+<h2>Defines<a class="headerlink" href="#defines" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="define_imnodes_8cpp_1adf4d73301961430d50d7edd96f92ce38.html#exhale-define-imnodes-8cpp-1adf4d73301961430d50d7edd96f92ce38"><span class="std std-ref">Define IMGUI_DEFINE_MATH_OPERATORS</span></a></p></li>
+<li><p><a class="reference internal" href="define_imnodes_8cpp_1a85de53f4bffce5edd75033f2555ad88b.html#exhale-define-imnodes-8cpp-1a85de53f4bffce5edd75033f2555ad88b"><span class="std std-ref">Define MINIMUM_COMPATIBLE_IMGUI_VERSION</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a9f64e3a56d732210ee29a66c86d80c2f.html#exhale-variable-imnodes-8cpp-1a9f64e3a56d732210ee29a66c86d80c2f"><span class="std std-ref">Variable active_attribute</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a63862538c52c7245e75da5ea9a118a26.html#exhale-variable-imnodes-8cpp-1a63862538c52c7245e75da5ea9a118a26"><span class="std std-ref">Variable active_attribute_id</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1afe7f6d531954bbafdbd45a05d59203bd.html#exhale-variable-imnodes-8cpp-1afe7f6d531954bbafdbd45a05d59203bd"><span class="std std-ref">Variable attribute_flag_stack</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ae30a9ef6708c65ac5e51c9108b722704.html#exhale-variable-imnodes-8cpp-1ae30a9ef6708c65ac5e51c9108b722704"><span class="std std-ref">Variable attribute_rect</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ad2a5ea9a05425af369363fc738bb4940.html#exhale-variable-imnodes-8cpp-1ad2a5ea9a05425af369363fc738bb4940"><span class="std std-ref">Variable background</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a7d3e4f2ecfb6b27329e14243e40ac136.html#exhale-variable-imnodes-8cpp-1a7d3e4f2ecfb6b27329e14243e40ac136"><span class="std std-ref">Variable background_hovered</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a9a139530c8d8f6afced4f925e3b40ea3.html#exhale-variable-imnodes-8cpp-1a9a139530c8d8f6afced4f925e3b40ea3"><span class="std std-ref">Variable background_selected</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1abde6bd48d7f18fd65a0c2e295c7d5af2.html#exhale-variable-imnodes-8cpp-1abde6bd48d7f18fd65a0c2e295c7d5af2"><span class="std std-ref">Variable base</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a743294894ae9cce4618ecff114abdb7d.html#exhale-variable-imnodes-8cpp-1a743294894ae9cce4618ecff114abdb7d"><span class="std std-ref">Variable bezier</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a364acf2a66aebe7f5bdee5dd31be7808.html#exhale-variable-imnodes-8cpp-1a364acf2a66aebe7f5bdee5dd31be7808"><span class="std std-ref">Variable border_thickness</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a703de5ff0db786eb52ec91b36ee7e33c.html#exhale-variable-imnodes-8cpp-1a703de5ff0db786eb52ec91b36ee7e33c"><span class="std std-ref">Variable bottom_left</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a5285257b8b97a192295521df12094982.html#exhale-variable-imnodes-8cpp-1a5285257b8b97a192295521df12094982"><span class="std std-ref">Variable bottom_right</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a539c382490a4068b375f4a0f51699149.html#exhale-variable-imnodes-8cpp-1a539c382490a4068b375f4a0f51699149"><span class="std std-ref">Variable box_selector</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ae29a495ccc00d005a525d1df9af08893.html#exhale-variable-imnodes-8cpp-1ae29a495ccc00d005a525d1df9af08893"><span class="std std-ref">Variable canvas_draw_list</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a68d7651622c03931e6b6824a78fbb552.html#exhale-variable-imnodes-8cpp-1a68d7651622c03931e6b6824a78fbb552"><span class="std std-ref">Variable canvas_origin_screen_space</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a13fb470ea0b5d65b53c789eabbbcef5a.html#exhale-variable-imnodes-8cpp-1a13fb470ea0b5d65b53c789eabbbcef5a"><span class="std std-ref">Variable canvas_rect_screen_space</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1af0cb7558b264706cf11ac6292a1c2603.html#exhale-variable-imnodes-8cpp-1af0cb7558b264706cf11ac6292a1c2603"><span class="std std-ref">Variable color</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a09154e5d5e76a1c3802428e21ccc7ec1.html#exhale-variable-imnodes-8cpp-1a09154e5d5e76a1c3802428e21ccc7ec1"><span class="std std-ref">Variable color_modifier_stack</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a1a5e2fb927803230b8bcffad8b69575c.html#exhale-variable-imnodes-8cpp-1a1a5e2fb927803230b8bcffad8b69575c"><span class="std std-ref">Variable color_style</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a5df8cc85f9d8ee73ebdd14f6d4d2c3d9.html#exhale-variable-imnodes-8cpp-1a5df8cc85f9d8ee73ebdd14f6d4d2c3d9"><span class="std std-ref">Variable corner_rounding</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a72792bb2cbe70d9dc274f493e6539a3b.html#exhale-variable-imnodes-8cpp-1a72792bb2cbe70d9dc274f493e6539a3b"><span class="std std-ref">Variable current_attribute_flags</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a8a5029e0384b02b1ee3e776abada5ba9.html#exhale-variable-imnodes-8cpp-1a8a5029e0384b02b1ee3e776abada5ba9"><span class="std std-ref">Variable current_attribute_id</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a1b147f128e934c0b811716c5879a3475.html#exhale-variable-imnodes-8cpp-1a1b147f128e934c0b811716c5879a3475"><span class="std std-ref">Variable current_node_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ad6a5ab428ae0d023286d3bb719dc3df2.html#exhale-variable-imnodes-8cpp-1ad6a5ab428ae0d023286d3bb719dc3df2"><span class="std std-ref">Variable current_pin_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1aa3f88310e20f7ad15accb9eba4bbc73f.html#exhale-variable-imnodes-8cpp-1aa3f88310e20f7ad15accb9eba4bbc73f"><span class="std std-ref">Variable current_scope</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1aff9ef943e2e2f94f18b3c3970d10eac1.html#exhale-variable-imnodes-8cpp-1aff9ef943e2e2f94f18b3c3970d10eac1"><span class="std std-ref">Variable default_editor_ctx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a909024d39cbdf581332cb35b3feb8708.html#exhale-variable-imnodes-8cpp-1a909024d39cbdf581332cb35b3feb8708"><span class="std std-ref">Variable deleted_link_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1af3fc6696890f59b0b2fdec1de2534f2d.html#exhale-variable-imnodes-8cpp-1af3fc6696890f59b0b2fdec1de2534f2d"><span class="std std-ref">Variable draggable</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a0cc7dbc3ea9b070d730cd303f6e366cb.html#exhale-variable-imnodes-8cpp-1a0cc7dbc3ea9b070d730cd303f6e366cb"><span class="std std-ref">Variable editor_ctx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a15069c6e5b2db499298a0b1857e3ff2c.html#exhale-variable-imnodes-8cpp-1a15069c6e5b2db499298a0b1857e3ff2c"><span class="std std-ref">Variable element_state_change</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ab897ef4c7ceb28f731316e4f798c1e63.html#exhale-variable-imnodes-8cpp-1ab897ef4c7ceb28f731316e4f798c1e63"><span class="std std-ref">Variable end_pin_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ac8bf36fe0577cba66bccda3a6f7e80a4.html#exhale-variable-imnodes-8cpp-1ac8bf36fe0577cba66bccda3a6f7e80a4"><span class="std std-ref">Variable flags</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ad744727e658b63272404d75ec73eb269.html#exhale-variable-imnodes-8cpp-1ad744727e658b63272404d75ec73eb269"><span class="std std-ref">Variable free_list</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a2493cd2a83c663c503d736033459e7aa.html#exhale-variable-imnodes-8cpp-1a2493cd2a83c663c503d736033459e7aa"><span class="std std-ref">Variable hovered</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a97162e825d5c7e32740626976febaeed.html#exhale-variable-imnodes-8cpp-1a97162e825d5c7e32740626976febaeed"><span class="std std-ref">Variable hovered_link_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ab033f0367a863ab4e98866ce11fe9a88.html#exhale-variable-imnodes-8cpp-1ab033f0367a863ab4e98866ce11fe9a88"><span class="std std-ref">Variable hovered_node_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1aa77649ca274e6ced55e1ee822083c2b5.html#exhale-variable-imnodes-8cpp-1aa77649ca274e6ced55e1ee822083c2b5"><span class="std std-ref">Variable hovered_pin_flags</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ab4469ac99a23ee35bd6fdadaab53c2df.html#exhale-variable-imnodes-8cpp-1ab4469ac99a23ee35bd6fdadaab53c2df"><span class="std std-ref">Variable hovered_pin_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a7441ef0865bcb3db9b8064dd7375c1ea.html#exhale-variable-imnodes-8cpp-1a7441ef0865bcb3db9b8064dd7375c1ea"><span class="std std-ref">Variable id</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a65fb9893580ed8c43759b3b54ad88595.html#exhale-variable-imnodes-8cpp-1a65fb9893580ed8c43759b3b54ad88595"><span class="std std-ref">Variable id_map</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1af86b2f74ffd97e718b4cdf261cd8c103.html#exhale-variable-imnodes-8cpp-1af86b2f74ffd97e718b4cdf261cd8c103"><span class="std std-ref">Variable in_use</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1af6e02a07fbf98d01562c01cbc65561af.html#exhale-variable-imnodes-8cpp-1af6e02a07fbf98d01562c01cbc65561af"><span class="std std-ref">Variable interactive_node_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a04e7368587739575e37f9cc4f2b52d6a.html#exhale-variable-imnodes-8cpp-1a04e7368587739575e37f9cc4f2b52d6a"><span class="std std-ref">Variable invalid_index</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a4cfcb819db3aa04cc7b965590239fc90.html#exhale-variable-imnodes-8cpp-1a4cfcb819db3aa04cc7b965590239fc90"><span class="std std-ref">Variable io</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ad4431eb5de33536080630069ee806087.html#exhale-variable-imnodes-8cpp-1ad4431eb5de33536080630069ee806087"><span class="std std-ref">Variable item</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a187698c55ea11577f9fe8933e1322fa7.html#exhale-variable-imnodes-8cpp-1a187698c55ea11577f9fe8933e1322fa7"><span class="std std-ref">Variable layout_style</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a4d264ff82607202326fc23ed7227b110.html#exhale-variable-imnodes-8cpp-1a4d264ff82607202326fc23ed7227b110"><span class="std std-ref">Variable left_mouse_clicked</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a40fba18bb53f7d79a6177be837a29ca5.html#exhale-variable-imnodes-8cpp-1a40fba18bb53f7d79a6177be837a29ca5"><span class="std std-ref">Variable left_mouse_dragging</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ab6863faf3e944997d1a028563803198f.html#exhale-variable-imnodes-8cpp-1ab6863faf3e944997d1a028563803198f"><span class="std std-ref">Variable left_mouse_released</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a0ee505c24e4d2f64b78a97fc6e2524f5.html#exhale-variable-imnodes-8cpp-1a0ee505c24e4d2f64b78a97fc6e2524f5"><span class="std std-ref">Variable link_creation</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a36c8783edc686f74df4589493972ccec.html#exhale-variable-imnodes-8cpp-1a36c8783edc686f74df4589493972ccec"><span class="std std-ref">Variable link_creation_type</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1acf7aaf60aa15e1b783095ab17b2adc9c.html#exhale-variable-imnodes-8cpp-1acf7aaf60aa15e1b783095ab17b2adc9c"><span class="std std-ref">Variable m_index</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a767e045f1272fd1d8d4582bf4d9bb58d.html#exhale-variable-imnodes-8cpp-1a767e045f1272fd1d8d4582bf4d9bb58d"><span class="std std-ref">Variable middle_mouse_clicked</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ae342c7fd0dcdf3af422d9d2c6daa495a.html#exhale-variable-imnodes-8cpp-1ae342c7fd0dcdf3af422d9d2c6daa495a"><span class="std std-ref">Variable middle_mouse_dragging</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1afe5f5aa4c59802606e95e556a9ef7b1d.html#exhale-variable-imnodes-8cpp-1afe5f5aa4c59802606e95e556a9ef7b1d"><span class="std std-ref">Variable mouse_pos</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a9ff16c82cd190bbf48d2b9093cf33ad8.html#exhale-variable-imnodes-8cpp-1a9ff16c82cd190bbf48d2b9093cf33ad8"><span class="std std-ref">Variable node_idx_submission_order</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1af466c97624ed44df149d3e9b88020fd8.html#exhale-variable-imnodes-8cpp-1af466c97624ed44df149d3e9b88020fd8"><span class="std std-ref">Variable node_idx_to_submission_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a7bf8658bba3d1b2bed7954f42f5e1e6f.html#exhale-variable-imnodes-8cpp-1a7bf8658bba3d1b2bed7954f42f5e1e6f"><span class="std std-ref">Variable node_indices_overlapping_with_mouse</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a2739137ac26a33e975d900675953a72c.html#exhale-variable-imnodes-8cpp-1a2739137ac26a33e975d900675953a72c"><span class="std std-ref">Variable num_segments</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ac57e703abf5af58163cd01bd284dd219.html#exhale-variable-imnodes-8cpp-1ac57e703abf5af58163cd01bd284dd219"><span class="std std-ref">Variable origin</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a558ae03f977b630adfe648bed23d5818.html#exhale-variable-imnodes-8cpp-1a558ae03f977b630adfe648bed23d5818"><span class="std std-ref">Variable outline</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1adca12696771cf60d98d89bd3af971430.html#exhale-variable-imnodes-8cpp-1adca12696771cf60d98d89bd3af971430"><span class="std std-ref">Variable p0</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ac3e5ff1c183c17dace8ee42b79238cec.html#exhale-variable-imnodes-8cpp-1ac3e5ff1c183c17dace8ee42b79238cec"><span class="std std-ref">Variable p1</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a5c772bc223831a6fc1dfe116b2aeed69.html#exhale-variable-imnodes-8cpp-1a5c772bc223831a6fc1dfe116b2aeed69"><span class="std std-ref">Variable p2</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1aaa48a665dbfe81038480c09cf46bfa48.html#exhale-variable-imnodes-8cpp-1aaa48a665dbfe81038480c09cf46bfa48"><span class="std std-ref">Variable p3</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1adb0a1412b4c2e8236db290a97cd156f4.html#exhale-variable-imnodes-8cpp-1adb0a1412b4c2e8236db290a97cd156f4"><span class="std std-ref">Variable padding</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a527c8a62a5edb8d3e563ba946ecdafa7.html#exhale-variable-imnodes-8cpp-1a527c8a62a5edb8d3e563ba946ecdafa7"><span class="std std-ref">Variable parent_node_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1abc89e1e7ab693087351ccc6df97b65a9.html#exhale-variable-imnodes-8cpp-1abc89e1e7ab693087351ccc6df97b65a9"><span class="std std-ref">Variable pin_indices</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a1fbb2d0a1e965dc4d621ca2a8709f360.html#exhale-variable-imnodes-8cpp-1a1fbb2d0a1e965dc4d621ca2a8709f360"><span class="std std-ref">Variable pool</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a793dc46ddb0f1347ddbc0cd046d691b0.html#exhale-variable-imnodes-8cpp-1a793dc46ddb0f1347ddbc0cd046d691b0"><span class="std std-ref">Variable pos</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a36c8bf7e278e26b00c0dd6563acd84c0.html#exhale-variable-imnodes-8cpp-1a36c8bf7e278e26b00c0dd6563acd84c0"><span class="std std-ref">Variable rect</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a10c278c5fcb389c6ca87f33c22548107.html#exhale-variable-imnodes-8cpp-1a10c278c5fcb389c6ca87f33c22548107"><span class="std std-ref">Variable right</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1aecf5316beca2aac398ace1f40ab5b3c5.html#exhale-variable-imnodes-8cpp-1aecf5316beca2aac398ace1f40ab5b3c5"><span class="std std-ref">Variable selected</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a39fe83ccf83f8f42c4008565998c8aba.html#exhale-variable-imnodes-8cpp-1a39fe83ccf83f8f42c4008565998c8aba"><span class="std std-ref">Variable shape</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1afea113a5a134d4ee35a70d900f26518d.html#exhale-variable-imnodes-8cpp-1afea113a5a134d4ee35a70d900f26518d"><span class="std std-ref">Variable snap_link_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ad93b7337ee48ecdd0ef5d1b419cab244.html#exhale-variable-imnodes-8cpp-1ad93b7337ee48ecdd0ef5d1b419cab244"><span class="std std-ref">Variable start_pin_idx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a4b798253dd80ae013643a26e88e2bf6a.html#exhale-variable-imnodes-8cpp-1a4b798253dd80ae013643a26e88e2bf6a"><span class="std std-ref">Variable style</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a6f5491db78b4abb4bb791d9cd994bcfe.html#exhale-variable-imnodes-8cpp-1a6f5491db78b4abb4bb791d9cd994bcfe"><span class="std std-ref">Variable style_modifier_stack</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a475fa590d2a241fa215d26b96dde6856.html#exhale-variable-imnodes-8cpp-1a475fa590d2a241fa215d26b96dde6856"><span class="std std-ref">Variable text_buffer</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a2cb1397ec62e4e5c4911a2b589c937bf.html#exhale-variable-imnodes-8cpp-1a2cb1397ec62e4e5c4911a2b589c937bf"><span class="std std-ref">Variable title_bar_content_rect</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a19b121c67f0bd42df7ca2f077399ea30.html#exhale-variable-imnodes-8cpp-1a19b121c67f0bd42df7ca2f077399ea30"><span class="std std-ref">Variable titlebar</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1ab99f8f571eaca9b1776d8fc810751ec2.html#exhale-variable-imnodes-8cpp-1ab99f8f571eaca9b1776d8fc810751ec2"><span class="std std-ref">Variable titlebar_hovered</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a71c71076699ecefe5b0102f48f102910.html#exhale-variable-imnodes-8cpp-1a71c71076699ecefe5b0102f48f102910"><span class="std std-ref">Variable titlebar_selected</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a1576d0afd3f8f8d2ede72f4a070a77e6.html#exhale-variable-imnodes-8cpp-1a1576d0afd3f8f8d2ede72f4a070a77e6"><span class="std std-ref">Variable top_left</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a2b2827b16bd3b81495bb82e5737442e1.html#exhale-variable-imnodes-8cpp-1a2b2827b16bd3b81495bb82e5737442e1"><span class="std std-ref">Variable top_right</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1aeed092b2afb6aef7bc80ccd236f2c031.html#exhale-variable-imnodes-8cpp-1aeed092b2afb6aef7bc80ccd236f2c031"><span class="std std-ref">Variable type</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imnodes_8cpp_1a17956fe0129d3d4c94ebc06cfef2ad82.html#exhale-variable-imnodes-8cpp-1a17956fe0129d3d4c94ebc06cfef2ad82"><span class="std std-ref">Variable value</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">File imnodes.cpp</a><ul>
+<li><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imnodes-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imnodes.cpp</span></code>)</a></li>
+<li><a class="reference internal" href="#includes">Includes</a></li>
+<li><a class="reference internal" href="#namespaces">Namespaces</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#enums">Enums</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#defines">Defines</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

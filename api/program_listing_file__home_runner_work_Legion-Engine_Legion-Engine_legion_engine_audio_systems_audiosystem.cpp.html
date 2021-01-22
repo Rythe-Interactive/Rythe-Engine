@@ -50,7 +50,7 @@
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">audio</span>
 <span class="p">{</span>
-    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">spinlock</span> <span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">;</span>
     <span class="n">ALCdevice</span><span class="o">*</span> <span class="n">AudioSystem</span><span class="o">::</span><span class="n">alDevice</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
     <span class="n">ALCcontext</span><span class="o">*</span> <span class="n">AudioSystem</span><span class="o">::</span><span class="n">alcContext</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
     <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">AudioSystem</span><span class="o">::</span><span class="n">sourceCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>

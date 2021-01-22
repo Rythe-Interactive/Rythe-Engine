@@ -1,0 +1,41 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_vertexarray.hpp:
+
+Program Listing for File vertexarray.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_vertexarray.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/vertexarray.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <application/application.hpp>
+   #include <rendering/data/buffer.hpp>
+   
+   namespace legion::rendering
+   {
+       struct vertexarray
+       {
+       private:
+           // Managed resource with the VAO id, also has the responsibility of deleting the VAO after all copies of this renderbuffer have been destroyed.
+           common::managed_resource<app::gl_id> m_id = common::managed_resource<app::gl_id>(nullptr);
+   
+       public:
+   
+           vertexarray() = default;
+   
+           explicit vertexarray([[maybe_unused]] std::nullptr_t t);
+   
+           static vertexarray generate();
+   
+           void setAttribPointer(const buffer& buf, uint index, size_type size, GLenum type, bool normalized, size_type stride, size_type offset);
+   
+           void setAttribDivisor(uint index, uint divisor);
+   
+           void bind() const;
+   
+           static void release();
+       };
+   }

@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__impl__glfw_8cpp_1ae64ad564e536847807e36c670c8ac9fc:
+
+Define GLFW_HAS_WINDOW_ALPHA
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GLFW_HAS_WINDOW_ALPHA

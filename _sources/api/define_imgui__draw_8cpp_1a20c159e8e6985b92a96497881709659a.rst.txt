@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__draw_8cpp_1a20c159e8e6985b92a96497881709659a:
+
+Define STBTT_pow
+================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STBTT_pow

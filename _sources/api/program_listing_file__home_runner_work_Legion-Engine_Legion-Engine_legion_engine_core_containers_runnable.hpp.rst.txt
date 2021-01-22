@@ -1,0 +1,41 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_runnable.hpp:
+
+Program Listing for File runnable.hpp
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_runnable.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/containers/runnable.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/platform/platform.hpp>
+   #include <core/types/types.hpp>
+   #include <memory>
+   #include <functional>
+   
+   namespace legion::core
+   {
+       struct runnable_base
+       {
+           virtual void execute() LEGION_PURE;
+       };
+   
+       template<typename Func>
+       struct runnable : public runnable_base
+       {
+       protected:
+           std::shared_ptr<std::remove_reference_t<Func>> m_func;
+       public:
+   
+           runnable() = default;
+           runnable(const Func& func) : m_func(new Func(func)) {}
+   
+           virtual void execute() override
+           {
+               std::invoke(*m_func);
+           }
+       };
+   }

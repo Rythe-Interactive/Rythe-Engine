@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class framebuffer &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class FramebufferResizeStage" href="classlegion_1_1rendering_1_1_framebuffer_resize_stage.html" />
+    <link rel="prev" title="Class handler_to_cpp" href="classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1rendering_1_1_framebuffer_resize_stage.html" title="Class FramebufferResizeStage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.html" title="Class handler_to_cpp"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class framebuffer</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-framebuffer">
+<span id="exhale-class-structlegion-1-1rendering-1-1framebuffer"></span><h1>Class framebuffer<a class="headerlink" href="#class-framebuffer" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_framebuffer.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-framebuffer-hpp"><span class="std std-ref">File framebuffer.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion9rendering11framebufferE">
+<span id="_CPPv3N6legion9rendering11framebufferE"></span><span id="_CPPv2N6legion9rendering11framebufferE"></span><span id="legion::rendering::framebuffer"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">framebuffer</code><a class="headerlink" href="#_CPPv4N6legion9rendering11framebufferE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Low level framebuffer. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11framebuffer11framebufferEv">
+<span id="_CPPv3N6legion9rendering11framebuffer11framebufferEv"></span><span id="_CPPv2N6legion9rendering11framebuffer11framebufferEv"></span><span id="legion::rendering::framebuffer::framebuffer"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1a82add4455f7bea03eed489b3a93d6e10"></span><code class="sig-name descname">framebuffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion9rendering11framebuffer11framebufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Faux constructor. To prevent unnecessary GPU allocations the default constructor doesn’t actually create a framebuffer. This means that default initialized framebuffers are invalid temporary objects until they get properly initialized. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11framebuffer11framebufferE6GLenum">
+<span id="_CPPv3N6legion9rendering11framebuffer11framebufferE6GLenum"></span><span id="_CPPv2N6legion9rendering11framebuffer11framebufferE6GLenum"></span><span id="legion::rendering::framebuffer::framebuffer__GLenum"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1abc328f1d3d61b56d4394d766750f9953"></span><code class="sig-name descname">framebuffer</code><span class="sig-paren">(</span>GLenum <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11framebuffer11framebufferE6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Main allocating constructor. This constructor actually creates the GPU side framebuffer. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Read more at <a class="reference external" href="http://docs.gl/gl4/glBindFramebuffer">docs.gl.</a> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code>: Framebuffer target for general operations. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering11framebuffer6verifyEv">
+<span id="_CPPv3NK6legion9rendering11framebuffer6verifyEv"></span><span id="_CPPv2NK6legion9rendering11framebuffer6verifyEv"></span><span id="legion::rendering::framebuffer::verifyC"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1aca82018a91cc950214dafbc4f52204ca"></span>std::pair&lt;bool, std::string&gt; <code class="sig-name descname">verify</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering11framebuffer6verifyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the framebuffer is valid and complete. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>std::pair&lt;bool, std::string&gt; First will be a boolean that will be true if the framebuffer is valid, the second will be the message about the state of the framebuffer. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering11framebuffer6targetEv">
+<span id="_CPPv3NK6legion9rendering11framebuffer6targetEv"></span><span id="_CPPv2NK6legion9rendering11framebuffer6targetEv"></span><span id="legion::rendering::framebuffer::targetC"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1a0fc427d76803461a5f45910414362428"></span>GLenum <code class="sig-name descname">target</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering11framebuffer6targetEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the rendering API type/target of the framebuffer. Useful for low level native rendering. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering11framebuffer2idEv">
+<span id="_CPPv3NK6legion9rendering11framebuffer2idEv"></span><span id="_CPPv2NK6legion9rendering11framebuffer2idEv"></span><span id="legion::rendering::framebuffer::idC"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1ad66086f1590a20b6d136c581bd47e18e"></span>app::gl_id <code class="sig-name descname">id</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering11framebuffer2idEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the rendering API id of the framebuffer. Useful for low level native rendering. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering11framebuffer4bindEv">
+<span id="_CPPv3NK6legion9rendering11framebuffer4bindEv"></span><span id="_CPPv2NK6legion9rendering11framebuffer4bindEv"></span><span id="legion::rendering::framebuffer::bindC"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1a7c567c29a3afb2aae775e2fb398ac9a4"></span>void <code class="sig-name descname">bind</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering11framebuffer4bindEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Bind the framebuffer to the current context. Useful for low level native rendering. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11framebuffer6attachE12renderbuffer6GLenum">
+<span id="_CPPv3N6legion9rendering11framebuffer6attachE12renderbuffer6GLenum"></span><span id="_CPPv2N6legion9rendering11framebuffer6attachE12renderbuffer6GLenum"></span><span id="legion::rendering::framebuffer::attach__renderbuffer.GLenum"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1a9e0625bb67d50a8ec64424835deb13d8"></span>void <code class="sig-name descname">attach</code><span class="sig-paren">(</span><a class="reference internal" href="class_structlegion_1_1rendering_1_1renderbuffer.html#_CPPv4N6legion9rendering12renderbufferE" title="legion::rendering::renderbuffer">renderbuffer</a> <em>rbo</em>, GLenum <em>attachment</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11framebuffer6attachE12renderbuffer6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attach a renderbuffer to a certain attachment-point of this framebuffer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rbo</span></code>: Renderbuffer to attach. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attachment</span></code>: Attachment-point to attach the renderbuffer to. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11framebuffer6attachE10attachment6GLenum">
+<span id="_CPPv3N6legion9rendering11framebuffer6attachE10attachment6GLenum"></span><span id="_CPPv2N6legion9rendering11framebuffer6attachE10attachment6GLenum"></span><span id="legion::rendering::framebuffer::attach__attachment.GLenum"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1aefe352ca2c6329e770e5d5f01eb9f8df"></span>void <code class="sig-name descname">attach</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion9rendering11framebuffer6attachE10attachment6GLenum" title="legion::rendering::framebuffer::attach::attachment">attachment</a> <em>att</em>, GLenum <em>attachment</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11framebuffer6attachE10attachment6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attach a unknown type attachment to a certain attachment-point of this framebuffer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">any</span></code>: Attachment to attach. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attachment</span></code>: Attachment-point to attach the renderbuffer to. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11framebuffer6attachE14texture_handle6GLenum">
+<span id="_CPPv3N6legion9rendering11framebuffer6attachE14texture_handle6GLenum"></span><span id="_CPPv2N6legion9rendering11framebuffer6attachE14texture_handle6GLenum"></span><span id="legion::rendering::framebuffer::attach__texture_handle.GLenum"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1a5741f1cd0e78da215fbd4080fbc54991"></span>void <code class="sig-name descname">attach</code><span class="sig-paren">(</span><a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <em>texture</em>, GLenum <em>attachment</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11framebuffer6attachE14texture_handle6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Attach a texture to a certain attachment-point of this framebuffer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">texture</span></code>: Texture handle of the texture to attach. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attachment</span></code>: Attachment-point to attach the texture to. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11framebuffer6detachE6GLenum">
+<span id="_CPPv3N6legion9rendering11framebuffer6detachE6GLenum"></span><span id="_CPPv2N6legion9rendering11framebuffer6detachE6GLenum"></span><span id="legion::rendering::framebuffer::detach__GLenum"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1ab2f968145bdf5787627bd80c819ca948"></span>void <code class="sig-name descname">detach</code><span class="sig-paren">(</span>GLenum <em>attachment</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11framebuffer6detachE6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering11framebuffer13getAttachmentE6GLenum">
+<span id="_CPPv3NK6legion9rendering11framebuffer13getAttachmentE6GLenum"></span><span id="_CPPv2NK6legion9rendering11framebuffer13getAttachmentE6GLenum"></span><span id="legion::rendering::framebuffer::getAttachment__GLenumC"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1a0666e034842c46eced33a466f8b8aaac"></span><em class="property">const</em> <a class="reference internal" href="#_CPPv4NK6legion9rendering11framebuffer13getAttachmentE6GLenum" title="legion::rendering::framebuffer::getAttachment::attachment">attachment</a> &amp;<code class="sig-name descname">getAttachment</code><span class="sig-paren">(</span>GLenum <em>attachment</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering11framebuffer13getAttachmentE6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the attachment of a certain attachment-point. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>const std::any&amp; An std::any that should be any_castable to either a texture handle or a renderbuffer if an attachment was active, the std::any will be empty otherwise. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">attachment</span></code>: Attachment-point to fetch the attachment for. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering11framebuffer7releaseEv">
+<span id="_CPPv3NK6legion9rendering11framebuffer7releaseEv"></span><span id="_CPPv2NK6legion9rendering11framebuffer7releaseEv"></span><span id="legion::rendering::framebuffer::releaseC"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1aea9bba72ae109a3e95bb19a97a6ea59c"></span>void <code class="sig-name descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering11framebuffer7releaseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Release the framebuffer from the current context. Useful for low level native rendering. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering11framebuffercvbEv">
+<span id="_CPPv3NK6legion9rendering11framebuffercvbEv"></span><span id="_CPPv2NK6legion9rendering11framebuffercvbEv"></span><span id="legion::rendering::framebuffer::castto-b-operatorC"></span><span class="target" id="structlegion_1_1rendering_1_1framebuffer_1a9e27926a480f2a95952ce631037c1a12"></span><code class="sig-name descname">operator bool</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering11framebuffercvbEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Check if the framebuffer was generated or not. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class framebuffer</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.html" title="previous chapter">Class handler_to_cpp</a></li>
+      <li>Next: <a href="classlegion_1_1rendering_1_1_framebuffer_resize_stage.html" title="next chapter">Class FramebufferResizeStage</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structlegion_1_1rendering_1_1framebuffer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

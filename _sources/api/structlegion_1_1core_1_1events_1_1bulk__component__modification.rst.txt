@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1core_1_1events_1_1bulk__component__modification:
+
+Template Struct bulk_component_modification
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_defaultevents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::events::event< bulk_component_modification< component_type > >`` (:ref:`exhale_class_structlegion_1_1core_1_1events_1_1event`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::events::bulk_component_modification
+   :members:
+   :protected-members:
+   :undoc-members:

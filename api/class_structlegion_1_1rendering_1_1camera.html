@@ -18,8 +18,8 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class handler_to_cpp" href="classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.html" />
-    <link rel="prev" title="Class attribute" href="class_structlegion_1_1rendering_1_1attribute.html" />
+    <link rel="next" title="Class ClearStage" href="classlegion_1_1rendering_1_1_clear_stage.html" />
+    <link rel="prev" title="Class buffer" href="class_structlegion_1_1rendering_1_1buffer.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -36,10 +36,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.html" title="Class handler_to_cpp"
+          <a href="classlegion_1_1rendering_1_1_clear_stage.html" title="Class ClearStage"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="class_structlegion_1_1rendering_1_1attribute.html" title="Class attribute"
+          <a href="class_structlegion_1_1rendering_1_1buffer.html" title="Class buffer"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -70,7 +70,7 @@
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
 <dt id="_CPPv4N6legion9rendering6cameraE">
-<span id="_CPPv3N6legion9rendering6cameraE"></span><span id="_CPPv2N6legion9rendering6cameraE"></span><span id="legion::rendering::camera"></span><span class="target" id="structlegion_1_1rendering_1_1camera"></span><em class="property">class </em><code class="sig-prename descclassname">legion::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">camera</code><a class="headerlink" href="#_CPPv4N6legion9rendering6cameraE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering6cameraE"></span><span id="_CPPv2N6legion9rendering6cameraE"></span><span id="legion::rendering::camera"></span><span class="target" id="structlegion_1_1rendering_1_1camera"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">camera</code><a class="headerlink" href="#_CPPv4N6legion9rendering6cameraE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Camera component. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
@@ -106,6 +106,21 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12targetWindowE">
+<span id="_CPPv3N6legion9rendering6camera12targetWindowE"></span><span id="_CPPv2N6legion9rendering6camera12targetWindowE"></span><span id="legion::rendering::camera::targetWindow__ecs::component_handle:app::window:"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1a0afdcab4eaffe8315c95b4d5f0778a20"></span>ecs::component_handle&lt;app::window&gt; <code class="sig-name descname">targetWindow</code> = ecs::component_handle&lt;app::window&gt;(world_entity_id)<a class="headerlink" href="#_CPPv4N6legion9rendering6camera12targetWindowE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12renderTargetE">
+<span id="_CPPv3N6legion9rendering6camera12renderTargetE"></span><span id="_CPPv2N6legion9rendering6camera12renderTargetE"></span><span id="legion::rendering::camera::renderTarget__framebuffer"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1a65b32f414823a3cf8e9d51bd8723b8a5"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a> <code class="sig-name descname">renderTarget</code> = <a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a>()<a class="headerlink" href="#_CPPv4N6legion9rendering6camera12renderTargetE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera10clearColorE">
+<span id="_CPPv3N6legion9rendering6camera10clearColorE"></span><span id="_CPPv2N6legion9rendering6camera10clearColorE"></span><span id="legion::rendering::camera::clearColor__math::color"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1aca5f0c63df19536a8931c2eeb6bed627"></span>math::color <code class="sig-name descname">clearColor</code> = math::colors::cornflower<a class="headerlink" href="#_CPPv4N6legion9rendering6camera10clearColorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
 <dt id="_CPPv4N6legion9rendering6camera3fovE">
 <span id="_CPPv3N6legion9rendering6camera3fovE"></span><span id="_CPPv2N6legion9rendering6camera3fovE"></span><span id="legion::rendering::camera::fov__float"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1acae2614e037ee2a35c4230165207a499"></span>float <code class="sig-name descname">fov</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera3fovE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
@@ -125,10 +140,91 @@
 <p class="breathe-sectiondef-title rubric">Friends</p>
 <dl class="friendclass">
 <dt>
+<em class="property">friend class</em> OldRenderer</dt>
+</dl>
+
+<dl class="friendclass">
+<dt>
 <em class="property">friend class</em> Renderer</dt>
 </dl>
 
 </div>
+<dl class="cpp struct">
+<dt id="_CPPv4N6legion9rendering6camera12camera_inputE">
+<span id="_CPPv3N6legion9rendering6camera12camera_inputE"></span><span id="_CPPv2N6legion9rendering6camera12camera_inputE"></span><span id="legion::rendering::camera::camera_input"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input"></span><em class="property">struct </em><code class="sig-name descname">camera_input</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_inputE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input12camera_inputEN4math4mat4EN4math4mat4EN4math4vec3EN4math4vec3EffN4math5ivec2E">
+<span id="_CPPv3N6legion9rendering6camera12camera_input12camera_inputEN4math4mat4EN4math4mat4EN4math4vec3EN4math4vec3EffN4math5ivec2E"></span><span id="_CPPv2N6legion9rendering6camera12camera_input12camera_inputEN4math4mat4EN4math4mat4EN4math4vec3EN4math4vec3EffN4math5ivec2E"></span><span id="legion::rendering::camera::camera_input::camera_input__math::mat4.math::mat4.math::vec3.math::vec3.float.float.math::ivec2"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1a312fa13790f73ba5b7bfabe516579e61"></span><code class="sig-name descname">camera_input</code><span class="sig-paren">(</span>math::mat4 <em>view</em>, math::mat4 <em>proj</em>, math::vec3 <em>pos</em>, math::vec3 <em>vdir</em>, float <em>nearz</em>, float <em>farz</em>, math::ivec2 <em>viewportSize</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input12camera_inputEN4math4mat4EN4math4mat4EN4math4vec3EN4math4vec3EffN4math5ivec2E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6camera12camera_input4bindER15material_handle">
+<span id="_CPPv3NK6legion9rendering6camera12camera_input4bindER15material_handle"></span><span id="_CPPv2NK6legion9rendering6camera12camera_input4bindER15material_handle"></span><span id="legion::rendering::camera::camera_input::bind__material_handleRC"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1a66ccd1f527cade7dd64bc886905e6d67"></span>void <code class="sig-name descname">bind</code><span class="sig-paren">(</span><a class="reference internal" href="class_structlegion_1_1rendering_1_1material__handle.html#_CPPv4N6legion9rendering15material_handleE" title="legion::rendering::material_handle">material_handle</a> &amp;<em>materialHandle</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6camera12camera_input4bindER15material_handle" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input4dataE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input4dataE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input4dataE"></span><span id="legion::rendering::camera::camera_input::data__math::vec4A"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1a753a281ae3429958b2df863451c73b81"></span>math::vec4 <code class="sig-name descname">data</code>[10]<a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input4dataE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input4viewE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input4viewE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input4viewE"></span><span id="legion::rendering::camera::camera_input::view__math::mat4"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1a99239304888d48ac4582d7eae1e0da58"></span>math::mat4 <code class="sig-name descname">view</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input4viewE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input4projE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input4projE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input4projE"></span><span id="legion::rendering::camera::camera_input::proj__math::mat4"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1a864d37d48b836990234b57c7f1c0e893"></span>math::mat4 <code class="sig-name descname">proj</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input4projE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input3posE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input3posE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input3posE"></span><span id="legion::rendering::camera::camera_input::pos__math::vec3"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1af6c67822741ba494c85df545693ddbe5"></span>math::vec3 <code class="sig-name descname">pos</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input3posE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input5nearzE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input5nearzE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input5nearzE"></span><span id="legion::rendering::camera::camera_input::nearz__float"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1ab708af19c026bdf1f8da058d4303347a"></span>float <code class="sig-name descname">nearz</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input5nearzE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input8posnearzE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input8posnearzE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input8posnearzE"></span><span id="legion::rendering::camera::camera_input::posnearz__math::vec4"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1afb58aed0d5f773d11c0c1fda5a1b6289"></span>math::vec4 <code class="sig-name descname">posnearz</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input8posnearzE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input4vdirE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input4vdirE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input4vdirE"></span><span id="legion::rendering::camera::camera_input::vdir__math::vec3"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1a34a9cae6e533ced03514b0202fa5746b"></span>math::vec3 <code class="sig-name descname">vdir</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input4vdirE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input4farzE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input4farzE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input4farzE"></span><span id="legion::rendering::camera::camera_input::farz__float"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1aa032475f4fe7b83903a861379dc76f8e"></span>float <code class="sig-name descname">farz</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input4farzE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input8vdirfarzE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input8vdirfarzE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input8vdirfarzE"></span><span id="legion::rendering::camera::camera_input::vdirfarz__math::vec4"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1a184bdc92d92dd4228ddcf88bce6e4ac1"></span>math::vec4 <code class="sig-name descname">vdirfarz</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input8vdirfarzE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_input12viewportSizeE">
+<span id="_CPPv3N6legion9rendering6camera12camera_input12viewportSizeE"></span><span id="_CPPv2N6legion9rendering6camera12camera_input12viewportSizeE"></span><span id="legion::rendering::camera::camera_input::viewportSize__math::ivec2"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1a0ed7f27709c54d7ea3c5830948d1fac0"></span>math::ivec2 <code class="sig-name descname">viewportSize</code><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_input12viewportSizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering6camera12camera_inputUt1_1E">
+<span id="_CPPv3N6legion9rendering6camera12camera_inputUt1_1E"></span><span class="target" id="structlegion_1_1rendering_1_1camera_1_1camera__input_1a7a470fdc95529857c0bbf938f092b93b"></span><em class="property">union</em> <a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering::camera::camera_input::<strong>[anonymous]</strong> <strong>[anonymous]</strong><a class="headerlink" href="#_CPPv4N6legion9rendering6camera12camera_inputUt1_1E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -156,8 +252,8 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="class_structlegion_1_1rendering_1_1attribute.html" title="previous chapter">Class attribute</a></li>
-      <li>Next: <a href="classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.html" title="next chapter">Class handler_to_cpp</a></li>
+      <li>Previous: <a href="class_structlegion_1_1rendering_1_1buffer.html" title="previous chapter">Class buffer</a></li>
+      <li>Next: <a href="classlegion_1_1rendering_1_1_clear_stage.html" title="next chapter">Class ClearStage</a></li>
   </ul></li>
   </ul></li>
 </ul>

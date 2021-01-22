@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1application_1_1context__guard:
+
+Struct context_guard
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_window_window.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::application::context_guard
+   :members:
+   :protected-members:
+   :undoc-members:

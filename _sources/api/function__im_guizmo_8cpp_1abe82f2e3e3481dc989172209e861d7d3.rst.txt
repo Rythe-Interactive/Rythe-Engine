@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1abe82f2e3e3481dc989172209e861d7d3:
+
+Function imgui::gizmo::GetParallelogram
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::GetParallelogram(const vec_t&, const vec_t&, const vec_t&)

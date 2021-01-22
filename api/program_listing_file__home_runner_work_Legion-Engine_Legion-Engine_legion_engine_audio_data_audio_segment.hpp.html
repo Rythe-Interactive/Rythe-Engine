@@ -132,7 +132,7 @@
     <span class="k">struct</span> <span class="n">audio_segment_handle</span>
     <span class="p">{</span>
         <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">&amp;&gt;</span> <span class="n">get</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">&amp;&gt;</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="k">operator</span> <span class="nf">id_type</span> <span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span><span class="p">;</span> <span class="p">}</span>
     <span class="p">};</span>
@@ -151,10 +151,10 @@
 
         <span class="c1">// Unorderer map to store all unique audio segments</span>
         <span class="c1">// Each audio segment has a unique id using name hash</span>
-        <span class="c1">// Each segment also needs a readonly_rw_spinlock for thread safety</span>
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_segments</span><span class="p">;</span>
+        <span class="c1">// Each segment also needs a rw_spinlock for thread safety</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">audio_segment</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_segments</span><span class="p">;</span>
 
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_segmentsLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_segmentsLock</span><span class="p">;</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

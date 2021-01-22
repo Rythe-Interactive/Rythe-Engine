@@ -75,6 +75,9 @@
         <span class="n">scheduling</span><span class="o">::</span><span class="n">Scheduler</span> <span class="n">m_scheduler</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
+
+        <span class="kr">inline</span> <span class="k">static</span> <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">eventbus</span><span class="p">;</span>
+
         <span class="n">Engine</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_modules</span><span class="p">(),</span> <span class="n">m_eventbus</span><span class="p">(),</span> <span class="n">m_ecs</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">),</span> <span class="n">m_cliargs</span><span class="p">(</span><span class="n">argv</span><span class="p">,</span> <span class="n">argv</span> <span class="o">+</span> <span class="n">argc</span><span class="p">),</span>
 <span class="cp">#if defined(LEGION_LOW_POWER)</span>
             <span class="n">m_scheduler</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">LEGION_MIN_THREADS</span><span class="p">)</span>
@@ -82,6 +85,8 @@
             <span class="n">m_scheduler</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">LEGION_MIN_THREADS</span><span class="p">)</span>
 <span class="cp">#endif</span>
         <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">setup</span><span class="p">();</span>
+            <span class="n">eventbus</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">;</span>
             <span class="n">Module</span><span class="o">::</span><span class="n">m_eventBus</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">;</span>
             <span class="n">Module</span><span class="o">::</span><span class="n">m_ecs</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_ecs</span><span class="p">;</span>
             <span class="n">Module</span><span class="o">::</span><span class="n">m_scheduler</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_scheduler</span><span class="p">;</span>
@@ -89,6 +94,7 @@
             <span class="n">SystemBase</span><span class="o">::</span><span class="n">m_ecs</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_ecs</span><span class="p">;</span>
             <span class="n">SystemBase</span><span class="o">::</span><span class="n">m_scheduler</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_scheduler</span><span class="p">;</span>
             <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle_base</span><span class="o">::</span><span class="n">m_registry</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_ecs</span><span class="p">;</span>
+            <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle_base</span><span class="o">::</span><span class="n">m_eventBus</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">m_eventbus</span><span class="p">;</span>
 
             <span class="n">reportModule</span><span class="o">&lt;</span><span class="n">CoreModule</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="p">}</span>
@@ -98,7 +104,7 @@
             <span class="n">m_modules</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
         <span class="p">}</span>
 
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">ModuleType</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">ModuleType</span><span class="p">,</span> <span class="n">Module</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">ModuleType</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">Args</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">ModuleType</span><span class="p">,</span> <span class="n">Module</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
         <span class="kt">void</span> <span class="n">reportModule</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">args</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Module</span><span class="o">&gt;</span> <span class="k">module</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">ModuleType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
@@ -112,9 +118,6 @@
 
         <span class="kt">void</span> <span class="n">init</span><span class="p">()</span>
         <span class="p">{</span>
-
-            <span class="n">log</span><span class="o">::</span><span class="n">setup</span><span class="p">();</span>
-
             <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">priority</span><span class="p">,</span> <span class="n">moduleList</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_modules</span><span class="p">)</span>
                 <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="k">module</span> <span class="o">:</span> <span class="n">moduleList</span><span class="p">)</span>
                     <span class="k">module</span><span class="o">-&gt;</span><span class="n">setup</span><span class="p">();</span>

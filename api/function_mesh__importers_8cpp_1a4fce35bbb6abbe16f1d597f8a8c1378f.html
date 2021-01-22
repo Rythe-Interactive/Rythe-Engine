@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Function legion::core::detail::handleGltfVertexColor &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Function legion::core::detail::typeHashImpl" href="function_type__util_8hpp_1a847f2b1e59149b3674036b329736dbca.html" />
+    <link rel="prev" title="Function legion::core::detail::handleGltfIndices" href="function_mesh__importers_8cpp_1a59311c6aa819339a257d0a3e7fbc4b1d.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="function_type__util_8hpp_1a847f2b1e59149b3674036b329736dbca.html" title="Template Function legion::core::detail::typeHashImpl"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="function_mesh__importers_8cpp_1a59311c6aa819339a257d0a3e7fbc4b1d.html" title="Function legion::core::detail::handleGltfIndices"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Function legion::core::detail::handleGltfVertexColor</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="function-legion-core-detail-handlegltfvertexcolor">
+<span id="exhale-function-mesh-importers-8cpp-1a4fce35bbb6abbe16f1d597f8a8c1378f"></span><h1>Function legion::core::detail::handleGltfVertexColor<a class="headerlink" href="#function-legion-core-detail-handlegltfvertexcolor" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-data-importers-mesh-importers-cpp"><span class="std std-ref">File mesh_importers.cpp</span></a></p></li>
+</ul>
+<div class="section" id="function-documentation">
+<h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core6detail21handleGltfVertexColorERKN8tinygltf6BufferERKN8tinygltf10BufferViewEiiPNSt6vectorIN4math5colorEEE">
+<span id="_CPPv3N6legion4core6detail21handleGltfVertexColorERKN8tinygltf6BufferERKN8tinygltf10BufferViewEiiPNSt6vectorIN4math5colorEEE"></span><span id="_CPPv2N6legion4core6detail21handleGltfVertexColorERKN8tinygltf6BufferERKN8tinygltf10BufferViewEiiPNSt6vectorIN4math5colorEEE"></span><span id="legion::core::detail::handleGltfVertexColor__tinygltf::BufferCR.tinygltf::BufferViewCR.i.i.std::vector:math::color:P"></span><span class="target" id="mesh__importers_8cpp_1a4fce35bbb6abbe16f1d597f8a8c1378f"></span>void <code class="sig-prename descclassname">legion::core::detail<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">handleGltfVertexColor</code><span class="sig-paren">(</span><em class="property">const</em> tinygltf::Buffer &amp;<em>buffer</em>, <em class="property">const</em> tinygltf::BufferView &amp;<em>bufferView</em>, int <em>accessorType</em>, int <em>componentType</em>, std::vector&lt;math::<a class="reference internal" href="class_structlegion_1_1core_1_1math_1_1color.html#_CPPv4N6legion4core4math5colorE" title="legion::core::math::color">color</a>&gt; *<em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6detail21handleGltfVertexColorERKN8tinygltf6BufferERKN8tinygltf10BufferViewEiiPNSt6vectorIN4math5colorEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to handle vertex color of tinygltf. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code>: - tinygltf::Buffer containing the mesh data </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bufferView</span></code>: - tinygltf::BufferView containing information about the buffer (data size/data offset) </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">accessorType</span></code>: - tinygltf accessorType, Vertex color is expected to come in vec3 or vec4 - will be handled by the function </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">componentType</span></code>: - tinygltf componentType, Vertex color is expected to come in float, unsigned byte or unsigned short - will be handled by the function </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: - std::vector&lt;color&gt; the destination of the data copy. The vector will be resized to vector.size()+(tinygltf vertex color size) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Function legion::core::detail::handleGltfVertexColor</a><ul>
+<li><a class="reference internal" href="#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="function_mesh__importers_8cpp_1a59311c6aa819339a257d0a3e7fbc4b1d.html" title="previous chapter">Function legion::core::detail::handleGltfIndices</a></li>
+      <li>Next: <a href="function_type__util_8hpp_1a847f2b1e59149b3674036b329736dbca.html" title="next chapter">Template Function legion::core::detail::typeHashImpl</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/function_mesh__importers_8cpp_1a4fce35bbb6abbe16f1d597f8a8c1378f.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

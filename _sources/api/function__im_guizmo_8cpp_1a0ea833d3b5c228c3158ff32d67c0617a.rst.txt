@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a0ea833d3b5c228c3158ff32d67c0617a:
+
+Function imgui::gizmo::DrawCubes
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::DrawCubes(const float *, const float *, const float *, int)

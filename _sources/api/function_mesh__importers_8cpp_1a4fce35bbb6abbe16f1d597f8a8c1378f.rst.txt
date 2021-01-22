@@ -1,0 +1,13 @@
+.. _exhale_function_mesh__importers_8cpp_1a4fce35bbb6abbe16f1d597f8a8c1378f:
+
+Function legion::core::detail::handleGltfVertexColor
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::detail::handleGltfVertexColor(const tinygltf::Buffer&, const tinygltf::BufferView&, int, int, std::vector<math::color> *)

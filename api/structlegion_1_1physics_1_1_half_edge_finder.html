@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struct HalfEdgeFinder &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Struct identifier" href="structlegion_1_1physics_1_1identifier.html" />
+    <link rel="prev" title="Struct HalfEdgeFace" href="structlegion_1_1physics_1_1_half_edge_face.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structlegion_1_1physics_1_1identifier.html" title="Struct identifier"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structlegion_1_1physics_1_1_half_edge_face.html" title="Struct HalfEdgeFace"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Struct HalfEdgeFinder</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="struct-halfedgefinder">
+<span id="exhale-struct-structlegion-1-1physics-1-1-half-edge-finder"></span><h1>Struct HalfEdgeFinder<a class="headerlink" href="#struct-halfedgefinder" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_half_edge_finder.h.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-half-edge-finder-h"><span class="std std-ref">File half_edge_finder.h</span></a></p></li>
+</ul>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt id="_CPPv4N6legion7physics14HalfEdgeFinderE">
+<span id="_CPPv3N6legion7physics14HalfEdgeFinderE"></span><span id="_CPPv2N6legion7physics14HalfEdgeFinderE"></span><span id="legion::physics::HalfEdgeFinder"></span><span class="target" id="structlegion_1_1physics_1_1_half_edge_finder"></span><em class="property">struct </em><code class="sig-prename descclassname">legion::physics<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">HalfEdgeFinder</code><a class="headerlink" href="#_CPPv4N6legion7physics14HalfEdgeFinderE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Responsible for creating a half-edge data structure for a mesh. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14HalfEdgeFinder12FindHalfEdgeER4meshRKN4math4mat4ERNSt5queueI15meshHalfEdgePtrEE">
+<span id="_CPPv3N6legion7physics14HalfEdgeFinder12FindHalfEdgeER4meshRKN4math4mat4ERNSt5queueI15meshHalfEdgePtrEE"></span><span id="_CPPv2N6legion7physics14HalfEdgeFinder12FindHalfEdgeER4meshRKN4math4mat4ERNSt5queueI15meshHalfEdgePtrEE"></span><span id="legion::physics::HalfEdgeFinder::FindHalfEdge__meshR.math::mat4CR.std::queue:meshHalfEdgePtr:R"></span><span class="target" id="structlegion_1_1physics_1_1_half_edge_finder_1a8824be8ee7dc2f47057345d50a30e76e"></span>void <code class="sig-name descname">FindHalfEdge</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion7physics14HalfEdgeFinder12FindHalfEdgeER4meshRKN4math4mat4ERNSt5queueI15meshHalfEdgePtrEE" title="legion::physics::HalfEdgeFinder::FindHalfEdge::mesh">mesh</a> &amp;<em>mesh</em>, <em class="property">const</em> math::mat4 &amp;<em>transform</em>, std::queue&lt;<a class="reference internal" href="typedef_mesh__splitter__typedefs_8hpp_1ac22df5277e2553777688a72132d2b403.html#_CPPv4N6legion7physics15meshHalfEdgePtrE" title="legion::physics::meshHalfEdgePtr">meshHalfEdgePtr</a>&gt; &amp;<em>meshHalfEdges</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14HalfEdgeFinder12FindHalfEdgeER4meshRKN4math4mat4ERNSt5queueI15meshHalfEdgePtrEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a mesh and its associated transform, populates the meshHalfEdges queue with the created meshHalfEdgePtrs. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14HalfEdgeFinder15InstantiateEdgeEiKNSt4pairIiiEERK4meshRNSt5queueI15meshHalfEdgePtrEER24VertexIndexToHalfEdgePtr">
+<span id="_CPPv3N6legion7physics14HalfEdgeFinder15InstantiateEdgeEiKNSt4pairIiiEERK4meshRNSt5queueI15meshHalfEdgePtrEER24VertexIndexToHalfEdgePtr"></span><span id="_CPPv2N6legion7physics14HalfEdgeFinder15InstantiateEdgeEiKNSt4pairIiiEERK4meshRNSt5queueI15meshHalfEdgePtrEER24VertexIndexToHalfEdgePtr"></span><span id="legion::physics::HalfEdgeFinder::InstantiateEdge__i.std::pair:i.i:C.meshCR.std::queue:meshHalfEdgePtr:R.VertexIndexToHalfEdgePtrR"></span><span class="target" id="structlegion_1_1physics_1_1_half_edge_finder_1ad7344a5fc7331f28190e67c0cb8bbe89"></span><a class="reference internal" href="typedef_mesh__splitter__typedefs_8hpp_1ac22df5277e2553777688a72132d2b403.html#_CPPv4N6legion7physics15meshHalfEdgePtrE" title="legion::physics::meshHalfEdgePtr">meshHalfEdgePtr</a> <code class="sig-name descname">InstantiateEdge</code><span class="sig-paren">(</span>int <em>vertexIndex</em>, <em class="property">const</em> std::pair&lt;int, int&gt; <em>uniqueIndexPair</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion7physics14HalfEdgeFinder15InstantiateEdgeEiKNSt4pairIiiEERK4meshRNSt5queueI15meshHalfEdgePtrEER24VertexIndexToHalfEdgePtr" title="legion::physics::HalfEdgeFinder::InstantiateEdge::mesh">mesh</a> &amp;<em>mesh</em>, std::queue&lt;<a class="reference internal" href="typedef_mesh__splitter__typedefs_8hpp_1ac22df5277e2553777688a72132d2b403.html#_CPPv4N6legion7physics15meshHalfEdgePtrE" title="legion::physics::meshHalfEdgePtr">meshHalfEdgePtr</a>&gt; &amp;<em>edgePtrs</em>, <a class="reference internal" href="typedef_mesh__splitter__typedefs_8hpp_1a86cfd5d08f6c8fbed905701bce664fc8.html#_CPPv4N6legion7physics24VertexIndexToHalfEdgePtrE" title="legion::physics::VertexIndexToHalfEdgePtr">VertexIndexToHalfEdgePtr</a> &amp;<em>indexToEdgeMap</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14HalfEdgeFinder15InstantiateEdgeEiKNSt4pairIiiEERK4meshRNSt5queueI15meshHalfEdgePtrEER24VertexIndexToHalfEdgePtr" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Instantiate a new half edge and returns it if its unique. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14HalfEdgeFinder9UniqueAddE15meshHalfEdgePtrR24VertexIndexToHalfEdgePtr19edgeVertexIndexPair">
+<span id="_CPPv3N6legion7physics14HalfEdgeFinder9UniqueAddE15meshHalfEdgePtrR24VertexIndexToHalfEdgePtr19edgeVertexIndexPair"></span><span id="_CPPv2N6legion7physics14HalfEdgeFinder9UniqueAddE15meshHalfEdgePtrR24VertexIndexToHalfEdgePtr19edgeVertexIndexPair"></span><span id="legion::physics::HalfEdgeFinder::UniqueAdd__meshHalfEdgePtr.VertexIndexToHalfEdgePtrR.edgeVertexIndexPair"></span><span class="target" id="structlegion_1_1physics_1_1_half_edge_finder_1a417d75d1e3ae1bd5525331b07439c686"></span><a class="reference internal" href="typedef_mesh__splitter__typedefs_8hpp_1ac22df5277e2553777688a72132d2b403.html#_CPPv4N6legion7physics15meshHalfEdgePtrE" title="legion::physics::meshHalfEdgePtr">meshHalfEdgePtr</a> <code class="sig-name descname">UniqueAdd</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_mesh__splitter__typedefs_8hpp_1ac22df5277e2553777688a72132d2b403.html#_CPPv4N6legion7physics15meshHalfEdgePtrE" title="legion::physics::meshHalfEdgePtr">meshHalfEdgePtr</a> <em>newEdge</em>, <a class="reference internal" href="typedef_mesh__splitter__typedefs_8hpp_1a86cfd5d08f6c8fbed905701bce664fc8.html#_CPPv4N6legion7physics24VertexIndexToHalfEdgePtrE" title="legion::physics::VertexIndexToHalfEdgePtr">VertexIndexToHalfEdgePtr</a> &amp;<em>indexToEdgeMap</em>, <a class="reference internal" href="typedef_mesh__splitter__typedefs_8hpp_1a53037ea411ffbe9ac39e3862045a69c4.html#_CPPv4N6legion7physics19edgeVertexIndexPairE" title="legion::physics::edgeVertexIndexPair">edgeVertexIndexPair</a> <em>uniqueIndexPair</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14HalfEdgeFinder9UniqueAddE15meshHalfEdgePtrR24VertexIndexToHalfEdgePtr19edgeVertexIndexPair" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Checks if a certain edge identified with ‘uniqueIndexPair’ is unique. If it is, it will be added to ‘edgePtrs’. If its not, the original will take its place. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a unique meshHalfEdgePtr </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics14HalfEdgeFinder10currentPtrE">
+<span id="_CPPv3N6legion7physics14HalfEdgeFinder10currentPtrE"></span><span id="_CPPv2N6legion7physics14HalfEdgeFinder10currentPtrE"></span><span id="legion::physics::HalfEdgeFinder::currentPtr__meshHalfEdgePtr"></span><span class="target" id="structlegion_1_1physics_1_1_half_edge_finder_1a31603910819c58f22f7388fbd2f73d92"></span><a class="reference internal" href="typedef_mesh__splitter__typedefs_8hpp_1ac22df5277e2553777688a72132d2b403.html#_CPPv4N6legion7physics15meshHalfEdgePtrE" title="legion::physics::meshHalfEdgePtr">meshHalfEdgePtr</a> <code class="sig-name descname">currentPtr</code><a class="headerlink" href="#_CPPv4N6legion7physics14HalfEdgeFinder10currentPtrE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Struct HalfEdgeFinder</a><ul>
+<li><a class="reference internal" href="#struct-documentation">Struct Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="structlegion_1_1physics_1_1_half_edge_face.html" title="previous chapter">Struct HalfEdgeFace</a></li>
+      <li>Next: <a href="structlegion_1_1physics_1_1identifier.html" title="next chapter">Struct identifier</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/structlegion_1_1physics_1_1_half_edge_finder.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a079f29569de5779052f1fbf3dd283e0f:
+
+Function ImStrdup
+=================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStrdup(const char *)

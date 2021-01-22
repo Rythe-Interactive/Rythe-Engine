@@ -1,0 +1,77 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuiFileBrowser.cpp:
+
+File ImGuiFileBrowser.cpp
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/ImGuiFileBrowser.cpp``)
+----------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuiFileBrowser.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``cctype``
+
+- ``climits``
+
+- ``cmath``
+
+- ``cwchar``
+
+- ``dirent.h``
+
+- ``functional``
+
+- ``imgui/ImGuiFileBrowser.h``
+
+- ``imgui/imgui.h``
+
+- ``imgui/imgui_internal.h``
+
+- ``iostream``
+
+- ``sstream``
+
+- ``string.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_imgui`
+
+- :ref:`namespace_imgui__filebrowser`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define__im_gui_file_browser_8cpp_1adf4d73301961430d50d7edd96f92ce38`
+

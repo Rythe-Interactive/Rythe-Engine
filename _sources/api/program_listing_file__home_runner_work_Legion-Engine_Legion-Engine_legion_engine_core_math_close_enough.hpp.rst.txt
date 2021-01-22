@@ -1,0 +1,63 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_close_enough.hpp:
+
+Program Listing for File close_enough.hpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_close_enough.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/math/close_enough.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   
+   #pragma once
+   #include <cstdlib>
+   #include <numeric>
+   #include <cmath>
+   #include <type_traits>
+   
+   namespace legion::core::math {
+   
+       //get the highest epsilon for N amount of floats
+       template <class... FLTS>
+       constexpr auto get_highest_epsilon(FLTS... flts)
+       {
+           static_assert((std::is_floating_point<FLTS>::value && ...) == true,
+                         "get highest epsilon is only useful if all numbers are floating point");
+   
+           if constexpr ((std::is_same<typename std::remove_cv<FLTS>::type,float>::value || ...) == true)
+               return std::numeric_limits<float>::epsilon();
+           else if constexpr ((std::is_same<typename std::remove_cv<FLTS>::type,double>::value || ...) == true)
+               return std::numeric_limits<double>::epsilon();
+           else
+               return std::numeric_limits<long double>::epsilon();
+       }
+   
+       //get the least precise type from a bunch of floating points
+       template <class... FLTS>
+       struct lowest_precision
+       {
+           using type = decltype(get_highest_epsilon(std::declval<FLTS>()...));
+       };
+   
+       //check if two types are nearly equal
+       template <class NUM_TYPE1,class NUM_TYPE2>
+       bool close_enough(NUM_TYPE1 lhs, NUM_TYPE2 rhs)
+       {
+           if constexpr(std::numeric_limits<NUM_TYPE1>::is_integer &&
+                        std::numeric_limits<NUM_TYPE2>::is_integer)
+               return lhs == rhs;
+   
+           else if constexpr(std::numeric_limits<NUM_TYPE1>::is_integer)
+               return std::abs(NUM_TYPE2(lhs) - rhs) <= std::numeric_limits<NUM_TYPE2>::epsilon();
+   
+           else if constexpr(std::numeric_limits<NUM_TYPE2>::is_integer)
+               return std::abs(lhs - NUM_TYPE1(rhs)) <= std::numeric_limits<NUM_TYPE1>::epsilon();
+   
+           else {
+               using lowest_t = typename lowest_precision<NUM_TYPE1,NUM_TYPE2>::type;
+               return std::abs(lowest_t(lhs) - lowest_t(rhs)) <= get_highest_epsilon(lhs,rhs);
+           }
+       }
+   }

@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__widgets_8cpp_1aecd41aa4f75eaef7549c506d202181ce:
+
+Variable ImStb::STB_TEXTEDIT_NEWLINE
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: ImStb::STB_TEXTEDIT_NEWLINE

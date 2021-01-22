@@ -1,0 +1,16 @@
+.. _exhale_class_classlegion_1_1physics_1_1_primitive_mesh:
+
+Class PrimitiveMesh
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::physics::PrimitiveMesh
+   :members:
+   :protected-members:
+   :undoc-members:

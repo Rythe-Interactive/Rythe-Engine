@@ -1,0 +1,334 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp:
+
+File imgui.cpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui.cpp``)
+-----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``ctype.h``
+
+- ``imgui/imgui.h``
+
+- ``imgui/imgui_internal.h``
+
+- ``stdint.h``
+
+- ``stdio.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_ImGui`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_struct_im_gui_resize_border_def`
+
+- :ref:`exhale_struct_struct_im_gui_resize_grip_def`
+
+- :ref:`exhale_struct_struct_im_gui_style_var_info`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_imgui_8cpp_1ab61bcc85f74e05dd59cec573fc2a8e9f`
+
+- :ref:`exhale_function_imgui_8cpp_1aa1b7f477fbb6049d246a41ac0616534f`
+
+- :ref:`exhale_function_imgui_8cpp_1ad4fc3ffd38147a034d7a6e77f0dc845c`
+
+- :ref:`exhale_function_imgui_8cpp_1a2b0bc4ba122704e5025907c77f313b7f`
+
+- :ref:`exhale_function_imgui_8cpp_1a1dc50294d00308b0e87af6cace2fe04e`
+
+- :ref:`exhale_function_imgui_8cpp_1a8f0fbb21b9de00f1260fd007898526cb`
+
+- :ref:`exhale_function_imgui_8cpp_1a07abb80a54115cb5cf9da03351e29533`
+
+- :ref:`exhale_function_imgui_8cpp_1ab94af6ce69cc289c81fe0c6cd501ddce`
+
+- :ref:`exhale_function_imgui_8cpp_1a603ad6ffdfa404dd9057cdba7324f6b0`
+
+- :ref:`exhale_function_imgui_8cpp_1acbe6338daf87dc6ab636f02f1367eb41`
+
+- :ref:`exhale_function_imgui_8cpp_1a4192614e5b95b319b523efde1a92a9a4`
+
+- :ref:`exhale_function_imgui_8cpp_1a3e6de6291eb99530bff0e8b6dceee0be`
+
+- :ref:`exhale_function_imgui_8cpp_1a437d1c54633f2e3c53dd775034be37ae`
+
+- :ref:`exhale_function_imgui_8cpp_1a404bde03a9c524d44b822354c6f9ad4a`
+
+- :ref:`exhale_function_imgui_8cpp_1a3c92847eb67e7138e6f9af0ee66d3b33`
+
+- :ref:`exhale_function_imgui_8cpp_1afa4bbdba732ac0bbd32ad37bd5bcbf21`
+
+- :ref:`exhale_function_imgui_8cpp_1aafe114b768af674e1c848dbd8058010d`
+
+- :ref:`exhale_function_imgui_8cpp_1a7b0bceed6d3b18bf462a3f984377c2fa`
+
+- :ref:`exhale_function_imgui_8cpp_1abd416e6de6b9a37e5e4476187b315a46`
+
+- :ref:`exhale_function_imgui_8cpp_1ad8ade673d24bfc66295fecf4f961d14b`
+
+- :ref:`exhale_function_imgui_8cpp_1a5d19a45099ec790161a49f27c074c938`
+
+- :ref:`exhale_function_imgui_8cpp_1a86d5da10dea53bf436cb9d62cc2357b0`
+
+- :ref:`exhale_function_imgui_8cpp_1a03560b4f51e08dbb54bb4b092afa53c7`
+
+- :ref:`exhale_function_imgui_8cpp_1a4ca7883a7a86cd11793badb35921e1ee`
+
+- :ref:`exhale_function_imgui_8cpp_1a9bd0c67916b1c57ab0840893a2689a8e`
+
+- :ref:`exhale_function_imgui_8cpp_1a754fd72b76f1e219494d7214813af70b`
+
+- :ref:`exhale_function_imgui_8cpp_1aa36646e497b4672ce72dfe0bd1f24e1c`
+
+- :ref:`exhale_function_imgui_8cpp_1ae0232e0e9aed2d09fb5d768e3cfc396e`
+
+- :ref:`exhale_function_imgui_8cpp_1ac4a6194720e9d693bc9d34e97d9465aa`
+
+- :ref:`exhale_function_imgui_8cpp_1addef8c2a01c9daaa3546469f01682c98`
+
+- :ref:`exhale_function_imgui_8cpp_1a4fee1343a8e94a841135911ec7b69a1c`
+
+- :ref:`exhale_function_imgui_8cpp_1ae6a61623537c5a5de071fade1f0e8acd`
+
+- :ref:`exhale_function_imgui_8cpp_1ab3b6f7a9c730b3701e7e3bbc4158c43f`
+
+- :ref:`exhale_function_imgui_8cpp_1aab6460bf5ebaa4975159cf0cd4324820`
+
+- :ref:`exhale_function_imgui_8cpp_1a75ccaf7d676b1f567ba888ae42ac3809`
+
+- :ref:`exhale_function_imgui_8cpp_1a2e0022a073d369645a0daab17f823779`
+
+- :ref:`exhale_function_imgui_8cpp_1a38bff81ada6282254daeea397063282f`
+
+- :ref:`exhale_function_imgui_8cpp_1af501a9de56446597afe2ae5cde18e1ba`
+
+- :ref:`exhale_function_imgui_8cpp_1ab2ff55bf59d3ac2c58306bb9e353a99a`
+
+- :ref:`exhale_function_imgui_8cpp_1a861004d5a1476e954abd68d6f9deaa06`
+
+- :ref:`exhale_function_imgui_8cpp_1a77326c9062d3882c55b0ec14ed4ff36a`
+
+- :ref:`exhale_function_imgui_8cpp_1a3fedd0a136d52d72d2fd1e3139b4272c`
+
+- :ref:`exhale_function_imgui_8cpp_1a5ae3ff143fed82b60445ce593b18cd8c`
+
+- :ref:`exhale_function_imgui_8cpp_1a35d7b339b0580793dc5a2a936c7aee39`
+
+- :ref:`exhale_function_imgui_8cpp_1ae9ed208c0b64e4919e5de1cb83b2db2a`
+
+- :ref:`exhale_function_imgui_8cpp_1a100d3c85f9c5500643d741ba5124af1e`
+
+- :ref:`exhale_function_imgui_8cpp_1ad89544d8d636c019854ac52bbc59fdda`
+
+- :ref:`exhale_function_imgui_8cpp_1aab7d3ffa460af6604421e8c2d8bdef19`
+
+- :ref:`exhale_function_imgui_8cpp_1a2cd868535661cdb5671214662f3c9388`
+
+- :ref:`exhale_function_imgui_8cpp_1ab23db65d89e626a7948902e11c3bf82e`
+
+- :ref:`exhale_function_imgui_8cpp_1aeb0b9ea206e330f46278add8099506e1`
+
+- :ref:`exhale_function_imgui_8cpp_1ac0c1591101437b98dcf2eb90bd9f74e7`
+
+- :ref:`exhale_function_imgui_8cpp_1ad00213b916de0bc1519d6d20259391cf`
+
+- :ref:`exhale_function_imgui_8cpp_1a601290fe1dbe4c3717eb7e7add3ef11f`
+
+- :ref:`exhale_function_imgui_8cpp_1ab4802269d29ac99243804fef0acee6df`
+
+- :ref:`exhale_function_imgui_8cpp_1a6fead8b4ae7bacfe0cbd4f6e64a7a8f6`
+
+- :ref:`exhale_function_imgui_8cpp_1a3f07fc97615db2b0864ce2aa3d3ee169`
+
+- :ref:`exhale_function_imgui_8cpp_1aafb35fd3d7d0a7baac8f0590487a2594`
+
+- :ref:`exhale_function_imgui_8cpp_1accb45e7a4174fdc2e0d2b662c834759d`
+
+- :ref:`exhale_function_imgui_8cpp_1a45a39b3a2cfa3aa899eecb63bac79d1a`
+
+- :ref:`exhale_function_imgui_8cpp_1a8bdb90b84ec6e306d312fc8bfb7caf64`
+
+- :ref:`exhale_function_imgui_8cpp_1a046623e61ba639346138d3993d4e57bb`
+
+- :ref:`exhale_function_imgui_8cpp_1af51b875ef6c3f2e0f430873ee7605669`
+
+- :ref:`exhale_function_imgui_8cpp_1af62448836920fc75035d6da0373fc167`
+
+- :ref:`exhale_function_imgui_8cpp_1acd1b12694d0365b516bf7373f182eeee`
+
+- :ref:`exhale_function_imgui_8cpp_1a78740b7be00764a8c15b60295edc9f51`
+
+- :ref:`exhale_function_imgui_8cpp_1a9e742332d7944d1c0e938005fdb77834`
+
+- :ref:`exhale_function_imgui_8cpp_1a2b5b2ff91a5980e3143141a882216fe8`
+
+- :ref:`exhale_function_imgui_8cpp_1a079f29569de5779052f1fbf3dd283e0f`
+
+- :ref:`exhale_function_imgui_8cpp_1a9160bb1dc10b7b041ec647619078ee2b`
+
+- :ref:`exhale_function_imgui_8cpp_1a578b4ec1e004a6c9e07610720421a482`
+
+- :ref:`exhale_function_imgui_8cpp_1adff1a1bf60752cd3395dae990cc2e34f`
+
+- :ref:`exhale_function_imgui_8cpp_1a457a373caeddd76d58ff282da05273b4`
+
+- :ref:`exhale_function_imgui_8cpp_1a66b44f8391ea7cba388700e4991a4859`
+
+- :ref:`exhale_function_imgui_8cpp_1aebf0117d9d0fb0f2731a94d64173b41a`
+
+- :ref:`exhale_function_imgui_8cpp_1a603026e750e955098e8c1e99428ca8b2`
+
+- :ref:`exhale_function_imgui_8cpp_1ae2af66779a69e229e9744aa9c65b77e6`
+
+- :ref:`exhale_function_imgui_8cpp_1a7d087fd93eb10b876979598caae02c64`
+
+- :ref:`exhale_function_imgui_8cpp_1a036b9dd7f0942fd34e385cc115f36631`
+
+- :ref:`exhale_function_imgui_8cpp_1a5aa67d6814b96ce1e93b089424a78173`
+
+- :ref:`exhale_function_imgui_8cpp_1ac2561e31f0de066ef0bb5bfbb541c8ae`
+
+- :ref:`exhale_function_imgui_8cpp_1ae1d5a0a2772f1e426f4bedbf4148235d`
+
+- :ref:`exhale_function_imgui_8cpp_1a8b8382de51e73ae65e2ccf325024ab38`
+
+- :ref:`exhale_function_imgui_8cpp_1ab0c1cae5ca2331c54681553722d0f72c`
+
+- :ref:`exhale_function_imgui_8cpp_1aeb054c43ad8aae45de24efc759a0ff7a`
+
+- :ref:`exhale_function_imgui_8cpp_1a6c310426654de2fac6776408bdfd1f01`
+
+- :ref:`exhale_function_imgui_8cpp_1a42ba83efd4d19e4a61898dc8f8632ff1`
+
+- :ref:`exhale_function_imgui_8cpp_1af48be8bc196ebaf2129062bd67007387`
+
+- :ref:`exhale_function_imgui_8cpp_1aa53a4a0b963d2d35b8e58442247e1239`
+
+- :ref:`exhale_function_imgui_8cpp_1a0d4bfbfc89237377e7ac93b9a59fb121`
+
+- :ref:`exhale_function_imgui_8cpp_1ad581ae633599c54e64b25f483de70322`
+
+- :ref:`exhale_function_imgui_8cpp_1ac5bd9140ccc0a8bab21f9c3b8395146e`
+
+- :ref:`exhale_function_imgui_8cpp_1afccc7c348da26a7fad81cb47712c0efb`
+
+- :ref:`exhale_function_imgui_8cpp_1aa02564f7a526e53bfe3c4062acd6f0f2`
+
+- :ref:`exhale_function_imgui_8cpp_1ab172b759f70219fff17c9e1445ac6a15`
+
+- :ref:`exhale_function_imgui_8cpp_1abf3223633b98dbd579a7ed8ec842a3e8`
+
+- :ref:`exhale_function_imgui_8cpp_1a740720398cccbdf1fd1ae6ffef8f7971`
+
+- :ref:`exhale_function_imgui_8cpp_1a24ca0e08c6e33315fd201b557aec2598`
+
+- :ref:`exhale_function_imgui_8cpp_1a3d6a7cb771e0291bcdd2160c4c91b0ad`
+
+- :ref:`exhale_function_imgui_8cpp_1a5c592415f88804e2f907477767d3dda1`
+
+- :ref:`exhale_function_imgui_8cpp_1a2bbbbc51af7ad094958521233b053c48`
+
+- :ref:`exhale_function_imgui_8cpp_1a116c105198e1e942a2ade0e7d9855969`
+
+- :ref:`exhale_function_imgui_8cpp_1a9924fbe297e670b0a477e2844f1a53c8`
+
+- :ref:`exhale_function_imgui_8cpp_1a7a755b69bbb9d88876e70a29397c1a31`
+
+- :ref:`exhale_function_imgui_8cpp_1a4f345909ba493da1c34b89bb89ac4475`
+
+- :ref:`exhale_function_imgui_8cpp_1a942052dc32d118a3455ea9cc244c41ad`
+
+- :ref:`exhale_function_imgui_8cpp_1a8f46722f3d3b6a30f8f8256aaa34f274`
+
+- :ref:`exhale_function_imgui_8cpp_1a96167b8831eaf55d73bfd79411b01fd6`
+
+- :ref:`exhale_function_imgui_8cpp_1a24623093a2b9a7babcc73f502bfabad0`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_imgui_8cpp_1a34b37472609811e1f0f1a48a0149b4ed`
+
+- :ref:`exhale_define_imgui_8cpp_1aee6443348cf59f4769b271e36febc80c`
+
+- :ref:`exhale_define_imgui_8cpp_1aaedc8fff290d4893a84c62411b0ddeed`
+
+- :ref:`exhale_define_imgui_8cpp_1adf4d73301961430d50d7edd96f92ce38`
+
+- :ref:`exhale_define_imgui_8cpp_1ac31befbe0bea7809852786485c77b3f9`
+
+- :ref:`exhale_define_imgui_8cpp_1a19fd5658c088617859d4a89c657ec5cc`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_imgui_8cpp_1afbe703729b56cf3c55213055de7f5004`
+
+- :ref:`exhale_variable_imgui_8cpp_1a25a3ba7c77ba636cc6c9cfc0516fd643`
+
+- :ref:`exhale_variable_imgui_8cpp_1a52840ef95faf1287593024477d206cbc`
+
+- :ref:`exhale_variable_imgui_8cpp_1a42e3a0e8feed1a6b8fb9ffe79af9d706`
+
+- :ref:`exhale_variable_imgui_8cpp_1a26aa67b834c0453a50c5e3970a8eba07`
+
+- :ref:`exhale_variable_imgui_8cpp_1a5786dd02b435b7de611cb7cbff7f097c`
+
+- :ref:`exhale_variable_imgui_8cpp_1a1ab13424fcaf0fcd8952d6f47beb8b9d`
+
+- :ref:`exhale_variable_imgui_8cpp_1ac766f5145198e91333f86ef48e8fa8b6`
+
+- :ref:`exhale_variable_imgui_8cpp_1a80f601256308bd185d2d25e71f1e320a`
+
+- :ref:`exhale_variable_imgui_8cpp_1a4172a86a71ad90be6fb63c63f362222d`
+
+- :ref:`exhale_variable_imgui_8cpp_1a8a1884294fd35bf48679533083c54f64`
+
+- :ref:`exhale_variable_imgui_8cpp_1ab6bee9ea01e0feab33c8263be3f58bca`
+
+- :ref:`exhale_variable_imgui_8cpp_1a32e2d4a858825732297e5fcedfbd1856`
+

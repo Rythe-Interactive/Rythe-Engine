@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1abe03f8effa1f2ad2f93567ce6383f1a5:
+
+Function imgui::nodes::LoadCurrentEditorStateFromIniFile
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::LoadCurrentEditorStateFromIniFile(const char *const)

@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1physics_1_1_splitter_intersection_info:
+
+Struct SplitterIntersectionInfo
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_debug_helpers.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::physics::SplitterIntersectionInfo
+   :members:
+   :protected-members:
+   :undoc-members:

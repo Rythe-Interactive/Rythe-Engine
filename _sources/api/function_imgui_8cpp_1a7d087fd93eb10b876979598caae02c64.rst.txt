@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a7d087fd93eb10b876979598caae02c64:
+
+Function ImStrTrimBlanks
+========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStrTrimBlanks(char *)

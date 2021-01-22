@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1a075502c0add9e1ec37d31593bd311af8:
+
+Function ImParseFormatFindEnd
+=============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImParseFormatFindEnd(const char *)

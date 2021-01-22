@@ -55,6 +55,11 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/async/async.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/common/exception.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/events/events.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/async/job_pool.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/async/async_runnable.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/async/thread_util.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;Optick/optick.h&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp"></span>
@@ -69,43 +74,33 @@
 
     <span class="k">class</span> <span class="nc">Scheduler</span>
     <span class="p">{</span>
-    <span class="k">public</span><span class="o">:</span>
-        <span class="k">struct</span> <span class="n">runnable</span>
-        <span class="p">{</span>
-            <span class="n">runnable</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-            <span class="n">runnable</span><span class="p">(</span><span class="k">const</span> <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&amp;</span> <span class="n">func</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">param</span><span class="p">)</span> <span class="o">:</span> <span class="n">func</span><span class="p">(</span><span class="n">func</span><span class="p">),</span> <span class="n">param</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="p">{}</span>
-
-            <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">func</span><span class="p">;</span>
-            <span class="kt">void</span><span class="o">*</span> <span class="n">param</span><span class="p">;</span>
-
-            <span class="kt">void</span> <span class="nf">operator</span><span class="p">()(</span><span class="kt">void</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">func</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
-                    <span class="n">func</span><span class="p">(</span><span class="n">param</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">};</span>
-
     <span class="k">private</span><span class="o">:</span>
+        <span class="k">friend</span> <span class="k">struct</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">async</span><span class="o">::</span><span class="n">job_pool_base</span><span class="p">;</span>
         <span class="k">struct</span> <span class="n">thread_error</span>
         <span class="p">{</span>
             <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">message</span><span class="p">;</span>
             <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">threadId</span><span class="p">;</span>
         <span class="p">};</span>
 
+<span class="cp">#if USE_OPTICK</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">spinlock</span> <span class="n">m_threadScopesLock</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Optick</span><span class="o">::</span><span class="n">ThreadScope</span><span class="o">&gt;&gt;</span> <span class="n">m_threadScopes</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
         <span class="n">ProcessChain</span> <span class="n">m_localChain</span><span class="p">;</span>
-        <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_processChainsLock</span><span class="p">;</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_processChainsLock</span><span class="p">;</span>
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">ProcessChain</span><span class="o">&gt;</span> <span class="n">m_processChains</span><span class="p">;</span>
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&gt;</span> <span class="n">m_chainThreads</span><span class="p">;</span>
-        <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_errorsLock</span><span class="p">;</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_errorsLock</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">thread_error</span><span class="o">&gt;</span> <span class="n">m_errors</span><span class="p">;</span>
 
-        <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_exitsLock</span><span class="p">;</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_exitsLock</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&gt;</span> <span class="n">m_exits</span><span class="p">;</span>
 
         <span class="n">std</span><span class="o">::</span><span class="n">atomic_bool</span> <span class="n">m_requestSync</span><span class="p">;</span>
         <span class="n">async</span><span class="o">::</span><span class="n">ring_sync_lock</span> <span class="n">m_syncLock</span><span class="p">;</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">m_timeScale</span> <span class="o">=</span> <span class="mf">1.f</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">m_timeScale</span> <span class="p">{</span> <span class="mf">1.f</span> <span class="p">};</span>
 
         <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">m_eventBus</span><span class="p">;</span>
 
@@ -113,21 +108,24 @@
         <span class="kt">bool</span> <span class="n">m_threadsShouldStart</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
         <span class="kt">bool</span> <span class="n">m_lowPower</span><span class="p">;</span>
 
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_threadsLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_threadsLock</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;&gt;</span> <span class="n">m_threads</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&gt;</span> <span class="n">m_unreservedThreads</span><span class="p">;</span>
         <span class="k">static</span> <span class="k">const</span> <span class="n">uint</span> <span class="n">m_maxThreadCount</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_availabilityLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_availabilityLock</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">uint</span> <span class="n">m_availableThreads</span><span class="p">;</span>
 
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_jobQueueLock</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">runnable</span><span class="o">&gt;</span> <span class="n">m_jobs</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&gt;</span> <span class="n">m_commandLocks</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">Scheduler</span><span class="o">::</span><span class="n">runnable</span><span class="o">&gt;&gt;</span> <span class="n">m_commands</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_jobQueueLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">job_pool_base</span><span class="o">&gt;&gt;</span> <span class="n">m_jobs</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&gt;</span> <span class="n">m_commandLocks</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">runnable_base</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_commands</span><span class="p">;</span>
 
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">threadMain</span><span class="p">(</span><span class="kt">bool</span><span class="o">*</span> <span class="n">exit</span><span class="p">,</span> <span class="kt">bool</span><span class="o">*</span> <span class="n">start</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">lowPower</span><span class="p">);</span>
 
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">tryCompleteJobPool</span><span class="p">();</span>
+
     <span class="k">public</span><span class="o">:</span>
+
         <span class="n">Scheduler</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">eventBus</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">lowPower</span><span class="p">,</span> <span class="n">uint</span> <span class="n">minThreads</span><span class="p">);</span>
 
         <span class="o">~</span><span class="n">Scheduler</span><span class="p">();</span>
@@ -174,11 +172,33 @@
             <span class="k">return</span> <span class="n">m_chainThreads</span><span class="p">[</span><span class="n">chainId</span><span class="p">];</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="n">sendCommand</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span><span class="p">,</span> <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">command</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">parameter</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">);</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Func</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">sendCommand</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">Func</span><span class="o">&amp;</span> <span class="n">func</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;legion::core::scheduling::Scheduler::sendCommand&lt;T&gt;&quot;</span><span class="p">);</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">async_runnable</span><span class="o">&lt;</span><span class="n">Func</span><span class="o">&gt;*</span> <span class="n">command</span> <span class="o">=</span> <span class="k">new</span> <span class="n">async</span><span class="o">::</span><span class="n">async_runnable</span><span class="o">&lt;</span><span class="n">Func</span><span class="o">&gt;</span><span class="p">(</span><span class="n">func</span><span class="p">);</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_commandLocks</span><span class="p">[</span><span class="n">id</span><span class="p">]);</span>
+            <span class="n">m_commands</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">runnable_base</span><span class="o">&gt;</span><span class="p">(</span><span class="n">command</span><span class="p">));</span>
+            <span class="k">return</span> <span class="n">command</span><span class="o">-&gt;</span><span class="n">getOperation</span><span class="p">([</span><span class="o">&amp;</span><span class="p">](</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span><span class="p">,</span> <span class="k">auto</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">sendCommand</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">func</span><span class="p">);</span> <span class="p">});</span>
+        <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">queueJob</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">job</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">parameter</span><span class="p">);</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Func</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">queueJobs</span><span class="p">(</span><span class="n">size_type</span> <span class="n">count</span><span class="p">,</span> <span class="k">const</span> <span class="n">Func</span><span class="o">&amp;</span> <span class="n">func</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">repeater</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="n">size_type</span> <span class="n">count</span><span class="p">,</span> <span class="k">auto</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">queueJobs</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">func</span><span class="p">);</span> <span class="p">};</span>
+            <span class="k">auto</span> <span class="n">onComplete</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]()</span> <span class="p">{</span><span class="n">tryCompleteJobPool</span><span class="p">();</span> <span class="p">};</span>
 
-        <span class="kt">void</span> <span class="nf">destroyThread</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">count</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">async</span><span class="o">::</span><span class="n">job_operation</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">repeater</span><span class="p">),</span> <span class="k">decltype</span><span class="p">(</span><span class="n">onComplete</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">async_progress</span><span class="o">&gt;</span><span class="p">(</span><span class="k">nullptr</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">job_pool_base</span><span class="o">&gt;</span><span class="p">(</span><span class="k">nullptr</span><span class="p">),</span> <span class="n">repeater</span><span class="p">,</span> <span class="n">onComplete</span><span class="p">);</span>
+
+            <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;legion::core::scheduling::Scheduler::queueJobs&lt;T&gt;&quot;</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">job_pool_base</span><span class="o">&gt;</span> <span class="n">jobPool</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">job_pool_base</span><span class="o">&gt;</span><span class="p">(</span><span class="k">new</span> <span class="n">async</span><span class="o">::</span><span class="n">job_pool</span><span class="o">&lt;</span><span class="n">Func</span><span class="o">&gt;</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">func</span><span class="p">));</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_jobQueueLock</span><span class="p">);</span>
+            <span class="n">m_jobs</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">jobPool</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">async</span><span class="o">::</span><span class="n">job_operation</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">repeater</span><span class="p">),</span> <span class="k">decltype</span><span class="p">(</span><span class="n">onComplete</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="n">jobPool</span><span class="o">-&gt;</span><span class="n">get_progress</span><span class="p">(),</span> <span class="n">jobPool</span><span class="p">,</span> <span class="n">repeater</span><span class="p">,</span> <span class="n">onComplete</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">destroyThread</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span><span class="p">);</span>
 
         <span class="kt">void</span> <span class="nf">reportExit</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&amp;</span> <span class="n">id</span><span class="p">);</span>
 
@@ -210,7 +230,7 @@
             <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="o">&lt;</span><span class="n">charc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_processChainsLock</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_processChains</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
-                <span class="k">return</span> <span class="o">&amp;</span><span class="n">m_processChains</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+                <span class="k">return</span> <span class="o">&amp;</span><span class="n">m_processChains</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
             <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -235,12 +255,23 @@
             <span class="n">m_chainThreads</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">chainThreadId</span><span class="p">;</span>
 
             <span class="n">log</span><span class="o">::</span><span class="n">impl</span><span class="o">::</span><span class="n">thread_names</span><span class="p">[</span><span class="n">chainThreadId</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-            <span class="n">sendCommand</span><span class="p">(</span><span class="n">chainThreadId</span><span class="p">,</span> <span class="p">[](</span><span class="kt">void</span><span class="o">*</span> <span class="n">param</span><span class="p">)</span>
+<span class="cp">#if USE_OPTICK</span>
+            <span class="n">sendCommand</span><span class="p">(</span><span class="n">chainThreadId</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_threadScopesLock</span> <span class="o">=</span> <span class="n">m_threadScopesLock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m_threadScopes</span> <span class="o">=</span> <span class="n">m_threadScopes</span><span class="p">]()</span>
                 <span class="p">{</span>
-                    <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">param</span><span class="p">;</span>
                     <span class="n">log</span><span class="o">::</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Thread {} assigned.&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">());</span>
-                <span class="p">});</span>
+                    <span class="n">async</span><span class="o">::</span><span class="n">set_thread_name</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
 
+                    <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_threadScopesLock</span><span class="p">);</span>
+                    <span class="n">m_threadScopes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Optick</span><span class="o">::</span><span class="n">ThreadScope</span><span class="o">&gt;</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">log</span><span class="o">::</span><span class="n">impl</span><span class="o">::</span><span class="n">thread_names</span><span class="p">[</span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()].</span><span class="n">c_str</span><span class="p">()));</span>
+                    <span class="n">OPTICK_UNUSED</span><span class="p">(</span><span class="o">*</span><span class="n">m_threadScopes</span><span class="p">[</span><span class="n">m_threadScopes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+                <span class="p">});</span>
+<span class="cp">#else</span>
+            <span class="n">sendCommand</span><span class="p">(</span><span class="n">chainThreadId</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">]()</span>
+                <span class="p">{</span>
+                    <span class="n">log</span><span class="o">::</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Thread {} assigned.&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">());</span>
+                    <span class="n">async</span><span class="o">::</span><span class="n">set_thread_name</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+                <span class="p">});</span>
+<span class="cp">#endif</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_processChainsLock</span><span class="p">);</span>
             <span class="k">return</span> <span class="o">&amp;</span><span class="n">m_processChains</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="k">this</span><span class="p">).</span><span class="n">first</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
         <span class="p">}</span>

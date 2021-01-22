@@ -18,6 +18,9 @@ Program Listing for File hashed_sparse_set.hpp
    #include <stdexcept>
    #include <core/platform/platform.hpp>
    #include <core/types/primitives.hpp>
+   #include <core/containers/iterator_tricks.hpp>
+   
+   #include <Optick/optick.h>
    
    namespace legion::core
    {
@@ -39,6 +42,9 @@ Program Listing for File hashed_sparse_set.hpp
            using iterator = typename dense_container::iterator;
            using const_iterator = typename dense_container::const_iterator;
    
+           using reverse_iterator = typename dense_container::reverse_iterator;
+           using const_reverse_iterator = typename dense_container::const_reverse_iterator;
+   
        private:
            dense_container m_dense;
            sparse_container m_sparse;
@@ -58,6 +64,17 @@ Program Listing for File hashed_sparse_set.hpp
            L_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
            L_NODISCARD const_iterator cend() const { return m_dense.cbegin() + m_size; }
    
+           L_NODISCARD reverse_iterator rbegin() { return m_dense.rbegin() - (m_dense.size() - m_size); }
+           L_NODISCARD const_reverse_iterator rbegin() const { return m_dense.crbegin() - (m_dense.size() - m_size); }
+           L_NODISCARD const_reverse_iterator crbegin() const { return m_dense.crbegin() - (m_dense.size() - m_size); }
+   
+           L_NODISCARD reverse_iterator rend() { return m_dense.rend(); }
+           L_NODISCARD const_reverse_iterator rend() const { return m_dense.crend(); }
+           L_NODISCARD const_reverse_iterator crend() const { return m_dense.crend(); }
+   
+           L_NODISCARD pair_range<reverse_iterator> reverse_range() { return pair_range<reverse_iterator>(rbegin(), rend()); }
+           L_NODISCARD pair_range<const_reverse_iterator> reverse_range() const { return pair_range<const_reverse_iterator>(crbegin(), crend()); }
+   
            L_NODISCARD size_type size() const noexcept { return m_size; }
    
            L_NODISCARD size_type capacity() const noexcept { return m_capacity; }
@@ -70,6 +87,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            void reserve(size_type size)
            {
+               OPTICK_EVENT();
                if (size > m_capacity)
                {
                    m_dense.resize(size);
@@ -81,39 +99,42 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD size_type count(value_const_reference val) const
            {
+               OPTICK_EVENT();
                return contains(val);
            }
    
            L_NODISCARD size_type count(value_type&& val) const
            {
+               OPTICK_EVENT();
                return contains(val);
            }
    #pragma endregion
    
    #pragma region contains
    
-           L_NODISCARD bool contains(value_const_reference val)
-           {
-               return m_sparse[val] >= 0 && m_sparse[val] < m_size && m_dense[m_sparse[val]] == val;
-           }
-   
-           L_NODISCARD bool contains(value_type&& val)
-           {
-               return m_sparse[val] >= 0 && m_sparse[val] < m_size && m_dense[m_sparse[val]] == val;
-           }
-   
            L_NODISCARD bool contains(value_const_reference val) const
            {
-               return m_sparse.count(val) && m_sparse.at(val) >= 0 && m_sparse.at(val) < m_size && m_dense[m_sparse.at(val)] == val;
+               OPTICK_EVENT();
+               if (!m_sparse.count(val))
+                   return false;
+   
+               const size_type& sparseVal = m_sparse.at(val);
+               return sparseVal >= 0 && sparseVal < m_size && sparseVal < m_dense.size() && m_dense.at(sparseVal) == val;
            }
    
            L_NODISCARD bool contains(value_type&& val) const
            {
-               return m_sparse.count(val) && m_sparse.at(val) >= 0 && m_sparse.at(val) < m_size && m_dense[m_sparse.at(val)] == val;
+               OPTICK_EVENT();
+               if (!m_sparse.count(val))
+                   return false;
+   
+               const size_type& sparseVal = m_sparse.at(val);
+               return sparseVal >= 0 && sparseVal < m_size&& sparseVal < m_dense.size() && m_dense.at(sparseVal) == val;
            }
    
            L_NODISCARD bool contains(const hashed_sparse_set<value_type>& other) const
            {
+               OPTICK_EVENT();
                if (other.m_size == 0)
                    return true;
    
@@ -130,6 +151,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD bool equals(self_const_reference other) const
            {
+               OPTICK_EVENT();
                if (m_size == other.m_size)
                {
                    for (int i = 0; i < m_size; i++)
@@ -144,6 +166,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD bool operator==(self_const_reference other) const
            {
+               OPTICK_EVENT();
                if (m_size == other.m_size)
                {
                    for (int i = 0; i < m_size; i++)
@@ -160,6 +183,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD iterator find(value_const_reference val)
            {
+               OPTICK_EVENT();
                if (contains(val))
                    return begin() + m_sparse[val];
                return end();
@@ -167,6 +191,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD const_iterator find(value_const_reference val) const
            {
+               OPTICK_EVENT();
                if (contains(val))
                    return begin() + m_sparse[val];
                return end();
@@ -177,6 +202,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            std::pair<iterator, bool> insert(value_const_reference val)
            {
+               OPTICK_EVENT();
                if (!contains(val))
                {
                    if (m_size >= m_capacity)
@@ -194,6 +220,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            std::pair<iterator, bool> insert(value_type&& val)
            {
+               OPTICK_EVENT();
                if (!contains(val))
                {
                    if (m_size >= m_capacity)
@@ -215,6 +242,7 @@ Program Listing for File hashed_sparse_set.hpp
            template<typename... Arguments>
            std::pair<iterator, bool> emplace(Arguments&&... arguments)
            {
+               OPTICK_EVENT();
                return insert(std::forward<value_type>(value_type(arguments...)));
            }
    #pragma endregion
@@ -223,6 +251,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD value_reference operator[](size_type&& index)
            {
+               OPTICK_EVENT();
                if (index < 0 || index > m_size)
                    throw std::out_of_range("hashed_sparse_set subscript out of range");
                return m_dense[index];
@@ -230,6 +259,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD value_reference operator[](const size_type& index)
            {
+               OPTICK_EVENT();
                if (index < 0 || index > m_size)
                    throw std::out_of_range("hashed_sparse_set subscript out of range");
                return m_dense[index];
@@ -237,6 +267,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD value_const_reference operator[](size_type&& index) const
            {
+               OPTICK_EVENT();
                if (index < 0 || index > m_size)
                    throw std::out_of_range("hashed_sparse_set subscript out of range");
                return m_dense[index];
@@ -244,6 +275,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD value_const_reference operator[](const size_type& index) const
            {
+               OPTICK_EVENT();
                if (index < 0 || index > m_size)
                    throw std::out_of_range("hashed_sparse_set subscript out of range");
                return m_dense[index];
@@ -254,6 +286,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD value_reference at(size_type&& index)
            {
+               OPTICK_EVENT();
                if (index < 0 || index > m_size)
                    throw std::out_of_range("hashed_sparse_set subscript out of range");
                return m_dense[index];
@@ -261,6 +294,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD value_reference at(const size_type& index)
            {
+               OPTICK_EVENT();
                if (index < 0 || index > m_size)
                    throw std::out_of_range("hashed_sparse_set subscript out of range");
                return m_dense[index];
@@ -268,6 +302,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD value_const_reference at(size_type&& index) const
            {
+               OPTICK_EVENT();
                if (index < 0 || index > m_size)
                    throw std::out_of_range("hashed_sparse_set subscript out of range");
                return m_dense[index];
@@ -275,6 +310,7 @@ Program Listing for File hashed_sparse_set.hpp
    
            L_NODISCARD value_const_reference at(const size_type& index) const
            {
+               OPTICK_EVENT();
                if (index < 0 || index > m_size)
                    throw std::out_of_range("hashed_sparse_set subscript out of range");
                return m_dense[index];
@@ -283,10 +319,15 @@ Program Listing for File hashed_sparse_set.hpp
    
            size_type erase(value_const_reference val)
            {
+               OPTICK_EVENT();
                if (contains(val))
                {
-                   m_dense[m_sparse[val]] = std::move(m_dense[m_size - 1]);
-                   m_sparse[m_dense[m_size - 1]] = std::move(m_sparse[val]);
+                   if (m_size - 1 != m_sparse[val])
+                   {
+                       m_dense[m_sparse[val]] = std::move(m_dense[m_size - 1]);
+                       m_sparse[m_dense[m_size - 1]] = std::move(m_sparse[val]);
+                   }
+                   
                    --m_size;
                    return true;
                }

@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1a40fba18bb53f7d79a6177be837a29ca5:
+
+Variable left_mouse_dragging
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: left_mouse_dragging

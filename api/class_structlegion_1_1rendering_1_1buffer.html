@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class buffer &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class camera" href="class_structlegion_1_1rendering_1_1camera.html" />
+    <link rel="prev" title="Class Bloom" href="classlegion_1_1rendering_1_1_bloom.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1rendering_1_1camera.html" title="Class camera"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1rendering_1_1_bloom.html" title="Class Bloom"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class buffer</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-buffer">
+<span id="exhale-class-structlegion-1-1rendering-1-1buffer"></span><h1>Class buffer<a class="headerlink" href="#class-buffer" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_buffer.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-buffer-hpp"><span class="std std-ref">File buffer.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion9rendering6bufferE">
+<span id="_CPPv3N6legion9rendering6bufferE"></span><span id="_CPPv2N6legion9rendering6bufferE"></span><span id="legion::rendering::buffer"></span><span class="target" id="structlegion_1_1rendering_1_1buffer"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">buffer</code><a class="headerlink" href="#_CPPv4N6legion9rendering6bufferE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Low level rendering buffer that can be used for all kinds of purposes. Depending on the target it could be a vertex buffer or shader storage buffer or something else. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6buffer6bufferEv">
+<span id="_CPPv3N6legion9rendering6buffer6bufferEv"></span><span id="_CPPv2N6legion9rendering6buffer6bufferEv"></span><span id="legion::rendering::buffer::buffer"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1a4ccd786ec9c379e5a06f4043ec0fa166"></span><code class="sig-name descname">buffer</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion9rendering6buffer6bufferEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Faux constructor. To prevent unnecessary GPU allocations the default constructor doesn’t actually create a buffer. This means that default initialized buffers are invalid temporary objects until they get properly initialized. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering6buffer6bufferE6GLenumRKNSt6vectorI1TEE6GLenum">
+<span id="_CPPv3I0EN6legion9rendering6buffer6bufferE6GLenumRKNSt6vectorI1TEE6GLenum"></span><span id="_CPPv2I0EN6legion9rendering6buffer6bufferE6GLenumRKNSt6vectorI1TEE6GLenum"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1buffer_1a96d47e73972a4d2a4e84a6a86fa8b162"></span><code class="sig-name descname">buffer</code><span class="sig-paren">(</span>GLenum <em>target</em>, <em class="property">const</em> std::vector&lt;<a class="reference internal" href="#_CPPv4I0EN6legion9rendering6buffer6bufferE6GLenumRKNSt6vectorI1TEE6GLenum" title="legion::rendering::buffer::buffer::T">T</a>&gt; &amp;<em>data</em>, GLenum <em>usage</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering6buffer6bufferE6GLenumRKNSt6vectorI1TEE6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Main allocating constructor. This constructor actually creates the GPU side buffer and binds it to this instance. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Read more at <a class="reference external" href="http://docs.gl/gl4/glBufferData">docs.gl.</a> </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code>: The buffer type to create. eg: GL_ARRAY_BUFFER, GL_SHADER_STORAGE_BUFFER </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: Vector of data to store in the buffers VRAM allocation. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">usage</span></code>: Intended memory usage. eg: GL_STATIC_DRAW (Data doesn’t change and ised for drawing many times), GL_DYNAMIC_READ (Changes all the time and is used for reading back to CPU) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6buffer6bufferE6GLenum9size_typePv6GLenum">
+<span id="_CPPv3N6legion9rendering6buffer6bufferE6GLenum9size_typePv6GLenum"></span><span id="_CPPv2N6legion9rendering6buffer6bufferE6GLenum9size_typePv6GLenum"></span><span id="legion::rendering::buffer::buffer__GLenum.size_type.voidP.GLenum"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1a390a4c86ed1bdfcdbbed16a9f0683601"></span><code class="sig-name descname">buffer</code><span class="sig-paren">(</span>GLenum <em>target</em>, size_type <em>size</em>, void *<em>data</em>, GLenum <em>usage</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6buffer6bufferE6GLenum9size_typePv6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Main allocating constructor. This constructor actually creates the GPU side buffer and binds it to this instance. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Read more at <a class="reference external" href="http://docs.gl/gl4/glBufferData">docs.gl.</a> </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>If the buffer is allocated with a nullptr as the data pointer then the memory in VRAM may be garbage when read. Do not assume null writes to happen. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code>: The buffer type to create. eg: GL_ARRAY_BUFFER, GL_SHADER_STORAGE_BUFFER </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: Size in bytes to allocate on VRAM. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: Data to send to VRAM. This may be a nullptr if you only want to allocate VRAM but keep the memory empty. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">usage</span></code>: Intended memory usage. eg: GL_STATIC_DRAW (Data doesn’t change and ised for drawing many times), GL_DYNAMIC_READ (Changes all the time and is used for reading back to CPU) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6buffer6bufferE6GLenum6GLenum">
+<span id="_CPPv3N6legion9rendering6buffer6bufferE6GLenum6GLenum"></span><span id="_CPPv2N6legion9rendering6buffer6bufferE6GLenum6GLenum"></span><span id="legion::rendering::buffer::buffer__GLenum.GLenum"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1ac206fc5eea639ff74efcd7133caf0d74"></span><code class="sig-name descname">buffer</code><span class="sig-paren">(</span>GLenum <em>target</em>, GLenum <em>usage</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6buffer6bufferE6GLenum6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Main non allocating constructor. This constructor actually creates the GPU side buffer and binds it to this instance. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>This constructor doesn’t actually allocate any VRAM to this buffer yet and requires a bufferData call in order to allocate memory for it. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code>: The buffer type to create. eg: GL_ARRAY_BUFFER, GL_SHADER_STORAGE_BUFFER </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">usage</span></code>: Intended memory usage. eg: GL_STATIC_DRAW (Data doesn’t change and ised for drawing many times), GL_DYNAMIC_READ (Changes all the time and is used for reading back to CPU) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer2idEv">
+<span id="_CPPv3NK6legion9rendering6buffer2idEv"></span><span id="_CPPv2NK6legion9rendering6buffer2idEv"></span><span id="legion::rendering::buffer::idC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1a665eaa27648129501e04edfe766dc96f"></span>app::gl_id <code class="sig-name descname">id</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer2idEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the rendering API id of the buffer. Useful for low level native rendering. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer6targetEv">
+<span id="_CPPv3NK6legion9rendering6buffer6targetEv"></span><span id="_CPPv2NK6legion9rendering6buffer6targetEv"></span><span id="legion::rendering::buffer::targetC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1ab07bdd549a269bc21e5078b0100e074f"></span>GLenum <code class="sig-name descname">target</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer6targetEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the rendering API type/target of the buffer. Useful for low level native rendering. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer5usageEv">
+<span id="_CPPv3NK6legion9rendering6buffer5usageEv"></span><span id="_CPPv2NK6legion9rendering6buffer5usageEv"></span><span id="legion::rendering::buffer::usageC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1a71e16a7411ba4510e011c4db2fdea69a"></span>GLenum <code class="sig-name descname">usage</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer5usageEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the rendering API intended memory usage of the buffer. Useful for low level native rendering. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer4sizeEv">
+<span id="_CPPv3NK6legion9rendering6buffer4sizeEv"></span><span id="_CPPv2NK6legion9rendering6buffer4sizeEv"></span><span id="legion::rendering::buffer::sizeC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1a37553f68df788c30f8b1f29ee38c8d6f"></span>size_type <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Returns the current size of the buffer in bytes. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer14bindBufferBaseE4uint">
+<span id="_CPPv3NK6legion9rendering6buffer14bindBufferBaseE4uint"></span><span id="_CPPv2NK6legion9rendering6buffer14bindBufferBaseE4uint"></span><span id="legion::rendering::buffer::bindBufferBase__uintC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1a555a7ee4780e33ab806489960e8b2520"></span>void <code class="sig-name descname">bindBufferBase</code><span class="sig-paren">(</span>uint <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer14bindBufferBaseE4uint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Bind buffer to a set indexed buffer binding location in shaders. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Read more at <a class="reference external" href="http://docs.gl/gl4/glBindBufferBase">docs.gl.</a> </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Target must be GL_ATOMIC_COUNTER_BUFFER, GL_TRANSFORM_FEEDBACK_BUFFER, GL_UNIFORM_BUFFER or GL_SHADER_STORAGE_BUFFER. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: Indexed buffer binding location to bind to. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer6resizeE9size_type">
+<span id="_CPPv3NK6legion9rendering6buffer6resizeE9size_type"></span><span id="_CPPv2NK6legion9rendering6buffer6resizeE9size_type"></span><span id="legion::rendering::buffer::resize__size_typeC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1ad022a56e04a9bb0fe8d16d2ccdfb6145"></span>void <code class="sig-name descname">resize</code><span class="sig-paren">(</span>size_type <em>newSize</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer6resizeE9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Resize the buffer to a new size. This reallocates VRAM and thus invalidates all data in the buffer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0ENK6legion9rendering6buffer10bufferDataEvRKNSt6vectorI1TEE">
+<span id="_CPPv3I0ENK6legion9rendering6buffer10bufferDataERKNSt6vectorI1TEE"></span><span id="_CPPv2I0ENK6legion9rendering6buffer10bufferDataERKNSt6vectorI1TEE"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1buffer_1a2bce57bdfce1dad93b0213741518fd01"></span>void <code class="sig-name descname">bufferData</code><span class="sig-paren">(</span><em class="property">const</em> std::vector&lt;<a class="reference internal" href="#_CPPv4I0ENK6legion9rendering6buffer10bufferDataEvRKNSt6vectorI1TEE" title="legion::rendering::buffer::bufferData::T">T</a>&gt; &amp;<em>data</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK6legion9rendering6buffer10bufferDataEvRKNSt6vectorI1TEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Send new data to the VRAM of the buffer. This may reallocate the buffer if the size of the new data is larger than the previously allocated VRAM. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: Vector with the data to send. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer10bufferDataE9size_typePv">
+<span id="_CPPv3NK6legion9rendering6buffer10bufferDataE9size_typePv"></span><span id="_CPPv2NK6legion9rendering6buffer10bufferDataE9size_typePv"></span><span id="legion::rendering::buffer::bufferData__size_type.voidPC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1a478ea7bf99569cc1ea29417e5e0530bd"></span>void <code class="sig-name descname">bufferData</code><span class="sig-paren">(</span>size_type <em>size</em>, void *<em>data</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer10bufferDataE9size_typePv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Send new data to the VRAM of the buffer. This may reallocate the buffer if the size of the new data is larger than the previously allocated VRAM. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: Size the data to send. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: Pointer to the data to send. (Should not be a nullptr, if you only want to allocate/reallocate then use the resize function.) </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer10bufferDataE9size_type9size_typePv">
+<span id="_CPPv3NK6legion9rendering6buffer10bufferDataE9size_type9size_typePv"></span><span id="_CPPv2NK6legion9rendering6buffer10bufferDataE9size_type9size_typePv"></span><span id="legion::rendering::buffer::bufferData__size_type.size_type.voidPC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1a31cc9413bfec2a7e5f85114f9d8fd77f"></span>void <code class="sig-name descname">bufferData</code><span class="sig-paren">(</span>size_type <em>offset</em>, size_type <em>size</em>, void *<em>data</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer10bufferDataE9size_type9size_typePv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Send new data to the VRAM of the buffer with a certain offset. This function does not reallocate data and thus the sum of offset + size cannot be more that the size of the buffer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">offset</span></code>: Offset since the start of the buffer in bytes. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">size</span></code>: Size of the new data in bytes. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: Pointer to the new data to write. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer4bindEv">
+<span id="_CPPv3NK6legion9rendering6buffer4bindEv"></span><span id="_CPPv2NK6legion9rendering6buffer4bindEv"></span><span id="legion::rendering::buffer::bindC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1a58ab37afd6980988d405576d6f098655"></span>void <code class="sig-name descname">bind</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer4bindEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Bind the buffer to the current context. Useful for low level native rendering. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6buffer7releaseEv">
+<span id="_CPPv3NK6legion9rendering6buffer7releaseEv"></span><span id="_CPPv2NK6legion9rendering6buffer7releaseEv"></span><span id="legion::rendering::buffer::releaseC"></span><span class="target" id="structlegion_1_1rendering_1_1buffer_1aa7ed4abfb43e9f8027ca965609274aad"></span>void <code class="sig-name descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6buffer7releaseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Release the buffer from the current context. Useful for low level native rendering. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class buffer</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1rendering_1_1_bloom.html" title="previous chapter">Class Bloom</a></li>
+      <li>Next: <a href="class_structlegion_1_1rendering_1_1camera.html" title="next chapter">Class camera</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structlegion_1_1rendering_1_1buffer.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -6,6 +6,17 @@ Class Kernel
 - Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp`
 
 
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1_kernel_1_1d2`
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1_kernel_1_1d3`
+
+
 Class Documentation
 -------------------
 

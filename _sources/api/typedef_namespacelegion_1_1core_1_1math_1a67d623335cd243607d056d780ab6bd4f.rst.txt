@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacelegion_1_1core_1_1math_1a67d623335cd243607d056d780ab6bd4f:
+
+Typedef legion::core::math::precision_chooser_t
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_precision.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::math::precision_chooser_t

@@ -1,0 +1,13 @@
+.. _exhale_define_bindings_8hpp_1ab28e970a7919584c628adfb6bbaa7a81:
+
+Define SV_SCENENORMAL
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_SCENENORMAL

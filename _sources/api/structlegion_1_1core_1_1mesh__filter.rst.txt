@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1core_1_1mesh__filter:
+
+Struct mesh_filter
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_defaultcomponents.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::mesh_handle`` (:ref:`exhale_class_structlegion_1_1core_1_1mesh__handle`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::mesh_filter
+   :members:
+   :protected-members:
+   :undoc-members:

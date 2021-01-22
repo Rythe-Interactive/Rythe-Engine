@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_events_events.hpp:
+
+File events.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_events>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/events``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/events/events.hpp``)
+------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_events_events.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/events/event.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_event.hpp`)
+
+- ``physics/data/physics_manifold.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_physics_manifold.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physicssystem.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__physics`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1collision__event__base`
+
+- :ref:`exhale_class_structlegion_1_1physics_1_1collision__event`
+
+- :ref:`exhale_class_structlegion_1_1physics_1_1trigger__event`
+

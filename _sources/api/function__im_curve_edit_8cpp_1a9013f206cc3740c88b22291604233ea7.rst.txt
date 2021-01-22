@@ -1,0 +1,13 @@
+.. _exhale_function__im_curve_edit_8cpp_1a9013f206cc3740c88b22291604233ea7:
+
+Function ImCurveEdit::DrawPoint
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImCurveEdit.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImCurveEdit::DrawPoint(ImDrawList *, ImVec2, const ImVec2, const ImVec2, bool)

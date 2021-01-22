@@ -39,6 +39,9 @@ Program Listing for File engine.hpp
            scheduling::Scheduler m_scheduler;
    
        public:
+   
+           inline static events::EventBus* eventbus;
+   
            Engine(int argc, char** argv) : m_modules(), m_eventbus(), m_ecs(&m_eventbus), m_cliargs(argv, argv + argc),
    #if defined(LEGION_LOW_POWER)
                m_scheduler(&m_eventbus, true, LEGION_MIN_THREADS)
@@ -46,6 +49,8 @@ Program Listing for File engine.hpp
                m_scheduler(&m_eventbus, false, LEGION_MIN_THREADS)
    #endif
            {
+               log::setup();
+               eventbus = &m_eventbus;
                Module::m_eventBus = &m_eventbus;
                Module::m_ecs = &m_ecs;
                Module::m_scheduler = &m_scheduler;
@@ -53,6 +58,7 @@ Program Listing for File engine.hpp
                SystemBase::m_ecs = &m_ecs;
                SystemBase::m_scheduler = &m_scheduler;
                ecs::component_handle_base::m_registry = &m_ecs;
+               ecs::component_handle_base::m_eventBus = &m_eventbus;
    
                reportModule<CoreModule>();
            }
@@ -62,7 +68,7 @@ Program Listing for File engine.hpp
                m_modules.clear();
            }
    
-           template <class ModuleType, class... Args, inherits_from<ModuleType, Module> = 0>
+           template <class ModuleType, class... Args CNDOXY(inherits_from<ModuleType, Module> = 0)>
            void reportModule(Args&&...args)
            {
                std::unique_ptr<Module> module = std::make_unique<ModuleType>(std::forward<Args>(args)...);
@@ -76,9 +82,6 @@ Program Listing for File engine.hpp
    
            void init()
            {
-   
-               log::setup();
-   
                for (const auto& [priority, moduleList] : m_modules)
                    for (auto& module : moduleList)
                        module->setup();

@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__widgets_8cpp_1ab23518380eb2c1ecdbb16c6be63da591:
+
+Variable IM_S32_MIN
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: IM_S32_MIN

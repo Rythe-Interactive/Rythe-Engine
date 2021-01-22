@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1ad383fd0b8dccca5f3a4e9fc4a426c8e1:
+
+Function ImStb::STB_TEXTEDIT_STRINGLEN
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStb::STB_TEXTEDIT_STRINGLEN(const STB_TEXTEDIT_STRING *)

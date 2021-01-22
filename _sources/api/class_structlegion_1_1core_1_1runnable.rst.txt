@@ -1,0 +1,31 @@
+.. _exhale_class_structlegion_1_1core_1_1runnable:
+
+Template Class runnable
+=======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_runnable.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::runnable_base`` (:ref:`exhale_struct_structlegion_1_1core_1_1runnable__base`)
+
+
+Derived Type
+************
+
+- ``public legion::core::async::async_runnable< Func >`` (:ref:`exhale_struct_structlegion_1_1core_1_1async_1_1async__runnable`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::runnable
+   :members:
+   :protected-members:
+   :undoc-members:

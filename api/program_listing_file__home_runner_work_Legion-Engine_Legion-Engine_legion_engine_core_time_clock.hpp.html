@@ -63,12 +63,12 @@
             <span class="n">m_start</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
         <span class="p">}</span>
 
-        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">startPoint</span><span class="p">()</span>
+        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">startPoint</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_start</span><span class="p">.</span><span class="n">time_since_epoch</span><span class="p">();</span>
         <span class="p">}</span>
 
-        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">elapsedTime</span><span class="p">()</span>
+        <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span> <span class="n">elapsedTime</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">time_span</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">m_start</span><span class="p">);</span>
         <span class="p">}</span>
@@ -86,6 +86,8 @@
             <span class="k">return</span> <span class="n">time</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">};</span>
+
+    <span class="k">using</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">clock</span><span class="o">&lt;&gt;</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>

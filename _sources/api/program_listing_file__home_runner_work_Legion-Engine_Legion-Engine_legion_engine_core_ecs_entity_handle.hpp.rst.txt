@@ -20,6 +20,7 @@ Program Listing for File entity_handle.hpp
    #include <cereal/types/vector.hpp>
    #include <cereal/archives/binary.hpp>
    #include <cereal/archives/json.hpp>
+   #include <core/events/eventbus.hpp>
    
    namespace legion::core::ecs
    {
@@ -32,61 +33,47 @@ Program Listing for File entity_handle.hpp
    
        class entity_handle;
    
-       struct child_iterator
-       {
-           friend class entity_handle;
-       private:
-           struct impl;
-   
-           std::shared_ptr<impl> m_pimpl;
-           child_iterator(impl* implptr);
-   
-       public:
-   
-           friend bool operator==(const child_iterator& lhs, const child_iterator& rhs);
-   
-           friend bool operator!=(const child_iterator& lhs, const child_iterator& rhs) { return !(lhs == rhs); }
-   
-           entity_handle& operator*();
-   
-           entity_handle* operator->();
-   
-           child_iterator& operator++();
-           child_iterator& operator--();
-           child_iterator operator++(int);
-           child_iterator operator--(int);
-   
-       };
-   
        class entity_handle
        {
            friend class EcsRegistry;
        private:
            id_type m_id;
            static EcsRegistry* m_registry;
+           static events::EventBus* m_eventBus;
+           using entity_set = hashed_sparse_set<entity_handle>;
    
        public:
-           entity_handle(id_type id) : m_id(id) {  }
+           entity_handle(id_type id) noexcept : m_id(id) {  }
    
-           entity_handle() : m_id(invalid_id) {  }
+           entity_handle() noexcept : m_id(invalid_id) {  }
    
-           entity_handle(const entity_handle& other) : m_id(other.m_id) {  }
+           entity_handle(const entity_handle& other) noexcept : m_id(other.m_id) {  }
    
-           entity_handle& operator=(const entity_handle& other);
+           entity_handle& operator=(const entity_handle& other) noexcept;
    
-           L_NODISCARD const hashed_sparse_set<id_type>& component_composition() const;
+           L_NODISCARD entity_handle clone(bool keep_parent = true, bool clone_children = true, bool clone_components = true) const;
    
-           operator id_type() const { return get_id(); }
+           L_NODISCARD hashed_sparse_set<id_type> component_composition() const;
+   
+           operator id_type() const { return m_id; }
+   
+           bool operator==(const entity_handle& other) const
+           {
+               return m_id == other.m_id;
+           }
+   
+           operator bool() const
+           {
+               return valid();
+           }
    
            L_NODISCARD id_type get_id() const;
    
-           L_NODISCARD child_iterator begin() const;
-   
-           L_NODISCARD child_iterator end() const;
+           L_NODISCARD entity_set children() const;
    
            L_NODISCARD entity_handle get_parent() const;
    
-           void set_parent(id_type newParent);
+           void set_parent(id_type newParent, bool addHierarchyIfAbsent = true);
    
            void serialize(cereal::JSONOutputArchive& oarchive);
            void serialize(cereal::BinaryOutputArchive& oarchive);
@@ -144,9 +131,13 @@ Program Listing for File entity_handle.hpp
            template<typename component_type>
            void write_component(component_type&& value)
            {
-               get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type>(value));
+               get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<component_type&&>(value));
            }
-   
+           template<typename component_type>
+           void write_component(const component_type& value)
+           {
+               get_component_handle<std::remove_reference_t<component_type>>().write(std::forward<const component_type&>(value));
+           }
    
            component_handle_base add_component(id_type componentTypeId);
    
@@ -203,7 +194,23 @@ Program Listing for File entity_handle.hpp
    
            bool valid() const;
        };
+   }
    
+   #if !defined(DOXY_EXCLUDE)
+   namespace std
+   {
+       template<> struct hash<legion::core::ecs::entity_handle>
+       {
+           std::size_t operator()(legion::core::ecs::entity_handle const& handle) const noexcept
+           {
+               return std::hash<legion::core::id_type>{}(handle.get_id());
+           }
+       };
+   }
+   #endif
    
-       using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
+   namespace legion::core::ecs
+   {
+       using entity_container = std::vector<entity_handle>;
+       using entity_set = hashed_sparse_set<entity_handle>;
    }

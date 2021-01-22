@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1math_1a828ceba59d7cd6df910e1c6fba3ac9b6:
+
+Function legion::core::math::planeMatrix
+========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_geometry.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::planeMatrix(const vec3&, const vec3&, const vec3&, const vec3&)

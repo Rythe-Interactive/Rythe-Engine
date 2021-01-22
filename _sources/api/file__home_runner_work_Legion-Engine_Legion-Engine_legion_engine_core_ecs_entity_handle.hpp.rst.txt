@@ -41,6 +41,8 @@ Includes
 
 - ``core/ecs/archetype.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`)
 
+- ``core/events/eventbus.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_eventbus.hpp`)
+
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
 
 - ``core/types/types.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_types.hpp`)
@@ -85,8 +87,6 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1child__iterator`
-
 - :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1entity__handle`
@@ -96,5 +96,5 @@ Typedefs
 --------
 
 
-- :ref:`exhale_typedef_entity__handle_8hpp_1a5c3759a3e30a71a9145fa5af22cbe72e`
+- :ref:`exhale_typedef_entity__handle_8hpp_1afef46b6d5861a9d0cde22b93cefdddeb`
 

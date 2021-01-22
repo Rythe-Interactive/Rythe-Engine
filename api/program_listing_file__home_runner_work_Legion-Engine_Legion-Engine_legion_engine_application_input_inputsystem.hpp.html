@@ -49,6 +49,7 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;application/events/inputevents.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;application/events/windowinputevents.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;numeric&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">application</span>
 <span class="p">{</span>
@@ -82,6 +83,15 @@
             <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">last_mods</span><span class="p">;</span>
             <span class="kt">float</span> <span class="n">last_value</span><span class="p">;</span>
         <span class="p">};</span>
+
+        <span class="k">struct</span> <span class="n">axis_command_queue</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span> <span class="n">values</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span><span class="o">&gt;</span> <span class="n">mods</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">inputmap</span><span class="o">::</span><span class="n">method</span><span class="o">&gt;</span> <span class="n">methods</span><span class="p">;</span>
+            <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">invoke</span><span class="p">;</span>
+        <span class="p">};</span>
+
     <span class="k">public</span><span class="o">:</span>
         <span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="k">override</span>
         <span class="p">{</span>
@@ -92,8 +102,7 @@
             <span class="n">bindToEvent</span><span class="o">&lt;</span><span class="n">mouse_scrolled</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">InputSystem</span><span class="o">::</span><span class="n">onMouseScrolled</span><span class="o">&gt;</span><span class="p">();</span>
 
             <span class="c1">//create Update Process</span>
-            <span class="n">createProcess</span><span class="o">&lt;&amp;</span><span class="n">InputSystem</span><span class="o">::</span><span class="n">onUpdate</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Input&quot;</span><span class="p">);</span>
-
+            <span class="n">createProcess</span><span class="o">&lt;&amp;</span><span class="n">InputSystem</span><span class="o">::</span><span class="n">onUpdate</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Input&quot;</span><span class="p">,</span> <span class="mf">1.f</span><span class="o">/</span><span class="mf">300.f</span><span class="p">);</span>
 
             <span class="c1">//make sure we get the joystick-callback on initialization of GLFW</span>
             <span class="n">ContextHelper</span><span class="o">::</span><span class="n">addOnInitCallback</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;::</span><span class="n">create</span><span class="p">([]</span>
@@ -104,7 +113,7 @@
                     <span class="c1">//that are already connected</span>
 
                     <span class="c1">//note that GLFW only supports 16 gamepads!</span>
-                    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span><span class="o">::</span><span class="n">MAX_SIZE</span> <span class="o">-</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span><span class="o">::</span><span class="n">JOYSTICK0</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span><span class="o">::</span><span class="n">MAX_SIZE</span> <span class="o">-</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span><span class="o">::</span><span class="n">JOYSTICK0</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
                     <span class="p">{</span>
                         <span class="k">if</span> <span class="p">(</span><span class="n">ContextHelper</span><span class="o">::</span><span class="n">joystickPresent</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
                         <span class="p">{</span>
@@ -270,6 +279,7 @@
             <span class="n">data</span><span class="p">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">action_callback</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
                 <span class="p">[](</span><span class="n">InputSystem</span><span class="o">*</span> <span class="n">self</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">state</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">mods</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">method</span><span class="p">,</span> <span class="kt">float</span> <span class="n">def</span><span class="p">,</span> <span class="kt">float</span> <span class="n">delta</span><span class="p">)</span>
                 <span class="p">{</span>
+                    <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Key to action callback&quot;</span><span class="p">);</span>
                     <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">def</span><span class="p">;</span>
                     <span class="n">Event</span> <span class="n">e</span><span class="p">;</span>
                     <span class="n">e</span><span class="p">.</span><span class="n">input_delta</span> <span class="o">=</span> <span class="n">delta</span><span class="p">;</span>
@@ -290,10 +300,7 @@
             <span class="n">data</span><span class="p">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">action_callback</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
                 <span class="p">[](</span><span class="n">InputSystem</span><span class="o">*</span> <span class="n">self</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">state</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">mods</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">method</span><span class="p">,</span> <span class="kt">float</span> <span class="n">def</span><span class="p">,</span> <span class="kt">float</span> <span class="n">delta</span><span class="p">)</span>
                 <span class="p">{</span>
-                    <span class="n">Event</span> <span class="n">e</span><span class="p">;</span>
-                    <span class="n">e</span><span class="p">.</span><span class="n">input_delta</span> <span class="o">=</span> <span class="n">delta</span><span class="p">;</span>
-                    <span class="n">e</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">state</span> <span class="o">?</span> <span class="nl">def</span> <span class="p">:</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="n">mods</span><span class="p">,</span> <span class="n">method</span><span class="p">);</span> <span class="c1">//convert key state false:true to float range 1-0</span>
-                    <span class="n">self</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">Event</span><span class="o">&gt;</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+                    <span class="n">self</span><span class="o">-&gt;</span><span class="n">pushCommand</span><span class="o">&lt;</span><span class="n">Event</span><span class="o">&gt;</span><span class="p">(</span><span class="n">state</span> <span class="o">?</span> <span class="nl">def</span> <span class="p">:</span> <span class="mf">0.0f</span><span class="p">,</span><span class="n">mods</span><span class="p">,</span><span class="n">method</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">);</span>
             <span class="n">data</span><span class="p">.</span><span class="n">trigger_value</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
@@ -312,6 +319,7 @@
             <span class="n">data</span><span class="p">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">axis_callback</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
                 <span class="p">[](</span><span class="n">InputSystem</span><span class="o">*</span> <span class="n">self</span><span class="p">,</span> <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">mods</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">method</span><span class="p">,</span> <span class="kt">float</span> <span class="n">delta</span><span class="p">)</span>
                 <span class="p">{</span>
+                    <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Axis to action callback&quot;</span><span class="p">);</span>
                     <span class="n">Event</span> <span class="n">e</span><span class="p">;</span>
                     <span class="n">e</span><span class="p">.</span><span class="n">input_delta</span> <span class="o">=</span> <span class="n">delta</span><span class="p">;</span>
                     <span class="n">e</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;</span> <span class="mf">0.05f</span> <span class="o">||</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.05f</span><span class="p">,</span> <span class="n">mods</span><span class="p">,</span> <span class="n">method</span><span class="p">);</span> <span class="c1">//convert float range 0-1 to key state false:true</span>
@@ -333,10 +341,7 @@
             <span class="n">data</span><span class="p">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">axis_callback</span><span class="o">::</span><span class="n">create</span><span class="p">(</span>
                 <span class="p">[](</span><span class="n">InputSystem</span><span class="o">*</span> <span class="n">self</span><span class="p">,</span> <span class="kt">float</span> <span class="n">value</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">mods</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">method</span><span class="p">,</span> <span class="kt">float</span> <span class="n">delta</span><span class="p">)</span>
                 <span class="p">{</span>
-                    <span class="n">Event</span> <span class="n">e</span><span class="p">;</span>
-                    <span class="n">e</span><span class="p">.</span><span class="n">input_delta</span> <span class="o">=</span> <span class="n">delta</span><span class="p">;</span>
-                    <span class="n">e</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">mods</span><span class="p">,</span> <span class="n">method</span><span class="p">);</span>
-                    <span class="n">self</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">Event</span><span class="o">&gt;</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+                    <span class="n">self</span><span class="o">-&gt;</span><span class="n">pushCommand</span><span class="o">&lt;</span><span class="n">Event</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">mods</span><span class="p">,</span><span class="n">method</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">);</span>
 
@@ -356,36 +361,42 @@
 
         <span class="kt">void</span> <span class="n">onUpdate</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">time_span</span><span class="o">&lt;</span><span class="n">fast_time</span><span class="o">&gt;</span> <span class="n">deltaTime</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">deltaTime</span><span class="p">;</span>
-
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="n">onJoystick</span><span class="p">(</span><span class="n">deltaTime</span><span class="p">);</span>
 
-            <span class="c1">//update all axis with their current values</span>
+            <span class="p">{</span>
+                <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Update axes&quot;</span><span class="p">);</span>
+                <span class="c1">//update all axis with their current values</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">inner_map</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_axes</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">axis</span><span class="p">]</span> <span class="o">:</span> <span class="n">inner_map</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">axis</span><span class="p">.</span><span class="n">callback</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">axis</span><span class="p">.</span><span class="n">last_value</span><span class="p">,</span> <span class="n">axis</span><span class="p">.</span><span class="n">last_mods</span><span class="p">,</span> <span class="n">axis</span><span class="p">.</span><span class="n">last_method</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
 
-            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">inner_map</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_axes</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">axis</span><span class="p">]</span> <span class="o">:</span> <span class="n">inner_map</span><span class="p">)</span>
+                <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Action repeating callbacks&quot;</span><span class="p">);</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">inner_map</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_actions</span><span class="p">)</span>
                 <span class="p">{</span>
-                    <span class="n">axis</span><span class="p">.</span><span class="n">callback</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">axis</span><span class="p">.</span><span class="n">last_value</span><span class="p">,</span> <span class="n">axis</span><span class="p">.</span><span class="n">last_mods</span><span class="p">,</span> <span class="n">axis</span><span class="p">.</span><span class="n">last_method</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">action</span><span class="p">]</span> <span class="o">:</span> <span class="n">inner_map</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">action</span><span class="p">.</span><span class="n">repeat</span><span class="p">)</span>
+                            <span class="n">action</span><span class="p">.</span><span class="n">callback</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">action</span><span class="p">.</span><span class="n">last_state</span><span class="p">,</span> <span class="n">action</span><span class="p">.</span><span class="n">last_mods</span><span class="p">,</span> <span class="n">action</span><span class="p">.</span><span class="n">last_method</span><span class="p">,</span> <span class="n">action</span><span class="p">.</span><span class="n">trigger_value</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
+                    <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
-            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">inner_map</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_actions</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">action</span><span class="p">]</span> <span class="o">:</span> <span class="n">inner_map</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">action</span><span class="p">.</span><span class="n">repeat</span><span class="p">)</span>
-                        <span class="n">action</span><span class="p">.</span><span class="n">callback</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">action</span><span class="p">.</span><span class="n">last_state</span><span class="p">,</span> <span class="n">action</span><span class="p">.</span><span class="n">last_mods</span><span class="p">,</span> <span class="n">action</span><span class="p">.</span><span class="n">last_method</span><span class="p">,</span> <span class="n">action</span><span class="p">.</span><span class="n">trigger_value</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
+
+            <span class="n">raiseCommandQueues</span><span class="p">(</span><span class="n">deltaTime</span><span class="p">);</span>
 
             <span class="n">onMouseReset</span><span class="p">();</span>
-
-
         <span class="p">}</span>
 
         <span class="kt">void</span> <span class="n">matchGLFWAxisWithSignalAxis</span><span class="p">(</span><span class="k">const</span> <span class="n">GLFWgamepadstate</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">joystick</span><span class="p">,</span>
-            <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">glfw</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">m</span><span class="p">)</span>
+            <span class="k">const</span> <span class="n">size_type</span> <span class="n">glfw</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">m</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">const</span> <span class="kt">float</span> <span class="n">value</span> <span class="o">=</span> <span class="n">state</span><span class="p">.</span><span class="n">axes</span><span class="p">[</span><span class="n">glfw</span><span class="p">];</span>
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">axis</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_axes</span><span class="p">[</span><span class="n">m</span><span class="p">])</span>
             <span class="p">{</span>
@@ -414,6 +425,7 @@
 
         <span class="kt">void</span> <span class="n">onJoystick</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">glfw_joystick_id</span> <span class="p">:</span> <span class="n">m_presentGamepads</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="k">using</span> <span class="n">mods</span> <span class="o">=</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span><span class="p">;</span>
@@ -575,6 +587,34 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Event</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">pushCommand</span><span class="p">(</span><span class="kt">float</span> <span class="n">value</span><span class="p">,</span><span class="n">inputmap</span><span class="o">::</span><span class="n">modifier_keys</span> <span class="n">mods</span><span class="p">,</span> <span class="n">inputmap</span><span class="o">::</span><span class="n">method</span> <span class="n">method</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="n">cq</span> <span class="o">=</span> <span class="n">m_axes_command_queues</span><span class="p">[</span><span class="n">Event</span><span class="o">::</span><span class="n">id</span><span class="p">];</span>
+            <span class="n">cq</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+            <span class="n">cq</span><span class="p">.</span><span class="n">mods</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">mods</span><span class="p">);</span>
+            <span class="n">cq</span><span class="p">.</span><span class="n">methods</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">method</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">raiseCommandQueues</span><span class="p">(</span><span class="kt">float</span> <span class="n">delta</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">for</span><span class="p">(</span><span class="k">auto</span>  <span class="p">[</span><span class="n">key</span><span class="p">,</span><span class="n">value</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_axes_command_queues</span><span class="p">){</span>
+                <span class="k">auto</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">input_axis</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+                <span class="n">axis</span><span class="o">-&gt;</span><span class="n">value_parts</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">values</span><span class="p">;</span>
+                <span class="n">axis</span><span class="o">-&gt;</span><span class="n">mods_parts</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">mods</span><span class="p">;</span>
+                <span class="n">axis</span><span class="o">-&gt;</span><span class="n">identifier_parts</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">methods</span><span class="p">;</span>
+
+                <span class="n">axis</span><span class="o">-&gt;</span><span class="n">input_delta</span> <span class="o">=</span> <span class="n">delta</span><span class="p">;</span>
+                <span class="n">axis</span><span class="o">-&gt;</span><span class="n">value</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">accumulate</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">value</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="mf">0.0f</span><span class="p">);</span>
+
+                <span class="n">raiseEventUnsafe</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">axis</span><span class="p">),</span><span class="n">key</span><span class="p">);</span>
+                <span class="n">value</span><span class="p">.</span><span class="n">mods</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="n">value</span><span class="p">.</span><span class="n">values</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="n">value</span><span class="p">.</span><span class="n">methods</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
         <span class="k">static</span> <span class="n">math</span><span class="o">::</span><span class="n">dvec2</span> <span class="n">m_mousePos</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">math</span><span class="o">::</span><span class="n">dvec2</span> <span class="n">m_mouseDelta</span><span class="p">;</span>
 
@@ -582,6 +622,9 @@
         <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">inputmap</span><span class="o">::</span><span class="n">method</span><span class="p">,</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">action_data</span><span class="o">&gt;&gt;</span> <span class="n">m_actions</span><span class="p">;</span>
 
         <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">inputmap</span><span class="o">::</span><span class="n">method</span><span class="p">,</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">axis_data</span><span class="o">&gt;&gt;</span>  <span class="n">m_axes</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span><span class="n">axis_command_queue</span><span class="o">&gt;</span> <span class="n">m_axes_command_queues</span><span class="p">;</span>
+
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

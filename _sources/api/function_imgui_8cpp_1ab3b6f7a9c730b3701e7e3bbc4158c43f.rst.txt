@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1ab3b6f7a9c730b3701e7e3bbc4158c43f:
+
+Function ImFileRead
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImFileRead(void *, ImU64, ImU64, ImFileHandle)

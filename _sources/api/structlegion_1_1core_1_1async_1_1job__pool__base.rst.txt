@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1core_1_1async_1_1job__pool__base:
+
+Struct job_pool_base
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_job_pool.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public legion::core::async::job_pool< Func >`` (:ref:`exhale_struct_structlegion_1_1core_1_1async_1_1job__pool`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::async::job_pool_base
+   :members:
+   :protected-members:
+   :undoc-members:

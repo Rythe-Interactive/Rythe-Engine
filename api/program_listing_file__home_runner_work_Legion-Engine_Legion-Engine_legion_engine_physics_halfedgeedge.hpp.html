@@ -50,25 +50,26 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/data/edge_label.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/halfedgeface.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/debugrendering.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
     <span class="k">struct</span> <span class="n">HalfEdgeEdge</span>
     <span class="p">{</span>
         <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">pairingEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-        <span class="n">HalfEdgeEdge</span> <span class="o">*</span> <span class="n">nextEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">nextEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
         <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">prevEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
 
         <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
 
         <span class="n">EdgeLabel</span> <span class="n">label</span><span class="p">;</span>
 
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">edgePositionPtr</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgePosition</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">id</span><span class="p">;</span>
 
         <span class="n">HalfEdgeEdge</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
-        <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">*</span> <span class="n">newEdgePositionPtr</span><span class="p">)</span> <span class="o">:</span> <span class="n">edgePositionPtr</span><span class="p">{</span> <span class="n">newEdgePositionPtr</span> <span class="p">}</span>
+        <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">newEdgePositionPtr</span><span class="p">)</span> <span class="o">:</span> <span class="n">edgePosition</span><span class="p">{</span> <span class="n">newEdgePositionPtr</span> <span class="p">}</span>
         <span class="p">{</span>
 
         <span class="p">}</span>
@@ -79,6 +80,12 @@
             <span class="n">prevEdge</span> <span class="o">=</span> <span class="n">newPrevEdge</span><span class="p">;</span>
         <span class="p">}</span>
 
+        <span class="kt">void</span> <span class="n">setPairingEdge</span><span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">edge</span><span class="p">;</span>
+            <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">getLocalNormal</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">;</span>
@@ -86,8 +93,17 @@
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">getLocalEdgeDirection</span><span class="p">()</span>  <span class="k">const</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="o">*</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span> <span class="o">-</span> <span class="o">*</span><span class="n">edgePositionPtr</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span> <span class="o">-</span> <span class="n">edgePosition</span><span class="p">;</span>
         <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">DEBUG_drawEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&amp;</span> <span class="n">debugColor</span><span class="p">,</span><span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">20.0f</span><span class="p">,</span> <span class="kt">float</span> <span class="n">width</span> <span class="o">=</span> <span class="mf">5.0f</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldStart</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldEnd</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="n">debug</span><span class="o">::</span><span class="n">user_projectDrawLine</span><span class="p">(</span><span class="n">worldStart</span><span class="p">,</span> <span class="n">worldEnd</span><span class="p">,</span> <span class="n">debugColor</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+        <span class="p">}</span>
+
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

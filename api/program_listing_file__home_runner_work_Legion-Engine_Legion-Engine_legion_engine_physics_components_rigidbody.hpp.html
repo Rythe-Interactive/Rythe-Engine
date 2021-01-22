@@ -64,7 +64,7 @@
         <span class="kt">float</span> <span class="n">linearDrag</span><span class="p">;</span>
 
         <span class="c1">//angular motion component</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">localInverseInertiaTensor</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">6.0f</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">localInverseInertiaTensor</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">3.0f</span><span class="p">);</span>
         <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">globalInverseInertiaTensor</span> <span class="o">=</span> <span class="n">localInverseInertiaTensor</span><span class="p">;</span>
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularAcc</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
@@ -76,8 +76,8 @@
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">torqueAccumulator</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">globalCentreOfMass</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
 
-        <span class="kt">float</span> <span class="n">restitution</span> <span class="o">=</span> <span class="mf">0.5f</span><span class="p">;</span>
-        <span class="kt">float</span> <span class="n">friction</span> <span class="o">=</span> <span class="mf">0.15f</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">restitution</span> <span class="o">=</span> <span class="mf">0.3f</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">friction</span> <span class="o">=</span> <span class="mf">0.3f</span><span class="p">;</span>
 
         <span class="kt">bool</span> <span class="n">isAsleep</span><span class="p">;</span>
 

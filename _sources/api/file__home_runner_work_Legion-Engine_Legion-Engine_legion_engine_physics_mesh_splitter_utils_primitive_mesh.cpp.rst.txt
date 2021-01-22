@@ -1,0 +1,46 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.cpp:
+
+File primitive_mesh.cpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/primitive_mesh.cpp``)
+---------------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``physics/mesh_splitter_utils/primitive_mesh.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.h`)
+
+- ``rendering/components/renderable.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__physics`
+

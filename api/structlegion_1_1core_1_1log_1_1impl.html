@@ -18,8 +18,8 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Template Struct precision_chooser" href="structlegion_1_1core_1_1math_1_1precision__chooser.html" />
-    <link rel="prev" title="Template Struct pair_range" href="structlegion_1_1core_1_1iterator_1_1pair__range.html" />
+    <link rel="next" title="Template Struct lowest_precision" href="structlegion_1_1core_1_1math_1_1lowest__precision.html" />
+    <link rel="prev" title="Template Struct is_vector&lt; std::vector&lt; T &gt; &gt;" href="structlegion_1_1core_1_1is__vector_3_01std_1_1vector_3_01_t_01_4_01_4.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -36,10 +36,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="structlegion_1_1core_1_1math_1_1precision__chooser.html" title="Template Struct precision_chooser"
+          <a href="structlegion_1_1core_1_1math_1_1lowest__precision.html" title="Template Struct lowest_precision"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="structlegion_1_1core_1_1iterator_1_1pair__range.html" title="Template Struct pair_range"
+          <a href="structlegion_1_1core_1_1is__vector_3_01std_1_1vector_3_01_t_01_4_01_4.html" title="Template Struct is_vector&lt; std::vector&lt; T &gt; &gt;"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -66,8 +66,18 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
 <dl class="cpp var">
+<dt id="_CPPv4N6legion4core3log4impl8log_fileE">
+<span id="_CPPv3N6legion4core3log4impl8log_fileE"></span><span id="_CPPv2N6legion4core3log4impl8log_fileE"></span><span id="legion::core::log::impl::log_file__cstring"></span><span class="target" id="structlegion_1_1core_1_1log_1_1impl_1add3191e3866ac3f69fbf903e050d198b"></span><a class="reference internal" href="typedef_primitives_8hpp_1abe7258f8958a4af909ef2fffdacfa706.html#_CPPv4N6legion4core7cstringE" title="legion::core::cstring">cstring</a> <code class="sig-name descname">log_file</code> = &quot;logs/legion-engine.log&quot;<a class="headerlink" href="#_CPPv4N6legion4core3log4impl8log_fileE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core3log4impl6loggerE">
+<span id="_CPPv3N6legion4core3log4impl6loggerE"></span><span id="_CPPv2N6legion4core3log4impl6loggerE"></span><span id="legion::core::log::impl::logger__std::shared_ptr:spdlog::logger:"></span><span class="target" id="structlegion_1_1core_1_1log_1_1impl_1a082a212b8852e1d15d62a7bd3ba4e7a1"></span>std::shared_ptr&lt;spdlog::logger&gt; <code class="sig-name descname">logger</code> = <a class="reference internal" href="#_CPPv4N6legion4core3log4implE" title="legion::core::log::impl">impl</a>::<a class="reference internal" href="#_CPPv4N6legion4core3log4impl14console_loggerE" title="legion::core::log::impl::console_logger">console_logger</a><a class="headerlink" href="#_CPPv4N6legion4core3log4impl6loggerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
 <dt id="_CPPv4N6legion4core3log4impl11file_loggerE">
-<span id="_CPPv3N6legion4core3log4impl11file_loggerE"></span><span id="_CPPv2N6legion4core3log4impl11file_loggerE"></span><span id="legion::core::log::impl::file_logger__std::shared_ptr:spdlog::logger:"></span><span class="target" id="structlegion_1_1core_1_1log_1_1impl_1a375c65f99488414d0d19a3a38a70ae0e"></span>std::shared_ptr&lt;spdlog::logger&gt; <code class="sig-name descname">file_logger</code> = spdlog::rotating_logger_mt(LOG_FILE,LOG_FILE,1'048'576,5)<a class="headerlink" href="#_CPPv4N6legion4core3log4impl11file_loggerE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion4core3log4impl11file_loggerE"></span><span id="_CPPv2N6legion4core3log4impl11file_loggerE"></span><span id="legion::core::log::impl::file_logger__std::shared_ptr:spdlog::logger:"></span><span class="target" id="structlegion_1_1core_1_1log_1_1impl_1a375c65f99488414d0d19a3a38a70ae0e"></span>std::shared_ptr&lt;spdlog::logger&gt; <code class="sig-name descname">file_logger</code><a class="headerlink" href="#_CPPv4N6legion4core3log4impl11file_loggerE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
@@ -104,8 +114,8 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="structlegion_1_1core_1_1iterator_1_1pair__range.html" title="previous chapter">Template Struct pair_range</a></li>
-      <li>Next: <a href="structlegion_1_1core_1_1math_1_1precision__chooser.html" title="next chapter">Template Struct precision_chooser</a></li>
+      <li>Previous: <a href="structlegion_1_1core_1_1is__vector_3_01std_1_1vector_3_01_t_01_4_01_4.html" title="previous chapter">Template Struct is_vector&lt; std::vector&lt; T &gt; &gt;</a></li>
+      <li>Next: <a href="structlegion_1_1core_1_1math_1_1lowest__precision.html" title="next chapter">Template Struct lowest_precision</a></li>
   </ul></li>
   </ul></li>
 </ul>

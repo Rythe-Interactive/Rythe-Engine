@@ -1,0 +1,13 @@
+.. _exhale_typedef_mesh__splitter__typedefs_8hpp_1a3041e1e9a86e0706c4c1a68f6d29918f:
+
+Typedef legion::physics::SplittablePolygonPtr
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_typedefs.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::physics::SplittablePolygonPtr

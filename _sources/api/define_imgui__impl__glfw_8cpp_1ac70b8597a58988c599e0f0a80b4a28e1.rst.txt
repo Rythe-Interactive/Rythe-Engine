@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__impl__glfw_8cpp_1ac70b8597a58988c599e0f0a80b4a28e1:
+
+Define GLFW_HAS_PER_MONITOR_DPI
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GLFW_HAS_PER_MONITOR_DPI

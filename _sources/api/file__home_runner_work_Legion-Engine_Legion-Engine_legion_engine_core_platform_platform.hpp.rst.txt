@@ -31,7 +31,13 @@ Included By
 -----------
 
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_operation.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_spinlock.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_thread_util.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
 
@@ -45,6 +51,8 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_iterator_tricks.hpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_runnable.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_map.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_sparse_set.hpp`
@@ -55,9 +63,9 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp`
-
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_pool.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.hpp`
 
@@ -80,6 +88,8 @@ Included By
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_filesystem_resolver.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_resource.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp`
 
@@ -106,9 +116,17 @@ Defines
 
 - :ref:`exhale_define_platform_8hpp_1a4e14578a41d311e647f3aee2b628d3dd`
 
+- :ref:`exhale_define_platform_8hpp_1a51cf7a63a96cae21cbf2f7d42194f359`
+
+- :ref:`exhale_define_platform_8hpp_1a0feb7e0b940efad526132db03f9febf9`
+
+- :ref:`exhale_define_platform_8hpp_1a68cf83a4745683c263dd0f412a87b2ef`
+
 - :ref:`exhale_define_platform_8hpp_1a047e130061d8c7493b1224c08eadb4f5`
 
 - :ref:`exhale_define_platform_8hpp_1a2acea82974982ff88014214aafd8d215`
+
+- :ref:`exhale_define_platform_8hpp_1a47f26c6c35622e4e3d93b9307107ca60`
 
 - :ref:`exhale_define_platform_8hpp_1a4ed25dd56aad296e044f27a33ef1c391`
 
@@ -140,5 +158,9 @@ Defines
 
 - :ref:`exhale_define_platform_8hpp_1a33684d6c743e29a93b949ce4599a5a48`
 
+- :ref:`exhale_define_platform_8hpp_1a258e6951347e1d429bba561cd959dfe0`
+
 - :ref:`exhale_define_platform_8hpp_1ac8c687223be2bdac90dfd02bf6bb4a9a`
+
+- :ref:`exhale_define_platform_8hpp_1ae73053051efbb45c3a39751f5ce9fb36`
 

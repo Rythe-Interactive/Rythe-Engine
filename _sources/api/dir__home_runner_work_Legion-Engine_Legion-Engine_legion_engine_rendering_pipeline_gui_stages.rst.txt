@@ -1,0 +1,21 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_gui_stages:
+
+
+Directory stages
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_gui>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/gui``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/gui/stages``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_gui_stages_imguirenderstage.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_gui_stages_imguirenderstage.hpp`
+
+

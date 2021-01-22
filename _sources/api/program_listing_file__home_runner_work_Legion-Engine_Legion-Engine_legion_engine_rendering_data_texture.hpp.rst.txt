@@ -35,7 +35,9 @@ Program Listing for File texture.hpp
        {
            depth = GL_DEPTH_COMPONENT,
            stencil = GL_STENCIL_INDEX,
-           depth_stencil = GL_DEPTH_STENCIL,
+           depth_stencil = GL_DEPTH24_STENCIL8,
+           rgba_hdr = GL_RGBA32F,
+           rgb_hdr = GL_RGB32F,
            red = GL_RED,
            rg = GL_RG,
            rgb = GL_RGB,
@@ -45,16 +47,16 @@ Program Listing for File texture.hpp
            red_int = GL_RED_INTEGER,
            rg_int = GL_RG_INTEGER,
            rgb_int = GL_RGB_INTEGER,
-           rgba_int = GL_RGBL_INTEGER,
+           rgba_int = GL_RGBA_INTEGER,
            bgr_int = GL_BGR_INTEGER,
-           bgra_int = GL_BGRL_INTEGER,
+           bgra_int = GL_BGRA_INTEGER,
        };
    
        using texture_components = image_components;
    
-       constexpr GLenum components_to_format[] = { 0, GL_RED, GL_RG, GL_RGB, GL_RGBA };
+       constexpr GLenum components_to_format[] = { 0, GL_RED, GL_RG, GL_RGB, GL_RGBA, GL_DEPTH_COMPONENT, GL_STENCIL_INDEX, GL_DEPTH_STENCIL };
    
-       constexpr GLenum channels_to_glenum[] = {0, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_FLOAT };
+       constexpr GLenum channels_to_glenum[] = { GL_UNSIGNED_INT_24_8, GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, 0, GL_FLOAT };
    
        enum struct texture_mipmap : GLint
        {
@@ -83,12 +85,15 @@ Program Listing for File texture.hpp
        {
            app::gl_id textureId = invalid_id;
    
-           math::ivec2 size;
            texture_components channels;
            texture_type type;
+           texture_format format;
+           channel_format fileFormat;
    
            static void to_resource(fs::basic_resource* resource, const texture& value);
            static void from_resource(texture* value, const fs::basic_resource& resource);
+           math::ivec2 size() const;
+           void resize(math::ivec2 size) const;
        };
    
        struct texture_handle
@@ -129,7 +134,7 @@ Program Listing for File texture.hpp
            friend struct texture_handle;
        private:
            static sparse_map<id_type, texture> m_textures;
-           static async::readonly_rw_spinlock m_textureLock;
+           static async::rw_spinlock m_textureLock;
    
            static const texture& get_texture(id_type id);
            static texture_data get_data(id_type id);
@@ -137,6 +142,7 @@ Program Listing for File texture.hpp
        public:
            static texture_handle create_texture(const std::string& name, const fs::view& file, texture_import_settings settings = default_texture_settings);
            static texture_handle create_texture(const fs::view& file, texture_import_settings settings = default_texture_settings);
+           static texture_handle create_texture(const std::string& name, math::ivec2 size, texture_import_settings settings = default_texture_settings);
    
            static texture_handle create_texture_from_image(const std::string& name, texture_import_settings settings = default_texture_settings);
    

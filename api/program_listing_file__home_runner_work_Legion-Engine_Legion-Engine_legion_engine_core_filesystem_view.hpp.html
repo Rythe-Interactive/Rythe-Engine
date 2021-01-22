@@ -53,6 +53,8 @@
 
 <span class="cp">#include</span> <span class="cpf">&lt;core/common/exception.hpp&gt;</span><span class="cp"></span>
 
+<span class="cp">#include</span> <span class="cpf">&lt;Optick/optick.h&gt;</span><span class="cp"></span>
+
 <span class="cp">#include</span> <span class="cpf">&quot;mem_filesystem_resolver.hpp&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;navigator.hpp&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;detail/traits.hpp&quot;</span><span class="cp"></span>
@@ -106,7 +108,8 @@
         <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
         <span class="k">auto</span> <span class="n">load_as</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">get</span><span class="p">().</span><span class="n">decay</span><span class="p">().</span><span class="n">to</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">return</span> <span class="nf">get</span><span class="p">().</span><span class="n">decay</span><span class="p">().</span><span class="n">to</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
         <span class="p">}</span>
 
 

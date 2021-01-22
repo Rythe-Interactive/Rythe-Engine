@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1ac5bd9140ccc0a8bab21f9c3b8395146e:
+
+Function LowerBound
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: LowerBound(ImVector<ImGuiStorage::ImGuiStoragePair>&, ImGuiID)

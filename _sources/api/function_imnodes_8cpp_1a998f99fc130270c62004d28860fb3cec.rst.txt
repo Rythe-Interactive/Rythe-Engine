@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1a998f99fc130270c62004d28860fb3cec:
+
+Function imgui::nodes::GetStyle
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::GetStyle()

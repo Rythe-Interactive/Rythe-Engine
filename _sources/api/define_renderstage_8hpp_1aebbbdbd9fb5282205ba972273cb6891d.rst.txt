@@ -1,0 +1,13 @@
+.. _exhale_define_renderstage_8hpp_1aebbbdbd9fb5282205ba972273cb6891d:
+
+Define volumetric_priority
+==========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: volumetric_priority

@@ -14,8 +14,13 @@ Derived Types
 
 - ``public legion::core::System< SelfType >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 - ``public legion::core::System< AudioSystem >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
+- ``public legion::core::System< HierarchySystem >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 - ``public legion::core::System< InputSystem >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
+- ``public legion::core::System< LODManager >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
+- ``public legion::core::System< ParticleSystemManager >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
+- ``public legion::core::System< PhysicsFractureTestSystem >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 - ``public legion::core::System< PhysicsSystem >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
+- ``public legion::core::System< PointCloudGeneration >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 - ``public legion::core::System< Renderer >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 - ``public legion::core::System< SceneManager >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 - ``public legion::core::System< WindowSystem >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)

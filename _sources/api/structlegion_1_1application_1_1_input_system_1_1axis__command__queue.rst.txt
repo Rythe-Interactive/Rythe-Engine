@@ -1,0 +1,22 @@
+.. _exhale_struct_structlegion_1_1application_1_1_input_system_1_1axis__command__queue:
+
+Struct InputSystem::axis_command_queue
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_input_inputsystem.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_class_classlegion_1_1application_1_1_input_system`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::application::InputSystem::axis_command_queue
+   :members:
+   :protected-members:
+   :undoc-members:

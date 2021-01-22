@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1math_1ab99d1ae877ad73aaf43334d28856a0bd:
+
+Template Function legion::core::math::close_enough
+==================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_close_enough.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::close_enough(NUM_TYPE1, NUM_TYPE2)

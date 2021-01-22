@@ -73,14 +73,16 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">core/common/exception.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-common-exception-hpp"><span class="std std-ref">File exception.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">core/math/math.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_math.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-math-math-hpp"><span class="std std-ref">File math.hpp</span></a>)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">core/types/type_util.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-types-type-util-hpp"><span class="std std-ref">File type_util.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">core/platform/platform.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-platform-platform-hpp"><span class="std std-ref">File platform.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">sstream</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">thread</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">thread</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_thread_util.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-thread-util-hpp"><span class="std std-ref">File thread_util.hpp</span></a>)</p></li>
 </ul>
 </div>
 <div class="section" id="included-by">
 <h2>Included By<a class="headerlink" href="#included-by" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_operation.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-async-operation-cpp"><span class="std std-ref">File async_operation.cpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_spinlock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-spinlock-hpp"><span class="std std-ref">File spinlock.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-buffer-cpp"><span class="std std-ref">File buffer.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_context.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-context-cpp"><span class="std std-ref">File context.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-kernel-cpp"><span class="std std-ref">File kernel.cpp</span></a></p></li>
@@ -95,6 +97,8 @@
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_processchain.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-scheduling-processchain-cpp"><span class="std std-ref">File processchain.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-scheduling-scheduler-cpp"><span class="std std-ref">File scheduler.cpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-scheduling-scheduler-hpp"><span class="std std-ref">File scheduler.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_point_cloud.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-components-point-cloud-hpp"><span class="std std-ref">File point_cloud.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_pointcloudgeneration.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-systems-pointcloudgeneration-hpp"><span class="std std-ref">File pointcloudgeneration.hpp</span></a></p></li>
 </ul>
 </div>
 <div class="section" id="namespaces">
@@ -135,7 +139,6 @@
 <div class="section" id="defines">
 <h2>Defines<a class="headerlink" href="#defines" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="define_logging_8hpp_1a69d4676733f5e850f451942b6d901382.html#exhale-define-logging-8hpp-1a69d4676733f5e850f451942b6d901382"><span class="std std-ref">Define LOG_FILE</span></a></p></li>
 <li><p><a class="reference internal" href="define_logging_8hpp_1ab69de76884dab62f7806d8802f7f64e0.html#exhale-define-logging-8hpp-1ab69de76884dab62f7806d8802f7f64e0"><span class="std std-ref">Define logger</span></a></p></li>
 <li><p><a class="reference internal" href="define_logging_8hpp_1a49b4952f117b467555d70a6087aeca74.html#exhale-define-logging-8hpp-1a49b4952f117b467555d70a6087aeca74"><span class="std std-ref">Define SPDLOG_HEADER_ONLY</span></a></p></li>
 </ul>

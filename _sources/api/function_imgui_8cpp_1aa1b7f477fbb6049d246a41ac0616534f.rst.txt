@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1aa1b7f477fbb6049d246a41ac0616534f:
+
+Function AddRootWindowToDrawData
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: AddRootWindowToDrawData(ImGuiWindow *)

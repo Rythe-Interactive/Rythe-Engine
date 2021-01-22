@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui_8cpp_1a32e2d4a858825732297e5fcedfbd1856:
+
+Variable WINDOWS_RESIZE_FROM_EDGES_HALF_THICKNESS
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: WINDOWS_RESIZE_FROM_EDGES_HALF_THICKNESS

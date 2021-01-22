@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1math_1a7fa0e58ae5dbc293be0d99290edc0be6:
+
+Function legion::core::math::pointToTriangle(const vec3&, const vec3&, const vec3&, const vec3&, const vec3&)
+=============================================================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_geometry.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::pointToTriangle(const vec3&, const vec3&, const vec3&, const vec3&, const vec3&)

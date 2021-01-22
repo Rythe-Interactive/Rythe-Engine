@@ -14,9 +14,11 @@ Program Listing for File component_handle.hpp
    #include <atomic>
    #include <core/common/exception.hpp>
    #include <core/ecs/ecsregistry.hpp>
-   #include <core/ecs/component_container.hpp>
+   #include <core/ecs/component_pool.hpp>
    #include <core/ecs/entity_handle.hpp>
    #include <core/platform/platform.hpp>
+   
+   #include <Optick/optick.h>
    
    namespace legion::core
    {
@@ -36,33 +38,30 @@ Program Listing for File component_handle.hpp
            entity_handle entity;
    
        protected:
-           id_type m_ownerId;
            id_type m_typeId;
            static EcsRegistry* m_registry;
-   
+           static events::EventBus* m_eventBus;
+           
        public:
-           component_handle_base() : entity(), m_ownerId(invalid_id), m_typeId(invalid_id) {};
-           component_handle_base(const component_handle_base& other) : entity(other.entity), m_ownerId(other.m_ownerId), m_typeId(other.m_typeId) {};
-           component_handle_base(component_handle_base&& other) : entity(other.entity),m_ownerId(other.m_ownerId), m_typeId(other.m_typeId) {};
-           component_handle_base(id_type entityId, id_type typeId) : entity(entityId), m_ownerId(entityId), m_typeId(typeId) {}
+           component_handle_base() : entity(), m_typeId(invalid_id) {};
+           component_handle_base(const component_handle_base& other) : entity(other.entity), m_typeId(other.m_typeId) {};
+           component_handle_base(component_handle_base&& other) : entity(other.entity), m_typeId(other.m_typeId) {};
+           component_handle_base(id_type entityId, id_type typeId) : entity(entityId), m_typeId(typeId) {}
    
-           component_handle_base& operator=(const component_handle_base& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
-           component_handle_base& operator=(component_handle_base&& other) { entity = other.entity; m_registry = other.m_registry; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
+           component_handle_base& operator=(const component_handle_base& other) { entity = other.entity; m_typeId = other.m_typeId; return *this; }
+           component_handle_base& operator=(component_handle_base&& other) { entity = other.entity; m_typeId = other.m_typeId; return *this; }
    
            template<typename component_type>
            component_handle<component_type> cast();
            template<typename component_type>
            const component_handle<component_type> cast() const;
    
-   
            void serialize(cereal::JSONOutputArchive& oarchive);
            void serialize(cereal::BinaryOutputArchive& oarchive);
            void serialize(cereal::JSONInputArchive& oarchive);
            void serialize(cereal::BinaryInputArchive& oarchive);
    
-   
-   
-           L_NODISCARD virtual bool valid() const LEGION_IMPURE_RETURN(m_ownerId);
+           L_NODISCARD virtual bool valid() const LEGION_IMPURE_RETURN(entity.valid());
    
            operator bool() const { return valid(); }
        };
@@ -79,154 +78,229 @@ Program Listing for File component_handle.hpp
    
            component_handle(id_type entityId) : component_handle_base(entityId,typeHash<component_type>()) {}
    
-           component_handle& operator=(const component_handle& other) { entity = other.entity; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
-           component_handle& operator=(component_handle&& other) { entity = other.entity; m_ownerId = other.m_ownerId; m_typeId = other.m_typeId; return *this; }
+           component_handle& operator=(const component_handle& other) { entity = other.entity; m_typeId = other.m_typeId; return *this; }
+           component_handle& operator=(component_handle&& other) { entity = other.entity; m_typeId = other.m_typeId; return *this; }
                                                                                           
-           bool operator==(const component_handle<component_type>& other) const { return m_ownerId == other.m_ownerId && m_typeId == other.m_typeId; }
+           bool operator==(const component_handle<component_type>& other) const { return entity == other.entity && m_typeId == other.m_typeId; }
    
            L_NODISCARD component_type read() const
            {
-               if (!m_ownerId || !m_registry)
-                   return component_type();
-   
-               component_container<component_type>* family = m_registry->getFamily<component_type>();
+               OPTICK_EVENT();
+               component_pool<component_type>* family = m_registry->getFamily<component_type>();
    
                async::readonly_guard rguard(family->get_lock());
    
-               if (!family->has_component(m_ownerId))
-                   return component_type();
-   
-               return family->get_component(m_ownerId);
+               return family->get_component(entity);
            }
    
            component_type write(component_type&& value)
            {
-               if (!m_ownerId || !m_registry)
-                   return component_type();
+               OPTICK_EVENT();
    
-               component_container<component_type>* family = m_registry->getFamily<component_type>();
+               component_pool<component_type>* family = m_registry->getFamily<component_type>();
    
-               async::readonly_guard rguard(family->get_lock());
+               component_type old;
+               {
+                   async::readonly_guard rguard(family->get_lock());
    
-               if (!family->has_component(m_ownerId))
-                   return component_type();
+   #ifdef LGN_SAFE_MODE
+                   if (!family->has_component(entity))
+                       return component_type();
+   #endif
    
-               family->get_component(m_ownerId) = value;
+                   component_type& ref = family->get_component(entity);
+                   old = ref;
+                   ref = value;
+               }
+               m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), std::cref(value));
                return value;
            }
    
            component_type write(const component_type& value)
            {
-               if (!m_ownerId || !m_registry)
-                   return component_type();
+               OPTICK_EVENT();
    
-               component_container<component_type>* family = m_registry->getFamily<component_type>();
+               component_pool<component_type>* family = m_registry->getFamily<component_type>();
    
-               async::readonly_guard rguard(family->get_lock());
+               component_type old;
+               {
+                   async::readonly_guard rguard(family->get_lock());
    
-               if (!family->has_component(m_ownerId))
-                   return component_type();
+   #ifdef LGN_SAFE_MODE
+                   if (!family->has_component(entity))
+                       return component_type();
+   #endif
    
-               family->get_component(m_ownerId) = value;
+                   component_type& ref = family->get_component(entity);
+                   old = ref;
+                   ref = value;
+               }
+               m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), value);
                return value;
            }
    
-           component_type read_modify_write(component_type&& value, component_type(*modifier)(const component_type&, component_type&&))
+           template<typename Func>
+           component_type read_modify_write(Func&& modifier)
            {
-               if (!m_ownerId || !m_registry)
-                   return component_type();
+               OPTICK_EVENT();
    
-               component_container<component_type>* family = m_registry->getFamily<component_type>();
+               component_pool<component_type>* family = m_registry->getFamily<component_type>();
    
-               async::readonly_guard rguard(family->get_lock());
+               component_type ret;
+               component_type old;
+               {
+                   async::readonly_guard rguard(family->get_lock());
    
-               if (!family->has_component(m_ownerId))
-                   return component_type();
+   #ifdef LGN_SAFE_MODE
+                   if (!family->has_component(entity))
+                       return component_type();
+   #endif
    
-               component_type& comp = family->get_component(m_ownerId);
-               comp = modifier(comp, std::forward<component_type>(value));
-               return comp;
+                   component_type& comp = family->get_component(entity);
+                   old = comp;
+                   modifier(comp);
+                   ret = comp;
+               }
+               m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
+               return ret;
+           }
+   
+           template<typename Func>
+           component_type read_modify_write(const Func& modifier)
+           {
+               OPTICK_EVENT();
+   
+               component_pool<component_type>* family = m_registry->getFamily<component_type>();
+   
+               component_type ret;
+               component_type old;
+               {
+                   async::readonly_guard rguard(family->get_lock());
+   
+   #ifdef LGN_SAFE_MODE
+                   if (!family->has_component(entity))
+                       return component_type();
+   #endif
+   
+                   component_type& comp = family->get_component(entity);
+                   old = comp;
+                   modifier(comp);
+                   ret = comp;
+               }
+               m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
+               return ret;
            }
    
            component_type fetch_add(component_type&& value)
            {
-               if (!m_ownerId || !m_registry)
-                   return component_type();
+               OPTICK_EVENT();
    
-               component_container<component_type>* family = m_registry->getFamily<component_type>();
+               component_pool<component_type>* family = m_registry->getFamily<component_type>();
    
-               async::readonly_guard rguard(family->get_lock());
+               component_type ret;
+               component_type old;
+               {
+                   async::readonly_guard rguard(family->get_lock());
    
-               if (!family->has_component(m_ownerId))
-                   return component_type();
+   #ifdef LGN_SAFE_MODE
+                   if (!family->has_component(entity))
+                       return component_type();
+   #endif
    
-               component_type& comp = family->get_component(m_ownerId);
-               comp = comp + value;
-               return comp;
+                   component_type& comp = family->get_component(entity);
+                   old = comp;
+                   comp = comp + value;
+                   ret = comp;
+               }
+               m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
+               return ret;
            }
    
            component_type fetch_add(const component_type& value)
            {
-               if (!m_ownerId || !m_registry)
-                   return component_type();
+               OPTICK_EVENT();
    
-               component_container<component_type>* family = m_registry->getFamily<component_type>();
+               component_pool<component_type>* family = m_registry->getFamily<component_type>();
    
-               async::readonly_guard rguard(family->get_lock());
+               component_type ret;
+               component_type old;
+               {
+                   async::readonly_guard rguard(family->get_lock());
    
-               if (!family->has_component(m_ownerId))
-                   return component_type();
+   #ifdef LGN_SAFE_MODE
+                   if (!family->has_component(entity))
+                       return component_type();
+   #endif
    
-               component_type& comp = family->get_component(m_ownerId);
-               comp = comp + value;
-               return comp;
+                   component_type& comp = family->get_component(entity);
+                   old = comp;
+                   comp = comp + value;
+                   ret = comp;
+               }
+               m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
+               return ret;
            }
    
            component_type fetch_multiply(component_type&& value)
            {
-               if (!m_ownerId || !m_registry)
-                   return component_type();
+               OPTICK_EVENT();
    
-               component_container<component_type>* family = m_registry->getFamily<component_type>();
+               component_pool<component_type>* family = m_registry->getFamily<component_type>();
    
-               async::readonly_guard rguard(family->get_lock());
+               component_type ret;
+               component_type old;
+               {
+                   async::readonly_guard rguard(family->get_lock());
    
-               if (!family->has_component(m_ownerId))
-                   return component_type();
+   #ifdef LGN_SAFE_MODE
+                   if (!family->has_component(entity))
+                       return component_type();
+   #endif
    
-               component_type& comp = family->get_component(m_ownerId);
-               comp = comp * value;
-               return comp;
+                   component_type& comp = family->get_component(entity);
+                   old = comp;
+                   comp = comp * value;
+                   ret = comp;
+               }
+               m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
+               return ret;
            }
    
            component_type fetch_multiply(const component_type& value)
            {
-               if (!m_ownerId || !m_registry)
-                   return component_type();
+               OPTICK_EVENT();
    
-               component_container<component_type>* family = m_registry->getFamily<component_type>();
+               component_pool<component_type>* family = m_registry->getFamily<component_type>();
    
-               async::readonly_guard rguard(family->get_lock());
+               component_type ret;
+               component_type old;
+               {
+                   async::readonly_guard rguard(family->get_lock());
    
-               if (!family->has_component(m_ownerId))
-                   return component_type();
+   #ifdef LGN_SAFE_MODE
+                   if (!family->has_component(entity))
+                       return component_type();
+   #endif
    
-               component_type& comp = family->get_component(m_ownerId);
-               comp = comp * value;
-               return comp;
+                   component_type& comp = family->get_component(entity);
+                   old = comp;
+                   comp = comp * value;
+                   ret = comp;
+               }
+               m_eventBus->raiseEvent<events::component_modification<component_type>>(entity, std::move(old), ret);
+               return ret;
            }
    
            void destroy()
            {
-               if (!m_ownerId || !m_registry)
-                   return;
-   
-               m_registry->destroyComponent(m_ownerId, typeHash<component_type>());
+               OPTICK_EVENT();
+               m_registry->destroyComponent(entity, typeHash<component_type>());
            }
    
            virtual bool valid() const override
            {
-               return m_ownerId && m_registry && m_registry->getFamily<component_type>()->has_component(m_ownerId);
+               OPTICK_EVENT();
+               return m_registry->getFamily<component_type>()->has_component(entity);
            }
        };
    
@@ -234,9 +308,10 @@ Program Listing for File component_handle.hpp
        template<typename component_type>
        inline component_handle<component_type> component_handle_base::cast()
        {
+           OPTICK_EVENT();
            if (typeHash<component_type>() == m_typeId)
            {
-               return component_handle<component_type>(m_ownerId);
+               return component_handle<component_type>(entity);
            }
            else
            {
@@ -247,9 +322,10 @@ Program Listing for File component_handle.hpp
        template<typename component_type>
        inline const component_handle<component_type> component_handle_base::cast() const
        {
+           OPTICK_EVENT();
            if (typeHash<component_type>() == m_typeId)
            {
-               return component_handle<component_type>(m_ownerId);
+               return component_handle<component_type>(entity);
            }
            else
            {
@@ -265,9 +341,10 @@ Program Listing for File component_handle.hpp
        {
            std::size_t operator()(legion::core::ecs::component_handle<component_type> const& handle) const noexcept
            {
+               OPTICK_EVENT();
                std::size_t hash;
                std::size_t h1 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(handle.m_registry));
-               std::size_t h2 = std::hash<legion::core::id_type>{}(handle.m_ownerId);
+               std::size_t h2 = std::hash<legion::core::id_type>{}(handle.entity);
                std::size_t h3 = legion::core::typeHash<component_type>();
                hash = h1 ^ (h2 << 1);
                return hash ^ (h3 << 1);

@@ -1,0 +1,257 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp:
+
+File ImGuizmo.cpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/ImGuizmo.cpp``)
+--------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``imgui/ImGuizmo.h``
+
+- ``imgui/imgui.h``
+
+- ``imgui/imgui_internal.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_imgui`
+
+- :ref:`namespace_imgui__gizmo`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structimgui_1_1gizmo_1_1_context`
+
+- :ref:`exhale_struct_structimgui_1_1gizmo_1_1matrix__t`
+
+- :ref:`exhale_struct_structimgui_1_1gizmo_1_1vec__t`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum__im_guizmo_8cpp_1afa617c695a8fa1287a592634ebdeef03`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a60adeb5cfe3e6754b478f3ae0cd3649c`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1af89a83a43c48019b512b264020d74ef3`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a40997df7b6134455500b4bdfd84261fc`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1af7429cd8e59ef958a75bdb8f08aeb022`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a912cdd8d509a868e222bd090a6dedd60`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1aaef173fe24edc783249e42a8be236556`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a45fab3557f86d771a0e8ea87d3c0eded`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a873c0605a95ead0eafa01dd353bc70e4`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ae0ecac50d97b23e2953687e6a0105cfb`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a2a8eafaab543677b34056b621f07cc3a`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a91852a35186cffb350d2bce66af9794f`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ab234527a26d2749e1e3286df3d8fb584`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a5dba4a5602b5bc9eee7af56ac5289110`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a7f02eb7f42865f8a7e6ff710f14cb838`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a09dd6209cabcd9c0f558931b7f442ae3`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a32074291a1ddf46793976c73d2c3f52b`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a9b6ed8e40ab2e1a8b29bbc303ae08fbf`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a96143a1fce0715b44346b2c7d433e5f4`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a0ea833d3b5c228c3158ff32d67c0617a`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a2e19bcd28720fd811075bffcc48d8b8a`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a530b17e6b8443324fb4fe88f2d4c2f08`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a9c3ecb002d7c1ef7dbeb21e3488f7f66`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a7b3be76c3652a94d01be086e97add329`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a7e182cee0f11aa97168e4ba6032fe2ac`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a57a869b00e0e3311b5588a2980b3743a`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a51d9796816d23f80cdc07711c70b0192`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a019a4fbcc3fac17023dc88f08de1d017`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ac28fadfe8f926eb3e340918d220b014d`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1abe82f2e3e3481dc989172209e861d7d3`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a0b3e69107befebe080b17249fc37510d`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a42cbad0466ca9e892b826c735c43773b`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1affe4887ec478af378926fb83fdf556cc`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a6d33c307985503e47de3c55b8a8c0c60`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a1eeee1e8f2710abea816b7ab4fe8de76`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a2b05482b02156b25f7996ea3af5803bb`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a43f9674036486cdf393cd6a52b6e9038`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1aaefaf0a3cfc4d8a5c1ae869be7823ef1`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a907e38f3b85f3568c6fb22fa63c9d140`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1aaf6eb9fc3bf1724c2c764550e58d539e`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a28c8630b3c97597d98abc994101ec2a1`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a897ccfc5b142ec7b7a9675193fbc4887`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ab58884204bbb0b1002eaadec23c87d0d`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ae238dd83ecd22a4fe7f65eebe98c3e59`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ad9aa53a3133fe94f62e04c44384b3527`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a5c69d2605af708c9f141cd3ae8d624e2`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1aa7d33d0d3962c221968d6196172236c8`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ab0fa8ef0f19309e05e2b14cec8bd6490`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a298c549d4f58f72cb5f18b4f1f4f3962`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1af2656960838e7acd68b022039e96e958`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1afc9485e07ebc2b22c478f3582b0812c2`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a2edd20b36a1857c9ac9100ce65b70290`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a07880bf42a5fc9e824d97ca9eca37326`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ac318f9d187196308b3c9823af581acab`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a02953d81dcb5ac6b9b5888132861a566`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a7ad4acfaa7b153f47831beda9e207fb5`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a8040fa0f3425353dfaeb5a292e44d5e7`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1acfadf20d210202cc8cee7583c8cc9585`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a979ed2deadaa973844e18cd28603be8a`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ab668c3f8826480d9a0d7ee3856dce9ca`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1aea349c57ae73d58a3f280b1d9cab8692`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1ade02801d10e135f8d9417b34177000fb`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define__im_guizmo_8cpp_1ad331bcfc5026697e79431763161a9f18`
+
+- :ref:`exhale_define__im_guizmo_8cpp_1adf4d73301961430d50d7edd96f92ce38`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a5b7e4ed53bcb702cd4dc91a5e289955e`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a75a643c7150a6ad03dfac52979f82069`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a18892bc4d1c55fe7449f9993992dc08f`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1ac084c32c25e623ceffa5ca35754f3883`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1affb66f312f0945052ca741d60ce35c45`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a4eb3ab0b6cfe9295f5651f8166e69992`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a076ebbb5b797f28742272724ed3aa33c`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a410023679f751f5a8922b105a8e755ee`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1aa377f221cc9bc34aeabbc0210169bf7d`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a7217eda162cc2b6a856de89f3768bbb0`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a63fa0a7759a79ad2b5526823e02385f5`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a265b9e5aec15a5bf156ef42304d5bd6e`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1ad1f1719909d70fcb2c18311418738f33`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a07a89327e71a995da7ae4e3a3e373712`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1ae57aafd8aab176398572c98188cc0f8f`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1ae5e352369fa32937bb16104bfdab015d`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a7b9b201a2da933ae7e6665a2f444b2a8`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a5b60b7abcf69bfe170b4c0ea6ba1737a`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a19c35fe49a0064cee748316c6835de32`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a4e005a1e0efbc8dc469333837ba6f75b`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a80fe73dda58ad6b4794048705f5c8ee3`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a032612d30a9a581c910ae722b17edfe9`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1ae3a0059c2841cb0bb1483306394470db`
+
+- :ref:`exhale_variable__im_guizmo_8cpp_1a946a6ea4a2021bbeac407af8d852a3cb`
+

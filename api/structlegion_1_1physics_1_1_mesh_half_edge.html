@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struct MeshHalfEdge &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Struct MeshLine" href="structlegion_1_1physics_1_1_mesh_line.html" />
+    <link rel="prev" title="Struct IntersectionEdgeInfo" href="structlegion_1_1physics_1_1_intersection_edge_info.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structlegion_1_1physics_1_1_mesh_line.html" title="Struct MeshLine"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structlegion_1_1physics_1_1_intersection_edge_info.html" title="Struct IntersectionEdgeInfo"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Struct MeshHalfEdge</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="struct-meshhalfedge">
+<span id="exhale-struct-structlegion-1-1physics-1-1-mesh-half-edge"></span><h1>Struct MeshHalfEdge<a class="headerlink" href="#struct-meshhalfedge" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_half_edge.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-mesh-half-edge-hpp"><span class="std std-ref">File mesh_half_edge.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">std::enable_shared_from_this&lt;</span> <span class="pre">MeshHalfEdge</span> <span class="pre">&gt;</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp struct">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdgeE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdgeE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdgeE"></span><span id="legion::physics::MeshHalfEdge"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge"></span><em class="property">struct </em><code class="sig-prename descclassname">legion::physics<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">MeshHalfEdge</code> : <em class="property">public</em> std::enable_shared_from_this&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt;<a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3ERKN4math4vec2ENSt8weak_ptrI17SplittablePolygonEE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3ERKN4math4vec2ENSt8weak_ptrI17SplittablePolygonEE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3ERKN4math4vec2ENSt8weak_ptrI17SplittablePolygonEE"></span><span id="legion::physics::MeshHalfEdge::MeshHalfEdge__math::vec3CR.math::vec2CR.std::weak_ptr:SplittablePolygon:"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a4be1f9453904d752edbd47e0bfe17ba3"></span><code class="sig-name descname">MeshHalfEdge</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>pPosition</em>, <em class="property">const</em> math::vec2 &amp;<em>pUVs</em>, std::weak_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_splittable_polygon.html#_CPPv4N6legion7physics17SplittablePolygonE" title="legion::physics::SplittablePolygon">SplittablePolygon</a>&gt; <em>pOwner</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3ERKN4math4vec2ENSt8weak_ptrI17SplittablePolygonEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3ERKN4math4vec2E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3ERKN4math4vec2E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3ERKN4math4vec2E"></span><span id="legion::physics::MeshHalfEdge::MeshHalfEdge__math::vec3CR.math::vec2CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a3e0238e7333101aa7d1326af3679e571"></span><code class="sig-name descname">MeshHalfEdge</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>pPosition</em>, <em class="property">const</em> math::vec2 &amp;<em>pUVs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3ERKN4math4vec2E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3E"></span><span id="legion::physics::MeshHalfEdge::MeshHalfEdge__math::vec3CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a6750c0eb657056f401f4665b38613e35"></span><code class="sig-name descname">MeshHalfEdge</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>pPosition</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge12MeshHalfEdgeERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge11getTriangleEv">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge11getTriangleEv"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge11getTriangleEv"></span><span id="legion::physics::MeshHalfEdge::getTriangle"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1ae46609122a9759e1ab63caf8d8bab8ce"></span>auto <code class="sig-name descname">getTriangle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge11getTriangleEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge17getShadowTriangleEv">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge17getShadowTriangleEv"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge17getShadowTriangleEv"></span><span id="legion::physics::MeshHalfEdge::getShadowTriangle"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a2a39dbbab0e292b537e61d16a6f0822a"></span>auto <code class="sig-name descname">getShadowTriangle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge17getShadowTriangleEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge10setPairingERNSt10shared_ptrI12MeshHalfEdgeEE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge10setPairingERNSt10shared_ptrI12MeshHalfEdgeEE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge10setPairingERNSt10shared_ptrI12MeshHalfEdgeEE"></span><span id="legion::physics::MeshHalfEdge::setPairing__std::shared_ptr:MeshHalfEdge:R"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1ad6c681e48e476185dedc532473f5b636"></span>void <code class="sig-name descname">setPairing</code><span class="sig-paren">(</span>std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt; &amp;<em>newPairing</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge10setPairingERNSt10shared_ptrI12MeshHalfEdgeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge17cloneOnShadowEdgeEv">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge17cloneOnShadowEdgeEv"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge17cloneOnShadowEdgeEv"></span><span id="legion::physics::MeshHalfEdge::cloneOnShadowEdge"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a46c9893140ec637f23810fdeaa4f70e9"></span>void <code class="sig-name descname">cloneOnShadowEdge</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge17cloneOnShadowEdgeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge14isSplitByPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge14isSplitByPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge14isSplitByPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::MeshHalfEdge::isSplitByPlane__math::mat4CR.math::vec3CR.math::vec3CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1af17ea0ce6c34af32c19c8267831dde2d"></span>bool <code class="sig-name descname">isSplitByPlane</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>planeNormal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge14isSplitByPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion7physics12MeshHalfEdge16getWorldCentroidERKN4math4mat4E">
+<span id="_CPPv3NK6legion7physics12MeshHalfEdge16getWorldCentroidERKN4math4mat4E"></span><span id="_CPPv2NK6legion7physics12MeshHalfEdge16getWorldCentroidERKN4math4mat4E"></span><span id="legion::physics::MeshHalfEdge::getWorldCentroid__math::mat4CRC"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1aef9d88bcc576625e5bac19be18c63e08"></span>math::vec3 <code class="sig-name descname">getWorldCentroid</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion7physics12MeshHalfEdge16getWorldCentroidERKN4math4mat4E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given the transform of the entity associated with this edge, returns the centroid of the edge in world space. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge22isEdgePartlyAbovePlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge22isEdgePartlyAbovePlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge22isEdgePartlyAbovePlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::MeshHalfEdge::isEdgePartlyAbovePlane__math::mat4CR.math::vec3CR.math::vec3CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1aa3b4ce1af4d33a3814926f8ab6862219"></span>bool <code class="sig-name descname">isEdgePartlyAbovePlane</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>planeNormal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge22isEdgePartlyAbovePlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given the transform of the entity associated with this edge and the position and normal of the cutting plane, check if one of the vertices of the is above the plane. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge22isEdgePartlyBelowPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge22isEdgePartlyBelowPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge22isEdgePartlyBelowPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::MeshHalfEdge::isEdgePartlyBelowPlane__math::mat4CR.math::vec3CR.math::vec3CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a892921b7e7f69c16f4af8ed1646ae21c"></span>bool <code class="sig-name descname">isEdgePartlyBelowPlane</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>planeNormal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge22isEdgePartlyBelowPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given the transform of the entity associated with this edge and the position and normal of the cutting plane, check if one of the vertices of the is below the plane. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge25getEdgeDistancesFromPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge25getEdgeDistancesFromPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge25getEdgeDistancesFromPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::MeshHalfEdge::getEdgeDistancesFromPlane__math::mat4CR.math::vec3CR.math::vec3CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a841715967671fd1e539054410b5c19e2"></span>std::tuple&lt;float, float&gt; <code class="sig-name descname">getEdgeDistancesFromPlane</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>planeNormal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge25getEdgeDistancesFromPlaneERKN4math4mat4ERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given the transform of the entity associated with this edge and the position and normal of the cutting plane, Gets Edge Distances From Plane. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge21getEdgeWorldPositionsERKN4math4mat4E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge21getEdgeWorldPositionsERKN4math4mat4E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge21getEdgeWorldPositionsERKN4math4mat4E"></span><span id="legion::physics::MeshHalfEdge::getEdgeWorldPositions__math::mat4CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a56663ab3d853e7a6b71fe0aeac96bb3c"></span>std::tuple&lt;math::vec3, math::vec3&gt; <code class="sig-name descname">getEdgeWorldPositions</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge21getEdgeWorldPositionsERKN4math4mat4E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given the transform of the entity associated with this edge, returns the 2 vertices of the edge in world space. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge20getEdgeWorldPositionERKN4math4mat4E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge20getEdgeWorldPositionERKN4math4mat4E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge20getEdgeWorldPositionERKN4math4mat4E"></span><span id="legion::physics::MeshHalfEdge::getEdgeWorldPosition__math::mat4CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a8215752b83fa4c1b82c1ef0885354a0b"></span>math::vec3 <code class="sig-name descname">getEdgeWorldPosition</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge20getEdgeWorldPositionERKN4math4mat4E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given the transform of the entity associated with this edge, returns ‘position’ in world space. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge26attemptGetTrianglesInEdgesERNSt10shared_ptrI12MeshHalfEdgeEERNSt10shared_ptrI12MeshHalfEdgeEE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge26attemptGetTrianglesInEdgesERNSt10shared_ptrI12MeshHalfEdgeEERNSt10shared_ptrI12MeshHalfEdgeEE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge26attemptGetTrianglesInEdgesERNSt10shared_ptrI12MeshHalfEdgeEERNSt10shared_ptrI12MeshHalfEdgeEE"></span><span id="legion::physics::MeshHalfEdge::attemptGetTrianglesInEdges__std::shared_ptr:MeshHalfEdge:R.std::shared_ptr:MeshHalfEdge:R"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a35b0af9bb313e983aa4973784602be7c"></span>bool <code class="sig-name descname">attemptGetTrianglesInEdges</code><span class="sig-paren">(</span>std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt; &amp;<em>nextEdge</em>, std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt; &amp;<em>prevEdge</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge26attemptGetTrianglesInEdgesERNSt10shared_ptrI12MeshHalfEdgeEERNSt10shared_ptrI12MeshHalfEdgeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge23markTriangleEdgeVisitedEv">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge23markTriangleEdgeVisitedEv"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge23markTriangleEdgeVisitedEv"></span><span id="legion::physics::MeshHalfEdge::markTriangleEdgeVisited"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a5312597fd7315f64747a8c7acb81ffbf"></span>void <code class="sig-name descname">markTriangleEdgeVisited</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge23markTriangleEdgeVisitedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge33populateQueueWithTriangleNeighborERNSt5queueINSt10shared_ptrI12MeshHalfEdgeEEEE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge33populateQueueWithTriangleNeighborERNSt5queueINSt10shared_ptrI12MeshHalfEdgeEEEE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge33populateQueueWithTriangleNeighborERNSt5queueINSt10shared_ptrI12MeshHalfEdgeEEEE"></span><span id="legion::physics::MeshHalfEdge::populateQueueWithTriangleNeighbor__std::queue:std::shared_ptr:MeshHalfEdge::R"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a38a524cf128bb714b3adae474af0045b"></span>void <code class="sig-name descname">populateQueueWithTriangleNeighbor</code><span class="sig-paren">(</span>std::queue&lt;std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt;&gt; &amp;<em>edgeQueue</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge33populateQueueWithTriangleNeighborERNSt5queueINSt10shared_ptrI12MeshHalfEdgeEEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge26populateVectorWithTriangleERNSt6vectorINSt10shared_ptrI12MeshHalfEdgeEEEE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge26populateVectorWithTriangleERNSt6vectorINSt10shared_ptrI12MeshHalfEdgeEEEE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge26populateVectorWithTriangleERNSt6vectorINSt10shared_ptrI12MeshHalfEdgeEEEE"></span><span id="legion::physics::MeshHalfEdge::populateVectorWithTriangle__std::vector:std::shared_ptr:MeshHalfEdge::R"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1ad1af022db2722dceba48961baf28eda3"></span>void <code class="sig-name descname">populateVectorWithTriangle</code><span class="sig-paren">(</span>std::vector&lt;std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt;&gt; &amp;<em>edgeVector</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge26populateVectorWithTriangleERNSt6vectorINSt10shared_ptrI12MeshHalfEdgeEEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge15isTriangleValidEv">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge15isTriangleValidEv"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge15isTriangleValidEv"></span><span id="legion::physics::MeshHalfEdge::isTriangleValid"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1acdab75afd23249e9d13132c245c39bd9"></span>bool <code class="sig-name descname">isTriangleValid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge15isTriangleValidEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge19calculateEdgeNormalERKN4math4mat4E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge19calculateEdgeNormalERKN4math4mat4E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge19calculateEdgeNormalERKN4math4mat4E"></span><span id="legion::physics::MeshHalfEdge::calculateEdgeNormal__math::mat4CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a971d1465127f866bd0e3546c0272f80d"></span>math::vec3 <code class="sig-name descname">calculateEdgeNormal</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge19calculateEdgeNormalERKN4math4mat4E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge19isNormalCloseEnoughERKN4math4vec3ERKN4math4mat4E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge19isNormalCloseEnoughERKN4math4vec3ERKN4math4mat4E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge19isNormalCloseEnoughERKN4math4vec3ERKN4math4mat4E"></span><span id="legion::physics::MeshHalfEdge::isNormalCloseEnough__math::vec3CR.math::mat4CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a377bb3e208f640a6054450a4a0382ec5"></span>bool <code class="sig-name descname">isNormalCloseEnough</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>comparisonNormal</em>, <em class="property">const</em> math::mat4 &amp;<em>transform</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge19isNormalCloseEnoughERKN4math4vec3ERKN4math4mat4E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge8positionE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge8positionE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge8positionE"></span><span id="legion::physics::MeshHalfEdge::position__math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a8ed9558d455a643de0693edfd692843c"></span>math::vec3 <code class="sig-name descname">position</code><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge8positionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge2uvE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge2uvE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge2uvE"></span><span id="legion::physics::MeshHalfEdge::uv__math::vec2"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1ae9707e3020d44be08091b5f680a4d213"></span>math::vec2 <code class="sig-name descname">uv</code><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge2uvE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge8nextEdgeE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge8nextEdgeE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge8nextEdgeE"></span><span id="legion::physics::MeshHalfEdge::nextEdge__std::shared_ptr:MeshHalfEdge:"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a9f93d48d944232547ea5cd5422aa01f9"></span>std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt; <code class="sig-name descname">nextEdge</code> = nullptr<a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge8nextEdgeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge11pairingEdgeE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge11pairingEdgeE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge11pairingEdgeE"></span><span id="legion::physics::MeshHalfEdge::pairingEdge__std::shared_ptr:MeshHalfEdge:"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a25524ec8b7609845421d0210a573461b"></span>std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt; <code class="sig-name descname">pairingEdge</code> = nullptr<a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge11pairingEdgeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge10shadowEdgeE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge10shadowEdgeE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge10shadowEdgeE"></span><span id="legion::physics::MeshHalfEdge::shadowEdge__std::shared_ptr:MeshHalfEdge:"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1aad270be764b9f86e8f08f8cd1efc5abf"></span>std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt; <code class="sig-name descname">shadowEdge</code> = nullptr<a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge10shadowEdgeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge5ownerE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge5ownerE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge5ownerE"></span><span id="legion::physics::MeshHalfEdge::owner__std::weak_ptr:SplittablePolygon:"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1aba89765b972673093a33939116165487"></span>std::weak_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_splittable_polygon.html#_CPPv4N6legion7physics17SplittablePolygonE" title="legion::physics::SplittablePolygon">SplittablePolygon</a>&gt; <code class="sig-name descname">owner</code><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge5ownerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge9isVisitedE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge9isVisitedE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge9isVisitedE"></span><span id="legion::physics::MeshHalfEdge::isVisited__b"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1aa8348d2f0c06e008bb2362475be4f74e"></span>bool <code class="sig-name descname">isVisited</code> = false<a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge9isVisitedE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge10isBoundaryE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge10isBoundaryE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge10isBoundaryE"></span><span id="legion::physics::MeshHalfEdge::isBoundary__b"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a7c08298e35fbbc9344bbe6b21142afeb"></span>bool <code class="sig-name descname">isBoundary</code> = false<a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge10isBoundaryE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge19connectIntoTriangleENSt10shared_ptrI12MeshHalfEdgeEENSt10shared_ptrI12MeshHalfEdgeEENSt10shared_ptrI12MeshHalfEdgeEE">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge19connectIntoTriangleENSt10shared_ptrI12MeshHalfEdgeEENSt10shared_ptrI12MeshHalfEdgeEENSt10shared_ptrI12MeshHalfEdgeEE"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge19connectIntoTriangleENSt10shared_ptrI12MeshHalfEdgeEENSt10shared_ptrI12MeshHalfEdgeEENSt10shared_ptrI12MeshHalfEdgeEE"></span><span id="legion::physics::MeshHalfEdge::connectIntoTriangle__std::shared_ptr:MeshHalfEdge:.std::shared_ptr:MeshHalfEdge:.std::shared_ptr:MeshHalfEdge:"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1a0e72cc0b70c7adf2b33b38b25519d51a"></span>void <code class="sig-name descname">connectIntoTriangle</code><span class="sig-paren">(</span>std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt; <em>first</em>, std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt; <em>second</em>, std::shared_ptr&lt;<a class="reference internal" href="#_CPPv4N6legion7physics12MeshHalfEdgeE" title="legion::physics::MeshHalfEdge">MeshHalfEdge</a>&gt; <em>third</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge19connectIntoTriangleENSt10shared_ptrI12MeshHalfEdgeEENSt10shared_ptrI12MeshHalfEdgeEENSt10shared_ptrI12MeshHalfEdgeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics12MeshHalfEdge14compareNormalsERKN4math4vec3ERKN4math4vec3E">
+<span id="_CPPv3N6legion7physics12MeshHalfEdge14compareNormalsERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics12MeshHalfEdge14compareNormalsERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::MeshHalfEdge::compareNormals__math::vec3CR.math::vec3CR"></span><span class="target" id="structlegion_1_1physics_1_1_mesh_half_edge_1abc63bae67f1d8389077f9c392324c58a"></span>bool <code class="sig-name descname">compareNormals</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>comparisonNormal</em>, <em class="property">const</em> math::vec3 &amp;<em>otherNormal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics12MeshHalfEdge14compareNormalsERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Struct MeshHalfEdge</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#struct-documentation">Struct Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="structlegion_1_1physics_1_1_intersection_edge_info.html" title="previous chapter">Struct IntersectionEdgeInfo</a></li>
+      <li>Next: <a href="structlegion_1_1physics_1_1_mesh_line.html" title="next chapter">Struct MeshLine</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/structlegion_1_1physics_1_1_mesh_half_edge.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

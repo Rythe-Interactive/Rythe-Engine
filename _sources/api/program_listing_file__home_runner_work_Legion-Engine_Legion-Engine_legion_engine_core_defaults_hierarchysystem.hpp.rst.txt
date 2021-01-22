@@ -1,0 +1,32 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_hierarchysystem.hpp:
+
+Program Listing for File hierarchysystem.hpp
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_hierarchysystem.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/defaults/hierarchysystem.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/engine/system.hpp>
+   #include <core/defaults/defaultcomponents.hpp>
+   
+   namespace legion::core
+   {
+       class HierarchySystem : public System<HierarchySystem>
+       {
+       public:
+           void onPositionModified(events::component_modification<position>* event);
+           void onRotationModified(events::component_modification<rotation>* event);
+           void onScaleModified(events::component_modification<scale>* event);
+   
+           void onPositionBulkModified(events::bulk_component_modification<position>* event);
+           void onRotationBulkModified(events::bulk_component_modification<rotation>* event);
+           void onScaleBulkModified(events::bulk_component_modification<scale>* event);
+   
+           virtual void setup();
+       };
+   }

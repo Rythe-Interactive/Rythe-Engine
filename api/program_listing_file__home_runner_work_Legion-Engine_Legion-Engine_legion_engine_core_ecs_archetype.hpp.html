@@ -46,46 +46,120 @@
   <div class="section" id="program-listing-for-file-archetype-hpp">
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-ecs-archetype-hpp"></span><h1>Program Listing for File archetype.hpp<a class="headerlink" href="#program-listing-for-file-archetype-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-ecs-archetype-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs/archetype.hpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-<span class="cp">#include</span> <span class="cpf">&lt;tuple&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/types/primitives.hpp&gt;</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>#pragma once
+#include &lt;tuple&gt;
+#include &lt;core/platform/platform.hpp&gt;
+#include &lt;core/types/primitives.hpp&gt;
 
-<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ecs</span>
-<span class="p">{</span>
-    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
-    <span class="k">class</span> <span class="nc">component_handle</span><span class="p">;</span>
+namespace legion::core::ecs
+{
+    template&lt;typename component_type&gt;
+    class component_handle;
 
-    <span class="k">class</span> <span class="nc">EcsRegistry</span><span class="p">;</span>
+    class EcsRegistry;
 
-    <span class="k">struct</span> <span class="n">archetype_base</span> <span class="p">{};</span>
+    struct archetype_base {};
 
-    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="o">&gt;</span>
-    <span class="k">struct</span> <span class="nl">archetype</span> <span class="p">:</span> <span class="k">public</span> <span class="n">archetype_base</span>
-    <span class="p">{</span>
-        <span class="k">friend</span> <span class="k">class</span> <span class="nc">EcsRegistry</span><span class="p">;</span>
-    <span class="k">public</span><span class="o">:</span>
-        <span class="k">using</span> <span class="n">handleGroup</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+    template&lt;typename component_type, typename... component_types&gt;
+    struct archetype : public archetype_base
+    {
+        friend class EcsRegistry;
+    public:
+        using handleGroup = std::tuple&lt;component_handle&lt;component_type&gt;, component_handle&lt;component_types&gt;...&gt;;
 
-        <span class="n">handleGroup</span> <span class="n">handles</span><span class="p">;</span>
+        handleGroup handles;
 
-        <span class="n">archetype</span><span class="p">(</span><span class="k">const</span> <span class="n">handleGroup</span><span class="o">&amp;</span> <span class="n">handles</span><span class="p">)</span> <span class="o">:</span> <span class="n">handles</span><span class="p">(</span><span class="n">handles</span><span class="p">)</span> <span class="p">{}</span>
+        archetype() = default;
+        archetype(const handleGroup&amp; handles) : handles(handles) {}
 
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-        <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get</span><span class="p">()</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">handles</span><span class="p">);</span>
-        <span class="p">}</span>
+        template&lt;typename T&gt;
+        component_handle&lt;T&gt; get()
+        {
+            return std::get&lt;component_handle&lt;T&gt;&gt;(handles);
+        }
 
-    <span class="k">private</span><span class="o">:</span>
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">create</span><span class="p">(</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">);</span>
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">create</span><span class="p">(</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">defaultValue</span><span class="p">,</span> <span class="n">component_types</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">defaultValues</span><span class="p">);</span>
+        template&lt;std::size_t I&gt;
+        auto get() -&gt;decltype(auto)
+        {
+            return std::get&lt;I&gt;(handles);
+        }
 
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">component_handle</span><span class="o">&lt;</span><span class="n">component_types</span><span class="o">&gt;</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">get</span><span class="p">(</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">);</span>
-        <span class="k">static</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="p">(</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">);</span>
-        <span class="k">static</span> <span class="kt">bool</span> <span class="nf">has</span><span class="p">(</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">);</span>
-    <span class="p">};</span>
-<span class="p">}</span>
+        bool valid()
+        {
+           return std::apply([](auto&amp;&amp;... args) {return(args.valid() &amp;&amp; ...); }, handles);
+        }
+
+        operator bool()
+        {
+            return valid();
+        }
+
+    private:
+        static std::tuple&lt;component_handle&lt;component_type&gt;, component_handle&lt;component_types&gt;...&gt; create(EcsRegistry* registry, id_type entityId);
+        static std::tuple&lt;component_handle&lt;component_type&gt;, component_handle&lt;component_types&gt;...&gt; create(EcsRegistry* registry, id_type entityId, component_type&amp;&amp; defaultValue, component_types&amp;&amp;... defaultValues);
+
+        static std::tuple&lt;component_handle&lt;component_type&gt;, component_handle&lt;component_types&gt;...&gt; get(EcsRegistry* registry, id_type entityId);
+        static void destroy(EcsRegistry* registry, id_type entityId);
+        static bool has(EcsRegistry* registry, id_type entityId);
+    };
+
+
+    template &lt;class T&gt;
+    struct ch_yield_type
+    {
+    };
+
+    template &lt;class T&gt;
+    struct ch_yield_type&lt;component_handle&lt;T&gt;&gt;
+    {
+        using type = T;
+    };
+
+}
+
+namespace std // NOLINT(cert-dcl58-cpp)
+{
+    template &lt;::std::size_t I,class ... Args&gt;
+    struct tuple_element&lt;I,legion::core::ecs::archetype&lt;Args...&gt;&gt;
+    {
+        using type = typename std::remove_reference_t&lt;typename tuple_element&lt;I,std::tuple&lt;legion::core::ecs::component_handle&lt;Args&gt;...&gt;&gt;::type&gt;;
+    };
+
+    template &lt;::std::size_t I,class ... Args&gt;
+    tuple_element&lt;I,legion::core::ecs::archetype&lt;Args...&gt;&gt;
+    get(legion::core::ecs::archetype&lt;Args...&gt;&amp; val)
+    {
+        return val.template get&lt;I&gt;();
+    }
+
+    template &lt;class X,class ... Args&gt;
+    legion::core::ecs::component_handle&lt;X&gt; get(legion::core::ecs::archetype&lt;Args...&gt;&amp; val)
+    {
+        return val.template get&lt;X&gt;();
+    }
+
+    template &lt;class... Types&gt;
+    struct tuple_size&lt;legion::core::ecs::archetype&lt;Types...&gt;&gt;
+    : public std::integral_constant&lt;std::size_t,sizeof...(Types)&gt;
+    {
+    };
+    template &lt;class... Types&gt;
+    struct tuple_size&lt;const legion::core::ecs::archetype&lt;Types...&gt;&gt;
+    : public std::integral_constant&lt;std::size_t,sizeof...(Types)&gt;
+    {
+    };
+    template &lt;class... Types&gt;
+    struct tuple_size&lt;volatile legion::core::ecs::archetype&lt;Types...&gt;&gt;
+    : public std::integral_constant&lt;std::size_t,sizeof...(Types)&gt;
+    {
+    };
+    template &lt;class... Types&gt;
+    struct tuple_size&lt;const volatile legion::core::ecs::archetype&lt;Types...&gt;&gt;
+    : public std::integral_constant&lt;std::size_t,sizeof...(Types)&gt;
+    {
+    };
+
+}
 </pre></div>
 </div>
 </div>

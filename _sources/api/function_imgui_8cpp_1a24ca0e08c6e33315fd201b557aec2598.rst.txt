@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a24ca0e08c6e33315fd201b557aec2598:
+
+Function NavUpdateWindowingHighlightWindow
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: NavUpdateWindowingHighlightWindow(int)

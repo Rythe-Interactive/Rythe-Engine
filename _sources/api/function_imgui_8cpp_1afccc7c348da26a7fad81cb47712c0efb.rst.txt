@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1afccc7c348da26a7fad81cb47712c0efb:
+
+Function MallocWrapper
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: MallocWrapper(size_t, void *)

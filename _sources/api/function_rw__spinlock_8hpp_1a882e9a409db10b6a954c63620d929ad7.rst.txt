@@ -1,0 +1,13 @@
+.. _exhale_function_rw__spinlock_8hpp_1a882e9a409db10b6a954c63620d929ad7:
+
+Template Function legion::core::async::readwrite_multiguard
+===========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::async::readwrite_multiguard(types...)

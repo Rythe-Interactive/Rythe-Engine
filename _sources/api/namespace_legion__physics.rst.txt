@@ -24,17 +24,39 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_boundary_edge_info`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1collision__event__base`
+
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_contact_vertex`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1cube__collider__params`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_edge_label`
 
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_fracturer`
+
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_half_edge_edge`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_half_edge_face`
 
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_half_edge_finder`
+
 - :ref:`exhale_struct_structlegion_1_1physics_1_1identifier`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_intersecting_polygon_organizer`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_intersection_edge_info`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_mesh_half_edge`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_mesh_line`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_mesh_split_params`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_mesh_splitter`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_mesh_splitter_debug_helper`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1physics__contact`
 
@@ -45,6 +67,10 @@ Classes
 - :ref:`exhale_struct_structlegion_1_1physics_1_1physics_component`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1rigidbody`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_splitter_intersection_info`
+
+- :ref:`exhale_class_structlegion_1_1physics_1_1collision__event`
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_convergance_identifier`
 
@@ -60,6 +86,8 @@ Classes
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_physics_collider`
 
+- :ref:`exhale_class_classlegion_1_1physics_1_1_physics_fracture_test_system`
+
 - :ref:`exhale_class_classlegion_1_1physics_1_1_physics_module`
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_physics_statics`
@@ -68,11 +96,30 @@ Classes
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_pointer_encapsulator`
 
-- :ref:`exhale_class_classlegion_1_1physics_1_1_trigger_event`
+- :ref:`exhale_class_classlegion_1_1physics_1_1_primitive_mesh`
+
+- :ref:`exhale_class_classlegion_1_1physics_1_1_splittable_polygon`
+
+- :ref:`exhale_class_structlegion_1_1physics_1_1trigger__event`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_splittable__polygon_8h_1a055b4a8ae65fc48792424145dbede841`
 
 
 Typedefs
 --------
 
 
+- :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1a53037ea411ffbe9ac39e3862045a69c4`
+
+- :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1ac22df5277e2553777688a72132d2b403`
+
 - :ref:`exhale_typedef_physicssystem_8hpp_1a185b74ed9c5197beba4040cf4f42ce02`
+
+- :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1a3041e1e9a86e0706c4c1a68f6d29918f`
+
+- :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1a86cfd5d08f6c8fbed905701bce664fc8`

@@ -18,7 +18,7 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Template Class uniform" href="class_structlegion_1_1rendering_1_1uniform.html" />
+    <link rel="next" title="Class Tonemapping" href="classlegion_1_1rendering_1_1_tonemapping.html" />
     <link rel="prev" title="Class texture_import_settings" href="class_structlegion_1_1rendering_1_1texture__import__settings.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="class_structlegion_1_1rendering_1_1uniform.html" title="Template Class uniform"
+          <a href="classlegion_1_1rendering_1_1_tonemapping.html" title="Class Tonemapping"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="class_structlegion_1_1rendering_1_1texture__import__settings.html" title="Class texture_import_settings"
@@ -61,7 +61,7 @@
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
 <dt id="_CPPv4N6legion9rendering12TextureCacheE">
-<span id="_CPPv3N6legion9rendering12TextureCacheE"></span><span id="_CPPv2N6legion9rendering12TextureCacheE"></span><span id="legion::rendering::TextureCache"></span><span class="target" id="classlegion_1_1rendering_1_1_texture_cache"></span><em class="property">class </em><code class="sig-prename descclassname">legion::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">TextureCache</code><a class="headerlink" href="#_CPPv4N6legion9rendering12TextureCacheE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering12TextureCacheE"></span><span id="_CPPv2N6legion9rendering12TextureCacheE"></span><span id="legion::rendering::TextureCache"></span><span class="target" id="classlegion_1_1rendering_1_1_texture_cache"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">TextureCache</code><a class="headerlink" href="#_CPPv4N6legion9rendering12TextureCacheE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Data cache for loading, storing and managing textures. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Functions</p>
@@ -85,6 +85,11 @@
 <dl class="cpp function">
 <dt id="_CPPv4N6legion9rendering12TextureCache14create_textureERKN2fs4viewE23texture_import_settings">
 <span id="_CPPv3N6legion9rendering12TextureCache14create_textureERKN2fs4viewE23texture_import_settings"></span><span id="_CPPv2N6legion9rendering12TextureCache14create_textureERKN2fs4viewE23texture_import_settings"></span><span id="legion::rendering::TextureCache::create_texture__fs::viewCR.texture_import_settings"></span><span class="target" id="classlegion_1_1rendering_1_1_texture_cache_1a541c80aa40091ccc8f38f510c8c7c445"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">create_texture</code><span class="sig-paren">(</span><em class="property">const</em> fs::view &amp;<em>file</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__import__settings.html#_CPPv4N6legion9rendering23texture_import_settingsE" title="legion::rendering::texture_import_settings">texture_import_settings</a> <em>settings</em> = <a class="reference internal" href="variable_texture_8hpp_1a69355df00001b5c499b2c9ba71c96d7a.html#_CPPv4N6legion9rendering24default_texture_settingsE" title="legion::rendering::default_texture_settings">default_texture_settings</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering12TextureCache14create_textureERKN2fs4viewE23texture_import_settings" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering12TextureCache14create_textureERKNSt6stringEN4math5ivec2E23texture_import_settings">
+<span id="_CPPv3N6legion9rendering12TextureCache14create_textureERKNSt6stringEN4math5ivec2E23texture_import_settings"></span><span id="_CPPv2N6legion9rendering12TextureCache14create_textureERKNSt6stringEN4math5ivec2E23texture_import_settings"></span><span id="legion::rendering::TextureCache::create_texture__ssCR.math::ivec2.texture_import_settings"></span><span class="target" id="classlegion_1_1rendering_1_1_texture_cache_1abab9e43a597ca9cfd9575a76bd8488d1"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__handle.html#_CPPv4N6legion9rendering14texture_handleE" title="legion::rendering::texture_handle">texture_handle</a> <code class="sig-name descname">create_texture</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em>, math::ivec2 <em>size</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1texture__import__settings.html#_CPPv4N6legion9rendering23texture_import_settingsE" title="legion::rendering::texture_import_settings">texture_import_settings</a> <em>settings</em> = <a class="reference internal" href="variable_texture_8hpp_1a69355df00001b5c499b2c9ba71c96d7a.html#_CPPv4N6legion9rendering24default_texture_settingsE" title="legion::rendering::default_texture_settings">default_texture_settings</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering12TextureCache14create_textureERKNSt6stringEN4math5ivec2E23texture_import_settings" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -163,7 +168,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
       <li>Previous: <a href="class_structlegion_1_1rendering_1_1texture__import__settings.html" title="previous chapter">Class texture_import_settings</a></li>
-      <li>Next: <a href="class_structlegion_1_1rendering_1_1uniform.html" title="next chapter">Template Class uniform</a></li>
+      <li>Next: <a href="classlegion_1_1rendering_1_1_tonemapping.html" title="next chapter">Class Tonemapping</a></li>
   </ul></li>
   </ul></li>
 </ul>

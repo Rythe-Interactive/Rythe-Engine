@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1a1526bb8d42b3fa38e1c702500d1ff601:
+
+Function ImGui::TabBarLayout
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGui::TabBarLayout(ImGuiTabBar *)

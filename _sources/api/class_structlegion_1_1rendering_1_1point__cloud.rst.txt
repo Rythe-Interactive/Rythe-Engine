@@ -1,0 +1,16 @@
+.. _exhale_class_structlegion_1_1rendering_1_1point__cloud:
+
+Class point_cloud
+=================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_point_cloud.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::point_cloud
+   :members:
+   :protected-members:
+   :undoc-members:

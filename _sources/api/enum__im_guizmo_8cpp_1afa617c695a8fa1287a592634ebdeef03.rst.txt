@@ -1,0 +1,13 @@
+.. _exhale_enum__im_guizmo_8cpp_1afa617c695a8fa1287a592634ebdeef03:
+
+Enum MOVETYPE
+=============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: imgui::gizmo::MOVETYPE

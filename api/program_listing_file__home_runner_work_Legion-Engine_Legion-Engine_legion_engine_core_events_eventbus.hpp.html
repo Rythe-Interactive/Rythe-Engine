@@ -53,53 +53,86 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/types/types.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/events/event.hpp&gt;</span><span class="cp"></span>
 
+<span class="cp">#include</span> <span class="cpf">&lt;Optick/optick.h&gt;</span><span class="cp"></span>
+
 <span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">events</span>
 <span class="p">{</span>
     <span class="k">class</span> <span class="nc">EventBus</span>
     <span class="p">{</span>
-        <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">event_base</span><span class="o">*&gt;&gt;</span> <span class="n">m_events</span><span class="p">;</span>
+        <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">event_base</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_events</span><span class="p">;</span>
         <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_base</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span> <span class="n">m_eventCallbacks</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
-        <span class="o">~</span><span class="n">EventBus</span><span class="p">()</span>
-        <span class="p">{</span>
-            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">events</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_events</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">*</span> <span class="nl">event</span> <span class="p">:</span> <span class="n">events</span><span class="p">)</span>
-                    <span class="k">delete</span> <span class="n">event</span><span class="p">;</span>
-
-                <span class="n">events</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">void</span> <span class="n">raiseEvent</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">arguments</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="n">event_type</span><span class="o">*</span> <span class="n">eventptr</span><span class="p">;</span>
 
             <span class="n">event_type</span> <span class="nf">event</span><span class="p">(</span><span class="n">arguments</span><span class="p">...);</span> <span class="c1">// Create new event.</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="n">persistent</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="n">unique</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">size</span><span class="p">()))</span>
             <span class="p">{</span>
                 <span class="n">eventptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">event_type</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">event</span><span class="p">));</span>
-                <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">insert</span><span class="p">(</span><span class="n">eventptr</span><span class="p">);</span> <span class="c1">// If it&#39;s persistent keep the event stored. (Or at least keep it somewhere fetch able.)</span>
+                <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">emplace</span><span class="p">(</span><span class="n">eventptr</span><span class="p">);</span> <span class="c1">// If it&#39;s persistent keep the event stored. (Or at least keep it somewhere fetch able.)</span>
             <span class="p">}</span>
             <span class="k">else</span>
                 <span class="n">eventptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">event</span><span class="p">;</span>
 
-            <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">]).</span><span class="n">invoke</span><span class="p">(</span><span class="n">eventptr</span><span class="p">);</span> <span class="c1">// Notify.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_eventCallbacks</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Event callbacks&quot;</span><span class="p">);</span>
+                <span class="n">OPTICK_TAG</span><span class="p">(</span><span class="s">&quot;Event&quot;</span><span class="p">,</span> <span class="n">typeName</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">());</span>
+                <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">]).</span><span class="n">invoke</span><span class="p">(</span><span class="n">eventptr</span><span class="p">);</span> <span class="c1">// Notify.</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">raiseEvent</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">event_base</span><span class="o">&gt;&amp;&amp;</span> <span class="n">value</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">persistent</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">unique</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">m_events</span><span class="p">[</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">get_id</span><span class="p">()].</span><span class="n">size</span><span class="p">()))</span>
+            <span class="p">{</span>
+                <span class="n">m_events</span><span class="p">[</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">get_id</span><span class="p">()].</span><span class="n">emplace</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">release</span><span class="p">());</span> <span class="c1">// If it&#39;s persistent keep the event stored. (Or at least keep it somewhere fetch able.)</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_eventCallbacks</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">get_id</span><span class="p">()))</span>
+            <span class="p">{</span>
+                <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Event callbacks&quot;</span><span class="p">);</span>
+                <span class="n">OPTICK_TAG</span><span class="p">(</span><span class="s">&quot;Event&quot;</span><span class="p">,</span> <span class="n">detail</span><span class="o">::</span><span class="n">eventNames</span><span class="p">[</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">get_id</span><span class="p">()].</span><span class="n">c_str</span><span class="p">());</span>
+                <span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">get_id</span><span class="p">()].</span><span class="n">invoke</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">raiseEventUnsafe</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">event_base</span><span class="o">&gt;&amp;&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">persistent</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">unique</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">m_events</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">size</span><span class="p">()))</span>
+            <span class="p">{</span>
+                <span class="n">m_events</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">emplace</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">release</span><span class="p">());</span> <span class="c1">// If it&#39;s persistent keep the event stored. (Or at least keep it somewhere fetch able.)</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_eventCallbacks</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Event callbacks&quot;</span><span class="p">);</span>
+                <span class="n">OPTICK_TAG</span><span class="p">(</span><span class="s">&quot;Event&quot;</span><span class="p">,</span> <span class="n">detail</span><span class="o">::</span><span class="n">eventNames</span><span class="p">[</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">get_id</span><span class="p">()].</span><span class="n">c_str</span><span class="p">());</span>
+                <span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">invoke</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">bool</span> <span class="n">checkEvent</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">return</span> <span class="n">m_events</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="n">size_type</span> <span class="n">getEventCount</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_events</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">))</span>
                 <span class="k">return</span> <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
             <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
@@ -108,6 +141,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="k">const</span> <span class="n">event_type</span><span class="o">&amp;</span> <span class="n">getEvent</span><span class="p">(</span><span class="n">index_type</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">())</span>
                 <span class="k">return</span> <span class="o">*</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">][</span><span class="n">index</span><span class="p">]);</span> <span class="c1">// Static cast because we already know that the types are the same.</span>
             <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
@@ -116,6 +150,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="k">const</span> <span class="n">event_type</span><span class="o">&amp;</span> <span class="n">getLastEvent</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">())</span>
             <span class="p">{</span>
                 <span class="n">size_type</span> <span class="n">size</span> <span class="o">=</span> <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
@@ -127,6 +162,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">void</span> <span class="n">clearEvent</span><span class="p">(</span><span class="n">index_type</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">())</span>
             <span class="p">{</span>
                 <span class="k">auto</span><span class="o">*</span> <span class="n">event</span> <span class="o">=</span> <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">][</span><span class="n">index</span><span class="p">];</span>
@@ -138,6 +174,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">void</span> <span class="n">clearLastEvent</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">())</span>
             <span class="p">{</span>
                 <span class="k">auto</span><span class="o">*</span> <span class="n">event</span> <span class="o">=</span> <span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">][</span><span class="n">m_events</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">].</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
@@ -149,7 +186,13 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;&gt;</span>
         <span class="kt">void</span> <span class="n">bindToEvent</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">]</span> <span class="o">+=</span> <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_base</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">callback</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">bindToEventUnsafe</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_base</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">+=</span> <span class="n">callback</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span>

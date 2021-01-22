@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1ae9ed208c0b64e4919e5de1cb83b2db2a:
+
+Function ImGui::NavRestoreLastChildNavWindow
+============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGui::NavRestoreLastChildNavWindow(ImGuiWindow *)

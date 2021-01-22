@@ -266,8 +266,11 @@
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">contains</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
             <span class="p">{</span>
-                <span class="n">m_dense</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">val</span><span class="p">]]</span> <span class="o">=</span> <span class="n">m_dense</span><span class="p">[</span><span class="n">m_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-                <span class="n">m_sparse</span><span class="p">[</span><span class="n">m_dense</span><span class="p">[</span><span class="n">m_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">m_sparse</span><span class="p">[</span><span class="n">val</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">!=</span> <span class="n">m_sparse</span><span class="p">[</span><span class="n">val</span><span class="p">])</span>
+                <span class="p">{</span>
+                    <span class="n">m_dense</span><span class="p">[</span><span class="n">m_sparse</span><span class="p">[</span><span class="n">val</span><span class="p">]]</span> <span class="o">=</span> <span class="n">m_dense</span><span class="p">[</span><span class="n">m_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                    <span class="n">m_sparse</span><span class="p">[</span><span class="n">m_dense</span><span class="p">[</span><span class="n">m_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">m_sparse</span><span class="p">[</span><span class="n">val</span><span class="p">];</span>
+                <span class="p">}</span>
                 <span class="o">--</span><span class="n">m_size</span><span class="p">;</span>
                 <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
             <span class="p">}</span>

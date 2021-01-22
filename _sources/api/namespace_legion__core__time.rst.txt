@@ -27,3 +27,12 @@ Typedefs
 
 
 - :ref:`exhale_typedef_time__span_8hpp_1a980bd219f37eb91482a7952d6572eba1`
+
+- :ref:`exhale_typedef_clock_8hpp_1ac8b69faff1f0c1c81285fa99e464a9ba`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_defaults_8hpp_1af749cbbdc7f4545a25cbd9a60a5b61d2`

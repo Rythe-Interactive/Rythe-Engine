@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__impl__opengl3_8cpp_1a7f9b5a4489b250ca33fd1fcca893a48f:
+
+Variable g_AttribLocationProjMtx
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: g_AttribLocationProjMtx

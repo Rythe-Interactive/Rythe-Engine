@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__draw_8cpp_1a98e6aacbe39a5d2a5fa9d08e362e49ef:
+
+Function GetDefaultCompressedFontDataTTFBase85
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: GetDefaultCompressedFontDataTTFBase85()

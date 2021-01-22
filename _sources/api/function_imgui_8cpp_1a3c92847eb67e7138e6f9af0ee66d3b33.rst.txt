@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a3c92847eb67e7138e6f9af0ee66d3b33:
+
+Function CreateNewWindow
+========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: CreateNewWindow(const char *, ImGuiWindowFlags)

@@ -1,0 +1,185 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp:
+
+File imgui_draw.cpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_draw.cpp``)
+----------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``imgui/imgui.h``
+
+- ``imgui/imgui_internal.h``
+
+- ``imgui/imstb_rectpack.h``
+
+- ``imgui/imstb_truetype.h``
+
+- ``stdio.h``
+
+- ``stdlib.h``
+
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_struct_im_font_build_dst_data`
+
+- :ref:`exhale_struct_struct_im_font_build_src_data`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a992fe244c130e7ec5a8aa7bc0889f9aa`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a7e56fa5a582707008d3a598b8d6e81fd`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a98e6aacbe39a5d2a5fa9d08e362e49ef`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1ae358747474c006135921182132a578a6`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a583080c74f4cef581b0233e0367e8538`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1adbf0ee92b3ac86e30b9e81f552d15d37`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1ac050ff181df43cec0b63d834b6039c3f`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a8d5f3a053aae34ac7b93e39cb9096d06`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a8dc3feae771599949b33712b520e9060`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1add0fcd1708ca3540688d8277fc01bf3f`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a4c015f0d4512b2ef9112f1abd6a8172a`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a5c1e7dc4dbb8ef1787cc953b6156fb28`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1ab634607914fd0dc9ed27d1dc65505adc`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a4bea0932904c84de73237df3f1f76bdd`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a19c9ebb9fccc7a5ff61b9367df9dc7fc`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a965f44a11f70d74588c6e1bb9f842b0e`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a1e4edfcb0eca0c2f9b67338817342cc4`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a7369890717be8d014dc7a437dcdfb282`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a13802610d242126f44f88bc9392e3bbc`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a23f899d930c93d351569ee83cf920570`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a5a5301def23b33e2156ac79a8b65c69b`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1ab60a4defbdf649dc073a900f61505dc2`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1ab5814a547146d0bc2c09e3b421abec63`
+
+- :ref:`exhale_function_imgui__draw_8cpp_1a4fc5013fcaedd05f22060e0c97f18c83`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a4df703825e073b91ea24956d6021ee59`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1aa595f4d7f5dca6ca04e5b1648e84f0d6`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1ac140465795cda6fa747579fc0b1b29d0`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a13d0eca12c1e2df442519a1a80d8cdaa`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a36c70a3a9dfec20d02bbb18e00a42ee1`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1adf4d73301961430d50d7edd96f92ce38`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a8abf98f5e58a4b3dbbdf35bb1d5ee872`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1acdc23c4b28788003d2841185775661ff`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a26702caa0fd7846cb92e8ba4d80446c3`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a0791e69f0dcd58efa795dd50eb8c6cd0`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1afaa2f2d0d9d6726cfae6da070e736347`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a9592e63d0df8b6f0712e8da3aea5db23`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a152aa757fb023d39f16dd537e66b60f0`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1aebe589aefd15ba7289a47168e31b5e45`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a1123d905f512c19c8d796a6d294a3a84`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a2b639a5c1ed39bb9e223a78b743f3769`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1ab937f3c3c6d0c2c126c50bb32e379f02`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a357d3564409e68f1b694e06f7beeca7e`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a284a26aeebf87bc1688d38b3b16c7248`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a37ec4d14918346d3451d4f44f24d4710`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a8f6734fe0cb6d6aa09e494602afa96be`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1a20c159e8e6985b92a96497881709659a`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1ace1fcbebd394a5bed76bc9b97dbe8d5a`
+
+- :ref:`exhale_define_imgui__draw_8cpp_1adb252cc9576591994fdf2f89baddc630`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_imgui__draw_8cpp_1a082105b7beb5c000f2db90529edf2f50`
+
+- :ref:`exhale_variable_imgui__draw_8cpp_1a2c96fc3febbe9f4f6c042a2f975a5b1d`
+
+- :ref:`exhale_variable_imgui__draw_8cpp_1a8fb14a4f88c1553e29260d6f43aada4b`
+
+- :ref:`exhale_variable_imgui__draw_8cpp_1adf518fea7357febbb14eeecb692a8d95`
+
+- :ref:`exhale_variable_imgui__draw_8cpp_1a7fcb9c29f786e1904c10a70f1385690a`
+
+- :ref:`exhale_variable_imgui__draw_8cpp_1abdae0f70193ebadc01bddcd66dfcf743`
+
+- :ref:`exhale_variable_imgui__draw_8cpp_1a78b497778dec25807f8ba5facab4732a`
+
+- :ref:`exhale_variable_imgui__draw_8cpp_1a6d45e455062888f4f84c022dcb80575f`
+
+- :ref:`exhale_variable_imgui__draw_8cpp_1a41c1b5025a92d93a30f72ba8f78c9910`
+

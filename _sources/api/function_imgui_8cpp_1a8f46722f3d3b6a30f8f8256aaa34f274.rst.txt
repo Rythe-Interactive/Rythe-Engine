@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a8f46722f3d3b6a30f8f8256aaa34f274:
+
+Function WindowSettingsHandler_ReadLine
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: WindowSettingsHandler_ReadLine(ImGuiContext *, ImGuiSettingsHandler *, void *, const char *)

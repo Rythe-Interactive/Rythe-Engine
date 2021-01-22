@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File splittable_polygon.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File splittable_polygon.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-splittable-polygon-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-splittable-polygon-cpp"></span><h1>Program Listing for File splittable_polygon.cpp<a class="headerlink" href="#program-listing-for-file-splittable-polygon-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-splittable-polygon-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/splittable_polygon.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/splittable_polygon.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/physics_statics.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/physicsconstants.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/mesh_half_edge.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
+<span class="p">{</span>
+    <span class="n">SplittablePolygon</span><span class="o">::</span><span class="n">SplittablePolygon</span>
+    <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&gt;&amp;</span> <span class="n">pEdgesInMesh</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">pNormal</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">edgesInPolygon</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">pEdgesInMesh</span><span class="p">)),</span> <span class="n">localNormal</span><span class="p">(</span><span class="n">pNormal</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">debugColor</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">linearRand</span><span class="p">(</span><span class="mf">0.25f</span><span class="p">,</span> <span class="mf">0.7f</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">linearRand</span><span class="p">(</span><span class="mf">0.25f</span><span class="p">,</span> <span class="mf">0.7f</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">linearRand</span><span class="p">(</span><span class="mf">0.25f</span><span class="p">,</span> <span class="mf">0.7f</span><span class="p">));</span>
+
+        <span class="n">CalculateLocalCentroid</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&gt;&amp;</span> <span class="n">SplittablePolygon</span><span class="o">::</span><span class="n">GetMeshEdges</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">edgesInPolygon</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">SplittablePolygon</span><span class="o">::</span><span class="n">CountBoundary</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">edgesInPolygon</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">res</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+
+    <span class="kt">void</span> <span class="n">SplittablePolygon</span><span class="o">::</span><span class="n">CalculateLocalCentroid</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">edgesInPolygon</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">localCentroid</span> <span class="o">+=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">localCentroid</span> <span class="o">/=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">edgesInPolygon</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">SplittablePolygon</span><span class="o">::</span><span class="n">AssignEdgeOwnership</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">edgesInPolygon</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">edge</span><span class="o">-&gt;</span><span class="n">owner</span> <span class="o">=</span> <span class="n">weak_from_this</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">SplittablePolygon</span><span class="o">::</span><span class="n">ResetEdgeVisited</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">edgesInPolygon</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">edge</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+
+
+    <span class="kt">void</span> <span class="n">SplittablePolygon</span><span class="o">::</span><span class="n">CalculatePolygonSplit</span>
+    <span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">planeNormal</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">aboveCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">belowCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">edgesInPolygon</span><span class="p">)</span>
+        <span class="p">{</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldPosition</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="kt">float</span> <span class="n">distToPlane</span> <span class="o">=</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">PointDistanceToPlane</span>
+            <span class="p">(</span><span class="n">planeNormal</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">worldPosition</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">distToPlane</span> <span class="o">&gt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">polygonItersectionEpsilon</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">aboveCount</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">distToPlane</span> <span class="o">&lt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">polygonItersectionEpsilon</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">belowCount</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">aboveCount</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">belowCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_SplitState</span> <span class="o">=</span> <span class="n">SplitState</span><span class="o">::</span><span class="n">Above</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">belowCount</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">aboveCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_SplitState</span> <span class="o">=</span> <span class="n">SplitState</span><span class="o">::</span><span class="n">Below</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">belowCount</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">aboveCount</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_SplitState</span> <span class="o">=</span> <span class="n">SplitState</span><span class="o">::</span><span class="n">Split</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">SplittablePolygon</span><span class="o">::</span><span class="n">IdentifyBoundaries</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">edgesInPolygon</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">bool</span> <span class="n">edgeIsBoundary</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedNormal</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">calculateEdgeNormal</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedOtherNormal</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">calculateEdgeNormal</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">MeshHalfEdge</span><span class="o">::</span><span class="n">compareNormals</span><span class="p">(</span><span class="n">transformedNormal</span><span class="p">,</span><span class="n">transformedOtherNormal</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="n">edgeIsBoundary</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">edge</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">=</span> <span class="n">edgeIsBoundary</span><span class="p">;</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">SplitState</span> <span class="n">SplittablePolygon</span><span class="o">::</span><span class="n">GetPolygonSplitState</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">m_SplitState</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

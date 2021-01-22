@@ -49,6 +49,7 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/events/event.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entity_handle.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/component_container.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">events</span>
 <span class="p">{</span>
@@ -62,6 +63,19 @@
 
     <span class="p">};</span>
 
+    <span class="k">struct</span> <span class="nl">parent_change</span> <span class="p">:</span> <span class="k">public</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">parent_change</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">oldParent</span><span class="p">;</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">newParent</span><span class="p">;</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">entity</span><span class="p">;</span>
+        <span class="n">parent_change</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">parent_change</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">entity</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">oldParent</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">newParent</span><span class="p">)</span> <span class="o">:</span> <span class="n">oldParent</span><span class="p">(</span><span class="n">oldParent</span><span class="p">),</span> <span class="n">newParent</span><span class="p">(</span><span class="n">newParent</span><span class="p">),</span> <span class="n">entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="p">{}</span>
+
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">persistent</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="p">};</span>
+
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
     <span class="k">struct</span> <span class="nl">component_creation</span> <span class="p">:</span> <span class="k">public</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">component_creation</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span>
     <span class="p">{</span>
@@ -69,6 +83,38 @@
 
         <span class="n">component_creation</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">component_creation</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">entity</span><span class="p">)</span> <span class="o">:</span> <span class="n">entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="p">{}</span>
+
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">persistent</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="nl">component_modification</span> <span class="p">:</span> <span class="k">public</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">component_modification</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span>
+    <span class="p">{</span>
+        <span class="n">component_type</span> <span class="n">oldValue</span><span class="p">;</span>
+        <span class="n">component_type</span> <span class="n">newValue</span><span class="p">;</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">entity</span><span class="p">;</span>
+
+        <span class="n">component_modification</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">component_modification</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">entity</span><span class="p">,</span> <span class="n">component_type</span><span class="o">&amp;&amp;</span> <span class="n">oldVal</span><span class="p">,</span> <span class="k">const</span> <span class="n">component_type</span><span class="o">&amp;</span> <span class="n">newVal</span><span class="p">)</span> <span class="o">:</span> <span class="n">oldValue</span><span class="p">(</span><span class="n">oldVal</span><span class="p">),</span> <span class="n">newValue</span><span class="p">(</span><span class="n">newVal</span><span class="p">),</span> <span class="n">entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">component_modification</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">entity</span><span class="p">,</span> <span class="k">const</span> <span class="n">component_type</span><span class="o">&amp;</span> <span class="n">oldVal</span><span class="p">,</span> <span class="k">const</span> <span class="n">component_type</span><span class="o">&amp;</span> <span class="n">newVal</span><span class="p">)</span> <span class="o">:</span> <span class="n">oldValue</span><span class="p">(</span><span class="n">oldVal</span><span class="p">),</span> <span class="n">newValue</span><span class="p">(</span><span class="n">newVal</span><span class="p">),</span> <span class="n">entity</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="p">{}</span>
+
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">persistent</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="nl">bulk_component_modification</span> <span class="p">:</span> <span class="k">public</span> <span class="n">event</span><span class="o">&lt;</span><span class="n">bulk_component_modification</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">oldValues</span><span class="p">;</span>
+        <span class="k">const</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">newValues</span><span class="p">;</span>
+        <span class="k">const</span> <span class="n">ecs</span><span class="o">::</span><span class="n">entity_container</span><span class="o">&amp;</span> <span class="n">entities</span><span class="p">;</span>
+
+        <span class="n">bulk_component_modification</span><span class="p">(</span><span class="n">bulk_component_modification</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">bulk_component_modification</span><span class="p">(</span><span class="k">const</span> <span class="n">bulk_component_modification</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">bulk_component_modification</span><span class="p">(</span><span class="k">const</span> <span class="n">ecs</span><span class="o">::</span><span class="n">entity_container</span><span class="o">&amp;</span> <span class="n">entities</span><span class="p">,</span> <span class="k">const</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">oldVals</span><span class="p">,</span> <span class="k">const</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">newVals</span><span class="p">)</span> <span class="o">:</span> <span class="n">oldValues</span><span class="p">(</span><span class="n">oldVals</span><span class="p">),</span> <span class="n">newValues</span><span class="p">(</span><span class="n">newVals</span><span class="p">),</span> <span class="n">entities</span><span class="p">(</span><span class="n">entities</span><span class="p">)</span> <span class="p">{}</span>
 
         <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">persistent</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
         <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">unique</span><span class="p">()</span> <span class="k">override</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>

@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1ab20ea11a16bdbdc0fc75e2e6e9b6d3ca:
+
+Function InputTextFilterCharacter
+=================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: InputTextFilterCharacter(unsigned int *, ImGuiInputTextFlags, ImGuiInputTextCallback, void *)

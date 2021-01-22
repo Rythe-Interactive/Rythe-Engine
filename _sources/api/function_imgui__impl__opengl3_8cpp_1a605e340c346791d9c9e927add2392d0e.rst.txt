@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__impl__opengl3_8cpp_1a605e340c346791d9c9e927add2392d0e:
+
+Function ImGui_ImplOpenGL3_DestroyDeviceObjects
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGui_ImplOpenGL3_DestroyDeviceObjects()

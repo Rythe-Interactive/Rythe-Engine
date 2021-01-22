@@ -1,0 +1,28 @@
+
+.. _namespace_imgui__sequencer:
+
+Namespace imgui::sequencer
+==========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function__im_sequencer_8cpp_1af3332a09d13f712221c2f6409f89eeeb`
+
+- :ref:`exhale_function__im_sequencer_8cpp_1a0788e42f8a47e1535cb538ff2e7c741b`
+
+- :ref:`exhale_function__im_sequencer_8cpp_1a86cbb7694dad6fb2f88c48f71f424188`
+
+- :ref:`exhale_function__im_sequencer_8cpp_1afb717d5871b71728f057e32032b9b10f`
+
+- :ref:`exhale_function__im_sequencer_8cpp_1ac2e721deda9dbb776cd2cb7ae1d076f8`

@@ -1,0 +1,800 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File imgui_impl_opengl3.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File imgui_impl_opengl3.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-imgui-impl-opengl3-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-impl-opengl3-cpp"></span><h1>Program Listing for File imgui_impl_opengl3.cpp<a class="headerlink" href="#program-listing-for-file-imgui-impl-opengl3-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-impl-opengl3-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_impl_opengl3.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// dear imgui: Renderer Backend for modern OpenGL with shaders / programmatic pipeline</span>
+<span class="c1">// - Desktop GL: 2.x 3.x 4.x</span>
+<span class="c1">// - Embedded GL: ES 2.0 (WebGL 1.0), ES 3.0 (WebGL 2.0)</span>
+<span class="c1">// This needs to be used along with a Platform Backend (e.g. GLFW, SDL, Win32, custom..)</span>
+
+<span class="c1">// Implemented features:</span>
+<span class="c1">//  [X] Renderer: User texture binding. Use &#39;GLuint&#39; OpenGL texture identifier as void*/ImTextureID. Read the FAQ about ImTextureID!</span>
+<span class="c1">//  [x] Renderer: Desktop GL only: Support for large meshes (64k+ vertices) with 16-bit indices.</span>
+
+<span class="c1">// You can copy and use unmodified imgui_impl_* files in your project. See examples/ folder for examples of using this.</span>
+<span class="c1">// If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.</span>
+<span class="c1">// Read online: https://github.com/ocornut/imgui/tree/master/docs</span>
+
+<span class="c1">// CHANGELOG</span>
+<span class="c1">// (minor and older changes stripped away, please see git history for details)</span>
+<span class="c1">//  2020-10-23: OpenGL: Save and restore current GL_PRIMITIVE_RESTART state.</span>
+<span class="c1">//  2020-10-15: OpenGL: Use glGetString(GL_VERSION) instead of glGetIntegerv(GL_MAJOR_VERSION, ...) when the later returns zero (e.g. Desktop GL 2.x)</span>
+<span class="c1">//  2020-09-17: OpenGL: Fix to avoid compiling/calling glBindSampler() on ES or pre 3.3 context which have the defines set by a loader.</span>
+<span class="c1">//  2020-07-10: OpenGL: Added support for glad2 OpenGL loader.</span>
+<span class="c1">//  2020-05-08: OpenGL: Made default GLSL version 150 (instead of 130) on OSX.</span>
+<span class="c1">//  2020-04-21: OpenGL: Fixed handling of glClipControl(GL_UPPER_LEFT) by inverting projection matrix.</span>
+<span class="c1">//  2020-04-12: OpenGL: Fixed context version check mistakenly testing for 4.0+ instead of 3.2+ to enable ImGuiBackendFlags_RendererHasVtxOffset.</span>
+<span class="c1">//  2020-03-24: OpenGL: Added support for glbinding 2.x OpenGL loader.</span>
+<span class="c1">//  2020-01-07: OpenGL: Added support for glbinding 3.x OpenGL loader.</span>
+<span class="c1">//  2019-10-25: OpenGL: Using a combination of GL define and runtime GL version to decide whether to use glDrawElementsBaseVertex(). Fix building with pre-3.2 GL loaders.</span>
+<span class="c1">//  2019-09-22: OpenGL: Detect default GL loader using __has_include compiler facility.</span>
+<span class="c1">//  2019-09-16: OpenGL: Tweak initialization code to allow application calling ImGui_ImplOpenGL3_CreateFontsTexture() before the first NewFrame() call.</span>
+<span class="c1">//  2019-05-29: OpenGL: Desktop GL only: Added support for large mesh (64K+ vertices), enable ImGuiBackendFlags_RendererHasVtxOffset flag.</span>
+<span class="c1">//  2019-04-30: OpenGL: Added support for special ImDrawCallback_ResetRenderState callback to reset render state.</span>
+<span class="c1">//  2019-03-29: OpenGL: Not calling glBindBuffer more than necessary in the render loop.</span>
+<span class="c1">//  2019-03-15: OpenGL: Added a GL call + comments in ImGui_ImplOpenGL3_Init() to detect uninitialized GL function loaders early.</span>
+<span class="c1">//  2019-03-03: OpenGL: Fix support for ES 2.0 (WebGL 1.0).</span>
+<span class="c1">//  2019-02-20: OpenGL: Fix for OSX not supporting OpenGL 4.5, we don&#39;t try to read GL_CLIP_ORIGIN even if defined by the headers/loader.</span>
+<span class="c1">//  2019-02-11: OpenGL: Projecting clipping rectangles correctly using draw_data-&gt;FramebufferScale to allow multi-viewports for retina display.</span>
+<span class="c1">//  2019-02-01: OpenGL: Using GLSL 410 shaders for any version over 410 (e.g. 430, 450).</span>
+<span class="c1">//  2018-11-30: Misc: Setting up io.BackendRendererName so it can be displayed in the About Window.</span>
+<span class="c1">//  2018-11-13: OpenGL: Support for GL 4.5&#39;s glClipControl(GL_UPPER_LEFT) / GL_CLIP_ORIGIN.</span>
+<span class="c1">//  2018-08-29: OpenGL: Added support for more OpenGL loaders: glew and glad, with comments indicative that any loader can be used.</span>
+<span class="c1">//  2018-08-09: OpenGL: Default to OpenGL ES 3 on iOS and Android. GLSL version default to &quot;#version 300 ES&quot;.</span>
+<span class="c1">//  2018-07-30: OpenGL: Support for GLSL 300 ES and 410 core. Fixes for Emscripten compilation.</span>
+<span class="c1">//  2018-07-10: OpenGL: Support for more GLSL versions (based on the GLSL version string). Added error output when shaders fail to compile/link.</span>
+<span class="c1">//  2018-06-08: Misc: Extracted imgui_impl_opengl3.cpp/.h away from the old combined GLFW/SDL+OpenGL3 examples.</span>
+<span class="c1">//  2018-06-08: OpenGL: Use draw_data-&gt;DisplayPos and draw_data-&gt;DisplaySize to setup projection matrix and clipping rectangle.</span>
+<span class="c1">//  2018-05-25: OpenGL: Removed unnecessary backup/restore of GL_ELEMENT_ARRAY_BUFFER_BINDING since this is part of the VAO state.</span>
+<span class="c1">//  2018-05-14: OpenGL: Making the call to glBindSampler() optional so 3.2 context won&#39;t fail if the function is a NULL pointer.</span>
+<span class="c1">//  2018-03-06: OpenGL: Added const char* glsl_version parameter to ImGui_ImplOpenGL3_Init() so user can override the GLSL version e.g. &quot;#version 150&quot;.</span>
+<span class="c1">//  2018-02-23: OpenGL: Create the VAO in the render function so the setup can more easily be used with multiple shared GL context.</span>
+<span class="c1">//  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplSdlGL3_RenderDrawData() in the .h file so you can call it yourself.</span>
+<span class="c1">//  2018-01-07: OpenGL: Changed GLSL shader version from 330 to 150.</span>
+<span class="c1">//  2017-09-01: OpenGL: Save and restore current bound sampler. Save and restore current polygon mode.</span>
+<span class="c1">//  2017-05-01: OpenGL: Fixed save and restore of current blend func state.</span>
+<span class="c1">//  2017-05-01: OpenGL: Fixed save and restore of current GL_ACTIVE_TEXTURE.</span>
+<span class="c1">//  2016-09-05: OpenGL: Fixed save and restore of current scissor rectangle.</span>
+<span class="c1">//  2016-07-29: OpenGL: Explicitly setting GL_UNPACK_ROW_LENGTH to reduce issues because SDL changes it. (#752)</span>
+
+<span class="c1">//----------------------------------------</span>
+<span class="c1">// OpenGL    GLSL      GLSL</span>
+<span class="c1">// version   version   string</span>
+<span class="c1">//----------------------------------------</span>
+<span class="c1">//  2.0       110       &quot;#version 110&quot;</span>
+<span class="c1">//  2.1       120       &quot;#version 120&quot;</span>
+<span class="c1">//  3.0       130       &quot;#version 130&quot;</span>
+<span class="c1">//  3.1       140       &quot;#version 140&quot;</span>
+<span class="c1">//  3.2       150       &quot;#version 150&quot;</span>
+<span class="c1">//  3.3       330       &quot;#version 330 core&quot;</span>
+<span class="c1">//  4.0       400       &quot;#version 400 core&quot;</span>
+<span class="c1">//  4.1       410       &quot;#version 410 core&quot;</span>
+<span class="c1">//  4.2       420       &quot;#version 410 core&quot;</span>
+<span class="c1">//  4.3       430       &quot;#version 430 core&quot;</span>
+<span class="c1">//  ES 2.0    100       &quot;#version 100&quot;      = WebGL 1.0</span>
+<span class="c1">//  ES 3.0    300       &quot;#version 300 es&quot;   = WebGL 2.0</span>
+<span class="c1">//----------------------------------------</span>
+
+<span class="cp">#if defined(_MSC_VER) &amp;&amp; !defined(_CRT_SECURE_NO_WARNINGS)</span>
+<span class="cp">#define _CRT_SECURE_NO_WARNINGS</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;imgui/imgui.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;imgui/backends/imgui_impl_opengl3.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#if defined(_MSC_VER) &amp;&amp; _MSC_VER &lt;= 1500 </span><span class="c1">// MSVC 2008 or earlier</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stddef.h&gt;     // intptr_t</span><span class="cp"></span>
+<span class="cp">#else</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;     // intptr_t</span><span class="cp"></span>
+<span class="cp">#endif</span>
+
+<span class="c1">// GL includes</span>
+<span class="cp">#if defined(IMGUI_IMPL_OPENGL_ES2)</span>
+<span class="cp">#include</span> <span class="cpf">&lt;GLES2/gl2.h&gt;</span><span class="cp"></span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_ES3)</span>
+<span class="cp">#if (defined(__APPLE__) &amp;&amp; (TARGET_OS_IOS || TARGET_OS_TV))</span>
+<span class="cp">#include</span> <span class="cpf">&lt;OpenGLES/ES3/gl.h&gt;    // Use GL ES 3</span><span class="cp"></span>
+<span class="cp">#else</span>
+<span class="cp">#include</span> <span class="cpf">&lt;GLES3/gl3.h&gt;          // Use GL ES 3</span><span class="cp"></span>
+<span class="cp">#endif</span>
+<span class="cp">#else</span>
+<span class="c1">// About Desktop OpenGL function loaders:</span>
+<span class="c1">//  Modern desktop OpenGL doesn&#39;t have a standard portable header file to load OpenGL function pointers.</span>
+<span class="c1">//  Helper libraries are often used for this purpose! Here we are supporting a few common ones (gl3w, glew, glad).</span>
+<span class="c1">//  You may use another loader/header of your choice (glext, glLoadGen, etc.), or chose to manually implement your own.</span>
+<span class="cp">#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)</span>
+<span class="cp">#include</span> <span class="cpf">&lt;GL/gl3w.h&gt;            // Needs to be initialized with gl3wInit() in user&#39;s code</span><span class="cp"></span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)</span>
+<span class="cp">#include</span> <span class="cpf">&lt;GL/glew.h&gt;            // Needs to be initialized with glewInit() in user&#39;s code.</span><span class="cp"></span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)</span>
+<span class="cp">#include</span> <span class="cpf">&lt;glad/glad.h&gt;          // Needs to be initialized with gladLoadGL() in user&#39;s code.</span><span class="cp"></span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)</span>
+<span class="cp">#include</span> <span class="cpf">&lt;gl/glad.h&gt;            // Needs to be initialized with gladLoadGL(...) or gladLoaderLoadGL() in user&#39;s code.</span><span class="cp"></span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)</span>
+<span class="cp">#ifndef GLFW_INCLUDE_NONE</span>
+<span class="cp">#define GLFW_INCLUDE_NONE       </span><span class="c1">// GLFW including OpenGL headers causes ambiguity or multiple definition errors.</span>
+<span class="cp">#endif</span>
+<span class="cp">#include</span> <span class="cpf">&lt;glbinding/Binding.h&gt;  // Needs to be initialized with glbinding::Binding::initialize() in user&#39;s code.</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;glbinding/gl/gl.h&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">gl</span><span class="p">;</span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)</span>
+<span class="cp">#ifndef GLFW_INCLUDE_NONE</span>
+<span class="cp">#define GLFW_INCLUDE_NONE       </span><span class="c1">// GLFW including OpenGL headers causes ambiguity or multiple definition errors.</span>
+<span class="cp">#endif</span>
+<span class="cp">#include</span> <span class="cpf">&lt;glbinding/glbinding.h&gt;// Needs to be initialized with glbinding::initialize() in user&#39;s code.</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;glbinding/gl/gl.h&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">gl</span><span class="p">;</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span> <span class="cpf">IMGUI_IMPL_OPENGL_LOADER_CUSTOM</span><span class="cp"></span>
+<span class="cp">#endif</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// Desktop GL 3.2+ has glDrawElementsBaseVertex() which GL ES and WebGL don&#39;t have.</span>
+<span class="cp">#if !defined(IMGUI_IMPL_OPENGL_ES2) &amp;&amp; !defined(IMGUI_IMPL_OPENGL_ES3) &amp;&amp; defined(GL_VERSION_3_2)</span>
+<span class="cp">#define IMGUI_IMPL_OPENGL_MAY_HAVE_VTX_OFFSET</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// Desktop GL 3.3+ has glBindSampler()</span>
+<span class="cp">#if !defined(IMGUI_IMPL_OPENGL_ES2) &amp;&amp; !defined(IMGUI_IMPL_OPENGL_ES3) &amp;&amp; defined(GL_VERSION_3_3)</span>
+<span class="cp">#define IMGUI_IMPL_OPENGL_MAY_HAVE_BIND_SAMPLER</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// Desktop GL 3.1+ has GL_PRIMITIVE_RESTART state</span>
+<span class="cp">#if !defined(IMGUI_IMPL_OPENGL_ES2) &amp;&amp; !defined(IMGUI_IMPL_OPENGL_ES3) &amp;&amp; defined(GL_VERSION_3_1)</span>
+<span class="cp">#define IMGUI_IMPL_OPENGL_MAY_HAVE_PRIMITIVE_RESTART</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// OpenGL Data</span>
+<span class="k">static</span> <span class="n">GLuint</span>       <span class="n">g_GlVersion</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>                <span class="c1">// Extracted at runtime using GL_MAJOR_VERSION, GL_MINOR_VERSION queries (e.g. 320 for GL 3.2)</span>
+<span class="k">static</span> <span class="kt">char</span>         <span class="n">g_GlslVersionString</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>   <span class="c1">// Specified by user or detected based on compile time GL settings.</span>
+<span class="k">static</span> <span class="n">GLuint</span>       <span class="n">g_FontTexture</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">GLuint</span>       <span class="n">g_ShaderHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">g_VertHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">g_FragHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">GLint</span>        <span class="n">g_AttribLocationTex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">g_AttribLocationProjMtx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>                                <span class="c1">// Uniforms location</span>
+<span class="k">static</span> <span class="n">GLuint</span>       <span class="n">g_AttribLocationVtxPos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">g_AttribLocationVtxUV</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">g_AttribLocationVtxColor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Vertex attributes location</span>
+<span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">g_VboHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">g_ElementsHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// Functions</span>
+<span class="kt">bool</span>    <span class="nf">ImGui_ImplOpenGL3_Init</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">glsl_version</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Query for GL version (e.g. 320 for GL 3.2)</span>
+<span class="cp">#if !defined(IMGUI_IMPL_OPENGL_ES2)</span>
+    <span class="n">GLint</span> <span class="n">major</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">GLint</span> <span class="n">minor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MAJOR_VERSION</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">major</span><span class="p">);</span>
+    <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_MINOR_VERSION</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">minor</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">major</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">minor</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Query GL_VERSION in desktop GL 2.x, the string will start with &quot;&lt;major&gt;.&lt;minor&gt;&quot;</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">gl_version</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">glGetString</span><span class="p">(</span><span class="n">GL_VERSION</span><span class="p">);</span>
+        <span class="n">sscanf</span><span class="p">(</span><span class="n">gl_version</span><span class="p">,</span> <span class="s">&quot;%d.%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">major</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">minor</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">g_GlVersion</span> <span class="o">=</span> <span class="p">(</span><span class="n">GLuint</span><span class="p">)(</span><span class="n">major</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">minor</span> <span class="o">*</span> <span class="mi">10</span><span class="p">);</span>
+<span class="cp">#else</span>
+    <span class="n">g_GlVersion</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span> <span class="c1">// GLES 2</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Setup backend capabilities flags</span>
+    <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">BackendRendererName</span> <span class="o">=</span> <span class="s">&quot;imgui_impl_opengl3&quot;</span><span class="p">;</span>
+<span class="cp">#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_VTX_OFFSET</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_GlVersion</span> <span class="o">&gt;=</span> <span class="mi">320</span><span class="p">)</span>
+        <span class="n">io</span><span class="p">.</span><span class="n">BackendFlags</span> <span class="o">|=</span> <span class="n">ImGuiBackendFlags_RendererHasVtxOffset</span><span class="p">;</span>  <span class="c1">// We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Store GLSL version string so we can refer to it later in case we recreate shaders.</span>
+    <span class="c1">// Note: GLSL version is NOT the same as GL version. Leave this to NULL if unsure.</span>
+<span class="cp">#if defined(IMGUI_IMPL_OPENGL_ES2)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glsl_version</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="n">glsl_version</span> <span class="o">=</span> <span class="s">&quot;#version 100&quot;</span><span class="p">;</span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_ES3)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glsl_version</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="n">glsl_version</span> <span class="o">=</span> <span class="s">&quot;#version 300 es&quot;</span><span class="p">;</span>
+<span class="cp">#elif defined(__APPLE__)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glsl_version</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="n">glsl_version</span> <span class="o">=</span> <span class="s">&quot;#version 150&quot;</span><span class="p">;</span>
+<span class="cp">#else</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glsl_version</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="n">glsl_version</span> <span class="o">=</span> <span class="s">&quot;#version 130&quot;</span><span class="p">;</span>
+<span class="cp">#endif</span>
+    <span class="n">IM_ASSERT</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">strlen</span><span class="p">(</span><span class="n">glsl_version</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="n">IM_ARRAYSIZE</span><span class="p">(</span><span class="n">g_GlslVersionString</span><span class="p">));</span>
+    <span class="n">strcpy</span><span class="p">(</span><span class="n">g_GlslVersionString</span><span class="p">,</span> <span class="n">glsl_version</span><span class="p">);</span>
+    <span class="n">strcat</span><span class="p">(</span><span class="n">g_GlslVersionString</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Debugging construct to make it easily visible in the IDE and debugger which GL loader has been selected.</span>
+    <span class="c1">// The code actually never uses the &#39;gl_loader&#39; variable! It is only here so you can read it!</span>
+    <span class="c1">// If auto-detection fails or doesn&#39;t select the same GL loader file as used by your application,</span>
+    <span class="c1">// you are likely to get a crash below.</span>
+    <span class="c1">// You can explicitly select a loader by using &#39;#define IMGUI_IMPL_OPENGL_LOADER_XXX&#39; in imconfig.h or compiler command-line.</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">gl_loader</span> <span class="o">=</span> <span class="s">&quot;Unknown&quot;</span><span class="p">;</span>
+    <span class="n">IM_UNUSED</span><span class="p">(</span><span class="n">gl_loader</span><span class="p">);</span>
+<span class="cp">#if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)</span>
+    <span class="n">gl_loader</span> <span class="o">=</span> <span class="s">&quot;GL3W&quot;</span><span class="p">;</span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLEW)</span>
+    <span class="n">gl_loader</span> <span class="o">=</span> <span class="s">&quot;GLEW&quot;</span><span class="p">;</span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD)</span>
+    <span class="n">gl_loader</span> <span class="o">=</span> <span class="s">&quot;GLAD&quot;</span><span class="p">;</span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLAD2)</span>
+    <span class="n">gl_loader</span> <span class="o">=</span> <span class="s">&quot;GLAD2&quot;</span><span class="p">;</span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING2)</span>
+    <span class="n">gl_loader</span> <span class="o">=</span> <span class="s">&quot;glbinding2&quot;</span><span class="p">;</span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_GLBINDING3)</span>
+    <span class="n">gl_loader</span> <span class="o">=</span> <span class="s">&quot;glbinding3&quot;</span><span class="p">;</span>
+<span class="cp">#elif defined(IMGUI_IMPL_OPENGL_LOADER_CUSTOM)</span>
+    <span class="n">gl_loader</span> <span class="o">=</span> <span class="s">&quot;custom&quot;</span><span class="p">;</span>
+<span class="cp">#else</span>
+    <span class="n">gl_loader</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Make an arbitrary GL call (we don&#39;t actually need the result)</span>
+    <span class="c1">// IF YOU GET A CRASH HERE: it probably means that you haven&#39;t initialized the OpenGL function loader used by this code.</span>
+    <span class="c1">// Desktop OpenGL 3/4 need a function loader. See the IMGUI_IMPL_OPENGL_LOADER_xxx explanation above.</span>
+    <span class="n">GLint</span> <span class="n">current_texture</span><span class="p">;</span>
+    <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_TEXTURE_BINDING_2D</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">current_texture</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span>    <span class="nf">ImGui_ImplOpenGL3_Shutdown</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">ImGui_ImplOpenGL3_DestroyDeviceObjects</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span>    <span class="nf">ImGui_ImplOpenGL3_NewFrame</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">g_ShaderHandle</span><span class="p">)</span>
+        <span class="n">ImGui_ImplOpenGL3_CreateDeviceObjects</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">ImGui_ImplOpenGL3_SetupRenderState</span><span class="p">(</span><span class="n">ImDrawData</span><span class="o">*</span> <span class="n">draw_data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fb_width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fb_height</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">vertex_array_object</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Setup render state: alpha-blending enabled, no face culling, no depth testing, scissor enabled, polygon fill</span>
+    <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_BLEND</span><span class="p">);</span>
+    <span class="n">glBlendEquation</span><span class="p">(</span><span class="n">GL_FUNC_ADD</span><span class="p">);</span>
+    <span class="n">glBlendFunc</span><span class="p">(</span><span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">);</span>
+    <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_CULL_FACE</span><span class="p">);</span>
+    <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_DEPTH_TEST</span><span class="p">);</span>
+    <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_SCISSOR_TEST</span><span class="p">);</span>
+<span class="cp">#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_PRIMITIVE_RESTART</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_GlVersion</span> <span class="o">&gt;=</span> <span class="mi">310</span><span class="p">)</span>
+        <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_PRIMITIVE_RESTART</span><span class="p">);</span>
+<span class="cp">#endif</span>
+<span class="cp">#ifdef GL_POLYGON_MODE</span>
+    <span class="n">glPolygonMode</span><span class="p">(</span><span class="n">GL_FRONT_AND_BACK</span><span class="p">,</span> <span class="n">GL_FILL</span><span class="p">);</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Support for GL 4.5 rarely used glClipControl(GL_UPPER_LEFT)</span>
+    <span class="kt">bool</span> <span class="n">clip_origin_lower_left</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="cp">#if defined(GL_CLIP_ORIGIN) &amp;&amp; !defined(__APPLE__)</span>
+    <span class="n">GLenum</span> <span class="n">current_clip_origin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_CLIP_ORIGIN</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">current_clip_origin</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">current_clip_origin</span> <span class="o">==</span> <span class="n">GL_UPPER_LEFT</span><span class="p">)</span>
+        <span class="n">clip_origin_lower_left</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Setup viewport, orthographic projection matrix</span>
+    <span class="c1">// Our visible imgui space lies from draw_data-&gt;DisplayPos (top left) to draw_data-&gt;DisplayPos+data_data-&gt;DisplaySize (bottom right). DisplayPos is (0,0) for single viewport apps.</span>
+    <span class="n">glViewport</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">fb_width</span><span class="p">,</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">fb_height</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">L</span> <span class="o">=</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplayPos</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">R</span> <span class="o">=</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplayPos</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">T</span> <span class="o">=</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplayPos</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">B</span> <span class="o">=</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplayPos</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">clip_origin_lower_left</span><span class="p">)</span> <span class="p">{</span> <span class="kt">float</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">T</span><span class="p">;</span> <span class="n">T</span> <span class="o">=</span> <span class="n">B</span><span class="p">;</span> <span class="n">B</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// Swap top and bottom if origin is upper left</span>
+    <span class="k">const</span> <span class="kt">float</span> <span class="n">ortho_projection</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span>
+    <span class="p">{</span>
+        <span class="p">{</span> <span class="mf">2.0f</span><span class="o">/</span><span class="p">(</span><span class="n">R</span><span class="o">-</span><span class="n">L</span><span class="p">),</span>   <span class="mf">0.0f</span><span class="p">,</span>         <span class="mf">0.0f</span><span class="p">,</span>   <span class="mf">0.0f</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="mf">0.0f</span><span class="p">,</span>         <span class="mf">2.0f</span><span class="o">/</span><span class="p">(</span><span class="n">T</span><span class="o">-</span><span class="n">B</span><span class="p">),</span>   <span class="mf">0.0f</span><span class="p">,</span>   <span class="mf">0.0f</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="mf">0.0f</span><span class="p">,</span>         <span class="mf">0.0f</span><span class="p">,</span>        <span class="o">-</span><span class="mf">1.0f</span><span class="p">,</span>   <span class="mf">0.0f</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="p">(</span><span class="n">R</span><span class="o">+</span><span class="n">L</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">-</span><span class="n">R</span><span class="p">),</span>  <span class="p">(</span><span class="n">T</span><span class="o">+</span><span class="n">B</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">B</span><span class="o">-</span><span class="n">T</span><span class="p">),</span>  <span class="mf">0.0f</span><span class="p">,</span>   <span class="mf">1.0f</span> <span class="p">},</span>
+    <span class="p">};</span>
+    <span class="n">glUseProgram</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">);</span>
+    <span class="n">glUniform1i</span><span class="p">(</span><span class="n">g_AttribLocationTex</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">glUniformMatrix4fv</span><span class="p">(</span><span class="n">g_AttribLocationProjMtx</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ortho_projection</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span>
+
+<span class="cp">#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_BIND_SAMPLER</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_GlVersion</span> <span class="o">&gt;=</span> <span class="mi">330</span><span class="p">)</span>
+        <span class="n">glBindSampler</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// We use combined texture/sampler state. Applications using GL 3.3 may set that otherwise.</span>
+<span class="cp">#endif</span>
+
+    <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">vertex_array_object</span><span class="p">;</span>
+<span class="cp">#ifndef IMGUI_IMPL_OPENGL_ES2</span>
+    <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">vertex_array_object</span><span class="p">);</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Bind vertex/index buffers and setup attributes for ImDrawVert</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">g_VboHandle</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">g_ElementsHandle</span><span class="p">);</span>
+    <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">g_AttribLocationVtxPos</span><span class="p">);</span>
+    <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">g_AttribLocationVtxUV</span><span class="p">);</span>
+    <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">g_AttribLocationVtxColor</span><span class="p">);</span>
+    <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">g_AttribLocationVtxPos</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span>         <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ImDrawVert</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)</span><span class="n">IM_OFFSETOF</span><span class="p">(</span><span class="n">ImDrawVert</span><span class="p">,</span> <span class="n">pos</span><span class="p">));</span>
+    <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">g_AttribLocationVtxUV</span><span class="p">,</span>    <span class="mi">2</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span>         <span class="n">GL_FALSE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ImDrawVert</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)</span><span class="n">IM_OFFSETOF</span><span class="p">(</span><span class="n">ImDrawVert</span><span class="p">,</span> <span class="n">uv</span><span class="p">));</span>
+    <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">g_AttribLocationVtxColor</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">GL_TRUE</span><span class="p">,</span>  <span class="k">sizeof</span><span class="p">(</span><span class="n">ImDrawVert</span><span class="p">),</span> <span class="p">(</span><span class="n">GLvoid</span><span class="o">*</span><span class="p">)</span><span class="n">IM_OFFSETOF</span><span class="p">(</span><span class="n">ImDrawVert</span><span class="p">,</span> <span class="n">col</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// OpenGL3 Render function.</span>
+<span class="c1">// Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly.</span>
+<span class="c1">// This is in order to be able to run within an OpenGL engine that doesn&#39;t do so.</span>
+<span class="kt">void</span>    <span class="nf">ImGui_ImplOpenGL3_RenderDrawData</span><span class="p">(</span><span class="n">ImDrawData</span><span class="o">*</span> <span class="n">draw_data</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)</span>
+    <span class="kt">int</span> <span class="n">fb_width</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">FramebufferScale</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">fb_height</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">FramebufferScale</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fb_width</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">fb_height</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+
+    <span class="c1">// Backup GL state</span>
+    <span class="n">GLenum</span> <span class="n">last_active_texture</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_ACTIVE_TEXTURE</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_active_texture</span><span class="p">);</span>
+    <span class="n">glActiveTexture</span><span class="p">(</span><span class="n">GL_TEXTURE0</span><span class="p">);</span>
+    <span class="n">GLuint</span> <span class="n">last_program</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_CURRENT_PROGRAM</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_program</span><span class="p">);</span>
+    <span class="n">GLuint</span> <span class="n">last_texture</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_TEXTURE_BINDING_2D</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_texture</span><span class="p">);</span>
+<span class="cp">#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_BIND_SAMPLER</span>
+    <span class="n">GLuint</span> <span class="n">last_sampler</span><span class="p">;</span> <span class="k">if</span> <span class="p">(</span><span class="n">g_GlVersion</span> <span class="o">&gt;=</span> <span class="mi">330</span><span class="p">)</span> <span class="p">{</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_SAMPLER_BINDING</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_sampler</span><span class="p">);</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="n">last_sampler</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+<span class="cp">#endif</span>
+    <span class="n">GLuint</span> <span class="n">last_array_buffer</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER_BINDING</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_array_buffer</span><span class="p">);</span>
+<span class="cp">#ifndef IMGUI_IMPL_OPENGL_ES2</span>
+    <span class="n">GLuint</span> <span class="n">last_vertex_array_object</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_VERTEX_ARRAY_BINDING</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_vertex_array_object</span><span class="p">);</span>
+<span class="cp">#endif</span>
+<span class="cp">#ifdef GL_POLYGON_MODE</span>
+    <span class="n">GLint</span> <span class="n">last_polygon_mode</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_POLYGON_MODE</span><span class="p">,</span> <span class="n">last_polygon_mode</span><span class="p">);</span>
+<span class="cp">#endif</span>
+    <span class="n">GLint</span> <span class="n">last_viewport</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_VIEWPORT</span><span class="p">,</span> <span class="n">last_viewport</span><span class="p">);</span>
+    <span class="n">GLint</span> <span class="n">last_scissor_box</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_SCISSOR_BOX</span><span class="p">,</span> <span class="n">last_scissor_box</span><span class="p">);</span>
+    <span class="n">GLenum</span> <span class="n">last_blend_src_rgb</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_BLEND_SRC_RGB</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_blend_src_rgb</span><span class="p">);</span>
+    <span class="n">GLenum</span> <span class="n">last_blend_dst_rgb</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_BLEND_DST_RGB</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_blend_dst_rgb</span><span class="p">);</span>
+    <span class="n">GLenum</span> <span class="n">last_blend_src_alpha</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_BLEND_SRC_ALPHA</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_blend_src_alpha</span><span class="p">);</span>
+    <span class="n">GLenum</span> <span class="n">last_blend_dst_alpha</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_BLEND_DST_ALPHA</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_blend_dst_alpha</span><span class="p">);</span>
+    <span class="n">GLenum</span> <span class="n">last_blend_equation_rgb</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_BLEND_EQUATION_RGB</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_blend_equation_rgb</span><span class="p">);</span>
+    <span class="n">GLenum</span> <span class="n">last_blend_equation_alpha</span><span class="p">;</span> <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_BLEND_EQUATION_ALPHA</span><span class="p">,</span> <span class="p">(</span><span class="n">GLint</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">last_blend_equation_alpha</span><span class="p">);</span>
+    <span class="n">GLboolean</span> <span class="n">last_enable_blend</span> <span class="o">=</span> <span class="n">glIsEnabled</span><span class="p">(</span><span class="n">GL_BLEND</span><span class="p">);</span>
+    <span class="n">GLboolean</span> <span class="n">last_enable_cull_face</span> <span class="o">=</span> <span class="n">glIsEnabled</span><span class="p">(</span><span class="n">GL_CULL_FACE</span><span class="p">);</span>
+    <span class="n">GLboolean</span> <span class="n">last_enable_depth_test</span> <span class="o">=</span> <span class="n">glIsEnabled</span><span class="p">(</span><span class="n">GL_DEPTH_TEST</span><span class="p">);</span>
+    <span class="n">GLboolean</span> <span class="n">last_enable_scissor_test</span> <span class="o">=</span> <span class="n">glIsEnabled</span><span class="p">(</span><span class="n">GL_SCISSOR_TEST</span><span class="p">);</span>
+<span class="cp">#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_PRIMITIVE_RESTART</span>
+    <span class="n">GLboolean</span> <span class="n">last_enable_primitive_restart</span> <span class="o">=</span> <span class="p">(</span><span class="n">g_GlVersion</span> <span class="o">&gt;=</span> <span class="mi">310</span><span class="p">)</span> <span class="o">?</span> <span class="n">glIsEnabled</span><span class="p">(</span><span class="n">GL_PRIMITIVE_RESTART</span><span class="p">)</span> <span class="o">:</span> <span class="n">GL_FALSE</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Setup desired GL state</span>
+    <span class="c1">// Recreate the VAO every time (this is to easily allow multiple GL contexts to be rendered to. VAO are not shared among GL contexts)</span>
+    <span class="c1">// The renderer would actually work without any VAO bound, but then our VertexAttrib calls would overwrite the default one currently bound.</span>
+    <span class="n">GLuint</span> <span class="n">vertex_array_object</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="cp">#ifndef IMGUI_IMPL_OPENGL_ES2</span>
+    <span class="n">glGenVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vertex_array_object</span><span class="p">);</span>
+<span class="cp">#endif</span>
+    <span class="n">ImGui_ImplOpenGL3_SetupRenderState</span><span class="p">(</span><span class="n">draw_data</span><span class="p">,</span> <span class="n">fb_width</span><span class="p">,</span> <span class="n">fb_height</span><span class="p">,</span> <span class="n">vertex_array_object</span><span class="p">);</span>
+
+    <span class="c1">// Will project scissor/clipping rectangles into framebuffer space</span>
+    <span class="n">ImVec2</span> <span class="n">clip_off</span> <span class="o">=</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">DisplayPos</span><span class="p">;</span>         <span class="c1">// (0,0) unless using multi-viewports</span>
+    <span class="n">ImVec2</span> <span class="n">clip_scale</span> <span class="o">=</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">FramebufferScale</span><span class="p">;</span> <span class="c1">// (1,1) unless using retina display which are often (2,2)</span>
+
+    <span class="c1">// Render command lists</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">CmdListsCount</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="n">ImDrawList</span><span class="o">*</span> <span class="n">cmd_list</span> <span class="o">=</span> <span class="n">draw_data</span><span class="o">-&gt;</span><span class="n">CmdLists</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+
+        <span class="c1">// Upload vertex/index buffers</span>
+        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="p">(</span><span class="n">GLsizeiptr</span><span class="p">)</span><span class="n">cmd_list</span><span class="o">-&gt;</span><span class="n">VtxBuffer</span><span class="p">.</span><span class="n">Size</span> <span class="o">*</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="k">sizeof</span><span class="p">(</span><span class="n">ImDrawVert</span><span class="p">),</span> <span class="p">(</span><span class="k">const</span> <span class="n">GLvoid</span><span class="o">*</span><span class="p">)</span><span class="n">cmd_list</span><span class="o">-&gt;</span><span class="n">VtxBuffer</span><span class="p">.</span><span class="n">Data</span><span class="p">,</span> <span class="n">GL_STREAM_DRAW</span><span class="p">);</span>
+        <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ELEMENT_ARRAY_BUFFER</span><span class="p">,</span> <span class="p">(</span><span class="n">GLsizeiptr</span><span class="p">)</span><span class="n">cmd_list</span><span class="o">-&gt;</span><span class="n">IdxBuffer</span><span class="p">.</span><span class="n">Size</span> <span class="o">*</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="k">sizeof</span><span class="p">(</span><span class="n">ImDrawIdx</span><span class="p">),</span> <span class="p">(</span><span class="k">const</span> <span class="n">GLvoid</span><span class="o">*</span><span class="p">)</span><span class="n">cmd_list</span><span class="o">-&gt;</span><span class="n">IdxBuffer</span><span class="p">.</span><span class="n">Data</span><span class="p">,</span> <span class="n">GL_STREAM_DRAW</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">cmd_i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cmd_i</span> <span class="o">&lt;</span> <span class="n">cmd_list</span><span class="o">-&gt;</span><span class="n">CmdBuffer</span><span class="p">.</span><span class="n">Size</span><span class="p">;</span> <span class="n">cmd_i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">const</span> <span class="n">ImDrawCmd</span><span class="o">*</span> <span class="n">pcmd</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">cmd_list</span><span class="o">-&gt;</span><span class="n">CmdBuffer</span><span class="p">[</span><span class="n">cmd_i</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">UserCallback</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">// User callback, registered via ImDrawList::AddCallback()</span>
+                <span class="c1">// (ImDrawCallback_ResetRenderState is a special callback value used by the user to request the renderer to reset render state.)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">UserCallback</span> <span class="o">==</span> <span class="n">ImDrawCallback_ResetRenderState</span><span class="p">)</span>
+                    <span class="n">ImGui_ImplOpenGL3_SetupRenderState</span><span class="p">(</span><span class="n">draw_data</span><span class="p">,</span> <span class="n">fb_width</span><span class="p">,</span> <span class="n">fb_height</span><span class="p">,</span> <span class="n">vertex_array_object</span><span class="p">);</span>
+                <span class="k">else</span>
+                    <span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">UserCallback</span><span class="p">(</span><span class="n">cmd_list</span><span class="p">,</span> <span class="n">pcmd</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="c1">// Project scissor/clipping rectangles into framebuffer space</span>
+                <span class="n">ImVec4</span> <span class="n">clip_rect</span><span class="p">;</span>
+                <span class="n">clip_rect</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">ClipRect</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">clip_off</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">clip_scale</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+                <span class="n">clip_rect</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">ClipRect</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">clip_off</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">clip_scale</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+                <span class="n">clip_rect</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">ClipRect</span><span class="p">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">clip_off</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">clip_scale</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+                <span class="n">clip_rect</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="p">(</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">ClipRect</span><span class="p">.</span><span class="n">w</span> <span class="o">-</span> <span class="n">clip_off</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">clip_scale</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">clip_rect</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">fb_width</span> <span class="o">&amp;&amp;</span> <span class="n">clip_rect</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">fb_height</span> <span class="o">&amp;&amp;</span> <span class="n">clip_rect</span><span class="p">.</span><span class="n">z</span> <span class="o">&gt;=</span> <span class="mf">0.0f</span> <span class="o">&amp;&amp;</span> <span class="n">clip_rect</span><span class="p">.</span><span class="n">w</span> <span class="o">&gt;=</span> <span class="mf">0.0f</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="c1">// Apply scissor/clipping rectangle</span>
+                    <span class="n">glScissor</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="n">clip_rect</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">fb_height</span> <span class="o">-</span> <span class="n">clip_rect</span><span class="p">.</span><span class="n">w</span><span class="p">),</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">clip_rect</span><span class="p">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">clip_rect</span><span class="p">.</span><span class="n">x</span><span class="p">),</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">clip_rect</span><span class="p">.</span><span class="n">w</span> <span class="o">-</span> <span class="n">clip_rect</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
+
+                    <span class="c1">// Bind texture, Draw</span>
+                    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="p">(</span><span class="n">GLuint</span><span class="p">)(</span><span class="kt">intptr_t</span><span class="p">)</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">TextureId</span><span class="p">);</span>
+<span class="cp">#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_VTX_OFFSET</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">g_GlVersion</span> <span class="o">&gt;=</span> <span class="mi">320</span><span class="p">)</span>
+                        <span class="n">glDrawElementsBaseVertex</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">,</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">ElemCount</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ImDrawIdx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">?</span> <span class="nl">GL_UNSIGNED_SHORT</span> <span class="p">:</span> <span class="n">GL_UNSIGNED_INT</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="kt">intptr_t</span><span class="p">)(</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">IdxOffset</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ImDrawIdx</span><span class="p">)),</span> <span class="p">(</span><span class="n">GLint</span><span class="p">)</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">VtxOffset</span><span class="p">);</span>
+                    <span class="k">else</span>
+<span class="cp">#endif</span>
+                    <span class="n">glDrawElements</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">,</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">ElemCount</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ImDrawIdx</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">?</span> <span class="nl">GL_UNSIGNED_SHORT</span> <span class="p">:</span> <span class="n">GL_UNSIGNED_INT</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="kt">intptr_t</span><span class="p">)(</span><span class="n">pcmd</span><span class="o">-&gt;</span><span class="n">IdxOffset</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ImDrawIdx</span><span class="p">)));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Destroy the temporary VAO</span>
+<span class="cp">#ifndef IMGUI_IMPL_OPENGL_ES2</span>
+    <span class="n">glDeleteVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vertex_array_object</span><span class="p">);</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Restore modified GL state</span>
+    <span class="n">glUseProgram</span><span class="p">(</span><span class="n">last_program</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">last_texture</span><span class="p">);</span>
+<span class="cp">#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_BIND_SAMPLER</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_GlVersion</span> <span class="o">&gt;=</span> <span class="mi">330</span><span class="p">)</span>
+        <span class="n">glBindSampler</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">last_sampler</span><span class="p">);</span>
+<span class="cp">#endif</span>
+    <span class="n">glActiveTexture</span><span class="p">(</span><span class="n">last_active_texture</span><span class="p">);</span>
+<span class="cp">#ifndef IMGUI_IMPL_OPENGL_ES2</span>
+    <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">last_vertex_array_object</span><span class="p">);</span>
+<span class="cp">#endif</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">last_array_buffer</span><span class="p">);</span>
+    <span class="n">glBlendEquationSeparate</span><span class="p">(</span><span class="n">last_blend_equation_rgb</span><span class="p">,</span> <span class="n">last_blend_equation_alpha</span><span class="p">);</span>
+    <span class="n">glBlendFuncSeparate</span><span class="p">(</span><span class="n">last_blend_src_rgb</span><span class="p">,</span> <span class="n">last_blend_dst_rgb</span><span class="p">,</span> <span class="n">last_blend_src_alpha</span><span class="p">,</span> <span class="n">last_blend_dst_alpha</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_enable_blend</span><span class="p">)</span> <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_BLEND</span><span class="p">);</span> <span class="k">else</span> <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_BLEND</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_enable_cull_face</span><span class="p">)</span> <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_CULL_FACE</span><span class="p">);</span> <span class="k">else</span> <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_CULL_FACE</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_enable_depth_test</span><span class="p">)</span> <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEPTH_TEST</span><span class="p">);</span> <span class="k">else</span> <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_DEPTH_TEST</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last_enable_scissor_test</span><span class="p">)</span> <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_SCISSOR_TEST</span><span class="p">);</span> <span class="k">else</span> <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_SCISSOR_TEST</span><span class="p">);</span>
+<span class="cp">#ifdef IMGUI_IMPL_OPENGL_MAY_HAVE_PRIMITIVE_RESTART</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_GlVersion</span> <span class="o">&gt;=</span> <span class="mi">310</span><span class="p">)</span> <span class="p">{</span> <span class="k">if</span> <span class="p">(</span><span class="n">last_enable_primitive_restart</span><span class="p">)</span> <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_PRIMITIVE_RESTART</span><span class="p">);</span> <span class="k">else</span> <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_PRIMITIVE_RESTART</span><span class="p">);</span> <span class="p">}</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifdef GL_POLYGON_MODE</span>
+    <span class="n">glPolygonMode</span><span class="p">(</span><span class="n">GL_FRONT_AND_BACK</span><span class="p">,</span> <span class="p">(</span><span class="n">GLenum</span><span class="p">)</span><span class="n">last_polygon_mode</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="cp">#endif</span>
+    <span class="n">glViewport</span><span class="p">(</span><span class="n">last_viewport</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">last_viewport</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">last_viewport</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">last_viewport</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+    <span class="n">glScissor</span><span class="p">(</span><span class="n">last_scissor_box</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">last_scissor_box</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">last_scissor_box</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="n">GLsizei</span><span class="p">)</span><span class="n">last_scissor_box</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="nf">ImGui_ImplOpenGL3_CreateFontsTexture</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Build texture atlas</span>
+    <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pixels</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">Fonts</span><span class="o">-&gt;</span><span class="n">GetTexDataAsRGBA32</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pixels</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">width</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">);</span>   <span class="c1">// Load as RGBA 32-bit (75% of the memory is wasted, but default font is so small) because it is more likely to be compatible with user&#39;s existing shaders. If your ImTextureId represent a higher-level concept than just a GL texture id, consider calling GetTexDataAsAlpha8() instead to save on GPU memory.</span>
+
+    <span class="c1">// Upload texture to graphics system</span>
+    <span class="n">GLint</span> <span class="n">last_texture</span><span class="p">;</span>
+    <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_TEXTURE_BINDING_2D</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">last_texture</span><span class="p">);</span>
+    <span class="n">glGenTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">g_FontTexture</span><span class="p">);</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">g_FontTexture</span><span class="p">);</span>
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MIN_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+    <span class="n">glTexParameteri</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">GL_TEXTURE_MAG_FILTER</span><span class="p">,</span> <span class="n">GL_LINEAR</span><span class="p">);</span>
+<span class="cp">#ifdef GL_UNPACK_ROW_LENGTH</span>
+    <span class="n">glPixelStorei</span><span class="p">(</span><span class="n">GL_UNPACK_ROW_LENGTH</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="cp">#endif</span>
+    <span class="n">glTexImage2D</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">pixels</span><span class="p">);</span>
+
+    <span class="c1">// Store our identifier</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">Fonts</span><span class="o">-&gt;</span><span class="n">TexID</span> <span class="o">=</span> <span class="p">(</span><span class="n">ImTextureID</span><span class="p">)(</span><span class="kt">intptr_t</span><span class="p">)</span><span class="n">g_FontTexture</span><span class="p">;</span>
+
+    <span class="c1">// Restore state</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">last_texture</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">ImGui_ImplOpenGL3_DestroyFontsTexture</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_FontTexture</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+        <span class="n">glDeleteTextures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">g_FontTexture</span><span class="p">);</span>
+        <span class="n">io</span><span class="p">.</span><span class="n">Fonts</span><span class="o">-&gt;</span><span class="n">TexID</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">g_FontTexture</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// If you get an error please report on github. You may try different GL context version or GLSL version. See GL&lt;&gt;GLSL version table at the top of this file.</span>
+<span class="k">static</span> <span class="kt">bool</span> <span class="nf">CheckShader</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">handle</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">desc</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">GLint</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">log_length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">glGetShaderiv</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">GL_COMPILE_STATUS</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+    <span class="n">glGetShaderiv</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">GL_INFO_LOG_LENGTH</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">log_length</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">GLboolean</span><span class="p">)</span><span class="n">status</span> <span class="o">==</span> <span class="n">GL_FALSE</span><span class="p">)</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;ERROR: ImGui_ImplOpenGL3_CreateDeviceObjects: failed to compile %s!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">log_length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ImVector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">buf</span><span class="p">;</span>
+        <span class="n">buf</span><span class="p">.</span><span class="n">resize</span><span class="p">((</span><span class="kt">int</span><span class="p">)(</span><span class="n">log_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="n">glGetShaderInfoLog</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">log_length</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="p">(</span><span class="n">GLchar</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">buf</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">GLboolean</span><span class="p">)</span><span class="n">status</span> <span class="o">==</span> <span class="n">GL_TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// If you get an error please report on GitHub. You may try different GL context version or GLSL version.</span>
+<span class="k">static</span> <span class="kt">bool</span> <span class="nf">CheckProgram</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">handle</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">desc</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">GLint</span> <span class="n">status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">log_length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">GL_LINK_STATUS</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+    <span class="n">glGetProgramiv</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">GL_INFO_LOG_LENGTH</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">log_length</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">GLboolean</span><span class="p">)</span><span class="n">status</span> <span class="o">==</span> <span class="n">GL_FALSE</span><span class="p">)</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;ERROR: ImGui_ImplOpenGL3_CreateDeviceObjects: failed to link %s! (with GLSL &#39;%s&#39;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">g_GlslVersionString</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">log_length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ImVector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">buf</span><span class="p">;</span>
+        <span class="n">buf</span><span class="p">.</span><span class="n">resize</span><span class="p">((</span><span class="kt">int</span><span class="p">)(</span><span class="n">log_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="n">glGetProgramInfoLog</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">log_length</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="p">(</span><span class="n">GLchar</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">buf</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">GLboolean</span><span class="p">)</span><span class="n">status</span> <span class="o">==</span> <span class="n">GL_TRUE</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span>    <span class="nf">ImGui_ImplOpenGL3_CreateDeviceObjects</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Backup GL state</span>
+    <span class="n">GLint</span> <span class="n">last_texture</span><span class="p">,</span> <span class="n">last_array_buffer</span><span class="p">;</span>
+    <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_TEXTURE_BINDING_2D</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">last_texture</span><span class="p">);</span>
+    <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER_BINDING</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">last_array_buffer</span><span class="p">);</span>
+<span class="cp">#ifndef IMGUI_IMPL_OPENGL_ES2</span>
+    <span class="n">GLint</span> <span class="n">last_vertex_array</span><span class="p">;</span>
+    <span class="n">glGetIntegerv</span><span class="p">(</span><span class="n">GL_VERTEX_ARRAY_BINDING</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">last_vertex_array</span><span class="p">);</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Parse GLSL version string</span>
+    <span class="kt">int</span> <span class="n">glsl_version</span> <span class="o">=</span> <span class="mi">130</span><span class="p">;</span>
+    <span class="n">sscanf</span><span class="p">(</span><span class="n">g_GlslVersionString</span><span class="p">,</span> <span class="s">&quot;#version %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">glsl_version</span><span class="p">);</span>
+
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">vertex_shader_glsl_120</span> <span class="o">=</span>
+        <span class="s">&quot;uniform mat4 ProjMtx;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;attribute vec2 Position;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;attribute vec2 UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;attribute vec4 Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;varying vec2 Frag_UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;varying vec4 Frag_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;void main()</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Frag_UV = UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Frag_Color = Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    gl_Position = ProjMtx * vec4(Position.xy,0,1);</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">vertex_shader_glsl_130</span> <span class="o">=</span>
+        <span class="s">&quot;uniform mat4 ProjMtx;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;in vec2 Position;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;in vec2 UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;in vec4 Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;out vec2 Frag_UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;out vec4 Frag_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;void main()</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Frag_UV = UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Frag_Color = Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    gl_Position = ProjMtx * vec4(Position.xy,0,1);</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">vertex_shader_glsl_300_es</span> <span class="o">=</span>
+        <span class="s">&quot;precision mediump float;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;layout (location = 0) in vec2 Position;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;layout (location = 1) in vec2 UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;layout (location = 2) in vec4 Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;uniform mat4 ProjMtx;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;out vec2 Frag_UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;out vec4 Frag_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;void main()</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Frag_UV = UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Frag_Color = Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    gl_Position = ProjMtx * vec4(Position.xy,0,1);</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">vertex_shader_glsl_410_core</span> <span class="o">=</span>
+        <span class="s">&quot;layout (location = 0) in vec2 Position;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;layout (location = 1) in vec2 UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;layout (location = 2) in vec4 Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;uniform mat4 ProjMtx;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;out vec2 Frag_UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;out vec4 Frag_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;void main()</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Frag_UV = UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Frag_Color = Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    gl_Position = ProjMtx * vec4(Position.xy,0,1);</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">fragment_shader_glsl_120</span> <span class="o">=</span>
+        <span class="s">&quot;#ifdef GL_ES</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    precision mediump float;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;#endif</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;uniform sampler2D Texture;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;varying vec2 Frag_UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;varying vec4 Frag_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;void main()</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    gl_FragColor = Frag_Color * texture2D(Texture, Frag_UV.st);</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">fragment_shader_glsl_130</span> <span class="o">=</span>
+        <span class="s">&quot;uniform sampler2D Texture;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;in vec2 Frag_UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;in vec4 Frag_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;out vec4 Out_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;void main()</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Out_Color = Frag_Color * texture(Texture, Frag_UV.st);</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">fragment_shader_glsl_300_es</span> <span class="o">=</span>
+        <span class="s">&quot;precision mediump float;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;uniform sampler2D Texture;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;in vec2 Frag_UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;in vec4 Frag_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;layout (location = 0) out vec4 Out_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;void main()</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Out_Color = Frag_Color * texture(Texture, Frag_UV.st);</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">fragment_shader_glsl_410_core</span> <span class="o">=</span>
+        <span class="s">&quot;in vec2 Frag_UV;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;in vec4 Frag_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;uniform sampler2D Texture;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;layout (location = 0) out vec4 Out_Color;</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;void main()</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;    Out_Color = Frag_Color * texture(Texture, Frag_UV.st);</span><span class="se">\n</span><span class="s">&quot;</span>
+        <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+
+    <span class="c1">// Select shaders matching our GLSL versions</span>
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">vertex_shader</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">fragment_shader</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">glsl_version</span> <span class="o">&lt;</span> <span class="mi">130</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">vertex_shader</span> <span class="o">=</span> <span class="n">vertex_shader_glsl_120</span><span class="p">;</span>
+        <span class="n">fragment_shader</span> <span class="o">=</span> <span class="n">fragment_shader_glsl_120</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">glsl_version</span> <span class="o">&gt;=</span> <span class="mi">410</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">vertex_shader</span> <span class="o">=</span> <span class="n">vertex_shader_glsl_410_core</span><span class="p">;</span>
+        <span class="n">fragment_shader</span> <span class="o">=</span> <span class="n">fragment_shader_glsl_410_core</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">glsl_version</span> <span class="o">==</span> <span class="mi">300</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">vertex_shader</span> <span class="o">=</span> <span class="n">vertex_shader_glsl_300_es</span><span class="p">;</span>
+        <span class="n">fragment_shader</span> <span class="o">=</span> <span class="n">fragment_shader_glsl_300_es</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">vertex_shader</span> <span class="o">=</span> <span class="n">vertex_shader_glsl_130</span><span class="p">;</span>
+        <span class="n">fragment_shader</span> <span class="o">=</span> <span class="n">fragment_shader_glsl_130</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Create shaders</span>
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">vertex_shader_with_version</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">g_GlslVersionString</span><span class="p">,</span> <span class="n">vertex_shader</span> <span class="p">};</span>
+    <span class="n">g_VertHandle</span> <span class="o">=</span> <span class="n">glCreateShader</span><span class="p">(</span><span class="n">GL_VERTEX_SHADER</span><span class="p">);</span>
+    <span class="n">glShaderSource</span><span class="p">(</span><span class="n">g_VertHandle</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">vertex_shader_with_version</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">glCompileShader</span><span class="p">(</span><span class="n">g_VertHandle</span><span class="p">);</span>
+    <span class="n">CheckShader</span><span class="p">(</span><span class="n">g_VertHandle</span><span class="p">,</span> <span class="s">&quot;vertex shader&quot;</span><span class="p">);</span>
+
+    <span class="k">const</span> <span class="n">GLchar</span><span class="o">*</span> <span class="n">fragment_shader_with_version</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">g_GlslVersionString</span><span class="p">,</span> <span class="n">fragment_shader</span> <span class="p">};</span>
+    <span class="n">g_FragHandle</span> <span class="o">=</span> <span class="n">glCreateShader</span><span class="p">(</span><span class="n">GL_FRAGMENT_SHADER</span><span class="p">);</span>
+    <span class="n">glShaderSource</span><span class="p">(</span><span class="n">g_FragHandle</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">fragment_shader_with_version</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">glCompileShader</span><span class="p">(</span><span class="n">g_FragHandle</span><span class="p">);</span>
+    <span class="n">CheckShader</span><span class="p">(</span><span class="n">g_FragHandle</span><span class="p">,</span> <span class="s">&quot;fragment shader&quot;</span><span class="p">);</span>
+
+    <span class="n">g_ShaderHandle</span> <span class="o">=</span> <span class="n">glCreateProgram</span><span class="p">();</span>
+    <span class="n">glAttachShader</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="n">g_VertHandle</span><span class="p">);</span>
+    <span class="n">glAttachShader</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="n">g_FragHandle</span><span class="p">);</span>
+    <span class="n">glLinkProgram</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">);</span>
+    <span class="n">CheckProgram</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="s">&quot;shader program&quot;</span><span class="p">);</span>
+
+    <span class="n">g_AttribLocationTex</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="s">&quot;Texture&quot;</span><span class="p">);</span>
+    <span class="n">g_AttribLocationProjMtx</span> <span class="o">=</span> <span class="n">glGetUniformLocation</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="s">&quot;ProjMtx&quot;</span><span class="p">);</span>
+    <span class="n">g_AttribLocationVtxPos</span> <span class="o">=</span> <span class="p">(</span><span class="n">GLuint</span><span class="p">)</span><span class="n">glGetAttribLocation</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="s">&quot;Position&quot;</span><span class="p">);</span>
+    <span class="n">g_AttribLocationVtxUV</span> <span class="o">=</span> <span class="p">(</span><span class="n">GLuint</span><span class="p">)</span><span class="n">glGetAttribLocation</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="s">&quot;UV&quot;</span><span class="p">);</span>
+    <span class="n">g_AttribLocationVtxColor</span> <span class="o">=</span> <span class="p">(</span><span class="n">GLuint</span><span class="p">)</span><span class="n">glGetAttribLocation</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="s">&quot;Color&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Create buffers</span>
+    <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">g_VboHandle</span><span class="p">);</span>
+    <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">g_ElementsHandle</span><span class="p">);</span>
+
+    <span class="n">ImGui_ImplOpenGL3_CreateFontsTexture</span><span class="p">();</span>
+
+    <span class="c1">// Restore modified GL state</span>
+    <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">last_texture</span><span class="p">);</span>
+    <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">last_array_buffer</span><span class="p">);</span>
+<span class="cp">#ifndef IMGUI_IMPL_OPENGL_ES2</span>
+    <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">last_vertex_array</span><span class="p">);</span>
+<span class="cp">#endif</span>
+
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span>    <span class="nf">ImGui_ImplOpenGL3_DestroyDeviceObjects</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_VboHandle</span><span class="p">)</span>        <span class="p">{</span> <span class="n">glDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">g_VboHandle</span><span class="p">);</span> <span class="n">g_VboHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_ElementsHandle</span><span class="p">)</span>   <span class="p">{</span> <span class="n">glDeleteBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">g_ElementsHandle</span><span class="p">);</span> <span class="n">g_ElementsHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_ShaderHandle</span> <span class="o">&amp;&amp;</span> <span class="n">g_VertHandle</span><span class="p">)</span> <span class="p">{</span> <span class="n">glDetachShader</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="n">g_VertHandle</span><span class="p">);</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_ShaderHandle</span> <span class="o">&amp;&amp;</span> <span class="n">g_FragHandle</span><span class="p">)</span> <span class="p">{</span> <span class="n">glDetachShader</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">,</span> <span class="n">g_FragHandle</span><span class="p">);</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_VertHandle</span><span class="p">)</span>       <span class="p">{</span> <span class="n">glDeleteShader</span><span class="p">(</span><span class="n">g_VertHandle</span><span class="p">);</span> <span class="n">g_VertHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_FragHandle</span><span class="p">)</span>       <span class="p">{</span> <span class="n">glDeleteShader</span><span class="p">(</span><span class="n">g_FragHandle</span><span class="p">);</span> <span class="n">g_FragHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">)</span>     <span class="p">{</span> <span class="n">glDeleteProgram</span><span class="p">(</span><span class="n">g_ShaderHandle</span><span class="p">);</span> <span class="n">g_ShaderHandle</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="n">ImGui_ImplOpenGL3_DestroyFontsTexture</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,69 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_particle_system_cache.hpp:
+
+Program Listing for File particle_system_cache.hpp
+==================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_particle_system_cache.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/particle_system_cache.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   
+   namespace legion::rendering
+   {
+       class ParticleSystemBase;
+       struct ParticleSystemHandle
+       {
+           id_type id;
+           const ParticleSystemBase* get() const;
+           bool validate() const noexcept;
+       };
+   
+       class ParticleSystemCache
+       {
+           friend struct ParticleSystemHandle;
+       public:
+           //TODO(Algo-Ryth-Mix) fix static assert!
+           template<class T, class ... Args>
+           static ParticleSystemHandle createParticleSystem(std::string name, Args&&...args)
+           {
+               //static_assert(std::is_convertible<ParticleSystemBase*, T*>::value, "T must inherit from ParticleSystemBase!");
+               return createParticleSystemImpl(std::move(name), new T(args...));
+           }
+           static ParticleSystemHandle getParticleSystem(std::string name)
+           {
+               const auto id = nameHash(name);
+               async::readonly_guard guard(m_particleSystemLock);
+               if (m_cache.find(id) == m_cache.end()) return ParticleSystemHandle{ invalid_id };
+               return ParticleSystemHandle{ id };
+           }
+       private:
+           static const ParticleSystemBase* getParticleSystemPointer(id_type id)
+           {
+               const auto iterator = m_cache.find(id);
+               if (iterator == m_cache.end()) return nullptr;
+               return iterator->second.get();
+           }
+   
+           static ParticleSystemHandle createParticleSystemImpl(const std::string& name, ParticleSystemBase* ptr);
+   
+           static std::unordered_map<id_type, std::unique_ptr<const ParticleSystemBase>> m_cache;
+           static async::rw_spinlock m_particleSystemLock;
+       };
+   
+       inline const ParticleSystemBase* ParticleSystemHandle::get() const
+       {
+           return ParticleSystemCache::getParticleSystemPointer(id);
+       }
+   
+       inline bool ParticleSystemHandle::validate() const noexcept
+       {
+           if (ParticleSystemCache::getParticleSystemPointer(id) == nullptr) return false;
+           return true;
+       }
+   }
+   

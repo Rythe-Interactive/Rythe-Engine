@@ -13,7 +13,6 @@ Nested Relationships
 Nested Types
 ************
 
-- :ref:`exhale_class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable`
 - :ref:`exhale_struct_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error`
 
 

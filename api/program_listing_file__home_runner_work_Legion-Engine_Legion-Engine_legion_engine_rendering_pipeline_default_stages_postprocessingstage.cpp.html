@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File postprocessingstage.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File postprocessingstage.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-postprocessingstage-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-postprocessingstage-cpp"></span><h1>Program Listing for File postprocessingstage.cpp<a class="headerlink" href="#program-listing-for-file-postprocessingstage-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_postprocessingstage.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-postprocessingstage-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/default/stages/postprocessingstage.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/default/stages/postprocessingstage.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">multimap</span><span class="o">&lt;</span><span class="n">priority_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">PostProcessingEffectBase</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">greater</span><span class="o">&lt;&gt;&gt;</span> <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">m_effects</span><span class="p">;</span>
+
+
+    <span class="kt">void</span> <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">setup</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">using</span> <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">fs</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
+
+        <span class="n">app</span><span class="o">::</span><span class="n">context_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+
+        <span class="n">m_screenQuad</span> <span class="o">=</span> <span class="n">screen_quad</span><span class="o">::</span><span class="n">generate</span><span class="p">();</span>
+
+        <span class="n">m_drawFBO</span> <span class="o">=</span> <span class="n">framebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">);</span>
+
+        <span class="n">m_swapTexture</span> <span class="o">=</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture</span><span class="p">(</span><span class="s">&quot;color_swap_image&quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">{</span>
+        <span class="n">texture_type</span><span class="o">::</span><span class="n">two_dimensional</span><span class="p">,</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">float_hdr</span><span class="p">,</span> <span class="n">texture_format</span><span class="o">::</span><span class="n">rgba_hdr</span><span class="p">,</span>
+        <span class="n">texture_components</span><span class="o">::</span><span class="n">rgb</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">texture_mipmap</span><span class="o">::</span><span class="n">linear</span><span class="p">,</span> <span class="n">texture_mipmap</span><span class="o">::</span><span class="n">linear</span><span class="p">,</span>
+        <span class="n">texture_wrap</span><span class="o">::</span><span class="n">repeat</span><span class="p">,</span> <span class="n">texture_wrap</span><span class="o">::</span><span class="n">repeat</span><span class="p">,</span> <span class="n">texture_wrap</span><span class="o">::</span><span class="n">repeat</span> <span class="p">});</span>
+
+        <span class="n">m_screenShader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;screen shader&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/screenshader.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">render</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">,</span> <span class="n">camera</span><span class="o">&amp;</span> <span class="n">cam</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">mainId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;main&quot;</span><span class="p">);</span>
+
+        <span class="k">auto</span> <span class="n">fbo</span> <span class="o">=</span> <span class="n">getFramebuffer</span><span class="p">(</span><span class="n">mainId</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">fbo</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Main frame buffer is missing.&quot;</span><span class="p">);</span>
+            <span class="n">abort</span><span class="p">();</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">app</span><span class="o">::</span><span class="n">context_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">guard</span><span class="p">.</span><span class="n">contextIsValid</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">abort</span><span class="p">();</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="p">[</span><span class="n">valid</span><span class="p">,</span> <span class="n">message</span><span class="p">]</span> <span class="o">=</span> <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">verify</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">valid</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Main frame buffer isn&#39;t complete: {}&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+            <span class="n">abort</span><span class="p">();</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">colorAttachment</span> <span class="o">=</span> <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">monostate</span><span class="o">&gt;</span><span class="p">(</span><span class="n">colorAttachment</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Color attachment was not found.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">colorAttachment</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Color attachment needs to be a texture to be able to use it for post processing.&quot;</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">texture_handle</span> <span class="n">textures</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">colorAttachment</span><span class="p">),</span> <span class="n">m_swapTexture</span> <span class="p">};</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">attachmentSize</span> <span class="o">=</span> <span class="n">textures</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">get_texture</span><span class="p">().</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">auto</span> <span class="n">tex</span> <span class="o">=</span> <span class="n">m_swapTexture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">attachmentSize</span> <span class="o">!=</span> <span class="n">tex</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+            <span class="n">tex</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">attachmentSize</span><span class="p">);</span>
+
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="kt">bool</span> <span class="n">stencil</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">depthAttachment</span> <span class="o">=</span> <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">GL_DEPTH</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">monostate</span><span class="o">&gt;</span><span class="p">(</span><span class="n">depthAttachment</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">stencil</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">depthAttachment</span> <span class="o">=</span> <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">GL_DEPTH_STENCIL</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">texture_handle</span> <span class="n">depthTexture</span> <span class="o">=</span> <span class="n">invalid_texture_handle</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">depthAttachment</span><span class="p">))</span>
+            <span class="n">depthTexture</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">depthAttachment</span><span class="p">);</span>
+        <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_DEPTH_TEST</span><span class="p">);</span>
+
+        <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">uint</span> <span class="n">attachment</span> <span class="o">=</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">;</span>
+        <span class="n">glDrawBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attachment</span><span class="p">);</span>
+        <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">effect</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_effects</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Rendering effect&quot;</span><span class="p">);</span>
+            <span class="n">OPTICK_TAG</span><span class="p">(</span><span class="s">&quot;Effect&quot;</span><span class="p">,</span> <span class="n">effect</span><span class="o">-&gt;</span><span class="n">getName</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">effect</span><span class="o">-&gt;</span><span class="n">isInitialized</span><span class="p">())</span> <span class="n">effect</span><span class="o">-&gt;</span><span class="n">init</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">pass</span> <span class="p">:</span> <span class="n">effect</span><span class="o">-&gt;</span><span class="n">renderPasses</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Effect pass&quot;</span><span class="p">);</span>
+                <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">attach</span><span class="p">(</span><span class="n">textures</span><span class="p">[</span><span class="o">!</span><span class="n">index</span><span class="p">],</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+
+                <span class="n">pass</span><span class="p">.</span><span class="n">invoke</span><span class="p">(</span><span class="o">*</span><span class="n">fbo</span><span class="p">,</span> <span class="n">textures</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">depthTexture</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
+
+                <span class="n">index</span> <span class="o">=</span> <span class="o">!</span><span class="n">index</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">attach</span><span class="p">(</span><span class="n">textures</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+            <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">bind</span><span class="p">();</span>
+            <span class="n">m_screenShader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+            <span class="n">m_screenShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">textures</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="n">m_screenQuad</span><span class="p">.</span><span class="n">render</span><span class="p">();</span>
+            <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">rendering</span><span class="o">::</span><span class="n">shader</span><span class="o">::</span><span class="n">release</span><span class="p">();</span>
+
+        <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_DEPTH_TEST</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">priority_type</span> <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">priority</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">post_fx_priority</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_postprocessingstage.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

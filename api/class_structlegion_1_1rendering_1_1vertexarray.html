@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class vertexarray &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class PointCloudParticleSystem" href="class_point_cloud_particle_system.html" />
+    <link rel="prev" title="Template Class uniform" href="class_structlegion_1_1rendering_1_1uniform.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_point_cloud_particle_system.html" title="Class PointCloudParticleSystem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structlegion_1_1rendering_1_1uniform.html" title="Template Class uniform"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class vertexarray</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-vertexarray">
+<span id="exhale-class-structlegion-1-1rendering-1-1vertexarray"></span><h1>Class vertexarray<a class="headerlink" href="#class-vertexarray" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_vertexarray.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-vertexarray-hpp"><span class="std std-ref">File vertexarray.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion9rendering11vertexarrayE">
+<span id="_CPPv3N6legion9rendering11vertexarrayE"></span><span id="_CPPv2N6legion9rendering11vertexarrayE"></span><span id="legion::rendering::vertexarray"></span><span class="target" id="structlegion_1_1rendering_1_1vertexarray"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">vertexarray</code><a class="headerlink" href="#_CPPv4N6legion9rendering11vertexarrayE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Low level vertexarray object. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Read more at <a class="reference external" href="https://www.khronos.org/opengl/wiki/Vertex_Specification#Vertex_Array_Object">khronos.org wiki.</a> </p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11vertexarray11vertexarrayEv">
+<span id="_CPPv3N6legion9rendering11vertexarray11vertexarrayEv"></span><span id="_CPPv2N6legion9rendering11vertexarray11vertexarrayEv"></span><span id="legion::rendering::vertexarray::vertexarray"></span><span class="target" id="structlegion_1_1rendering_1_1vertexarray_1af39c49af0833d1b4e3f9f8cdec0a2887"></span><code class="sig-name descname">vertexarray</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion9rendering11vertexarray11vertexarrayEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Faux constructor. To prevent unnecessary GPU allocations the default constructor doesn’t actually create a VAO. This means that default initialized vertexarrays are invalid temporary objects until they get properly initialized. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11vertexarray11vertexarrayENSt9nullptr_tE">
+<span id="_CPPv3N6legion9rendering11vertexarray11vertexarrayENSt9nullptr_tE"></span><span id="_CPPv2N6legion9rendering11vertexarray11vertexarrayENSt9nullptr_tE"></span><span id="legion::rendering::vertexarray::vertexarray__std::nullptr_t"></span><span class="target" id="structlegion_1_1rendering_1_1vertexarray_1a5385f714d2fc1212342365c45e1aff32"></span><code class="sig-name descname">vertexarray</code><span class="sig-paren">(</span>[[maybe_unused]] std::nullptr_t <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11vertexarray11vertexarrayENSt9nullptr_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Main allocating constructor. This constructor actually creates the GPU side renderbuffer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span></code>: temporary message value that tells the compiler to use the right constructor. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11vertexarray16setAttribPointerERK6buffer4uint9size_type6GLenumb9size_type9size_type">
+<span id="_CPPv3N6legion9rendering11vertexarray16setAttribPointerERK6buffer4uint9size_type6GLenumb9size_type9size_type"></span><span id="_CPPv2N6legion9rendering11vertexarray16setAttribPointerERK6buffer4uint9size_type6GLenumb9size_type9size_type"></span><span id="legion::rendering::vertexarray::setAttribPointer__bufferCR.uint.size_type.GLenum.b.size_type.size_type"></span><span class="target" id="structlegion_1_1rendering_1_1vertexarray_1ae602f09245f2ee9bb38463804a913891"></span>void <code class="sig-name descname">setAttribPointer</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="class_structlegion_1_1rendering_1_1buffer.html#_CPPv4N6legion9rendering6bufferE" title="legion::rendering::buffer">buffer</a> &amp;<em>buf</em>, uint <em>index</em>, size_type <em>size</em>, GLenum <em>type</em>, bool <em>normalized</em>, size_type <em>stride</em>, size_type <em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11vertexarray16setAttribPointerERK6buffer4uint9size_type6GLenumb9size_type9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11vertexarray16setAttribDivisorE4uint4uint">
+<span id="_CPPv3N6legion9rendering11vertexarray16setAttribDivisorE4uint4uint"></span><span id="_CPPv2N6legion9rendering11vertexarray16setAttribDivisorE4uint4uint"></span><span id="legion::rendering::vertexarray::setAttribDivisor__uint.uint"></span><span class="target" id="structlegion_1_1rendering_1_1vertexarray_1a521e11496d30954d7122150f2ea1fcc0"></span>void <code class="sig-name descname">setAttribDivisor</code><span class="sig-paren">(</span>uint <em>index</em>, uint <em>divisor</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11vertexarray16setAttribDivisorE4uint4uint" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering11vertexarray4bindEv">
+<span id="_CPPv3NK6legion9rendering11vertexarray4bindEv"></span><span id="_CPPv2NK6legion9rendering11vertexarray4bindEv"></span><span id="legion::rendering::vertexarray::bindC"></span><span class="target" id="structlegion_1_1rendering_1_1vertexarray_1a17014f2d8646d376a29fa2700e11f611"></span>void <code class="sig-name descname">bind</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering11vertexarray4bindEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Bind the vertexarray to the current context. Useful for low level native rendering. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11vertexarray8generateEv">
+<span id="_CPPv3N6legion9rendering11vertexarray8generateEv"></span><span id="_CPPv2N6legion9rendering11vertexarray8generateEv"></span><span id="legion::rendering::vertexarray::generate"></span><span class="target" id="structlegion_1_1rendering_1_1vertexarray_1ae3cfb8d1baf6d80516c26acc898b8f2f"></span><a class="reference internal" href="#_CPPv4N6legion9rendering11vertexarrayE" title="legion::rendering::vertexarray">vertexarray</a> <code class="sig-name descname">generate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11vertexarray8generateEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Static function to generate a VAO. Alternative to the vertexarray(std::nullptr_t) constructor. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>vertexarray Newly created VAO. </p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11vertexarray7releaseEv">
+<span id="_CPPv3N6legion9rendering11vertexarray7releaseEv"></span><span id="_CPPv2N6legion9rendering11vertexarray7releaseEv"></span><span id="legion::rendering::vertexarray::release"></span><span class="target" id="structlegion_1_1rendering_1_1vertexarray_1a557fc9ba357841dc479e7fa8280e4ebc"></span>void <code class="sig-name descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11vertexarray7releaseEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Release the vertexarray from the current context. Useful for low level native rendering. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class vertexarray</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="class_structlegion_1_1rendering_1_1uniform.html" title="previous chapter">Template Class uniform</a></li>
+      <li>Next: <a href="class_point_cloud_particle_system.html" title="next chapter">Class PointCloudParticleSystem</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structlegion_1_1rendering_1_1vertexarray.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

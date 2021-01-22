@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__demo_8cpp_1a4dadf5e7b393795666d19af9694037cf:
+
+Function ShowExampleAppLongText
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_demo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ShowExampleAppLongText(bool *)

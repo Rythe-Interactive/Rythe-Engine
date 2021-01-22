@@ -22,7 +22,7 @@ Program Listing for File convexconvexpenetrationquery.cpp
            math::vec3& pFaceCentroid, math::vec3& pNormal, float pPenetration, bool pIsARef)
            :  PenetrationQuery(pFaceCentroid,pNormal,pPenetration,pIsARef),refFace(pRefFace), incFace(pIncFace)
        {
-   
+           debugID = "ConvexConvexPenetrationQuery";
        }
    
        void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform
@@ -35,7 +35,7 @@ Program Listing for File convexconvexpenetrationquery.cpp
    
            auto sendToInitialOutput = [&outputContactPoints,&incTransform](HalfEdgeEdge* edge)
            {
-               math::vec3 localVertexPosition = *edge->edgePositionPtr;
+               math::vec3 localVertexPosition = edge->edgePosition;
                math::vec3 worldVertex = incTransform * math::vec4(localVertexPosition, 1);
    
                outputContactPoints.push_back(ContactVertex(worldVertex,edge->label));

@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1a9e846195cf7e5f781093b18caf75d048:
+
+Function imgui::nodes::StyleColorsDark
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::StyleColorsDark()

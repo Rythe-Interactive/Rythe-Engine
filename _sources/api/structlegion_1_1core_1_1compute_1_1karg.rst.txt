@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1compute_1_1karg:
+
+Struct karg
+===========
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_high_level_function.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::compute::karg
+   :members:
+   :protected-members:
+   :undoc-members:

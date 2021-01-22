@@ -1,0 +1,24 @@
+
+.. _namespace_imgui__base:
+
+Namespace imgui::base
+=====================
+
+
+include for the imgui GUI-System 
+ 
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+Detailed Description
+--------------------
+
+:ref:`namespace_imgui__base` contains the standard Imgui Installation imgui::nodes contains node-graph stuff imgui::filebrowser contains a filebrowser module imgui::sequencer contains a sequencer module imgui::gizmo contains functions to work with gizmos 
+ 
+

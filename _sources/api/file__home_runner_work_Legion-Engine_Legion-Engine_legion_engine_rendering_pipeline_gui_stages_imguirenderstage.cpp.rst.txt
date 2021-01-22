@@ -1,0 +1,52 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_gui_stages_imguirenderstage.cpp:
+
+File imguirenderstage.cpp
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_gui_stages>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/gui/stages``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/gui/stages/imguirenderstage.cpp``)
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_gui_stages_imguirenderstage.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``imgui/ImGuizmo.h``
+
+- ``imgui/backends/imgui_impl_glfw.h``
+
+- ``imgui/backends/imgui_impl_opengl3.h``
+
+- ``imgui/imnodes.h``
+
+- ``rendering/pipeline/gui/stages/imguirenderstage.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_gui_stages_imguirenderstage.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__rendering`
+

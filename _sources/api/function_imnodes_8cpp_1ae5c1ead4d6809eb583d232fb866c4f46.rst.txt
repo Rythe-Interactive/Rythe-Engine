@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1ae5c1ead4d6809eb583d232fb866c4f46:
+
+Function imgui::nodes::SetNodeScreenSpacePos
+============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::SetNodeScreenSpacePos(int, const ImVec2&)

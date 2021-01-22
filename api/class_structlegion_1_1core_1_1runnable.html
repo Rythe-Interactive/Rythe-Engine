@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Class runnable &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class SceneManager" href="classlegion_1_1core_1_1scenemanagement_1_1_scene_manager.html" />
+    <link rel="prev" title="Class obj_mesh_loader" href="class_structlegion_1_1core_1_1obj__mesh__loader.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classlegion_1_1core_1_1scenemanagement_1_1_scene_manager.html" title="Class SceneManager"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structlegion_1_1core_1_1obj__mesh__loader.html" title="Class obj_mesh_loader"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Template Class runnable</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-runnable">
+<span id="exhale-class-structlegion-1-1core-1-1runnable"></span><h1>Template Class runnable<a class="headerlink" href="#template-class-runnable" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_runnable.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-containers-runnable-hpp"><span class="std std-ref">File runnable.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::core::runnable_base</span></code> (<a class="reference internal" href="structlegion_1_1core_1_1runnable__base.html#exhale-struct-structlegion-1-1core-1-1runnable-base"><span class="std std-ref">Struct runnable_base</span></a>)</p></li>
+</ul>
+</div>
+<div class="section" id="derived-type">
+<h3>Derived Type<a class="headerlink" href="#derived-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::core::async::async_runnable&lt;</span> <span class="pre">Func</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="structlegion_1_1core_1_1async_1_1async__runnable.html#exhale-struct-structlegion-1-1core-1-1async-1-1async-runnable"><span class="std std-ref">Template Struct async_runnable</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4I0EN6legion4core8runnableE">
+<span id="_CPPv3I0EN6legion4core8runnableE"></span><span id="_CPPv2I0EN6legion4core8runnableE"></span>template&lt;typename <code class="sig-name descname">Func</code>&gt;<br /><span class="target" id="structlegion_1_1core_1_1runnable"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">runnable</code> : <em class="property">public</em> legion::core::<a class="reference internal" href="structlegion_1_1core_1_1runnable__base.html#_CPPv4N6legion4core13runnable_baseE" title="legion::core::runnable_base">runnable_base</a><a class="headerlink" href="#_CPPv4I0EN6legion4core8runnableE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A data structure encapsulating commands and jobs sent to any thread and it’s parameters. </p>
+<p>Subclassed by <a class="reference internal" href="structlegion_1_1core_1_1async_1_1async__runnable.html#structlegion_1_1core_1_1async_1_1async__runnable"><span class="std std-ref">legion::core::async::async_runnable&lt; Func &gt;</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core8runnable8runnableEv">
+<span id="_CPPv3N6legion4core8runnable8runnableEv"></span><span id="_CPPv2N6legion4core8runnable8runnableEv"></span><span id="legion::core::runnable::runnable"></span><span class="target" id="structlegion_1_1core_1_1runnable_1a8cdbb1d278b73e43348337dbc92eb201"></span><code class="sig-name descname">runnable</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core8runnable8runnableEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core8runnable8runnableERK4Func">
+<span id="_CPPv3N6legion4core8runnable8runnableERK4Func"></span><span id="_CPPv2N6legion4core8runnable8runnableERK4Func"></span><span id="legion::core::runnable::runnable__FuncCR"></span><span class="target" id="structlegion_1_1core_1_1runnable_1a43f47040f9ce098fef94aea0c50c53bb"></span><code class="sig-name descname">runnable</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core8runnableE" title="legion::core::runnable::Func">Func</a> &amp;<em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core8runnable8runnableERK4Func" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core8runnable7executeEv">
+<span id="_CPPv3N6legion4core8runnable7executeEv"></span><span id="_CPPv2N6legion4core8runnable7executeEv"></span><span id="legion::core::runnable::execute"></span><span class="target" id="structlegion_1_1core_1_1runnable_1abf853b63429726e677ecd81d19c38dab"></span>void <code class="sig-name descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion4core8runnable7executeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Attributes</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion4core8runnable6m_funcE">
+<span id="_CPPv3N6legion4core8runnable6m_funcE"></span><span id="_CPPv2N6legion4core8runnable6m_funcE"></span><span id="legion::core::runnable::m_func__std::shared_ptr:std::remove_reference_t:Func::"></span><span class="target" id="structlegion_1_1core_1_1runnable_1af6d013871367ae0f8549870fdeb9289d"></span>std::shared_ptr&lt;std::remove_reference_t&lt;<a class="reference internal" href="#_CPPv4I0EN6legion4core8runnableE" title="legion::core::runnable::Func">Func</a>&gt;&gt; <code class="sig-name descname">m_func</code><a class="headerlink" href="#_CPPv4N6legion4core8runnable6m_funcE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Template Class runnable</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+<li><a class="reference internal" href="#derived-type">Derived Type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="class_structlegion_1_1core_1_1obj__mesh__loader.html" title="previous chapter">Class obj_mesh_loader</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1scenemanagement_1_1_scene_manager.html" title="next chapter">Class SceneManager</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structlegion_1_1core_1_1runnable.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

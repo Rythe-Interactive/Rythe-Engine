@@ -1,0 +1,29 @@
+
+.. _namespace_legion__core__events__detail:
+
+Namespace legion::core::events::detail
+======================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_event_8hpp_1a93d201e9e7d0b30dc435f7bb60e70694`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_event_8hpp_1aec057eca893c35b5ce1769f15cc2ba66`
+
+- :ref:`exhale_variable_event_8hpp_1a7a413e6b69ea0b659776f20812ba88ae`

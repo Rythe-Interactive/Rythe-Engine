@@ -56,6 +56,7 @@
 <span class="p">{</span>
     <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">buildBufferNames</span><span class="p">()</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">size_type</span> <span class="n">size</span><span class="p">;</span>
         <span class="n">cl_uint</span> <span class="n">num_args</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">container</span><span class="p">;</span>
@@ -87,12 +88,14 @@
 
     <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">readWriteMode</span><span class="p">(</span><span class="n">buffer_type</span> <span class="n">t</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">m_default_mode</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">//get name from buffer</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
             <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Encountered unnamed buffer! binding to a Kernel-location will fail!&quot;</span><span class="p">);</span>
@@ -101,6 +104,7 @@
 
     <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">//translate name to index</span>
         <span class="n">param_find</span><span class="p">([</span><span class="k">this</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">)](</span><span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
         <span class="p">{</span>
@@ -111,8 +115,9 @@
 
     <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">//set kernel argument</span>
-        <span class="k">const</span> <span class="n">cl_int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">clSetKernelArg</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cl_mem</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">);</span>
+        <span class="k">const</span> <span class="n">cl_int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">clSetKernelArg</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_data</span> <span class="o">?</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cl_mem</span><span class="p">)</span> <span class="o">:</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">cl_sampler</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">);</span>
 
         <span class="c1">//check clSetKernelArg</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
@@ -124,7 +129,7 @@
 
     <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">enqueueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
     <span class="p">{</span>
-
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="cm">/*</span>
 <span class="cm">            we are writing to the device buffer</span>
 
@@ -146,6 +151,11 @@
 <span class="cm">            but we still need to read it</span>
 
 <span class="cm">        */</span>
+
+        <span class="c1">//first check if the buffer has data</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_data</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+
         <span class="n">cl_int</span> <span class="n">ret</span><span class="p">;</span>
         <span class="k">switch</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_type</span><span class="p">)</span>
         <span class="p">{</span>
@@ -189,27 +199,30 @@
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setAndEnqueueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">//get name from buffer</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
             <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Encountered unnamed buffer! binding to a Kernel-location will fail!&quot;</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nf">setAndEnqueBuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nf">setAndEnqueueBuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">m_name</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
     <span class="p">}</span>
 
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setAndEnqueueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">//translate name to index</span>
         <span class="n">param_find</span><span class="p">([</span><span class="k">this</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">blocking</span><span class="p">](</span><span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
+            <span class="n">setAndEnqueueBuffer</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">blocking</span><span class="p">);</span>
         <span class="p">},</span> <span class="n">name</span><span class="p">);</span>
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setAndEnqueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setAndEnqueueBuffer</span><span class="p">(</span><span class="n">Buffer</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">,</span> <span class="n">block_mode</span> <span class="n">blocking</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">//set and ... enqueue_buffer</span>
         <span class="c1">//nothing fun to see here</span>
         <span class="n">enqueueBuffer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">blocking</span><span class="p">);</span>
@@ -219,14 +232,16 @@
 
     <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">dispatch</span><span class="p">()</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">auto</span> <span class="p">[</span><span class="n">globals</span><span class="p">,</span> <span class="n">locals</span><span class="p">,</span> <span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">parse_dimensions</span><span class="p">();</span>
         <span class="c1">//enqueue the Kernel in the command queue</span>
         <span class="n">cl_int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">clEnqueueNDRangeKernel</span><span class="p">(</span>
             <span class="n">m_queue</span><span class="p">,</span>
             <span class="n">m_func</span><span class="p">,</span>
-            <span class="mi">1</span><span class="p">,</span>
+            <span class="n">size</span><span class="p">,</span>
             <span class="k">nullptr</span><span class="p">,</span>
-            <span class="o">&amp;</span><span class="n">m_global_size</span><span class="p">,</span>
-            <span class="o">&amp;</span><span class="n">m_local_size</span><span class="p">,</span>
+            <span class="n">globals</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span>
+            <span class="n">locals</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span>
             <span class="mi">0</span><span class="p">,</span>
             <span class="k">nullptr</span><span class="p">,</span>
             <span class="k">nullptr</span>
@@ -242,18 +257,17 @@
 
     <span class="kt">void</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">finish</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">//execute all commands in the queue</span>
         <span class="n">clFlush</span><span class="p">(</span><span class="n">m_queue</span><span class="p">);</span>
 
-        <span class="c1">//probably not necessarily necessary</span>
+        <span class="c1">//waits for all tasks</span>
         <span class="n">clFinish</span><span class="p">(</span><span class="n">m_queue</span><span class="p">);</span>
-
-        <span class="c1">//neccessary</span>
-        <span class="n">clReleaseCommandQueue</span><span class="p">(</span><span class="n">m_queue</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="kt">size_t</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">getMaxWorkSize</span><span class="p">()</span> <span class="k">const</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="kt">size_t</span> <span class="n">value</span><span class="p">;</span>
 
         <span class="n">cl_int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">clGetKernelWorkGroupInfo</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">Context</span><span class="o">::</span><span class="n">getDeviceId</span><span class="p">(),</span> <span class="n">CL_KERNEL_WORK_GROUP_SIZE</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">size_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
@@ -268,23 +282,58 @@
         <span class="n">m_default_mode</span><span class="p">(</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">),</span>
         <span class="n">m_prog</span><span class="p">(</span><span class="n">program</span><span class="p">),</span>
         <span class="n">m_func</span><span class="p">(</span><span class="n">kernel</span><span class="p">),</span>
-        <span class="n">m_global_size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">m_global_size</span><span class="p">(</span><span class="n">size_type</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
         <span class="n">m_local_size</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">m_refcounter</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">size_t</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
         <span class="n">m_queue</span> <span class="o">=</span> <span class="n">program</span><span class="o">-&gt;</span><span class="n">make_cq</span><span class="p">();</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">local</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">local</span><span class="p">(</span><span class="n">size_type</span> <span class="n">s</span><span class="p">)</span>
     <span class="p">{</span>
-
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">//TODO(algo-ryth-mix) This should cap at CL_KERNEL_WORK_GROUP_SIZE</span>
         <span class="n">m_local_size</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">global</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">global</span><span class="p">(</span><span class="n">dimension</span> <span class="n">s</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">m_global_size</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">global</span><span class="p">(</span><span class="n">size_type</span> <span class="n">s0</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">s1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="n">m_global_size</span> <span class="o">=</span> <span class="n">d2</span><span class="p">{</span> <span class="n">s0</span><span class="p">,</span><span class="n">s1</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">global</span><span class="p">(</span><span class="n">size_type</span> <span class="n">s0</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">s1</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">s2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="n">m_global_size</span> <span class="o">=</span> <span class="n">d3</span><span class="p">{</span> <span class="n">s0</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span> <span class="p">};</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setKernelArg</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">size</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="c1">//translate name to index</span>
+        <span class="n">param_find</span><span class="p">([</span><span class="k">this</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">)](</span><span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">this</span><span class="o">-&gt;</span><span class="n">setKernelArg</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+        <span class="p">},</span> <span class="n">name</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Kernel</span><span class="o">&amp;</span> <span class="n">Kernel</span><span class="o">::</span><span class="n">setKernelArg</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">size</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">index</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">clSetKernelArg</span><span class="p">(</span><span class="n">m_func</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;clSetKernelArg failed for Arg at index {}&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+        <span class="p">}</span>
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>

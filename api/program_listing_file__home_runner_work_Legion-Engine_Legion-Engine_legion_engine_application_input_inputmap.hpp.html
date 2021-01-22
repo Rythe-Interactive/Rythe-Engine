@@ -48,13 +48,14 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_input_inputmap.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-application-input-inputmap-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/application/input/inputmap.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstddef&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">application</span>
 <span class="p">{</span>
     <span class="k">struct</span> <span class="n">inputmap</span>
     <span class="p">{</span>
-        <span class="k">enum</span> <span class="k">class</span> <span class="nc">modifier_keys</span> <span class="o">:</span> <span class="kt">uint8_t</span>
+        <span class="k">enum</span> <span class="k">class</span> <span class="nc">modifier_keys</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="kt">uint8_t</span>
         <span class="p">{</span>
             <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
             <span class="n">CTRL</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
@@ -68,29 +69,29 @@
             <span class="n">MAX_SIZE</span> <span class="o">=</span> <span class="mi">16</span> <span class="o">+</span> <span class="n">JOYSTICK0</span>
         <span class="p">};</span>
 
-        <span class="k">static</span> <span class="kt">uint8_t</span> <span class="nf">value</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">m</span><span class="p">)</span>
+        <span class="k">static</span> <span class="n">math</span><span class="o">::</span><span class="kt">uint8_t</span> <span class="n">value</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">m</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="k">friend</span> <span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="k">friend</span> <span class="n">math</span><span class="o">::</span><span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">-</span> <span class="n">value</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="k">friend</span> <span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="k">friend</span> <span class="n">math</span><span class="o">::</span><span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">+</span> <span class="n">value</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">friend</span> <span class="n">modifier_keys</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="k">friend</span> <span class="n">modifier_keys</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="kt">uint8_t</span> <span class="n">rhs</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">modifier_keys</span><span class="o">&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">friend</span> <span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">&amp;</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="k">friend</span> <span class="n">math</span><span class="o">::</span><span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">&amp;</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">value</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="k">friend</span> <span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">|</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="k">friend</span> <span class="n">math</span><span class="o">::</span><span class="kt">uint8_t</span> <span class="k">operator</span><span class="o">|</span><span class="p">(</span><span class="n">modifier_keys</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">modifier_keys</span> <span class="n">rhs</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">value</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">|</span> <span class="n">value</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
         <span class="p">}</span>

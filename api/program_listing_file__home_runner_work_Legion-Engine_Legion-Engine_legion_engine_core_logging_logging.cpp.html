@@ -46,16 +46,17 @@
   <div class="section" id="program-listing-for-file-logging-cpp">
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-logging-logging-cpp"></span><h1>Program Listing for File logging.cpp<a class="headerlink" href="#program-listing-for-file-logging-cpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-logging-logging-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/logging/logging.cpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>#include &lt;core/logging/logging.hpp&gt;
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
 
 
-namespace legion::core::log {
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">log</span> <span class="p">{</span>
+    <span class="n">cstring</span> <span class="n">impl</span><span class="o">::</span><span class="n">log_file</span> <span class="o">=</span> <span class="s">&quot;logs/legion-engine.log&quot;</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">spdlog</span><span class="o">::</span><span class="n">logger</span><span class="o">&gt;</span> <span class="n">impl</span><span class="o">::</span><span class="n">file_logger</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">spdlog</span><span class="o">::</span><span class="n">logger</span><span class="o">&gt;</span> <span class="n">impl</span><span class="o">::</span><span class="n">console_logger</span> <span class="o">=</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">stdout_color_mt</span><span class="p">(</span><span class="s">&quot;does-not-matter&quot;</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">spdlog</span><span class="o">::</span><span class="n">logger</span><span class="o">&gt;</span> <span class="n">impl</span><span class="o">::</span><span class="n">logger</span> <span class="o">=</span> <span class="n">impl</span><span class="o">::</span><span class="n">console_logger</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">impl</span><span class="o">::</span><span class="n">thread_names</span><span class="p">;</span>
 
-std::shared_ptr&lt;spdlog::logger&gt; impl::file_logger  = spdlog::rotating_logger_mt(LOG_FILE,LOG_FILE,1&#39;048&#39;576,5);
-std::shared_ptr&lt;spdlog::logger&gt; impl::console_logger = spdlog::stdout_color_mt(&quot;does-not-matter&quot;);
-std::unordered_map&lt;std::thread::id, std::string&gt; impl::thread_names;
-
-}
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>

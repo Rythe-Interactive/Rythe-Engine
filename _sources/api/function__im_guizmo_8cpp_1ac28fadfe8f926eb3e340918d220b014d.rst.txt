@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1ac28fadfe8f926eb3e340918d220b014d:
+
+Function imgui::gizmo::GetMoveType
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::GetMoveType(vec_t *)

@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Struct shader_import_settings" href="structlegion_1_1rendering_1_1shader__import__settings.html" />
-    <link rel="prev" title="Struct renderable" href="structlegion_1_1rendering_1_1renderable.html" />
+    <link rel="prev" title="Struct screen_quad" href="structlegion_1_1rendering_1_1screen__quad.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="structlegion_1_1rendering_1_1shader__import__settings.html" title="Struct shader_import_settings"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="structlegion_1_1rendering_1_1renderable.html" title="Struct renderable"
+          <a href="structlegion_1_1rendering_1_1screen__quad.html" title="Struct screen_quad"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -61,7 +61,7 @@
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp struct">
 <dt id="_CPPv4N6legion9rendering13shader_handleE">
-<span id="_CPPv3N6legion9rendering13shader_handleE"></span><span id="_CPPv2N6legion9rendering13shader_handleE"></span><span id="legion::rendering::shader_handle"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle"></span><em class="property">struct </em><code class="sig-prename descclassname">legion::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">shader_handle</code><a class="headerlink" href="#_CPPv4N6legion9rendering13shader_handleE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering13shader_handleE"></span><span id="_CPPv2N6legion9rendering13shader_handleE"></span><span id="legion::rendering::shader_handle"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle"></span><em class="property">struct </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">shader_handle</code><a class="headerlink" href="#_CPPv4N6legion9rendering13shader_handleE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Types</p>
 <dl class="cpp type">
@@ -72,6 +72,46 @@
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering13shader_handle11has_variantE7id_type">
+<span id="_CPPv3NK6legion9rendering13shader_handle11has_variantE7id_type"></span><span id="_CPPv2NK6legion9rendering13shader_handle11has_variantE7id_type"></span><span id="legion::rendering::shader_handle::has_variant__id_typeC"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1ad0cf692d5a41f5352b57aa6489c210f6"></span>bool <code class="sig-name descname">has_variant</code><span class="sig-paren">(</span>id_type <em>variantId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering13shader_handle11has_variantE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering13shader_handle11has_variantERKNSt6stringE">
+<span id="_CPPv3NK6legion9rendering13shader_handle11has_variantERKNSt6stringE"></span><span id="_CPPv2NK6legion9rendering13shader_handle11has_variantERKNSt6stringE"></span><span id="legion::rendering::shader_handle::has_variant__ssCRC"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1a25c257f6cd5fd86072f36c2587c6275a"></span>bool <code class="sig-name descname">has_variant</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>variant</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering13shader_handle11has_variantERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering13shader_handle17configure_variantE7id_type">
+<span id="_CPPv3N6legion9rendering13shader_handle17configure_variantE7id_type"></span><span id="_CPPv2N6legion9rendering13shader_handle17configure_variantE7id_type"></span><span id="legion::rendering::shader_handle::configure_variant__id_type"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1a139fe138b881e694d1458eff86e4f6a3"></span>void <code class="sig-name descname">configure_variant</code><span class="sig-paren">(</span>id_type <em>variantId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering13shader_handle17configure_variantE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering13shader_handle17configure_variantERKNSt6stringE">
+<span id="_CPPv3N6legion9rendering13shader_handle17configure_variantERKNSt6stringE"></span><span id="_CPPv2N6legion9rendering13shader_handle17configure_variantERKNSt6stringE"></span><span id="legion::rendering::shader_handle::configure_variant__ssCR"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1a74a3ea3b7d253cbe41c6288ad3f67f45"></span>void <code class="sig-name descname">configure_variant</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>variant</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering13shader_handle17configure_variantERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering13shader_handle11get_variantE7id_type">
+<span id="_CPPv3N6legion9rendering13shader_handle11get_variantE7id_type"></span><span id="_CPPv2N6legion9rendering13shader_handle11get_variantE7id_type"></span><span id="legion::rendering::shader_handle::get_variant__id_type"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1a6927e21216646b6368f79c50cd60f8e8"></span><a class="reference internal" href="structlegion_1_1rendering_1_1shader__variant.html#_CPPv4N6legion9rendering14shader_variantE" title="legion::rendering::shader_variant">shader_variant</a> &amp;<code class="sig-name descname">get_variant</code><span class="sig-paren">(</span>id_type <em>variantId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering13shader_handle11get_variantE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering13shader_handle11get_variantERKNSt6stringE">
+<span id="_CPPv3N6legion9rendering13shader_handle11get_variantERKNSt6stringE"></span><span id="_CPPv2N6legion9rendering13shader_handle11get_variantERKNSt6stringE"></span><span id="legion::rendering::shader_handle::get_variant__ssCR"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1acc76b9af79d777fce8b6ca5c2c01df80"></span><a class="reference internal" href="structlegion_1_1rendering_1_1shader__variant.html#_CPPv4N6legion9rendering14shader_variantE" title="legion::rendering::shader_variant">shader_variant</a> &amp;<code class="sig-name descname">get_variant</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>variant</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering13shader_handle11get_variantERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering13shader_handle11get_variantE7id_type">
+<span id="_CPPv3NK6legion9rendering13shader_handle11get_variantE7id_type"></span><span id="_CPPv2NK6legion9rendering13shader_handle11get_variantE7id_type"></span><span id="legion::rendering::shader_handle::get_variant__id_typeC"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1a56ae0f418d1862e2f3817bc2630c3c4a"></span><em class="property">const</em> <a class="reference internal" href="structlegion_1_1rendering_1_1shader__variant.html#_CPPv4N6legion9rendering14shader_variantE" title="legion::rendering::shader_variant">shader_variant</a> &amp;<code class="sig-name descname">get_variant</code><span class="sig-paren">(</span>id_type <em>variantId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering13shader_handle11get_variantE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering13shader_handle11get_variantERKNSt6stringE">
+<span id="_CPPv3NK6legion9rendering13shader_handle11get_variantERKNSt6stringE"></span><span id="_CPPv2NK6legion9rendering13shader_handle11get_variantERKNSt6stringE"></span><span id="legion::rendering::shader_handle::get_variant__ssCRC"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1abdefe9ba8bc3afe4eda293567ed225db"></span><em class="property">const</em> <a class="reference internal" href="structlegion_1_1rendering_1_1shader__variant.html#_CPPv4N6legion9rendering14shader_variantE" title="legion::rendering::shader_variant">shader_variant</a> &amp;<code class="sig-name descname">get_variant</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>variant</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering13shader_handle11get_variantERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
 <dl class="cpp function">
 <dt id="_CPPv4NK6legion9rendering13shader_handle23get_uniform_block_indexERKNSt6stringE">
 <span id="_CPPv3NK6legion9rendering13shader_handle23get_uniform_block_indexERKNSt6stringE"></span><span id="_CPPv2NK6legion9rendering13shader_handle23get_uniform_block_indexERKNSt6stringE"></span><span id="legion::rendering::shader_handle::get_uniform_block_index__ssCRC"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1a4640968aae3351e77dffb0166c0bae87"></span>GLuint <code class="sig-name descname">get_uniform_block_index</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering13shader_handle23get_uniform_block_indexERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
@@ -89,7 +129,17 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4NK6legion9rendering13shader_handle16get_uniform_infoEv">
-<span id="_CPPv3NK6legion9rendering13shader_handle16get_uniform_infoEv"></span><span id="_CPPv2NK6legion9rendering13shader_handle16get_uniform_infoEv"></span><span id="legion::rendering::shader_handle::get_uniform_infoC"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1af69ebf8f5a8ae8e315caff258cc9e124"></span>std::vector&lt;std::tuple&lt;std::string, GLint, GLenum&gt;&gt; <code class="sig-name descname">get_uniform_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering13shader_handle16get_uniform_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK6legion9rendering13shader_handle16get_uniform_infoEv"></span><span id="_CPPv2NK6legion9rendering13shader_handle16get_uniform_infoEv"></span><span id="legion::rendering::shader_handle::get_uniform_infoC"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1aa02725567af9ce9779ad4f9980a2225d"></span>std::unordered_map&lt;id_type, std::vector&lt;std::tuple&lt;std::string, GLint, GLenum&gt;&gt;&gt; <code class="sig-name descname">get_uniform_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering13shader_handle16get_uniform_infoEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering13shader_handle16get_uniform_infoE7id_type">
+<span id="_CPPv3NK6legion9rendering13shader_handle16get_uniform_infoE7id_type"></span><span id="_CPPv2NK6legion9rendering13shader_handle16get_uniform_infoE7id_type"></span><span id="legion::rendering::shader_handle::get_uniform_info__id_typeC"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1abb9b14498a5fa8a8669cd924a98c6b28"></span>std::vector&lt;std::tuple&lt;std::string, GLint, GLenum&gt;&gt; <code class="sig-name descname">get_uniform_info</code><span class="sig-paren">(</span>id_type <em>variantId</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering13shader_handle16get_uniform_infoE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering13shader_handle16get_uniform_infoERKNSt6stringE">
+<span id="_CPPv3NK6legion9rendering13shader_handle16get_uniform_infoERKNSt6stringE"></span><span id="_CPPv2NK6legion9rendering13shader_handle16get_uniform_infoERKNSt6stringE"></span><span id="legion::rendering::shader_handle::get_uniform_info__ssCRC"></span><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1ad09acf4f7b4796e957701cf1a5a1de77"></span>std::vector&lt;std::tuple&lt;std::string, GLint, GLenum&gt;&gt; <code class="sig-name descname">get_uniform_info</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>variant</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering13shader_handle16get_uniform_infoERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -98,8 +148,28 @@
 <dd></dd></dl>
 
 <dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering13shader_handle11has_uniformEbRKNSt6stringE">
+<span id="_CPPv3I0EN6legion9rendering13shader_handle11has_uniformERKNSt6stringE"></span><span id="_CPPv2I0EN6legion9rendering13shader_handle11has_uniformERKNSt6stringE"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1ad3e4ba9c99ea888d9891ef20fb025809"></span>bool <code class="sig-name descname">has_uniform</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering13shader_handle11has_uniformEbRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
 <dt id="_CPPv4I0EN6legion9rendering13shader_handle11get_uniformE7uniformI1TE7id_type">
 <span id="_CPPv3I0EN6legion9rendering13shader_handle11get_uniformE7id_type"></span><span id="_CPPv2I0EN6legion9rendering13shader_handle11get_uniformE7id_type"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1a86635876585b95b1f1dc1b12ece07063"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1uniform.html#_CPPv4I0EN6legion9rendering7uniformE" title="legion::rendering::uniform">uniform</a>&lt;<a class="reference internal" href="#_CPPv4I0EN6legion9rendering13shader_handle11get_uniformE7uniformI1TE7id_type" title="legion::rendering::shader_handle::get_uniform::T">T</a>&gt; <code class="sig-name descname">get_uniform</code><span class="sig-paren">(</span>id_type <em>uniformId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering13shader_handle11get_uniformE7uniformI1TE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering13shader_handle11has_uniformEb7id_type">
+<span id="_CPPv3I0EN6legion9rendering13shader_handle11has_uniformE7id_type"></span><span id="_CPPv2I0EN6legion9rendering13shader_handle11has_uniformE7id_type"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1adfd060ac894533c444da60976744e728"></span>bool <code class="sig-name descname">has_uniform</code><span class="sig-paren">(</span>id_type <em>uniformId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering13shader_handle11has_uniformEb7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering13shader_handle25get_uniform_with_locationE7uniformI1TE5GLint">
+<span id="_CPPv3I0EN6legion9rendering13shader_handle25get_uniform_with_locationE5GLint"></span><span id="_CPPv2I0EN6legion9rendering13shader_handle25get_uniform_with_locationE5GLint"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1a9df912402214f951ed3f61e920f097f5"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1uniform.html#_CPPv4I0EN6legion9rendering7uniformE" title="legion::rendering::uniform">uniform</a>&lt;<a class="reference internal" href="#_CPPv4I0EN6legion9rendering13shader_handle25get_uniform_with_locationE7uniformI1TE5GLint" title="legion::rendering::shader_handle::get_uniform_with_location::T">T</a>&gt; <code class="sig-name descname">get_uniform_with_location</code><span class="sig-paren">(</span>GLint <em>location</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering13shader_handle25get_uniform_with_locationE7uniformI1TE5GLint" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering13shader_handle25has_uniform_with_locationEb5GLint">
+<span id="_CPPv3I0EN6legion9rendering13shader_handle25has_uniform_with_locationE5GLint"></span><span id="_CPPv2I0EN6legion9rendering13shader_handle25has_uniform_with_locationE5GLint"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="structlegion_1_1rendering_1_1shader__handle_1a5a4a1be3a6f2b1e45e71adc318cc1855"></span>bool <code class="sig-name descname">has_uniform_with_location</code><span class="sig-paren">(</span>GLint <em>location</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering13shader_handle25has_uniform_with_locationEb5GLint" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -172,7 +242,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="structlegion_1_1rendering_1_1renderable.html" title="previous chapter">Struct renderable</a></li>
+      <li>Previous: <a href="structlegion_1_1rendering_1_1screen__quad.html" title="previous chapter">Struct screen_quad</a></li>
       <li>Next: <a href="structlegion_1_1rendering_1_1shader__import__settings.html" title="next chapter">Struct shader_import_settings</a></li>
   </ul></li>
   </ul></li>

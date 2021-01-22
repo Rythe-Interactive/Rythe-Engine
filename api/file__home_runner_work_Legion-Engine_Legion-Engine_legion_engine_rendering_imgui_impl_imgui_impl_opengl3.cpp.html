@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File imgui_impl_opengl3.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">File imgui_impl_opengl3.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="file-imgui-impl-opengl3-cpp">
+<span id="file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-impl-opengl3-cpp"></span><h1>File imgui_impl_opengl3.cpp<a class="headerlink" href="#file-imgui-impl-opengl3-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl.html#dir-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl</span></code>)</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-impl-opengl3-cpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_impl_opengl3.cpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id3">Functions</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id4">Variables</a></p></li>
+</ul>
+</div>
+<div class="section" id="definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-impl-opengl3-cpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_impl_opengl3.cpp</span></code>)<a class="headerlink" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-impl-opengl3-cpp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp.html">Program Listing for File imgui_impl_opengl3.cpp</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IMGUI_IMPL_OPENGL_LOADER_CUSTOM</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/backends/imgui_impl_opengl3.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imgui.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdint.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdio.h</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1a22f46b7ed68c385f411c4b2dc25c50e8.html#exhale-function-imgui-impl-opengl3-8cpp-1a22f46b7ed68c385f411c4b2dc25c50e8"><span class="std std-ref">Function CheckProgram</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1a11601584c987e4aeae774985e1177d74.html#exhale-function-imgui-impl-opengl3-8cpp-1a11601584c987e4aeae774985e1177d74"><span class="std std-ref">Function CheckShader</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1ab27f12289d6fe9fcd412f92af280b398.html#exhale-function-imgui-impl-opengl3-8cpp-1ab27f12289d6fe9fcd412f92af280b398"><span class="std std-ref">Function ImGui_ImplOpenGL3_CreateDeviceObjects</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1a3dc4f80532d710de41d4075214eb363e.html#exhale-function-imgui-impl-opengl3-8cpp-1a3dc4f80532d710de41d4075214eb363e"><span class="std std-ref">Function ImGui_ImplOpenGL3_CreateFontsTexture</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1a605e340c346791d9c9e927add2392d0e.html#exhale-function-imgui-impl-opengl3-8cpp-1a605e340c346791d9c9e927add2392d0e"><span class="std std-ref">Function ImGui_ImplOpenGL3_DestroyDeviceObjects</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1a539aaad4aa185838297fb13b2409c405.html#exhale-function-imgui-impl-opengl3-8cpp-1a539aaad4aa185838297fb13b2409c405"><span class="std std-ref">Function ImGui_ImplOpenGL3_DestroyFontsTexture</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1a0475f257dc97d1daceee89cb4b19744d.html#exhale-function-imgui-impl-opengl3-8cpp-1a0475f257dc97d1daceee89cb4b19744d"><span class="std std-ref">Function ImGui_ImplOpenGL3_Init</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1a900e74add4e56e74f97a210eb329aa91.html#exhale-function-imgui-impl-opengl3-8cpp-1a900e74add4e56e74f97a210eb329aa91"><span class="std std-ref">Function ImGui_ImplOpenGL3_NewFrame</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1ad215190229f4f300593911aa7b3821de.html#exhale-function-imgui-impl-opengl3-8cpp-1ad215190229f4f300593911aa7b3821de"><span class="std std-ref">Function ImGui_ImplOpenGL3_RenderDrawData</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1a328d27e0d40312d064adbc45c0cf240b.html#exhale-function-imgui-impl-opengl3-8cpp-1a328d27e0d40312d064adbc45c0cf240b"><span class="std std-ref">Function ImGui_ImplOpenGL3_SetupRenderState</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__impl__opengl3_8cpp_1acbd53376e6135ad71e7bcd9879278e37.html#exhale-function-imgui-impl-opengl3-8cpp-1acbd53376e6135ad71e7bcd9879278e37"><span class="std std-ref">Function ImGui_ImplOpenGL3_Shutdown</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1a7f9b5a4489b250ca33fd1fcca893a48f.html#exhale-variable-imgui-impl-opengl3-8cpp-1a7f9b5a4489b250ca33fd1fcca893a48f"><span class="std std-ref">Variable g_AttribLocationProjMtx</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1a0748bbfa60bb086a8e23948206c68bbc.html#exhale-variable-imgui-impl-opengl3-8cpp-1a0748bbfa60bb086a8e23948206c68bbc"><span class="std std-ref">Variable g_AttribLocationTex</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1a0bdf58ccf08ae86319ad30ba137fe19e.html#exhale-variable-imgui-impl-opengl3-8cpp-1a0bdf58ccf08ae86319ad30ba137fe19e"><span class="std std-ref">Variable g_AttribLocationVtxColor</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1af9a80727c42ddc4bab83ad22952a8755.html#exhale-variable-imgui-impl-opengl3-8cpp-1af9a80727c42ddc4bab83ad22952a8755"><span class="std std-ref">Variable g_AttribLocationVtxPos</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1ad002357bcd4fdc132ccd39ace695ccd4.html#exhale-variable-imgui-impl-opengl3-8cpp-1ad002357bcd4fdc132ccd39ace695ccd4"><span class="std std-ref">Variable g_AttribLocationVtxUV</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1a26abda8950dc2d4adf6e2a5171c2445a.html#exhale-variable-imgui-impl-opengl3-8cpp-1a26abda8950dc2d4adf6e2a5171c2445a"><span class="std std-ref">Variable g_ElementsHandle</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1a76694bfc1e27296421f914cfe8246635.html#exhale-variable-imgui-impl-opengl3-8cpp-1a76694bfc1e27296421f914cfe8246635"><span class="std std-ref">Variable g_FontTexture</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1a8bd0b9474bb0923002b18894944e45fe.html#exhale-variable-imgui-impl-opengl3-8cpp-1a8bd0b9474bb0923002b18894944e45fe"><span class="std std-ref">Variable g_FragHandle</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1a080be4f3f916ccafcbe99a70cba44e08.html#exhale-variable-imgui-impl-opengl3-8cpp-1a080be4f3f916ccafcbe99a70cba44e08"><span class="std std-ref">Variable g_GlslVersionString</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1ae616a8d5b513f4effd4c43dce2dfd941.html#exhale-variable-imgui-impl-opengl3-8cpp-1ae616a8d5b513f4effd4c43dce2dfd941"><span class="std std-ref">Variable g_GlVersion</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1ae1b73cef0bc055e139fff6b0e1768a4f.html#exhale-variable-imgui-impl-opengl3-8cpp-1ae1b73cef0bc055e139fff6b0e1768a4f"><span class="std std-ref">Variable g_ShaderHandle</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1a137cb22f50258ade706c87cd18d7da60.html#exhale-variable-imgui-impl-opengl3-8cpp-1a137cb22f50258ade706c87cd18d7da60"><span class="std std-ref">Variable g_VboHandle</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__impl__opengl3_8cpp_1a5010daecbe2e956c15b02203ed7cdfd3.html#exhale-variable-imgui-impl-opengl3-8cpp-1a5010daecbe2e956c15b02203ed7cdfd3"><span class="std std-ref">Variable g_VertHandle</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">File imgui_impl_opengl3.cpp</a><ul>
+<li><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-impl-opengl3-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_impl_opengl3.cpp</span></code>)</a></li>
+<li><a class="reference internal" href="#includes">Includes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

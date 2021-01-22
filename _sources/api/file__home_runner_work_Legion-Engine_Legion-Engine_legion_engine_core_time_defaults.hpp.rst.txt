@@ -1,0 +1,59 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_defaults.hpp:
+
+File defaults.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/time``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/time/defaults.hpp``)
+---------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_defaults.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/time/clock.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp`)
+
+- ``core/time/time_span.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_time_span.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_time.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__time`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_defaults_8hpp_1af749cbbdc7f4545a25cbd9a60a5b61d2`
+

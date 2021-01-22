@@ -173,13 +173,13 @@
             <span class="k">return</span> <span class="n">time_span</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="n">L_NODISCARD</span> <span class="k">static</span> <span class="k">constexpr</span> <span class="n">time_span</span><span class="p">(</span><span class="n">min</span><span class="p">)()</span> <span class="k">noexcept</span>
+        <span class="n">L_NODISCARD</span> <span class="k">static</span> <span class="k">constexpr</span> <span class="n">time_span</span> <span class="n">min</span><span class="p">()</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="c1">// get minimum value</span>
             <span class="k">return</span> <span class="n">time_span</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_values</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;::</span><span class="n">min</span><span class="p">)());</span>
         <span class="p">}</span>
 
-        <span class="n">L_NODISCARD</span> <span class="k">static</span> <span class="k">constexpr</span> <span class="n">time_span</span><span class="p">(</span><span class="n">max</span><span class="p">)()</span> <span class="k">noexcept</span>
+        <span class="n">L_NODISCARD</span> <span class="k">static</span> <span class="k">constexpr</span> <span class="n">time_span</span> <span class="n">max</span><span class="p">()</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="c1">// get maximum value</span>
             <span class="k">return</span> <span class="n">time_span</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_values</span><span class="o">&lt;</span><span class="n">time_type</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">)());</span>

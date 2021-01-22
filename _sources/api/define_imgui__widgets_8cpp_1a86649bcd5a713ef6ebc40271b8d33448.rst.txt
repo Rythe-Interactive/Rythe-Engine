@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__widgets_8cpp_1a86649bcd5a713ef6ebc40271b8d33448:
+
+Define STB_TEXTEDIT_K_LINEEND
+=============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STB_TEXTEDIT_K_LINEEND

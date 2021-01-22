@@ -17,19 +17,35 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1async__operation`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1async__progress`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1async__runnable`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1job__operation`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1job__pool`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1job__pool__base`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1this__job`
+
 - :ref:`exhale_class_classlegion_1_1core_1_1async_1_1mixed__multiguard`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readonly__guard`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readonly__multiguard`
 
-- :ref:`exhale_class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock`
-
 - :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readwrite__guard`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1async_1_1readwrite__multiguard`
 
 - :ref:`exhale_class_structlegion_1_1core_1_1async_1_1ring__sync__lock`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1async_1_1rw__spinlock`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1async_1_1spinlock`
 
 - :ref:`exhale_class_structlegion_1_1core_1_1async_1_1transferable__atomic`
 
@@ -38,13 +54,34 @@ Enums
 -----
 
 
-- :ref:`exhale_enum_readonly__rw__spinlock_8hpp_1a7388d770ac6f90a39c06820935bc14c9`
+- :ref:`exhale_enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4`
+
+- :ref:`exhale_enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233`
 
 
 Functions
 ---------
 
 
-- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a89751c24fa6156877ab4556b15eb0ace`
+- :ref:`exhale_function_async__operation_8hpp_1a4e28bbac5d29e54a5ea3d7cfec819ce8`
 
-- :ref:`exhale_function_readonly__rw__spinlock_8hpp_1a882e9a409db10b6a954c63620d929ad7`
+- :ref:`exhale_function_rw__spinlock_8hpp_1a89751c24fa6156877ab4556b15eb0ace`
+
+- :ref:`exhale_function_rw__spinlock_8hpp_1a882e9a409db10b6a954c63620d929ad7`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_rw__spinlock_8hpp_1a46c98158ee7e0735d4d256392ba4c97c`
+
+- :ref:`exhale_variable_rw__spinlock_8hpp_1a0554e84ad78fb78708ada075012251b8`
+
+- :ref:`exhale_variable_rw__spinlock_8hpp_1adc9fbc6688bc6e953f957d424a3b907d`
+
+- :ref:`exhale_variable_wait__priority_8hpp_1a296800fb5244978a07832ce6dc46809b`
+
+- :ref:`exhale_variable_wait__priority_8hpp_1a3a499c571db581c9cf0fd56b9b58735c`
+
+- :ref:`exhale_variable_wait__priority_8hpp_1a63e47b71857382616a0007388fe10cc1`

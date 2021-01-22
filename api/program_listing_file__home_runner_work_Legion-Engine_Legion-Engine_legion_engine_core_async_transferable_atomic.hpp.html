@@ -48,7 +48,7 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_transferable_atomic.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-transferable-atomic-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async/transferable_atomic.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;atomic&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/async/readonly_rw_spinlock.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/async/rw_spinlock.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">async</span>
 <span class="p">{</span>
@@ -57,7 +57,7 @@
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">mutable</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">m_atomic</span><span class="p">;</span>
-        <span class="k">mutable</span> <span class="n">readonly_rw_spinlock</span> <span class="n">m_lock</span><span class="p">;</span>
+        <span class="k">mutable</span> <span class="n">rw_spinlock</span> <span class="n">m_lock</span><span class="p">;</span>
     <span class="k">public</span><span class="o">:</span>
         <span class="n">transferable_atomic</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
@@ -79,7 +79,7 @@
 
         <span class="o">~</span><span class="n">transferable_atomic</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
-        <span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span> <span class="n">get_lock</span><span class="p">()</span> <span class="k">noexcept</span>
+        <span class="n">rw_spinlock</span><span class="o">&amp;</span> <span class="n">get_lock</span><span class="p">()</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_lock</span><span class="p">;</span>
         <span class="p">}</span>

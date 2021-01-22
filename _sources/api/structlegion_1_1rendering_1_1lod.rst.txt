@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1rendering_1_1lod:
+
+Struct lod
+==========
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_lod.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::rendering::lod
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -17,6 +17,8 @@ Program Listing for File ring_sync_lock.hpp
    #include <unordered_map>
    #include <core/async/transferable_atomic.hpp>
    
+   #include <Optick/optick.h>
+   
    namespace legion::core::async
    {
        struct ring_sync_lock
@@ -25,7 +27,7 @@ Program Listing for File ring_sync_lock.hpp
            const uint m_maxRank;
            std::atomic_uint m_rank;
            const std::thread::id owningThread;
-           readonly_rw_spinlock m_waitersLock;
+           rw_spinlock m_waitersLock;
            std::unordered_map<uint, transferable_atomic<uint>> m_waiters;
            std::atomic_uint m_subscribers;
            std::atomic_bool m_release;
@@ -39,6 +41,7 @@ Program Listing for File ring_sync_lock.hpp
    
            void sync()
            {
+               OPTICK_EVENT();
                uint rank = m_rank.load(std::memory_order_acquire); // Fetch the current rank at which the lock should be.
                uint nextRank = (rank + 1) % m_maxRank; // Calculate the next rank at which the lock should be.
    

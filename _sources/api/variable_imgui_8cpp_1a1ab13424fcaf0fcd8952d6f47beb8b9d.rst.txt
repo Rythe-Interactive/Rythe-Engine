@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui_8cpp_1a1ab13424fcaf0fcd8952d6f47beb8b9d:
+
+Variable NAV_WINDOWING_HIGHLIGHT_DELAY
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: NAV_WINDOWING_HIGHLIGHT_DELAY

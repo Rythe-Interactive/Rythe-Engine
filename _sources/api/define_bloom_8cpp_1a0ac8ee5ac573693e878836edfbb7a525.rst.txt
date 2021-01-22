@@ -1,0 +1,13 @@
+.. _exhale_define_bloom_8cpp_1a0ac8ee5ac573693e878836edfbb7a525:
+
+Define kernelsize
+=================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_bloom.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: kernelsize

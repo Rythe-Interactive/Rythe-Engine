@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui_8cpp_1a4172a86a71ad90be6fb63c63f362222d:
+
+Variable resize_grip_def
+========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: resize_grip_def

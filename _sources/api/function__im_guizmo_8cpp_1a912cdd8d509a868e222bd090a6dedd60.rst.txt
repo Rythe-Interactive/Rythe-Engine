@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a912cdd8d509a868e222bd090a6dedd60:
+
+Function imgui::gizmo::ComputeAngleOnPlan
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::ComputeAngleOnPlan()

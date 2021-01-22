@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File debugrenderstage.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File debugrenderstage.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-debugrenderstage-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-debugrenderstage-cpp"></span><h1>Program Listing for File debugrenderstage.cpp<a class="headerlink" href="#program-listing-for-file-debugrenderstage-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_debugrenderstage.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-debugrenderstage-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/default/stages/debugrenderstage.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/default/stages/debugrenderstage.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">spinlock</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">debugLinesLock</span><span class="p">;</span>
+    <span class="k">thread_local</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">debug</span><span class="o">::</span><span class="n">debug_line_event</span><span class="o">&gt;*</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">localLines</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">debug</span><span class="o">::</span><span class="n">debug_line_event</span><span class="o">&gt;*&gt;</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">debugLines</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">startDebugDomain</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">localLines</span><span class="p">)</span>
+            <span class="n">localLines</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">debug</span><span class="o">::</span><span class="n">debug_line_event</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">endDebugDomain</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">localLines</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="n">size_type</span> <span class="n">size</span> <span class="o">=</span> <span class="n">localLines</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">id</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">();</span>
+
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">debugLinesLock</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">debugLines</span><span class="p">[</span><span class="n">id</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">line</span> <span class="p">:</span> <span class="o">*</span><span class="p">(</span><span class="n">debugLines</span><span class="p">[</span><span class="n">id</span><span class="p">]))</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">time</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">localLines</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+                        <span class="n">localLines</span><span class="o">-&gt;</span><span class="n">insert</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">delete</span> <span class="n">debugLines</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+            <span class="p">}</span>
+
+            <span class="n">debugLines</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">localLines</span><span class="p">;</span>
+            <span class="n">localLines</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">localLines</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">debug</span><span class="o">::</span><span class="n">debug_line_event</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">localLines</span><span class="o">-&gt;</span><span class="n">reserve</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">drawDebugLine</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">event_base</span><span class="o">*</span> <span class="n">event</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">debug</span><span class="o">::</span><span class="n">debug_line_event</span><span class="o">*</span> <span class="n">line</span> <span class="o">=</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">debug</span><span class="o">::</span><span class="n">debug_line_event</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">event</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">localLines</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">(</span><span class="o">*</span><span class="n">line</span><span class="p">))</span>
+            <span class="n">localLines</span><span class="o">-&gt;</span><span class="n">erase</span><span class="p">(</span><span class="o">*</span><span class="n">line</span><span class="p">);</span>
+        <span class="n">localLines</span><span class="o">-&gt;</span><span class="n">insert</span><span class="p">(</span><span class="o">*</span><span class="n">line</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">setup</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scheduling</span><span class="o">::</span><span class="n">ProcessChain</span><span class="o">::</span><span class="n">subscribeToChainStart</span><span class="o">&lt;&amp;</span><span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">startDebugDomain</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">scheduling</span><span class="o">::</span><span class="n">ProcessChain</span><span class="o">::</span><span class="n">subscribeToChainEnd</span><span class="o">&lt;&amp;</span><span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">endDebugDomain</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">bindToEventUnsafe</span><span class="p">(</span><span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;debug_line&quot;</span><span class="p">),</span> <span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">event_base</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;::</span><span class="k">template</span> <span class="n">create</span><span class="o">&lt;</span><span class="n">DebugRenderStage</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">drawDebugLine</span><span class="o">&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">render</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">,</span> <span class="n">camera</span><span class="o">&amp;</span> <span class="n">cam</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">using</span> <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">fs</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">debug</span><span class="o">::</span><span class="n">debug_line_event</span><span class="o">&gt;</span> <span class="n">lines</span><span class="p">;</span>
+
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">debugLinesLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">debugLines</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span><span class="p">;</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">debug</span><span class="o">::</span><span class="n">debug_line_event</span><span class="o">&gt;</span> <span class="n">toRemove</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">threadId</span><span class="p">,</span> <span class="n">domain</span><span class="p">]</span> <span class="o">:</span> <span class="n">debugLines</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">lines</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">lines</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">domain</span><span class="o">-&gt;</span><span class="n">begin</span><span class="p">(),</span> <span class="n">domain</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">());</span>
+
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">line</span> <span class="p">:</span> <span class="p">(</span><span class="o">*</span><span class="n">domain</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">time</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="k">continue</span><span class="p">;</span>
+
+                    <span class="n">line</span><span class="p">.</span><span class="n">timeBuffer</span> <span class="o">+=</span> <span class="n">deltaTime</span><span class="p">;</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">timeBuffer</span> <span class="o">&gt;=</span> <span class="n">line</span><span class="p">.</span><span class="n">time</span><span class="p">)</span>
+                        <span class="n">toRemove</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">line</span> <span class="p">:</span> <span class="n">toRemove</span><span class="p">)</span>
+                    <span class="n">domain</span><span class="o">-&gt;</span><span class="n">erase</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">mainId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;main&quot;</span><span class="p">);</span>
+        <span class="k">auto</span> <span class="n">fbo</span> <span class="o">=</span> <span class="n">getFramebuffer</span><span class="p">(</span><span class="n">mainId</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">fbo</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Main frame buffer is missing.&quot;</span><span class="p">);</span>
+            <span class="n">abort</span><span class="p">();</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">app</span><span class="o">::</span><span class="n">context_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">guard</span><span class="p">.</span><span class="n">contextIsValid</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">abort</span><span class="p">();</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="n">material_handle</span> <span class="n">debugMaterial</span> <span class="o">=</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">create_material</span><span class="p">(</span><span class="s">&quot;debug&quot;</span><span class="p">,</span> <span class="s">&quot;assets://shaders/debug.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">vertexBuffer</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">size_type</span> <span class="n">vertexBufferSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">colorBuffer</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">size_type</span> <span class="n">colorBufferSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">ignoreDepthBuffer</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">size_type</span> <span class="n">ignoreDepthBufferSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">vao</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">debugMaterial</span> <span class="o">==</span> <span class="n">invalid_material_handle</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">vertexBuffer</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vertexBuffer</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">colorBuffer</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">colorBuffer</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ignoreDepthBuffer</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ignoreDepthBuffer</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">vao</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">glGenVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">vao</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&gt;&gt;</span> <span class="n">lineBatches</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">width</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">:</span> <span class="n">lineBatches</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">ignoreDepths</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">vertices</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+            <span class="n">ignoreDepths</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="n">colors</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">line</span> <span class="p">:</span> <span class="n">lines</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">ignoreDepths</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">vertices</span><span class="p">]</span> <span class="o">=</span> <span class="n">lineBatches</span><span class="p">[</span><span class="n">line</span><span class="p">.</span><span class="n">width</span><span class="p">];</span>
+            <span class="n">ignoreDepths</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">ignoreDepth</span><span class="p">);</span>
+            <span class="n">ignoreDepths</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">ignoreDepth</span><span class="p">);</span>
+            <span class="n">colors</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">color</span><span class="p">);</span>
+            <span class="n">colors</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">color</span><span class="p">);</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">start</span><span class="p">);</span>
+            <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="n">end</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="p">[</span><span class="n">valid</span><span class="p">,</span> <span class="n">message</span><span class="p">]</span> <span class="o">=</span> <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">verify</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">valid</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Main frame buffer isn&#39;t complete: {}&quot;</span><span class="p">,</span> <span class="n">message</span><span class="p">);</span>
+            <span class="n">abort</span><span class="p">();</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">bind</span><span class="p">();</span>
+
+        <span class="n">debugMaterial</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+
+        <span class="n">glEnable</span><span class="p">(</span><span class="n">GL_LINE_SMOOTH</span><span class="p">);</span>
+        <span class="n">glBindVertexArray</span><span class="p">(</span><span class="n">vao</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">width</span><span class="p">,</span> <span class="n">lineData</span><span class="p">]</span> <span class="o">:</span> <span class="n">lineBatches</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">ignoreDepths</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">vertices</span><span class="p">]</span> <span class="o">=</span> <span class="n">lineData</span><span class="p">;</span>
+
+            <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vertexBuffer</span><span class="p">);</span>
+
+            <span class="n">size_type</span> <span class="n">vertexCount</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">vertexCount</span> <span class="o">&gt;</span> <span class="n">vertexBufferSize</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">vertexCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_DYNAMIC_DRAW</span><span class="p">);</span>
+                <span class="n">vertexBufferSize</span> <span class="o">=</span> <span class="n">vertexCount</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">glBufferSubData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vertexCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">),</span> <span class="n">vertices</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+            <span class="n">glEnableVertexAttribArray</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">);</span>
+            <span class="n">glVertexAttribPointer</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+            <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">colorBuffer</span><span class="p">);</span>
+
+            <span class="n">size_type</span> <span class="n">colorCount</span> <span class="o">=</span> <span class="n">colors</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">colorCount</span> <span class="o">&gt;</span> <span class="n">colorBufferSize</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">colorCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_DYNAMIC_DRAW</span><span class="p">);</span>
+                <span class="n">colorBufferSize</span> <span class="o">=</span> <span class="n">colorCount</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">glBufferSubData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">colorCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="p">),</span> <span class="n">colors</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+
+            <span class="k">auto</span> <span class="n">colorAttrib</span> <span class="o">=</span> <span class="n">debugMaterial</span><span class="p">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">&quot;color&quot;</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">colorAttrib</span> <span class="o">==</span> <span class="n">invalid_attribute</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">colorAttrib</span><span class="p">.</span><span class="n">set_attribute_pointer</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+            <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">ignoreDepthBuffer</span><span class="p">);</span>
+
+            <span class="n">size_type</span> <span class="n">ignoreDepthCount</span> <span class="o">=</span> <span class="n">ignoreDepths</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ignoreDepthCount</span> <span class="o">&gt;</span> <span class="n">ignoreDepthBufferSize</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">ignoreDepthCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_DYNAMIC_DRAW</span><span class="p">);</span>
+                <span class="n">ignoreDepthBufferSize</span> <span class="o">=</span> <span class="n">ignoreDepthCount</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">glBufferSubData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ignoreDepthCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">uint</span><span class="p">),</span> <span class="n">ignoreDepths</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+
+            <span class="k">auto</span> <span class="n">ignoreDepthAttrib</span> <span class="o">=</span> <span class="n">debugMaterial</span><span class="p">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">&quot;ignoreDepth&quot;</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">ignoreDepthAttrib</span> <span class="o">==</span> <span class="n">invalid_attribute</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">ignoreDepthAttrib</span><span class="p">.</span><span class="n">set_attribute_pointer</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">GL_UNSIGNED_INT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+            <span class="n">glUniformMatrix4fv</span><span class="p">(</span><span class="n">SV_VIEW</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">camInput</span><span class="p">.</span><span class="n">view</span><span class="p">));</span>
+            <span class="n">glUniformMatrix4fv</span><span class="p">(</span><span class="n">SV_PROJECT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">value_ptr</span><span class="p">(</span><span class="n">camInput</span><span class="p">.</span><span class="n">proj</span><span class="p">));</span>
+
+            <span class="n">glLineWidth</span><span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="n">glDrawArraysInstanced</span><span class="p">(</span><span class="n">GL_LINES</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">colors</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+            <span class="n">ignoreDepthAttrib</span><span class="p">.</span><span class="n">disable_attribute_pointer</span><span class="p">();</span>
+            <span class="n">colorAttrib</span><span class="p">.</span><span class="n">disable_attribute_pointer</span><span class="p">();</span>
+            <span class="n">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">glBindVertexArray</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+        <span class="n">glDisable</span><span class="p">(</span><span class="n">GL_LINE_SMOOTH</span><span class="p">);</span>
+
+        <span class="n">debugMaterial</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+
+        <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">priority_type</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">priority</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">post_fx_priority</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_debugrenderstage.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

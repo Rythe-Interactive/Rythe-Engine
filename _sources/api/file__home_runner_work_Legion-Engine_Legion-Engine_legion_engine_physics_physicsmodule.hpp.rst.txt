@@ -35,6 +35,8 @@ Includes
 
 - ``physics/components/rigidbody.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_rigidbody.hpp`)
 
+- ``physics/mesh_splitter_utils/mesh_splitter.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter.hpp`)
+
 - ``physics/systems/physicssystem.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physicssystem.hpp`)
 
 

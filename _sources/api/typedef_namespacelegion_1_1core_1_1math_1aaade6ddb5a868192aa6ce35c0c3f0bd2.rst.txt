@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacelegion_1_1core_1_1math_1aaade6ddb5a868192aa6ce35c0c3f0bd2:
+
+Typedef legion::core::math::angleld
+===================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_trigonometry.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::math::angleld

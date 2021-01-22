@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__impl__opengl3_8cpp_1ae616a8d5b513f4effd4c43dce2dfd941:
+
+Variable g_GlVersion
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: g_GlVersion

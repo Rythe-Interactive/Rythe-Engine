@@ -1,0 +1,34 @@
+.. _exhale_class_classlegion_1_1rendering_1_1_render_stage_base:
+
+Class RenderStageBase
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public legion::rendering::RenderStage< SelfType >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+- ``public legion::rendering::RenderStage< ClearStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+- ``public legion::rendering::RenderStage< DebugRenderStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+- ``public legion::rendering::RenderStage< FramebufferResizeStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+- ``public legion::rendering::RenderStage< ImGuiStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+- ``public legion::rendering::RenderStage< LightBufferStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+- ``public legion::rendering::RenderStage< MeshBatchingStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+- ``public legion::rendering::RenderStage< MeshRenderStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+- ``public legion::rendering::RenderStage< PostProcessingStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+- ``public legion::rendering::RenderStage< SubmitStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::RenderStageBase
+   :members:
+   :protected-members:
+   :undoc-members:

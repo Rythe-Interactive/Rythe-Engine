@@ -1,0 +1,1280 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File ImGuiFileBrowser.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File ImGuiFileBrowser.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-imguifilebrowser-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imguifilebrowser-cpp"></span><h1>Program Listing for File ImGuiFileBrowser.cpp<a class="headerlink" href="#program-listing-for-file-imguifilebrowser-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuiFileBrowser.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imguifilebrowser-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/ImGuiFileBrowser.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;imgui/ImGuiFileBrowser.h&gt;</span><span class="cp"></span>
+<span class="cp">#ifndef IMGUI_DEFINE_MATH_OPERATORS</span>
+<span class="cp">#define IMGUI_DEFINE_MATH_OPERATORS</span>
+<span class="cp">#endif</span>
+<span class="cp">#include</span> <span class="cpf">&lt;imgui/imgui_internal.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;climits&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;sstream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cwchar&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cctype&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;imgui/imgui.h&gt;</span><span class="cp"></span>
+<span class="cp">#if defined (WIN32) || defined (_WIN32) || defined (__WIN32)</span>
+<span class="cp">#define OSWIN</span>
+<span class="cp">#ifndef NOMINMAX</span>
+    <span class="cp">#define NOMINMAX</span>
+<span class="cp">#endif</span>
+<span class="cp">#include</span> <span class="cpf">&lt;imgui/Dirent/dirent.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;windows.h&gt;</span><span class="cp"></span>
+<span class="cp">#else</span>
+<span class="cp">#include</span> <span class="cpf">&lt;dirent.h&gt;</span><span class="cp"></span>
+<span class="cp">#endif </span><span class="c1">// defined (WIN32) || defined (_WIN32)</span>
+
+<span class="k">namespace</span> <span class="n">imgui</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="n">filebrowser</span>
+<span class="p">{</span>
+    <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">ImGuiFileBrowser</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">filter_mode</span> <span class="o">=</span> <span class="n">FilterMode_Files</span> <span class="o">|</span> <span class="n">FilterMode_Dirs</span><span class="p">;</span>
+
+        <span class="n">show_inputbar_combobox</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">validate_file</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">show_hidden</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">is_dir</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">filter_dirty</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">is_appearing</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="n">col_items_limit</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
+        <span class="n">selected_idx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">selected_ext_idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">ext_box_width</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0f</span><span class="p">;</span>
+        <span class="n">col_width</span> <span class="o">=</span> <span class="mf">280.0f</span><span class="p">;</span>
+        <span class="n">min_size</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">300</span><span class="p">);</span>
+
+        <span class="n">invfile_modal_id</span> <span class="o">=</span> <span class="s">&quot;Invalid File!&quot;</span><span class="p">;</span>
+        <span class="n">repfile_modal_id</span> <span class="o">=</span> <span class="s">&quot;Replace File?&quot;</span><span class="p">;</span>
+        <span class="n">selected_fn</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="n">selected_path</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="n">input_fn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+
+        <span class="cp">#ifdef OSWIN</span>
+        <span class="n">current_path</span> <span class="o">=</span> <span class="s">&quot;./&quot;</span><span class="p">;</span>
+        <span class="cp">#else</span>
+        <span class="n">initCurrentPath</span><span class="p">();</span>
+        <span class="cp">#endif</span>
+    <span class="p">}</span>
+
+    <span class="n">ImGuiFileBrowser</span><span class="o">::~</span><span class="n">ImGuiFileBrowser</span><span class="p">()</span>
+    <span class="p">{</span>
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">clearFileList</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">//Clear pointer references to subdirs and subfiles</span>
+        <span class="n">filtered_dirs</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">filtered_files</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">inputcb_filter_files</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+        <span class="c1">//Now clear subdirs and subfiles</span>
+        <span class="n">subdirs</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">subfiles</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">filter_dirty</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">selected_idx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">closeDialog</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">valid_types</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="n">valid_exts</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">selected_ext_idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">selected_idx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+        <span class="n">input_fn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>  <span class="c1">//Hide any text in Input bar for the next time save dialog is opened.</span>
+        <span class="n">filter</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>     <span class="c1">//Clear Filter for the next time open dialog is called.</span>
+
+        <span class="n">show_inputbar_combobox</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">validate_file</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">show_hidden</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">is_dir</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">filter_dirty</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">is_appearing</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="c1">//Clear pointer references to subdirs and subfiles</span>
+        <span class="n">filtered_dirs</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">filtered_files</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">inputcb_filter_files</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+        <span class="c1">//Now clear subdirs and subfiles</span>
+        <span class="n">subdirs</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">subfiles</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">CloseCurrentPopup</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">showFileDialog</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">label</span><span class="p">,</span> <span class="k">const</span> <span class="n">DialogMode</span> <span class="n">mode</span><span class="p">,</span> <span class="k">const</span> <span class="n">ImVec2</span><span class="o">&amp;</span> <span class="n">sz_xy</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">valid_types</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="n">dialog_mode</span> <span class="o">=</span> <span class="n">mode</span><span class="p">;</span>
+        <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+        <span class="n">max_size</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">max_size</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">DisplaySize</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetNextWindowSizeConstraints</span><span class="p">(</span><span class="n">min_size</span><span class="p">,</span> <span class="n">max_size</span><span class="p">);</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetNextWindowPos</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">DisplaySize</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="p">,</span> <span class="n">ImGuiCond_Appearing</span><span class="p">,</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mf">0.5f</span><span class="p">,</span><span class="mf">0.5f</span><span class="p">));</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetNextWindowSize</span><span class="p">(</span><span class="n">ImVec2</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">sz_xy</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min_size</span><span class="p">.</span><span class="n">x</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">sz_xy</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">min_size</span><span class="p">.</span><span class="n">y</span><span class="p">)),</span> <span class="n">ImGuiCond_Appearing</span><span class="p">);</span>
+
+        <span class="c1">//Set Proper Filter Mode.</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+            <span class="n">filter_mode</span> <span class="o">=</span> <span class="n">FilterMode_Dirs</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">filter_mode</span> <span class="o">=</span> <span class="n">FilterMode_Files</span> <span class="o">|</span> <span class="n">FilterMode_Dirs</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">BeginPopupModal</span><span class="p">(</span><span class="n">label</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">ImGuiWindowFlags_NoScrollbar</span> <span class="o">|</span> <span class="n">ImGuiWindowFlags_NoScrollWithMouse</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="kt">bool</span> <span class="n">show_error</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+            <span class="c1">// If this is the initial run, read current directory and load data once.</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">is_appearing</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">selected_fn</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="n">selected_path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">mode</span> <span class="o">!=</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">this</span><span class="o">-&gt;</span><span class="n">valid_types</span> <span class="o">=</span> <span class="n">valid_types</span><span class="p">;</span>
+                    <span class="n">setValidExtTypes</span><span class="p">(</span><span class="n">valid_types</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="cm">/* If current path is empty (can happen on Windows if user closes dialog while inside MyComputer.</span>
+<span class="cm">                 * Since this is a virtual folder, path would be empty) load the drives on Windows else initialize the current path on Unix.</span>
+<span class="cm">                 */</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">current_path</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="cp">#ifdef OSWIN</span>
+                    <span class="n">show_error</span> <span class="o">|=</span> <span class="o">!</span><span class="p">(</span><span class="n">loadWindowsDrives</span><span class="p">());</span>
+                    <span class="cp">#else</span>
+                    <span class="n">initCurrentPath</span><span class="p">();</span>
+                    <span class="n">show_error</span> <span class="o">|=</span> <span class="o">!</span><span class="p">(</span><span class="n">readDIR</span><span class="p">(</span><span class="n">current_path</span><span class="p">));</span>
+                    <span class="cp">#endif </span><span class="c1">// OSWIN</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                    <span class="n">show_error</span> <span class="o">|=</span> <span class="o">!</span><span class="p">(</span><span class="n">readDIR</span><span class="p">(</span><span class="n">current_path</span><span class="p">));</span>
+                <span class="n">is_appearing</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">show_error</span> <span class="o">|=</span> <span class="n">renderNavAndSearchBarRegion</span><span class="p">();</span>
+            <span class="n">show_error</span> <span class="o">|=</span> <span class="n">renderFileListRegion</span><span class="p">();</span>
+            <span class="n">show_error</span> <span class="o">|=</span> <span class="n">renderInputTextAndExtRegion</span><span class="p">();</span>
+            <span class="n">show_error</span> <span class="o">|=</span> <span class="n">renderButtonsAndCheckboxRegion</span><span class="p">();</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">validate_file</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">validate_file</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="kt">bool</span> <span class="n">check</span> <span class="o">=</span> <span class="n">validateFile</span><span class="p">();</span>
+
+                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">check</span> <span class="o">&amp;&amp;</span> <span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">OPEN</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">OpenPopup</span><span class="p">(</span><span class="n">invfile_modal_id</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+                    <span class="n">selected_fn</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                    <span class="n">selected_path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="p">}</span>
+
+                <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">check</span> <span class="o">&amp;&amp;</span> <span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SAVE</span><span class="p">)</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">OpenPopup</span><span class="p">(</span><span class="n">repfile_modal_id</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+
+                <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="o">!</span><span class="n">check</span> <span class="o">&amp;&amp;</span> <span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">selected_fn</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                    <span class="n">selected_path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                    <span class="n">show_error</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">error_title</span> <span class="o">=</span> <span class="s">&quot;Invalid Directory!&quot;</span><span class="p">;</span>
+                    <span class="n">error_msg</span> <span class="o">=</span> <span class="s">&quot;Invalid Directory Selected. Please make sure the directory exists.&quot;</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="c1">//If selected file passes through validation check, set path to the file and close file dialog</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">check</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">selected_path</span> <span class="o">=</span> <span class="n">current_path</span> <span class="o">+</span> <span class="n">selected_fn</span><span class="p">;</span>
+
+                    <span class="c1">//Add a trailing &quot;/&quot; to emphasize its a directory not a file. If you want just the dir name it&#39;s accessible through &quot;selected_fn&quot;</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+                        <span class="n">selected_path</span> <span class="o">+=</span> <span class="s">&quot;/&quot;</span><span class="p">;</span>
+                    <span class="n">closeDialog</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">// We don&#39;t need to check as the modals will only be shown if OpenPopup is called</span>
+            <span class="n">showInvalidFileModal</span><span class="p">();</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">showReplaceFileModal</span><span class="p">())</span>
+                <span class="n">closeDialog</span><span class="p">();</span>
+
+            <span class="c1">//Show Error Modal if there was an error opening any directory</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">show_error</span><span class="p">)</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">OpenPopup</span><span class="p">(</span><span class="n">error_title</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+            <span class="n">showErrorModal</span><span class="p">();</span>
+
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">EndPopup</span><span class="p">();</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="n">selected_fn</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">selected_path</span><span class="p">.</span><span class="n">empty</span><span class="p">());</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">renderNavAndSearchBarRegion</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ImGuiStyle</span><span class="o">&amp;</span> <span class="n">style</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="n">show_error</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">frame_height</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeight</span><span class="p">();</span>
+        <span class="kt">float</span> <span class="n">list_item_height</span> <span class="o">=</span> <span class="n">GImGui</span><span class="o">-&gt;</span><span class="n">FontSize</span> <span class="o">+</span> <span class="n">style</span><span class="p">.</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="n">ImVec2</span> <span class="n">pw_content_size</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetWindowSize</span><span class="p">()</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">;</span>
+        <span class="n">ImVec2</span> <span class="n">sw_size</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="s">&quot;Random&quot;</span><span class="p">).</span><span class="n">x</span> <span class="o">+</span> <span class="mi">140</span><span class="p">,</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="mf">2.0f</span> <span class="o">+</span> <span class="n">frame_height</span><span class="p">);</span>
+        <span class="n">ImVec2</span> <span class="n">sw_content_size</span> <span class="o">=</span> <span class="n">sw_size</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">;</span>
+        <span class="n">ImVec2</span> <span class="n">nw_size</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">pw_content_size</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">sw_size</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sw_size</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+
+
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">BeginChild</span><span class="p">(</span><span class="s">&quot;##NavigationWindow&quot;</span><span class="p">,</span> <span class="n">nw_size</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">ImGuiWindowFlags_AlwaysAutoResize</span> <span class="o">|</span> <span class="n">ImGuiWindowFlags_NoScrollbar</span><span class="p">);</span>
+
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_Text</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">0.882f</span><span class="p">,</span> <span class="mf">0.745f</span><span class="p">,</span> <span class="mf">0.078f</span><span class="p">,</span><span class="mf">1.0f</span><span class="p">));</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">current_dirlist</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="n">current_dirlist</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">c_str</span><span class="p">())</span> <span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//If last button clicked, nothing happens</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">current_dirlist</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">show_error</span> <span class="o">|=</span> <span class="o">!</span><span class="p">(</span><span class="n">onNavigationButtonClick</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+            <span class="p">}</span>
+
+            <span class="c1">//Draw Arrow Buttons</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">current_dirlist</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+                <span class="kt">float</span> <span class="n">next_label_width</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="n">current_dirlist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">].</span><span class="n">c_str</span><span class="p">()).</span><span class="n">x</span><span class="p">;</span>
+
+                <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="o">&lt;</span> <span class="n">current_dirlist</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">next_label_width</span> <span class="o">+=</span> <span class="n">frame_height</span> <span class="o">+</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&quot;</span><span class="p">).</span><span class="n">x</span><span class="p">;</span>
+
+                <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">GetCursorPosX</span><span class="p">()</span> <span class="o">+</span> <span class="n">next_label_width</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">nw_size</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="mf">3.0</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_Button</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.01f</span><span class="p">));</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_Text</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span><span class="mf">1.0f</span><span class="p">));</span>
+
+                    <span class="c1">//Render a drop down of navigation items on button press</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&quot;</span><span class="p">))</span>
+                        <span class="n">ImGui</span><span class="o">::</span><span class="n">OpenPopup</span><span class="p">(</span><span class="s">&quot;##NavBarDropboxPopup&quot;</span><span class="p">);</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">BeginPopup</span><span class="p">(</span><span class="s">&quot;##NavBarDropboxPopup&quot;</span><span class="p">))</span>
+                    <span class="p">{</span>
+                        <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_FrameBg</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">0.125f</span><span class="p">,</span> <span class="mf">0.125f</span><span class="p">,</span> <span class="mf">0.125f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">));</span>
+                        <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">ListBoxHeader</span><span class="p">(</span><span class="s">&quot;##NavBarDropBox&quot;</span><span class="p">,</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">list_item_height</span><span class="o">*</span> <span class="mi">5</span><span class="p">)))</span>
+                        <span class="p">{</span>
+                            <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_Text</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">0.882f</span><span class="p">,</span> <span class="mf">0.745f</span><span class="p">,</span> <span class="mf">0.078f</span><span class="p">,</span><span class="mf">1.0f</span><span class="p">));</span>
+                            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">current_dirlist</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+                            <span class="p">{</span>
+                                <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Selectable</span><span class="p">(</span><span class="n">current_dirlist</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">c_str</span><span class="p">(),</span> <span class="nb">false</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">!=</span> <span class="n">current_dirlist</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                                <span class="p">{</span>
+                                    <span class="n">show_error</span> <span class="o">|=</span> <span class="o">!</span><span class="p">(</span><span class="n">onNavigationButtonClick</span><span class="p">(</span><span class="n">j</span><span class="p">));</span>
+                                    <span class="n">ImGui</span><span class="o">::</span><span class="n">CloseCurrentPopup</span><span class="p">();</span>
+                                <span class="p">}</span>
+                            <span class="p">}</span>
+                            <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleColor</span><span class="p">();</span>
+                            <span class="n">ImGui</span><span class="o">::</span><span class="n">ListBoxFooter</span><span class="p">();</span>
+                        <span class="p">}</span>
+                        <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleColor</span><span class="p">();</span>
+                        <span class="n">ImGui</span><span class="o">::</span><span class="n">EndPopup</span><span class="p">();</span>
+                    <span class="p">}</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleColor</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_Button</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.01f</span><span class="p">));</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_Text</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span><span class="mf">1.0f</span><span class="p">));</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">ArrowButtonEx</span><span class="p">(</span><span class="s">&quot;##Right&quot;</span><span class="p">,</span> <span class="n">ImGuiDir_Right</span><span class="p">,</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">frame_height</span><span class="p">,</span> <span class="n">frame_height</span><span class="p">),</span> <span class="n">ImGuiButtonFlags_Disabled</span><span class="p">);</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleColor</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleColor</span><span class="p">();</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">EndChild</span><span class="p">();</span>
+
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">();</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">BeginChild</span><span class="p">(</span><span class="s">&quot;##SearchWindow&quot;</span><span class="p">,</span> <span class="n">sw_size</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">ImGuiWindowFlags_AlwaysAutoResize</span> <span class="o">|</span> <span class="n">ImGuiWindowFlags_NoScrollbar</span><span class="p">);</span>
+
+        <span class="c1">//Render Search/Filter bar</span>
+        <span class="kt">float</span> <span class="n">marker_width</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="s">&quot;(?)&quot;</span><span class="p">).</span><span class="n">x</span> <span class="o">+</span> <span class="n">style</span><span class="p">.</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">filter</span><span class="p">.</span><span class="n">Draw</span><span class="p">(</span><span class="s">&quot;##SearchBar&quot;</span><span class="p">,</span> <span class="n">sw_content_size</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">marker_width</span><span class="p">)</span> <span class="o">||</span> <span class="n">filter_dirty</span> <span class="p">)</span>
+            <span class="n">filterFiles</span><span class="p">(</span><span class="n">filter_mode</span><span class="p">);</span>
+
+        <span class="c1">//If filter bar was focused clear selection</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">GetFocusID</span><span class="p">()</span> <span class="o">==</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetID</span><span class="p">(</span><span class="s">&quot;##SearchBar&quot;</span><span class="p">))</span>
+            <span class="n">selected_idx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">();</span>
+        <span class="n">showHelpMarker</span><span class="p">(</span><span class="s">&quot;Filter (inc, -exc)&quot;</span><span class="p">);</span>
+
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">EndChild</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">show_error</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">renderFileListRegion</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ImGuiStyle</span><span class="o">&amp;</span> <span class="n">style</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">();</span>
+        <span class="n">ImVec2</span> <span class="n">pw_size</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetWindowSize</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="n">show_error</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">list_item_height</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">).</span><span class="n">y</span> <span class="o">+</span> <span class="n">style</span><span class="p">.</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">input_bar_ypos</span> <span class="o">=</span> <span class="n">pw_size</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeightWithSpacing</span><span class="p">()</span> <span class="o">*</span> <span class="mf">2.5f</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">window_height</span> <span class="o">=</span> <span class="n">input_bar_ypos</span> <span class="o">-</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetCursorPosY</span><span class="p">()</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">window_content_height</span> <span class="o">=</span> <span class="n">window_height</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="mf">2.0f</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">min_content_size</span> <span class="o">=</span> <span class="n">pw_size</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="mf">4.0f</span><span class="p">;</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">window_content_height</span> <span class="o">&lt;=</span> <span class="mf">0.0f</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">show_error</span><span class="p">;</span>
+
+        <span class="c1">//Reinitialize the limit on number of selectables in one column based on height</span>
+        <span class="n">col_items_limit</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="n">window_content_height</span><span class="o">/</span><span class="n">list_item_height</span><span class="p">));</span>
+        <span class="kt">int</span> <span class="n">num_cols</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ceil</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">filtered_dirs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="n">filtered_files</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="o">/</span> <span class="n">col_items_limit</span><span class="p">)));</span>
+
+        <span class="c1">//Limitation by ImGUI in 1.75. If columns are greater than 64 readjust the limit on items per column and recalculate number of columns</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">num_cols</span> <span class="o">&gt;</span> <span class="mi">64</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">exceed_items_amount</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_cols</span> <span class="o">-</span> <span class="mi">64</span><span class="p">)</span> <span class="o">*</span> <span class="n">col_items_limit</span><span class="p">;</span>
+            <span class="n">col_items_limit</span> <span class="o">+=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ceil</span><span class="p">(</span><span class="n">exceed_items_amount</span><span class="o">/</span><span class="mf">64.0</span><span class="p">));</span>
+            <span class="n">num_cols</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ceil</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">filtered_dirs</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="n">filtered_files</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="o">/</span> <span class="n">col_items_limit</span><span class="p">)));</span>
+        <span class="p">}</span>
+
+        <span class="kt">float</span> <span class="n">content_width</span> <span class="o">=</span> <span class="n">num_cols</span> <span class="o">*</span> <span class="n">col_width</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">content_width</span> <span class="o">&lt;</span> <span class="n">min_content_size</span><span class="p">)</span>
+            <span class="n">content_width</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetNextWindowContentSize</span><span class="p">(</span><span class="n">ImVec2</span><span class="p">(</span><span class="n">content_width</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">BeginChild</span><span class="p">(</span><span class="s">&quot;##ScrollingRegion&quot;</span><span class="p">,</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">window_height</span><span class="p">),</span> <span class="nb">true</span><span class="p">,</span> <span class="n">ImGuiWindowFlags_HorizontalScrollbar</span><span class="p">);</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">Columns</span><span class="p">(</span><span class="n">num_cols</span><span class="p">);</span>
+
+        <span class="c1">//Output directories in yellow</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_Text</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">0.882f</span><span class="p">,</span> <span class="mf">0.745f</span><span class="p">,</span> <span class="mf">0.078f</span><span class="p">,</span><span class="mf">1.0f</span><span class="p">));</span>
+        <span class="kt">int</span> <span class="n">items</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">filtered_dirs</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">filtered_dirs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">is_hidden</span> <span class="o">||</span> <span class="n">show_hidden</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">items</span><span class="o">++</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Selectable</span><span class="p">(</span><span class="n">filtered_dirs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">selected_idx</span> <span class="o">==</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="n">is_dir</span><span class="p">,</span> <span class="n">ImGuiSelectableFlags_AllowDoubleClick</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="n">selected_idx</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                    <span class="n">is_dir</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+                    <span class="c1">// If dialog mode is SELECT then copy the selected dir name to the input text bar</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+                        <span class="n">strcpy</span><span class="p">(</span><span class="n">input_fn</span><span class="p">,</span> <span class="n">filtered_dirs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+
+                    <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">IsMouseDoubleClicked</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+                    <span class="p">{</span>
+                        <span class="n">show_error</span> <span class="o">|=</span> <span class="o">!</span><span class="p">(</span><span class="n">onDirClick</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">%</span> <span class="n">col_items_limit</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">NextColumn</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleColor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+        <span class="c1">//Output files</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">filtered_files</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">filtered_files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">is_hidden</span> <span class="o">||</span> <span class="n">show_hidden</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">items</span><span class="o">++</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Selectable</span><span class="p">(</span><span class="n">filtered_files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">selected_idx</span> <span class="o">==</span> <span class="n">i</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">is_dir</span><span class="p">,</span> <span class="n">ImGuiSelectableFlags_AllowDoubleClick</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="c1">//int len = filtered_files[i]-&gt;name.length();</span>
+                    <span class="n">selected_idx</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                    <span class="n">is_dir</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+                    <span class="c1">// If dialog mode is OPEN/SAVE then copy the selected file name to the input text bar</span>
+                    <span class="n">strcpy</span><span class="p">(</span><span class="n">input_fn</span><span class="p">,</span> <span class="n">filtered_files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+
+                    <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">IsMouseDoubleClicked</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+                    <span class="p">{</span>
+                        <span class="n">selected_fn</span> <span class="o">=</span> <span class="n">filtered_files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">;</span>
+                        <span class="n">validate_file</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">%</span> <span class="n">col_items_limit</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">ImGui</span><span class="o">::</span><span class="n">NextColumn</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">Columns</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">EndChild</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="n">show_error</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">renderInputTextAndExtRegion</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">label</span> <span class="o">=</span> <span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SAVE</span><span class="p">)</span> <span class="o">?</span> <span class="s">&quot;Save As:&quot;</span> <span class="o">:</span> <span class="s">&quot;Open:&quot;</span><span class="p">;</span>
+        <span class="n">ImGuiStyle</span><span class="o">&amp;</span> <span class="n">style</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">();</span>
+        <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+
+        <span class="n">ImVec2</span> <span class="n">pw_pos</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetWindowPos</span><span class="p">();</span>
+        <span class="n">ImVec2</span> <span class="n">pw_content_sz</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetWindowSize</span><span class="p">()</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">;</span>
+        <span class="n">ImVec2</span> <span class="n">cursor_pos</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetCursorPos</span><span class="p">();</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">ext_box_width</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">ext_box_width</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="s">&quot;.abc&quot;</span><span class="p">).</span><span class="n">x</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">label_width</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="n">label</span><span class="p">.</span><span class="n">c_str</span><span class="p">()).</span><span class="n">x</span> <span class="o">+</span> <span class="n">style</span><span class="p">.</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">frame_height_spacing</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeightWithSpacing</span><span class="p">();</span>
+        <span class="kt">float</span> <span class="n">input_bar_width</span> <span class="o">=</span> <span class="n">pw_content_sz</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">label_width</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">!=</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+            <span class="n">input_bar_width</span> <span class="o">-=</span> <span class="p">(</span><span class="n">ext_box_width</span> <span class="o">+</span> <span class="n">style</span><span class="p">.</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+
+        <span class="kt">bool</span> <span class="n">show_error</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetCursorPosY</span><span class="p">(</span><span class="n">pw_content_sz</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">frame_height_spacing</span> <span class="o">*</span> <span class="mf">2.0f</span><span class="p">);</span>
+
+        <span class="c1">//Render Input Text Bar label</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">Text</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">label</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">();</span>
+
+        <span class="c1">//Render Input Text Bar</span>
+        <span class="n">input_combobox_pos</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">pw_pos</span> <span class="o">+</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetCursorPos</span><span class="p">());</span>
+        <span class="n">input_combobox_sz</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="n">input_bar_width</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">PushItemWidth</span><span class="p">(</span><span class="n">input_bar_width</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">InputTextWithHint</span><span class="p">(</span><span class="s">&quot;##FileNameInput&quot;</span><span class="p">,</span> <span class="s">&quot;Type a name...&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">input_fn</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">256</span><span class="p">,</span> <span class="n">ImGuiInputTextFlags_EnterReturnsTrue</span> <span class="o">|</span> <span class="n">ImGuiInputTextFlags_AutoSelectAll</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">input_fn</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">selected_fn</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">input_fn</span><span class="p">);</span>
+                <span class="n">validate_file</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">PopItemWidth</span><span class="p">();</span>
+
+        <span class="c1">//If input bar was focused clear selection</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">IsItemEdited</span><span class="p">())</span>
+            <span class="n">selected_idx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+        <span class="c1">// If Input Bar is edited show a list of files or dirs matching the input text.</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">IsItemEdited</span><span class="p">()</span> <span class="o">||</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">IsItemActivated</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="c1">//If dialog_mode is OPEN/SAVE then filter from list of files..</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">OPEN</span> <span class="o">||</span> <span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SAVE</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">inputcb_filter_files</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">subfiles</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">ImStristr</span><span class="p">(</span><span class="n">subfiles</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">input_fn</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                        <span class="n">inputcb_filter_files</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">subfiles</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">//If dialog_mode == SELECT then filter from list of directories</span>
+            <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">inputcb_filter_files</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">subdirs</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">ImStristr</span><span class="p">(</span><span class="n">subdirs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">input_fn</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                        <span class="n">inputcb_filter_files</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">subdirs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">//If filtered list has any items show dropdown</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">inputcb_filter_files</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">show_inputbar_combobox</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">show_inputbar_combobox</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//Render Extensions and File Types DropDown</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">!=</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">();</span>
+            <span class="n">renderExtBox</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="c1">//Render a Drop Down of files/dirs (depending on mode) that have matching characters as the input text only.</span>
+        <span class="n">show_error</span> <span class="o">|=</span> <span class="n">renderInputComboBox</span><span class="p">();</span>
+
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetCursorPos</span><span class="p">(</span><span class="n">cursor_pos</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">show_error</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">renderButtonsAndCheckboxRegion</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ImVec2</span> <span class="n">pw_size</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetWindowSize</span><span class="p">();</span>
+        <span class="n">ImGuiStyle</span><span class="o">&amp;</span> <span class="n">style</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="n">show_error</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">frame_height</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeight</span><span class="p">();</span>
+        <span class="kt">float</span> <span class="n">frame_height_spacing</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeightWithSpacing</span><span class="p">();</span>
+        <span class="kt">float</span> <span class="n">opensave_btn_width</span> <span class="o">=</span> <span class="n">getButtonSize</span><span class="p">(</span><span class="s">&quot;Open&quot;</span><span class="p">).</span><span class="n">x</span><span class="p">;</span>     <span class="c1">// Since both Open/Save are 4 characters long, width gonna be same.</span>
+        <span class="kt">float</span> <span class="n">selcan_btn_width</span> <span class="o">=</span> <span class="n">getButtonSize</span><span class="p">(</span><span class="s">&quot;Cancel&quot;</span><span class="p">).</span><span class="n">x</span><span class="p">;</span>     <span class="c1">// Since both Cacnel/Select have same number of characters, so same width.</span>
+        <span class="kt">float</span> <span class="n">buttons_xpos</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+            <span class="n">buttons_xpos</span> <span class="o">=</span> <span class="n">pw_size</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">opensave_btn_width</span> <span class="o">-</span> <span class="p">(</span><span class="mf">2.0f</span> <span class="o">*</span> <span class="n">selcan_btn_width</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span> <span class="mf">2.0f</span> <span class="o">*</span> <span class="n">style</span><span class="p">.</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">buttons_xpos</span> <span class="o">=</span> <span class="n">pw_size</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">opensave_btn_width</span> <span class="o">-</span> <span class="n">selcan_btn_width</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetCursorPosY</span><span class="p">(</span><span class="n">pw_size</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">frame_height_spacing</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+
+        <span class="c1">//Render Checkbox</span>
+        <span class="kt">float</span> <span class="n">label_width</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="s">&quot;Show Hidden Files and Folders&quot;</span><span class="p">).</span><span class="n">x</span> <span class="o">+</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetCursorPosX</span><span class="p">()</span> <span class="o">+</span> <span class="n">frame_height</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">show_marker</span> <span class="o">=</span> <span class="p">(</span><span class="n">label_width</span> <span class="o">&gt;=</span> <span class="n">buttons_xpos</span><span class="p">);</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">Checkbox</span><span class="p">(</span> <span class="p">(</span><span class="n">show_marker</span><span class="p">)</span> <span class="o">?</span> <span class="s">&quot;##showHiddenFiles&quot;</span> <span class="o">:</span> <span class="s">&quot;Show Hidden Files and Folders&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">show_hidden</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">show_marker</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">();</span>
+            <span class="n">showHelpMarker</span><span class="p">(</span><span class="s">&quot;Show Hidden Files and Folders&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//Render an Open Button (in OPEN/SELECT dialog_mode) or Open/Save depending on what&#39;s selected in SAVE dialog_mode</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">();</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetCursorPosX</span><span class="p">(</span><span class="n">buttons_xpos</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SAVE</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// If directory selected and Input Text Bar doesn&#39;t have focus, render Open Button</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">selected_idx</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">is_dir</span> <span class="o">&amp;&amp;</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFocusID</span><span class="p">()</span> <span class="o">!=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetID</span><span class="p">(</span><span class="s">&quot;##FileNameInput&quot;</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Open&quot;</span><span class="p">))</span>
+                    <span class="n">show_error</span> <span class="o">|=</span> <span class="o">!</span><span class="p">(</span><span class="n">onDirClick</span><span class="p">(</span><span class="n">selected_idx</span><span class="p">));</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Save&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">input_fn</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">selected_fn</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">input_fn</span><span class="p">);</span>
+                <span class="n">validate_file</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Open&quot;</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="c1">//It&#39;s possible for both to be true at once (user selected directory but input bar has some text. In this case we chose to open the directory instead of opening the file.</span>
+                <span class="c1">//Also note that we don&#39;t need to access the selected file through &quot;selected_idx&quot; since the if a file is selected, input bar will get populated with that name.</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">selected_idx</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">is_dir</span><span class="p">)</span>
+                    <span class="n">show_error</span> <span class="o">|=</span> <span class="o">!</span><span class="p">(</span><span class="n">onDirClick</span><span class="p">(</span><span class="n">selected_idx</span><span class="p">));</span>
+                <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">input_fn</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">selected_fn</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">input_fn</span><span class="p">);</span>
+                    <span class="n">validate_file</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">//Render Select Button if in SELECT Mode</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//Render Select Button</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Select&quot;</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">input_fn</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">selected_fn</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">input_fn</span><span class="p">);</span>
+                        <span class="n">validate_file</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">//Render Cancel Button</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Cancel&quot;</span><span class="p">))</span>
+            <span class="n">closeDialog</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="n">show_error</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">renderInputComboBox</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">bool</span> <span class="n">show_error</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">ImGuiStyle</span><span class="o">&amp;</span> <span class="n">style</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">();</span>
+        <span class="n">ImGuiID</span> <span class="n">input_id</span> <span class="o">=</span>  <span class="n">ImGui</span><span class="o">::</span><span class="n">GetID</span><span class="p">(</span><span class="s">&quot;##FileNameInput&quot;</span><span class="p">);</span>
+        <span class="n">ImGuiID</span> <span class="n">focus_scope_id</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetID</span><span class="p">(</span><span class="s">&quot;##InputBarComboBoxListScope&quot;</span><span class="p">);</span>
+        <span class="kt">float</span> <span class="n">frame_height</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeight</span><span class="p">();</span>
+
+        <span class="n">input_combobox_sz</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">((</span><span class="n">inputcb_filter_files</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">frame_height</span> <span class="o">+</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span>  <span class="mf">2.0f</span><span class="p">,</span>
+                                        <span class="mi">8</span> <span class="o">*</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeight</span><span class="p">()</span> <span class="o">+</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span>  <span class="mf">2.0f</span><span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">show_inputbar_combobox</span> <span class="o">&amp;&amp;</span> <span class="p">(</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFocusScope</span><span class="p">()</span> <span class="o">==</span> <span class="n">focus_scope_id</span> <span class="o">||</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetCurrentContext</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">ActiveIdIsAlive</span> <span class="o">==</span> <span class="n">input_id</span>  <span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">ImGuiWindowFlags</span> <span class="n">popupFlags</span> <span class="o">=</span> <span class="n">ImGuiWindowFlags_NoTitleBar</span>           <span class="o">|</span>
+                                          <span class="n">ImGuiWindowFlags_NoResize</span>             <span class="o">|</span>
+                                          <span class="n">ImGuiWindowFlags_NoMove</span>               <span class="o">|</span>
+                                          <span class="n">ImGuiWindowFlags_NoFocusOnAppearing</span>   <span class="o">|</span>
+                                          <span class="n">ImGuiWindowFlags_NoScrollbar</span>          <span class="o">|</span>
+                                          <span class="n">ImGuiWindowFlags_NoSavedSettings</span><span class="p">;</span>
+
+
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_ChildBg</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">0.1f</span><span class="p">,</span> <span class="mf">0.1f</span><span class="p">,</span> <span class="mf">0.1f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">));</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_FrameBg</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">0.125f</span><span class="p">,</span> <span class="mf">0.125f</span><span class="p">,</span> <span class="mf">0.125f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">));</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">SetNextWindowBgAlpha</span><span class="p">(</span><span class="mf">1.0</span><span class="p">);</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">SetNextWindowPos</span><span class="p">(</span><span class="n">input_combobox_pos</span> <span class="o">+</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeightWithSpacing</span><span class="p">()));</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">PushClipRect</span><span class="p">(</span><span class="n">ImVec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">().</span><span class="n">DisplaySize</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">BeginChild</span><span class="p">(</span><span class="s">&quot;##InputBarComboBox&quot;</span><span class="p">,</span> <span class="n">input_combobox_sz</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">popupFlags</span><span class="p">);</span>
+
+            <span class="n">ImVec2</span> <span class="n">listbox_size</span> <span class="o">=</span> <span class="n">input_combobox_sz</span> <span class="o">-</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">().</span><span class="n">WindowPadding</span> <span class="o">*</span> <span class="mf">2.0f</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">ListBoxHeader</span><span class="p">(</span><span class="s">&quot;##InputBarComboBoxList&quot;</span><span class="p">,</span> <span class="n">listbox_size</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">PushStyleColor</span><span class="p">(</span><span class="n">ImGuiCol_Text</span><span class="p">,</span> <span class="n">ImVec4</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span><span class="mf">1.0f</span><span class="p">));</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">PushFocusScope</span><span class="p">(</span><span class="n">focus_scope_id</span><span class="p">);</span>
+                <span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">element</span> <span class="p">:</span> <span class="n">inputcb_filter_files</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Selectable</span><span class="p">(</span><span class="n">element</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">c_str</span><span class="p">(),</span> <span class="nb">false</span><span class="p">,</span> <span class="n">ImGuiSelectableFlags_NoHoldingActiveID</span> <span class="o">|</span> <span class="n">ImGuiSelectableFlags_SelectOnClick</span><span class="p">))</span>
+                    <span class="p">{</span>
+                        <span class="k">if</span><span class="p">(</span><span class="n">element</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">256</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">error_title</span> <span class="o">=</span> <span class="s">&quot;Error!&quot;</span><span class="p">;</span>
+                            <span class="n">error_msg</span> <span class="o">=</span> <span class="s">&quot;Selected File Name is longer than 256 characters.&quot;</span><span class="p">;</span>
+                            <span class="n">show_error</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="k">else</span>
+                        <span class="p">{</span>
+                            <span class="n">strcpy</span><span class="p">(</span><span class="n">input_fn</span><span class="p">,</span> <span class="n">element</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">c_str</span><span class="p">());</span>
+                            <span class="n">show_inputbar_combobox</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">PopFocusScope</span><span class="p">();</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleColor</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">ListBoxFooter</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">EndChild</span><span class="p">();</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">PopStyleColor</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">PopClipRect</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">show_error</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">renderExtBox</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">PushItemWidth</span><span class="p">(</span><span class="n">ext_box_width</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">BeginCombo</span><span class="p">(</span><span class="s">&quot;##FileTypes&quot;</span><span class="p">,</span> <span class="n">valid_exts</span><span class="p">[</span><span class="n">selected_ext_idx</span><span class="p">].</span><span class="n">c_str</span><span class="p">()))</span>
+        <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">valid_exts</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Selectable</span><span class="p">(</span><span class="n">valid_exts</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">c_str</span><span class="p">(),</span> <span class="n">selected_ext_idx</span> <span class="o">==</span> <span class="n">i</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="n">selected_ext_idx</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SAVE</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">(</span><span class="n">input_fn</span><span class="p">);</span>
+                        <span class="kt">size_t</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">name</span><span class="p">.</span><span class="n">find_last_of</span><span class="p">(</span><span class="s">&quot;.&quot;</span><span class="p">);</span>
+                        <span class="k">if</span><span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span>
+                            <span class="n">idx</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">input_fn</span><span class="p">);</span>
+                        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">valid_exts</span><span class="p">[</span><span class="n">selected_ext_idx</span><span class="p">].</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+                            <span class="n">input_fn</span><span class="p">[</span><span class="n">idx</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">valid_exts</span><span class="p">[</span><span class="n">selected_ext_idx</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+                        <span class="n">input_fn</span><span class="p">[</span><span class="n">idx</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">filterFiles</span><span class="p">(</span><span class="n">FilterMode_Files</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">EndCombo</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">valid_exts</span><span class="p">[</span><span class="n">selected_ext_idx</span><span class="p">];</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">PopItemWidth</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">onNavigationButtonClick</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">new_path</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+        <span class="c1">//First Button corresponds to virtual folder Computer which lists all logical drives (hard disks and removables) and &quot;/&quot; on Unix</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="cp">#ifdef OSWIN</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">loadWindowsDrives</span><span class="p">())</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">current_path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="n">current_dirlist</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="n">current_dirlist</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Computer&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="cp">#else</span>
+            <span class="n">new_path</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="p">;</span>
+            <span class="cp">#endif </span><span class="c1">// OSWIN</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="cp">#ifdef OSWIN</span>
+            <span class="c1">//Clicked on a drive letter?</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">new_path</span> <span class="o">=</span> <span class="n">current_path</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="c1">//Start from i=1 since at 0 lies &quot;MyComputer&quot; which is only virtual and shouldn&#39;t be read by readDIR</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">idx</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                    <span class="n">new_path</span> <span class="o">+=</span> <span class="n">current_dirlist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="cp">#else</span>
+            <span class="c1">//Since UNIX absolute paths start at &quot;/&quot;, we handle this separately to avoid adding a double slash at the beginning</span>
+            <span class="n">new_path</span> <span class="o">+=</span> <span class="n">current_dirlist</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">idx</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">new_path</span> <span class="o">+=</span> <span class="n">current_dirlist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span><span class="p">;</span>
+            <span class="cp">#endif</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">readDIR</span><span class="p">(</span><span class="n">new_path</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">current_dirlist</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">current_dirlist</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="o">+</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">current_dirlist</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+            <span class="n">current_path</span> <span class="o">=</span> <span class="n">new_path</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">onDirClick</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">new_path</span><span class="p">(</span><span class="n">current_path</span><span class="p">);</span>
+        <span class="kt">bool</span> <span class="n">drives_shown</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="cp">#ifdef OSWIN</span>
+        <span class="n">drives_shown</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_dirlist</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">current_dirlist</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;Computer&quot;</span><span class="p">);</span>
+        <span class="cp">#endif </span><span class="c1">// OSWIN</span>
+
+        <span class="n">name</span> <span class="o">=</span> <span class="n">filtered_dirs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">;</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;..&quot;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">new_path</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span> <span class="c1">// Remove trailing &#39;/&#39;</span>
+            <span class="n">new_path</span> <span class="o">=</span> <span class="n">new_path</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">new_path</span><span class="p">.</span><span class="n">find_last_of</span><span class="p">(</span><span class="sc">&#39;/&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// Also include a trailing &#39;/&#39;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="c1">//Remember we displayed drives on Windows as *Local/Removable Disk: X* hence we need last char only</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">drives_shown</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="p">.</span><span class="n">back</span><span class="p">())</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span><span class="p">;</span>
+            <span class="n">new_path</span> <span class="o">+=</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">readDIR</span><span class="p">(</span><span class="n">new_path</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;..&quot;</span><span class="p">)</span>
+                <span class="n">current_dirlist</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+            <span class="k">else</span>
+                <span class="n">current_dirlist</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+             <span class="n">current_path</span> <span class="o">=</span> <span class="n">new_path</span><span class="p">;</span>
+             <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+           <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">readDIR</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">pathdir</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">DIR</span><span class="o">*</span> <span class="n">dir</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="n">dirent</span> <span class="o">*</span><span class="n">ent</span><span class="p">;</span>
+
+        <span class="cm">/* If the current directory doesn&#39;t exist, and we are opening the dialog for the first time, reset to defaults to avoid looping of showing error modal.</span>
+<span class="cm">         * An example case is when user closes the dialog in a folder. Then deletes the folder outside. On reopening the dialog the current path (previous) would be invalid.</span>
+<span class="cm">         */</span>
+        <span class="n">dir</span> <span class="o">=</span> <span class="n">opendir</span><span class="p">(</span><span class="n">pathdir</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">dir</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">is_appearing</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">current_dirlist</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="cp">#ifdef OSWIN</span>
+            <span class="n">current_path</span> <span class="o">=</span> <span class="n">pathdir</span> <span class="o">=</span> <span class="s">&quot;./&quot;</span><span class="p">;</span>
+            <span class="cp">#else</span>
+            <span class="n">initCurrentPath</span><span class="p">();</span>
+            <span class="n">pathdir</span> <span class="o">=</span> <span class="n">current_path</span><span class="p">;</span>
+            <span class="cp">#endif </span><span class="c1">// OSWIN</span>
+
+            <span class="n">dir</span> <span class="o">=</span> <span class="n">opendir</span><span class="p">(</span><span class="n">pathdir</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="cp">#ifdef OSWIN</span>
+            <span class="c1">// If we are on Windows and current path is relative then get absolute path from dirent structure</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">current_dirlist</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">pathdir</span> <span class="o">==</span> <span class="s">&quot;./&quot;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">dir</span><span class="o">-&gt;</span><span class="n">wdirp</span><span class="o">-&gt;</span><span class="n">patt</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">current_directory</span> <span class="o">=</span> <span class="n">wStringToString</span><span class="p">(</span><span class="n">absolute_path</span><span class="p">);</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">replace</span><span class="p">(</span><span class="n">current_directory</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">current_directory</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="sc">&#39;\\&#39;</span><span class="p">,</span> <span class="sc">&#39;/&#39;</span><span class="p">);</span>
+
+                <span class="c1">//Remove trailing &quot;*&quot; returned by ** dir-&gt;wdirp-&gt;patt **</span>
+                <span class="n">current_directory</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+                <span class="n">current_path</span> <span class="o">=</span> <span class="n">current_directory</span><span class="p">;</span>
+
+                <span class="c1">//Create a vector of each directory in the file path for the filepath bar. Not Necessary for linux as starting directory is &quot;/&quot;</span>
+                <span class="n">parsePathTabs</span><span class="p">(</span><span class="n">current_path</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="cp">#endif </span><span class="c1">// OSWIN</span>
+
+            <span class="c1">// store all the files and directories within directory and clear previous entries</span>
+            <span class="n">clearFileList</span><span class="p">();</span>
+            <span class="k">while</span> <span class="p">((</span><span class="n">ent</span> <span class="o">=</span> <span class="n">readdir</span> <span class="p">(</span><span class="n">dir</span><span class="p">))</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">bool</span> <span class="n">is_hidden</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">(</span><span class="n">ent</span><span class="o">-&gt;</span><span class="n">d_name</span><span class="p">);</span>
+
+                <span class="c1">//Ignore current directory</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;.&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span><span class="p">;</span>
+
+                <span class="c1">//Somehow there is a &#39;..&#39; present in root directory in linux.</span>
+                <span class="cp">#ifndef OSWIN</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">name</span> <span class="o">==</span> <span class="s">&quot;..&quot;</span> <span class="o">&amp;&amp;</span> <span class="n">pathdir</span> <span class="o">==</span> <span class="s">&quot;/&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="cp">#endif </span><span class="c1">// OSWIN</span>
+
+                <span class="k">if</span><span class="p">(</span><span class="n">name</span> <span class="o">!=</span> <span class="s">&quot;..&quot;</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="cp">#ifdef OSWIN</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">dir</span> <span class="o">=</span> <span class="n">pathdir</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">ent</span><span class="o">-&gt;</span><span class="n">d_name</span><span class="p">);</span>
+                    <span class="c1">// IF system file skip it...</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">FILE_ATTRIBUTE_SYSTEM</span> <span class="o">&amp;</span> <span class="n">GetFileAttributesA</span><span class="p">(</span><span class="n">dir</span><span class="p">.</span><span class="n">c_str</span><span class="p">()))</span>
+                        <span class="k">continue</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">FILE_ATTRIBUTE_HIDDEN</span> <span class="o">&amp;</span> <span class="n">GetFileAttributesA</span><span class="p">(</span><span class="n">dir</span><span class="p">.</span><span class="n">c_str</span><span class="p">()))</span>
+                        <span class="n">is_hidden</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="cp">#else</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;.&#39;</span><span class="p">)</span>
+                        <span class="n">is_hidden</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="cp">#endif </span><span class="c1">// OSWIN</span>
+                <span class="p">}</span>
+                <span class="c1">//Store directories and files in separate vectors</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">ent</span><span class="o">-&gt;</span><span class="n">d_type</span> <span class="o">==</span> <span class="n">DT_DIR</span><span class="p">)</span>
+                    <span class="n">subdirs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Info</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">is_hidden</span><span class="p">));</span>
+                <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">ent</span><span class="o">-&gt;</span><span class="n">d_type</span> <span class="o">==</span> <span class="n">DT_REG</span> <span class="o">&amp;&amp;</span> <span class="n">dialog_mode</span> <span class="o">!=</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+                    <span class="n">subfiles</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Info</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">is_hidden</span><span class="p">));</span>
+            <span class="p">}</span>
+            <span class="n">closedir</span> <span class="p">(</span><span class="n">dir</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">subdirs</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">subdirs</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">alphaSortComparator</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">subfiles</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">subfiles</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">alphaSortComparator</span><span class="p">);</span>
+
+            <span class="c1">//Initialize Filtered dirs and files</span>
+            <span class="n">filterFiles</span><span class="p">(</span><span class="n">filter_mode</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">error_title</span> <span class="o">=</span> <span class="s">&quot;Error!&quot;</span><span class="p">;</span>
+            <span class="n">error_msg</span> <span class="o">=</span> <span class="s">&quot;Error opening directory! Make sure the directory exists and you have the proper rights to access the directory.&quot;</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">filterFiles</span><span class="p">(</span><span class="kt">int</span> <span class="n">filter_mode</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">filter_dirty</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">filter_mode</span> <span class="o">|</span> <span class="n">FilterMode_Dirs</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">filtered_dirs</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">subdirs</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">filter</span><span class="p">.</span><span class="n">PassFilter</span><span class="p">(</span><span class="n">subdirs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">()))</span>
+                    <span class="n">filtered_dirs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">&amp;</span><span class="n">subdirs</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">filter_mode</span> <span class="o">|</span> <span class="n">FilterMode_Files</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">filtered_files</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">subfiles</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">valid_exts</span><span class="p">[</span><span class="n">selected_ext_idx</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;*.*&quot;</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">filter</span><span class="p">.</span><span class="n">PassFilter</span><span class="p">(</span><span class="n">subfiles</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">()))</span>
+                        <span class="n">filtered_files</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">&amp;</span><span class="n">subfiles</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">filter</span><span class="p">.</span><span class="n">PassFilter</span><span class="p">(</span><span class="n">subfiles</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">())</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">ImStristr</span><span class="p">(</span><span class="n">subfiles</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">valid_exts</span><span class="p">[</span><span class="n">selected_ext_idx</span><span class="p">].</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">))</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                        <span class="n">filtered_files</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">&amp;</span><span class="n">subfiles</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">showHelpMarker</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">desc</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">TextDisabled</span><span class="p">(</span><span class="s">&quot;(?)&quot;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">IsItemHovered</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">BeginTooltip</span><span class="p">();</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">PushTextWrapPos</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">GetFontSize</span><span class="p">()</span> <span class="o">*</span> <span class="mf">35.0f</span><span class="p">);</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">TextUnformatted</span><span class="p">(</span><span class="n">desc</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">PopTextWrapPos</span><span class="p">();</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">EndTooltip</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">showErrorModal</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ImVec2</span> <span class="n">window_size</span><span class="p">(</span><span class="mi">260</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetNextWindowSize</span><span class="p">(</span><span class="n">window_size</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">BeginPopupModal</span><span class="p">(</span><span class="n">error_title</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">ImGuiWindowFlags_NoScrollbar</span> <span class="o">|</span> <span class="n">ImGuiWindowFlags_NoResize</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">TextWrapped</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">error_msg</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">Separator</span><span class="p">();</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">SetCursorPosX</span><span class="p">(</span><span class="n">window_size</span><span class="p">.</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0f</span> <span class="o">-</span> <span class="n">getButtonSize</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">).</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0f</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">,</span> <span class="n">getButtonSize</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">)))</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">CloseCurrentPopup</span><span class="p">();</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">EndPopup</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">showReplaceFileModal</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ImVec2</span> <span class="n">window_size</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetNextWindowSize</span><span class="p">(</span><span class="n">window_size</span><span class="p">);</span>
+        <span class="kt">bool</span> <span class="n">ret_val</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">BeginPopupModal</span><span class="p">(</span><span class="n">repfile_modal_id</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">ImGuiWindowFlags_NoScrollbar</span> <span class="o">|</span> <span class="n">ImGuiWindowFlags_NoResize</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="kt">float</span> <span class="n">frame_height</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeightWithSpacing</span><span class="p">();</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;A file with the following filename already exists. Are you sure you want to replace the existing file?&quot;</span><span class="p">;</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">TextWrapped</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">Separator</span><span class="p">();</span>
+
+            <span class="kt">float</span> <span class="n">buttons_width</span> <span class="o">=</span> <span class="n">getButtonSize</span><span class="p">(</span><span class="s">&quot;Yes&quot;</span><span class="p">).</span><span class="n">x</span> <span class="o">+</span> <span class="n">getButtonSize</span><span class="p">(</span><span class="s">&quot;No&quot;</span><span class="p">).</span><span class="n">x</span> <span class="o">+</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">().</span><span class="n">ItemSpacing</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">SetCursorPosX</span><span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">GetCursorPosX</span><span class="p">()</span> <span class="o">+</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetWindowWidth</span><span class="p">()</span><span class="o">/</span><span class="mf">2.0f</span> <span class="o">-</span> <span class="n">buttons_width</span><span class="o">/</span><span class="mf">2.0f</span> <span class="o">-</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">().</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Yes&quot;</span><span class="p">,</span> <span class="n">getButtonSize</span><span class="p">(</span><span class="s">&quot;Yes&quot;</span><span class="p">)))</span>
+            <span class="p">{</span>
+                <span class="n">selected_path</span> <span class="o">=</span> <span class="n">current_path</span> <span class="o">+</span> <span class="n">selected_fn</span><span class="p">;</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">CloseCurrentPopup</span><span class="p">();</span>
+                <span class="n">ret_val</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">SameLine</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;No&quot;</span><span class="p">,</span> <span class="n">getButtonSize</span><span class="p">(</span><span class="s">&quot;No&quot;</span><span class="p">)))</span>
+            <span class="p">{</span>
+                <span class="n">selected_fn</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="n">selected_path</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">CloseCurrentPopup</span><span class="p">();</span>
+                <span class="n">ret_val</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">EndPopup</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ret_val</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">showInvalidFileModal</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">ImGuiStyle</span><span class="o">&amp;</span> <span class="n">style</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&quot;Selected file either doesn&#39;t exist or is not supported. Please select a file with the following extensions...&quot;</span><span class="p">;</span>
+        <span class="n">ImVec2</span> <span class="n">text_size</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="n">text</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="mi">350</span> <span class="o">-</span> <span class="n">style</span><span class="p">.</span><span class="n">WindowPadding</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="mf">2.0f</span><span class="p">);</span>
+        <span class="n">ImVec2</span> <span class="n">button_size</span> <span class="o">=</span> <span class="n">getButtonSize</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">);</span>
+
+        <span class="kt">float</span> <span class="n">frame_height</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetFrameHeightWithSpacing</span><span class="p">();</span>
+        <span class="kt">float</span> <span class="n">cw_content_height</span> <span class="o">=</span> <span class="n">valid_exts</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="n">frame_height</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">cw_height</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="mf">4.0f</span> <span class="o">*</span> <span class="n">frame_height</span><span class="p">,</span> <span class="n">cw_content_height</span><span class="p">);</span>
+        <span class="n">ImVec2</span> <span class="nf">window_size</span><span class="p">(</span><span class="mi">350</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">ImGui</span><span class="o">::</span><span class="n">SetNextWindowSize</span><span class="p">(</span><span class="n">window_size</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">BeginPopupModal</span><span class="p">(</span><span class="n">invfile_modal_id</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">ImGuiWindowFlags_NoScrollbar</span> <span class="o">|</span> <span class="n">ImGuiWindowFlags_NoResize</span><span class="p">))</span>
+        <span class="p">{</span>
+
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">TextWrapped</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">BeginChild</span><span class="p">(</span><span class="s">&quot;##SupportedExts&quot;</span><span class="p">,</span> <span class="n">ImVec2</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cw_height</span><span class="p">),</span> <span class="nb">true</span><span class="p">);</span>
+            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">valid_exts</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">BulletText</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">valid_exts</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">c_str</span><span class="p">());</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">EndChild</span><span class="p">();</span>
+
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">SetCursorPosX</span><span class="p">(</span><span class="n">window_size</span><span class="p">.</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0f</span> <span class="o">-</span> <span class="n">button_size</span><span class="p">.</span><span class="n">x</span><span class="o">/</span><span class="mf">2.0f</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">,</span> <span class="n">button_size</span><span class="p">))</span>
+                <span class="n">ImGui</span><span class="o">::</span><span class="n">CloseCurrentPopup</span><span class="p">();</span>
+            <span class="n">ImGui</span><span class="o">::</span><span class="n">EndPopup</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">setValidExtTypes</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">valid_types_string</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="cm">/* Initialize a list of files extensions that are valid.</span>
+<span class="cm">         * If the user chooses a file that doesn&#39;t match the extensions in the</span>
+<span class="cm">         * list, we will show an error modal...</span>
+<span class="cm">         */</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">max_str</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="n">valid_exts</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">extension</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">istringstream</span> <span class="n">iss</span><span class="p">(</span><span class="n">valid_types_string</span><span class="p">);</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">iss</span><span class="p">,</span> <span class="n">extension</span><span class="p">,</span> <span class="sc">&#39;,&#39;</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">extension</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">max_str</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">extension</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+                    <span class="n">max_str</span> <span class="o">=</span> <span class="n">extension</span><span class="p">;</span>
+                <span class="n">valid_exts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">extension</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="kt">float</span> <span class="n">min_width</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="s">&quot;.abc&quot;</span><span class="p">).</span><span class="n">x</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
+        <span class="n">ext_box_width</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">min_width</span><span class="p">,</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="n">max_str</span><span class="p">.</span><span class="n">c_str</span><span class="p">()).</span><span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">validateFile</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">bool</span> <span class="n">match</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="c1">//If there is an item selected, check if the selected file name (the input filename, in other words) matches the selection.</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">selected_idx</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="p">(</span><span class="n">filtered_dirs</span><span class="p">[</span><span class="n">selected_idx</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">==</span> <span class="n">selected_fn</span><span class="p">);</span>
+            <span class="k">else</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="p">(</span><span class="n">filtered_files</span><span class="p">[</span><span class="n">selected_idx</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">==</span> <span class="n">selected_fn</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//If the input filename doesn&#39;t match we need to explicitly find the input filename..</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">match</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">subdirs</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">subdirs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span> <span class="o">==</span> <span class="n">selected_fn</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">match</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">subfiles</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">subfiles</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span> <span class="o">==</span> <span class="n">selected_fn</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">match</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// If file doesn&#39;t match, return true on SAVE mode (since file doesn&#39;t exist, hence can be saved directly) and return false on other modes (since file doesn&#39;t exist so cant open/select)</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">match</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SAVE</span><span class="p">);</span>
+
+        <span class="c1">// If file matches, return false on SAVE, we need to show a replace file modal</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SAVE</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="c1">// Return true on SELECT, no need to validate extensions</span>
+        <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">dialog_mode</span> <span class="o">==</span> <span class="n">DialogMode</span><span class="o">::</span><span class="n">SELECT</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="c1">// If list of extensions has all types, no need to validate.</span>
+            <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="nl">ext</span> <span class="p">:</span> <span class="n">valid_exts</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">ext</span> <span class="o">==</span> <span class="s">&quot;*.*&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="kt">size_t</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">selected_fn</span><span class="p">.</span><span class="n">find_last_of</span><span class="p">(</span><span class="sc">&#39;.&#39;</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">file_ext</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span> <span class="o">?</span> <span class="s">&quot;&quot;</span> <span class="o">:</span> <span class="n">selected_fn</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">selected_fn</span><span class="p">.</span><span class="n">length</span><span class="p">()</span> <span class="o">-</span> <span class="n">idx</span><span class="p">);</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="n">valid_exts</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">valid_exts</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">file_ext</span><span class="p">)</span> <span class="o">!=</span> <span class="n">valid_exts</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">ImVec2</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">getButtonSize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">button_text</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">ImGui</span><span class="o">::</span><span class="n">CalcTextSize</span><span class="p">(</span><span class="n">button_text</span><span class="p">.</span><span class="n">c_str</span><span class="p">())</span> <span class="o">+</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetStyle</span><span class="p">().</span><span class="n">FramePadding</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">parsePathTabs</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">path</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">path_element</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">root</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+        <span class="cp">#ifdef OSWIN</span>
+        <span class="n">current_dirlist</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;Computer&quot;</span><span class="p">);</span>
+        <span class="cp">#else</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;/&#39;</span><span class="p">)</span>
+            <span class="n">current_dirlist</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">);</span>
+        <span class="cp">#endif </span><span class="c1">//OSWIN</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">istringstream</span> <span class="n">iss</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">iss</span><span class="p">,</span> <span class="n">path_element</span><span class="p">,</span> <span class="sc">&#39;/&#39;</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">path_element</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="n">current_dirlist</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">path_element</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">wStringToString</span><span class="p">(</span><span class="k">const</span> <span class="kt">wchar_t</span><span class="o">*</span> <span class="n">wchar_arr</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">mbstate_t</span> <span class="n">state</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="kt">mbstate_t</span><span class="p">();</span>
+
+         <span class="c1">//MinGW bug (patched in mingw-w64), wcsrtombs doesn&#39;t ignore length parameter when dest = nullptr. Hence the large number.</span>
+        <span class="kt">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">wcsrtombs</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">wchar_arr</span><span class="p">),</span> <span class="mi">600000</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">state</span><span class="p">);</span>
+
+        <span class="kt">char</span><span class="o">*</span> <span class="n">char_arr</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="p">];</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">wcsrtombs</span><span class="p">(</span><span class="n">char_arr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">wchar_arr</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">state</span><span class="p">);</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ret_val</span><span class="p">(</span><span class="n">char_arr</span><span class="p">);</span>
+
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">char_arr</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">ret_val</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">alphaSortComparator</span><span class="p">(</span><span class="k">const</span> <span class="n">Info</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Info</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str1</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">();</span>
+        <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">str2</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">c_str</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">ca</span><span class="p">,</span> <span class="n">cb</span><span class="p">;</span>
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="n">ca</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span> <span class="o">*</span><span class="n">str1</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">cb</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span><span class="p">)</span> <span class="o">*</span><span class="n">str2</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">ca</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">tolower</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">toupper</span><span class="p">(</span><span class="n">ca</span><span class="p">));</span>
+            <span class="n">cb</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">tolower</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">toupper</span><span class="p">(</span><span class="n">cb</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">ca</span> <span class="o">==</span> <span class="n">cb</span> <span class="o">&amp;&amp;</span> <span class="n">ca</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ca</span>  <span class="o">&lt;</span> <span class="n">cb</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//Windows Exclusive function</span>
+    <span class="cp">#ifdef OSWIN</span>
+    <span class="kt">bool</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">loadWindowsDrives</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">DWORD</span> <span class="n">len</span> <span class="o">=</span> <span class="n">GetLogicalDriveStringsA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="k">nullptr</span><span class="p">);</span>
+        <span class="kt">char</span><span class="o">*</span> <span class="n">drives</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="p">];</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">GetLogicalDriveStringsA</span><span class="p">(</span><span class="n">len</span><span class="p">,</span><span class="n">drives</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">drives</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">clearFileList</span><span class="p">();</span>
+        <span class="kt">char</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">drives</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">drv</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="o">*</span><span class="n">temp</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span> <span class="n">temp</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">drv</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">DRIVE_REMOVABLE</span> <span class="o">==</span> <span class="n">GetDriveTypeA</span><span class="p">(</span><span class="n">drv</span><span class="p">))</span>
+                <span class="n">subdirs</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="s">&quot;Removable Disk: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">drv</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">false</span><span class="p">});</span>
+            <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">DRIVE_FIXED</span> <span class="o">==</span> <span class="n">GetDriveTypeA</span><span class="p">(</span><span class="n">drv</span><span class="p">))</span>
+                <span class="n">subdirs</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="s">&quot;Local Disk: &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">drv</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">false</span><span class="p">});</span>
+            <span class="c1">//Go to nullptr character</span>
+            <span class="k">while</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">++</span><span class="n">temp</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">drives</span><span class="p">;</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="cp">#endif</span>
+
+    <span class="c1">//Unix only</span>
+    <span class="cp">#ifndef OSWIN</span>
+    <span class="kt">void</span> <span class="n">ImGuiFileBrowser</span><span class="o">::</span><span class="n">initCurrentPath</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">bool</span> <span class="n">path_max_def</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="cp">#ifdef PATH_MAX</span>
+        <span class="n">path_max_def</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="cp">#endif </span><span class="c1">// PATH_MAX</span>
+
+        <span class="kt">char</span><span class="o">*</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+        <span class="c1">//If PATH_MAX is defined deal with memory using new/delete. Else fallback to malloc&#39;ed memory from `realpath()`</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">path_max_def</span><span class="p">)</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">PATH_MAX</span><span class="p">];</span>
+
+        <span class="kt">char</span><span class="o">*</span> <span class="n">real_path</span> <span class="o">=</span> <span class="n">realpath</span><span class="p">(</span><span class="s">&quot;./&quot;</span><span class="p">,</span> <span class="n">buffer</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">real_path</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">current_path</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="p">;</span>
+            <span class="n">current_dirlist</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">current_path</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">real_path</span><span class="p">);</span>
+            <span class="n">current_path</span> <span class="o">+=</span> <span class="s">&quot;/&quot;</span><span class="p">;</span>
+            <span class="n">parsePathTabs</span><span class="p">(</span><span class="n">current_path</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">path_max_def</span><span class="p">)</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">buffer</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="nf">free</span><span class="p">(</span><span class="n">real_path</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="cp">#endif </span><span class="c1">// OSWIN</span>
+<span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuiFileBrowser.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

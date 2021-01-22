@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__draw_8cpp_1a6d45e455062888f4f84c022dcb80575f:
+
+Variable stb__barrier_out_e
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: stb__barrier_out_e

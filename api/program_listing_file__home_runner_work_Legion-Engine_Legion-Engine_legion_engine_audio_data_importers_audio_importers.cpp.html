@@ -102,7 +102,7 @@
             <span class="n">fileInfo</span><span class="p">.</span><span class="n">avg_bitrate_kbps</span>
         <span class="p">);</span>
 
-        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
         <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">alcContext</span><span class="p">);</span>
         <span class="c1">//Generate openal buffer</span>
         <span class="n">alGenBuffers</span><span class="p">((</span><span class="n">ALuint</span><span class="p">)</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">as</span><span class="p">.</span><span class="n">audioBufferId</span><span class="p">);</span>
@@ -429,7 +429,7 @@
 
         <span class="kt">void</span> <span class="n">createAndBufferAudioData</span><span class="p">(</span><span class="n">ALuint</span><span class="o">*</span> <span class="n">bufferId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">,</span> <span class="n">byte</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sampleRate</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">contextLock</span><span class="p">);</span>
             <span class="n">alcMakeContextCurrent</span><span class="p">(</span><span class="n">AudioSystem</span><span class="o">::</span><span class="n">alcContext</span><span class="p">);</span>
             <span class="c1">//Generate openal buffer</span>
             <span class="n">alGenBuffers</span><span class="p">((</span><span class="n">ALuint</span><span class="p">)</span><span class="mi">1</span><span class="p">,</span> <span class="n">bufferId</span><span class="p">);</span>

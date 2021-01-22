@@ -39,7 +39,7 @@ Includes
 
 - ``core/ecs/archetype.inl`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.inl`)
 
-- ``core/ecs/component_container.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp`)
+- ``core/ecs/component_pool.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_pool.hpp`)
 
 - ``core/ecs/entity_handle.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entity_handle.hpp`)
 
@@ -52,6 +52,8 @@ Includes
 - ``core/types/types.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_types.hpp`)
 
 - ``memory``
+
+- ``unordered_map``
 
 - ``utility``
 

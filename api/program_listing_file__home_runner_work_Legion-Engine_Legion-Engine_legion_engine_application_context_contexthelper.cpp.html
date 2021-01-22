@@ -53,7 +53,7 @@
     <span class="n">std</span><span class="o">::</span><span class="n">atomic_bool</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">m_initialized</span><span class="p">;</span>
     <span class="n">atomic_sparse_map</span><span class="o">&lt;</span><span class="n">GLFWwindow</span><span class="o">*</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">m_windowInitialized</span><span class="p">;</span>
 
-    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">m_initCallbackLock</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">m_initCallbackLock</span><span class="p">;</span>
     <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">m_onInit</span><span class="p">;</span>
 
     <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">GLFWwindow</span><span class="o">*&gt;</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">newFocus</span><span class="p">;</span>
@@ -201,7 +201,8 @@
 
     <span class="kt">void</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">setWindowShouldClose</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">glfwSetWindowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">window</span><span class="p">)</span>
+            <span class="n">glfwSetWindowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="kt">int</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">windowShouldClose</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">)</span>
@@ -251,6 +252,7 @@
 
     <span class="kt">void</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">swapBuffers</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">initialized</span><span class="p">())</span>
             <span class="n">glfwSwapBuffers</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
     <span class="p">}</span>
@@ -265,10 +267,14 @@
         <span class="n">glfwPollEvents</span><span class="p">();</span>
     <span class="p">}</span>
 
-    <span class="kt">void</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">)</span>
+    <span class="kt">bool</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">initialized</span><span class="p">())</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m_initialized</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span>
+        <span class="p">{</span>
             <span class="n">glfwMakeContextCurrent</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">ContextHelper</span><span class="o">::</span><span class="n">getCurrentContext</span><span class="p">()</span>

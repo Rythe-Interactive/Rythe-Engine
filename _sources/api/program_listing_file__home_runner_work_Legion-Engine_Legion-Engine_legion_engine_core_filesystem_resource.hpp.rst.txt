@@ -16,6 +16,8 @@ Program Listing for File resource.hpp
    
    #include <string_view>                // std::string_view
    
+   #include <Optick/optick.h>
+   
    #include "detail/resource_meta.hpp"   //has_to_resource<T,Sig>, has_from_resource<T,Sig>
    
    
@@ -33,10 +35,13 @@ Program Listing for File resource.hpp
    
            explicit basic_resource(std::nullptr_t placeholder) : m_container{}{}
    
-           explicit basic_resource(byte_vec v) : m_container(std::move(v)) {}
+           explicit basic_resource(byte_vec v) : m_container(std::move(v)) {
+               OPTICK_EVENT();
+           }
    
-           explicit basic_resource(const std::string_view& v) : basic_resource(nullptr)
+           explicit basic_resource(std::string_view v) : basic_resource(nullptr)
            {
+               OPTICK_EVENT();
                m_container.assign(v.begin(), v.end());
            }
    
@@ -116,7 +121,7 @@ Program Listing for File resource.hpp
            }
    
    
-           template <class T,class... Args>
+           template <typename T,class... Args>
            L_NODISCARD T to(Args&&...args) const;
    
            template <class T>
@@ -132,6 +137,7 @@ Program Listing for File resource.hpp
                 typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
        void to_resource(basic_resource* resource,const T& value)
        {
+           OPTICK_EVENT();
            T::to_resource(resource,value);
        }
    
@@ -139,6 +145,7 @@ Program Listing for File resource.hpp
                 typename C1 = std::enable_if<detail::has_to_resource<T,void(basic_resource*,const T&)>::value>>
        basic_resource to_resource(const T& value)
        {
+           OPTICK_EVENT();
            basic_resource res(nullptr);
            T::to_resource(&res,value);
            return res;
@@ -148,6 +155,7 @@ Program Listing for File resource.hpp
                 typename C1 = std::enable_if<detail::has_from_resource<T,void(T*,const basic_resource&)>::value>>
        void from_resource(T* value, const basic_resource& resource)
        {
+           OPTICK_EVENT();
            T::from_resource(value, resource);
        }
        
@@ -157,7 +165,8 @@ Program Listing for File resource.hpp
                typename C3 = std::enable_if<std::is_move_constructible<T>::value>>
        T from_resource(const basic_resource& resource)
        {
-           T value;
+          OPTICK_EVENT();
+          T value;
            T::from_resource(&value,resource);
            return std::move(value);
        }
@@ -168,22 +177,34 @@ Program Listing for File resource.hpp
                class ... Args>
        T from_resource(const basic_resource& resource,Args&&... args)
        {
-           T value(std::forward<Args>(args)...);
+          OPTICK_EVENT();
+          T value(std::forward<Args>(args)...);
            T::from_resource(&value,resource);
            return std::move(value);
        }
    
    
-       template <class T,class... Args>
+       template <typename T,class... Args>
        L_NODISCARD T basic_resource::to(Args&&...args) const
        {
+           OPTICK_EVENT();
            return std::move(from_resource<T>(*this, std::forward<Args>(args)...));
        }
    
        template <class T>
        void basic_resource::from(const T& v)
        {
+           OPTICK_EVENT();
            to_resource(this,v);
        }
+       namespace literals
+       {
+          inline basic_resource operator""_res(const char* str,size_type len)
+          {
+              return basic_resource(std::string_view(str,len));
+          }
+   
+       }
+   
        #endif
    }

@@ -29,9 +29,13 @@ Includes
 --------
 
 
+- ``algorithm``
+
 - ``core/common/string_extra.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`)
 
 - ``core/data/importers/mesh_importers.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.hpp`)
+
+- ``core/filesystem/basic_resolver.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_basic_resolver.hpp`)
 
 - ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`)
 
@@ -58,4 +62,15 @@ Classes
 
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1detail_1_1vertex__hash`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_mesh__importers_8cpp_1a925c6780e89d22e163ed4e210195e4ad`
+
+- :ref:`exhale_function_mesh__importers_8cpp_1a59311c6aa819339a257d0a3e7fbc4b1d`
+
+- :ref:`exhale_function_mesh__importers_8cpp_1a4fce35bbb6abbe16f1d597f8a8c1378f`
 

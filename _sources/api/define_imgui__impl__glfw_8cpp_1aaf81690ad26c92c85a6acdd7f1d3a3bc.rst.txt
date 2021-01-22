@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__impl__glfw_8cpp_1aaf81690ad26c92c85a6acdd7f1d3a3bc:
+
+Define GLFW_HAS_VULKAN
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GLFW_HAS_VULKAN

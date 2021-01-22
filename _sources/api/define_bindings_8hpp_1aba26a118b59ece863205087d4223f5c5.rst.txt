@@ -1,0 +1,13 @@
+.. _exhale_define_bindings_8hpp_1aba26a118b59ece863205087d4223f5c5:
+
+Define POSITION_ATTACHMENT
+==========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: POSITION_ATTACHMENT

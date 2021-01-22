@@ -47,157 +47,114 @@
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-ecs-component-container-hpp"></span><h1>Program Listing for File component_container.hpp<a class="headerlink" href="#program-listing-for-file-component-container-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-ecs-component-container-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs/component_container.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/async/readonly_rw_spinlock.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/async/transferable_atomic.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/containers/atomic_sparse_map.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/types/types.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/events/eventbus.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/events/events.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/component_meta.hpp&gt;</span><span class="cp"></span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;cereal/types/unordered_map.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cereal/types/memory.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/json.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/portable_binary.hpp&gt;</span><span class="cp"></span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;core/serialization/serializationmeta.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ecs</span>
 <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">EcsRegistry</span><span class="p">;</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="n">component_container</span><span class="p">;</span>
 
-    <span class="k">class</span> <span class="nc">component_container_base</span>
+    <span class="k">struct</span> <span class="n">component_container_base</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">L_NODISCARD</span> <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">has_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">const</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">create_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">create_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">destroy_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
+        <span class="n">id_type</span> <span class="n">m_componentid</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="n">component_container_base</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentId</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">m_componentid</span><span class="p">(</span><span class="n">componentId</span><span class="p">)</span> <span class="p">{}</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONInputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
+        <span class="n">id_type</span> <span class="n">getComponentTypeId</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_componentid</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="k">virtual</span> <span class="o">~</span><span class="n">component_container_base</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">component_container_base</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+        <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">cast</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">;</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+        <span class="k">const</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">cast</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
-    <span class="k">class</span> <span class="nc">component_container</span> <span class="o">:</span> <span class="k">public</span> <span class="n">component_container_base</span>
+    <span class="k">struct</span> <span class="nl">component_container</span> <span class="p">:</span> <span class="k">public</span> <span class="n">component_container_base</span><span class="p">,</span> <span class="k">public</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span>
     <span class="p">{</span>
-    <span class="k">private</span><span class="o">:</span>
-        <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">component_type</span><span class="o">&gt;</span> <span class="n">m_components</span><span class="p">;</span>
-        <span class="k">mutable</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_lock</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">underlying_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">allocator_type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">underlying_type</span><span class="o">::</span><span class="n">allocator_type</span><span class="p">;</span>
 
-        <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">m_eventBus</span><span class="p">;</span>
-        <span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">m_registry</span><span class="p">;</span>
-        <span class="n">component_type</span> <span class="n">m_nullComp</span><span class="p">;</span>
-    <span class="k">public</span><span class="o">:</span>
-        <span class="n">component_container</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="n">component_container</span><span class="p">(</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">eventBus</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_registry</span><span class="p">(</span><span class="n">registry</span><span class="p">),</span> <span class="n">m_eventBus</span><span class="p">(</span><span class="n">eventBus</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">component_container</span><span class="p">()</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">()</span> <span class="p">{}</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
-                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
-                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">serialize</span><span class="p">(</span><span class="n">oarchive</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
-        <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONInputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="k">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
-                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
-                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">serialize</span><span class="p">(</span><span class="n">oarchive</span><span class="p">);</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
-        <span class="p">}</span>
+        <span class="k">explicit</span> <span class="n">component_container</span><span class="p">(</span><span class="k">const</span> <span class="n">allocator_type</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">)</span> <span class="k">noexcept</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="n">alloc</span><span class="p">)</span> <span class="p">{}</span>
 
-        <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span> <span class="n">get_lock</span><span class="p">()</span> <span class="k">const</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">m_lock</span><span class="p">;</span>
-        <span class="p">}</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="n">size_type</span> <span class="n">count</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">component_type</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">allocator_type</span><span class="o">&amp;</span> <span class="n">alloc</span> <span class="o">=</span> <span class="n">allocator_type</span><span class="p">())</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">alloc</span><span class="p">)</span> <span class="p">{}</span>
 
-        <span class="n">L_NODISCARD</span> <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">has_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
-            <span class="k">return</span> <span class="n">m_components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="k">explicit</span> <span class="n">component_container</span><span class="p">(</span><span class="n">size_type</span> <span class="n">count</span><span class="p">,</span> <span class="k">const</span> <span class="n">allocator_type</span><span class="o">&amp;</span> <span class="n">alloc</span> <span class="o">=</span> <span class="n">allocator_type</span><span class="p">())</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">alloc</span><span class="p">)</span> <span class="p">{}</span>
 
-        <span class="n">L_NODISCARD</span> <span class="n">component_type</span><span class="o">&amp;</span> <span class="n">get_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">m_components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-                <span class="k">return</span> <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">];</span>
-            <span class="k">return</span> <span class="n">m_nullComp</span><span class="p">;</span>
-        <span class="p">}</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">InputIt</span><span class="o">&gt;</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="n">InputIt</span> <span class="n">first</span><span class="p">,</span> <span class="n">InputIt</span> <span class="n">last</span><span class="p">,</span> <span class="k">const</span> <span class="n">allocator_type</span><span class="o">&amp;</span> <span class="n">alloc</span> <span class="o">=</span> <span class="n">allocator_type</span><span class="p">())</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">alloc</span><span class="p">)</span> <span class="p">{}</span>
 
-        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">component_type</span><span class="o">&amp;</span> <span class="n">get_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">const</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">m_components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-                <span class="k">return</span> <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">];</span>
-            <span class="k">return</span> <span class="n">m_nullComp</span><span class="p">;</span>
-        <span class="p">}</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="k">const</span> <span class="n">underlying_type</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="k">const</span> <span class="n">component_container</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">underlying_type</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="n">other</span><span class="p">))</span> <span class="p">{}</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">create_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="n">component_type</span> <span class="n">comp</span><span class="p">;</span>
-            <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">detail</span><span class="o">::</span><span class="n">has_init</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
-                <span class="n">component_type</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">comp</span><span class="p">);</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="k">const</span> <span class="n">underlying_type</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">,</span> <span class="k">const</span> <span class="n">allocator_type</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">alloc</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="k">const</span> <span class="n">component_container</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">,</span> <span class="k">const</span> <span class="n">allocator_type</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">underlying_type</span><span class="o">&amp;&gt;</span><span class="p">(</span><span class="n">other</span><span class="p">),</span> <span class="n">alloc</span><span class="p">)</span> <span class="p">{}</span>
 
-            <span class="p">{</span>
-                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
-                <span class="n">m_components</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">comp</span><span class="p">));</span>
-            <span class="p">}</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="n">underlying_type</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="n">component_container</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">underlying_type</span><span class="o">&amp;&amp;&gt;</span><span class="p">(</span><span class="n">other</span><span class="p">))</span> <span class="p">{}</span>
 
-            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">component_creation</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">));</span>
-        <span class="p">}</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="n">underlying_type</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">,</span> <span class="k">const</span> <span class="n">allocator_type</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">alloc</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="n">component_container</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">,</span> <span class="k">const</span> <span class="n">allocator_type</span><span class="o">&amp;</span> <span class="n">alloc</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">underlying_type</span><span class="o">&amp;&amp;&gt;</span><span class="p">(</span><span class="n">other</span><span class="p">),</span> <span class="n">alloc</span><span class="p">)</span> <span class="p">{}</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">create_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">)</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="p">{</span>
-                <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
-                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
-            <span class="p">}</span>
+        <span class="n">component_container</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">init</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">allocator_type</span><span class="o">&amp;</span> <span class="n">alloc</span> <span class="o">=</span> <span class="n">allocator_type</span><span class="p">())</span>
+            <span class="o">:</span> <span class="n">component_container_base</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()),</span> <span class="n">underlying_type</span><span class="p">(</span><span class="n">init</span><span class="p">,</span> <span class="n">alloc</span><span class="p">)</span> <span class="p">{}</span>
 
-            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">component_creation</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">));</span>
-        <span class="p">}</span>
-
-
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">destroy_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">component_destruction</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">));</span>
-
-            <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">detail</span><span class="o">::</span><span class="n">has_destroy</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">component_type</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">rguard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
-                <span class="n">component_type</span><span class="o">::</span><span class="n">destroy</span><span class="p">(</span><span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">]);</span>
-            <span class="p">}</span>
-
-            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">wguard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
-            <span class="n">m_components</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
-        <span class="p">}</span>
     <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="k">struct</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">component_container_base</span><span class="p">,</span> <span class="k">public</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">underlying_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">allocator_type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">underlying_type</span><span class="o">::</span><span class="n">allocator_type</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;&gt;</span>
+    <span class="k">struct</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">component_container_base</span><span class="p">,</span> <span class="k">public</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">underlying_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">allocator_type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">underlying_type</span><span class="o">::</span><span class="n">allocator_type</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">static</span> <span class="kr">inline</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="n">invalid_container</span><span class="p">;</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">component_container_base</span><span class="o">::</span><span class="n">cast</span><span class="p">()</span> <span class="k">noexcept</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">!=</span> <span class="n">m_componentid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">invalid_container</span><span class="p">);;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="k">const</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">component_container_base</span><span class="o">::</span><span class="n">cast</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">!=</span> <span class="n">m_componentid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">invalid_container</span><span class="p">);;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>

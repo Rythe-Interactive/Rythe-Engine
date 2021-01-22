@@ -37,6 +37,8 @@ Includes
 
 - ``core/defaults/defaultcomponents.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_defaultcomponents.hpp`)
 
+- ``core/defaults/hierarchysystem.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_hierarchysystem.hpp`)
+
 - ``core/engine/module.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_module.hpp`)
 
 - ``core/filesystem/basic_resolver.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_basic_resolver.hpp`)

@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__impl__glfw_8cpp_1a58ac1869ab11654688bc0ea77bf224fe:
+
+Define GLFW_HAS_NEW_CURSORS
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GLFW_HAS_NEW_CURSORS

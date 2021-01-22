@@ -59,7 +59,7 @@
     <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
     <span class="k">constexpr</span> <span class="n">T</span> <span class="n">rad2deg_c</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="k">return</span> <span class="n">T</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span> <span class="o">/</span> <span class="n">half_pi</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">T</span><span class="p">(</span><span class="mi">180</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
     <span class="p">}</span>
 
     <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
@@ -72,7 +72,7 @@
     <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
     <span class="k">constexpr</span> <span class="n">T</span> <span class="n">deg2rad_c</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="k">return</span> <span class="n">half_pi</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">/</span> <span class="n">T</span><span class="p">(</span><span class="mi">360</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">pi</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">/</span> <span class="n">T</span><span class="p">(</span><span class="mi">180</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>

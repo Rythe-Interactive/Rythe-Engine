@@ -1,0 +1,13 @@
+.. _exhale_variable_event_8hpp_1aec057eca893c35b5ce1769f15cc2ba66:
+
+Variable legion::core::events::detail::eventNameLock
+====================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_event.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::events::detail::eventNameLock

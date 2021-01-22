@@ -1,0 +1,64 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_wait_priority.hpp:
+
+File wait_priority.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async/wait_priority.hpp``)
+---------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_wait_priority.hpp.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_operation.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__async`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_wait__priority_8hpp_1a296800fb5244978a07832ce6dc46809b`
+
+- :ref:`exhale_variable_wait__priority_8hpp_1a3a499c571db581c9cf0fd56b9b58735c`
+
+- :ref:`exhale_variable_wait__priority_8hpp_1a63e47b71857382616a0007388fe10cc1`
+

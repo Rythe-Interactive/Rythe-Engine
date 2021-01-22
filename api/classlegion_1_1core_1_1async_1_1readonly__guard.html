@@ -55,24 +55,24 @@
   <div class="section" id="class-readonly-guard">
 <span id="exhale-class-classlegion-1-1core-1-1async-1-1readonly-guard"></span><h1>Class readonly_guard<a class="headerlink" href="#class-readonly-guard" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-readonly-rw-spinlock-hpp"><span class="std std-ref">File readonly_rw_spinlock.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-rw-spinlock-hpp"><span class="std std-ref">File rw_spinlock.hpp</span></a></p></li>
 </ul>
 <div class="section" id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
 <dt id="_CPPv4N6legion4core5async14readonly_guardE">
 <span id="_CPPv3N6legion4core5async14readonly_guardE"></span><span id="_CPPv2N6legion4core5async14readonly_guardE"></span><span id="legion::core::async::readonly_guard"></span><span class="target" id="classlegion_1_1core_1_1async_1_1readonly__guard"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::async<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">readonly_guard</code><a class="headerlink" href="#_CPPv4N6legion4core5async14readonly_guardE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>RAII guard that uses ::async::readonly_rw_spinlock to lock for read-only. </p>
+<dd><p>RAII guard that uses ::async::rw_spinlock to lock for read-only. </p>
 <p><dl class="simple">
-<dt><strong>Note</strong></dt><dd><p>Read-only operations can happen simultaneously without waiting for each other. Read-only operations will only wait for Read-Write operations to be finished. <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#structlegion_1_1core_1_1async_1_1readonly__rw__spinlock"><span class="std std-ref">legion::core::async::readonly_rw_spinlock</span></a> </p>
+<dt><strong>Note</strong></dt><dd><p>Read-only operations can happen simultaneously without waiting for each other. Read-only operations will only wait for Read-Write operations to be finished. <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#structlegion_1_1core_1_1async_1_1rw__spinlock"><span class="std std-ref">legion::core::async::rw_spinlock</span></a> </p>
 </dd>
 </dl>
 </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core5async14readonly_guard14readonly_guardER20readonly_rw_spinlock">
-<span id="_CPPv3N6legion4core5async14readonly_guard14readonly_guardER20readonly_rw_spinlock"></span><span id="_CPPv2N6legion4core5async14readonly_guard14readonly_guardER20readonly_rw_spinlock"></span><span id="legion::core::async::readonly_guard::readonly_guard__readonly_rw_spinlockR"></span><span class="target" id="classlegion_1_1core_1_1async_1_1readonly__guard_1aa44f5a76a7282916a12f27fd0043a544"></span><code class="sig-name descname">readonly_guard</code><span class="sig-paren">(</span><a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#_CPPv4N6legion4core5async20readonly_rw_spinlockE" title="legion::core::async::readonly_rw_spinlock">readonly_rw_spinlock</a> &amp;<em>lock</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async14readonly_guard14readonly_guardER20readonly_rw_spinlock" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion4core5async14readonly_guard14readonly_guardERK11rw_spinlock13wait_priority">
+<span id="_CPPv3N6legion4core5async14readonly_guard14readonly_guardERK11rw_spinlock13wait_priority"></span><span id="_CPPv2N6legion4core5async14readonly_guard14readonly_guardERK11rw_spinlock13wait_priority"></span><span id="legion::core::async::readonly_guard::readonly_guard__rw_spinlockCR.wait_priority"></span><span class="target" id="classlegion_1_1core_1_1async_1_1readonly__guard_1ab2b7991e42609be3dfde2d43ebd90f9f"></span><code class="sig-name descname">readonly_guard</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#_CPPv4N6legion4core5async11rw_spinlockE" title="legion::core::async::rw_spinlock">rw_spinlock</a> &amp;<em>lock</em>, <a class="reference internal" href="enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233.html#_CPPv4N6legion4core5async13wait_priorityE" title="legion::core::async::wait_priority">wait_priority</a> <em>priority</em> = <a class="reference internal" href="enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233.html#_CPPv4N6legion4core5async13wait_priorityE" title="legion::core::async::wait_priority">wait_priority</a>::<a class="reference internal" href="enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233.html#_CPPv4N6legion4core5async13wait_priority9real_timeE" title="legion::core::async::wait_priority::real_time">real_time</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async14readonly_guard14readonly_guardERK11rw_spinlock13wait_priority" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates readonly guard and locks for Read-only. </p>
 </dd></dl>
 

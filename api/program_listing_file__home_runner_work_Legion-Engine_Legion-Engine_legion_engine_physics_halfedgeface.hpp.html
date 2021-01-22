@@ -55,13 +55,56 @@
 
     <span class="k">struct</span> <span class="n">HalfEdgeFace</span>
     <span class="p">{</span>
+        <span class="k">enum</span> <span class="k">struct</span> <span class="nl">face_angle_relation</span> <span class="p">:</span> <span class="kt">int</span>
+        <span class="p">{</span>
+            <span class="n">coplanar</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">convex</span><span class="p">,</span>
+            <span class="n">concave</span>
+        <span class="p">};</span>
+
         <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">startEdge</span><span class="p">;</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal</span><span class="p">;</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">centroid</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">color</span> <span class="n">DEBUG_color</span><span class="p">;</span>
 
         <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">newStartEdge</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">newNormal</span><span class="p">);</span>
 
+        <span class="kt">void</span> <span class="nf">deleteEdges</span><span class="p">();</span>
+
+        <span class="kt">void</span> <span class="nf">setFaceForAllEdges</span><span class="p">();</span>
+
         <span class="kt">void</span> <span class="nf">forEachEdge</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">delegate</span><span class="o">&lt;</span> <span class="kt">void</span><span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">functionToExecute</span><span class="p">);</span>
+
+        <span class="kt">void</span> <span class="nf">inverse</span><span class="p">();</span>
+
+        <span class="kt">bool</span> <span class="nf">testConvexity</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="kt">bool</span> <span class="nf">makeNormalsConvexWithFace</span><span class="p">(</span><span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">);</span>
+
+        <span class="n">face_angle_relation</span> <span class="nf">getAngleRelation</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">bool</span> <span class="nf">testConvexity</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">bool</span> <span class="nf">makeNormalsConvexWithFace</span><span class="p">(</span><span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="nf">findMiddleEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="nf">mergeFaces</span><span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">&amp;</span> <span class="n">middleEdge</span><span class="p">);</span>
+
+        <span class="k">friend</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">rhs</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// Because the centroid is dependent on all edges, we do not need to check the edge positions</span>
+            <span class="k">return</span> <span class="n">lhs</span><span class="p">.</span><span class="n">normal</span> <span class="o">==</span> <span class="n">rhs</span><span class="p">.</span><span class="n">normal</span> <span class="o">&amp;&amp;</span> <span class="n">lhs</span><span class="p">.</span><span class="n">centroid</span> <span class="o">==</span> <span class="n">rhs</span><span class="p">.</span><span class="n">centroid</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">to_string</span><span class="p">(</span><span class="k">const</span> <span class="n">face_angle_relation</span><span class="o">&amp;</span> <span class="n">relation</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">relation</span> <span class="o">==</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">coplanar</span><span class="p">)</span> <span class="k">return</span> <span class="s">&quot;coplanar&quot;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">relation</span> <span class="o">==</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">convex</span><span class="p">)</span> <span class="k">return</span> <span class="s">&quot;convex&quot;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">relation</span> <span class="o">==</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">concave</span><span class="p">)</span> <span class="k">return</span> <span class="s">&quot;concave&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">DEBUG_DrawFace</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&amp;</span> <span class="n">debugColor</span><span class="p">,</span>  <span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">20.0f</span><span class="p">);</span>
 
         <span class="o">~</span><span class="n">HalfEdgeFace</span><span class="p">();</span>
     <span class="p">};</span>

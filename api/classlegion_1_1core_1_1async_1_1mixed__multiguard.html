@@ -55,7 +55,7 @@
   <div class="section" id="template-class-mixed-multiguard">
 <span id="exhale-class-classlegion-1-1core-1-1async-1-1mixed-multiguard"></span><h1>Template Class mixed_multiguard<a class="headerlink" href="#template-class-mixed-multiguard" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-readonly-rw-spinlock-hpp"><span class="std std-ref">File readonly_rw_spinlock.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-rw-spinlock-hpp"><span class="std std-ref">File rw_spinlock.hpp</span></a></p></li>
 </ul>
 <div class="section" id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
@@ -66,7 +66,7 @@
 <p><dl class="simple">
 <dt><strong>Note</strong></dt><dd><p>Read-only operations can happen simultaneously without waiting for each other. Read-only operations will only wait for Read-Write operations to be finished. </p>
 </dd>
-<dt><strong>Note</strong></dt><dd><p>Read-Write operations cannot happen simultaneously and will wait for each other. Read-Write operations will also wait for any Read-only operations to be finished. <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#structlegion_1_1core_1_1async_1_1readonly__rw__spinlock"><span class="std std-ref">legion::core::async::readonly_rw_spinlock</span></a> </p>
+<dt><strong>Note</strong></dt><dd><p>Read-Write operations cannot happen simultaneously and will wait for each other. Read-Write operations will also wait for any Read-only operations to be finished. <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#structlegion_1_1core_1_1async_1_1rw__spinlock"><span class="std std-ref">legion::core::async::rw_spinlock</span></a> </p>
 </dd>
 </dl>
 </p>
@@ -77,7 +77,7 @@
 <span id="_CPPv3IDpEN6legion4core5async16mixed_multiguard16mixed_multiguardEDpRR5types"></span><span id="_CPPv2IDpEN6legion4core5async16mixed_multiguard16mixed_multiguardEDpRR5types"></span>template&lt;typename ...<code class="sig-name descname">types</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1async_1_1mixed__multiguard_1a7de05091913321c796688bb9c737a019"></span><code class="sig-name descname">mixed_multiguard</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4IDpEN6legion4core5async16mixed_multiguard16mixed_multiguardEDpRR5types" title="legion::core::async::mixed_multiguard::mixed_multiguard::types">types</a>&amp;&amp;... <em>arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN6legion4core5async16mixed_multiguard16mixed_multiguardEDpRR5types" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates readonly multi-guard and locks for specified permissions. </p>
 <p><dl class="simple">
-<dt><strong>Note</strong></dt><dd><p>Argument order should be as follows: (<a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#structlegion_1_1core_1_1async_1_1readonly__rw__spinlock"><span class="std std-ref">readonly_rw_spinlock</span></a>&amp;, lock_state, <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#structlegion_1_1core_1_1async_1_1readonly__rw__spinlock"><span class="std std-ref">readonly_rw_spinlock</span></a>&amp;, lock_state, …) </p>
+<dt><strong>Note</strong></dt><dd><p>Argument order should be as follows: (<a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#structlegion_1_1core_1_1async_1_1rw__spinlock"><span class="std std-ref">rw_spinlock</span></a>&amp;, lock_state, <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#structlegion_1_1core_1_1async_1_1rw__spinlock"><span class="std std-ref">rw_spinlock</span></a>&amp;, lock_state, …) </p>
 </dd>
 </dl>
 </p>

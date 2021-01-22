@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__impl__glfw_8cpp_1a4050ee29c2912f416655ea45215aeec3:
+
+Variable g_PrevUserCallbackMousebutton
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: g_PrevUserCallbackMousebutton

@@ -1,0 +1,80 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_operation.hpp:
+
+File async_operation.hpp
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async/async_operation.hpp``)
+-----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_operation.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``atomic`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`)
+
+- ``core/async/wait_priority.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_wait_priority.hpp`)
+
+- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
+
+- ``core/types/types.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_types.hpp`)
+
+- ``memory``
+
+- ``thread`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_thread_util.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_operation.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_runnable.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_job_pool.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__core__async`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1async__operation`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1async__progress`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_async__operation_8hpp_1a4e28bbac5d29e54a5ea3d7cfec819ce8`
+

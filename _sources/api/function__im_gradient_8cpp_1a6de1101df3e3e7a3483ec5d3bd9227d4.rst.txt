@@ -1,0 +1,13 @@
+.. _exhale_function__im_gradient_8cpp_1a6de1101df3e3e7a3483ec5d3bd9227d4:
+
+Function ImGradient::operator+
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGradient.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGradient::operator+(const ImVec2&, const ImVec2&)

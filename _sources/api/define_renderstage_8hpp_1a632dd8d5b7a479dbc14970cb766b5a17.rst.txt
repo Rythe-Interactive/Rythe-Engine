@@ -1,0 +1,13 @@
+.. _exhale_define_renderstage_8hpp_1a632dd8d5b7a479dbc14970cb766b5a17:
+
+Define ui_priority
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ui_priority

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class RenderStage &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <title>Template Class RenderStage &#8212; LegionEngine v 0.2 alpha documentation</title>
     <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
@@ -18,8 +18,8 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class shader" href="class_structlegion_1_1rendering_1_1shader.html" />
-    <link rel="prev" title="Class RenderingModule" href="classlegion_1_1rendering_1_1_rendering_module.html" />
+    <link rel="next" title="Class RenderStageBase" href="classlegion_1_1rendering_1_1_render_stage_base.html" />
+    <link rel="prev" title="Class RenderPipelineBase" href="classlegion_1_1rendering_1_1_render_pipeline_base.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -36,14 +36,14 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="class_structlegion_1_1rendering_1_1shader.html" title="Class shader"
+          <a href="classlegion_1_1rendering_1_1_render_stage_base.html" title="Class RenderStageBase"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="classlegion_1_1rendering_1_1_rendering_module.html" title="Class RenderingModule"
+          <a href="classlegion_1_1rendering_1_1_render_pipeline_base.html" title="Class RenderPipelineBase"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Class RenderStage</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Template Class RenderStage</a></li> 
       </ul>
     </div>  
 
@@ -52,17 +52,45 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="class-renderstage">
-<span id="exhale-class-classlegion-1-1rendering-1-1-render-stage"></span><h1>Class RenderStage<a class="headerlink" href="#class-renderstage" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="template-class-renderstage">
+<span id="exhale-class-classlegion-1-1rendering-1-1-render-stage"></span><h1>Template Class RenderStage<a class="headerlink" href="#template-class-renderstage" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-renderstage-hpp"><span class="std std-ref">File renderstage.hpp</span></a></p></li>
 </ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStageBase</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage_base.html#exhale-class-classlegion-1-1rendering-1-1-render-stage-base"><span class="std std-ref">Class RenderStageBase</span></a>)</p></li>
+</ul>
+</div>
+</div>
 <div class="section" id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
-<dt id="_CPPv4N6legion9rendering11RenderStageE">
-<span id="_CPPv3N6legion9rendering11RenderStageE"></span><span id="_CPPv2N6legion9rendering11RenderStageE"></span><span id="legion::rendering::RenderStage"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage"></span><em class="property">class </em><code class="sig-name descname">RenderStage</code><a class="headerlink" href="#_CPPv4N6legion9rendering11RenderStageE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN6legion9rendering11RenderStageE">
+<span id="_CPPv3I0EN6legion9rendering11RenderStageE"></span><span id="_CPPv2I0EN6legion9rendering11RenderStageE"></span>template&lt;typename <code class="sig-name descname">SelfType</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">RenderStage</code> : <em class="property">public</em> <a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering::RenderStageBase<a class="headerlink" href="#_CPPv4I0EN6legion9rendering11RenderStageE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11RenderStage12createEntityEv">
+<span id="_CPPv3N6legion9rendering11RenderStage12createEntityEv"></span><span id="_CPPv2N6legion9rendering11RenderStage12createEntityEv"></span><span id="legion::rendering::RenderStage::createEntity"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1acd7bd351fd9f6d5c3ba0e75831e552f8"></span>ecs::entity_handle <code class="sig-name descname">createEntity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11RenderStage12createEntityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Create a new entity and return the handle. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4IDpEN6legion9rendering11RenderStage11createQueryEN3ecs11EntityQueryEv">
+<span id="_CPPv3IDpEN6legion9rendering11RenderStage11createQueryEv"></span><span id="_CPPv2IDpEN6legion9rendering11RenderStage11createQueryEv"></span>template&lt;typename ...<code class="sig-name descname">component_types</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1a801831ecd49ef84194362649d20c6368"></span>ecs::EntityQuery <code class="sig-name descname">createQuery</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IDpEN6legion9rendering11RenderStage11createQueryEN3ecs11EntityQueryEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11RenderStage11createQueryERK17hashed_sparse_setI7id_typeE">
+<span id="_CPPv3N6legion9rendering11RenderStage11createQueryERK17hashed_sparse_setI7id_typeE"></span><span id="_CPPv2N6legion9rendering11RenderStage11createQueryERK17hashed_sparse_setI7id_typeE"></span><span id="legion::rendering::RenderStage::createQuery__hashed_sparse_set:id_type:CR"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1ad4a7adc8f2b2af278e70c799016a3ea6"></span>ecs::EntityQuery <code class="sig-name descname">createQuery</code><span class="sig-paren">(</span><em class="property">const</em> hashed_sparse_set&lt;id_type&gt; &amp;<em>componentTypes</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11RenderStage11createQueryERK17hashed_sparse_setI7id_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
 
 </div>
 </div>
@@ -76,7 +104,11 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Class RenderStage</a><ul>
+<li><a class="reference internal" href="#">Template Class RenderStage</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
 </ul>
 </li>
@@ -85,8 +117,8 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="classlegion_1_1rendering_1_1_rendering_module.html" title="previous chapter">Class RenderingModule</a></li>
-      <li>Next: <a href="class_structlegion_1_1rendering_1_1shader.html" title="next chapter">Class shader</a></li>
+      <li>Previous: <a href="classlegion_1_1rendering_1_1_render_pipeline_base.html" title="previous chapter">Class RenderPipelineBase</a></li>
+      <li>Next: <a href="classlegion_1_1rendering_1_1_render_stage_base.html" title="next chapter">Class RenderStageBase</a></li>
   </ul></li>
   </ul></li>
 </ul>

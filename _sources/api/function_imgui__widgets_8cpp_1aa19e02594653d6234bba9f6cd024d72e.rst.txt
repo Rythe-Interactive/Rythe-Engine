@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1aa19e02594653d6234bba9f6cd024d72e:
+
+Function ImStb::STB_TEXTEDIT_GETCHAR
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStb::STB_TEXTEDIT_GETCHAR(const STB_TEXTEDIT_STRING *, int)

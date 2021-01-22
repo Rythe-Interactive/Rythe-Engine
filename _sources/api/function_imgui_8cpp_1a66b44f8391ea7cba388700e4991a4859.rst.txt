@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a66b44f8391ea7cba388700e4991a4859:
+
+Function ImStrlenW
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStrlenW(const ImWchar *)

@@ -14,7 +14,7 @@ Program Listing for File image.hpp
    #include <core/types/primitives.hpp>
    #include <core/containers/sparse_map.hpp>
    #include <core/math/color.hpp>
-   #include <core/async/readonly_rw_spinlock.hpp>
+   #include <core/async/rw_spinlock.hpp>
    #include <core/filesystem/view.hpp>
    #include <mutex>
    
@@ -22,6 +22,7 @@ Program Listing for File image.hpp
    {
        enum struct channel_format : uint
        {
+           depth_stencil = 0,
            eight_bit = 1,
            sixteen_bit = 2,
            float_hdr = 4
@@ -32,7 +33,10 @@ Program Listing for File image.hpp
            grey = 1,
            grey_alpha = 2,
            rgb = 3,
-           rgba = 4
+           rgba = 4,
+           depth = 5,
+           stencil = 6,
+           depth_stencil = 7
        };
    
        struct image final
@@ -207,7 +211,7 @@ Program Listing for File image.hpp
    
            const std::vector<math::color>& read_colors();
    
-           std::pair<async::readonly_rw_spinlock&, image&> get_raw_image();
+           std::pair<async::rw_spinlock&, image&> get_raw_image();
    
            void destroy();
    
@@ -233,17 +237,17 @@ Program Listing for File image.hpp
            friend struct image_handle;
        private:
            static const std::vector<math::color> m_nullColors;
-           static async::readonly_rw_spinlock m_nullLock;
+           static async::rw_spinlock m_nullLock;
    
-           static std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, image>>> m_images;
-           static async::readonly_rw_spinlock m_imagesLock;
+           static std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, image>>> m_images;
+           static async::rw_spinlock m_imagesLock;
            static std::unordered_map<id_type, std::unique_ptr<std::vector<math::color>>> m_colors;
-           static async::readonly_rw_spinlock m_colorsLock;
+           static async::rw_spinlock m_colorsLock;
    
            static const std::vector<math::color>& process_raw(id_type id);
    
            static const std::vector<math::color>& read_colors(id_type id);
-           static std::pair<async::readonly_rw_spinlock&, image&> get_raw_image(id_type id);
+           static std::pair<async::rw_spinlock&, image&> get_raw_image(id_type id);
    
        public:
            static image_handle create_image(const std::string& name, const filesystem::view& file, image_import_settings settings = default_image_settings);

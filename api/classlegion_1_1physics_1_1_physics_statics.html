@@ -169,7 +169,7 @@
 <dl class="cpp function">
 <dt id="_CPPv4N6legion7physics14PhysicsStatics20PointDistanceToPlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E">
 <span id="_CPPv3N6legion7physics14PhysicsStatics20PointDistanceToPlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics14PhysicsStatics20PointDistanceToPlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::PhysicsStatics::PointDistanceToPlane__math::vec3CR.math::vec3CR.math::vec3CR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a61676b1a23d5424a0267b4f63734b734"></span>float <code class="sig-name descname">PointDistanceToPlane</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>planeNormal</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics20PointDistanceToPlaneERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Finds the distance of a point given a 3D plane. </p>
+<dd><p>Finds the distance of a point given a 3D plane Assumes the plane normal is normalized. </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -190,9 +190,102 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics32FindLineToPlaneIntersectionPointERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERN4math4vec3ERf">
+<span id="_CPPv3N6legion7physics14PhysicsStatics32FindLineToPlaneIntersectionPointERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERN4math4vec3ERf"></span><span id="_CPPv2N6legion7physics14PhysicsStatics32FindLineToPlaneIntersectionPointERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERN4math4vec3ERf"></span><span id="legion::physics::PhysicsStatics::FindLineToPlaneIntersectionPoint__math::vec3CR.math::vec3CR.math::vec3CR.math::vec3CR.math::vec3R.floatR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1ad58363b9a170b842a4782a2bf5ab1e90"></span>bool <code class="sig-name descname">FindLineToPlaneIntersectionPoint</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>planeNormal</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>startPoint</em>, <em class="property">const</em> math::vec3 &amp;<em>endPoint</em>, math::vec3 &amp;<em>intersectionPoint</em>, float &amp;<em>interpolant</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics32FindLineToPlaneIntersectionPointERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERN4math4vec3ERf" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Given a line going from start point to end point finds the intersection point of the line to a given 3D plane. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Returns true if an intersection is found </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[out]</span> <span class="pre">interpolant</span></code>: The calculated interpolant required to get from the startPoint to the endPoint </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt id="_CPPv4N6legion7physics14PhysicsStatics26FindLineToPointInterpolantERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E">
 <span id="_CPPv3N6legion7physics14PhysicsStatics26FindLineToPointInterpolantERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="_CPPv2N6legion7physics14PhysicsStatics26FindLineToPointInterpolantERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E"></span><span id="legion::physics::PhysicsStatics::FindLineToPointInterpolant__math::vec3CR.math::vec3CR.math::vec3CR.math::vec3CR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a99e2b0256e10b983c29a9e119879452e"></span>float <code class="sig-name descname">FindLineToPointInterpolant</code><span class="sig-paren">(</span><em class="property">const</em> math::vec3 &amp;<em>startPoint</em>, <em class="property">const</em> math::vec3 &amp;<em>endPoint</em>, <em class="property">const</em> math::vec3 &amp;<em>planePosition</em>, <em class="property">const</em> math::vec3 &amp;<em>planeNormal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics26FindLineToPointInterpolantERKN4math4vec3ERKN4math4vec3ERKN4math4vec3ERKN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Given a line going from a startPoint to and endPoint, finds the interpolant required to intersect a given 3D plane </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics15GenerateVoronoiENSt6vectorIN4math4vec3EEEN4math4vec2EN4math4vec2EN4math4vec2EN4math4vec3Ebbbi">
+<span id="_CPPv3N6legion7physics14PhysicsStatics15GenerateVoronoiENSt6vectorIN4math4vec3EEEN4math4vec2EN4math4vec2EN4math4vec2EN4math4vec3Ebbbi"></span><span id="_CPPv2N6legion7physics14PhysicsStatics15GenerateVoronoiENSt6vectorIN4math4vec3EEEN4math4vec2EN4math4vec2EN4math4vec2EN4math4vec3Ebbbi"></span><span id="legion::physics::PhysicsStatics::GenerateVoronoi__std::vector:math::vec3:.math::vec2.math::vec2.math::vec2.math::vec3.b.b.b.i"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a736c1890367acd1f663d06dfb14d59e6"></span>std::vector&lt;std::vector&lt;math::vec4&gt;&gt; <code class="sig-name descname">GenerateVoronoi</code><span class="sig-paren">(</span>std::vector&lt;math::vec3&gt; <em>points</em>, math::vec2 <em>xRange</em>, math::vec2 <em>yRange</em>, math::vec2 <em>zRange</em>, math::vec3 <em>containerResolution</em>, bool <em>xPeriodic</em> = false, bool <em>yPeriodic</em> = false, bool <em>zPeriodic</em> = false, int <em>initMem</em> = 8<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics15GenerateVoronoiENSt6vectorIN4math4vec3EEEN4math4vec2EN4math4vec2EN4math4vec2EN4math4vec3Ebbbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a Voronoi diagram based on the given parameters. <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A list of lists of vec4’s </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">points</span></code>: A list of points these will serve as the points of the voronoi diagram. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xRange</span></code>: The min and max of the width of the voronoi diagram space. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yRange</span></code>: The min and max of the height of the voronoi diagram space. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zRange</span></code>: The min and max of the depth of the voronoi diagram space. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">containerResolution</span></code>: The resolution of the contianer the voronoi diagram will be generated in. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xPeriodic</span></code>: A bool that decides whether x should be periodic. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yPeriodic</span></code>: A bool that decides whether y should be periodic. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zPeriodic</span></code>: A bool that decides whether z should be periodic. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">initMem</span></code>: The initial memory amount. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics15GenerateVoronoiENSt6vectorIN4math4vec3EEEKdKdKdKdKdKdKdKdKdbbbi">
+<span id="_CPPv3N6legion7physics14PhysicsStatics15GenerateVoronoiENSt6vectorIN4math4vec3EEEKdKdKdKdKdKdKdKdKdbbbi"></span><span id="_CPPv2N6legion7physics14PhysicsStatics15GenerateVoronoiENSt6vectorIN4math4vec3EEEKdKdKdKdKdKdKdKdKdbbbi"></span><span id="legion::physics::PhysicsStatics::GenerateVoronoi__std::vector:math::vec3:.doubleC.doubleC.doubleC.doubleC.doubleC.doubleC.doubleC.doubleC.doubleC.b.b.b.i"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1ac289534b5e340b59d1cc4e65fa7c63df"></span>std::vector&lt;std::vector&lt;math::vec4&gt;&gt; <code class="sig-name descname">GenerateVoronoi</code><span class="sig-paren">(</span>std::vector&lt;math::vec3&gt; <em>points</em>, <em class="property">const</em> double <em>xMin</em> = -5, <em class="property">const</em> double <em>xMax</em> = 5, <em class="property">const</em> double <em>yMin</em> = -5, <em class="property">const</em> double <em>yMax</em> = 5, <em class="property">const</em> double <em>zMin</em> = -5, <em class="property">const</em> double <em>zMax</em> = 5, <em class="property">const</em> double <em>conResX</em> = 10, <em class="property">const</em> double <em>conResY</em> = 10, <em class="property">const</em> double <em>conResZ</em> = 10, bool <em>xPeriodic</em> = false, bool <em>yPeriodic</em> = false, bool <em>zPeriodic</em> = false, int <em>initMem</em> = 8<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics15GenerateVoronoiENSt6vectorIN4math4vec3EEEKdKdKdKdKdKdKdKdKdbbbi" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a Voronoi diagram based on the given parameters. <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A list of lists of vec4’s </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">points</span></code>: A list of points these will serve as the points of the voronoi diagram. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xMin</span></code>: The min of the width of the voronoi diagram space. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xMax</span></code>: The max of the width of the voronoi diagram space. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yMin</span></code>: The min of the height of the voronoi diagram space. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yMax</span></code>: The max of the height of the voronoi diagram space </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zMin</span></code>: The min of the depth of the voronoi diagram space. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zMax</span></code>: The max of the depth of the voronoi diagram space </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conResX</span></code>: The x resolution of the contianer the voronoi diagram will be generated in. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conResY</span></code>: The y resolution of the contianer the voronoi diagram will be generated in. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conResZ</span></code>: The z resolution of the contianer the voronoi diagram will be generated in. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xPeriodic</span></code>: A bool that decides whether x should be periodic. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yPeriodic</span></code>: A bool that decides whether y should be periodic. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zPeriodic</span></code>: A bool that decides whether z should be periodic. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">initMem</span></code>: The initial memory amount. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics15GenerateVoronoiERN4voro9containerENSt6vectorIN4math4vec3EEE">
+<span id="_CPPv3N6legion7physics14PhysicsStatics15GenerateVoronoiERN4voro9containerENSt6vectorIN4math4vec3EEE"></span><span id="_CPPv2N6legion7physics14PhysicsStatics15GenerateVoronoiERN4voro9containerENSt6vectorIN4math4vec3EEE"></span><span id="legion::physics::PhysicsStatics::GenerateVoronoi__voro::containerR.std::vector:math::vec3:"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a14e40639b21e86c226ed2f63a91ce45c"></span>std::vector&lt;std::vector&lt;math::vec4&gt;&gt; <code class="sig-name descname">GenerateVoronoi</code><span class="sig-paren">(</span>voro::container &amp;<em>con</em>, std::vector&lt;math::vec3&gt; <em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics15GenerateVoronoiERN4voro9containerENSt6vectorIN4math4vec3EEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a Voronoi diagram based on the given parameters. <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A list of lists of vec4’s </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">con</span></code>: The container that hold the parameters and generates the voronoi diagram. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">points</span></code>: A list of points these will serve as the points of the voronoi diagram. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14PhysicsStatics15GenerateVoronoiERN4voro9containerE">
+<span id="_CPPv3N6legion7physics14PhysicsStatics15GenerateVoronoiERN4voro9containerE"></span><span id="_CPPv2N6legion7physics14PhysicsStatics15GenerateVoronoiERN4voro9containerE"></span><span id="legion::physics::PhysicsStatics::GenerateVoronoi__voro::containerR"></span><span class="target" id="classlegion_1_1physics_1_1_physics_statics_1a542c77be524a6242d5e64f0d90552fa0"></span>std::vector&lt;std::vector&lt;math::vec4&gt;&gt; <code class="sig-name descname">GenerateVoronoi</code><span class="sig-paren">(</span>voro::container &amp;<em>con</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14PhysicsStatics15GenerateVoronoiERN4voro9containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a Voronoi diagram based on the given parameters. <dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>A list of lists of vec4’s </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">con</span></code>: The container that hold the parameters and generates the voronoi diagram. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
 </dd></dl>
 
 </div>

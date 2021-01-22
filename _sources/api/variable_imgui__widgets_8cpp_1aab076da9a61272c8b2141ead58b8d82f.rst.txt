@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__widgets_8cpp_1aab076da9a61272c8b2141ead58b8d82f:
+
+Variable COLUMNS_HIT_RECT_HALF_WIDTH
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: COLUMNS_HIT_RECT_HALF_WIDTH

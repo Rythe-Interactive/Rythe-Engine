@@ -63,7 +63,7 @@
     <span class="p">{</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">atomic_bool</span> <span class="n">m_initialized</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_initCallbackLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_initCallbackLock</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span> <span class="n">m_onInit</span><span class="p">;</span>
 
         <span class="k">static</span> <span class="n">atomic_sparse_map</span><span class="o">&lt;</span><span class="n">GLFWwindow</span><span class="o">*</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&gt;</span> <span class="n">m_windowInitialized</span><span class="p">;</span>
@@ -103,7 +103,7 @@
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">swapBuffers</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">swapInterval</span><span class="p">(</span><span class="kt">int</span> <span class="n">interval</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">pollEvents</span><span class="p">();</span>
-        <span class="k">static</span> <span class="kt">void</span> <span class="nf">makeContextCurrent</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">bool</span> <span class="nf">makeContextCurrent</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">GLFWwindow</span><span class="o">*</span> <span class="nf">getCurrentContext</span><span class="p">();</span>
         <span class="k">static</span> <span class="n">GLFWkeyfun</span> <span class="nf">setKeyCallback</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="n">GLFWkeyfun</span> <span class="n">callback</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">GLFWcharfun</span> <span class="nf">setCharCallback</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="n">GLFWcharfun</span> <span class="n">callback</span><span class="p">);</span>

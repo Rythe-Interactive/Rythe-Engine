@@ -68,14 +68,14 @@ Enums
 -----
 
 
-- :ref:`exhale_enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0`
+- :ref:`exhale_enum_core_2compute_2buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0`
 
 
 Functions
 ---------
 
 
-- :ref:`exhale_function_buffer_8hpp_1a82a0d5cd18aa1549402dceebbdbed0b7`
+- :ref:`exhale_function_core_2compute_2buffer_8hpp_1a82a0d5cd18aa1549402dceebbdbed0b7`
 
-- :ref:`exhale_function_buffer_8hpp_1af327ae4b79c2f85f761673cff545eb80`
+- :ref:`exhale_function_core_2compute_2buffer_8hpp_1af327ae4b79c2f85f761673cff545eb80`
 

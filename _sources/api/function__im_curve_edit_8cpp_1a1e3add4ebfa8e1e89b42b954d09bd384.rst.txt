@@ -1,0 +1,13 @@
+.. _exhale_function__im_curve_edit_8cpp_1a1e3add4ebfa8e1e89b42b954d09bd384:
+
+Function ImCurveEdit::operator-
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImCurveEdit.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImCurveEdit::operator-(const ImVec2&, const ImVec2&)

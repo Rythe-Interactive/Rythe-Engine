@@ -54,6 +54,8 @@
 <li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
 <li><p><a class="reference internal" href="#namespaces" id="id4">Namespaces</a></p></li>
 <li><p><a class="reference internal" href="#classes" id="id5">Classes</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id6">Functions</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id7">Variables</a></p></li>
 </ul>
 </div>
 <div class="section" id="definition-home-runner-work-legion-engine-legion-engine-legion-engine-core-events-event-hpp">
@@ -67,9 +69,11 @@
 <div class="section" id="includes">
 <h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">core/async/ring_sync_lock.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_ring_sync_lock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-ring-sync-lock-hpp"><span class="std std-ref">File ring_sync_lock.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">core/platform/platform.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-platform-platform-hpp"><span class="std std-ref">File platform.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">core/types/primitives.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-types-primitives-hpp"><span class="std std-ref">File primitives.hpp</span></a>)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">core/types/type_util.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-types-type-util-hpp"><span class="std std-ref">File type_util.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unordered_map</span></code></p></li>
 </ul>
 </div>
 <div class="section" id="included-by">
@@ -79,13 +83,14 @@
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_defaultevents.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-events-defaultevents-hpp"><span class="std std-ref">File defaultevents.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_eventbus.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-events-eventbus-hpp"><span class="std std-ref">File eventbus.hpp</span></a></p></li>
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_events.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-events-events-hpp"><span class="std std-ref">File events.hpp</span></a></p></li>
-<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_events_trigger_event.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-events-trigger-event-hpp"><span class="std std-ref">File trigger_event.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_events_events.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-events-events-hpp"><span class="std std-ref">File events.hpp</span></a></p></li>
 </ul>
 </div>
 <div class="section" id="namespaces">
 <h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="namespace_legion__core__events.html#namespace-legion-core-events"><span class="std std-ref">Namespace legion::core::events</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_legion__core__events__detail.html#namespace-legion-core-events-detail"><span class="std std-ref">Namespace legion::core::events::detail</span></a></p></li>
 </ul>
 </div>
 <div class="section" id="classes">
@@ -93,6 +98,19 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#exhale-class-structlegion-1-1core-1-1events-1-1event"><span class="std std-ref">Template Class event</span></a></p></li>
 <li><p><a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event__base.html#exhale-class-structlegion-1-1core-1-1events-1-1event-base"><span class="std std-ref">Class event_base</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_event_8hpp_1a93d201e9e7d0b30dc435f7bb60e70694.html#exhale-function-event-8hpp-1a93d201e9e7d0b30dc435f7bb60e70694"><span class="std std-ref">Template Function legion::core::events::detail::reportEventType</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="variable_event_8hpp_1aec057eca893c35b5ce1769f15cc2ba66.html#exhale-variable-event-8hpp-1aec057eca893c35b5ce1769f15cc2ba66"><span class="std std-ref">Variable legion::core::events::detail::eventNameLock</span></a></p></li>
+<li><p><a class="reference internal" href="variable_event_8hpp_1a7a413e6b69ea0b659776f20812ba88ae.html#exhale-variable-event-8hpp-1a7a413e6b69ea0b659776f20812ba88ae"><span class="std std-ref">Variable legion::core::events::detail::eventNames</span></a></p></li>
 </ul>
 </div>
 </div>
@@ -112,6 +130,8 @@
 <li><a class="reference internal" href="#included-by">Included By</a></li>
 <li><a class="reference internal" href="#namespaces">Namespaces</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
 </ul>
 </li>
 </ul>

@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__draw_8cpp_1a8abf98f5e58a4b3dbbdf35bb1d5ee872:
+
+Define stb__in2
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: stb__in2

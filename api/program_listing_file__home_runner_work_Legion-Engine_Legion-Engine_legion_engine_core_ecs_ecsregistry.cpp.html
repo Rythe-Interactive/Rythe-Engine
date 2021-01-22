@@ -48,20 +48,23 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-ecs-ecsregistry-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/ecs/ecsregistry.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/ecs/ecsregistry.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entity_handle.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/component_container.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/component_pool.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/component_handle.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;core/defaults/defaultcomponents.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/events/eventbus.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ecs</span>
 <span class="p">{</span>
     <span class="c1">// 2 because the world entity is 1 and 0 is invalid_id</span>
     <span class="n">id_type</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">m_nextEntityId</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">world</span> <span class="o">=</span> <span class="n">entity_handle</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">);</span>
 
     <span class="kt">void</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">recursiveDestroyEntityInternal</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
     <span class="p">{</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-            <span class="k">throw</span> <span class="n">legion_entity_not_found_error</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+<span class="cp">#endif</span>
 
         <span class="n">m_queryRegistry</span><span class="p">.</span><span class="n">markEntityDestruction</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Remove entity from any queries.</span>
 
@@ -87,50 +90,60 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="k">for</span> <span class="p">(</span><span class="n">entity_handle</span><span class="o">&amp;</span> <span class="nl">child</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">children</span><span class="p">)</span>  <span class="c1">// Destroy all children.</span>
-            <span class="n">recursiveDestroyEntityInternal</span><span class="p">(</span><span class="n">child</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">hasComponent</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">children</span> <span class="o">=</span> <span class="n">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">).</span><span class="n">children</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">entity_handle</span><span class="o">&amp;</span> <span class="nl">child</span> <span class="p">:</span> <span class="n">children</span><span class="p">.</span><span class="n">reverse_range</span><span class="p">())</span>   <span class="c1">// Destroy all children.</span>
+                <span class="n">recursiveDestroyEntityInternal</span><span class="p">(</span><span class="n">child</span><span class="p">);</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">EcsRegistry</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">eventBus</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_families</span><span class="p">(),</span> <span class="n">m_entityData</span><span class="p">(),</span> <span class="n">m_containedEntities</span><span class="p">(),</span> <span class="n">m_entities</span><span class="p">(),</span> <span class="n">m_queryRegistry</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">),</span> <span class="n">m_eventBus</span><span class="p">(</span><span class="n">eventBus</span><span class="p">)</span>
+    <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">EcsRegistry</span><span class="p">(</span><span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">eventBus</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_families</span><span class="p">(),</span> <span class="n">m_entityData</span><span class="p">(),</span> <span class="n">m_entities</span><span class="p">(),</span> <span class="n">m_queryRegistry</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">),</span> <span class="n">m_eventBus</span><span class="p">(</span><span class="n">eventBus</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">entity_handle</span><span class="o">::</span><span class="n">m_registry</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+        <span class="n">entity_handle</span><span class="o">::</span><span class="n">m_eventBus</span> <span class="o">=</span> <span class="n">eventBus</span><span class="p">;</span>
         <span class="c1">// Create world entity.</span>
-        <span class="n">m_entityData</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">);</span>
-        <span class="n">m_containedEntities</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">);</span>
+        <span class="n">m_entityData</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">,</span> <span class="n">entity_data</span><span class="p">());</span>
         <span class="n">m_entities</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">);</span>
-        <span class="n">world</span> <span class="o">=</span> <span class="n">entity_handle</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">);</span>
+        <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">world</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;</span><span class="p">();</span>
     <span class="p">}</span>
 
-    <span class="n">component_container_base</span><span class="o">*</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getFamily</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span>
+    <span class="n">component_pool_base</span><span class="o">*</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getFamily</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_familyLock</span><span class="p">);</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_families</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">))</span>
-            <span class="k">throw</span> <span class="n">legion_unknown_component_error</span><span class="p">;</span>
-
-        <span class="k">return</span> <span class="n">m_families</span><span class="p">[</span><span class="n">componentTypeId</span><span class="p">].</span><span class="n">get</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_families</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Component type {} not found! Did you forget to report it?&quot;</span><span class="p">,</span> <span class="n">componentTypeId</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+<span class="cp">#endif</span>
+        <span class="k">return</span> <span class="n">m_families</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
     <span class="p">}</span>
 
     <span class="kt">bool</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">hasComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-            <span class="k">throw</span> <span class="n">legion_entity_not_found_error</span><span class="p">;</span>
-
-        <span class="k">return</span> <span class="nf">getFamily</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">has_component</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityDataLock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">m_entityData</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">components</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="n">component_handle_base</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-            <span class="k">throw</span> <span class="n">legion_entity_not_found_error</span><span class="p">;</span>
-
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">return</span> <span class="nf">component_handle_base</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">componentTypeId</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="n">component_handle_base</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">createComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-            <span class="k">throw</span> <span class="n">legion_entity_not_found_error</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">component_handle_base</span><span class="p">();</span>
+<span class="cp">#endif</span>
 
         <span class="n">getFamily</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">create_component</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
 
@@ -144,10 +157,35 @@
         <span class="k">return</span> <span class="nf">component_handle_base</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">componentTypeId</span><span class="p">);</span>
     <span class="p">}</span>
 
+
+
+    <span class="n">component_handle_base</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">copyComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">destinationEntity</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">sourceEntity</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">sourceEntity</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">destinationEntity</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">component_handle_base</span><span class="p">();</span>
+<span class="cp">#endif</span>
+
+        <span class="n">getFamily</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">clone_component</span><span class="p">(</span><span class="n">destinationEntity</span><span class="p">,</span> <span class="n">sourceEntity</span><span class="p">);</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityDataLock</span><span class="p">);</span>
+            <span class="n">m_entityData</span><span class="p">[</span><span class="n">destinationEntity</span><span class="p">].</span><span class="n">components</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">);</span> <span class="c1">// Is fine because the lock only locks order changes in the container, not the values themselves.</span>
+        <span class="p">}</span>
+
+        <span class="n">m_queryRegistry</span><span class="p">.</span><span class="n">evaluateEntityChange</span><span class="p">(</span><span class="n">destinationEntity</span><span class="p">,</span> <span class="n">componentTypeId</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="nf">component_handle_base</span><span class="p">(</span><span class="n">destinationEntity</span><span class="p">,</span> <span class="n">componentTypeId</span><span class="p">);</span>
+    <span class="p">}</span>
+
     <span class="n">component_handle_base</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">createComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-            <span class="k">throw</span> <span class="n">legion_entity_not_found_error</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">component_handle_base</span><span class="p">();</span>
+<span class="cp">#endif</span>
 
         <span class="n">getFamily</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">create_component</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
 
@@ -163,8 +201,11 @@
 
     <span class="kt">void</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">destroyComponent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-            <span class="k">throw</span> <span class="n">legion_entity_not_found_error</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+<span class="cp">#endif</span>
 
         <span class="n">m_queryRegistry</span><span class="p">.</span><span class="n">evaluateEntityChange</span><span class="p">(</span><span class="n">entityId</span><span class="p">,</span> <span class="n">componentTypeId</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
         <span class="n">getFamily</span><span class="p">(</span><span class="n">componentTypeId</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">destroy_component</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
@@ -175,15 +216,18 @@
         <span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="n">L_NODISCARD</span>   <span class="kt">bool</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+    <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">entityId</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">entityId</span> <span class="o">&amp;&amp;</span> <span class="n">m_containedEntities</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">m_entities</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">createEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
     <span class="p">{</span>
-
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">entityId</span><span class="p">)</span>
             <span class="n">id</span> <span class="o">=</span> <span class="n">m_nextEntityId</span><span class="o">++</span><span class="p">;</span>
@@ -194,41 +238,43 @@
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">createEntity</span><span class="p">(</span><span class="n">id</span><span class="o">++</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">createEntity</span><span class="p">();</span>
+
+        <span class="n">entity_data</span> <span class="n">data</span><span class="p">{};</span>
 
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityDataLock</span><span class="p">);</span>  <span class="c1">// We need write permission now because we hope to insert a new item.</span>
-            <span class="n">m_entityData</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity_data</span><span class="p">{};</span>
+            <span class="n">m_entityData</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="n">component_pool</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;*</span> <span class="n">family</span> <span class="o">=</span> <span class="n">getFamily</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">rguard</span><span class="p">(</span><span class="n">family</span><span class="o">-&gt;</span><span class="n">get_lock</span><span class="p">());</span>
+            <span class="n">family</span><span class="o">-&gt;</span><span class="n">get_component</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">).</span><span class="n">children</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span> <span class="c1">// No scope needed because we also need read permission in the return line.</span>
         <span class="n">m_entities</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-        <span class="n">m_containedEntities</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-
-        <span class="n">entity_handle</span><span class="p">(</span><span class="n">id</span><span class="p">).</span><span class="n">set_parent</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="nf">entity_handle</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="kt">void</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">destroyEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">recurse</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-            <span class="k">throw</span> <span class="n">legion_entity_not_found_error</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+<span class="cp">#endif</span>
 
         <span class="n">m_queryRegistry</span><span class="p">.</span><span class="n">markEntityDestruction</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span> <span class="c1">// Remove entity from any queries.</span>
 
         <span class="n">entity_handle</span> <span class="nf">entity</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
 
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">child</span> <span class="p">:</span> <span class="n">entity</span><span class="p">)</span>
-        <span class="p">{</span>
-
-        <span class="p">}</span>
-
         <span class="p">{</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span> <span class="c1">// Request read-write permission for the entity list.</span>
-            <span class="n">entity</span><span class="p">.</span><span class="n">set_parent</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">);</span> <span class="c1">// Remove ourselves as child from parent.</span>
+            <span class="n">entity</span><span class="p">.</span><span class="n">set_parent</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span> <span class="c1">// Remove ourselves as child from parent.</span>
             <span class="n">m_entities</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">entity</span><span class="p">);</span> <span class="c1">// Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.</span>
-            <span class="n">m_containedEntities</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="n">entity_data</span> <span class="n">data</span> <span class="o">=</span> <span class="p">{};</span>
@@ -247,39 +293,76 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="k">for</span> <span class="p">(</span><span class="n">entity_handle</span><span class="o">&amp;</span> <span class="nl">child</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">children</span><span class="p">)</span>
+        <span class="k">auto</span> <span class="n">children</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">children</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">entity_handle</span><span class="o">&amp;</span> <span class="nl">child</span> <span class="p">:</span> <span class="n">children</span><span class="p">.</span><span class="n">reverse_range</span><span class="p">())</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">recurse</span><span class="p">)</span>
                 <span class="n">recursiveDestroyEntityInternal</span><span class="p">(</span><span class="n">child</span><span class="p">);</span> <span class="c1">// Recursively destroy all children</span>
             <span class="k">else</span>
-                <span class="n">child</span><span class="p">.</span><span class="n">set_parent</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">);</span> <span class="c1">// Remove parent from children.</span>
+                <span class="n">child</span><span class="p">.</span><span class="n">set_parent</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span> <span class="c1">// Remove parent from children.</span>
     <span class="p">}</span>
 
     <span class="n">L_NODISCARD</span> <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">entity_handle</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">);</span>
+<span class="cp">#endif</span>
 
         <span class="k">return</span> <span class="nf">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">);;</span>
     <span class="p">}</span>
 
-    <span class="n">L_NODISCARD</span> <span class="n">entity_data</span><span class="o">&amp;</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntityData</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+    <span class="n">L_NODISCARD</span> <span class="n">entity_data</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntityData</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
-            <span class="k">throw</span> <span class="n">legion_entity_not_found_error</span><span class="p">;</span>
-
+            <span class="k">return</span> <span class="n">entity_data</span><span class="p">();</span>
+<span class="cp">#endif</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityDataLock</span><span class="p">);</span>
+
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
         <span class="n">entity_data</span><span class="o">&amp;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">m_entityData</span><span class="p">[</span><span class="n">entityId</span><span class="p">];</span> <span class="c1">// Is fine because the lock only locks order changes in the container, not the values themselves.</span>
-
-
         <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">parent</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">parent</span><span class="p">))</span> <span class="c1">// Re-validate parent.</span>
             <span class="n">data</span><span class="p">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
-
         <span class="k">return</span> <span class="n">data</span><span class="p">;</span>
+<span class="cp">#else</span>
+        <span class="k">return</span> <span class="n">m_entityData</span><span class="p">[</span><span class="n">entityId</span><span class="p">];</span> <span class="c1">// Is fine because the lock only locks order changes in the container, not the values themselves.</span>
+<span class="cp">#endif</span>
+
     <span class="p">}</span>
 
-    <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">entity_set</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;&gt;</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntities</span><span class="p">()</span>
+    <span class="kt">void</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">setEntityData</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="k">const</span> <span class="n">entity_data</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">entityId</span><span class="p">))</span>
+            <span class="k">return</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityDataLock</span><span class="p">);</span>
+        <span class="n">m_entityData</span><span class="p">[</span><span class="n">entityId</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">L_NODISCARD</span> <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntityParent</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+<span class="cp">#ifdef LGN_SAFE_MODE</span>
+        <span class="n">id_type</span> <span class="n">parentId</span> <span class="o">=</span> <span class="n">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">).</span><span class="n">read_component</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;</span><span class="p">().</span><span class="n">parent</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">parentId</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">parentId</span><span class="p">))</span> <span class="c1">// Re-validate parent.</span>
+            <span class="n">parentId</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">{</span> <span class="n">parentId</span> <span class="p">};</span>
+<span class="cp">#else</span>
+        <span class="k">return</span> <span class="nf">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">).</span><span class="n">read_component</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;</span><span class="p">().</span><span class="n">parent</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+    <span class="p">}</span>
+
+    <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">entity_set</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&amp;&gt;</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntities</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">m_entities</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">));</span>
     <span class="p">}</span>
 <span class="p">}</span>

@@ -29,9 +29,13 @@ Includes
 --------
 
 
+- ``Optick/optick.h``
+
 - ``algorithm``
 
 - ``cctype``
+
+- ``core/types/primitives.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_primitives.hpp`)
 
 - ``cstring``
 
@@ -40,8 +44,6 @@ Includes
 - ``locale``
 
 - ``sstream``
-
-- ``string`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`)
 
 - ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
 
@@ -62,6 +64,8 @@ Included By
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_navigator.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`
 
 
 
@@ -97,6 +101,8 @@ Functions
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a20ad9ed4fa81e004d572a28e095d1594`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a4b80e5f32e486e733eb995bc908b1e9a`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1adcb52150dc4d98a50923a9193ef3c966`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a6637167f612315189c6b67f1220ec1e0`
 

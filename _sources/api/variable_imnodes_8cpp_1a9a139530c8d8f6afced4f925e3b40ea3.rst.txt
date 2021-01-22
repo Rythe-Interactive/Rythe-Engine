@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1a9a139530c8d8f6afced4f925e3b40ea3:
+
+Variable background_selected
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: background_selected

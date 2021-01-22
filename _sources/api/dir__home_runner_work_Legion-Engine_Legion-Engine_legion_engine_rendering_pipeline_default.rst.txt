@@ -1,0 +1,27 @@
+.. _dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default:
+
+
+Directory default
+=================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/default``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx`
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages`
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_defaultpipeline.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_defaultpipeline.hpp`
+
+

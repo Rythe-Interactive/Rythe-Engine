@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1a3a60b171cd558d728361702f4aac5596:
+
+Function imgui::nodes::BeginNode
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::BeginNode(const int)

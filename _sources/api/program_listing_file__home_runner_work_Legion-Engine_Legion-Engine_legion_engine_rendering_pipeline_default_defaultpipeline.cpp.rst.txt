@@ -1,0 +1,57 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_defaultpipeline.cpp:
+
+Program Listing for File defaultpipeline.cpp
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_defaultpipeline.cpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/default/defaultpipeline.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <rendering/pipeline/default/defaultpipeline.hpp>
+   #include <rendering/pipeline/default/stages/clearstage.hpp>
+   #include <rendering/pipeline/default/stages/framebufferresizestage.hpp>
+   #include <rendering/pipeline/default/stages/lightbufferstage.hpp>
+   #include <rendering/pipeline/default/stages/meshbatchingstage.hpp>
+   #include <rendering/pipeline/default/stages/meshrenderstage.hpp>
+   #include <rendering/pipeline/default/stages/debugrenderstage.hpp>
+   #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
+   #include <rendering/pipeline/default/stages/submitstage.hpp>
+   #include <rendering/pipeline/default/postfx/tonemapping.hpp>
+   #include <rendering/pipeline/default/postfx/fxaa.hpp>
+   #include <rendering/pipeline/default/postfx/bloom.hpp>
+   #include <rendering/data/buffer.hpp>
+   
+   
+   namespace legion::rendering
+   {
+       void DefaultPipeline::setup(app::window& context)
+       {
+           OPTICK_EVENT();
+           attachStage<ClearStage>();
+           attachStage<FramebufferResizeStage>();
+           attachStage<LightBufferStage>();
+           attachStage<MeshBatchingStage>();
+           attachStage<MeshRenderStage>();
+           attachStage<DebugRenderStage>();
+           attachStage<PostProcessingStage>();
+           attachStage<SubmitStage>();
+   
+           PostProcessingStage::addEffect<Bloom>();
+           PostProcessingStage::addEffect<Tonemapping>(-64);
+           PostProcessingStage::addEffect<FXAA>(-100);
+   
+           buffer modelMatrixBuffer;
+   
+           {
+               app::context_guard guard(context);
+               addFramebuffer("main");
+               modelMatrixBuffer = buffer(GL_ARRAY_BUFFER, sizeof(math::mat4) * 1024, nullptr, GL_DYNAMIC_DRAW);
+           }
+   
+           create_meta<buffer>("model matrix buffer", modelMatrixBuffer);
+       }
+   
+   }

@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1core_1_1ecs_1_1component__pool__base:
+
+Class component_pool_base
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_pool.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public legion::core::ecs::component_pool< component_type >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__pool`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::ecs::component_pool_base
+   :members:
+   :protected-members:
+   :undoc-members:

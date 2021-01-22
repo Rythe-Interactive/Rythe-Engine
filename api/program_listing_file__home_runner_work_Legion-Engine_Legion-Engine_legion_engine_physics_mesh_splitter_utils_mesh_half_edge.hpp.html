@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File mesh_half_edge.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File mesh_half_edge.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-mesh-half-edge-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-mesh-half-edge-hpp"></span><h1>Program Listing for File mesh_half_edge.hpp<a class="headerlink" href="#program-listing-for-file-mesh-half-edge-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_half_edge.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-mesh-half-edge-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/mesh_half_edge.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/splittable_polygon.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/physics_statics.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nl">MeshHalfEdge</span> <span class="p">:</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_shared_from_this</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">position</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">uv</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span> <span class="n">nextEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span> <span class="n">pairingEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span> <span class="n">shadowEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">SplittablePolygon</span><span class="o">&gt;</span> <span class="n">owner</span><span class="p">;</span>
+
+        <span class="c1">//TODO: these bools should probably be stored as an array in SplittablePolygon</span>
+        <span class="kt">bool</span> <span class="n">isVisited</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">isBoundary</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="n">MeshHalfEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">pPosition</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&amp;</span> <span class="n">pUVs</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">SplittablePolygon</span><span class="o">&gt;</span> <span class="n">pOwner</span><span class="p">)</span> <span class="o">:</span> <span class="n">position</span><span class="p">(</span><span class="n">pPosition</span><span class="p">),</span> <span class="n">uv</span><span class="p">(</span><span class="n">pUVs</span><span class="p">),</span><span class="n">owner</span><span class="p">(</span><span class="n">pOwner</span><span class="p">)</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="n">MeshHalfEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">pPosition</span><span class="p">,</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&amp;</span> <span class="n">pUVs</span><span class="p">)</span> <span class="o">:</span> <span class="n">position</span><span class="p">(</span><span class="n">pPosition</span><span class="p">),</span><span class="n">uv</span><span class="p">(</span><span class="n">pUVs</span><span class="p">)</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="n">MeshHalfEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">pPosition</span><span class="p">)</span> <span class="o">:</span> <span class="n">position</span><span class="p">(</span><span class="n">pPosition</span><span class="p">)</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">getTriangle</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">shared_from_this</span><span class="p">(),</span> <span class="n">nextEdge</span><span class="p">,</span> <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">getShadowTriangle</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">shadowEdge</span><span class="p">,</span> <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">shadowEdge</span><span class="p">,</span> <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">shadowEdge</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">setPairing</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&amp;</span> <span class="n">newPairing</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">newPairing</span><span class="p">;</span>
+            <span class="n">newPairing</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">shared_from_this</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">cloneOnShadowEdge</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">shadowEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">uv</span><span class="p">);</span>
+            <span class="n">shadowEdge</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">=</span> <span class="n">isBoundary</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="n">connectIntoTriangle</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span> <span class="n">first</span>
+            <span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span> <span class="n">second</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span> <span class="n">third</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">first</span><span class="o">-&gt;</span><span class="n">nextEdge</span> <span class="o">=</span> <span class="n">second</span><span class="p">;</span>
+            <span class="n">second</span><span class="o">-&gt;</span><span class="n">nextEdge</span> <span class="o">=</span> <span class="n">third</span><span class="p">;</span>
+            <span class="n">third</span><span class="o">-&gt;</span><span class="n">nextEdge</span> <span class="o">=</span> <span class="n">first</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+        <span class="kt">bool</span> <span class="n">isSplitByPlane</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span>
+            <span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span>
+            <span class="p">,</span><span class="k">const</span>  <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">currentDistFromPlane</span><span class="p">,</span> <span class="n">nextDistFromPlane</span><span class="p">]</span> <span class="o">=</span> <span class="n">getEdgeDistancesFromPlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">currentDistFromPlane</span> <span class="o">&gt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">currentDistFromPlane</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">nextDistFromPlane</span> <span class="o">&gt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">nextDistFromPlane</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="kt">int</span> <span class="n">edgeSplitState</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">;</span>
+
+
+            <span class="k">return</span> <span class="n">edgeSplitState</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">;</span>
+
+
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">getWorldCentroid</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">((</span><span class="n">position</span> <span class="o">+</span> <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="n">isEdgePartlyAbovePlane</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">currentDistFromPlane</span><span class="p">,</span> <span class="n">nextDistFromPlane</span><span class="p">]</span> <span class="o">=</span> <span class="n">getEdgeDistancesFromPlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">);</span>
+
+            <span class="kt">bool</span> <span class="n">currentAbovePlane</span> <span class="o">=</span> <span class="n">currentDistFromPlane</span> <span class="o">&gt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">;</span>
+            <span class="kt">bool</span> <span class="n">nextAbovePlane</span> <span class="o">=</span> <span class="n">nextDistFromPlane</span> <span class="o">&gt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="n">currentAbovePlane</span> <span class="o">||</span> <span class="n">nextAbovePlane</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="n">isEdgePartlyBelowPlane</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">currentDistFromPlane</span><span class="p">,</span> <span class="n">nextDistFromPlane</span><span class="p">]</span> <span class="o">=</span> <span class="n">getEdgeDistancesFromPlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">);</span>
+
+            <span class="kt">bool</span> <span class="n">currentBelowPlane</span> <span class="o">=</span> <span class="n">currentDistFromPlane</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">;</span>
+            <span class="kt">bool</span> <span class="n">nextBelowPlane</span> <span class="o">=</span> <span class="n">nextDistFromPlane</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="n">currentBelowPlane</span> <span class="o">||</span> <span class="n">nextBelowPlane</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="kt">float</span><span class="o">&gt;</span> <span class="n">getEdgeDistancesFromPlane</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">currentWorldPos</span><span class="p">,</span> <span class="n">nextWorldPos</span><span class="p">]</span> <span class="o">=</span> <span class="n">getEdgeWorldPositions</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+            <span class="kt">float</span> <span class="n">currentDistFromPlane</span> <span class="o">=</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">PointDistanceToPlane</span><span class="p">(</span><span class="n">planeNormal</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span>  <span class="n">currentWorldPos</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">nextDistFromPlane</span> <span class="o">=</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">PointDistanceToPlane</span><span class="p">(</span><span class="n">planeNormal</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span>  <span class="n">nextWorldPos</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">currentDistFromPlane</span><span class="p">,</span> <span class="n">nextDistFromPlane</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">getEdgeWorldPositions</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">currentWorldPos</span> <span class="o">=</span> <span class="n">getEdgeWorldPosition</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">nextWorldPos</span> <span class="o">=</span> <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPosition</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">currentWorldPos</span><span class="p">,</span> <span class="n">nextWorldPos</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">getEdgeWorldPosition</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="n">attemptGetTrianglesInEdges</span>
+        <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&amp;</span> <span class="n">nextEdge</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&amp;</span> <span class="n">prevEdge</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">nextEdge</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">prevEdge</span> <span class="o">=</span> <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">markTriangleEdgeVisited</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">isVisited</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">populateQueueWithTriangleNeighbor</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&gt;&amp;</span> <span class="n">edgeQueue</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pairingEdge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">edgeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">pairingEdge</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">edgeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">edgeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">populateVectorWithTriangle</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&gt;&amp;</span> <span class="n">edgeVector</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">edgeVector</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">shared_from_this</span><span class="p">());</span>
+            <span class="n">edgeVector</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextEdge</span><span class="p">);</span>
+            <span class="n">edgeVector</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="n">isTriangleValid</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span> <span class="n">nextEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span> <span class="n">prevEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nf">attemptGetTrianglesInEdges</span><span class="p">(</span> <span class="n">nextEdge</span><span class="p">,</span> <span class="n">prevEdge</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">calculateEdgeNormal</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">firstDir</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">-</span> <span class="n">position</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">secondDir</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">-</span> <span class="n">position</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">firstDir</span><span class="p">,</span> <span class="n">secondDir</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="n">isNormalCloseEnough</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">comparisonNormal</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">compareNormals</span><span class="p">(</span><span class="n">calculateEdgeNormal</span><span class="p">(</span><span class="n">transform</span><span class="p">),</span> <span class="n">comparisonNormal</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">static</span> <span class="kt">bool</span> <span class="n">compareNormals</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">comparisonNormal</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">otherNormal</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">static</span> <span class="kt">float</span> <span class="n">toleranceDot</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cos</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">5.0f</span><span class="p">));</span>
+
+            <span class="kt">float</span> <span class="n">dotResult</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">otherNormal</span><span class="p">,</span> <span class="n">comparisonNormal</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">dotResult</span> <span class="o">&gt;</span> <span class="n">toleranceDot</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_half_edge.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

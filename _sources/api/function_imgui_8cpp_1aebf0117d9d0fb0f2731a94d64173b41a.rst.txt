@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1aebf0117d9d0fb0f2731a94d64173b41a:
+
+Function ImStrncpy
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStrncpy(char *, const char *, size_t)

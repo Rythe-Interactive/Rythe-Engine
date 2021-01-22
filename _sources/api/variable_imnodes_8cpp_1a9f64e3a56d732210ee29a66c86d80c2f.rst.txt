@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1a9f64e3a56d732210ee29a66c86d80c2f:
+
+Variable active_attribute
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: active_attribute

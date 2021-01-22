@@ -1,0 +1,52 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_gui.hpp:
+
+File gui.hpp
+============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/util/gui.hpp``)
+---------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_gui.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``imgui/ImGuiFileBrowser.h``
+
+- ``imgui/ImGuizmo.h``
+
+- ``imgui/ImSequencer.h``
+
+- ``imgui/imgui.h``
+
+- ``imgui/imnodes.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_imgui__base`
+

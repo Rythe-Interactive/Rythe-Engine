@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__draw_8cpp_1a082105b7beb5c000f2db90529edf2f50:
+
+Variable FONT_ATLAS_DEFAULT_TEX_CURSOR_DATA
+===========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: FONT_ATLAS_DEFAULT_TEX_CURSOR_DATA

@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1a2884d6bcfd0fba8eb8e322c2507aed5a:
+
+Function ImStb::is_separator
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStb::is_separator(unsigned int)

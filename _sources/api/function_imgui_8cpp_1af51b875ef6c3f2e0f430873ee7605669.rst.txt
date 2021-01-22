@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1af51b875ef6c3f2e0f430873ee7605669:
+
+Function ImGui::UpdateWindowManualResize
+========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGui::UpdateWindowManualResize(ImGuiWindow *, const ImVec2&, int *, int, ImU32, const ImRect&)

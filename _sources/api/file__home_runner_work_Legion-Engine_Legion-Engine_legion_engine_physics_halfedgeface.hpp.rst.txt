@@ -61,3 +61,5 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_half_edge_face`
 
+- :ref:`exhale_class_classface__angle__relation`
+

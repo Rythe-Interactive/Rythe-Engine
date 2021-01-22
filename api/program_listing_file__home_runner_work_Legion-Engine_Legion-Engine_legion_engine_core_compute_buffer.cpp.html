@@ -48,7 +48,7 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-compute-buffer-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/compute/buffer.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/compute/buffer.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;CL/cl_gl.h&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">compute</span>
 <span class="p">{</span>
@@ -57,8 +57,125 @@
         <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span> <span class="o">&amp;</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rhs</span><span class="p">);</span>
     <span class="p">}</span>
 
+    <span class="n">Buffer</span><span class="o">::</span><span class="n">Buffer</span><span class="p">(</span><span class="n">cl_context</span> <span class="n">ctx</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">width</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">height</span><span class="p">,</span> <span class="n">size_type</span> <span class="n">depth</span><span class="p">,</span> <span class="n">cl_mem_object_type</span> <span class="n">object_type</span><span class="p">,</span> <span class="n">cl_image_format</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span> <span class="n">buffer_type</span> <span class="n">type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="p">,</span> <span class="n">m_data</span><span class="p">((</span><span class="n">byte</span><span class="o">*</span><span class="p">)</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">channelSize</span><span class="p">;</span>
+
+        <span class="k">switch</span> <span class="p">(</span><span class="n">format</span><span class="o">-&gt;</span><span class="n">image_channel_order</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="k">case</span> <span class="nl">CL_RGBA</span><span class="p">:</span>
+            <span class="n">channelSize</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">CL_RGB</span><span class="p">:</span>
+            <span class="n">channelSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">CL_RA</span><span class="p">:</span>
+            <span class="n">channelSize</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">CL_R</span><span class="p">:</span>
+            <span class="n">channelSize</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+        <span class="k">switch</span><span class="p">(</span><span class="n">format</span><span class="o">-&gt;</span><span class="n">image_channel_data_type</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="k">case</span> <span class="nl">CL_UNORM_INT8</span><span class="p">:</span>
+
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">CL_UNORM_INT16</span><span class="p">:</span>
+            <span class="n">channelSize</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">CL_FLOAT</span><span class="p">:</span>
+            <span class="n">channelSize</span> <span class="o">*=</span> <span class="mi">4</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">m_size</span> <span class="o">=</span> <span class="n">width</span> <span class="o">*</span> <span class="n">height</span> <span class="o">*</span> <span class="n">channelSize</span><span class="p">;</span>
+        <span class="n">m_ref_count</span> <span class="o">=</span> <span class="k">new</span> <span class="n">size_type</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="c1">//convert buffer_type to cl_mem_flags</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">)</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_READ_ONLY</span><span class="p">;</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">)</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_WRITE_ONLY</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_READ_WRITE</span><span class="p">;</span>
+
+        <span class="n">m_type</span> <span class="o">|=</span> <span class="n">CL_MEM_USE_HOST_PTR</span><span class="p">;</span>
+
+        <span class="n">cl_image_desc</span> <span class="n">description</span><span class="p">;</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">image_type</span> <span class="o">=</span> <span class="n">object_type</span><span class="p">;</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">image_width</span> <span class="o">=</span> <span class="n">width</span><span class="p">;</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">image_height</span> <span class="o">=</span> <span class="n">height</span><span class="p">;</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">image_depth</span> <span class="o">=</span> <span class="n">depth</span><span class="p">;</span>
+
+
+        <span class="c1">// as far as I can tell this should be null, It might also be the most important argument here idno</span>
+        <span class="c1">// https://www.khronos.org/registry/OpenCL/specs/2.2/html/OpenCL_API.html#image-descriptor</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">mem_object</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+
+        <span class="c1">// we only support passing one image at a time</span>
+        <span class="c1">// do not pass CL_IMAGE_2D_ARRAY</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">image_array_size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="c1">// when host ptr not 0 then these will be calculated from image_type &amp; image_width</span>
+        <span class="c1">// https://www.khronos.org/registry/OpenCL/specs/2.2/html/OpenCL_API.html#image-descriptor</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">image_row_pitch</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">image_slice_pitch</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="c1">// num samples &amp; num mip_level must be 0</span>
+        <span class="c1">// https://www.khronos.org/registry/OpenCL/specs/2.2/html/OpenCL_API.html#image-descriptor</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">num_samples</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">description</span><span class="p">.</span><span class="n">num_mip_levels</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="n">cl_int</span> <span class="n">ret</span><span class="p">;</span>
+
+        <span class="n">m_memory_object</span> <span class="o">=</span> <span class="n">clCreateImage</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">m_type</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">description</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ret</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clCreateImage failed for Buffer: {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Buffer</span><span class="o">::</span><span class="n">Buffer</span><span class="p">(</span><span class="n">cl_context</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">buffer</span><span class="p">,</span> <span class="n">buffer_type</span> <span class="n">type</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">is_renderbuffer</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="p">,</span> <span class="n">m_data</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">m_size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="n">m_ref_count</span> <span class="o">=</span> <span class="k">new</span> <span class="n">size_type</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="c1">//convert buffer_type to cl_mem_flags</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">)</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_READ_ONLY</span><span class="p">;</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">)</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_WRITE_ONLY</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_READ_WRITE</span><span class="p">;</span>
+
+        <span class="n">cl_int</span> <span class="n">ret</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_renderbuffer</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_memory_object</span> <span class="o">=</span> <span class="n">clCreateFromGLRenderbuffer</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">m_type</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ret</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">m_memory_object</span> <span class="o">=</span> <span class="n">clCreateFromGLBuffer</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">m_type</span><span class="p">,</span> <span class="n">buffer</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ret</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clCreateFromGL(X?+)Buffer failed for Buffer: {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
     <span class="n">Buffer</span><span class="o">::</span><span class="n">Buffer</span><span class="p">(</span><span class="n">cl_context</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">byte</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="n">buffer_type</span> <span class="n">type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span> <span class="o">:</span><span class="n">m_size</span><span class="p">(</span><span class="n">len</span><span class="p">),</span> <span class="n">m_data</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">m_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ctx</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="c1">//initialize new ref-counter</span>
         <span class="n">m_ref_count</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">size_t</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 
@@ -78,9 +195,33 @@
         <span class="n">m_memory_object</span> <span class="o">=</span> <span class="n">clCreateBuffer</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">m_type</span><span class="p">,</span> <span class="n">m_size</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ret</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clCreateBuffer failed for Buffer: {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clCreateBuffer failed for Buffer: {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">);</span>
         <span class="p">}</span>
 
+    <span class="p">}</span>
+
+    <span class="n">Buffer</span><span class="o">::</span><span class="n">Buffer</span><span class="p">(</span><span class="n">cl_context</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">gl_target</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">gl_texture</span><span class="p">,</span> <span class="n">cl_uint</span> <span class="n">miplevel</span><span class="p">,</span> <span class="n">buffer_type</span> <span class="n">type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">m_name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="p">,</span> <span class="n">m_data</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span>
+        <span class="p">,</span> <span class="n">m_size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="n">m_ref_count</span> <span class="o">=</span> <span class="k">new</span> <span class="n">size_type</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="c1">//convert buffer_type to cl_mem_flags</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">)</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_READ_ONLY</span><span class="p">;</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">)</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_WRITE_ONLY</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">m_type</span> <span class="o">=</span> <span class="n">CL_MEM_READ_WRITE</span><span class="p">;</span>
+
+        <span class="n">cl_int</span> <span class="n">ret</span><span class="p">;</span>
+        <span class="n">m_memory_object</span> <span class="o">=</span> <span class="n">clCreateFromGLTexture</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">m_type</span><span class="p">,</span> <span class="n">gl_target</span><span class="p">,</span> <span class="n">miplevel</span><span class="p">,</span> <span class="n">gl_texture</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ret</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="n">CL_SUCCESS</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;clCreateFromGLTexture failed for Buffer: {}&quot;</span><span class="p">,</span> <span class="n">m_name</span><span class="p">);</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="kt">void</span> <span class="n">Buffer</span><span class="o">::</span><span class="n">rename</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
@@ -99,20 +240,21 @@
 
         <span class="c1">//Move Ctor needs to be explicitly defined</span>
         <span class="c1">//to increase Reference Counter</span>
-        <span class="o">++*</span> <span class="n">m_ref_count</span><span class="p">;</span>
+     <span class="c1">//   ++* m_ref_count;</span>
     <span class="p">}</span>
 
     <span class="n">Buffer</span><span class="o">::</span><span class="n">Buffer</span><span class="p">(</span><span class="k">const</span> <span class="n">Buffer</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="o">:</span>
         <span class="n">m_name</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_name</span><span class="p">),</span>
         <span class="n">m_memory_object</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_memory_object</span><span class="p">),</span>
-        <span class="n">m_ref_count</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_ref_count</span><span class="p">),</span>
+        <span class="c1">//    m_ref_count(b.m_ref_count),</span>
         <span class="n">m_type</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_type</span><span class="p">),</span>
         <span class="n">m_data</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_data</span><span class="p">),</span>
         <span class="n">m_size</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">m_size</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">//Copy Ctor needs to be explicitly defined</span>
         <span class="c1">//to increase Reference Counter</span>
-        <span class="o">++*</span> <span class="n">m_ref_count</span><span class="p">;</span>
+       <span class="c1">// if(m_ref_count)</span>
+      <span class="c1">//  ++* m_ref_count;</span>
     <span class="p">}</span>
 
 
@@ -123,12 +265,12 @@
 
         <span class="c1">//check if this is the last element</span>
         <span class="c1">//TODO(algo-ryth-mix): make this thread-safe</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">--*</span><span class="n">m_ref_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="c1">//free ref-counter &amp; memory_object</span>
-            <span class="k">delete</span> <span class="n">m_ref_count</span><span class="p">;</span>
-            <span class="n">clReleaseMemObject</span><span class="p">(</span><span class="n">m_memory_object</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="c1">//if (m_ref_count &amp;&amp; --*m_ref_count == 0)</span>
+        <span class="c1">//{</span>
+        <span class="c1">//    //free ref-counter &amp; memory_object</span>
+        <span class="c1">//    /*delete m_ref_count;</span>
+        <span class="c1">//    clReleaseMemObject(m_memory_object);*/</span>
+        <span class="c1">//}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

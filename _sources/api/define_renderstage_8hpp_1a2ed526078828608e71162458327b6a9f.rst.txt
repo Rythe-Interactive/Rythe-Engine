@@ -1,0 +1,13 @@
+.. _exhale_define_renderstage_8hpp_1a2ed526078828608e71162458327b6a9f:
+
+Define submit_priority
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: submit_priority

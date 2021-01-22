@@ -49,13 +49,11 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_postprocessingeffect.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_shader.cpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipeline.hpp`
-
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_shadercompiler_shadercompiler.hpp`
-
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_renderer.hpp`
 
 
 
@@ -73,6 +71,10 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1shader__handle`
 
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1shader__variant`
+
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1uniform_3_01texture__handle_01_4`
+
 - :ref:`exhale_class_structlegion_1_1rendering_1_1attribute`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1shader`
@@ -88,7 +90,7 @@ Typedefs
 --------
 
 
-- :ref:`exhale_typedef_shader_8hpp_1a83b5ac17e74d34eda59690b8d430982d`
+- :ref:`exhale_typedef_shader_8hpp_1a4a216b7602b217b2977b990467cbd9ee`
 
 - :ref:`exhale_typedef_shader_8hpp_1af23ef4f8dd58d8149bbe092b0ddd0796`
 

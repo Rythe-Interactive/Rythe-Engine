@@ -1,0 +1,24 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_point_emitter_data.hpp:
+
+Program Listing for File point_emitter_data.hpp
+===============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_point_emitter_data.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/components/point_emitter_data.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <rendering/data/Octree.hpp>
+   namespace legion::rendering
+   {
+       struct point_emitter_data
+       {
+           int CurrentLOD = 0;
+           rendering::Octree<uint8>* Tree;
+           std::vector<int> ElementsPerLOD;
+       };
+   }

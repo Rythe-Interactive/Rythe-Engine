@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Class texture_data" href="class_structlegion_1_1rendering_1_1texture__data.html" />
-    <link rel="prev" title="Class stbi_texture_loader" href="class_structlegion_1_1rendering_1_1stbi__texture__loader.html" />
+    <link rel="prev" title="Class SubmitStage" href="classlegion_1_1rendering_1_1_submit_stage.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="class_structlegion_1_1rendering_1_1texture__data.html" title="Class texture_data"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="class_structlegion_1_1rendering_1_1stbi__texture__loader.html" title="Class stbi_texture_loader"
+          <a href="classlegion_1_1rendering_1_1_submit_stage.html" title="Class SubmitStage"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -61,18 +61,26 @@
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="cpp class">
 <dt id="_CPPv4N6legion9rendering7textureE">
-<span id="_CPPv3N6legion9rendering7textureE"></span><span id="_CPPv2N6legion9rendering7textureE"></span><span id="legion::rendering::texture"></span><span class="target" id="structlegion_1_1rendering_1_1texture"></span><em class="property">class </em><code class="sig-prename descclassname">legion::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">texture</code><a class="headerlink" href="#_CPPv4N6legion9rendering7textureE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion9rendering7textureE"></span><span id="_CPPv2N6legion9rendering7textureE"></span><span id="legion::rendering::texture"></span><span class="target" id="structlegion_1_1rendering_1_1texture"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">texture</code><a class="headerlink" href="#_CPPv4N6legion9rendering7textureE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Struct containing all the data needed for rendering. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering7texture4sizeEv">
+<span id="_CPPv3NK6legion9rendering7texture4sizeEv"></span><span id="_CPPv2NK6legion9rendering7texture4sizeEv"></span><span id="legion::rendering::texture::sizeC"></span><span class="target" id="structlegion_1_1rendering_1_1texture_1a4ff9a41794d8b332b36e221e830a54e0"></span>math::ivec2 <code class="sig-name descname">size</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering7texture4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering7texture6resizeEN4math5ivec2E">
+<span id="_CPPv3NK6legion9rendering7texture6resizeEN4math5ivec2E"></span><span id="_CPPv2NK6legion9rendering7texture6resizeEN4math5ivec2E"></span><span id="legion::rendering::texture::resize__math::ivec2C"></span><span class="target" id="structlegion_1_1rendering_1_1texture_1a333cb010714d739a9a56e85a9cdfd8b4"></span>void <code class="sig-name descname">resize</code><span class="sig-paren">(</span>math::ivec2 <em>size</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion9rendering7texture6resizeEN4math5ivec2E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="cpp var">
 <dt id="_CPPv4N6legion9rendering7texture9textureIdE">
 <span id="_CPPv3N6legion9rendering7texture9textureIdE"></span><span id="_CPPv2N6legion9rendering7texture9textureIdE"></span><span id="legion::rendering::texture::textureId__app::gl_id"></span><span class="target" id="structlegion_1_1rendering_1_1texture_1af6e007053598dfac985f8a5a41ad2a00"></span>app::gl_id <code class="sig-name descname">textureId</code> = invalid_id<a class="headerlink" href="#_CPPv4N6legion9rendering7texture9textureIdE" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp var">
-<dt id="_CPPv4N6legion9rendering7texture4sizeE">
-<span id="_CPPv3N6legion9rendering7texture4sizeE"></span><span id="_CPPv2N6legion9rendering7texture4sizeE"></span><span id="legion::rendering::texture::size__math::ivec2"></span><span class="target" id="structlegion_1_1rendering_1_1texture_1a2e3a47ec55e73e31c8d4e38b7b3c8075"></span>math::ivec2 <code class="sig-name descname">size</code><a class="headerlink" href="#_CPPv4N6legion9rendering7texture4sizeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
@@ -83,6 +91,16 @@
 <dl class="cpp var">
 <dt id="_CPPv4N6legion9rendering7texture4typeE">
 <span id="_CPPv3N6legion9rendering7texture4typeE"></span><span id="_CPPv2N6legion9rendering7texture4typeE"></span><span id="legion::rendering::texture::type__texture_type"></span><span class="target" id="structlegion_1_1rendering_1_1texture_1ad7d847093e30948a5a562a4e965b7078"></span><a class="reference internal" href="enum_texture_8hpp_1a98302b4adcb004d184460c840a95b3e5.html#_CPPv4N6legion9rendering12texture_typeE" title="legion::rendering::texture_type">texture_type</a> <code class="sig-name descname">type</code><a class="headerlink" href="#_CPPv4N6legion9rendering7texture4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering7texture6formatE">
+<span id="_CPPv3N6legion9rendering7texture6formatE"></span><span id="_CPPv2N6legion9rendering7texture6formatE"></span><span id="legion::rendering::texture::format__texture_format"></span><span class="target" id="structlegion_1_1rendering_1_1texture_1a47e03a74ffc2fde1a267fffb3114a562"></span><a class="reference internal" href="enum_texture_8hpp_1a4beac8f03a1a4607475602841e77f7ed.html#_CPPv4N6legion9rendering14texture_formatE" title="legion::rendering::texture_format">texture_format</a> <code class="sig-name descname">format</code><a class="headerlink" href="#_CPPv4N6legion9rendering7texture6formatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering7texture10fileFormatE">
+<span id="_CPPv3N6legion9rendering7texture10fileFormatE"></span><span id="_CPPv2N6legion9rendering7texture10fileFormatE"></span><span id="legion::rendering::texture::fileFormat__channel_format"></span><span class="target" id="structlegion_1_1rendering_1_1texture_1a4c9c043adbbcb9030ec2573b063e7cbe"></span>channel_format <code class="sig-name descname">fileFormat</code><a class="headerlink" href="#_CPPv4N6legion9rendering7texture10fileFormatE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -122,7 +140,7 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="class_structlegion_1_1rendering_1_1stbi__texture__loader.html" title="previous chapter">Class stbi_texture_loader</a></li>
+      <li>Previous: <a href="classlegion_1_1rendering_1_1_submit_stage.html" title="previous chapter">Class SubmitStage</a></li>
       <li>Next: <a href="class_structlegion_1_1rendering_1_1texture__data.html" title="next chapter">Class texture_data</a></li>
   </ul></li>
   </ul></li>

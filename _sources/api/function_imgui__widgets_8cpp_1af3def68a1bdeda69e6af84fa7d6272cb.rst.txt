@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1af3def68a1bdeda69e6af84fa7d6272cb:
+
+Function RenderArrowsForVerticalBar
+===================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: RenderArrowsForVerticalBar(ImDrawList *, ImVec2, ImVec2, float, float)

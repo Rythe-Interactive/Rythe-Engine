@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1ac2561e31f0de066ef0bb5bfbb541c8ae:
+
+Function ImTextCountCharsFromUtf8
+=================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImTextCountCharsFromUtf8(const char *, const char *)

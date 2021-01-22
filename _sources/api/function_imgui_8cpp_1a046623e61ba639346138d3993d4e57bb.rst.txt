@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a046623e61ba639346138d3993d4e57bb:
+
+Function ImGui::UpdateTabFocus
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGui::UpdateTabFocus()

@@ -1,0 +1,13 @@
+.. _exhale_function_debugrendering_8hpp_1ac68069c24d039e529280c33fd8722602:
+
+Function legion::debug::CONCAT_DEFINE(PROJECT_NAME, DrawLine)
+=============================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_debugrendering.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::debug::CONCAT_DEFINE(PROJECT_NAME, DrawLine)

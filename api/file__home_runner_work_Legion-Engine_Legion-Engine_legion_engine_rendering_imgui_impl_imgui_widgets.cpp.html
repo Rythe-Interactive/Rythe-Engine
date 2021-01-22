@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File imgui_widgets.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">File imgui_widgets.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="file-imgui-widgets-cpp">
+<span id="file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-widgets-cpp"></span><h1>File imgui_widgets.cpp<a class="headerlink" href="#file-imgui-widgets-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl.html#dir-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl</span></code>)</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-widgets-cpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_widgets.cpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id3">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id4">Classes</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id5">Functions</a></p></li>
+<li><p><a class="reference internal" href="#defines" id="id6">Defines</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id7">Variables</a></p></li>
+</ul>
+</div>
+<div class="section" id="definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-widgets-cpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_widgets.cpp</span></code>)<a class="headerlink" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-widgets-cpp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp.html">Program Listing for File imgui_widgets.cpp</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ctype.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imgui.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imgui_internal.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imstb_textedit.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdint.h</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_imgui.html#namespace-imgui"><span class="std std-ref">Namespace imgui</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_ImStb.html#namespace-imstb"><span class="std std-ref">Namespace ImStb</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="struct_im_gui_plot_array_getter_data.html#exhale-struct-struct-im-gui-plot-array-getter-data"><span class="std std-ref">Struct ImGuiPlotArrayGetterData</span></a></p></li>
+<li><p><a class="reference internal" href="struct_im_gui_tab_bar_section.html#exhale-struct-struct-im-gui-tab-bar-section"><span class="std std-ref">Struct ImGuiTabBarSection</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a295cb58de3f221694160b173529ca4d7.html#exhale-function-imgui-widgets-8cpp-1a295cb58de3f221694160b173529ca4d7"><span class="std std-ref">Function CalcMaxPopupHeightFromItemCount</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1adb02051ad064ff8f14557c7483f2fd7e.html#exhale-function-imgui-widgets-8cpp-1adb02051ad064ff8f14557c7483f2fd7e"><span class="std std-ref">Template Function DataTypeClampT</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a912c66d17cb3b09d5daac6e6b992a9a2.html#exhale-function-imgui-widgets-8cpp-1a912c66d17cb3b09d5daac6e6b992a9a2"><span class="std std-ref">Template Function DataTypeCompareT</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1aabc7ace6eaff201b41715fac3c12b154.html#exhale-function-imgui-widgets-8cpp-1aabc7ace6eaff201b41715fac3c12b154"><span class="std std-ref">Function GetColumnWidthEx</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1aa235e9c607930ebb1304d6df978d5fe8.html#exhale-function-imgui-widgets-8cpp-1aa235e9c607930ebb1304d6df978d5fe8"><span class="std std-ref">Function GetDraggedColumnOffset</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a756d29be52c948582e6f585d7ad24351.html#exhale-function-imgui-widgets-8cpp-1a756d29be52c948582e6f585d7ad24351"><span class="std std-ref">Function GetMinimumStepAtDecimalPrecision</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1adfaf14ac6e0cd96e2fa6c2e5bac7cba6.html#exhale-function-imgui-widgets-8cpp-1adfaf14ac6e0cd96e2fa6c2e5bac7cba6"><span class="std std-ref">Function GetTabBarFromTabBarRef</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1ab810e3e68b96839086a444b8ca55d42d.html#exhale-function-imgui-widgets-8cpp-1ab810e3e68b96839086a444b8ca55d42d"><span class="std std-ref">Function GetTabBarRefFromTabBar</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a57469838509290dd5088d194ab1e7639.html#exhale-function-imgui-widgets-8cpp-1a57469838509290dd5088d194ab1e7639"><span class="std std-ref">Function IM_STATIC_ASSERT</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a82edd53168b17508d7df4af9f7469694.html#exhale-function-imgui-widgets-8cpp-1a82edd53168b17508d7df4af9f7469694"><span class="std std-ref">Template Function ImAtoi</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a3dcda0a629504f551a02eb7d5c781b48.html#exhale-function-imgui-widgets-8cpp-1a3dcda0a629504f551a02eb7d5c781b48"><span class="std std-ref">Function ImGui::TabBarCalcMaxTabWidth</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a517a032bbf81af4a54d47fbad549fec2.html#exhale-function-imgui-widgets-8cpp-1a517a032bbf81af4a54d47fbad549fec2"><span class="std std-ref">Function ImGui::TabBarCalcTabID</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a1526bb8d42b3fa38e1c702500d1ff601.html#exhale-function-imgui-widgets-8cpp-1a1526bb8d42b3fa38e1c702500d1ff601"><span class="std std-ref">Function ImGui::TabBarLayout</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a7f69850603cb7785873276bdad96cd14.html#exhale-function-imgui-widgets-8cpp-1a7f69850603cb7785873276bdad96cd14"><span class="std std-ref">Function ImGui::TabBarScrollClamp</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a5d0ac25abe189c752495f2f26afea2e6.html#exhale-function-imgui-widgets-8cpp-1a5d0ac25abe189c752495f2f26afea2e6"><span class="std std-ref">Function ImGui::TabBarScrollingButtons</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a4abdae991de47be7c4b8ce58a6afb0f1.html#exhale-function-imgui-widgets-8cpp-1a4abdae991de47be7c4b8ce58a6afb0f1"><span class="std std-ref">Function ImGui::TabBarScrollToTab</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a46e34a2960eb4aa9fb9afb9bfb5ec96b.html#exhale-function-imgui-widgets-8cpp-1a46e34a2960eb4aa9fb9afb9bfb5ec96b"><span class="std std-ref">Function ImGui::TabBarTabListPopupButton</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a075502c0add9e1ec37d31593bd311af8.html#exhale-function-imgui-widgets-8cpp-1a075502c0add9e1ec37d31593bd311af8"><span class="std std-ref">Function ImParseFormatFindEnd</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a626d7d52c95ea9823d90a558ad969ec3.html#exhale-function-imgui-widgets-8cpp-1a626d7d52c95ea9823d90a558ad969ec3"><span class="std std-ref">Function ImParseFormatFindStart</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a7df6480b83fda2eb807460516f8e7595.html#exhale-function-imgui-widgets-8cpp-1a7df6480b83fda2eb807460516f8e7595"><span class="std std-ref">Function ImParseFormatPrecision</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a921c7726f10a7c11213b57291037a386.html#exhale-function-imgui-widgets-8cpp-1a921c7726f10a7c11213b57291037a386"><span class="std std-ref">Function ImParseFormatTrimDecorations</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a2884d6bcfd0fba8eb8e322c2507aed5a.html#exhale-function-imgui-widgets-8cpp-1a2884d6bcfd0fba8eb8e322c2507aed5a"><span class="std std-ref">Function ImStb::is_separator</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a59a99c3930e2c7dd71826f29e5049a4c.html#exhale-function-imgui-widgets-8cpp-1a59a99c3930e2c7dd71826f29e5049a4c"><span class="std std-ref">Function ImStb::is_word_boundary_from_right</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a521d3b1cab31673e040bf67381ca94d9.html#exhale-function-imgui-widgets-8cpp-1a521d3b1cab31673e040bf67381ca94d9"><span class="std std-ref">Function ImStb::STB_TEXTEDIT_DELETECHARS</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1aa19e02594653d6234bba9f6cd024d72e.html#exhale-function-imgui-widgets-8cpp-1aa19e02594653d6234bba9f6cd024d72e"><span class="std std-ref">Function ImStb::STB_TEXTEDIT_GETCHAR</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1ab6d0d27d4036f915e8ace4caf978a6df.html#exhale-function-imgui-widgets-8cpp-1ab6d0d27d4036f915e8ace4caf978a6df"><span class="std std-ref">Function ImStb::STB_TEXTEDIT_GETWIDTH</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a2e89b5f04b29ef70c336205779886acf.html#exhale-function-imgui-widgets-8cpp-1a2e89b5f04b29ef70c336205779886acf"><span class="std std-ref">Function ImStb::STB_TEXTEDIT_INSERTCHARS</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a294857d9864178e0005adf73a76f1820.html#exhale-function-imgui-widgets-8cpp-1a294857d9864178e0005adf73a76f1820"><span class="std std-ref">Function ImStb::STB_TEXTEDIT_KEYTOTEXT</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a9fe06316a0792c6fb7dfeaadca544590.html#exhale-function-imgui-widgets-8cpp-1a9fe06316a0792c6fb7dfeaadca544590"><span class="std std-ref">Function ImStb::STB_TEXTEDIT_LAYOUTROW</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1af02b2956c19e781cb5b6a6d0bf633753.html#exhale-function-imgui-widgets-8cpp-1af02b2956c19e781cb5b6a6d0bf633753"><span class="std std-ref">Function ImStb::STB_TEXTEDIT_MOVEWORDLEFT_IMPL</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a8feb954c68dd44fc78a088e9e120f148.html#exhale-function-imgui-widgets-8cpp-1a8feb954c68dd44fc78a088e9e120f148"><span class="std std-ref">Function ImStb::STB_TEXTEDIT_MOVEWORDRIGHT_IMPL</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a0ac9454d214484898aa08152ccba087a.html#exhale-function-imgui-widgets-8cpp-1a0ac9454d214484898aa08152ccba087a"><span class="std std-ref">Function ImStb::stb_textedit_replace</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1ad383fd0b8dccca5f3a4e9fc4a426c8e1.html#exhale-function-imgui-widgets-8cpp-1ad383fd0b8dccca5f3a4e9fc4a426c8e1"><span class="std std-ref">Function ImStb::STB_TEXTEDIT_STRINGLEN</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a6b80fbdb51d7eba0d61d2ce186ef79cb.html#exhale-function-imgui-widgets-8cpp-1a6b80fbdb51d7eba0d61d2ce186ef79cb"><span class="std std-ref">Function InputTextCalcTextLenAndLineCount</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1ad795bc11bc530c78739c89d68b0390af.html#exhale-function-imgui-widgets-8cpp-1ad795bc11bc530c78739c89d68b0390af"><span class="std std-ref">Function InputTextCalcTextSizeW</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1ab20ea11a16bdbdc0fc75e2e6e9b6d3ca.html#exhale-function-imgui-widgets-8cpp-1ab20ea11a16bdbdc0fc75e2e6e9b6d3ca"><span class="std std-ref">Function InputTextFilterCharacter</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1aae8cddf994f916d52739ed5a2ecc708d.html#exhale-function-imgui-widgets-8cpp-1aae8cddf994f916d52739ed5a2ecc708d"><span class="std std-ref">Function Items_ArrayGetter</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a06bfc74a928bbc6b5ec608a39162ba62.html#exhale-function-imgui-widgets-8cpp-1a06bfc74a928bbc6b5ec608a39162ba62"><span class="std std-ref">Function Items_SingleStringGetter</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1abe25f079d3dcf351ba31ed5d856e21d8.html#exhale-function-imgui-widgets-8cpp-1abe25f079d3dcf351ba31ed5d856e21d8"><span class="std std-ref">Function PatchFormatStringFloatToInt</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1ad4576f39d1ccf89f3c230754c81b278a.html#exhale-function-imgui-widgets-8cpp-1ad4576f39d1ccf89f3c230754c81b278a"><span class="std std-ref">Function Plot_ArrayGetter</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1af3def68a1bdeda69e6af84fa7d6272cb.html#exhale-function-imgui-widgets-8cpp-1af3def68a1bdeda69e6af84fa7d6272cb"><span class="std std-ref">Function RenderArrowsForVerticalBar</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a56b30ec768c46c2abdd27ae66073c3e8.html#exhale-function-imgui-widgets-8cpp-1a56b30ec768c46c2abdd27ae66073c3e8"><span class="std std-ref">Function ShrinkWidthItemComparer</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a3b9d5feb26a83507589fdb7887eb73cc.html#exhale-function-imgui-widgets-8cpp-1a3b9d5feb26a83507589fdb7887eb73cc"><span class="std std-ref">Function TabItemComparerByBeginOrder</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__widgets_8cpp_1a3a68672a788f293779faf265ff2c33a1.html#exhale-function-imgui-widgets-8cpp-1a3a68672a788f293779faf265ff2c33a1"><span class="std std-ref">Function TabItemComparerBySection</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="defines">
+<h2>Defines<a class="headerlink" href="#defines" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1adf4d73301961430d50d7edd96f92ce38.html#exhale-define-imgui-widgets-8cpp-1adf4d73301961430d50d7edd96f92ce38"><span class="std std-ref">Define IMGUI_DEFINE_MATH_OPERATORS</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1ade8f1a617b962d4405a2492cc3ed0468.html#exhale-define-imgui-widgets-8cpp-1ade8f1a617b962d4405a2492cc3ed0468"><span class="std std-ref">Define STB_TEXTEDIT_IMPLEMENTATION</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a436a147e85256c7a3e2fee4a69e3aa72.html#exhale-define-imgui-widgets-8cpp-1a436a147e85256c7a3e2fee4a69e3aa72"><span class="std std-ref">Define STB_TEXTEDIT_K_BACKSPACE</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a1e7e825b3df67f64a15b84c548e51c26.html#exhale-define-imgui-widgets-8cpp-1a1e7e825b3df67f64a15b84c548e51c26"><span class="std std-ref">Define STB_TEXTEDIT_K_DELETE</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a1b0a25c8debb2e6b33d5b9678ff31eb6.html#exhale-define-imgui-widgets-8cpp-1a1b0a25c8debb2e6b33d5b9678ff31eb6"><span class="std std-ref">Define STB_TEXTEDIT_K_DOWN</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1ab78e75643116b67f27faa253997d6bf4.html#exhale-define-imgui-widgets-8cpp-1ab78e75643116b67f27faa253997d6bf4"><span class="std std-ref">Define STB_TEXTEDIT_K_LEFT</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a86649bcd5a713ef6ebc40271b8d33448.html#exhale-define-imgui-widgets-8cpp-1a86649bcd5a713ef6ebc40271b8d33448"><span class="std std-ref">Define STB_TEXTEDIT_K_LINEEND</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1ae5c188433685fd5694d9323078e7faa4.html#exhale-define-imgui-widgets-8cpp-1ae5c188433685fd5694d9323078e7faa4"><span class="std std-ref">Define STB_TEXTEDIT_K_LINESTART</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1aff21d9af1b439f88b59765b52de1df51.html#exhale-define-imgui-widgets-8cpp-1aff21d9af1b439f88b59765b52de1df51"><span class="std std-ref">Define STB_TEXTEDIT_K_PGDOWN</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1ac4c3f430bf4d3264b9555e8fdf0fdef9.html#exhale-define-imgui-widgets-8cpp-1ac4c3f430bf4d3264b9555e8fdf0fdef9"><span class="std std-ref">Define STB_TEXTEDIT_K_PGUP</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a349b079acfb7872afca79e1db09c5d6d.html#exhale-define-imgui-widgets-8cpp-1a349b079acfb7872afca79e1db09c5d6d"><span class="std std-ref">Define STB_TEXTEDIT_K_REDO</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a2372bf34dbfe9ee393e5e893a59519ff.html#exhale-define-imgui-widgets-8cpp-1a2372bf34dbfe9ee393e5e893a59519ff"><span class="std std-ref">Define STB_TEXTEDIT_K_RIGHT</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a295377d91a81714e475c3675142944aa.html#exhale-define-imgui-widgets-8cpp-1a295377d91a81714e475c3675142944aa"><span class="std std-ref">Define STB_TEXTEDIT_K_SHIFT</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a74b070e036f6ac29eb876a94cb856600.html#exhale-define-imgui-widgets-8cpp-1a74b070e036f6ac29eb876a94cb856600"><span class="std std-ref">Define STB_TEXTEDIT_K_TEXTEND</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1adb6231fb52ce1b5fe340d158db4fa113.html#exhale-define-imgui-widgets-8cpp-1adb6231fb52ce1b5fe340d158db4fa113"><span class="std std-ref">Define STB_TEXTEDIT_K_TEXTSTART</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1aabfc2cec24f396fb94d03d9f103a910e.html#exhale-define-imgui-widgets-8cpp-1aabfc2cec24f396fb94d03d9f103a910e"><span class="std std-ref">Define STB_TEXTEDIT_K_UNDO</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a579019adb9b5fbb8432121dc10d59755.html#exhale-define-imgui-widgets-8cpp-1a579019adb9b5fbb8432121dc10d59755"><span class="std std-ref">Define STB_TEXTEDIT_K_UP</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1acbb30e32121ef025272892af98f2ac58.html#exhale-define-imgui-widgets-8cpp-1acbb30e32121ef025272892af98f2ac58"><span class="std std-ref">Define STB_TEXTEDIT_K_WORDLEFT</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a4ac168018b20e53285d76c46aa24a122.html#exhale-define-imgui-widgets-8cpp-1a4ac168018b20e53285d76c46aa24a122"><span class="std std-ref">Define STB_TEXTEDIT_K_WORDRIGHT</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1aee9a4cbd23af66a75c6d41bad2e393d5.html#exhale-define-imgui-widgets-8cpp-1aee9a4cbd23af66a75c6d41bad2e393d5"><span class="std std-ref">Define STB_TEXTEDIT_MOVEWORDLEFT</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__widgets_8cpp_1a578438ad23cd7446c7930de4738cee37.html#exhale-define-imgui-widgets-8cpp-1a578438ad23cd7446c7930de4738cee37"><span class="std std-ref">Define STB_TEXTEDIT_MOVEWORDRIGHT</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1aab076da9a61272c8b2141ead58b8d82f.html#exhale-variable-imgui-widgets-8cpp-1aab076da9a61272c8b2141ead58b8d82f"><span class="std std-ref">Variable COLUMNS_HIT_RECT_HALF_WIDTH</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1a39c26e8d64b2991841314baacb3fbfee.html#exhale-variable-imgui-widgets-8cpp-1a39c26e8d64b2991841314baacb3fbfee"><span class="std std-ref">Variable GDataTypeInfo</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1ab1ace264ddcd0f6adf4b93be01e650fe.html#exhale-variable-imgui-widgets-8cpp-1ab1ace264ddcd0f6adf4b93be01e650fe"><span class="std std-ref">Variable IM_S16_MAX</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1a7c46de92d34867711c1a57ff04150326.html#exhale-variable-imgui-widgets-8cpp-1a7c46de92d34867711c1a57ff04150326"><span class="std std-ref">Variable IM_S16_MIN</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1ab68bb13a2a0e7423f4720aef01e7c0a7.html#exhale-variable-imgui-widgets-8cpp-1ab68bb13a2a0e7423f4720aef01e7c0a7"><span class="std std-ref">Variable IM_S32_MAX</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1ab23518380eb2c1ecdbb16c6be63da591.html#exhale-variable-imgui-widgets-8cpp-1ab23518380eb2c1ecdbb16c6be63da591"><span class="std std-ref">Variable IM_S32_MIN</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1a7509a34f2f2b1f2e1040105d67281072.html#exhale-variable-imgui-widgets-8cpp-1a7509a34f2f2b1f2e1040105d67281072"><span class="std std-ref">Variable IM_S64_MAX</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1a08bb8d1b3c1d794ddb447d5fcf70c173.html#exhale-variable-imgui-widgets-8cpp-1a08bb8d1b3c1d794ddb447d5fcf70c173"><span class="std std-ref">Variable IM_S64_MIN</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1ac6ee000e9a50cc1cd4981e42343bc9f2.html#exhale-variable-imgui-widgets-8cpp-1ac6ee000e9a50cc1cd4981e42343bc9f2"><span class="std std-ref">Variable IM_S8_MAX</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1aa431e20c88d9b014fc4afb59523490b1.html#exhale-variable-imgui-widgets-8cpp-1aa431e20c88d9b014fc4afb59523490b1"><span class="std std-ref">Variable IM_S8_MIN</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1acd4c506580a6e7cc632c4fa949f61b35.html#exhale-variable-imgui-widgets-8cpp-1acd4c506580a6e7cc632c4fa949f61b35"><span class="std std-ref">Variable IM_U16_MAX</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1a068cf7ddf36d342bd232c5ccf9b73242.html#exhale-variable-imgui-widgets-8cpp-1a068cf7ddf36d342bd232c5ccf9b73242"><span class="std std-ref">Variable IM_U16_MIN</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1ae2a1dbde6be4172620d31e321d2e459f.html#exhale-variable-imgui-widgets-8cpp-1ae2a1dbde6be4172620d31e321d2e459f"><span class="std std-ref">Variable IM_U32_MAX</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1a4f15972fff9fd018c8355d16aa9814e5.html#exhale-variable-imgui-widgets-8cpp-1a4f15972fff9fd018c8355d16aa9814e5"><span class="std std-ref">Variable IM_U32_MIN</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1a1df4f706900ddcd0caf9cae679c3ccbf.html#exhale-variable-imgui-widgets-8cpp-1a1df4f706900ddcd0caf9cae679c3ccbf"><span class="std std-ref">Variable IM_U64_MAX</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1a747e2cea3d296a14a0e79040d35863b5.html#exhale-variable-imgui-widgets-8cpp-1a747e2cea3d296a14a0e79040d35863b5"><span class="std std-ref">Variable IM_U64_MIN</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1acffcd64b4f14cc09b7b1339ce67a7563.html#exhale-variable-imgui-widgets-8cpp-1acffcd64b4f14cc09b7b1339ce67a7563"><span class="std std-ref">Variable IM_U8_MAX</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1a391f5186e44833b2f1f368c722498982.html#exhale-variable-imgui-widgets-8cpp-1a391f5186e44833b2f1f368c722498982"><span class="std std-ref">Variable IM_U8_MIN</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__widgets_8cpp_1aecd41aa4f75eaef7549c506d202181ce.html#exhale-variable-imgui-widgets-8cpp-1aecd41aa4f75eaef7549c506d202181ce"><span class="std std-ref">Variable ImStb::STB_TEXTEDIT_NEWLINE</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">File imgui_widgets.cpp</a><ul>
+<li><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-widgets-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_widgets.cpp</span></code>)</a></li>
+<li><a class="reference internal" href="#includes">Includes</a></li>
+<li><a class="reference internal" href="#namespaces">Namespaces</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#defines">Defines</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

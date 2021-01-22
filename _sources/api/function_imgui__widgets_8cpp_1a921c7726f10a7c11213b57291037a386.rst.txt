@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1a921c7726f10a7c11213b57291037a386:
+
+Function ImParseFormatTrimDecorations
+=====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImParseFormatTrimDecorations(const char *, char *, size_t)

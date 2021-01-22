@@ -1,0 +1,84 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImCurveEdit.cpp:
+
+File ImCurveEdit.cpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/ImCurveEdit.cpp``)
+-----------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImCurveEdit.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``imgui/ImCurveEdit.h``
+
+- ``imgui/imgui.h``
+
+- ``imgui/imgui_internal.h``
+
+- ``set`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_assetimporter.cpp`)
+
+- ``stdint.h``
+
+- ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_ImCurveEdit`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1a27381149ff613cdddd5a63d53a958b6a`
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1a9013f206cc3740c88b22291604233ea7`
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1a02f0a5e50811e3ad649a543ef2ca7bde`
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1a7cc8221ecd23d7e4ae71b1102d29a9f2`
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1a7d55d3bb7de5cfaa2d8c6ae227e6bcdb`
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1a2c0f08f35924c108842b45f57fc8306c`
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1a1e3add4ebfa8e1e89b42b954d09bd384`
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1ae5615add04774ec5310f9f4c6f7f1ad3`
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1a89b5426b2ea413653ca65ce4ad577fda`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define__im_curve_edit_8cpp_1ad331bcfc5026697e79431763161a9f18`
+

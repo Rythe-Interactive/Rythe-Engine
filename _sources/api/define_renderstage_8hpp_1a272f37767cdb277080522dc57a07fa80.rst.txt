@@ -1,0 +1,13 @@
+.. _exhale_define_renderstage_8hpp_1a272f37767cdb277080522dc57a07fa80:
+
+Define post_fx_priority
+=======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: post_fx_priority

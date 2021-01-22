@@ -17,14 +17,34 @@ Program Listing for File string_extra.hpp
    #include <vector>
    #include <sstream>
    #include <iterator>
-   #include <string>
+   #include <core/types/primitives.hpp>
    #include <cstring>
    
+   #include <Optick/optick.h>
+   
    namespace legion::core::common {
+   
+       inline bool ends_with(const std::string& src, cstring value)
+       {
+           auto valueLength = strlen(value);
+           if (src.size() < valueLength)
+               return false;
+   
+           std::string_view srcEnd(src.data() + (src.size() - valueLength), valueLength);
+   
+           for (int i = 0; i < valueLength; i++)
+           {
+               if (srcEnd[i] != value[i])
+                   return false;
+           }
+   
+           return true;
+       }
    
        template<typename StringType>
        inline size_t replace_items(StringType& source, const std::string& item, const std::string& value)
        {
+           OPTICK_EVENT();
            size_t count = 0;
            auto it = source.begin();
    
@@ -44,6 +64,7 @@ Program Listing for File string_extra.hpp
    
            bool operator()(char c) const
            {
+               OPTICK_EVENT();
                for (auto testChar = _chars; *testChar != 0; ++testChar)
                    if (*testChar == c) return true;
                return false;
@@ -62,6 +83,7 @@ Program Listing for File string_extra.hpp
        template <char token, char... tokens>
        bool str_tokens_helper(std::ctype<char>::mask* rc)
        {
+           OPTICK_EVENT();
            rc[token] = std::ctype<char>::space;
            if constexpr (sizeof...(tokens) != 0) str_tokens_helper<tokens...>(rc);
            return true;
@@ -78,10 +100,12 @@ Program Listing for File string_extra.hpp
            static mask const* get_table()
            {
                //create const and normal rc
-               static const mask* const_rc = classic_table();
+               static const mask* const_rc = std::use_facet<std::ctype<char>>(std::locale()).table();
                static mask rc[table_size];
                static auto memory = memcpy(rc, const_rc, table_size * sizeof(mask));
-               static bool memory2 = str_tokens_helper<token, tokens...>(rc);
+               static char memory1 = rc[' '] = std::ctype<char>::digit;
+               static char memory2 = rc['\t'] = std::ctype<char>::digit;
+               static bool memory3 = str_tokens_helper<token, tokens...>(rc);
                //set spaces
    
                return rc;
@@ -92,6 +116,7 @@ Program Listing for File string_extra.hpp
        template <char token_1, char... token>
        std::vector<std::string> split_string_at(const std::string& string)
        {
+           OPTICK_EVENT();
            //copy string into stringstream
            std::stringstream ss(string);
    
@@ -110,6 +135,7 @@ Program Listing for File string_extra.hpp
    
        template <const char* const delim, typename Range, typename Value = typename Range::value_type>
        std::string join_strings_with(Range const& elements) {
+           OPTICK_EVENT();
            std::ostringstream os;
            auto b = begin(elements), e = end(elements);
    
@@ -123,8 +149,10 @@ Program Listing for File string_extra.hpp
    
            return os.str();
        }
+   
        template <typename Range, typename Value = typename Range::value_type>
        std::string join_strings_with(Range const& elements, const char* const delim) {
+           OPTICK_EVENT();
            std::ostringstream os;
            auto b = begin(elements), e = end(elements);
    
@@ -141,6 +169,7 @@ Program Listing for File string_extra.hpp
    
        template <const char delim, typename Range, typename Value = typename Range::value_type>
        std::string join_strings_with(Range const& elements) {
+           OPTICK_EVENT();
            std::ostringstream os;
            auto b = begin(elements), e = end(elements);
    
@@ -158,6 +187,7 @@ Program Listing for File string_extra.hpp
        }
        template <typename Range, typename Value = typename Range::value_type>
        std::string join_strings_with(Range const& elements, char delim) {
+           OPTICK_EVENT();
            std::ostringstream os;
            auto b = begin(elements), e = end(elements);
    
@@ -177,6 +207,7 @@ Program Listing for File string_extra.hpp
        //remove given word from string at offset and return true if success and false on fail
        inline bool find_and_remove_at(std::string& src, const std::string& search, size_t offset = 0)
        {
+           OPTICK_EVENT();
            //create temporary
            size_t loc;
    
@@ -192,6 +223,7 @@ Program Listing for File string_extra.hpp
        //remove given word from string at offset and return the position
        inline size_t locate_and_delete_at(std::string& src, const std::string& search, size_t offset = 0)
        {
+           OPTICK_EVENT();
            //create temporary
            size_t loc;
    
@@ -208,6 +240,7 @@ Program Listing for File string_extra.hpp
        template <char token_1, char... tokens>
        inline size_t nearest_of_any_at(std::string string, size_t offset = 0)
        {
+           OPTICK_EVENT();
            //create tokens using variadic unfolding
            std::vector<char> tokensVector = { token_1 , tokens... };
    
@@ -231,12 +264,14 @@ Program Listing for File string_extra.hpp
        template <>
        inline std::vector<std::string> data_from_string_<std::vector<std::string>>(std::string str)
        {
+           OPTICK_EVENT();
            return split_string_at<',', ' '>(str);
        }
    
        template <typename T>
        inline T data_from_string_(std::string str)
        {
+           OPTICK_EVENT();
            std::stringstream temp(str);
            T value;
            temp >> value;
@@ -253,6 +288,7 @@ Program Listing for File string_extra.hpp
        template <>
        inline std::string string_from_data<std::vector<std::string>>(std::vector<std::string> data)
        {
+           OPTICK_EVENT();
            std::string ret;
            for (const std::string& str : data)
                ret += str;
@@ -263,6 +299,7 @@ Program Listing for File string_extra.hpp
        template <typename t>
        inline std::string string_from_data(t data)
        {
+           OPTICK_EVENT();
            std::stringstream temp;
            temp << data;
            return temp.str();

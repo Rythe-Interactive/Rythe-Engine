@@ -1,0 +1,13 @@
+.. _exhale_typedef_mesh__splitter__typedefs_8hpp_1a86cfd5d08f6c8fbed905701bce664fc8:
+
+Typedef legion::physics::VertexIndexToHalfEdgePtr
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_typedefs.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::physics::VertexIndexToHalfEdgePtr

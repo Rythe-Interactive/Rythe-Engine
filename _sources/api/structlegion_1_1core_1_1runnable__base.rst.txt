@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1core_1_1runnable__base:
+
+Struct runnable_base
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_runnable.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public legion::core::runnable< Func >`` (:ref:`exhale_class_structlegion_1_1core_1_1runnable`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::runnable_base
+   :members:
+   :protected-members:
+   :undoc-members:

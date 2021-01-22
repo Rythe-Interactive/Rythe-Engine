@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1math_1ace96b6b04d3fdba65afe2db3aea2ae82:
+
+Function legion::core::math::pointToPlane
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_geometry.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::pointToPlane(const vec3&, const vec3&, const vec3&)

@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__impl__opengl3_8cpp_1a26abda8950dc2d4adf6e2a5171c2445a:
+
+Variable g_ElementsHandle
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: g_ElementsHandle

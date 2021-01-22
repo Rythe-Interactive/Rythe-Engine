@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a5aa67d6814b96ce1e93b089424a78173:
+
+Function ImTextCharToUtf8
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImTextCharToUtf8(char *, int, unsigned int)

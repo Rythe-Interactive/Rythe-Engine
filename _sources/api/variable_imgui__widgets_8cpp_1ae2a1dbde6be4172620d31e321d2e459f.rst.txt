@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__widgets_8cpp_1ae2a1dbde6be4172620d31e321d2e459f:
+
+Variable IM_U32_MAX
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: IM_U32_MAX

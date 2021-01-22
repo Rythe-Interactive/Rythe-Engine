@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1ab668c3f8826480d9a0d7ee3856dce9ca:
+
+Function imgui::gizmo::SetRect
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::SetRect(float, float, float, float)

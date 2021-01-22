@@ -13,17 +13,10 @@ Namespace legion::debug
 
 
 
-Classes
--------
-
-
-- :ref:`exhale_struct_structlegion_1_1debug_1_1debug__line`
-
-
 Functions
 ---------
 
 
-- :ref:`exhale_function_debugrendering_8hpp_1aa1e66b3bc468491c64d0bd74db002f8a`
+- :ref:`exhale_function_debugrendering_8hpp_1ac68069c24d039e529280c33fd8722602`
 
-- :ref:`exhale_function_debugrendering_8hpp_1a16f43664217b0cd69ddd598711a62406`
+- :ref:`exhale_function_debugrendering_8hpp_1ab935709c7b0cd5654e4418cf02d48d22`

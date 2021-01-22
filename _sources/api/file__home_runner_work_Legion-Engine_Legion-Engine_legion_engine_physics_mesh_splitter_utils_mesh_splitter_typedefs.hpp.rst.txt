@@ -1,0 +1,79 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_typedefs.hpp:
+
+File mesh_splitter_typedefs.hpp
+===============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp``)
+-----------------------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_typedefs.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
+
+- ``physics/mesh_splitter_utils/mesh_half_edge.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_half_edge.hpp`)
+
+- ``physics/mesh_splitter_utils/primitive_mesh.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.h`)
+
+- ``physics/mesh_splitter_utils/splittable_polygon.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_half_edge_finder.h`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersecting_polygon_organizer.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersection_edge_info.h`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_debug_helpers.h`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_legion__physics`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1a53037ea411ffbe9ac39e3862045a69c4`
+
+- :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1ac22df5277e2553777688a72132d2b403`
+
+- :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1a3041e1e9a86e0706c4c1a68f6d29918f`
+
+- :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1a86cfd5d08f6c8fbed905701bce664fc8`
+

@@ -62,6 +62,7 @@
 
     <span class="kt">void</span> <span class="n">Context</span><span class="o">::</span><span class="n">init</span><span class="p">()</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">if</span><span class="p">(</span><span class="n">m_initialized</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span> <span class="c1">// if the context already exists do not initialize</span>
 
         <span class="n">cl_uint</span> <span class="n">ret_num_devices</span><span class="p">;</span>
@@ -135,7 +136,8 @@
 
     <span class="n">Program</span> <span class="n">Context</span><span class="o">::</span><span class="n">createProgram</span><span class="p">(</span><span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="k">return</span> <span class="n">Program</span><span class="p">(</span><span class="n">m_context</span><span class="p">,</span><span class="n">m_device_id</span><span class="p">,</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nf">Program</span><span class="p">(</span><span class="n">m_context</span><span class="p">,</span><span class="n">m_device_id</span><span class="p">,</span><span class="n">data</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

@@ -1,0 +1,13 @@
+.. _exhale_function__im_sequencer_8cpp_1af3332a09d13f712221c2f6409f89eeeb:
+
+Function imgui::sequencer::max
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImSequencer.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::sequencer::max(int, int)

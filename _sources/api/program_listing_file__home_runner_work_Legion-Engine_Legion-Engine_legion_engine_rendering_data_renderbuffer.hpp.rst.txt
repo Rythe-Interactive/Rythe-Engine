@@ -1,0 +1,52 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_renderbuffer.hpp:
+
+Program Listing for File renderbuffer.hpp
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_renderbuffer.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/renderbuffer.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <application/application.hpp>
+   
+   namespace legion::rendering
+   {
+       struct renderbuffer
+       {
+       private:
+           // Managed resource with the renderbuffer id, also has the responsibility of deleting the renderbuffer after all copies of this renderbuffer have been destroyed.
+           common::managed_resource<app::gl_id> m_id = common::managed_resource<app::gl_id>(nullptr);
+           // Amount of samples of the renderbuffer. 0 if the renderbuffer isn't multi-sampled.
+           uint m_samples = 0;
+           GLenum m_internalformat;
+       public:
+   
+           renderbuffer() = default;
+   
+           renderbuffer(GLenum internalformat, math::ivec2 resolution, uint samples = 0);
+   
+           renderbuffer(GLenum internalformat, int width, int height, uint samples = 0);
+   
+   
+           renderbuffer(GLenum internalformat, uint samples = 0);
+   
+           void bind() const;
+   
+           static void release();
+   
+           L_NODISCARD app::gl_id id() const;
+   
+           L_NODISCARD size_type samples() const;
+   
+           L_NODISCARD GLenum format() const;
+   
+           L_NODISCARD math::ivec2 size() const;
+   
+           void resize(math::ivec2 newSize) const;
+   
+       };
+   }

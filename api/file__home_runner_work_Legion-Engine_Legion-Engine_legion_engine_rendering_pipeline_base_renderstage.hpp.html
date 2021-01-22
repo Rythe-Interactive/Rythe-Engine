@@ -50,9 +50,11 @@
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-renderstage-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/base/renderstage.hpp</span></code>)</a></p></li>
-<li><p><a class="reference internal" href="#included-by" id="id2">Included By</a></p></li>
-<li><p><a class="reference internal" href="#namespaces" id="id3">Namespaces</a></p></li>
-<li><p><a class="reference internal" href="#classes" id="id4">Classes</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id4">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id5">Classes</a></p></li>
+<li><p><a class="reference internal" href="#defines" id="id6">Defines</a></p></li>
 </ul>
 </div>
 <div class="section" id="definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-renderstage-hpp">
@@ -63,10 +65,29 @@
 </ul>
 </div>
 </div>
+<div class="section" id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">application/application.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-application-application-hpp"><span class="std std-ref">File application.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rendering/components/camera.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_camera.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-components-camera-hpp"><span class="std std-ref">File camera.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rendering/pipeline/base/pipelinebase.hpp</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipelinebase.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-pipelinebase-hpp"><span class="std std-ref">File pipelinebase.hpp</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rendering/pipeline/base/renderstage.inl</span></code> (<a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.inl.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-renderstage-inl"><span class="std std-ref">File renderstage.inl</span></a>)</p></li>
+</ul>
+</div>
 <div class="section" id="included-by">
 <h2>Included By<a class="headerlink" href="#included-by" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_pipeline.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-pipeline-hpp"><span class="std std-ref">File pipeline.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-renderstage-cpp"><span class="std std-ref">File renderstage.cpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_clearstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-clearstage-hpp"><span class="std std-ref">File clearstage.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_debugrenderstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-debugrenderstage-hpp"><span class="std std-ref">File debugrenderstage.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_framebufferresizestage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-framebufferresizestage-hpp"><span class="std std-ref">File framebufferresizestage.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_lightbufferstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-lightbufferstage-hpp"><span class="std std-ref">File lightbufferstage.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_meshbatchingstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-meshbatchingstage-hpp"><span class="std std-ref">File meshbatchingstage.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_meshrenderstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-meshrenderstage-hpp"><span class="std std-ref">File meshrenderstage.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_postprocessingstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-postprocessingstage-hpp"><span class="std std-ref">File postprocessingstage.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_submitstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-stages-submitstage-hpp"><span class="std std-ref">File submitstage.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_gui_stages_imguirenderstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-gui-stages-imguirenderstage-hpp"><span class="std std-ref">File imguirenderstage.hpp</span></a></p></li>
 </ul>
 </div>
 <div class="section" id="namespaces">
@@ -78,7 +99,20 @@
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Class RenderStage</span></a></p></li>
+<li><p><a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a></p></li>
+<li><p><a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage_base.html#exhale-class-classlegion-1-1rendering-1-1-render-stage-base"><span class="std std-ref">Class RenderStageBase</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="defines">
+<h2>Defines<a class="headerlink" href="#defines" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="define_renderstage_8hpp_1a56983329d396b5040ef4e82a9ea0ec5b.html#exhale-define-renderstage-8hpp-1a56983329d396b5040ef4e82a9ea0ec5b"><span class="std std-ref">Define opaque_priority</span></a></p></li>
+<li><p><a class="reference internal" href="define_renderstage_8hpp_1a272f37767cdb277080522dc57a07fa80.html#exhale-define-renderstage-8hpp-1a272f37767cdb277080522dc57a07fa80"><span class="std std-ref">Define post_fx_priority</span></a></p></li>
+<li><p><a class="reference internal" href="define_renderstage_8hpp_1a9785219a994244b8bc877391ca17325c.html#exhale-define-renderstage-8hpp-1a9785219a994244b8bc877391ca17325c"><span class="std std-ref">Define setup_priority</span></a></p></li>
+<li><p><a class="reference internal" href="define_renderstage_8hpp_1a2ed526078828608e71162458327b6a9f.html#exhale-define-renderstage-8hpp-1a2ed526078828608e71162458327b6a9f"><span class="std std-ref">Define submit_priority</span></a></p></li>
+<li><p><a class="reference internal" href="define_renderstage_8hpp_1a59df9ef5b8397aa2f9d770fdce165d04.html#exhale-define-renderstage-8hpp-1a59df9ef5b8397aa2f9d770fdce165d04"><span class="std std-ref">Define transparent_priority</span></a></p></li>
+<li><p><a class="reference internal" href="define_renderstage_8hpp_1a632dd8d5b7a479dbc14970cb766b5a17.html#exhale-define-renderstage-8hpp-1a632dd8d5b7a479dbc14970cb766b5a17"><span class="std std-ref">Define ui_priority</span></a></p></li>
+<li><p><a class="reference internal" href="define_renderstage_8hpp_1aebbbdbd9fb5282205ba972273cb6891d.html#exhale-define-renderstage-8hpp-1aebbbdbd9fb5282205ba972273cb6891d"><span class="std std-ref">Define volumetric_priority</span></a></p></li>
 </ul>
 </div>
 </div>
@@ -94,9 +128,11 @@
   <ul>
 <li><a class="reference internal" href="#">File renderstage.hpp</a><ul>
 <li><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-renderstage-hpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/base/renderstage.hpp</span></code>)</a></li>
+<li><a class="reference internal" href="#includes">Includes</a></li>
 <li><a class="reference internal" href="#included-by">Included By</a></li>
 <li><a class="reference internal" href="#namespaces">Namespaces</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#defines">Defines</a></li>
 </ul>
 </li>
 </ul>

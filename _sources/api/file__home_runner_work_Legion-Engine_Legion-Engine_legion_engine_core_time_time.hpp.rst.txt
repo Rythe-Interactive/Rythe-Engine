@@ -31,6 +31,8 @@ Includes
 
 - ``core/time/clock.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp`)
 
+- ``core/time/defaults.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_defaults.hpp`)
+
 - ``core/time/time_span.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_time_span.hpp`)
 
 

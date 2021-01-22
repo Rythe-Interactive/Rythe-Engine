@@ -12,6 +12,7 @@ Inheritance Relationships
 Derived Types
 *************
 
+- ``public legion::core::ecs::archetype< mesh_filter, mesh_renderer >`` (:ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1archetype`)
 - ``public legion::core::ecs::archetype< position, rotation, scale >`` (:ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1archetype`)
 - ``public legion::core::ecs::archetype< component_type, component_types >`` (:ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1archetype`)
 

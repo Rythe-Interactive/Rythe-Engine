@@ -52,11 +52,14 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/containers/hashed_sparse_set.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/entity_handle.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/archetype.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/component_container.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">ecs</span>
 <span class="p">{</span>
     <span class="k">class</span> <span class="nc">QueryRegistry</span><span class="p">;</span>
     <span class="k">class</span> <span class="nc">EcsRegistry</span><span class="p">;</span>
+    <span class="k">using</span> <span class="n">entity_container</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">entity_handle</span><span class="o">&gt;</span><span class="p">;</span>
 
     <span class="k">class</span> <span class="nc">EntityQuery</span>
     <span class="p">{</span>
@@ -64,6 +67,7 @@
         <span class="n">QueryRegistry</span><span class="o">*</span> <span class="n">m_registry</span><span class="p">;</span>
         <span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">m_ecsRegistry</span><span class="p">;</span>
         <span class="n">id_type</span> <span class="n">m_id</span><span class="p">;</span>
+        <span class="k">const</span> <span class="n">entity_container</span><span class="o">*</span> <span class="n">m_localcopy</span><span class="p">;</span>
 
     <span class="k">public</span><span class="o">:</span>
         <span class="n">EntityQuery</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="n">QueryRegistry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">ecsRegistry</span><span class="p">);</span>
@@ -76,14 +80,58 @@
         <span class="n">EntityQuery</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">EntityQuery</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">);</span>
         <span class="n">EntityQuery</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">EntityQuery</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">);</span>
 
-        <span class="n">entity_set</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">component_container_base</span><span class="o">&amp;</span> <span class="n">get</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
 
-        <span class="n">entity_set</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+        <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">get</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">get</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()).</span><span class="k">template</span> <span class="n">cast</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">submit</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">submit</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">submit</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">queryEntities</span><span class="p">();</span>
+
+        <span class="n">entity_container</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">entity_container</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">id_type</span> <span class="nf">id</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_id</span><span class="p">;</span> <span class="p">}</span>
 
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">addArchetype</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">addArchetypeImpl</span><span class="o">&lt;</span><span class="n">archetype</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple_size</span><span class="o">&lt;</span><span class="n">archetype</span><span class="o">&gt;::</span><span class="n">value</span><span class="o">&gt;</span><span class="p">{});</span>
+        <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">archetype</span><span class="p">,</span><span class="kt">size_t</span> <span class="p">...</span> <span class="n">I</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">addArchetypeImpl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">I</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">(</span><span class="n">addComponentType</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple_element</span><span class="o">&lt;</span><span class="n">I</span><span class="p">,</span><span class="n">archetype</span><span class="o">&gt;&gt;</span><span class="p">),...);</span>
+        <span class="p">}</span>
+    <span class="k">public</span><span class="o">:</span>
+
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
         <span class="kt">void</span> <span class="n">addComponentType</span><span class="p">()</span> <span class="p">{</span> <span class="n">addComponentType</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span> <span class="p">}</span>
+
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">archetype</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">N</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple_size</span><span class="o">&lt;</span><span class="n">archetype</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span><span class="k">typename</span> <span class="n">Indicies</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;&gt;</span>
+        <span class="kt">void</span> <span class="n">addArchetype</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">addArchetypeEnumerated</span><span class="o">&lt;</span><span class="n">archetype</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Indicies</span><span class="p">{});</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">archetype</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="p">...</span> <span class="n">I</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">addArchetypeEnumerated</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">I</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="p">(</span><span class="n">addComponentType</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple_element</span><span class="o">&lt;</span><span class="n">I</span><span class="p">,</span><span class="n">archetype</span><span class="o">&gt;&gt;</span><span class="p">(),...);</span>
+        <span class="p">}</span>
 
         <span class="kt">void</span> <span class="n">addComponentType</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
 

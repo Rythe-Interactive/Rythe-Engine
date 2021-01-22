@@ -15,24 +15,35 @@ Program Listing for File queryregistry.hpp
    #include <core/containers/containers.hpp>
    #include <core/types/primitives.hpp>
    #include <core/ecs/entityquery.hpp>
+   #include <core/ecs/archetype.hpp>
+   #include <core/ecs/component_container.hpp>
+   #include <core/time/clock.hpp>
    
    namespace legion::core::ecs
    {
        class EcsRegistry;
        class entity_handle;
    
-       using entity_set = hashed_sparse_set<entity_handle, std::hash<id_type>>;
+       using entity_set = hashed_sparse_set<entity_handle>;
+       using entity_container = std::vector<entity_handle>;
    
        class QueryRegistry
        {
            friend class EntityQuery;
        private:
            EcsRegistry& m_registry;
-           async::readonly_rw_spinlock m_entityLock;
-           sparse_map<id_type, entity_set*> m_entityLists;
-           async::readonly_rw_spinlock m_referenceLock;
+   
+           mutable async::rw_spinlock m_entityLock;
+           sparse_map<id_type, std::pair<float, entity_set>> m_entityLists;
+   
+           static thread_local std::unordered_map<id_type, std::pair<float, entity_container>> m_localCopies;
+           static thread_local std::unordered_map<id_type, std::unordered_map<id_type, std::unique_ptr<component_container_base>>> m_localComponents;
+           static time::clock<fast_time> m_clock;
+   
+           mutable async::rw_spinlock m_referenceLock;
            sparse_map<id_type, size_type> m_references;
-           async::readonly_rw_spinlock m_componentLock;
+   
+           mutable async::rw_spinlock m_componentLock;
            sparse_map<id_type, hashed_sparse_set<id_type>> m_componentTypes;
    
            id_type m_lastQueryId = 1;
@@ -48,9 +59,6 @@ Program Listing for File queryregistry.hpp
    
            ~QueryRegistry()
            {
-               for (auto [_, entityList] : m_entityLists)
-                   delete entityList;
-   
                m_validRegistries.erase(this);
            }
    
@@ -68,15 +76,37 @@ Program Listing for File queryregistry.hpp
            EntityQuery createQuery()
            {
                hashed_sparse_set<id_type> componentTypeIds;
-               (componentTypeIds.insert(typeHash<component_types>()), ...);
+               (createQuerySingle<component_types>(componentTypeIds), ...);
                return createQuery(componentTypeIds);
            }
+       private:
+           template <typename T>
+           void createQuerySingle(hashed_sparse_set<id_type>& h)
+           {
+               if constexpr (std::is_base_of_v<archetype_base,std::remove_all_extents_t<std::decay_t<T>>>)
+               {
+                   createQueryArchetype<T>(h,std::make_index_sequence<std::tuple_size<typename T::handleGroup>::value>{});
+               } else
+               {
+                   h.insert(typeHash<T>());
+               }
+           }
    
+           template <typename T,size_t ... I>
+           void createQueryArchetype(hashed_sparse_set<id_type>& h,std::index_sequence<I...>)
+           {
+               (h.insert(typeHash<typename ch_yield_type<std::tuple_element_t<I,typename T::handleGroup>>::type>()),...);
+           }
+   
+       public:
            EntityQuery createQuery(const hashed_sparse_set<id_type>& componentTypes);
    
            const hashed_sparse_set<id_type>& getComponentTypes(id_type queryId);
    
-           const entity_set& getEntities(id_type queryId);
+           const entity_container& getEntities(id_type queryId);
+   
+           component_container_base& getComponents(id_type queryId, id_type componentTypeId);
+           void submit(id_type queryId, id_type componentTypeId);
    
            void addReference(id_type queryId);
    

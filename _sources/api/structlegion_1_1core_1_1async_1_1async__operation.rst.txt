@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1core_1_1async_1_1async__operation:
+
+Template Struct async_operation
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_operation.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public legion::core::async::job_operation< Func, CompleteFunc >`` (:ref:`exhale_struct_structlegion_1_1core_1_1async_1_1job__operation`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::async::async_operation
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a530b17e6b8443324fb4fe88f2d4c2f08:
+
+Function imgui::gizmo::DrawHatchedAxis
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::DrawHatchedAxis(const vec_t&)

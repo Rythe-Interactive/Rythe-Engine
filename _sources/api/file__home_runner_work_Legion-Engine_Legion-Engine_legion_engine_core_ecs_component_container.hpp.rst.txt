@@ -29,31 +29,9 @@ Includes
 --------
 
 
-- ``cereal/archives/json.hpp``
-
-- ``cereal/archives/portable_binary.hpp``
-
-- ``cereal/types/memory.hpp``
-
-- ``cereal/types/unordered_map.hpp``
-
-- ``core/async/readonly_rw_spinlock.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp`)
-
-- ``core/async/transferable_atomic.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_transferable_atomic.hpp`)
-
-- ``core/containers/atomic_sparse_map.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`)
-
-- ``core/ecs/component_meta.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_meta.hpp`)
-
-- ``core/events/eventbus.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_eventbus.hpp`)
-
-- ``core/events/events.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_events.hpp`)
-
-- ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)
-
-- ``core/serialization/serializationmeta.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationmeta.hpp`)
-
 - ``core/types/types.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_types.hpp`)
+
+- ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
 
 
 
@@ -61,13 +39,13 @@ Included By
 -----------
 
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_pool.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecs.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_entityquery.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.cpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_queryregistry.hpp`
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_defaultevents.hpp`
 
 
 
@@ -83,7 +61,18 @@ Classes
 -------
 
 
-- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__container`
+- :ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1component__container_3_01std_1_1nullptr__t_01_4`
 
-- :ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__container__base`
+- :ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1component__container_3_01void_01_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1component__container__base`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1component__container`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_component__container_8hpp_1a943b74a24dd28dec2c31423e4a48dc66`
 

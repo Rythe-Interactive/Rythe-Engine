@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File particle_system_manager.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File particle_system_manager.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-particle-system-manager-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-systems-particle-system-manager-hpp"></span><h1>Program Listing for File particle_system_manager.hpp<a class="headerlink" href="#program-listing-for-file-particle-system-manager-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_particle_system_manager.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-systems-particle-system-manager-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/systems/particle_system_manager.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/particle_system_base.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">ParticleSystemManager</span> <span class="o">:</span> <span class="k">public</span> <span class="n">System</span><span class="o">&lt;</span><span class="n">ParticleSystemManager</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">ParticleSystemManager</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">ParticleSystemBase</span><span class="o">::</span><span class="n">m_registry</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">void</span> <span class="n">setup</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">createProcess</span><span class="o">&lt;&amp;</span><span class="n">ParticleSystemManager</span><span class="o">::</span><span class="n">update</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Update&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">static</span> <span class="k">auto</span> <span class="n">emitters</span> <span class="o">=</span> <span class="n">createQuery</span><span class="o">&lt;</span><span class="n">particle_emitter</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">emitters</span><span class="p">.</span><span class="n">queryEntities</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">entity</span> <span class="p">:</span> <span class="n">emitters</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//Gets emitter handle and emitter.</span>
+                <span class="k">auto</span> <span class="n">emitterHandle</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">particle_emitter</span><span class="o">&gt;</span><span class="p">();</span>
+                <span class="k">auto</span> <span class="n">emit</span> <span class="o">=</span> <span class="n">emitterHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+                <span class="c1">//Checks if emitter was already initialized.</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">emit</span><span class="p">.</span><span class="n">setupCompleted</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="c1">//If NOT then it goes through the particle system setup.</span>
+                    <span class="n">emit</span><span class="p">.</span><span class="n">setupCompleted</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">emitterHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">emit</span><span class="p">);</span>
+
+                    <span class="k">const</span> <span class="n">ParticleSystemBase</span><span class="o">*</span> <span class="n">particleSystem</span> <span class="o">=</span> <span class="n">emit</span><span class="p">.</span><span class="n">particleSystemHandle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+                    <span class="n">particleSystem</span><span class="o">-&gt;</span><span class="n">setup</span><span class="p">(</span><span class="n">emitterHandle</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="c1">//If it IS then it runs the emitter through the particle system update.</span>
+                    <span class="k">const</span> <span class="n">ParticleSystemBase</span><span class="o">*</span> <span class="n">particleSystem</span> <span class="o">=</span> <span class="n">emit</span><span class="p">.</span><span class="n">particleSystemHandle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+                    <span class="n">particleSystem</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">emit</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">,</span> <span class="n">emitterHandle</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_particle_system_manager.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,32 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_split_params.hpp:
+
+Program Listing for File mesh_split_params.hpp
+==============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_split_params.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/mesh_split_params.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   
+   #include <core/core.hpp>
+   
+   namespace legion::physics
+   {
+       struct MeshSplitParams
+       {
+           MeshSplitParams(math::vec3 pPlanePosition,math::vec3 pPlaneNormal)
+               : planePostion(pPlanePosition), planeNormal(pPlaneNormal)
+           {
+   
+           }
+   
+           math::vec3 planePostion;
+           math::vec3 planeNormal;
+       };
+   }
+   
+   

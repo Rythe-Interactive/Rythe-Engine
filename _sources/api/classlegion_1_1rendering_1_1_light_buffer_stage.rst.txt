@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1rendering_1_1_light_buffer_stage:
+
+Class LightBufferStage
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_lightbufferstage.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::rendering::RenderStage< LightBufferStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::LightBufferStage
+   :members:
+   :protected-members:
+   :undoc-members:

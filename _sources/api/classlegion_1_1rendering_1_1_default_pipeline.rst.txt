@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1rendering_1_1_default_pipeline:
+
+Class DefaultPipeline
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_defaultpipeline.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::rendering::RenderPipeline< DefaultPipeline >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_pipeline`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::DefaultPipeline
+   :members:
+   :protected-members:
+   :undoc-members:

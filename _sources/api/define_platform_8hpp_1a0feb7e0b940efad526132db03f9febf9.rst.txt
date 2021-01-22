@@ -1,0 +1,13 @@
+.. _exhale_define_platform_8hpp_1a0feb7e0b940efad526132db03f9febf9:
+
+Define CONCAT
+=============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: CONCAT

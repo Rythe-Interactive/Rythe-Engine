@@ -19,15 +19,16 @@ Program Listing for File image.cpp
        std::mutex image::m_refsLock;
    
        const std::vector<math::color> ImageCache::m_nullColors;
-       async::readonly_rw_spinlock ImageCache::m_nullLock;
+       async::rw_spinlock ImageCache::m_nullLock;
    
-       std::unordered_map<id_type, std::unique_ptr<std::pair<async::readonly_rw_spinlock, image>>> ImageCache::m_images;
-       async::readonly_rw_spinlock ImageCache::m_imagesLock;
+       std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, image>>> ImageCache::m_images;
+       async::rw_spinlock ImageCache::m_imagesLock;
        std::unordered_map<id_type, std::unique_ptr<std::vector<math::color>>> ImageCache::m_colors;
-       async::readonly_rw_spinlock ImageCache::m_colorsLock;
+       async::rw_spinlock ImageCache::m_colorsLock;
    
        void image::apply_raw(bool lazyApply)
        {
+           OPTICK_EVENT();
            {
                async::readwrite_guard guard(ImageCache::m_colorsLock);
                ImageCache::m_colors.erase(m_id);
@@ -38,16 +39,19 @@ Program Listing for File image.cpp
    
        const std::vector<math::color>& image::read_colors()
        {
+           OPTICK_EVENT();
            return ImageCache::read_colors(m_id);
        }
    
        size_type image::data_size()
        {
+           OPTICK_EVENT();
            return m_dataSize;
        }
    
        math::ivec2 image_handle::size()
        {
+           OPTICK_EVENT();
            auto [lock, image] = ImageCache::get_raw_image(id);
            async::readonly_guard guard(lock);
            return image.size;
@@ -55,21 +59,25 @@ Program Listing for File image.cpp
    
        const std::vector<math::color>& image_handle::read_colors()
        {
+           OPTICK_EVENT();
            return ImageCache::read_colors(id);
        }
    
-       std::pair<async::readonly_rw_spinlock&, image&> image_handle::get_raw_image()
+       std::pair<async::rw_spinlock&, image&> image_handle::get_raw_image()
        {
+           OPTICK_EVENT();
            return ImageCache::get_raw_image(id);
        }
    
        void image_handle::destroy()
        {
+           OPTICK_EVENT();
            ImageCache::destroy_image(id);
        }
    
        const std::vector<math::color>& ImageCache::process_raw(id_type id)
        {
+           OPTICK_EVENT();
            {
                async::readonly_guard guard(m_imagesLock);
                if (!m_images.count(id))
@@ -254,14 +262,16 @@ Program Listing for File image.cpp
    
        const std::vector<math::color>& ImageCache::read_colors(id_type id)
        {
+           OPTICK_EVENT();
            async::readonly_guard guard(m_colorsLock);
            if (!m_colors.count(id))
                return process_raw(id);
            return *m_colors[id];
        }
    
-       std::pair<async::readonly_rw_spinlock&, image&> ImageCache::get_raw_image(id_type id)
+       std::pair<async::rw_spinlock&, image&> ImageCache::get_raw_image(id_type id)
        {
+           OPTICK_EVENT();
            async::readonly_guard guard(m_colorsLock);
            auto& [lock, image] = *m_images[id];
            return std::make_pair(std::ref(lock), std::ref(image));
@@ -269,6 +279,7 @@ Program Listing for File image.cpp
    
        image_handle ImageCache::create_image(const std::string& name, const filesystem::view& file, image_import_settings settings)
        {
+           OPTICK_EVENT();
            id_type id = nameHash(name);
    
            {
@@ -287,9 +298,10 @@ Program Listing for File image.cpp
    
            {
                async::readwrite_guard guard(m_imagesLock);
-               auto* pair_ptr = new std::pair<async::readonly_rw_spinlock, image>(std::make_pair<async::readonly_rw_spinlock, image>(async::readonly_rw_spinlock(), std::move(result)));
+               auto* pair_ptr = new std::pair<async::rw_spinlock, image>();
+               pair_ptr->second = std::move(result);
                pair_ptr->second.m_id = id;
-               m_images.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::readonly_rw_spinlock, image>>(pair_ptr)));
+               m_images.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, image>>(pair_ptr)));
            }
    
            return { id };
@@ -297,6 +309,7 @@ Program Listing for File image.cpp
    
        image_handle ImageCache::get_handle(const std::string& name)
        {
+           OPTICK_EVENT();
            id_type id = nameHash(name);
            async::readonly_guard guard(m_imagesLock);
            if (m_images.count(id))
@@ -306,6 +319,7 @@ Program Listing for File image.cpp
    
        image_handle ImageCache::get_handle(id_type id)
        {
+           OPTICK_EVENT();
            async::readonly_guard guard(m_imagesLock);
            if (m_images.count(id))
                return { id };
@@ -314,6 +328,7 @@ Program Listing for File image.cpp
    
        void ImageCache::destroy_image(const std::string& name)
        {
+           OPTICK_EVENT();
            id_type id = nameHash(name);
    
            {
@@ -333,6 +348,7 @@ Program Listing for File image.cpp
    
        void ImageCache::destroy_image(id_type id)
        {
+           OPTICK_EVENT();
            {
                async::readwrite_guard guard(m_imagesLock);
                if (m_images.count(id))

@@ -33,6 +33,8 @@ Includes
 
 - ``application/events/windowinputevents.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_events_windowinputevents.hpp`)
 
+- ``numeric``
+
 
 
 Included By
@@ -58,6 +60,8 @@ Classes
 
 
 - :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1action__data`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1axis__command__queue`
 
 - :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1axis__data`
 

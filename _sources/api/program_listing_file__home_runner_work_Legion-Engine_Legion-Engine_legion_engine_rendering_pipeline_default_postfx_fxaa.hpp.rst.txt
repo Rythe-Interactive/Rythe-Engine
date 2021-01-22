@@ -1,0 +1,30 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_fxaa.hpp:
+
+Program Listing for File fxaa.hpp
+=================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_fxaa.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/default/postfx/fxaa.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <rendering/data/postprocessingeffect.hpp>
+   #include <rendering/util/bindings.hpp>
+   
+   namespace legion::rendering
+   {
+       class FXAA : public PostProcessingEffect<FXAA>
+       {
+       private:
+           shader_handle m_fxaaShader;
+       public:
+           void setup(app::window& context) override;
+   
+           void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime);
+       };
+   
+   
+   }

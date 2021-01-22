@@ -29,6 +29,8 @@ Includes
 --------
 
 
+- ``CL/cl_gl.h``
+
 - ``core/compute/buffer.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp`)
 
 - ``core/logging/logging.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp`)
@@ -49,5 +51,5 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_buffer_8cpp_1a695235fb2d9e5438db1f87bd07d2c9f6`
+- :ref:`exhale_function_core_2compute_2buffer_8cpp_1a695235fb2d9e5438db1f87bd07d2c9f6`
 

@@ -16,6 +16,7 @@ Files
 -----
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_defaults.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_time.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_time_span.hpp`
 

@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File tonemapping.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File tonemapping.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-tonemapping-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-postfx-tonemapping-cpp"></span><h1>Program Listing for File tonemapping.cpp<a class="headerlink" href="#program-listing-for-file-tonemapping-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_tonemapping.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-postfx-tonemapping-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/default/postfx/tonemapping.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/default/postfx/tonemapping.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">id_type</span><span class="o">&gt;</span> <span class="n">Tonemapping</span><span class="o">::</span><span class="n">m_currentShader</span> <span class="o">=</span> <span class="p">{</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;aces tonemapping&quot;</span><span class="p">)</span> <span class="p">};</span>
+
+    <span class="kt">void</span> <span class="n">Tonemapping</span><span class="o">::</span><span class="n">setAlgorithm</span><span class="p">(</span><span class="n">tonemapping_type</span> <span class="n">type</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">acesId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;aces tonemapping&quot;</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">reinhardId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;reinhard tonemapping&quot;</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">reinhardJodieId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;reinhard jodie tonemapping&quot;</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">legionId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;legion tonemapping&quot;</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">unreal3Id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;unreal3 tonemapping&quot;</span><span class="p">);</span>
+
+        <span class="k">switch</span> <span class="p">(</span><span class="n">type</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="k">case</span> <span class="n">tonemapping_type</span><span class="o">::</span><span class="nl">aces</span><span class="p">:</span>
+            <span class="n">m_currentShader</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">acesId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="n">tonemapping_type</span><span class="o">::</span><span class="nl">reinhard</span><span class="p">:</span>
+            <span class="n">m_currentShader</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">reinhardId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="n">tonemapping_type</span><span class="o">::</span><span class="nl">reinhard_jodie</span><span class="p">:</span>
+            <span class="n">m_currentShader</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">reinhardJodieId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="n">tonemapping_type</span><span class="o">::</span><span class="nl">legion</span><span class="p">:</span>
+            <span class="n">m_currentShader</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">legionId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="n">tonemapping_type</span><span class="o">::</span><span class="nl">unreal3</span><span class="p">:</span>
+            <span class="n">m_currentShader</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">unreal3Id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="n">m_currentShader</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">legionId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Tonemapping</span><span class="o">::</span><span class="n">setup</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">using</span> <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">fs</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
+        <span class="n">rendering</span><span class="o">::</span><span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;aces tonemapping&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/aces.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">rendering</span><span class="o">::</span><span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;reinhard tonemapping&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/reinhard.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">rendering</span><span class="o">::</span><span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;reinhard jodie tonemapping&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/reinhardjodie.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">rendering</span><span class="o">::</span><span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;legion tonemapping&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/legiontonemap.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">rendering</span><span class="o">::</span><span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;unreal3 tonemapping&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/unreal3.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">addRenderPass</span><span class="o">&lt;&amp;</span><span class="n">Tonemapping</span><span class="o">::</span><span class="n">renderPass</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">exposure</span> <span class="o">=</span> <span class="mf">0.5f</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Tonemapping</span><span class="o">::</span><span class="n">renderPass</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">texture_handle</span> <span class="n">colortexture</span><span class="p">,</span> <span class="n">texture_handle</span> <span class="n">depthtexture</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">exposureId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;exposure&quot;</span><span class="p">);</span>
+        <span class="c1">//static bool firstFrame = true;</span>
+
+        <span class="cm">/*auto tex = std::get&lt;texture_handle&gt;(fbo.getAttachment(GL_COLOR_ATTACHMENT0)).get_texture();</span>
+
+<span class="cm">        auto size = tex.size();</span>
+
+<span class="cm">        size_type maxMip = math::floor(math::log2(math::max(size.x, size.y)));</span>
+
+<span class="cm">        static std::vector&lt;math::color&gt; colors = { math::color() };</span>
+
+<span class="cm">        if (!firstFrame)</span>
+<span class="cm">        {</span>
+<span class="cm">            OPTICK_EVENT(&quot;Read mip pixel data&quot;);</span>
+<span class="cm">            glBindTexture(static_cast&lt;GLenum&gt;(tex.type), tex.textureId);</span>
+<span class="cm">            glGetTexImage(static_cast&lt;GLenum&gt;(tex.type), maxMip, components_to_format[static_cast&lt;int&gt;(tex.channels)], GL_FLOAT, colors.data());</span>
+<span class="cm">            glBindTexture(static_cast&lt;GLenum&gt;(tex.type), 0);</span>
+<span class="cm">        }</span>
+<span class="cm">        else</span>
+<span class="cm">            firstFrame = false;*/</span>
+
+        <span class="cm">/*float luminance = math::dot(math::vec3(colors[0].r, colors[0].g, colors[0].b), math::vec3(0.2126f, 0.7152f, 0.0722f));</span>
+
+<span class="cm">        float newExposure = math::clamp(math::pow(math::max((1.0f - luminance), 0.f), 2.2f) * 10.f, 0.f, 10.f);</span>
+
+<span class="cm">        if (newExposure &lt; exposure)</span>
+<span class="cm">            exposure = math::lerp(exposure, newExposure, deltaTime.seconds());</span>
+<span class="cm">        else</span>
+<span class="cm">            exposure = math::lerp(exposure, newExposure, deltaTime.seconds() * 0.5f);*/</span>
+
+        <span class="k">auto</span> <span class="n">shader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">m_currentShader</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">));</span>
+
+        <span class="n">fbo</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">shader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+
+        <span class="n">shader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">exposureId</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">exposure</span><span class="p">);</span>
+
+        <span class="n">shader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">colortexture</span><span class="p">);</span>
+        <span class="n">renderQuad</span><span class="p">();</span>
+        <span class="n">shader</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+
+        <span class="c1">//{</span>
+        <span class="c1">//    OPTICK_EVENT(&quot;Generate scene color mipmaps&quot;);</span>
+        <span class="c1">//    glGenerateTextureMipmap(tex.textureId);</span>
+        <span class="c1">//}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_tonemapping.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

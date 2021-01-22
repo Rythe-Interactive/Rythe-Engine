@@ -1,0 +1,63 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_framebuffer.hpp:
+
+Program Listing for File framebuffer.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_framebuffer.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/framebuffer.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <application/application.hpp>
+   #include <rendering/data/texture.hpp>
+   #include <rendering/data/renderbuffer.hpp>
+   #include <any>
+   #include <unordered_map>
+   
+   namespace legion::rendering
+   {
+       using attachment = std::variant<std::monostate, texture_handle, renderbuffer>;
+       static const attachment invalid_attachment = std::monostate();
+       struct framebuffer
+       {
+       private:
+           // Managed resource with the framebuffer id, also has the responsibility of deleting the framebuffer after all copies of this framebuffer have been destroyed.
+           common::managed_resource<app::gl_id> m_id = common::managed_resource<app::gl_id>(nullptr);
+           // Type of framebuffer, either read, write or both.
+           GLenum m_target = GL_FRAMEBUFFER;
+   
+           // Attachments to the framebuffer. Can be either texture handles or renderbuffers.
+           std::unordered_map<GLenum, attachment> m_attachments;
+   
+       public:
+   
+           framebuffer() = default;
+   
+           explicit framebuffer(GLenum target);
+   
+           std::pair<bool, std::string> verify() const;
+   
+           GLenum target() const;
+   
+           app::gl_id id() const;
+   
+           void bind() const;
+   
+           void attach(renderbuffer rbo, GLenum attachment);
+   
+           void attach(attachment att, GLenum attachment);
+   
+           void attach(texture_handle texture, GLenum attachment);
+   
+           void detach(GLenum attachment);
+   
+           L_NODISCARD const attachment& getAttachment(GLenum attachment) const;
+   
+           void release() const;
+   
+           L_NODISCARD operator bool() const;
+       };
+   }

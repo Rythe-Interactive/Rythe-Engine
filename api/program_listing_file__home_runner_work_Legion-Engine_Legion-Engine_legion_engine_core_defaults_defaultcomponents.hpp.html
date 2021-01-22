@@ -49,13 +49,14 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/math/math.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/archetype.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;core/data/mesh.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/types/unordered_map.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/types/memory.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/json.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/portable_binary.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/ecs/component_handle.hpp&gt;</span><span class="cp"></span>
 
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span>
@@ -114,21 +115,25 @@
 
         <span class="n">L_NODISCARD</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">right</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">toMat3</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">right</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">up</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">toMat3</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">up</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">forward</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">toMat3</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">forward</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">matrix</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">toMat3</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
         <span class="p">}</span>
 
@@ -137,9 +142,15 @@
 
     <span class="n">L_NODISCARD</span> <span class="kr">inline</span> <span class="n">rotation</span> <span class="n">rotation</span><span class="o">::</span><span class="n">lookat</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">position</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">center</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">up</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">conjugate</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">toQuat</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">lookAt</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">up</span><span class="p">))));</span>
     <span class="p">}</span>
 
+    <span class="k">struct</span> <span class="n">hierarchy</span>
+    <span class="p">{</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">parent</span><span class="p">;</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_set</span> <span class="n">children</span><span class="p">;</span>
+    <span class="p">};</span>
 
     <span class="k">struct</span> <span class="nl">scale</span> <span class="p">:</span> <span class="k">public</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span>
     <span class="p">{</span>
@@ -168,49 +179,64 @@
 
     <span class="p">};</span>
 
-
     <span class="k">struct</span> <span class="nl">transform</span> <span class="p">:</span> <span class="k">public</span> <span class="n">ecs</span><span class="o">::</span><span class="n">archetype</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span>
     <span class="p">{</span>
         <span class="k">using</span> <span class="n">base</span> <span class="o">=</span> <span class="n">ecs</span><span class="o">::</span><span class="n">archetype</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span><span class="p">;</span>
 
+        <span class="n">transform</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">transform</span><span class="p">(</span><span class="k">const</span> <span class="n">base</span><span class="o">::</span><span class="n">handleGroup</span><span class="o">&amp;</span> <span class="n">handles</span><span class="p">)</span> <span class="o">:</span> <span class="n">base</span><span class="p">(</span><span class="n">handles</span><span class="p">)</span> <span class="p">{}</span>
 
-        <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span> <span class="n">get_world_components</span><span class="p">()</span>
-        <span class="p">{</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">worldMatrix</span> <span class="o">=</span> <span class="n">get_world_to_local_matrix</span><span class="p">();</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">p</span><span class="p">;</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">quat</span> <span class="n">r</span><span class="p">;</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">s</span><span class="p">;</span>
-
-            <span class="n">math</span><span class="o">::</span><span class="n">decompose</span><span class="p">(</span><span class="n">worldMatrix</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
-
-            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="o">&gt;</span> <span class="n">get_local_components</span><span class="p">();</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">get_world_to_local_matrix</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">get_local_to_world_matrix</span><span class="p">());</span>
         <span class="p">}</span>
 
-        <span class="n">L_NODISCARD</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">get_local_to_world_matrix</span><span class="p">()</span>
-        <span class="p">{</span>
-            <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">handles</span><span class="p">;</span>
-            <span class="k">auto</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">positionH</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_parent</span><span class="p">();</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">&amp;&amp;</span> <span class="n">parent</span><span class="p">.</span><span class="n">has_components</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">())</span>
-            <span class="p">{</span>
-                <span class="n">transform</span> <span class="n">transf</span> <span class="o">=</span> <span class="n">parent</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
-                <span class="k">return</span> <span class="n">transf</span><span class="p">.</span><span class="n">get_local_to_world_matrix</span><span class="p">()</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">positionH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
-            <span class="p">}</span>
-
-            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">positionH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
-        <span class="p">}</span>
+        <span class="n">L_NODISCARD</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">get_local_to_world_matrix</span><span class="p">();</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">get_local_to_parent_matrix</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">handles</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">positionH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_local_components</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">position</span><span class="p">);</span>
         <span class="p">}</span>
+
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="nl">velocity</span> <span class="p">:</span> <span class="k">public</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span>
+    <span class="p">{</span>
+        <span class="n">velocity</span><span class="p">()</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">velocity</span><span class="p">(</span><span class="k">const</span> <span class="n">velocity</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">velocity</span><span class="p">(</span><span class="n">velocity</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">velocity</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">velocity</span><span class="p">(</span><span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="kt">float</span> <span class="n">y</span><span class="p">,</span> <span class="kt">float</span> <span class="n">z</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">velocity</span><span class="p">(</span><span class="kt">float</span> <span class="n">v</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">velocity</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">velocity</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">velocity</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">velocity</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">velocity</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">velocity</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;&amp;</span> <span class="n">src</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="nl">mesh_filter</span> <span class="p">:</span> <span class="k">public</span> <span class="n">mesh_handle</span>
+    <span class="p">{</span>
+        <span class="n">mesh_filter</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="k">explicit</span> <span class="nf">mesh_filter</span><span class="p">(</span><span class="k">const</span> <span class="n">mesh_handle</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="p">{</span> <span class="n">id</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">};</span>
+
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">mesh_filter</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span>
 

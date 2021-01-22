@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1ac8bf36fe0577cba66bccda3a6f7e80a4:
+
+Variable flags
+==============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: flags

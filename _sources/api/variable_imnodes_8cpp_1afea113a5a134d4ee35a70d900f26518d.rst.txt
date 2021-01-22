@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1afea113a5a134d4ee35a70d900f26518d:
+
+Variable snap_link_idx
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: snap_link_idx

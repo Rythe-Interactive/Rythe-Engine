@@ -1,0 +1,13 @@
+.. _exhale_enum_imnodes_8cpp_1ab718acbfe874ecaf7b2648d68abda136:
+
+Enum ScopeFlags
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: imgui::nodes::@272::ScopeFlags

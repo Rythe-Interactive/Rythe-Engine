@@ -14,7 +14,7 @@ Program Listing for File material.cpp
    
    namespace legion::rendering
    {
-       material_parameter_base* material_parameter_base::create_param(const std::string& name,const GLint& location, const GLenum& type)
+       material_parameter_base* material_parameter_base::create_param(const std::string& name, const GLint& location, const GLenum& type)
        {
            switch (type)
            {
@@ -73,11 +73,18 @@ Program Listing for File material.cpp
            }
        }
    
-       async::readonly_rw_spinlock MaterialCache::m_materialLock;
+       async::rw_spinlock MaterialCache::m_materialLock;
        std::unordered_map<id_type, material> MaterialCache::m_materials;
+       material_handle MaterialCache::m_invalid_material;
    
        material_handle MaterialCache::create_material(const std::string& name, const shader_handle& shader)
        {
+           if (!m_materials.count(invalid_id))
+           {
+               m_materials[invalid_id].init(ShaderCache::get_handle("invalid"));
+               m_materials[invalid_id].m_name = "invalid";
+           }
+   
            id_type id = nameHash(name);
            if (m_materials.count(id))
                return { id };
@@ -89,6 +96,13 @@ Program Listing for File material.cpp
            }
    
            m_materials[id].init(shader);
+   
+           if (!m_materials[id].m_variants.size())
+           {
+               m_materials.erase(id);
+               return { invalid_id };
+           }
+   
            m_materials[id].m_name = name;
    
            log::debug("Created material {} with shader: {}", name, shader.get_name());
@@ -98,6 +112,12 @@ Program Listing for File material.cpp
    
        material_handle MaterialCache::create_material(const std::string& name, const filesystem::view& shaderFile, shader_import_settings settings)
        {
+           if (!m_materials.count(invalid_id))
+           {
+               m_materials[invalid_id].init(ShaderCache::get_handle("invalid"));
+               m_materials[invalid_id].m_name = "invalid";
+           }
+   
            id_type id = nameHash(name);
            if (m_materials.count(id))
                return { id };
@@ -113,13 +133,19 @@ Program Listing for File material.cpp
            m_materials[id].init(shader);
            m_materials[id].m_name = name;
    
-           log::trace("Created material {} with shader: {}", name, shader.get_name());
+           log::debug("Created material {} with shader: {}", name, shader.get_name());
    
            return { id };
        }
    
        material_handle MaterialCache::get_material(const std::string& name)
        {
+           if (!m_materials.count(invalid_id))
+           {
+               m_materials[invalid_id].init(ShaderCache::get_handle("invalid"));
+               m_materials[invalid_id].m_name = "invalid";
+           }
+   
            id_type id = nameHash(name);
            async::readonly_guard guard(m_materialLock);
            if (m_materials.count(id))
@@ -127,21 +153,85 @@ Program Listing for File material.cpp
            return invalid_material_handle;
        }
    
+       bool material_handle::has_variant(id_type variantId) const
+       {
+           async::readonly_guard guard(MaterialCache::m_materialLock);
+           return MaterialCache::m_materials[id].has_variant(variantId);
+       }
+   
+       bool material_handle::has_variant(const std::string& variant) const
+       {
+           id_type variantId = nameHash(variant);
+           async::readonly_guard guard(MaterialCache::m_materialLock);
+           return MaterialCache::m_materials[id].has_variant(variantId);
+       }
+   
+       void material_handle::set_variant(id_type variantId)
+       {
+           async::readonly_guard guard(MaterialCache::m_materialLock);
+           MaterialCache::m_materials[id].set_variant(variantId);
+       }
+   
+       void material_handle::set_variant(const std::string& variant)
+       {
+           id_type variantId = nameHash(variant);
+           async::readonly_guard guard(MaterialCache::m_materialLock);
+           MaterialCache::m_materials[id].set_variant(variantId);
+       }
+   
        void material_handle::bind()
        {
+           OPTICK_EVENT();
            async::readonly_guard guard(MaterialCache::m_materialLock);
            MaterialCache::m_materials[id].bind();
        }
    
+       std::string material_handle::get_name()
+       {
+           async::readonly_guard guard(MaterialCache::m_materialLock);
+           return MaterialCache::m_materials[id].m_name;
+       }
+   
        attribute material_handle::get_attribute(const std::string& name)
        {
+           async::readonly_guard guard(MaterialCache::m_materialLock);
            return MaterialCache::m_materials[id].m_shader.get_attribute(name);
+       }
+   
+       bool material::has_variant(id_type variantId) const
+       {
+           return m_shader.has_variant(variantId);
+       }
+   
+       bool material::has_variant(const std::string& variant) const
+       {
+           return m_shader.has_variant(variant);
+       }
+   
+       void material::set_variant(id_type variantId)
+       {
+           if (m_shader.has_variant(variantId))
+               m_currentVariant = variantId;
+           else
+               m_currentVariant = 0;
+       }
+   
+       void material::set_variant(const std::string& variant)
+       {
+           std::string variantName = variant;
+           std::replace(variantName.begin(), variantName.end(), ' ', '_');
+           id_type variantId = nameHash(variantName);
+           if (m_shader.has_variant(variantId))
+               m_currentVariant = variantId;
+           else
+               m_currentVariant = 0;
        }
    
        void material::bind()
        {
+           m_shader.configure_variant(m_currentVariant);
            m_shader.bind();
-           for (auto& [_, param] : m_parameters)
+           for (auto& [_, param] : m_variants[m_currentVariant].parameters)
                param->apply(m_shader);
        }
    }

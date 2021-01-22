@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1common_1_1managed__resource:
+
+Template Struct managed_resource
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_managed_resource.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::common::managed_resource
+   :members:
+   :protected-members:
+   :undoc-members:

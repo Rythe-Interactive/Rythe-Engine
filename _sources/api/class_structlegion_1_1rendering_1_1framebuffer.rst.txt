@@ -1,0 +1,16 @@
+.. _exhale_class_structlegion_1_1rendering_1_1framebuffer:
+
+Class framebuffer
+=================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_framebuffer.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::framebuffer
+   :members:
+   :protected-members:
+   :undoc-members:

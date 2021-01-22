@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1physics_1_1_intersecting_polygon_organizer:
+
+Struct IntersectingPolygonOrganizer
+===================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersecting_polygon_organizer.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::physics::IntersectingPolygonOrganizer
+   :members:
+   :protected-members:
+   :undoc-members:

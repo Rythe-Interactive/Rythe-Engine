@@ -1,0 +1,16 @@
+.. _exhale_class_classface__angle__relation:
+
+Class face_angle_relation
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeface.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: face_angle_relation
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -19,7 +19,7 @@ Program Listing for File editor.hpp
        class Editor
        {
        public:
-           template <class ModuleType, class... Args, inherits_from<ModuleType, EditorModule> = 0>
+           template <class ModuleType, class... Args CNDOXY(inherits_from<ModuleType, EditorModule> = 0)>
            void reportModule(Args&&...args)
            {
    

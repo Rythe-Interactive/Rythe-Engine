@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1aff9ef943e2e2f94f18b3c3970d10eac1:
+
+Variable default_editor_ctx
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: default_editor_ctx

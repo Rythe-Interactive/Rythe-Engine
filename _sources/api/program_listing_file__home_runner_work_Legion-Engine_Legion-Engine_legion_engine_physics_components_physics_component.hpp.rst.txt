@@ -42,7 +42,8 @@ Program Listing for File physics_component.hpp
    
            void calculateNewLocalCenterOfMass();
    
-           void ConstructConvexHull(/*mesh*/);
+           std::shared_ptr<ConvexCollider> ConstructConvexHull(legion::core::mesh_handle& meshHandle);
+           void ConstructConvexHull(legion::core::mesh_handle& meshHandle, ConvexCollider& col);
    
            void ConstructBox(/*mesh*/);
    

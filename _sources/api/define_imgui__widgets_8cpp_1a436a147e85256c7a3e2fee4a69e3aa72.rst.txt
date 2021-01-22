@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__widgets_8cpp_1a436a147e85256c7a3e2fee4a69e3aa72:
+
+Define STB_TEXTEDIT_K_BACKSPACE
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STB_TEXTEDIT_K_BACKSPACE

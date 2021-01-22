@@ -1,0 +1,13 @@
+.. _exhale_define_bindings_8hpp_1a60f1918469e55157be20a6a7a958332e:
+
+Define SV_COLOR
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_bindings.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: SV_COLOR

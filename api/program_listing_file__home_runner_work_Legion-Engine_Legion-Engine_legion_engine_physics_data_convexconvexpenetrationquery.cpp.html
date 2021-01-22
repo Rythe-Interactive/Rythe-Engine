@@ -57,7 +57,7 @@
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">pFaceCentroid</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">pNormal</span><span class="p">,</span> <span class="kt">float</span> <span class="n">pPenetration</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">pIsARef</span><span class="p">)</span>
         <span class="o">:</span>  <span class="n">PenetrationQuery</span><span class="p">(</span><span class="n">pFaceCentroid</span><span class="p">,</span><span class="n">pNormal</span><span class="p">,</span><span class="n">pPenetration</span><span class="p">,</span><span class="n">pIsARef</span><span class="p">),</span><span class="n">refFace</span><span class="p">(</span><span class="n">pRefFace</span><span class="p">),</span> <span class="n">incFace</span><span class="p">(</span><span class="n">pIncFace</span><span class="p">)</span>
     <span class="p">{</span>
-
+        <span class="n">debugID</span> <span class="o">=</span> <span class="s">&quot;ConvexConvexPenetrationQuery&quot;</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="kt">void</span> <span class="n">ConvexConvexPenetrationQuery</span><span class="o">::</span><span class="n">populateContactList</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">refTransform</span>
@@ -70,7 +70,7 @@
 
         <span class="k">auto</span> <span class="n">sendToInitialOutput</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">outputContactPoints</span><span class="p">,</span><span class="o">&amp;</span><span class="n">incTransform</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localVertexPosition</span> <span class="o">=</span> <span class="o">*</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localVertexPosition</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">;</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldVertex</span> <span class="o">=</span> <span class="n">incTransform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">localVertexPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
             <span class="n">outputContactPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ContactVertex</span><span class="p">(</span><span class="n">worldVertex</span><span class="p">,</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">label</span><span class="p">));</span>

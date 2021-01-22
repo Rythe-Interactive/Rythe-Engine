@@ -29,6 +29,8 @@ Includes
 --------
 
 
+- ``Optick/optick.h``
+
 - ``core/containers/containers.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_containers.hpp`)
 
 - ``core/platform/platform.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp`)

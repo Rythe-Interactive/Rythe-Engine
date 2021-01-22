@@ -1,0 +1,13 @@
+.. _exhale_define_imgui_8cpp_1aaedc8fff290d4893a84c62411b0ddeed:
+
+Define IMGUI_DEBUG_NAV_SCORING
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: IMGUI_DEBUG_NAV_SCORING

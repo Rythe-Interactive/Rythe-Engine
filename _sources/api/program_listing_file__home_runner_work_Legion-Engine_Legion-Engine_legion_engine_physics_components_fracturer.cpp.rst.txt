@@ -1,0 +1,17 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturer.cpp:
+
+Program Listing for File fracturer.cpp
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturer.cpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/components/fracturer.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include "fracturer.h"
+   
+   void legion::physics::Fracturer::Fracture()
+   {
+   }

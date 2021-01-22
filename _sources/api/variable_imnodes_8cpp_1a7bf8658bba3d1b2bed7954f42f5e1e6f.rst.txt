@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1a7bf8658bba3d1b2bed7954f42f5e1e6f:
+
+Variable node_indices_overlapping_with_mouse
+============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: node_indices_overlapping_with_mouse

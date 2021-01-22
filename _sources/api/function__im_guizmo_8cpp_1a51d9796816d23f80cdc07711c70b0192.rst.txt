@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a51d9796816d23f80cdc07711c70b0192:
+
+Function imgui::gizmo::FPU_MatrixF_x_MatrixF
+============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::FPU_MatrixF_x_MatrixF(const float *, const float *, float *)

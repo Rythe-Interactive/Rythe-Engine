@@ -29,6 +29,10 @@ Includes
 --------
 
 
+- ``Optick/optick.h``
+
+- ``core/defaults/defaultcomponents.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_defaultcomponents.hpp`)
+
 - ``core/ecs/component_handle.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_handle.hpp`)
 
 - ``core/ecs/ecsregistry.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_ecsregistry.hpp`)
@@ -45,18 +49,4 @@ Namespaces
 
 
 - :ref:`namespace_legion__core__ecs`
-
-
-Classes
--------
-
-
-- :ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1child__iterator_1_1impl`
-
-
-Functions
----------
-
-
-- :ref:`exhale_function_entity__handle_8cpp_1a08e3947c61ef1f6f2995c0f6a9358480`
 

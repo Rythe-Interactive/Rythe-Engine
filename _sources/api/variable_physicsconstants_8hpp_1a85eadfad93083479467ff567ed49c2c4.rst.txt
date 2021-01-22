@@ -1,0 +1,13 @@
+.. _exhale_variable_physicsconstants_8hpp_1a85eadfad93083479467ff567ed49c2c4:
+
+Variable legion::physics::constants::polygonSplitterEpsilon
+===========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::physics::constants::polygonSplitterEpsilon

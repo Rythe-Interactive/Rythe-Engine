@@ -41,6 +41,12 @@ Included By
 -----------
 
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_queryregistry.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scheduling_scheduler.cpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_defaults.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_time.hpp`
 
 
@@ -58,4 +64,11 @@ Classes
 
 
 - :ref:`exhale_class_classlegion_1_1core_1_1time_1_1clock`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_clock_8hpp_1ac8b69faff1f0c1c81285fa99e464a9ba`
 

@@ -1,0 +1,735 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File intersecting_polygon_organizer.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File intersecting_polygon_organizer.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-intersecting-polygon-organizer-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-intersecting-polygon-organizer-hpp"></span><h1>Program Listing for File intersecting_polygon_organizer.hpp<a class="headerlink" href="#program-listing-for-file-intersecting-polygon-organizer-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersecting_polygon_organizer.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-intersecting-polygon-organizer-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/intersecting_polygon_organizer.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/splittable_polygon.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/mesh_splitter_debug_helpers.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/intersection_edge_info.h&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">IntersectingPolygonOrganizer</span>
+    <span class="p">{</span>
+        <span class="n">MeshSplitterDebugHelper</span><span class="o">*</span> <span class="n">debugHelper</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+        <span class="n">IntersectingPolygonOrganizer</span><span class="p">(</span><span class="n">MeshSplitterDebugHelper</span><span class="o">*</span> <span class="n">pDebugHelper</span><span class="p">)</span> <span class="o">:</span> <span class="n">debugHelper</span><span class="p">(</span><span class="n">pDebugHelper</span><span class="p">)</span>
+        <span class="p">{</span>
+
+        <span class="p">}</span>
+
+        <span class="c1">//------------------------------------------------------ Related to Edge Categorization  ----------------------------------------------------------------//</span>
+        <span class="kt">void</span> <span class="n">SplitPolygon</span><span class="p">(</span><span class="n">SplittablePolygonPtr</span> <span class="n">splitPolygon</span>
+            <span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">cutPosition</span>
+            <span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="n">SplitState</span> <span class="n">requestedState</span>
+            <span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">IntersectionEdgeInfo</span><span class="o">&gt;&amp;</span> <span class="n">generatedIntersectionEdges</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">BoundaryEdgeInfo</span> <span class="n">polygonDebugInfo</span><span class="p">;</span>
+
+            <span class="kt">bool</span> <span class="n">keepAbove</span> <span class="o">=</span> <span class="n">requestedState</span> <span class="o">==</span> <span class="n">SplitState</span><span class="o">::</span><span class="n">Above</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="c1">//For now assume no islands in one polygon</span>
+
+            <span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">ResetEdgeVisited</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">().</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+
+            <span class="c1">//---------------------------- [1] Get Triangles Effected by the split------------------------------------------------------------------//</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">unEffectedUsedEdges</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">effectedUsedEdges</span><span class="p">;</span>
+
+            <span class="n">BFSIdentifyEffectedEdges</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">splitPolygon</span><span class="p">,</span> <span class="n">unEffectedUsedEdges</span><span class="p">,</span> <span class="n">effectedUsedEdges</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="n">keepAbove</span><span class="p">);</span>
+
+            <span class="c1">//---------------------------- [2] Get used boundary Effected ----------------------------------------------------------------------------//</span>
+
+            <span class="c1">//set &#39;effectedUsedEdges&#39; to be unvisited in order to differentiate it from &#39;unEffectedUsedEdges&#39;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">effectedUsedEdges</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">edge</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">IdentifyBoundaryEffectedEdges</span><span class="p">(</span><span class="n">effectedUsedEdges</span><span class="p">,</span>
+                <span class="n">transform</span><span class="p">,</span> <span class="n">cutPosition</span>
+                <span class="p">,</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="n">keepAbove</span><span class="p">);</span>
+
+
+            <span class="c1">//----------------------------- [3] Sort Edges ---------------------------------------------------------------------------------------//</span>
+
+            <span class="c1">//find edges in effectedUsedEdges that are split by plane and store them in a std::vector</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">splitEdges</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">effectedUsedEdges</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">isSplitByPlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="n">splitEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">edge</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">//sort them based on support point created by cross product of normal and split normal</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldCentroid</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">localCentroid</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldPolygonNormal</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">localNormal</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">worldNormal</span> <span class="o">=</span> <span class="n">worldPolygonNormal</span><span class="p">;</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">polygonNormalCrossCutNormal</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">worldPolygonNormal</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">));</span>
+
+            <span class="c1">//SortingCriterium splittingPlaneSorter(worldCentroid,polygonNormalCrossCutNormal,transform);</span>
+
+            <span class="k">auto</span> <span class="n">initialSorter</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">transform</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">worldCentroid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">polygonNormalCrossCutNormal</span><span class="p">]</span>
+            <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&amp;</span> <span class="n">rhs</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">aWorldCentroid</span> <span class="o">=</span> <span class="n">lhs</span><span class="o">-&gt;</span><span class="n">getWorldCentroid</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">bWorldCentroid</span> <span class="o">=</span> <span class="n">rhs</span><span class="o">-&gt;</span><span class="n">getWorldCentroid</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">AtoPolygonCentroid</span> <span class="o">=</span> <span class="n">aWorldCentroid</span> <span class="o">-</span> <span class="n">worldCentroid</span><span class="p">;</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">BtoPolygonCentroid</span> <span class="o">=</span> <span class="n">bWorldCentroid</span> <span class="o">-</span> <span class="n">worldCentroid</span><span class="p">;</span>
+
+                <span class="k">return</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">AtoPolygonCentroid</span><span class="p">,</span> <span class="n">polygonNormalCrossCutNormal</span><span class="p">)</span> <span class="o">&lt;</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">BtoPolygonCentroid</span><span class="p">,</span> <span class="n">polygonNormalCrossCutNormal</span><span class="p">);</span>
+            <span class="p">};</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">splitEdges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">splitEdges</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">initialSorter</span><span class="p">);</span>
+
+            <span class="c1">//clear the polygon&#39;s edge list because we are going to start regenerating it</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="n">meshEdges</span> <span class="o">=</span> <span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">();</span>
+            <span class="n">meshEdges</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+            <span class="kt">int</span> <span class="n">edgesUsed</span> <span class="o">=</span> <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="k">static</span> <span class="kt">int</span> <span class="n">numberOfEdgesToMakeATriangle</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+            <span class="c1">//Check for the special case where there are only 2 splitEdges, this will create 1 triangle</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">edgesUsed</span> <span class="o">==</span> <span class="n">numberOfEdgesToMakeATriangle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">HandleTriangleSplit</span><span class="p">(</span><span class="n">splitPolygon</span><span class="p">,</span>
+                    <span class="n">splitEdges</span><span class="p">,</span> <span class="n">generatedIntersectionEdges</span><span class="p">,</span>
+                    <span class="n">transform</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">keepAbove</span><span class="p">);</span>
+
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">edgesUsed</span> <span class="o">&lt;</span> <span class="n">numberOfEdgesToMakeATriangle</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//there exist a number of edges that is on the splitting plane</span>
+                <span class="n">assert</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">//previous sorting direction is dependent on cut tangent.</span>
+            <span class="c1">//use centroids of first and last split edge as the new sorting direction</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldFirstEdge</span> <span class="o">=</span> <span class="n">splitEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">getWorldCentroid</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldSecondEdge</span> <span class="o">=</span> <span class="n">splitEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">splitEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">getWorldCentroid</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+            <span class="c1">//sort effectedUsedEdges based on sorting direction</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">sortingCentroid</span> <span class="o">=</span> <span class="p">(</span><span class="n">worldFirstEdge</span> <span class="o">+</span> <span class="n">worldSecondEdge</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0f</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">sortingDirection</span> <span class="o">=</span> <span class="n">worldSecondEdge</span> <span class="o">-</span> <span class="n">worldFirstEdge</span><span class="p">;</span>
+
+            <span class="k">auto</span> <span class="n">boundarySorter</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">transform</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sortingCentroid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sortingDirection</span><span class="p">]</span>
+            <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&amp;</span> <span class="n">lhs</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;&amp;</span> <span class="n">rhs</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">aWorldCentroid</span> <span class="o">=</span> <span class="n">lhs</span><span class="o">-&gt;</span><span class="n">getWorldCentroid</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">bWorldCentroid</span> <span class="o">=</span> <span class="n">rhs</span><span class="o">-&gt;</span><span class="n">getWorldCentroid</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">AtoPolygonCentroid</span> <span class="o">=</span> <span class="n">aWorldCentroid</span> <span class="o">-</span> <span class="n">sortingCentroid</span><span class="p">;</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">BtoPolygonCentroid</span> <span class="o">=</span> <span class="n">bWorldCentroid</span> <span class="o">-</span> <span class="n">sortingCentroid</span><span class="p">;</span>
+
+                <span class="k">return</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">AtoPolygonCentroid</span><span class="p">,</span> <span class="n">sortingDirection</span><span class="p">)</span> <span class="o">&lt;</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">BtoPolygonCentroid</span><span class="p">,</span> <span class="n">sortingDirection</span><span class="p">);</span>
+            <span class="p">};</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">sort</span><span class="p">(</span><span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">boundarySorter</span><span class="p">);</span>
+
+            <span class="n">meshHalfEdgePtr</span> <span class="n">firstEdge</span> <span class="o">=</span> <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">secondEdge</span> <span class="o">=</span> <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="c1">//------------------------------------- [5] Regenerate Edges ----------------------------------------------------------------------------------------------------------//</span>
+
+            <span class="c1">//get start and end intersection points</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">firstEdgeCurrent</span><span class="p">,</span> <span class="n">firstEdgeNext</span><span class="p">]</span> <span class="o">=</span> <span class="n">firstEdge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPositions</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+            <span class="c1">//check if position of first edge is outside intersection, this is important because it will determine how the edges will be regenerated</span>
+            <span class="kt">bool</span> <span class="n">startFromOutsideIntersection</span> <span class="o">=</span>
+                <span class="n">keepAbove</span> <span class="o">==</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">IsPointAbovePlane</span><span class="p">(</span><span class="n">cutNormal</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">firstEdgeCurrent</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">firstEdgeIntersection</span><span class="p">,</span> <span class="n">firstInterpolantUV</span><span class="p">,</span> <span class="n">secondEdgeIntersection</span><span class="p">,</span> <span class="n">secondInterpolantUV</span><span class="p">]</span>
+                <span class="o">=</span> <span class="n">GetFirstAndLastEdgeIntersectionInfo</span><span class="p">(</span><span class="n">cutNormal</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span>
+                <span class="n">firstEdge</span><span class="p">,</span> <span class="n">secondEdge</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">startToEndIntersection</span> <span class="o">=</span> <span class="n">secondEdgeIntersection</span> <span class="o">-</span> <span class="n">firstEdgeIntersection</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">startToEndUV</span> <span class="o">=</span> <span class="n">secondInterpolantUV</span> <span class="o">-</span> <span class="n">firstInterpolantUV</span><span class="p">;</span>
+
+            <span class="n">meshHalfEdgePtr</span> <span class="n">supportEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="c1">//generated half edges using</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">generatedHalfEdges</span><span class="p">;</span>
+
+            <span class="n">SplitterIntersectionInfo</span> <span class="nf">vertexIntersectionInfo</span><span class="p">(</span>
+                <span class="n">firstEdgeIntersection</span><span class="p">,</span>
+                <span class="n">startToEndIntersection</span><span class="p">,</span>
+                <span class="n">firstInterpolantUV</span><span class="p">,</span>
+                <span class="n">startToEndUV</span><span class="p">);</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">startFromOutsideIntersection</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">InsideIntersectionMeshRegeneration</span><span class="p">(</span>
+                        <span class="n">transform</span><span class="p">,</span> <span class="n">effectedUsedEdges</span><span class="p">,</span>
+                        <span class="n">generatedHalfEdges</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">supportEdge</span><span class="p">,</span> <span class="n">vertexIntersectionInfo</span><span class="p">,</span> <span class="n">polygonDebugInfo</span><span class="p">,</span> <span class="n">generatedIntersectionEdges</span><span class="p">,</span><span class="n">splitPolygon</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">OutsideIntersectionMeshRegeneration</span><span class="p">(</span>
+                        <span class="n">transform</span><span class="p">,</span> <span class="n">effectedUsedEdges</span><span class="p">,</span>
+                        <span class="n">generatedHalfEdges</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">supportEdge</span><span class="p">,</span> <span class="n">vertexIntersectionInfo</span><span class="p">,</span> <span class="n">polygonDebugInfo</span><span class="p">,</span> <span class="n">generatedIntersectionEdges</span><span class="p">,</span> <span class="n">splitPolygon</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">intersectionPoints</span><span class="p">.</span><span class="n">first</span> <span class="o">=</span> <span class="n">firstEdgeIntersection</span><span class="p">;</span>
+            <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">intersectionPoints</span><span class="p">.</span><span class="n">second</span> <span class="o">=</span> <span class="n">secondEdgeIntersection</span><span class="p">;</span>
+
+            <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">finalSortingDirection</span><span class="p">.</span><span class="n">first</span> <span class="o">=</span> <span class="n">sortingCentroid</span><span class="p">;</span>
+            <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">finalSortingDirection</span><span class="p">.</span><span class="n">second</span> <span class="o">=</span> <span class="n">sortingDirection</span><span class="p">;</span>
+
+            <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">drawColor</span> <span class="o">=</span> <span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">debugColor</span><span class="p">;</span>
+
+            <span class="c1">//--------------DEBUG STUFF----------------//</span>
+            <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">boundaryEdges</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span>
+                <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">boundaryEdges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
+                <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
+                <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+
+            <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">boundaryEdges</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span>
+                <span class="n">polygonDebugInfo</span><span class="p">.</span><span class="n">boundaryEdges</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span>
+                <span class="n">generatedHalfEdges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
+                <span class="n">generatedHalfEdges</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+            <span class="c1">//-------------------------------------//</span>
+
+            <span class="n">debugHelper</span><span class="o">-&gt;</span><span class="n">boundaryEdgesForPolygon</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">polygonDebugInfo</span><span class="p">);</span>
+
+            <span class="c1">//------------------------------------- [6] Add regenerated edges to the polygon -----------------------------------------------------------------------------------//</span>
+
+            <span class="n">meshEdges</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">meshEdges</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">unEffectedUsedEdges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">unEffectedUsedEdges</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+            <span class="n">meshEdges</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">meshEdges</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+            <span class="n">meshEdges</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">meshEdges</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">generatedHalfEdges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">generatedHalfEdges</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+
+            <span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">CalculateLocalCentroid</span><span class="p">();</span>
+            <span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">AssignEdgeOwnership</span><span class="p">();</span>
+            <span class="n">debugHelper</span><span class="o">-&gt;</span><span class="n">polygonCount</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//------------------------------------------------------ Edge Categorization Helper Functions ----------------------------------------------------------------//</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;</span> <span class="n">GetFirstAndLastEdgeIntersectionInfo</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">cutPosition</span>
+            <span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">transform</span><span class="p">,</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">firstEdge</span><span class="p">,</span> <span class="n">meshHalfEdgePtr</span> <span class="n">secondEdge</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">firstEdgeCurrent</span><span class="p">,</span> <span class="n">firstEdgeNext</span><span class="p">]</span> <span class="o">=</span> <span class="n">firstEdge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPositions</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">secondEdgeCurrent</span><span class="p">,</span> <span class="n">secondEdgeNext</span><span class="p">]</span> <span class="o">=</span> <span class="n">secondEdge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPositions</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">firstEdgeIntersection</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">firstEdgeInterpolant</span><span class="p">;</span>
+            <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindLineToPlaneIntersectionPoint</span><span class="p">(</span><span class="n">cutNormal</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span>
+                <span class="n">firstEdgeCurrent</span><span class="p">,</span> <span class="n">firstEdgeNext</span><span class="p">,</span> <span class="n">firstEdgeIntersection</span><span class="p">,</span> <span class="n">firstEdgeInterpolant</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">firstInterpolantUV</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">lerp</span><span class="p">(</span><span class="n">firstEdge</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">firstEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">firstEdgeInterpolant</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">secondEdgeIntersection</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">secondEdgeInterpolant</span><span class="p">;</span>
+            <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindLineToPlaneIntersectionPoint</span><span class="p">(</span><span class="n">cutNormal</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span>
+                <span class="n">secondEdgeCurrent</span><span class="p">,</span> <span class="n">secondEdgeNext</span><span class="p">,</span> <span class="n">secondEdgeIntersection</span><span class="p">,</span> <span class="n">secondEdgeInterpolant</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">secondInterpolantUV</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">lerp</span><span class="p">(</span><span class="n">secondEdge</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">secondEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">secondEdgeInterpolant</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">startToEndIntersection</span> <span class="o">=</span> <span class="n">secondEdgeIntersection</span> <span class="o">-</span> <span class="n">firstEdgeIntersection</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">startToEndUV</span> <span class="o">=</span> <span class="n">secondInterpolantUV</span> <span class="o">-</span> <span class="n">firstInterpolantUV</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">firstEdgeIntersection</span><span class="p">,</span> <span class="n">firstInterpolantUV</span><span class="p">,</span> <span class="n">secondEdgeIntersection</span><span class="p">,</span> <span class="n">secondInterpolantUV</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">RegenerateTriangleSplit</span><span class="p">(</span><span class="kt">bool</span> <span class="n">startFromOutsideIntersection</span>
+            <span class="p">,</span> <span class="n">meshHalfEdgePtr</span> <span class="n">firstSplitEdge</span><span class="p">,</span> <span class="n">meshHalfEdgePtr</span> <span class="n">secondSplitEdge</span>
+            <span class="p">,</span> <span class="n">meshHalfEdgePtr</span><span class="o">&amp;</span> <span class="n">intersectionEdge</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">cutPosition</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">firstEdgeIntersection</span><span class="p">,</span> <span class="n">firstInterpolantUV</span><span class="p">,</span> <span class="n">secondEdgeIntersection</span><span class="p">,</span> <span class="n">secondInterpolantUV</span><span class="p">]</span>
+                <span class="o">=</span> <span class="n">GetFirstAndLastEdgeIntersectionInfo</span><span class="p">(</span><span class="n">cutNormal</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span>
+                    <span class="n">firstSplitEdge</span><span class="p">,</span> <span class="n">secondSplitEdge</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">startToEndIntersection</span> <span class="o">=</span> <span class="n">secondEdgeIntersection</span> <span class="o">-</span> <span class="n">firstEdgeIntersection</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">startToEndUV</span> <span class="o">=</span> <span class="n">secondInterpolantUV</span> <span class="o">-</span> <span class="n">firstInterpolantUV</span><span class="p">;</span>
+
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">inverseTrans</span><span class="p">{</span> <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="p">};</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">startFromOutsideIntersection</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">firstSplitEdge</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">=</span> <span class="n">inverseTrans</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">firstEdgeIntersection</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">firstSplitEdge</span><span class="o">-&gt;</span><span class="n">uv</span> <span class="o">=</span> <span class="n">firstInterpolantUV</span><span class="p">;</span>
+
+                <span class="n">intersectionEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span>
+                    <span class="p">(</span><span class="n">inverseTrans</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">secondEdgeIntersection</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">secondInterpolantUV</span><span class="p">);</span>
+
+                <span class="n">MeshHalfEdge</span><span class="o">::</span><span class="n">connectIntoTriangle</span><span class="p">(</span><span class="n">firstSplitEdge</span><span class="p">,</span> <span class="n">secondSplitEdge</span><span class="p">,</span> <span class="n">intersectionEdge</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">intersectionEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span>
+                    <span class="p">(</span><span class="n">inverseTrans</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">firstEdgeIntersection</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">firstInterpolantUV</span><span class="p">);</span>
+
+                <span class="n">secondSplitEdge</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">=</span> <span class="n">inverseTrans</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">secondEdgeIntersection</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">secondSplitEdge</span><span class="o">-&gt;</span><span class="n">uv</span> <span class="o">=</span> <span class="n">secondInterpolantUV</span><span class="p">;</span>
+
+                <span class="n">MeshHalfEdge</span><span class="o">::</span><span class="n">connectIntoTriangle</span><span class="p">(</span><span class="n">firstSplitEdge</span><span class="p">,</span> <span class="n">intersectionEdge</span><span class="p">,</span> <span class="n">secondSplitEdge</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">BFSIdentifyEffectedEdges</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="n">SplittablePolygonPtr</span> <span class="n">splitPolygon</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">unEffectedUsedEdges</span>
+            <span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">effectedUsedEdges</span>
+            <span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">cutPosition</span><span class="p">,</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">cutNormal</span><span class="p">,</span><span class="kt">bool</span> <span class="n">keepAbove</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">initalEdge</span> <span class="o">=</span> <span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">().</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="c1">//intialize unvisited queue</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">unvisitedEdges</span><span class="p">;</span>
+            <span class="n">unvisitedEdges</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">initalEdge</span><span class="p">);</span>
+
+            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">unvisitedEdges</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">currentEdge</span> <span class="o">=</span> <span class="n">unvisitedEdges</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+                <span class="n">unvisitedEdges</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">currentEdge</span><span class="o">-&gt;</span><span class="n">isVisited</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">currentEdge</span><span class="o">-&gt;</span><span class="n">markTriangleEdgeVisited</span><span class="p">();</span>
+
+                    <span class="k">auto</span> <span class="p">[</span><span class="n">edge1</span><span class="p">,</span> <span class="n">edge2</span><span class="p">,</span> <span class="n">edge3</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentEdge</span><span class="o">-&gt;</span><span class="n">getTriangle</span><span class="p">();</span>
+
+                    <span class="kt">bool</span> <span class="n">edge1Split</span> <span class="o">=</span> <span class="n">edge1</span><span class="o">-&gt;</span><span class="n">isSplitByPlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">);</span>
+                    <span class="kt">bool</span> <span class="n">edge2Split</span> <span class="o">=</span> <span class="n">edge2</span><span class="o">-&gt;</span><span class="n">isSplitByPlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">);</span>
+                    <span class="kt">bool</span> <span class="n">edge3Split</span> <span class="o">=</span> <span class="n">edge3</span><span class="o">-&gt;</span><span class="n">isSplitByPlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">);</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">edge1Split</span> <span class="o">||</span> <span class="n">edge2Split</span> <span class="o">||</span> <span class="n">edge3Split</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">currentEdge</span><span class="o">-&gt;</span><span class="n">populateVectorWithTriangle</span><span class="p">(</span><span class="n">effectedUsedEdges</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span>
+                    <span class="p">{</span>
+                        <span class="c1">//if we reach this point the triangle is either completely above the plane or completly below it</span>
+                        <span class="c1">//we cache it only if its at the correct position</span>
+                        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgePosition</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">currentEdge</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">keepAbove</span> <span class="o">==</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">IsPointAbovePlane</span><span class="p">(</span><span class="n">cutNormal</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">edgePosition</span><span class="p">))</span>
+                        <span class="p">{</span>
+                            <span class="n">currentEdge</span><span class="o">-&gt;</span><span class="n">populateVectorWithTriangle</span><span class="p">(</span><span class="n">unEffectedUsedEdges</span><span class="p">);</span>
+                        <span class="p">}</span>
+
+                    <span class="p">}</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">edge1</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">unvisitedEdges</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">edge1</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">edge2</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">unvisitedEdges</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">edge2</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">edge3</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">unvisitedEdges</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">edge3</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">IdentifyBoundaryEffectedEdges</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">effectedUsedEdges</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">cutPosition</span>
+            <span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">keepAbove</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">tempEdges</span><span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">effectedUsedEdges</span><span class="p">)</span> <span class="p">};</span>
+            <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">tempEdges</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">bool</span> <span class="n">isAtLeastPartiallyAtRequestedSpot</span> <span class="o">=</span> <span class="n">keepAbove</span> <span class="o">?</span>
+                    <span class="n">edge</span><span class="o">-&gt;</span><span class="n">isEdgePartlyAbovePlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">)</span>
+                    <span class="o">:</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">isEdgePartlyBelowPlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">);</span>
+
+                <span class="kt">bool</span> <span class="n">isBoundaryEffectedOrPolygonBoundary</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">||</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">isVisited</span><span class="p">;</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">isAtLeastPartiallyAtRequestedSpot</span> <span class="o">&amp;&amp;</span> <span class="n">isBoundaryEffectedOrPolygonBoundary</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">effectedUsedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">edge</span><span class="p">));</span>
+                <span class="p">}</span>
+
+            <span class="p">}</span>
+
+            <span class="c1">//tempEdges gets destroyed at end of scope</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">HandleTriangleSplit</span><span class="p">(</span><span class="n">SplittablePolygonPtr</span> <span class="n">splitPolygon</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">splitEdges</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">IntersectionEdgeInfo</span><span class="o">&gt;&amp;</span> <span class="n">generatedIntersectionEdges</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">cutNormal</span><span class="p">,</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">keepAbove</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="n">meshEdges</span> <span class="o">=</span> <span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">();</span>
+
+            <span class="n">meshHalfEdgePtr</span> <span class="n">firstEdge</span> <span class="o">=</span> <span class="n">splitEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">secondEdge</span> <span class="o">=</span> <span class="n">splitEdges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeWorldPosition</span> <span class="o">=</span> <span class="n">firstEdge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPosition</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+            <span class="kt">bool</span> <span class="n">startFromOutsideIntersection</span> <span class="o">=</span>
+                <span class="n">keepAbove</span> <span class="o">==</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">IsPointAbovePlane</span><span class="p">(</span><span class="n">cutNormal</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">edgeWorldPosition</span><span class="p">);</span>
+
+            <span class="c1">//handle triangle split</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">intersectionEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+            <span class="n">RegenerateTriangleSplit</span><span class="p">(</span><span class="n">startFromOutsideIntersection</span>
+                <span class="p">,</span> <span class="n">firstEdge</span><span class="p">,</span> <span class="n">secondEdge</span><span class="p">,</span>
+                <span class="n">intersectionEdge</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span>
+                <span class="n">transform</span><span class="p">);</span>
+
+            <span class="n">IntersectionEdgeInfo</span> <span class="nf">intersectionEdgeInfo</span><span class="p">(</span><span class="n">intersectionEdge</span><span class="p">);</span>
+
+            <span class="n">generatedIntersectionEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">intersectionEdgeInfo</span><span class="p">);</span>
+
+
+            <span class="n">meshEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">firstEdge</span><span class="p">);</span>
+            <span class="n">meshEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">secondEdge</span><span class="p">);</span>
+            <span class="n">meshEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">intersectionEdge</span><span class="p">);</span>
+
+            <span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">CalculateLocalCentroid</span><span class="p">();</span>
+            <span class="n">splitPolygon</span><span class="o">-&gt;</span><span class="n">AssignEdgeOwnership</span><span class="p">();</span>
+        <span class="p">}</span>
+
+
+        <span class="c1">//------------------------------------------------------ Related to Quad Organization ----------------------------------------------------------------//</span>
+
+        <span class="kt">void</span> <span class="n">InsideIntersectionMeshRegeneration</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">effectedBoundaryEdges</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">generatedEdges</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span>
+            <span class="p">,</span> <span class="n">meshHalfEdgePtr</span><span class="o">&amp;</span> <span class="n">supportEdge</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">SplitterIntersectionInfo</span><span class="o">&amp;</span> <span class="n">vertexIntersectionInfo</span><span class="p">,</span> <span class="n">BoundaryEdgeInfo</span><span class="o">&amp;</span> <span class="n">debugStuff</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">IntersectionEdgeInfo</span><span class="o">&gt;&amp;</span> <span class="n">generatedIntersectionEdges</span>
+            <span class="p">,</span> <span class="n">SplittablePolygonPtr</span> <span class="n">owner</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//select Base Half Edge</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">baseEdge</span> <span class="o">=</span> <span class="n">effectedBoundaryEdges</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">debugStuff</span><span class="p">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">baseEdge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPosition</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+
+            <span class="cm">/*const math::vec3&amp; initialIntersectionPosition = vertexIntersectionInfo.startIntersectionPosition;</span>
+<span class="cm">            const math::vec3&amp; startToEndPosition = vertexIntersectionInfo.startToEndPosition;</span>
+<span class="cm">            const math::vec2&amp; initialUVIntersection = vertexIntersectionInfo.startIntersectionUV;</span>
+<span class="cm">            const math::vec2&amp; startToEndUV = vertexIntersectionInfo.startToEndUV;*/</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">initialIntersectionPosition</span><span class="p">,</span> <span class="n">startToEndPosition</span><span class="p">,</span>
+                <span class="n">initialUVIntersection</span><span class="p">,</span> <span class="n">startToEndUV</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertexIntersectionInfo</span><span class="p">.</span><span class="n">GetIntersectionData</span><span class="p">();</span>
+
+            <span class="c1">//----------------------------------- Create currentSupportEdge -------------------------------------------------------------//</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">currentSupportEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">currentSupportEdge</span> <span class="o">=</span> <span class="n">effectedBoundaryEdges</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+                <span class="c1">//currentSupportEdge.position = transform.worldToLocalMatrix.MultiplyPoint(worldStartIntersection);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">currentSupportEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span>
+                    <span class="p">(</span><span class="n">baseEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">,</span> <span class="n">baseEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+
+
+                <span class="n">currentSupportEdge</span><span class="o">-&gt;</span><span class="n">setPairing</span><span class="p">(</span><span class="n">supportEdge</span><span class="p">);</span>
+                <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">currentSupportEdge</span><span class="p">);</span>
+
+            <span class="p">}</span>
+
+            <span class="n">debugStuff</span><span class="p">.</span><span class="n">prevSupport</span> <span class="o">=</span> <span class="n">currentSupportEdge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPosition</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+            <span class="c1">//----------------------------------- Create nextcurrentSupportEdge -------------------------------------------------------------//</span>
+            <span class="kt">int</span> <span class="n">maxData</span> <span class="o">=</span> <span class="n">effectedBoundaryEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">nextSupportEdge</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">effectedBoundaryEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">nextSupportEdge</span> <span class="o">=</span> <span class="n">effectedBoundaryEdges</span><span class="p">[</span><span class="n">effectedBoundaryEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldPosition</span> <span class="o">=</span>
+                    <span class="p">(</span><span class="n">initialIntersectionPosition</span> <span class="o">+</span> <span class="n">startToEndPosition</span><span class="p">);</span>
+
+                <span class="n">nextSupportEdge</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">((</span><span class="n">worldPosition</span><span class="p">),</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">nextSupportEdge</span><span class="o">-&gt;</span><span class="n">uv</span> <span class="o">=</span> <span class="n">initialUVIntersection</span> <span class="o">+</span> <span class="n">startToEndUV</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldPosition</span> <span class="o">=</span> <span class="n">initialIntersectionPosition</span>
+                    <span class="o">+</span> <span class="n">startToEndPosition</span> <span class="o">*</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span> <span class="o">/</span> <span class="n">maxData</span><span class="p">;</span>
+
+                <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">uv</span> <span class="o">=</span> <span class="n">initialUVIntersection</span> <span class="o">+</span> <span class="n">startToEndUV</span> <span class="o">*</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span> <span class="o">/</span> <span class="n">maxData</span><span class="p">;</span>
+
+                <span class="n">nextSupportEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span> <span class="n">MeshHalfEdge</span><span class="o">&gt;</span><span class="p">(</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">worldPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">uv</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+
+                <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextSupportEdge</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">debugStuff</span><span class="p">.</span><span class="n">nextSupport</span> <span class="o">=</span> <span class="n">nextSupportEdge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPosition</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+            <span class="c1">//----------------------------------- Create Intersection -------------------------------------------------------------//</span>
+
+            <span class="kt">int</span> <span class="n">currentIndex</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+
+
+            <span class="c1">//i - 1 &lt; 0 ? 0 : i - 1 ;</span>
+            <span class="kt">float</span> <span class="n">interpolant</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">currentIndex</span> <span class="o">/</span> <span class="n">maxData</span><span class="p">;</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldIntersectionPosition</span> <span class="o">=</span>
+                <span class="n">initialIntersectionPosition</span> <span class="o">+</span> <span class="p">(</span><span class="n">startToEndPosition</span> <span class="o">*</span> <span class="n">interpolant</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localIntersectionPosition</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span>
+                <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">worldIntersectionPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">uv</span> <span class="o">=</span> <span class="n">initialUVIntersection</span> <span class="o">+</span> <span class="n">startToEndUV</span> <span class="o">*</span> <span class="n">interpolant</span><span class="p">;</span>
+
+            <span class="n">meshHalfEdgePtr</span> <span class="n">intersectionEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span> <span class="n">MeshHalfEdge</span><span class="o">&gt;</span><span class="p">(</span>
+                <span class="n">localIntersectionPosition</span><span class="p">,</span> <span class="n">uv</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+
+
+            <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">intersectionEdge</span><span class="p">);</span>
+            <span class="n">intersectionEdge</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+            <span class="n">debugStuff</span><span class="p">.</span><span class="n">intersectionEdge</span> <span class="o">=</span> <span class="n">intersectionEdge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPosition</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+
+            <span class="n">CreateNonAllignedQuad</span><span class="p">(</span><span class="n">currentSupportEdge</span><span class="p">,</span> <span class="n">nextSupportEdge</span><span class="p">,</span> <span class="n">baseEdge</span><span class="p">,</span> <span class="n">intersectionEdge</span><span class="p">,</span> <span class="n">generatedEdges</span><span class="p">,</span><span class="n">owner</span><span class="p">);</span>
+
+            <span class="c1">//-------------------------- Insantiate intersection info ----------------------------------------------//</span>
+
+            <span class="n">IntersectionEdgeInfo</span> <span class="nf">intersectionEdgeInfo</span><span class="p">(</span>
+                <span class="n">intersectionEdge</span><span class="p">);</span>
+            <span class="n">generatedIntersectionEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">intersectionEdgeInfo</span><span class="p">);</span>
+
+
+            <span class="n">supportEdge</span> <span class="o">=</span> <span class="n">nextSupportEdge</span><span class="p">;</span>
+
+
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">CreateNonAllignedQuad</span><span class="p">(</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">currentSupport</span><span class="p">,</span> <span class="n">meshHalfEdgePtr</span> <span class="n">nextSupport</span><span class="p">,</span> <span class="n">meshHalfEdgePtr</span> <span class="n">baseEdge</span><span class="p">,</span> <span class="n">meshHalfEdgePtr</span> <span class="n">intersectionEdge</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">generatedEdges</span><span class="p">,</span> <span class="n">SplittablePolygonPtr</span> <span class="n">owner</span>
+        <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//create new supporttriangle located at next support</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">supportTriangle</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span> <span class="n">MeshHalfEdge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">nextSupport</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">,</span> <span class="n">nextSupport</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+
+
+            <span class="c1">//currentSupport-intersection-supporttriangle</span>
+            <span class="n">MeshHalfEdge</span><span class="o">::</span><span class="n">connectIntoTriangle</span><span class="p">(</span><span class="n">currentSupport</span><span class="p">,</span> <span class="n">intersectionEdge</span><span class="p">,</span> <span class="n">supportTriangle</span><span class="p">);</span>
+
+            <span class="c1">//create new nextsupporttriangle located at currentsupport</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">nextSupportTriangle</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span> <span class="n">MeshHalfEdge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">currentSupport</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">,</span> <span class="n">currentSupport</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+
+            <span class="c1">//nextsupporttriangle-nextSupport-baseEdge</span>
+            <span class="n">MeshHalfEdge</span><span class="o">::</span><span class="n">connectIntoTriangle</span><span class="p">(</span><span class="n">nextSupportTriangle</span><span class="p">,</span> <span class="n">nextSupport</span><span class="p">,</span> <span class="n">baseEdge</span><span class="p">);</span>
+
+            <span class="n">supportTriangle</span><span class="o">-&gt;</span><span class="n">setPairing</span><span class="p">(</span><span class="n">nextSupportTriangle</span><span class="p">);</span>
+            <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">supportTriangle</span><span class="p">);</span>
+            <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextSupportTriangle</span><span class="p">);</span>
+
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">OutsideIntersectionMeshRegeneration</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">effectedBoundaryEdges</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">generatedEdges</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span>
+            <span class="p">,</span> <span class="n">meshHalfEdgePtr</span> <span class="n">supportEdge</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">SplitterIntersectionInfo</span><span class="o">&amp;</span> <span class="n">vertexIntersectionInfo</span><span class="p">,</span> <span class="n">BoundaryEdgeInfo</span><span class="o">&amp;</span> <span class="n">debugStuff</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">IntersectionEdgeInfo</span><span class="o">&gt;&amp;</span> <span class="n">generatedIntersectionEdges</span>
+            <span class="p">,</span> <span class="n">SplittablePolygonPtr</span> <span class="n">owner</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">baseEdge</span> <span class="o">=</span> <span class="n">effectedBoundaryEdges</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">initialIntersectionPosition</span><span class="p">,</span> <span class="n">startToEndPosition</span><span class="p">,</span>
+                <span class="n">initialUVIntersection</span><span class="p">,</span> <span class="n">startToEndUV</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertexIntersectionInfo</span><span class="p">.</span><span class="n">GetIntersectionData</span><span class="p">();</span>
+
+            <span class="c1">//----------------------------------- Create currentSupportEdge -------------------------------------------------------------//</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">currentSupportEdge</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">currentSupportEdge</span> <span class="o">=</span> <span class="n">effectedBoundaryEdges</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+                <span class="n">currentSupportEdge</span><span class="o">-&gt;</span><span class="n">position</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">initialIntersectionPosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+                <span class="n">currentSupportEdge</span><span class="o">-&gt;</span><span class="n">uv</span> <span class="o">=</span> <span class="n">initialUVIntersection</span><span class="p">;</span>
+
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">currentSupportEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span>
+                    <span class="p">(</span><span class="n">supportEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">,</span> <span class="n">supportEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+
+                <span class="n">currentSupportEdge</span><span class="o">-&gt;</span><span class="n">setPairing</span><span class="p">(</span><span class="n">supportEdge</span><span class="p">);</span>
+                <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">currentSupportEdge</span><span class="p">);</span>
+            <span class="p">}</span>
+
+
+            <span class="c1">//----------------------------------- Create nextcurrentSupportEdge -------------------------------------------------------------//</span>
+            <span class="n">meshHalfEdgePtr</span>  <span class="n">nextSupportEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">effectedBoundaryEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">nextSupportEdge</span> <span class="o">=</span> <span class="n">effectedBoundaryEdges</span><span class="p">[</span><span class="n">effectedBoundaryEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="c1">//currentSupportEdge.position = transform.worldToLocalMatrix.MultiplyPoint(worldStartIntersection + startToEndIntersection);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">nextSupportEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">baseEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">,</span> <span class="n">baseEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+                <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextSupportEdge</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">supportEdge</span> <span class="o">=</span> <span class="n">nextSupportEdge</span><span class="p">;</span>
+            <span class="c1">//----------------------------------- Create Intersection -------------------------------------------------------------//</span>
+            <span class="c1">//Vector3 intersectionPosition;</span>
+            <span class="kt">int</span> <span class="n">maxData</span> <span class="o">=</span> <span class="n">effectedBoundaryEdges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">currentIndex</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">interpolant</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">currentIndex</span> <span class="o">/</span> <span class="n">maxData</span><span class="p">;</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">IntersectionEdgePosition</span> <span class="o">=</span>
+                <span class="n">initialIntersectionPosition</span> <span class="o">+</span> <span class="p">(</span><span class="n">startToEndPosition</span> <span class="o">*</span> <span class="n">interpolant</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localIntersectionEdgePosition</span> <span class="o">=</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">IntersectionEdgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec2</span> <span class="n">edgeUV</span> <span class="o">=</span> <span class="n">initialUVIntersection</span> <span class="o">+</span> <span class="n">startToEndUV</span> <span class="o">*</span> <span class="n">interpolant</span><span class="p">;</span>
+
+            <span class="n">meshHalfEdgePtr</span> <span class="n">intersectionEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span>
+                <span class="p">(</span><span class="n">localIntersectionEdgePosition</span><span class="p">,</span> <span class="n">edgeUV</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+            <span class="n">intersectionEdge</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">intersectionEdge</span><span class="p">);</span>
+
+            <span class="n">CreateAllignedQuad</span><span class="p">(</span><span class="n">currentSupportEdge</span><span class="p">,</span> <span class="n">nextSupportEdge</span><span class="p">,</span> <span class="n">baseEdge</span><span class="p">,</span>
+                <span class="n">intersectionEdge</span><span class="p">,</span> <span class="n">generatedEdges</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+
+            <span class="n">IntersectionEdgeInfo</span> <span class="nf">intersectionEdgeInfo</span><span class="p">(</span>
+                <span class="n">intersectionEdge</span><span class="p">);</span>
+
+            <span class="n">generatedIntersectionEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">intersectionEdgeInfo</span><span class="p">);</span>
+
+
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">CreateAllignedQuad</span><span class="p">(</span><span class="n">meshHalfEdgePtr</span> <span class="n">currentSupport</span><span class="p">,</span> <span class="n">meshHalfEdgePtr</span> <span class="n">nextSupport</span><span class="p">,</span> <span class="n">meshHalfEdgePtr</span> <span class="n">baseEdge</span><span class="p">,</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">intersectionEdge</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">generatedEdges</span><span class="p">,</span> <span class="n">SplittablePolygonPtr</span> <span class="n">owner</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//create new supporttriangle located at next support</span>
+            <span class="n">meshHalfEdgePtr</span> <span class="n">supportTriangle</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">nextSupport</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">,</span> <span class="n">nextSupport</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+
+            <span class="c1">//currentSupport-intersection-supporttriangle</span>
+            <span class="n">MeshHalfEdge</span><span class="o">::</span><span class="n">connectIntoTriangle</span><span class="p">(</span><span class="n">currentSupport</span><span class="p">,</span> <span class="n">supportTriangle</span><span class="p">,</span> <span class="n">intersectionEdge</span><span class="p">);</span>
+
+            <span class="c1">//create new nextsupporttriangle located at currentsupport</span>
+            <span class="n">meshHalfEdgePtr</span>  <span class="n">nextSupportTriangle</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">currentSupport</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">,</span> <span class="n">currentSupport</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">,</span> <span class="n">owner</span><span class="p">);</span>
+
+            <span class="c1">//nextsupporttriangle-nextSupport-baseEdge</span>
+            <span class="n">MeshHalfEdge</span><span class="o">::</span><span class="n">connectIntoTriangle</span><span class="p">(</span><span class="n">nextSupportTriangle</span><span class="p">,</span> <span class="n">baseEdge</span><span class="p">,</span> <span class="n">nextSupport</span><span class="p">);</span>
+
+            <span class="n">supportTriangle</span><span class="o">-&gt;</span><span class="n">setPairing</span><span class="p">(</span><span class="n">nextSupportTriangle</span><span class="p">);</span>
+
+            <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">supportTriangle</span><span class="p">);</span>
+            <span class="n">generatedEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">nextSupportTriangle</span><span class="p">);</span>
+        <span class="p">}</span>
+
+    <span class="p">};</span>
+
+
+
+
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersecting_polygon_organizer.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

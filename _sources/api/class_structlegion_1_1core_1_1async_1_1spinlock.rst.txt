@@ -1,0 +1,16 @@
+.. _exhale_class_structlegion_1_1core_1_1async_1_1spinlock:
+
+Class spinlock
+==============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_spinlock.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::core::async::spinlock
+   :members:
+   :protected-members:
+   :undoc-members:

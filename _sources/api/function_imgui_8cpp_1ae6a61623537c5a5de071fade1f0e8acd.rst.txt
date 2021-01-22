@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1ae6a61623537c5a5de071fade1f0e8acd:
+
+Function ImFileOpen
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImFileOpen(const char *, const char *)

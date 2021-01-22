@@ -53,6 +53,8 @@
 <span class="cp">#include</span> <span class="cpf">&lt;unordered_map&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/async/transferable_atomic.hpp&gt;</span><span class="cp"></span>
 
+<span class="cp">#include</span> <span class="cpf">&lt;Optick/optick.h&gt;</span><span class="cp"></span>
+
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">async</span>
 <span class="p">{</span>
     <span class="k">struct</span> <span class="n">ring_sync_lock</span>
@@ -61,7 +63,7 @@
         <span class="k">const</span> <span class="n">uint</span> <span class="n">m_maxRank</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">atomic_uint</span> <span class="n">m_rank</span><span class="p">;</span>
         <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span> <span class="n">owningThread</span><span class="p">;</span>
-        <span class="n">readonly_rw_spinlock</span> <span class="n">m_waitersLock</span><span class="p">;</span>
+        <span class="n">rw_spinlock</span> <span class="n">m_waitersLock</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">uint</span><span class="p">,</span> <span class="n">transferable_atomic</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">&gt;&gt;</span> <span class="n">m_waiters</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">atomic_uint</span> <span class="n">m_subscribers</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">atomic_bool</span> <span class="n">m_release</span><span class="p">;</span>
@@ -75,6 +77,7 @@
 
         <span class="kt">void</span> <span class="nf">sync</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="n">uint</span> <span class="n">rank</span> <span class="o">=</span> <span class="n">m_rank</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span> <span class="c1">// Fetch the current rank at which the lock should be.</span>
             <span class="n">uint</span> <span class="n">nextRank</span> <span class="o">=</span> <span class="p">(</span><span class="n">rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">m_maxRank</span><span class="p">;</span> <span class="c1">// Calculate the next rank at which the lock should be.</span>
 

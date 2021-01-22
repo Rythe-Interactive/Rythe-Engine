@@ -43,11 +43,13 @@ Included By
 -----------
 
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp`
-
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_ring_sync_lock.hpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_string_extra.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_buffer.hpp`
 
@@ -118,6 +120,8 @@ Defines
 - :ref:`exhale_define_primitives_8hpp_1a8989d6cd4cbbb9a9e0b1e241736281b7`
 
 - :ref:`exhale_define_primitives_8hpp_1aa95d03c8fe4c7467a8e475748cbf67e1`
+
+- :ref:`exhale_define_primitives_8hpp_1a1831a8adc4d4f340008c310cf92b7088`
 
 
 Typedefs
@@ -194,7 +198,7 @@ Typedefs
 
 - :ref:`exhale_typedef_primitives_8hpp_1ac28ecc1417fd08ecf77aa9bfaaa52e3d`
 
-- :ref:`exhale_typedef_primitives_8hpp_1a699bbd0458cd29aab4b11bfe6338ef3f`
+- :ref:`exhale_typedef_primitives_8hpp_1a3b028f7dbe81c1dc3fbaa8875933d9d0`
 
 - :ref:`exhale_typedef_primitives_8hpp_1a3182390078e86521f5e2389d47ce37d7`
 

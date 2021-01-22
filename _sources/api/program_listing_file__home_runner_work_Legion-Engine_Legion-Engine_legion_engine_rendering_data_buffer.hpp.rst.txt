@@ -1,0 +1,63 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_buffer.hpp:
+
+Program Listing for File buffer.hpp
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_buffer.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/buffer.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <application/application.hpp>
+   
+   namespace legion::rendering
+   {
+       struct buffer
+       {
+       private:
+           // Managed resource with the buffer id, also has the responsibility of deleting the buffer after all copies of this buffer have been destroyed.
+           common::managed_resource<app::gl_id> m_id = common::managed_resource<app::gl_id>(nullptr);
+           GLenum m_target = invalid_id; // Buffer target
+           GLenum m_usage = invalid_id; // Buffer intended memory usage.
+                                        // This can be changed by OpenGL if the driver thinks you made the wrong choice,
+                                        // in that case a warning will show in the console and this value will not be accurate anymore.
+   
+       public:
+           buffer() = default;
+   
+           template<typename T>
+           buffer(GLenum target, const std::vector<T>& data, GLenum usage);
+   
+           buffer(GLenum target, size_type size, void* data, GLenum usage);
+   
+           buffer(GLenum target, GLenum usage);
+   
+           L_NODISCARD app::gl_id id() const;
+   
+           L_NODISCARD GLenum target() const;
+   
+           L_NODISCARD GLenum usage() const;
+   
+           L_NODISCARD size_type size() const;
+   
+           void bindBufferBase(uint index) const;
+   
+           void resize(size_type newSize) const;
+   
+           template<typename T>
+           void bufferData(const std::vector<T>& data) const;
+   
+           void bufferData(size_type size, void* data) const;
+   
+           void bufferData(size_type offset, size_type size, void* data) const;
+   
+           void bind() const;
+   
+           void release() const;
+       };
+   }
+   
+   #include <rendering/data/buffer.inl>

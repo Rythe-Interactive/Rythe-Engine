@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1rendering_1_1_particle_system_handle:
+
+Struct ParticleSystemHandle
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_particle_system_cache.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::rendering::ParticleSystemHandle
+   :members:
+   :protected-members:
+   :undoc-members:

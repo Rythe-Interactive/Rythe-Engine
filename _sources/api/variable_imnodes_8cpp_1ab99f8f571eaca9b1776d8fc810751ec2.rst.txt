@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1ab99f8f571eaca9b1776d8fc810751ec2:
+
+Variable titlebar_hovered
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: titlebar_hovered

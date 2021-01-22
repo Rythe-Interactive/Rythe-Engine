@@ -1,0 +1,13 @@
+.. _exhale_function_event_8hpp_1a93d201e9e7d0b30dc435f7bb60e70694:
+
+Template Function legion::core::events::detail::reportEventType
+===============================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_event.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::events::detail::reportEventType()

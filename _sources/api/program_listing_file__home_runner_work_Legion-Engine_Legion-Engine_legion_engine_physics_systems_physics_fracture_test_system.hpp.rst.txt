@@ -1,0 +1,61 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physics_fracture_test_system.hpp:
+
+Program Listing for File physics_fracture_test_system.hpp
+=========================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physics_fracture_test_system.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/systems/physics_fracture_test_system.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   #include <rendering/components/renderable.hpp>
+   
+   using namespace legion;
+   
+   struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
+   struct nextPhysicsTimeStepContinue : public app::input_action<nextPhysicsTimeStepContinue> {};
+   struct physics_split_test : public app::input_action<physics_split_test> {};
+   
+   namespace legion::physics
+   {
+       class PhysicsFractureTestSystem final : public System<PhysicsFractureTestSystem>
+       {
+       public:
+   
+           virtual void setup();
+   
+           virtual void colliderDraw(time::span dt);
+   
+       private:
+   
+           void OnSplit(physics_split_test* action);
+   
+           void meshSplittingTest(rendering::model_handle planeH, rendering::model_handle cubeH
+               , rendering::model_handle cylinderH, rendering::model_handle complexH, rendering::material_handle TextureH);
+   
+           void collisionResolutionTest(rendering::model_handle cubeH,
+               rendering::material_handle wireframeH);
+   
+           void extendedContinuePhysics(extendedPhysicsContinue * action);
+   
+           void OneTimeContinuePhysics(nextPhysicsTimeStepContinue * action);
+   
+           rendering::material_handle textureH;
+   
+           rendering::model_handle cubeH;
+           rendering::model_handle concaveTestObject;
+           rendering::model_handle planeH;
+           rendering::model_handle cylinderH;
+           rendering::model_handle complexH;
+   
+           ecs::entity_handle staticToAABBEntLinear, staticToAABBEntRotation, staticToOBBEnt, staticToEdgeEnt;
+   
+       };
+   
+     
+   
+   }

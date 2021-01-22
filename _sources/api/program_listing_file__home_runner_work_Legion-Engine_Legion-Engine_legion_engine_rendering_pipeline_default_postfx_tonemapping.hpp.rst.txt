@@ -1,0 +1,40 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_tonemapping.hpp:
+
+Program Listing for File tonemapping.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_tonemapping.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/default/postfx/tonemapping.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <rendering/data/postprocessingeffect.hpp>
+   #include <rendering/util/bindings.hpp>
+   
+   namespace legion::rendering
+   {
+       enum struct tonemapping_type
+       {
+           aces, reinhard, reinhard_jodie, legion, unreal3
+       };
+   
+       class Tonemapping : public PostProcessingEffect<Tonemapping>
+       {
+       private:
+           static std::atomic<id_type> m_currentShader;
+           float exposure;
+   
+       public:
+           static void setAlgorithm(tonemapping_type type);
+   
+           void setup(app::window& context) override;
+   
+           void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime);
+   
+       };
+   
+   
+   }

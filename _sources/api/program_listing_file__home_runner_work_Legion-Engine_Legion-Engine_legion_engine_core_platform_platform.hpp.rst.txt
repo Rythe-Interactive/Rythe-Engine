@@ -12,10 +12,26 @@ Program Listing for File platform.hpp
 
    #pragma once
    
+   #if !defined(PROJECT_NAME)
+   #define PROJECT_NAME user_project
+   #endif
+   
+   #define CONCAT(A, B) A ## B
+   
+   #define CONCAT_DEFINE(A, B) CONCAT(A, B)
+   
    #define LEGION_CPP17V 201703L
    
    #define LEGION_DEBUG_VALUE 1
    #define LEGION_RELEASE_VALUE 2
+   
+   #if defined(DOXY_EXCLUDE)
+   #define NDOXY(...)
+   #define CNDOXY(...)
+   #else
+   #define NDOXY(args...) args
+   #define CNDOXY(args...) , args
+   #endif
    
    #if defined(_DEBUG) || defined(DEBUG)
    
@@ -33,7 +49,7 @@ Program Listing for File platform.hpp
    #endif
    
    
-   #if defined(_MSC_VER)
+   #if defined(_WIN64)
    
        #define LEGION_WINDOWS
    
@@ -49,6 +65,7 @@ Program Listing for File platform.hpp
    
        #define LEGION_LINUX
    
+       #include <sys/prctl.h>
        #include <sys/resource.h>
        #include <sys/types.h>
        #include <sys/wait.h>
@@ -71,6 +88,26 @@ Program Listing for File platform.hpp
        #endif
    #endif
    
+   #if defined(__clang__)
+       // clang
+   #define LEGION_CLANG
+   
+   #if defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
+   #define LEGION_CLANG_GCC
+   #elif defined(_MSC_VER)
+   #define LEGION_CLANG_MSVC
+   #endif
+   
+   #define L_PAUSE_INSTRUCTION __builtin_ia32_pause
+   #elif defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
+       // gcc
+   #define LEGION_GCC
+   #define L_PAUSE_INSTRUCTION __builtin_ia32_pause
+   #elif defined(_MSC_VER)
+       // msvc
+   #define LEGION_MSVC
+   #define L_PAUSE_INSTRUCTION _mm_pause
+   #endif
    
    #if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
    
@@ -104,6 +141,15 @@ Program Listing for File platform.hpp
    #else
    #define L_NODISCARD
    #endif
+   
+   #if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(maybe_unused) || defined(DOXY_INCLUDE)
+   
+   #define L_MAYBEUNUSED [[maybe_unused]]
+   #else
+   #define L_MAYBEUNUSED
+   #endif
+   
+   
    
    #if __cplusplus > LEGION_CPP17V || L_HASCPPATTRIB(noreturn) || defined(DOXY_INCLUDE)
    

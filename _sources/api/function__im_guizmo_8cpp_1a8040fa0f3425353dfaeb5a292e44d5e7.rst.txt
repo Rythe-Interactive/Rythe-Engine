@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a8040fa0f3425353dfaeb5a292e44d5e7:
+
+Function imgui::gizmo::SetGizmoSizeClipSpace
+============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::SetGizmoSizeClipSpace(float)

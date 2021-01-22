@@ -122,15 +122,33 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion7physics14ConvexCollider15UpdateTightAABBEN4math4mat4E">
-<span id="_CPPv3N6legion7physics14ConvexCollider15UpdateTightAABBEN4math4mat4E"></span><span id="_CPPv2N6legion7physics14ConvexCollider15UpdateTightAABBEN4math4mat4E"></span><span id="legion::physics::ConvexCollider::UpdateTightAABB__math::mat4"></span><span class="target" id="classlegion_1_1physics_1_1_convex_collider_1aeb0f2e14a6c29b1d9b0f2f899be05fa2"></span>void <code class="sig-name descname">UpdateTightAABB</code><span class="sig-paren">(</span>math::mat4 <em>transform</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14ConvexCollider15UpdateTightAABBEN4math4mat4E" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics14ConvexCollider25UpdateTightBoundingVolumeERKN4math4mat4E">
+<span id="_CPPv3N6legion7physics14ConvexCollider25UpdateTightBoundingVolumeERKN4math4mat4E"></span><span id="_CPPv2N6legion7physics14ConvexCollider25UpdateTightBoundingVolumeERKN4math4mat4E"></span><span id="legion::physics::ConvexCollider::UpdateTightBoundingVolume__math::mat4CR"></span><span class="target" id="classlegion_1_1physics_1_1_convex_collider_1af9934e5374534fa1f5da2da0f66080ec"></span>void <code class="sig-name descname">UpdateTightBoundingVolume</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion7physics14ConvexCollider25UpdateTightBoundingVolumeERKN4math4mat4E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14ConvexCollider15UpdateTightAABBERKN4math4mat4E">
+<span id="_CPPv3N6legion7physics14ConvexCollider15UpdateTightAABBERKN4math4mat4E"></span><span id="_CPPv2N6legion7physics14ConvexCollider15UpdateTightAABBERKN4math4mat4E"></span><span id="legion::physics::ConvexCollider::UpdateTightAABB__math::mat4CR"></span><span class="target" id="classlegion_1_1physics_1_1_convex_collider_1ab89a236af8970a2814d0b4403fe0910e"></span>void <code class="sig-name descname">UpdateTightAABB</code><span class="sig-paren">(</span><em class="property">const</em> math::mat4 &amp;<em>transform</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14ConvexCollider15UpdateTightAABBERKN4math4mat4E" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Given the current transform of the entity, creates a tight AABB of the collider;. </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion7physics14ConvexCollider27ConstructConvexHullWithMeshEv">
-<span id="_CPPv3N6legion7physics14ConvexCollider27ConstructConvexHullWithMeshEv"></span><span id="_CPPv2N6legion7physics14ConvexCollider27ConstructConvexHullWithMeshEv"></span><span id="legion::physics::ConvexCollider::ConstructConvexHullWithMesh"></span><span class="target" id="classlegion_1_1physics_1_1_convex_collider_1ad3b30efb33e840c0b459a60e627d3ebd"></span>void <code class="sig-name descname">ConstructConvexHullWithMesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14ConvexCollider27ConstructConvexHullWithMeshEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics14ConvexCollider6doStepERN6legion4core11mesh_handleE">
+<span id="_CPPv3N6legion7physics14ConvexCollider6doStepERN6legion4core11mesh_handleE"></span><span id="_CPPv2N6legion7physics14ConvexCollider6doStepERN6legion4core11mesh_handleE"></span><span id="legion::physics::ConvexCollider::doStep__legion::core::mesh_handleR"></span><span class="target" id="classlegion_1_1physics_1_1_convex_collider_1a218c76ee502ff6056b057b8593e21742"></span>void <code class="sig-name descname">doStep</code><span class="sig-paren">(</span>legion::core::<a class="reference internal" href="class_structlegion_1_1core_1_1mesh__handle.html#_CPPv4N6legion4core11mesh_handleE" title="legion::core::mesh_handle">mesh_handle</a> &amp;<em>mesh</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14ConvexCollider6doStepERN6legion4core11mesh_handleE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Does one step of the convex hull generation Just for debug purposes. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics14ConvexCollider27ConstructConvexHullWithMeshERN6legion4core11mesh_handleE">
+<span id="_CPPv3N6legion7physics14ConvexCollider27ConstructConvexHullWithMeshERN6legion4core11mesh_handleE"></span><span id="_CPPv2N6legion7physics14ConvexCollider27ConstructConvexHullWithMeshERN6legion4core11mesh_handleE"></span><span id="legion::physics::ConvexCollider::ConstructConvexHullWithMesh__legion::core::mesh_handleR"></span><span class="target" id="classlegion_1_1physics_1_1_convex_collider_1abf63c1d3a8ae6d4f36dba360bee41e22"></span>void <code class="sig-name descname">ConstructConvexHullWithMesh</code><span class="sig-paren">(</span>legion::core::<a class="reference internal" href="class_structlegion_1_1core_1_1mesh__handle.html#_CPPv4N6legion4core11mesh_handleE" title="legion::core::mesh_handle">mesh_handle</a> &amp;<em>meshHandle</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics14ConvexCollider27ConstructConvexHullWithMeshERN6legion4core11mesh_handleE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Constructs a polyhedron-shaped convex hull that encompasses the given mesh. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">meshHandle</span></code>: - The mesh handle to lock the mesh and the mesh to create a hull from </p></li>
+</ul>
+</dd>
+</dl>
+</p>
 </dd></dl>
 
 <dl class="cpp function">

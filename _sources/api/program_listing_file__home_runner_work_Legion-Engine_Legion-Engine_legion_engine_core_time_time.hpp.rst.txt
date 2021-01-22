@@ -11,5 +11,6 @@ Program Listing for File time.hpp
 .. code-block:: cpp
 
    #pragma once
+   #include <core/time/defaults.hpp>
    #include <core/time/time_span.hpp>
    #include <core/time/clock.hpp>

@@ -18,7 +18,7 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class readonly_rw_spinlock" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html" />
+    <link rel="next" title="Class readwrite_guard" href="classlegion_1_1core_1_1async_1_1readwrite__guard.html" />
     <link rel="prev" title="Class readonly_guard" href="classlegion_1_1core_1_1async_1_1readonly__guard.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html" title="Class readonly_rw_spinlock"
+          <a href="classlegion_1_1core_1_1async_1_1readwrite__guard.html" title="Class readwrite_guard"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="classlegion_1_1core_1_1async_1_1readonly__guard.html" title="Class readonly_guard"
@@ -55,7 +55,7 @@
   <div class="section" id="template-class-readonly-multiguard">
 <span id="exhale-class-classlegion-1-1core-1-1async-1-1readonly-multiguard"></span><h1>Template Class readonly_multiguard<a class="headerlink" href="#template-class-readonly-multiguard" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_readonly_rw_spinlock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-readonly-rw-spinlock-hpp"><span class="std std-ref">File readonly_rw_spinlock.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-rw-spinlock-hpp"><span class="std std-ref">File rw_spinlock.hpp</span></a></p></li>
 </ul>
 <div class="section" id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
@@ -64,15 +64,15 @@
 <span id="_CPPv3I_9size_typeEN6legion4core5async19readonly_multiguardE"></span><span id="_CPPv2I_9size_typeEN6legion4core5async19readonly_multiguardE"></span>template&lt;<a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">S</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1async_1_1readonly__multiguard"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::async<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">readonly_multiguard</code><a class="headerlink" href="#_CPPv4I_9size_typeEN6legion4core5async19readonly_multiguardE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for read-only. (similar to std::lock) </p>
 <p><dl class="simple">
-<dt><strong>Note</strong></dt><dd><p>Read-only operations can happen simultaneously without waiting for each other. Read-only operations will only wait for Read-Write operations to be finished. <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#structlegion_1_1core_1_1async_1_1readonly__rw__spinlock"><span class="std std-ref">legion::core::async::readonly_rw_spinlock</span></a> </p>
+<dt><strong>Note</strong></dt><dd><p>Read-only operations can happen simultaneously without waiting for each other. Read-only operations will only wait for Read-Write operations to be finished. <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#structlegion_1_1core_1_1async_1_1rw__spinlock"><span class="std std-ref">legion::core::async::rw_spinlock</span></a> </p>
 </dd>
 </dl>
 </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardER10lock_type1R10lock_type2DpR11lock_typesN">
-<span id="_CPPv3I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardER10lock_type1R10lock_type2DpR11lock_typesN"></span><span id="_CPPv2I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardER10lock_type1R10lock_type2DpR11lock_typesN"></span>template&lt;typename <code class="sig-name descname">lock_type1</code> = <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#_CPPv4N6legion4core5async20readonly_rw_spinlockE" title="legion::core::async::readonly_rw_spinlock">readonly_rw_spinlock</a>, typename <code class="sig-name descname">lock_type2</code> = <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html#_CPPv4N6legion4core5async20readonly_rw_spinlockE" title="legion::core::async::readonly_rw_spinlock">readonly_rw_spinlock</a>, typename ...<code class="sig-name descname">lock_typesN</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1async_1_1readonly__multiguard_1aaad2781a77630c195d89c499af4bfb0b"></span><code class="sig-name descname">readonly_multiguard</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardER10lock_type1R10lock_type2DpR11lock_typesN" title="legion::core::async::readonly_multiguard::readonly_multiguard::lock_type1">lock_type1</a> &amp;<em>lock1</em>, <a class="reference internal" href="#_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardER10lock_type1R10lock_type2DpR11lock_typesN" title="legion::core::async::readonly_multiguard::readonly_multiguard::lock_type2">lock_type2</a> &amp;<em>lock2</em>, <a class="reference internal" href="#_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardER10lock_type1R10lock_type2DpR11lock_typesN" title="legion::core::async::readonly_multiguard::readonly_multiguard::lock_typesN">lock_typesN</a>&amp;... <em>locks</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardER10lock_type1R10lock_type2DpR11lock_typesN" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardERK10lock_type1RK10lock_type2DpRK11lock_typesN">
+<span id="_CPPv3I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardERK10lock_type1RK10lock_type2DpRK11lock_typesN"></span><span id="_CPPv2I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardERK10lock_type1RK10lock_type2DpRK11lock_typesN"></span>template&lt;typename <code class="sig-name descname">lock_type1</code> = <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#_CPPv4N6legion4core5async11rw_spinlockE" title="legion::core::async::rw_spinlock">rw_spinlock</a>, typename <code class="sig-name descname">lock_type2</code> = <a class="reference internal" href="class_structlegion_1_1core_1_1async_1_1rw__spinlock.html#_CPPv4N6legion4core5async11rw_spinlockE" title="legion::core::async::rw_spinlock">rw_spinlock</a>, typename ...<code class="sig-name descname">lock_typesN</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1async_1_1readonly__multiguard_1ab4067f9d6744af845958f3dff3fe1b91"></span><code class="sig-name descname">readonly_multiguard</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardERK10lock_type1RK10lock_type2DpRK11lock_typesN" title="legion::core::async::readonly_multiguard::readonly_multiguard::lock_type1">lock_type1</a> &amp;<em>lock1</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardERK10lock_type1RK10lock_type2DpRK11lock_typesN" title="legion::core::async::readonly_multiguard::readonly_multiguard::lock_type2">lock_type2</a> &amp;<em>lock2</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardERK10lock_type1RK10lock_type2DpRK11lock_typesN" title="legion::core::async::readonly_multiguard::readonly_multiguard::lock_typesN">lock_typesN</a>&amp;... <em>locks</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00DpEN6legion4core5async19readonly_multiguard19readonly_multiguardERK10lock_type1RK10lock_type2DpRK11lock_typesN" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Creates readonly multi-guard and locks for Read-only. </p>
 </dd></dl>
 
@@ -117,7 +117,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
       <li>Previous: <a href="classlegion_1_1core_1_1async_1_1readonly__guard.html" title="previous chapter">Class readonly_guard</a></li>
-      <li>Next: <a href="class_structlegion_1_1core_1_1async_1_1readonly__rw__spinlock.html" title="next chapter">Class readonly_rw_spinlock</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1async_1_1readwrite__guard.html" title="next chapter">Class readwrite_guard</a></li>
   </ul></li>
   </ul></li>
 </ul>

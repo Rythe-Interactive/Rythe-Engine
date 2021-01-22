@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__impl__glfw_8cpp_1a637facc7eff897ef4512026ea1afaf0d:
+
+Function ImGui_ImplGlfw_Init
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGui_ImplGlfw_Init(GLFWwindow *, bool, GlfwClientApi)

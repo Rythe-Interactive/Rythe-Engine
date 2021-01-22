@@ -1,0 +1,13 @@
+.. _exhale_variable_framebuffer_8hpp_1a5d6946df42f47529b142ce5b5e0eb1e7:
+
+Variable legion::rendering::invalid_attachment
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_framebuffer.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::rendering::invalid_attachment

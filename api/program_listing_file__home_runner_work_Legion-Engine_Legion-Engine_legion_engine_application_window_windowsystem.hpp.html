@@ -102,19 +102,19 @@
         <span class="p">};</span>
 
         <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">GLFWwindow</span><span class="o">*</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;&gt;</span> <span class="n">m_windowComponents</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_creationLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">spinlock</span> <span class="n">m_creationLock</span><span class="p">;</span>
 
         <span class="n">ecs</span><span class="o">::</span><span class="n">EntityQuery</span> <span class="n">m_windowQuery</span><span class="p">{};</span> <span class="c1">// Query with all the windows to update.</span>
         <span class="kt">bool</span> <span class="n">m_exit</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// Keep track of whether the exit event has been raised.</span>
                              <span class="c1">// If any window requests happen after this boolean has been set then they will be denied.</span>
 
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_creationRequestLock</span><span class="p">;</span> <span class="c1">// Lock to keep the creation request list thread-safe.</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">spinlock</span> <span class="n">m_creationRequestLock</span><span class="p">;</span> <span class="c1">// Lock to keep the creation request list thread-safe.</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">window_request</span><span class="o">&gt;</span> <span class="n">m_creationRequests</span><span class="p">;</span> <span class="c1">// List of requests since the last creation loop.</span>
 
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_fullscreenRequestLock</span><span class="p">;</span> <span class="c1">// Lock to keep the fullscreen request list thread-safe.</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">spinlock</span> <span class="n">m_fullscreenRequestLock</span><span class="p">;</span> <span class="c1">// Lock to keep the fullscreen request list thread-safe.</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">fullscreen_toggle_request</span><span class="o">&gt;</span> <span class="n">m_fullscreenRequests</span><span class="p">;</span> <span class="c1">// List of requests since the last fullscreen update loop.</span>
 
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_iconRequestLock</span><span class="p">;</span> <span class="c1">// Lock to keep the icon request list thread-safe.</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">spinlock</span> <span class="n">m_iconRequestLock</span><span class="p">;</span> <span class="c1">// Lock to keep the icon request list thread-safe.</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">icon_request</span><span class="o">&gt;</span> <span class="n">m_iconRequests</span><span class="p">;</span> <span class="c1">// List of requests since the last icon update loop.</span>
 
         <span class="c1">// Internal function for closing a window safely.</span>
@@ -157,7 +157,9 @@
 <span class="cp">#pragma endregion</span>
 
     <span class="k">public</span><span class="o">:</span>
-        <span class="k">static</span> <span class="kt">void</span> <span class="n">requestIconChange</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">bool</span> <span class="n">windowStillExists</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">win</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">requestIconChange</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">icon</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">requestIconChange</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">iconName</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">requestFullscreenToggle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">position</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">100</span> <span class="p">,</span><span class="mi">100</span> <span class="p">},</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">400</span> <span class="p">});</span>

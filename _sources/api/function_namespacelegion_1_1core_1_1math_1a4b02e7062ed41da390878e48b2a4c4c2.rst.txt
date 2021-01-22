@@ -1,0 +1,13 @@
+.. _exhale_function_namespacelegion_1_1core_1_1math_1a4b02e7062ed41da390878e48b2a4c4c2:
+
+Function legion::core::math::pointToLineSegment2D
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_math_geometry.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::math::pointToLineSegment2D(const vec2&, const vec2&, const vec2&)

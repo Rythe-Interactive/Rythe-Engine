@@ -1,0 +1,13 @@
+.. _exhale_define_renderstage_8hpp_1a59df9ef5b8397aa2f9d770fdce165d04:
+
+Define transparent_priority
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: transparent_priority

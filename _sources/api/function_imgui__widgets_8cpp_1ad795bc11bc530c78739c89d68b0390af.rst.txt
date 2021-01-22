@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1ad795bc11bc530c78739c89d68b0390af:
+
+Function InputTextCalcTextSizeW
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: InputTextCalcTextSizeW(const ImWchar *, const ImWchar *, const ImWchar **, ImVec2 *, bool)

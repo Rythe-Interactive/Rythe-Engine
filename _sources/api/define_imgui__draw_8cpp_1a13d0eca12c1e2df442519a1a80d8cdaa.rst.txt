@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__draw_8cpp_1a13d0eca12c1e2df442519a1a80d8cdaa:
+
+Define ImDrawCmd_HeaderCopy
+===========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ImDrawCmd_HeaderCopy

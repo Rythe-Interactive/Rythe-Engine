@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__draw_8cpp_1a7e56fa5a582707008d3a598b8d6e81fd:
+
+Function Decode85Byte
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: Decode85Byte(char)

@@ -201,7 +201,7 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core3ecs13QueryRegistry11getEntitiesE7id_type">
-<span id="_CPPv3N6legion4core3ecs13QueryRegistry11getEntitiesE7id_type"></span><span id="_CPPv2N6legion4core3ecs13QueryRegistry11getEntitiesE7id_type"></span><span id="legion::core::ecs::QueryRegistry::getEntities__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_query_registry_1a6e153c0fc8eb62391332f30d0b1c6b0f"></span><em class="property">const</em> <a class="reference internal" href="typedef_entity__handle_8hpp_1a5c3759a3e30a71a9145fa5af22cbe72e.html#_CPPv4N6legion4core3ecs10entity_setE" title="legion::core::ecs::entity_set">entity_set</a> &amp;<code class="sig-name descname">getEntities</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>queryId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13QueryRegistry11getEntitiesE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion4core3ecs13QueryRegistry11getEntitiesE7id_type"></span><span id="_CPPv2N6legion4core3ecs13QueryRegistry11getEntitiesE7id_type"></span><span id="legion::core::ecs::QueryRegistry::getEntities__id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_query_registry_1a82441a9ef9482599604c963bc32c4e27"></span><em class="property">const</em> <a class="reference internal" href="typedef_component__pool_8hpp_1a9d9862a245e6da11b2f93cfc234727bf.html#_CPPv4N6legion4core3ecs16entity_containerE" title="legion::core::ecs::entity_container">entity_container</a> &amp;<code class="sig-name descname">getEntities</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>queryId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13QueryRegistry11getEntitiesE7id_type" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get the ids and handles of all entities that have all components of the query. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>sparse_map&lt;id_type, entity_handle&gt;&amp; Sparse map with the ids as the key and the handles as the value. </p>
@@ -213,6 +213,16 @@
 </dl>
 </p>
 </dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs13QueryRegistry13getComponentsE7id_type7id_type">
+<span id="_CPPv3N6legion4core3ecs13QueryRegistry13getComponentsE7id_type7id_type"></span><span id="_CPPv2N6legion4core3ecs13QueryRegistry13getComponentsE7id_type7id_type"></span><span id="legion::core::ecs::QueryRegistry::getComponents__id_type.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_query_registry_1ace08dac8c5a1e9755ea802cc7f6a13b6"></span><a class="reference internal" href="structlegion_1_1core_1_1ecs_1_1component__container__base.html#_CPPv4N6legion4core3ecs24component_container_baseE" title="legion::core::ecs::component_container_base">component_container_base</a> &amp;<code class="sig-name descname">getComponents</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>queryId</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13QueryRegistry13getComponentsE7id_type7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core3ecs13QueryRegistry6submitE7id_type7id_type">
+<span id="_CPPv3N6legion4core3ecs13QueryRegistry6submitE7id_type7id_type"></span><span id="_CPPv2N6legion4core3ecs13QueryRegistry6submitE7id_type7id_type"></span><span id="legion::core::ecs::QueryRegistry::submit__id_type.id_type"></span><span class="target" id="classlegion_1_1core_1_1ecs_1_1_query_registry_1a8c2e0af387e1090b6416756c1bb2d2e4"></span>void <code class="sig-name descname">submit</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>queryId</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>componentTypeId</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core3ecs13QueryRegistry6submitE7id_type7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core3ecs13QueryRegistry12addReferenceE7id_type">

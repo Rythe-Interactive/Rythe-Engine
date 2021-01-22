@@ -54,9 +54,24 @@
     <span class="kt">void</span> <span class="n">physicsComponent</span><span class="o">::</span><span class="n">calculateNewLocalCenterOfMass</span><span class="p">()</span>
     <span class="p">{</span>
     <span class="p">}</span>
-    <span class="kt">void</span> <span class="n">physicsComponent</span><span class="o">::</span><span class="n">ConstructConvexHull</span><span class="p">()</span>
-    <span class="p">{</span>
 
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;</span> <span class="n">physicsComponent</span><span class="o">::</span><span class="n">ConstructConvexHull</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">mesh_handle</span><span class="o">&amp;</span> <span class="n">meshHandle</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">collider</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="c1">//collider-&gt;ConstructConvexHullWithMesh(meshHandle);</span>
+        <span class="n">collider</span><span class="o">-&gt;</span><span class="n">doStep</span><span class="p">(</span><span class="n">meshHandle</span><span class="p">);</span>
+
+        <span class="n">colliders</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">collider</span><span class="p">);</span>
+
+        <span class="n">calculateNewLocalCenterOfMass</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="n">collider</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">physicsComponent</span><span class="o">::</span><span class="n">ConstructConvexHull</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">mesh_handle</span><span class="o">&amp;</span> <span class="n">meshHandle</span><span class="p">,</span> <span class="n">ConvexCollider</span><span class="o">&amp;</span> <span class="n">col</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">col</span><span class="p">.</span><span class="n">doStep</span><span class="p">(</span><span class="n">meshHandle</span><span class="p">);</span>
         <span class="n">calculateNewLocalCenterOfMass</span><span class="p">();</span>
     <span class="p">}</span>
 

@@ -43,6 +43,8 @@ Included By
 -----------
 
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_managed_resource.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_containers.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_events_eventbus.hpp`

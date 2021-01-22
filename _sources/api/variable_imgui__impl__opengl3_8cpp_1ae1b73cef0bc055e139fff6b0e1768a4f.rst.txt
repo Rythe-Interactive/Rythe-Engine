@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui__impl__opengl3_8cpp_1ae1b73cef0bc055e139fff6b0e1768a4f:
+
+Variable g_ShaderHandle
+=======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: g_ShaderHandle

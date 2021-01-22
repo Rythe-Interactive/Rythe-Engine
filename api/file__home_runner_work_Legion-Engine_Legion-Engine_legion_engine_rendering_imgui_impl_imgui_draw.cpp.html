@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File imgui_draw.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">File imgui_draw.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="file-imgui-draw-cpp">
+<span id="file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-draw-cpp"></span><h1>File imgui_draw.cpp<a class="headerlink" href="#file-imgui-draw-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl.html#dir-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl</span></code>)</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-draw-cpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_draw.cpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id3">Classes</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id4">Functions</a></p></li>
+<li><p><a class="reference internal" href="#defines" id="id5">Defines</a></p></li>
+<li><p><a class="reference internal" href="#variables" id="id6">Variables</a></p></li>
+</ul>
+</div>
+<div class="section" id="definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-draw-cpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_draw.cpp</span></code>)<a class="headerlink" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-draw-cpp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp.html">Program Listing for File imgui_draw.cpp</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imgui.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imgui_internal.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imstb_rectpack.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">imgui/imstb_truetype.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdio.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stdlib.h</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="struct_im_font_build_dst_data.html#exhale-struct-struct-im-font-build-dst-data"><span class="std std-ref">Struct ImFontBuildDstData</span></a></p></li>
+<li><p><a class="reference internal" href="struct_im_font_build_src_data.html#exhale-struct-struct-im-font-build-src-data"><span class="std std-ref">Struct ImFontBuildSrcData</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a992fe244c130e7ec5a8aa7bc0889f9aa.html#exhale-function-imgui-draw-8cpp-1a992fe244c130e7ec5a8aa7bc0889f9aa"><span class="std std-ref">Function Decode85</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a7e56fa5a582707008d3a598b8d6e81fd.html#exhale-function-imgui-draw-8cpp-1a7e56fa5a582707008d3a598b8d6e81fd"><span class="std std-ref">Function Decode85Byte</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a98e6aacbe39a5d2a5fa9d08e362e49ef.html#exhale-function-imgui-draw-8cpp-1a98e6aacbe39a5d2a5fa9d08e362e49ef"><span class="std std-ref">Function GetDefaultCompressedFontDataTTFBase85</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1ae358747474c006135921182132a578a6.html#exhale-function-imgui-draw-8cpp-1ae358747474c006135921182132a578a6"><span class="std std-ref">Function ImAcos01</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a583080c74f4cef581b0233e0367e8538.html#exhale-function-imgui-draw-8cpp-1a583080c74f4cef581b0233e0367e8538"><span class="std std-ref">Function ImBezierCalc</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1adbf0ee92b3ac86e30b9e81f552d15d37.html#exhale-function-imgui-draw-8cpp-1adbf0ee92b3ac86e30b9e81f552d15d37"><span class="std std-ref">Function ImFontAtlasBuildFinish</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1ac050ff181df43cec0b63d834b6039c3f.html#exhale-function-imgui-draw-8cpp-1ac050ff181df43cec0b63d834b6039c3f"><span class="std std-ref">Function ImFontAtlasBuildInit</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a8d5f3a053aae34ac7b93e39cb9096d06.html#exhale-function-imgui-draw-8cpp-1a8d5f3a053aae34ac7b93e39cb9096d06"><span class="std std-ref">Function ImFontAtlasBuildMultiplyCalcLookupTable</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a8dc3feae771599949b33712b520e9060.html#exhale-function-imgui-draw-8cpp-1a8dc3feae771599949b33712b520e9060"><span class="std std-ref">Function ImFontAtlasBuildMultiplyRectAlpha8</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1add0fcd1708ca3540688d8277fc01bf3f.html#exhale-function-imgui-draw-8cpp-1add0fcd1708ca3540688d8277fc01bf3f"><span class="std std-ref">Function ImFontAtlasBuildPackCustomRects</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a4c015f0d4512b2ef9112f1abd6a8172a.html#exhale-function-imgui-draw-8cpp-1a4c015f0d4512b2ef9112f1abd6a8172a"><span class="std std-ref">Function ImFontAtlasBuildRender1bppRectFromString</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a5c1e7dc4dbb8ef1787cc953b6156fb28.html#exhale-function-imgui-draw-8cpp-1a5c1e7dc4dbb8ef1787cc953b6156fb28"><span class="std std-ref">Function ImFontAtlasBuildRenderDefaultTexData</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1ab634607914fd0dc9ed27d1dc65505adc.html#exhale-function-imgui-draw-8cpp-1ab634607914fd0dc9ed27d1dc65505adc"><span class="std std-ref">Function ImFontAtlasBuildRenderLinesTexData</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a4bea0932904c84de73237df3f1f76bdd.html#exhale-function-imgui-draw-8cpp-1a4bea0932904c84de73237df3f1f76bdd"><span class="std std-ref">Function ImFontAtlasBuildSetupFont</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a19c9ebb9fccc7a5ff61b9367df9dc7fc.html#exhale-function-imgui-draw-8cpp-1a19c9ebb9fccc7a5ff61b9367df9dc7fc"><span class="std std-ref">Function ImFontAtlasBuildWithStbTruetype</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a965f44a11f70d74588c6e1bb9f842b0e.html#exhale-function-imgui-draw-8cpp-1a965f44a11f70d74588c6e1bb9f842b0e"><span class="std std-ref">Function PathBezierToCasteljau</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a1e4edfcb0eca0c2f9b67338817342cc4.html#exhale-function-imgui-draw-8cpp-1a1e4edfcb0eca0c2f9b67338817342cc4"><span class="std std-ref">Function stb__lit</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a7369890717be8d014dc7a437dcdfb282.html#exhale-function-imgui-draw-8cpp-1a7369890717be8d014dc7a437dcdfb282"><span class="std std-ref">Function stb__match</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a13802610d242126f44f88bc9392e3bbc.html#exhale-function-imgui-draw-8cpp-1a13802610d242126f44f88bc9392e3bbc"><span class="std std-ref">Function stb_adler32</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a23f899d930c93d351569ee83cf920570.html#exhale-function-imgui-draw-8cpp-1a23f899d930c93d351569ee83cf920570"><span class="std std-ref">Function stb_decompress</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a5a5301def23b33e2156ac79a8b65c69b.html#exhale-function-imgui-draw-8cpp-1a5a5301def23b33e2156ac79a8b65c69b"><span class="std std-ref">Function stb_decompress_length</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1ab60a4defbdf649dc073a900f61505dc2.html#exhale-function-imgui-draw-8cpp-1ab60a4defbdf649dc073a900f61505dc2"><span class="std std-ref">Function stb_decompress_token</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1ab5814a547146d0bc2c09e3b421abec63.html#exhale-function-imgui-draw-8cpp-1ab5814a547146d0bc2c09e3b421abec63"><span class="std std-ref">Function UnpackAccumulativeOffsetsIntoRanges</span></a></p></li>
+<li><p><a class="reference internal" href="function_imgui__draw_8cpp_1a4fc5013fcaedd05f22060e0c97f18c83.html#exhale-function-imgui-draw-8cpp-1a4fc5013fcaedd05f22060e0c97f18c83"><span class="std std-ref">Function UnpackBitVectorToFlatIndexList</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="defines">
+<h2>Defines<a class="headerlink" href="#defines" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a4df703825e073b91ea24956d6021ee59.html#exhale-define-imgui-draw-8cpp-1a4df703825e073b91ea24956d6021ee59"><span class="std std-ref">Define IM_FIXNORMAL2F</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1aa595f4d7f5dca6ca04e5b1648e84f0d6.html#exhale-define-imgui-draw-8cpp-1aa595f4d7f5dca6ca04e5b1648e84f0d6"><span class="std std-ref">Define IM_NORMALIZE2F_OVER_ZERO</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1ac140465795cda6fa747579fc0b1b29d0.html#exhale-define-imgui-draw-8cpp-1ac140465795cda6fa747579fc0b1b29d0"><span class="std std-ref">Define ImDrawCmd_HeaderCompare</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a13d0eca12c1e2df442519a1a80d8cdaa.html#exhale-define-imgui-draw-8cpp-1a13d0eca12c1e2df442519a1a80d8cdaa"><span class="std std-ref">Define ImDrawCmd_HeaderCopy</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a36c70a3a9dfec20d02bbb18e00a42ee1.html#exhale-define-imgui-draw-8cpp-1a36c70a3a9dfec20d02bbb18e00a42ee1"><span class="std std-ref">Define ImDrawCmd_HeaderSize</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1adf4d73301961430d50d7edd96f92ce38.html#exhale-define-imgui-draw-8cpp-1adf4d73301961430d50d7edd96f92ce38"><span class="std std-ref">Define IMGUI_DEFINE_MATH_OPERATORS</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a8abf98f5e58a4b3dbbdf35bb1d5ee872.html#exhale-define-imgui-draw-8cpp-1a8abf98f5e58a4b3dbbdf35bb1d5ee872"><span class="std std-ref">Define stb__in2</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1acdc23c4b28788003d2841185775661ff.html#exhale-define-imgui-draw-8cpp-1acdc23c4b28788003d2841185775661ff"><span class="std std-ref">Define stb__in3</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a26702caa0fd7846cb92e8ba4d80446c3.html#exhale-define-imgui-draw-8cpp-1a26702caa0fd7846cb92e8ba4d80446c3"><span class="std std-ref">Define stb__in4</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a0791e69f0dcd58efa795dd50eb8c6cd0.html#exhale-define-imgui-draw-8cpp-1a0791e69f0dcd58efa795dd50eb8c6cd0"><span class="std std-ref">Define STB_RECT_PACK_IMPLEMENTATION</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1afaa2f2d0d9d6726cfae6da070e736347.html#exhale-define-imgui-draw-8cpp-1afaa2f2d0d9d6726cfae6da070e736347"><span class="std std-ref">Define STB_TRUETYPE_IMPLEMENTATION</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a9592e63d0df8b6f0712e8da3aea5db23.html#exhale-define-imgui-draw-8cpp-1a9592e63d0df8b6f0712e8da3aea5db23"><span class="std std-ref">Define STBRP_ASSERT</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a152aa757fb023d39f16dd537e66b60f0.html#exhale-define-imgui-draw-8cpp-1a152aa757fb023d39f16dd537e66b60f0"><span class="std std-ref">Define STBRP_SORT</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1aebe589aefd15ba7289a47168e31b5e45.html#exhale-define-imgui-draw-8cpp-1aebe589aefd15ba7289a47168e31b5e45"><span class="std std-ref">Define STBRP_STATIC</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a1123d905f512c19c8d796a6d294a3a84.html#exhale-define-imgui-draw-8cpp-1a1123d905f512c19c8d796a6d294a3a84"><span class="std std-ref">Define STBTT_assert</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a2b639a5c1ed39bb9e223a78b743f3769.html#exhale-define-imgui-draw-8cpp-1a2b639a5c1ed39bb9e223a78b743f3769"><span class="std std-ref">Define STBTT_fabs</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1ab937f3c3c6d0c2c126c50bb32e379f02.html#exhale-define-imgui-draw-8cpp-1ab937f3c3c6d0c2c126c50bb32e379f02"><span class="std std-ref">Define STBTT_fmod</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a357d3564409e68f1b694e06f7beeca7e.html#exhale-define-imgui-draw-8cpp-1a357d3564409e68f1b694e06f7beeca7e"><span class="std std-ref">Define STBTT_free</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a284a26aeebf87bc1688d38b3b16c7248.html#exhale-define-imgui-draw-8cpp-1a284a26aeebf87bc1688d38b3b16c7248"><span class="std std-ref">Define STBTT_iceil</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a37ec4d14918346d3451d4f44f24d4710.html#exhale-define-imgui-draw-8cpp-1a37ec4d14918346d3451d4f44f24d4710"><span class="std std-ref">Define STBTT_ifloor</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a8f6734fe0cb6d6aa09e494602afa96be.html#exhale-define-imgui-draw-8cpp-1a8f6734fe0cb6d6aa09e494602afa96be"><span class="std std-ref">Define STBTT_malloc</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1a20c159e8e6985b92a96497881709659a.html#exhale-define-imgui-draw-8cpp-1a20c159e8e6985b92a96497881709659a"><span class="std std-ref">Define STBTT_pow</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1ace1fcbebd394a5bed76bc9b97dbe8d5a.html#exhale-define-imgui-draw-8cpp-1ace1fcbebd394a5bed76bc9b97dbe8d5a"><span class="std std-ref">Define STBTT_sqrt</span></a></p></li>
+<li><p><a class="reference internal" href="define_imgui__draw_8cpp_1adb252cc9576591994fdf2f89baddc630.html#exhale-define-imgui-draw-8cpp-1adb252cc9576591994fdf2f89baddc630"><span class="std std-ref">Define STBTT_STATIC</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="variable_imgui__draw_8cpp_1a082105b7beb5c000f2db90529edf2f50.html#exhale-variable-imgui-draw-8cpp-1a082105b7beb5c000f2db90529edf2f50"><span class="std std-ref">Variable FONT_ATLAS_DEFAULT_TEX_CURSOR_DATA</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__draw_8cpp_1a2c96fc3febbe9f4f6c042a2f975a5b1d.html#exhale-variable-imgui-draw-8cpp-1a2c96fc3febbe9f4f6c042a2f975a5b1d"><span class="std std-ref">Variable FONT_ATLAS_DEFAULT_TEX_DATA_H</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__draw_8cpp_1a8fb14a4f88c1553e29260d6f43aada4b.html#exhale-variable-imgui-draw-8cpp-1a8fb14a4f88c1553e29260d6f43aada4b"><span class="std std-ref">Variable FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__draw_8cpp_1adf518fea7357febbb14eeecb692a8d95.html#exhale-variable-imgui-draw-8cpp-1adf518fea7357febbb14eeecb692a8d95"><span class="std std-ref">Variable FONT_ATLAS_DEFAULT_TEX_DATA_W</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__draw_8cpp_1a7fcb9c29f786e1904c10a70f1385690a.html#exhale-variable-imgui-draw-8cpp-1a7fcb9c29f786e1904c10a70f1385690a"><span class="std std-ref">Variable proggy_clean_ttf_compressed_data_base85</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__draw_8cpp_1abdae0f70193ebadc01bddcd66dfcf743.html#exhale-variable-imgui-draw-8cpp-1abdae0f70193ebadc01bddcd66dfcf743"><span class="std std-ref">Variable stb__barrier_in_b</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__draw_8cpp_1a78b497778dec25807f8ba5facab4732a.html#exhale-variable-imgui-draw-8cpp-1a78b497778dec25807f8ba5facab4732a"><span class="std std-ref">Variable stb__barrier_out_b</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__draw_8cpp_1a6d45e455062888f4f84c022dcb80575f.html#exhale-variable-imgui-draw-8cpp-1a6d45e455062888f4f84c022dcb80575f"><span class="std std-ref">Variable stb__barrier_out_e</span></a></p></li>
+<li><p><a class="reference internal" href="variable_imgui__draw_8cpp_1a41c1b5025a92d93a30f72ba8f78c9910.html#exhale-variable-imgui-draw-8cpp-1a41c1b5025a92d93a30f72ba8f78c9910"><span class="std std-ref">Variable stb__dout</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">File imgui_draw.cpp</a><ul>
+<li><a class="reference internal" href="#definition-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-draw-cpp">Definition (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_draw.cpp</span></code>)</a></li>
+<li><a class="reference internal" href="#includes">Includes</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#defines">Defines</a></li>
+<li><a class="reference internal" href="#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

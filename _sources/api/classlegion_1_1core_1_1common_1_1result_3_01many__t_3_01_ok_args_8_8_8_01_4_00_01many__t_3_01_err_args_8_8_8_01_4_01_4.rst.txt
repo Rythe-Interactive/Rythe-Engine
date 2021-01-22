@@ -12,7 +12,7 @@ Inheritance Relationships
 Base Types
 **********
 
-- ``public legion::core::common::result_impl< ok_proxy< OkArgs... >, err_proxy< ErrArgs... >, std::tuple< OkArgs... >, std::tuple< ErrArgs... > >`` (:ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__impl`)
+- ``public result_impl< ok_proxy< OkArgs... >, err_proxy< ErrArgs... >, std::tuple< OkArgs... >, std::tuple< ErrArgs... > >``
 - ``public legion::core::common::result_ident`` (:ref:`exhale_class_classlegion_1_1core_1_1common_1_1result__ident`)
 
 

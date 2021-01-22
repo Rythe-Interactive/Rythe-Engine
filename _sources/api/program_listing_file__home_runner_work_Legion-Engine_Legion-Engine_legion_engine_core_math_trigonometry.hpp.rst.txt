@@ -23,7 +23,7 @@ Program Listing for File trigonometry.hpp
        template<class T>
        constexpr T rad2deg_c()
        {
-           return T(360) / half_pi<T>();
+           return T(180) / pi<T>();
        }
    
        template <class T>
@@ -36,7 +36,7 @@ Program Listing for File trigonometry.hpp
        template <class T>
        constexpr T deg2rad_c()
        {
-           return half_pi<T>() / T(360);
+           return pi<T>() / T(180);
        }
    
        template <class T>

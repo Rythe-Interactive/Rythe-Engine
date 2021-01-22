@@ -66,11 +66,6 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core6events8EventBusD0Ev">
-<span id="_CPPv3N6legion4core6events8EventBusD0Ev"></span><span id="_CPPv2N6legion4core6events8EventBusD0Ev"></span><span id="legion::core::events::EventBus::~EventBus"></span><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a6ed404b1cdfccbc43f10ef09ce5030f6"></span><code class="sig-name descname">~EventBus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6events8EventBusD0Ev" title="Permalink to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
 <dt id="_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args">
 <span id="_CPPv3I0Dp0EN6legion4core6events8EventBus10raiseEventEDpRR4Args"></span><span id="_CPPv2I0Dp0EN6legion4core6events8EventBus10raiseEventEDpRR4Args"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename ...<code class="sig-name descname">Args</code>, typename = <a class="reference internal" href="typedef_types_2meta_8hpp_1adcd474bc5e8b1b7207b8465976de1422.html#_CPPv4N6legion4core13inherits_fromE" title="legion::core::inherits_from">inherits_from</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args" title="legion::core::events::EventBus::raiseEvent::event_type">event_type</a>, <a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event.html#_CPPv4I0EN6legion4core6events5eventE" title="legion::core::events::event">event</a>&lt;<a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args" title="legion::core::events::EventBus::raiseEvent::event_type">event_type</a>&gt;&gt;&gt;<br /><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a275d8cea6f8ee208f0c2f1ffb9215b28"></span>void <code class="sig-name descname">raiseEvent</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args" title="legion::core::events::EventBus::raiseEvent::Args">Args</a>&amp;&amp;... <em>arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0Dp0EN6legion4core6events8EventBus10raiseEventEvDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Insert event into bus and notify all subscribers. </p>
@@ -86,6 +81,16 @@
 </dl>
 </p>
 </dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core6events8EventBus10raiseEventERRNSt10unique_ptrI10event_baseEE">
+<span id="_CPPv3N6legion4core6events8EventBus10raiseEventERRNSt10unique_ptrI10event_baseEE"></span><span id="_CPPv2N6legion4core6events8EventBus10raiseEventERRNSt10unique_ptrI10event_baseEE"></span><span id="legion::core::events::EventBus::raiseEvent__std::unique_ptr:event_base:RR"></span><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a165e986ed933db100e1512bf66199f4d"></span>void <code class="sig-name descname">raiseEvent</code><span class="sig-paren">(</span>std::unique_ptr&lt;<a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event__base.html#_CPPv4N6legion4core6events10event_baseE" title="legion::core::events::event_base">event_base</a>&gt; &amp;&amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6events8EventBus10raiseEventERRNSt10unique_ptrI10event_baseEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core6events8EventBus16raiseEventUnsafeERRNSt10unique_ptrI10event_baseEE7id_type">
+<span id="_CPPv3N6legion4core6events8EventBus16raiseEventUnsafeERRNSt10unique_ptrI10event_baseEE7id_type"></span><span id="_CPPv2N6legion4core6events8EventBus16raiseEventUnsafeERRNSt10unique_ptrI10event_baseEE7id_type"></span><span id="legion::core::events::EventBus::raiseEventUnsafe__std::unique_ptr:event_base:RR.id_type"></span><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1aae37ea805bd9f1357536f23ebb4623f1"></span>void <code class="sig-name descname">raiseEventUnsafe</code><span class="sig-paren">(</span>std::unique_ptr&lt;<a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event__base.html#_CPPv4N6legion4core6events10event_baseE" title="legion::core::events::event_base">event_base</a>&gt; &amp;&amp;<em>value</em>, <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6events8EventBus16raiseEventUnsafeERRNSt10unique_ptrI10event_baseEE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4I00ENK6legion4core6events8EventBus10checkEventEbv">
@@ -177,6 +182,11 @@
 </dl>
 </p>
 </dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core6events8EventBus17bindToEventUnsafeE7id_type8delegateIFvP10event_baseEE">
+<span id="_CPPv3N6legion4core6events8EventBus17bindToEventUnsafeE7id_type8delegateIFvP10event_baseEE"></span><span id="_CPPv2N6legion4core6events8EventBus17bindToEventUnsafeE7id_type8delegateIFvP10event_baseEE"></span><span class="target" id="classlegion_1_1core_1_1events_1_1_event_bus_1a2244c297396e84eecbc205609d120568"></span>void <code class="sig-name descname">bindToEventUnsafe</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <em>id</em>, <a class="reference internal" href="classlegion_1_1core_1_1delegate.html#_CPPv4I0EN6legion4core8delegateE" title="legion::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span><a class="reference internal" href="class_structlegion_1_1core_1_1events_1_1event__base.html#_CPPv4N6legion4core6events10event_baseE" title="legion::core::events::event_base">event_base</a>*<span class="sig-paren">)</span>&gt; <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6events8EventBus17bindToEventUnsafeE7id_type8delegateIFvP10event_baseEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 </div>
 </dd></dl>

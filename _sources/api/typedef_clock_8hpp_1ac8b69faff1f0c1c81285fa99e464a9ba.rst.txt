@@ -1,0 +1,13 @@
+.. _exhale_typedef_clock_8hpp_1ac8b69faff1f0c1c81285fa99e464a9ba:
+
+Typedef legion::core::time::timer
+=================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_clock.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::time::timer

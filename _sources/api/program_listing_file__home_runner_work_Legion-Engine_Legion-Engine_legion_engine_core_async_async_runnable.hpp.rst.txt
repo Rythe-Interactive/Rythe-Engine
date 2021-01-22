@@ -1,0 +1,46 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_runnable.hpp:
+
+Program Listing for File async_runnable.hpp
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_runnable.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async/async_runnable.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/async/async_operation.hpp>
+   #include <core/containers/runnable.hpp>
+   
+   namespace legion::core::async
+   {
+       template<typename Func>
+       struct async_runnable : public runnable<Func>
+       {
+       protected:
+           std::shared_ptr<async_progress> m_progress;
+       public:
+           async_runnable() = default;
+           async_runnable(const Func& func) : runnable<Func>(func), m_progress(new async_progress(1)) {}
+   
+           std::shared_ptr<async_progress> getProgress() noexcept
+           {
+               return m_progress;
+           }
+   
+           template<typename RepeaterFunc>
+           async_operation<RepeaterFunc> getOperation(const RepeaterFunc& func) noexcept
+           {
+               return async_operation<RepeaterFunc>(m_progress, func);
+           }
+   
+           virtual void execute() override
+           {
+               std::invoke(*(this->m_func));
+               m_progress->complete();
+           }
+       };
+   }
+   

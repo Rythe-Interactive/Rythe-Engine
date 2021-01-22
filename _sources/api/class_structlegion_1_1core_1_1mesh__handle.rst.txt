@@ -6,6 +6,15 @@ Class mesh_handle
 - Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
 
 
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public legion::core::mesh_filter`` (:ref:`exhale_struct_structlegion_1_1core_1_1mesh__filter`)
+
+
 Class Documentation
 -------------------
 

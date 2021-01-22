@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Namespace std &#8212; ArgsEngine v 0.2 alpha documentation</title>
+    <title>Namespace std &#8212; LegionEngine v 0.2 alpha documentation</title>
     <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
@@ -18,8 +18,8 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Namespace std::literals::chrono_literals" href="namespace_std__literals__chrono_literals.html" />
-    <link rel="prev" title="Namespace Scheduler" href="namespace_Scheduler.html" />
+    <link rel="next" title="Struct ExampleAppConsole" href="struct_example_app_console.html" />
+    <link rel="prev" title="Namespace legion::rendering::detail" href="namespace_legion__rendering__detail.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -36,13 +36,13 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="namespace_std__literals__chrono_literals.html" title="Namespace std::literals::chrono_literals"
+          <a href="struct_example_app_console.html" title="Struct ExampleAppConsole"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="namespace_Scheduler.html" title="Namespace Scheduler"
+          <a href="namespace_legion__rendering__detail.html" title="Namespace legion::rendering::detail"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">ArgsEngine v 0.2 alpha documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">ARGS API</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Namespace std</a></li> 
       </ul>
     </div>  
@@ -58,17 +58,24 @@
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#classes" id="id2">Classes</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id3">Functions</a></p></li>
 </ul>
 </div>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="structstd_1_1hash_3_01args_1_1core_1_1detail_1_1vertex__hash_01_4.html#exhale-struct-structstd-1-1hash-3-01args-1-1core-1-1detail-1-1vertex-hash-01-4"><span class="std std-ref">Template Struct hash&lt; args::core::detail::vertex_hash &gt;</span></a></p></li>
-<li><p><a class="reference internal" href="structstd_1_1hash_3_01args_1_1core_1_1ecs_1_1component__handle_3_01component__type_01_4_01_4.html#exhale-struct-structstd-1-1hash-3-01args-1-1core-1-1ecs-1-1component-handle-3-01component-type-01-4-01-4"><span class="std std-ref">Template Struct hash&lt; args::core::ecs::component_handle&lt; component_type &gt; &gt;</span></a></p></li>
-<li><p><a class="reference internal" href="structstd_1_1hash_3_01args_1_1core_1_1math_1_1color_01_4.html#exhale-struct-structstd-1-1hash-3-01args-1-1core-1-1math-1-1color-01-4"><span class="std std-ref">Template Struct hash&lt; args::core::math::color &gt;</span></a></p></li>
-<li><p><a class="reference internal" href="structstd_1_1hash_3_01args_1_1debug_1_1debug__line_01_4.html#exhale-struct-structstd-1-1hash-3-01args-1-1debug-1-1debug-line-01-4"><span class="std std-ref">Template Struct hash&lt; args::debug::debug_line &gt;</span></a></p></li>
-<li><p><a class="reference internal" href="structstd_1_1hash_3_01args_1_1rendering_1_1material__handle_01_4.html#exhale-struct-structstd-1-1hash-3-01args-1-1rendering-1-1material-handle-01-4"><span class="std std-ref">Template Struct hash&lt; args::rendering::material_handle &gt;</span></a></p></li>
-<li><p><a class="reference internal" href="structstd_1_1hash_3_01args_1_1rendering_1_1model__handle_01_4.html#exhale-struct-structstd-1-1hash-3-01args-1-1rendering-1-1model-handle-01-4"><span class="std std-ref">Template Struct hash&lt; args::rendering::model_handle &gt;</span></a></p></li>
+<li><p><a class="reference internal" href="structstd_1_1tuple__element_3_01_i_00_01legion_1_1core_1_1ecs_1_1archetype_3_01_args_8_8_8_01_4_01_4.html#exhale-struct-structstd-1-1tuple-element-3-01-i-00-01legion-1-1core-1-1ecs-1-1archetype-3-01-args-8-8-8-01-4-01-4"><span class="std std-ref">Template Struct tuple_element&lt; I, legion::core::ecs::archetype&lt; Args… &gt; &gt;</span></a></p></li>
+<li><p><a class="reference internal" href="structstd_1_1tuple__size_3_01const_01legion_1_1core_1_1ecs_1_1archetype_3_01_types_8_8_8_01_4_01_4.html#exhale-struct-structstd-1-1tuple-size-3-01const-01legion-1-1core-1-1ecs-1-1archetype-3-01-types-8-8-8-01-4-01-4"><span class="std std-ref">Template Struct tuple_size&lt; const legion::core::ecs::archetype&lt; Types… &gt; &gt;</span></a></p></li>
+<li><p><a class="reference internal" href="structstd_1_1tuple__size_3_01const_01volatile_01legion_1_1core_1_1ecs_1_1archetype_3_01_types_8_8_8_01_4_01_4.html#exhale-struct-structstd-1-1tuple-size-3-01const-01volatile-01legion-1-1core-1-1ecs-1-1archetype-3-01-types-8-8-8-01-4-01-4"><span class="std std-ref">Template Struct tuple_size&lt; const volatile legion::core::ecs::archetype&lt; Types… &gt; &gt;</span></a></p></li>
+<li><p><a class="reference internal" href="structstd_1_1tuple__size_3_01legion_1_1core_1_1ecs_1_1archetype_3_01_types_8_8_8_01_4_01_4.html#exhale-struct-structstd-1-1tuple-size-3-01legion-1-1core-1-1ecs-1-1archetype-3-01-types-8-8-8-01-4-01-4"><span class="std std-ref">Template Struct tuple_size&lt; legion::core::ecs::archetype&lt; Types… &gt; &gt;</span></a></p></li>
+<li><p><a class="reference internal" href="structstd_1_1tuple__size_3_01volatile_01legion_1_1core_1_1ecs_1_1archetype_3_01_types_8_8_8_01_4_01_4.html#exhale-struct-structstd-1-1tuple-size-3-01volatile-01legion-1-1core-1-1ecs-1-1archetype-3-01-types-8-8-8-01-4-01-4"><span class="std std-ref">Template Struct tuple_size&lt; volatile legion::core::ecs::archetype&lt; Types… &gt; &gt;</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_archetype_8hpp_1a9fa919b127dd81db4650bb126ebd1e03.html#exhale-function-archetype-8hpp-1a9fa919b127dd81db4650bb126ebd1e03"><span class="std std-ref">Template Function std::get(legion::core::ecs::archetype&lt;Args…&gt;&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_archetype_8hpp_1a259309ff52dd5e0a470382efb0592dd2.html#exhale-function-archetype-8hpp-1a259309ff52dd5e0a470382efb0592dd2"><span class="std std-ref">Template Function std::get(legion::core::ecs::archetype&lt;Args…&gt;&amp;)</span></a></p></li>
 </ul>
 </div>
 </div>
@@ -84,15 +91,16 @@
   <ul>
 <li><a class="reference internal" href="#">Namespace std</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
 </ul>
 </li>
 </ul>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
-  <li><a href="library_root.html">ARGS API</a><ul>
-      <li>Previous: <a href="namespace_Scheduler.html" title="previous chapter">Namespace Scheduler</a></li>
-      <li>Next: <a href="namespace_std__literals__chrono_literals.html" title="next chapter">Namespace std::literals::chrono_literals</a></li>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="namespace_legion__rendering__detail.html" title="previous chapter">Namespace legion::rendering::detail</a></li>
+      <li>Next: <a href="struct_example_app_console.html" title="next chapter">Struct ExampleAppConsole</a></li>
   </ul></li>
   </ul></li>
 </ul>

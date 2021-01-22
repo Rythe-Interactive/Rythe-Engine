@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1af02b2956c19e781cb5b6a6d0bf633753:
+
+Function ImStb::STB_TEXTEDIT_MOVEWORDLEFT_IMPL
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStb::STB_TEXTEDIT_MOVEWORDLEFT_IMPL(STB_TEXTEDIT_STRING *, int)

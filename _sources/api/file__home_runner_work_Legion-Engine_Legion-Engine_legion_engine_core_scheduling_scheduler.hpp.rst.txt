@@ -29,9 +29,17 @@ Includes
 --------
 
 
+- ``Optick/optick.h``
+
 - ``atomic`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_atomic_sparse_map.hpp`)
 
 - ``core/async/async.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async.hpp`)
+
+- ``core/async/async_runnable.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_async_runnable.hpp`)
+
+- ``core/async/job_pool.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_job_pool.hpp`)
+
+- ``core/async/thread_util.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_thread_util.hpp`)
 
 - ``core/common/exception.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_exception.hpp`)
 
@@ -55,7 +63,7 @@ Includes
 
 - ``sstream``
 
-- ``thread``
+- ``thread`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_thread_util.hpp`)
 
 
 
@@ -92,8 +100,6 @@ Classes
 - :ref:`exhale_struct_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1scheduling_1_1_scheduler`
-
-- :ref:`exhale_class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable`
 
 
 Variables

@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__widgets_8cpp_1aee9a4cbd23af66a75c6d41bad2e393d5:
+
+Define STB_TEXTEDIT_MOVEWORDLEFT
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STB_TEXTEDIT_MOVEWORDLEFT

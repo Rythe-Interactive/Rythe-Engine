@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1af89a83a43c48019b512b264020d74ef3:
+
+Function imgui::gizmo::BuildPlan
+================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::BuildPlan(const vec_t&, const vec_t&)

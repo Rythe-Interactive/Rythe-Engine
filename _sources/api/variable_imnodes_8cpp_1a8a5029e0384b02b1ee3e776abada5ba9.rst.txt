@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1a8a5029e0384b02b1ee3e776abada5ba9:
+
+Variable current_attribute_id
+=============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: current_attribute_id

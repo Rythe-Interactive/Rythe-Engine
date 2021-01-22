@@ -64,10 +64,13 @@
         <span class="c1">//--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//</span>
         <span class="c1">//&#39;this&#39; is colliderB and &#39;convexCollider&#39; is colliderA</span>
 
+
+        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;-------------------- SAT CHECK -----------------&quot;</span><span class="p">);</span>
         <span class="n">PointerEncapsulator</span> <span class="o">&lt;</span> <span class="n">HalfEdgeFace</span><span class="o">&gt;</span> <span class="n">ARefFace</span><span class="p">;</span>
 
         <span class="kt">float</span> <span class="n">ARefSeperation</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindSeperatingAxisByExtremePointProjection</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">convexCollider</span><span class="p">,</span> <span class="n">manifold</span><span class="p">.</span><span class="n">transformB</span><span class="p">,</span><span class="n">manifold</span><span class="p">.</span><span class="n">transformA</span><span class="p">,</span>  <span class="n">ARefFace</span><span class="p">,</span> <span class="n">ARefSeperation</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">ARefFace</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindSeperatingAxisByExtremePointProjection</span><span class="p">(</span>
+            <span class="k">this</span><span class="p">,</span> <span class="n">convexCollider</span><span class="p">,</span> <span class="n">manifold</span><span class="p">.</span><span class="n">transformB</span><span class="p">,</span><span class="n">manifold</span><span class="p">.</span><span class="n">transformA</span><span class="p">,</span>  <span class="n">ARefFace</span><span class="p">,</span> <span class="n">ARefSeperation</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">ARefFace</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">manifold</span><span class="p">.</span><span class="n">isColliding</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
             <span class="k">return</span><span class="p">;</span>
@@ -76,12 +79,12 @@
         <span class="n">PointerEncapsulator</span> <span class="o">&lt;</span> <span class="n">HalfEdgeFace</span><span class="o">&gt;</span> <span class="n">BRefFace</span><span class="p">;</span>
 
         <span class="kt">float</span> <span class="n">BRefSeperation</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindSeperatingAxisByExtremePointProjection</span><span class="p">(</span><span class="n">convexCollider</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="n">manifold</span><span class="p">.</span><span class="n">transformA</span><span class="p">,</span> <span class="n">manifold</span><span class="p">.</span><span class="n">transformB</span><span class="p">,</span> <span class="n">BRefFace</span><span class="p">,</span> <span class="n">BRefSeperation</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">BRefFace</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindSeperatingAxisByExtremePointProjection</span><span class="p">(</span><span class="n">convexCollider</span><span class="p">,</span>
+            <span class="k">this</span><span class="p">,</span> <span class="n">manifold</span><span class="p">.</span><span class="n">transformA</span><span class="p">,</span> <span class="n">manifold</span><span class="p">.</span><span class="n">transformB</span><span class="p">,</span> <span class="n">BRefFace</span><span class="p">,</span> <span class="n">BRefSeperation</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">BRefFace</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">manifold</span><span class="p">.</span><span class="n">isColliding</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
             <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
-
 
         <span class="n">PointerEncapsulator</span><span class="o">&lt;</span> <span class="n">HalfEdgeEdge</span><span class="o">&gt;</span> <span class="n">edgeRef</span><span class="p">;</span>
         <span class="n">PointerEncapsulator</span><span class="o">&lt;</span> <span class="n">HalfEdgeEdge</span><span class="o">&gt;</span> <span class="n">edgeInc</span><span class="p">;</span>
@@ -107,7 +110,7 @@
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldFaceNormalB</span> <span class="o">=</span> <span class="n">manifold</span><span class="p">.</span><span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">BRefFace</span><span class="p">.</span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
 
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldEdgeAPosition</span> <span class="o">=</span> <span class="n">edgeRef</span><span class="p">.</span><span class="n">ptr</span><span class="o">?</span> <span class="n">manifold</span><span class="p">.</span><span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">*</span><span class="n">edgeRef</span><span class="p">.</span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">edgePositionPtr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">();</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldEdgeAPosition</span> <span class="o">=</span> <span class="n">edgeRef</span><span class="p">.</span><span class="n">ptr</span><span class="o">?</span> <span class="n">manifold</span><span class="p">.</span><span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeRef</span><span class="p">.</span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">();</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldEdgeNormal</span> <span class="o">=</span> <span class="n">edgeNormal</span><span class="p">;</span>
 
         <span class="k">auto</span> <span class="n">abPenetrationQuery</span> <span class="o">=</span>
@@ -121,15 +124,7 @@
 
         <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PenetrationQuery</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">penetrationQueryArray</span><span class="p">{</span> <span class="n">abEdgePenetrationQuery</span><span class="p">,</span> <span class="n">abPenetrationQuery</span><span class="p">,</span> <span class="n">baPenetrationQuery</span>  <span class="p">};</span>
 
-        <span class="k">auto</span> <span class="n">lessThan</span>
-        <span class="p">{</span>
-            <span class="p">[](</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PenetrationQuery</span><span class="o">&gt;</span> <span class="n">lhs</span><span class="p">,</span>  <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PenetrationQuery</span><span class="o">&gt;</span> <span class="n">rhs</span><span class="p">)</span>
-            <span class="p">{</span>
-            <span class="k">return</span> <span class="n">lhs</span><span class="o">-&gt;</span><span class="n">penetration</span> <span class="o">&lt;</span> <span class="n">rhs</span><span class="o">-&gt;</span><span class="n">penetration</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">};</span>
-
-        <span class="c1">//manifold.penetrationInformation = *std::max_element(penetrationQueryArray.begin(), penetrationQueryArray.end(),lessThan);</span>
+        <span class="c1">//-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">abPenetrationQuery</span><span class="o">-&gt;</span><span class="n">penetration</span> <span class="o">+</span> <span class="n">physics</span><span class="o">::</span><span class="n">constants</span><span class="o">::</span><span class="n">faceToFacePenetrationBias</span> <span class="o">&gt;</span>
             <span class="n">baPenetrationQuery</span><span class="o">-&gt;</span><span class="n">penetration</span><span class="p">)</span>

@@ -1,0 +1,13 @@
+.. _exhale_variable__im_guizmo_8cpp_1a5b7e4ed53bcb702cd4dc91a5e289955e:
+
+Variable imgui::gizmo::angleLimit
+=================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: imgui::gizmo::angleLimit

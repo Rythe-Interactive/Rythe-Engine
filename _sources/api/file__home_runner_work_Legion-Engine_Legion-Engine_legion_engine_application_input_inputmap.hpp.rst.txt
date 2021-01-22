@@ -29,6 +29,10 @@ Includes
 --------
 
 
+- ``cstddef``
+
+- ``cstdint``
+
 - ``set`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_assetimporter.cpp`)
 
 

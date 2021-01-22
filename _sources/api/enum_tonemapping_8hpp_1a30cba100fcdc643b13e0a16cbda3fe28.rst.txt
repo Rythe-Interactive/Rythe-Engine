@@ -1,0 +1,13 @@
+.. _exhale_enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28:
+
+Enum tonemapping_type
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_tonemapping.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::rendering::tonemapping_type

@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1physics_1_1_splittable_polygon:
+
+Class SplittablePolygon
+=======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public std::enable_shared_from_this< SplittablePolygon >``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::physics::SplittablePolygon
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -11,19 +11,36 @@ Program Listing for File pipeline.hpp
 .. code-block:: cpp
 
    #pragma once
-   #include <rendering/data/model.hpp>
-   #include <rendering/data/shader.hpp>
-   #include <rendering/components/renderable.hpp>
+   #include <rendering/data/framebuffer.hpp>
    #include <rendering/components/camera.hpp>
+   #include <rendering/pipeline/base/pipelinebase.hpp>
    #include <rendering/pipeline/base/renderstage.hpp>
+   #include <application/application.hpp>
    
-   #include <map>
    #include <memory>
+   #include <any>
    
    namespace legion::rendering
    {
-       class ARGS_API Pipeline
+       template<typename Self>
+       class RenderPipeline : public RenderPipelineBase
        {
-           std::map<priority_type, std::unique_ptr<RenderStage>> m_stages;
+           friend class Renderer;
+       protected:
+           static std::multimap<priority_type, std::unique_ptr<RenderStageBase>, std::greater<>> m_stages;
+   
+       public:
+   
+           template<typename StageType CNDOXY(inherits_from<StageType, RenderStage<StageType>> = 0)>
+           static void attachStage();
+   
+           static void attachStage(std::unique_ptr<RenderStageBase>&& stage);
+   
+           virtual void setup(app::window& context) LEGION_PURE;
+   
+           void init(app::window& context) override;
+           void render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime) override;
        };
    }
+   
+   #include <rendering/pipeline/base/pipeline.inl>

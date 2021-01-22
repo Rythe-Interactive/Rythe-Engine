@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Function legion::audio::detail::convertToMono(const byte *, int, int&amp;, int&amp;, int)" href="function_audio__importers_8cpp_1a95eafeb1b00f533f6eb714d90c039b0b.html" />
-    <link rel="prev" title="Function ini_reader_string" href="function_ini_8c_1af35fe60b25b04f05cacd3a33c9b28c5d.html" />
+    <link rel="prev" title="Function Items_SingleStringGetter" href="function_imgui__widgets_8cpp_1a06bfc74a928bbc6b5ec608a39162ba62.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -39,7 +39,7 @@
           <a href="function_audio__importers_8cpp_1a95eafeb1b00f533f6eb714d90c039b0b.html" title="Function legion::audio::detail::convertToMono(const byte *, int, int&amp;, int&amp;, int)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="function_ini_8c_1af35fe60b25b04f05cacd3a33c9b28c5d.html" title="Function ini_reader_string"
+          <a href="function_imgui__widgets_8cpp_1a06bfc74a928bbc6b5ec608a39162ba62.html" title="Function Items_SingleStringGetter"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -59,16 +59,13 @@
 </ul>
 <div class="section" id="function-documentation">
 <h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Permalink to this headline">¶</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Unable to resolve multiple matches for function “legion::audio::detail::convertToMono” with arguments (const byte *, int, byte *, int, int) in doxygen xml output for project “LegionEngine” from directory: ../xml/.
-Potential matches:
-</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">byte</span> <span class="o">*</span><span class="n">convertToMono</span><span class="p">(</span><span class="k">const</span> <span class="n">byte</span> <span class="o">*</span><span class="n">inputData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">monoSize</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">)</span>
-<span class="o">-</span> <span class="kt">void</span> <span class="n">convertToMono</span><span class="p">(</span><span class="k">const</span> <span class="n">byte</span> <span class="o">*</span><span class="n">inputData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dataSize</span><span class="p">,</span> <span class="n">byte</span> <span class="o">*</span><span class="n">monoData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">,</span> <span class="kt">int</span> <span class="n">bitsPerSample</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion5audio6detail13convertToMonoEPK4byteiP4byteii">
+<span id="_CPPv3N6legion5audio6detail13convertToMonoEPK4byteiP4byteii"></span><span id="_CPPv2N6legion5audio6detail13convertToMonoEPK4byteiP4byteii"></span><span id="legion::audio::detail::convertToMono__byteCP.i.byteP.i.i"></span><span class="target" id="audio__importers_8cpp_1ae996ec805a9a71a82884dbf707a7712e"></span>void <code class="sig-prename descclassname">legion::audio::detail<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">convertToMono</code><span class="sig-paren">(</span><em class="property">const</em> byte *<em>inputData</em>, int <em>dataSize</em>, byte *<em>monoData</em>, int <em>channels</em>, int <em>bitsPerSample</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion5audio6detail13convertToMonoEPK4byteiP4byteii" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>function to convert audio data to mono audio data </p>
+<p>inputData is unedited audio data, dataSize is the complete audio data size, monoData is the out mono data, monoData is assumed to be resized with the correct size (dataSize/channelCount) channels is the channelCount or amount of channels bitsPerSample is the audio resolution (16 bit for mp3, and usually 16 bit for wav) </p>
+</dd></dl>
+
 </div>
 </div>
 
@@ -90,7 +87,7 @@ Potential matches:
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="function_ini_8c_1af35fe60b25b04f05cacd3a33c9b28c5d.html" title="previous chapter">Function ini_reader_string</a></li>
+      <li>Previous: <a href="function_imgui__widgets_8cpp_1a06bfc74a928bbc6b5ec608a39162ba62.html" title="previous chapter">Function Items_SingleStringGetter</a></li>
       <li>Next: <a href="function_audio__importers_8cpp_1a95eafeb1b00f533f6eb714d90c039b0b.html" title="next chapter">Function legion::audio::detail::convertToMono(const byte *, int, int&amp;, int&amp;, int)</a></li>
   </ul></li>
   </ul></li>

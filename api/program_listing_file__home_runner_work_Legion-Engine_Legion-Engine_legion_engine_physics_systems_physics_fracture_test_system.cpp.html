@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File physics_fracture_test_system.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File physics_fracture_test_system.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-physics-fracture-test-system-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-systems-physics-fracture-test-system-cpp"></span><h1>Program Listing for File physics_fracture_test_system.cpp<a class="headerlink" href="#program-listing-for-file-physics-fracture-test-system-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physics_fracture_test_system.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-systems-physics-fracture-test-system-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/systems/physics_fracture_test_system.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/systems/physics_fracture_test_system.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/mesh_splitter.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/splittable_polygon.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/components/physics_component.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/systems/physicssystem.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/debugrendering.hpp&gt;</span><span class="cp"></span>
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
+<span class="p">{</span>
+    <span class="kt">void</span> <span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">setup</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">fs</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
+
+        <span class="n">physics</span><span class="o">::</span><span class="n">PrimitiveMesh</span><span class="o">::</span><span class="n">SetECSRegistry</span><span class="p">(</span><span class="n">m_ecs</span><span class="p">);</span>
+
+        <span class="k">auto</span> <span class="n">win</span> <span class="o">=</span> <span class="n">world</span><span class="p">.</span><span class="n">read_component</span><span class="o">&lt;</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="n">app</span><span class="o">::</span><span class="n">context_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+
+        <span class="cp">#pragma region Material Setup</span>
+        <span class="n">textureH</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">create_material</span><span class="p">(</span><span class="s">&quot;texture&quot;</span><span class="p">,</span> <span class="s">&quot;assets://shaders/texture.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">textureH</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;_texture&quot;</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture</span><span class="p">(</span><span class="s">&quot;assets://textures/split-test.png&quot;</span><span class="n">_view</span><span class="p">));</span>
+        <span class="cp">#pragma endregion</span>
+
+        <span class="cp">#pragma region Model Setup</span>
+        <span class="n">cubeH</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="s">&quot;cube&quot;</span><span class="p">,</span> <span class="s">&quot;assets://models/cube.obj&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">planeH</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="s">&quot;plane&quot;</span><span class="p">,</span> <span class="s">&quot;assets://models/plane.obj&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">cylinderH</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="s">&quot;cylinder&quot;</span><span class="p">,</span> <span class="s">&quot;assets://models/cylinder.obj&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">concaveTestObject</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="s">&quot;concaveTestObject&quot;</span><span class="p">,</span> <span class="s">&quot;assets://models/polygonTest.obj&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="cp">#pragma endregion</span>
+
+        <span class="cp">#pragma region Input binding</span>
+        <span class="n">app</span><span class="o">::</span><span class="n">InputSystem</span><span class="o">::</span><span class="n">createBinding</span><span class="o">&lt;</span><span class="n">physics_split_test</span><span class="o">&gt;</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">inputmap</span><span class="o">::</span><span class="n">method</span><span class="o">::</span><span class="n">ENTER</span><span class="p">);</span>
+        <span class="n">app</span><span class="o">::</span><span class="n">InputSystem</span><span class="o">::</span><span class="n">createBinding</span><span class="o">&lt;</span><span class="n">extendedPhysicsContinue</span><span class="o">&gt;</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">inputmap</span><span class="o">::</span><span class="n">method</span><span class="o">::</span><span class="n">M</span><span class="p">);</span>
+        <span class="n">app</span><span class="o">::</span><span class="n">InputSystem</span><span class="o">::</span><span class="n">createBinding</span><span class="o">&lt;</span><span class="n">nextPhysicsTimeStepContinue</span><span class="o">&gt;</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">inputmap</span><span class="o">::</span><span class="n">method</span><span class="o">::</span><span class="n">N</span><span class="p">);</span>
+        <span class="cm">/*app::InputSystem::createBinding&lt; activate_CRtest2&gt;(app::inputmap::method::KP_2);</span>
+<span class="cm">        app::InputSystem::createBinding&lt; activate_CRtest3&gt;(app::inputmap::method::KP_3);*/</span>
+        <span class="cp">#pragma endregion</span>
+
+        <span class="cp">#pragma region Function binding</span>
+        <span class="cm">/*bindToEvent&lt; activate_CRtest2, &amp;TestSystem::onActivateUnitTest2&gt;();</span>
+<span class="cm">        bindToEvent&lt; activate_CRtest3, &amp;TestSystem::onActivateUnitTest3&gt;();*/</span>
+        <span class="n">bindToEvent</span><span class="o">&lt;</span><span class="n">physics_split_test</span><span class="p">,</span><span class="o">&amp;</span><span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">OnSplit</span> <span class="o">&gt;</span> <span class="p">();</span>
+        <span class="n">bindToEvent</span><span class="o">&lt;</span><span class="n">extendedPhysicsContinue</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">extendedContinuePhysics</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">bindToEvent</span><span class="o">&lt;</span><span class="n">nextPhysicsTimeStepContinue</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">OneTimeContinuePhysics</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="cp">#pragma endregion</span>
+
+       <span class="cm">/* meshSplittingTest(planeH, cubeH</span>
+<span class="cm">            , cylinderH, complexH, textureH);*/</span>
+
+        <span class="n">createProcess</span><span class="o">&lt;&amp;</span><span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">colliderDraw</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Update&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">colliderDraw</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="k">static</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EntityQuery</span> <span class="n">halfEdgeQuery</span> <span class="o">=</span> <span class="n">createQuery</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">MeshSplitter</span><span class="p">,</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">halfEdgeQuery</span><span class="p">.</span><span class="n">queryEntities</span><span class="p">();</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">entity</span> <span class="p">:</span> <span class="n">halfEdgeQuery</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">edgeFinderH</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">MeshSplitter</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">edgeFinder</span> <span class="o">=</span> <span class="n">edgeFinderH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">transH</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">posH</span><span class="p">,</span> <span class="n">rotH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">posH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">pol</span> <span class="p">:</span> <span class="n">edgeFinder</span><span class="p">.</span><span class="n">meshPolygons</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">worldCentroid</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">pol</span><span class="o">-&gt;</span><span class="n">localCentroid</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">worldNormal</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">pol</span><span class="o">-&gt;</span><span class="n">localNormal</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">pol</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">auto</span> <span class="p">[</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">getEdgeWorldPositions</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+                        <span class="k">auto</span> <span class="n">startOffset</span> <span class="o">=</span> <span class="p">(</span><span class="n">worldCentroid</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1f</span> <span class="o">+</span> <span class="n">worldNormal</span> <span class="o">*</span> <span class="mf">0.01f</span><span class="p">;</span>
+                        <span class="k">auto</span> <span class="n">endOffset</span> <span class="o">=</span> <span class="p">(</span><span class="n">worldCentroid</span> <span class="o">-</span> <span class="n">end</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1f</span> <span class="o">+</span> <span class="n">worldNormal</span> <span class="o">*</span> <span class="mf">0.01f</span><span class="p">;</span>
+
+                        <span class="n">debug</span><span class="o">::</span><span class="n">user_projectDrawLine</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">startOffset</span><span class="p">,</span> <span class="n">end</span> <span class="o">+</span> <span class="n">endOffset</span><span class="p">,</span> <span class="n">pol</span><span class="o">-&gt;</span><span class="n">debugColor</span><span class="p">,</span> <span class="mf">5.0f</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">pol</span> <span class="p">:</span> <span class="n">edgeFinder</span><span class="p">.</span><span class="n">meshPolygons</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">boundaryCount</span> <span class="o">=</span> <span class="n">pol</span><span class="o">-&gt;</span><span class="n">CountBoundary</span><span class="p">();</span>
+
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">boundaryCount</span> <span class="o">==</span> <span class="mi">16</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldCentroid</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">pol</span><span class="o">-&gt;</span><span class="n">localCentroid</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+                    <span class="c1">//</span>
+                    <span class="n">debug</span><span class="o">::</span><span class="n">user_projectDrawLine</span><span class="p">(</span><span class="n">worldCentroid</span><span class="p">,</span> <span class="n">worldCentroid</span>  <span class="o">+</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">colors</span><span class="o">::</span><span class="n">red</span><span class="p">,</span> <span class="mf">5.0f</span><span class="p">,</span> <span class="mf">30.0f</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="c1">//log::debug(&quot; polygon had {} boundary edges &quot;, boundaryCount);</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">meshSplittingTest</span><span class="p">(</span><span class="n">rendering</span><span class="o">::</span><span class="n">model_handle</span> <span class="n">planeH</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">model_handle</span> <span class="n">cubeH</span>
+        <span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">model_handle</span> <span class="n">cylinderH</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">model_handle</span> <span class="n">complexH</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">material_handle</span> <span class="n">TextureH</span><span class="p">)</span>
+    <span class="p">{</span>
+
+
+        <span class="n">physics</span><span class="o">::</span><span class="n">cube_collider_params</span> <span class="n">cubeParams</span><span class="p">;</span>
+        <span class="n">cubeParams</span><span class="p">.</span><span class="n">breadth</span> <span class="o">=</span> <span class="mf">2.0f</span><span class="p">;</span>
+        <span class="n">cubeParams</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="mf">2.0f</span><span class="p">;</span>
+        <span class="n">cubeParams</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span> <span class="mf">2.0f</span><span class="p">;</span>
+
+        <span class="c1">//-------------------------------------------------------------------------------------------------------------------------------//</span>
+                                                     <span class="c1">//CUBE TEST</span>
+        <span class="c1">//-------------------------------------------------------------------------------------------------------------------------------//</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">cubeSplit2</span><span class="p">;</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">splitter</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+            <span class="n">cubeSplit2</span> <span class="o">=</span> <span class="n">splitter</span><span class="p">;</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">splitter</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">cubeParams</span><span class="p">);</span>
+
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="n">splitter</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">planeH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">TextureH</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">splitter</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">10.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">2.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">rotation</span> <span class="o">=</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+            <span class="n">rotation</span> <span class="o">*=</span> <span class="n">math</span><span class="o">::</span><span class="n">angleAxis</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">deg2rad</span><span class="p">(</span><span class="o">-</span><span class="mf">60.0f</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+
+            <span class="n">splitter</span><span class="p">.</span><span class="n">write_component</span><span class="p">(</span><span class="n">rotation</span><span class="p">);</span>
+
+        <span class="p">}</span>
+
+        <span class="c1">//Cube split plane</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">cubeSplit</span><span class="p">;</span>
+        <span class="p">{</span>
+             <span class="k">auto</span> <span class="n">splitter</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+             <span class="n">cubeSplit</span> <span class="o">=</span> <span class="n">splitter</span><span class="p">;</span>
+
+             <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">splitter</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+             <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+             <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+             <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">cubeParams</span><span class="p">);</span>
+
+             <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+             <span class="n">splitter</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">planeH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">TextureH</span><span class="p">));</span>
+
+             <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">splitter</span><span class="p">);</span>
+             <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span> <span class="mf">1.5f</span><span class="p">,</span> <span class="mf">10.0f</span><span class="p">));</span>
+             <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">2.0f</span><span class="p">));</span>
+
+             <span class="k">auto</span> <span class="n">rotation</span> <span class="o">=</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+             <span class="c1">//rotation *= math::angleAxis(math::deg2rad(60.0f), math::vec3(1, 0, 0));</span>
+
+             <span class="n">splitter</span><span class="p">.</span><span class="n">write_component</span><span class="p">(</span><span class="n">rotation</span><span class="p">);</span>
+
+        <span class="p">}</span>
+
+        <span class="c1">//Cube</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="c1">//ent.add_component&lt;addRB&gt;();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">cubeParams</span><span class="p">);</span>
+
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="n">ent</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">cubeH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">TextureH</span><span class="p">));</span>
+            <span class="c1">//renderableHandle.write({ cubeH,TextureH });</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span> <span class="mf">1.5f</span><span class="p">,</span> <span class="mf">10.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;AABBRbStable&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="n">finderH</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">MeshSplitter</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">finder</span> <span class="o">=</span> <span class="n">finderH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">finder</span><span class="p">.</span><span class="n">splitTester</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cubeSplit</span><span class="p">);</span>
+            <span class="n">finder</span><span class="p">.</span><span class="n">splitTester</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cubeSplit2</span><span class="p">);</span>
+            <span class="n">finder</span><span class="p">.</span><span class="n">InitializePolygons</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">finderH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">finder</span><span class="p">);</span>
+
+        <span class="p">}</span>
+
+        <span class="c1">//-------------------------------------------------------------------------------------------------------------------------------//</span>
+                                                    <span class="c1">//CYLINDER TEST</span>
+        <span class="c1">//-------------------------------------------------------------------------------------------------------------------------------//</span>
+
+        <span class="c1">//Split plane</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">cylinderSplit</span><span class="p">;</span>
+        <span class="p">{</span>
+            <span class="n">cylinderSplit</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+
+            <span class="n">cylinderSplit</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">planeH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">TextureH</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">cylinderSplit</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span> <span class="mf">1.3f</span><span class="p">,</span> <span class="mf">15.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">2.0f</span><span class="p">));</span>
+
+        <span class="p">}</span>
+
+        <span class="c1">//Cylinder</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent</span><span class="p">);</span>
+
+            <span class="n">physicsComponent</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">cubeParams</span><span class="p">);</span>
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent</span><span class="p">);</span>
+
+            <span class="n">ent</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">cylinderH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">TextureH</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span> <span class="mf">1.5f</span><span class="p">,</span> <span class="mf">15.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;AABBRbStable&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+
+
+            <span class="k">auto</span> <span class="n">finderH</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">MeshSplitter</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">finder</span> <span class="o">=</span> <span class="n">finderH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">finder</span><span class="p">.</span><span class="n">splitTester</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span> <span class="n">cylinderSplit</span><span class="p">);</span>
+            <span class="n">finder</span><span class="p">.</span><span class="n">InitializePolygons</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">finderH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">finder</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//-------------------------------------------------------------------------------------------------------------------------------//</span>
+                                                   <span class="c1">//CONCAVE TEST</span>
+        <span class="c1">//-------------------------------------------------------------------------------------------------------------------------------//</span>
+
+
+        <span class="c1">//Complex Mesh</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">cubeParams</span><span class="p">);</span>
+
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="n">ent</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">concaveTestObject</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">TextureH</span><span class="p">));</span>
+
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span> <span class="mf">2.5f</span><span class="p">,</span> <span class="mf">22.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;AABBRbStable&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="n">finderH</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">MeshSplitter</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">finder</span> <span class="o">=</span> <span class="n">finderH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="c1">//finder.splitTester.push_back(cylinderSplit);</span>
+            <span class="n">finder</span><span class="p">.</span><span class="n">InitializePolygons</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">finderH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">finder</span><span class="p">);</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">);</span>
+
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;finder size {} &quot;</span> <span class="p">,</span> <span class="n">finder</span><span class="p">.</span><span class="n">meshPolygons</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">collisionResolutionTest</span><span class="p">(</span><span class="n">rendering</span><span class="o">::</span><span class="n">model_handle</span> <span class="n">cubeH</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">material_handle</span> <span class="n">wireframeH</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">physics</span><span class="o">::</span><span class="n">cube_collider_params</span> <span class="n">cubeParams</span><span class="p">;</span>
+        <span class="n">cubeParams</span><span class="p">.</span><span class="n">breadth</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
+        <span class="n">cubeParams</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
+        <span class="n">cubeParams</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
+
+        <span class="n">physics</span><span class="o">::</span><span class="n">cube_collider_params</span> <span class="n">staticBlockParams</span><span class="p">;</span>
+        <span class="n">staticBlockParams</span><span class="p">.</span><span class="n">breadth</span> <span class="o">=</span> <span class="mf">2.5f</span><span class="p">;</span>
+        <span class="n">staticBlockParams</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="mf">2.5f</span><span class="p">;</span>
+        <span class="n">staticBlockParams</span><span class="p">.</span><span class="n">height</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
+
+        <span class="kt">float</span> <span class="n">testPos</span> <span class="o">=</span> <span class="mf">10.0f</span><span class="p">;</span>
+        <span class="c1">//----------- Static Block To AABB Body Stability Test ------------//</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0f</span><span class="p">,</span> <span class="mf">15.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">2.5f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">2.5f</span><span class="p">));</span>
+
+            <span class="n">ent</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">cubeH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">wireframeH</span><span class="p">));</span>
+
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">staticBlockParams</span><span class="p">);</span>
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">isTrigger</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="c1">//auto renderableHandle = m_ecs-&gt;createComponent&lt;rendering::mesh_renderable&gt;(mesh_filter(ent);</span>
+            <span class="c1">//renderableHandle.write({ cubeH), wireframeH });</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0f</span><span class="p">,</span> <span class="mf">15.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">idComp</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">idComp</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;AABBStaticStable&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">idComp</span><span class="p">);</span>
+
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">staticToAABBEntLinear</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">staticToAABBEntLinear</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">cubeParams</span><span class="p">);</span>
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="c1">//auto crb = m_ecs-&gt;createComponent&lt;physics::rigidbody&gt;(staticToAABBEnt);</span>
+            <span class="c1">//auto rbHandle = staticToAABBEnt.add_component&lt;physics::rigidbody&gt;();</span>
+
+            <span class="c1">//auto renderableHandle = m_ecs-&gt;createComponent&lt;rendering::mesh_renderable&gt;(mesh_filter(staticToAABBEnt);</span>
+            <span class="c1">//renderableHandle.write({ cubeH), wireframeH });</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">staticToAABBEntLinear</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">15.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">staticToAABBEntLinear</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;AABBRbStable&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//{</span>
+        <span class="c1">//    auto ent = m_ecs-&gt;createEntity();</span>
+        <span class="c1">//    //physicsUnitTestCD.push_back(staticToAABBEntLinear);</span>
+        <span class="c1">//    auto entPhyHande = ent.add_component&lt;physics::physicsComponent&gt;();</span>
+
+        <span class="c1">//    physics::physicsComponent physicsComponent2;</span>
+        <span class="c1">//    physics::physicsComponent::init(physicsComponent2);</span>
+
+
+        <span class="c1">//    physicsComponent2.AddBox(cubeParams);</span>
+        <span class="c1">//    entPhyHande.write(physicsComponent2);</span>
+
+        <span class="c1">//    auto crb = m_ecs-&gt;createComponent&lt;physics::rigidbody&gt;(ent);</span>
+        <span class="c1">//    auto rbHandle = ent.add_component&lt;physics::rigidbody&gt;();</span>
+
+        <span class="c1">//    //auto renderableHandle = m_ecs-&gt;createComponent&lt;rendering::mesh_renderable&gt;(mesh_filter(staticToAABBEnt);</span>
+        <span class="c1">//    //renderableHandle.write({ cubeH), wireframeH });</span>
+
+        <span class="c1">//    auto [positionH, rotationH, scaleH] = m_ecs-&gt;createComponents&lt;transform&gt;(ent);</span>
+        <span class="c1">//    positionH.write(math::vec3(testPos+0.5f, -1.0f, 15.0f));</span>
+        <span class="c1">//    scaleH.write(math::vec3(1.0f));</span>
+
+        <span class="c1">//    auto idHandle = m_ecs-&gt;createComponent&lt;physics::identifier&gt;(ent);</span>
+        <span class="c1">//    auto id = idHandle.read();</span>
+        <span class="c1">//    id.id = &quot;AABBRbStable&quot;;</span>
+        <span class="c1">//    idHandle.write(id);</span>
+        <span class="c1">//}</span>
+
+        <span class="c1">//----------- Static Block To AABB Body Rotation Test------------//</span>
+
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0f</span><span class="p">,</span> <span class="mf">8.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">2.5f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">2.5f</span><span class="p">));</span>
+
+            <span class="n">ent</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">cubeH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">wireframeH</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">staticBlockParams</span><span class="p">);</span>
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">isTrigger</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="c1">//auto renderableHandle = m_ecs-&gt;createComponent&lt;rendering::mesh_renderable&gt;(mesh_filter(ent);</span>
+            <span class="c1">//renderableHandle.write({ cubeH), wireframeH });</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0f</span><span class="p">,</span> <span class="mf">8.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">idComp</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">idComp</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;AABBStatic&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">idComp</span><span class="p">);</span>
+
+
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">staticToAABBEntRotation</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">staticToAABBEntRotation</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">cubeParams</span><span class="p">);</span>
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="c1">//auto crb = m_ecs-&gt;createComponent&lt;physics::rigidbody&gt;(staticToAABBEnt);</span>
+            <span class="c1">//auto rbHandle = staticToAABBEnt.add_component&lt;physics::rigidbody&gt;();</span>
+
+            <span class="c1">//auto renderableHandle = m_ecs-&gt;createComponent&lt;rendering::mesh_renderable&gt;(mesh_filter(staticToAABBEnt);</span>
+            <span class="c1">//renderableHandle.write({ cubeH), wireframeH });</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">staticToAABBEntRotation</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span> <span class="o">-</span> <span class="mf">2.7f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">8.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">staticToAABBEntRotation</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;AABBRb&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//----------- Static Block To Rotated Body ------------//</span>
+
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0f</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">2.5f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">2.5f</span><span class="p">));</span>
+
+            <span class="n">ent</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">cubeH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">wireframeH</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">staticBlockParams</span><span class="p">);</span>
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">isTrigger</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="c1">//auto renderableHandle = m_ecs-&gt;createComponent&lt;rendering::mesh_renderable&gt;(mesh_filter(ent);</span>
+            <span class="c1">//renderableHandle.write({ cubeH), wireframeH });</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0f</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;OBBStatic&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">staticToOBBEnt</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">staticToOBBEnt</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">cubeParams</span><span class="p">);</span>
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">isTrigger</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+            <span class="c1">//auto renderableHandle = m_ecs-&gt;createComponent&lt;rendering::mesh_renderable&gt;(staticToOBBEnt);</span>
+            <span class="c1">//renderableHandle.write({ cubeH, wireframeH });</span>
+            <span class="n">staticToOBBEnt</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span>
+                <span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">cubeH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">wireframeH</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">staticToOBBEnt</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0f</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">rot</span> <span class="o">=</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="cm">/*rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));</span>
+<span class="cm">            rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));</span>
+<span class="cm">            rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));*/</span>
+            <span class="c1">//rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));</span>
+            <span class="n">rotationH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">rot</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">staticToOBBEnt</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;NON_STATIC&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+
+
+            <span class="c1">//log::debug(&quot;rb.angularVelocity {}&quot;, rb.angularVelocity);</span>
+
+        <span class="p">}</span>
+
+        <span class="c1">//----------- Static Block To Rotated Body Edge ------------//</span>
+
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">2.5f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">2.5f</span><span class="p">));</span>
+
+            <span class="n">ent</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh_filter</span><span class="p">(</span><span class="n">cubeH</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">()),</span> <span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span><span class="n">wireframeH</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">staticBlockParams</span><span class="p">);</span>
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">isTrigger</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+            <span class="c1">//auto renderableHandle = m_ecs-&gt;createComponent&lt;rendering::mesh_renderable&gt;(mesh_filter(ent);</span>
+            <span class="c1">//renderableHandle.write({ cubeH), wireframeH });</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;OBBFoundationStaticEdge&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">staticToEdgeEnt</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">entPhyHande</span> <span class="o">=</span> <span class="n">staticToEdgeEnt</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span> <span class="n">physicsComponent2</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">::</span><span class="n">init</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+            <span class="n">physicsComponent2</span><span class="p">.</span><span class="n">AddBox</span><span class="p">(</span><span class="n">cubeParams</span><span class="p">);</span>
+            <span class="n">entPhyHande</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComponent2</span><span class="p">);</span>
+
+
+            <span class="c1">//auto renderableHandle = m_ecs-&gt;createComponent&lt;rendering::mesh_renderable&gt;(mesh_filter(staticToEdgeEnt);</span>
+            <span class="c1">//renderableHandle.write({ cubeH), wireframeH });</span>
+
+            <span class="k">auto</span> <span class="p">[</span><span class="n">positionH</span><span class="p">,</span> <span class="n">rotationH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">staticToEdgeEnt</span><span class="p">);</span>
+            <span class="n">positionH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">testPos</span> <span class="o">+</span> <span class="mf">3.0f</span><span class="p">,</span> <span class="mf">2.0f</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0f</span><span class="p">));</span>
+            <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">));</span>
+
+            <span class="k">auto</span> <span class="n">rot</span> <span class="o">=</span> <span class="n">rotationH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">rot</span> <span class="o">*=</span> <span class="n">math</span><span class="o">::</span><span class="n">angleAxis</span><span class="p">(</span><span class="mf">45.f</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+            <span class="n">rot</span> <span class="o">*=</span> <span class="n">math</span><span class="o">::</span><span class="n">angleAxis</span><span class="p">(</span><span class="mf">45.f</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+            <span class="n">rotationH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">rot</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="n">idHandle</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponent</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">(</span><span class="n">staticToEdgeEnt</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;OBBRb&quot;</span><span class="p">;</span>
+            <span class="n">idHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+
+
+
+
+            <span class="c1">//log::debug(&quot;rb.angularVelocity {}&quot;, rb.angularVelocity);</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">extendedContinuePhysics</span><span class="p">(</span><span class="n">extendedPhysicsContinue</span> <span class="o">*</span> <span class="n">action</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">action</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">IsPaused</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">IsPaused</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">OneTimeContinuePhysics</span><span class="p">(</span><span class="n">nextPhysicsTimeStepContinue</span> <span class="o">*</span> <span class="n">action</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">action</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">IsPaused</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">physics</span><span class="o">::</span><span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">oneTimeRunActive</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot; onNextPhysicsTimeStepRequest&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">PhysicsFractureTestSystem</span><span class="o">::</span><span class="n">OnSplit</span><span class="p">(</span><span class="n">physics_split_test</span><span class="o">*</span> <span class="n">action</span><span class="p">)</span>
+    <span class="p">{</span>
+
+
+        <span class="k">static</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EntityQuery</span> <span class="n">halfEdgeQuery</span> <span class="o">=</span> <span class="n">createQuery</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">MeshSplitter</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">action</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">halfEdgeQuery</span><span class="p">.</span><span class="n">queryEntities</span><span class="p">();</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">entity</span> <span class="p">:</span> <span class="n">halfEdgeQuery</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">edgeFinderH</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">MeshSplitter</span><span class="o">&gt;</span><span class="p">();</span>
+                <span class="k">auto</span> <span class="n">edgeFinder</span> <span class="o">=</span> <span class="n">edgeFinderH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+                <span class="n">edgeFinder</span><span class="p">.</span><span class="n">TestSplit</span><span class="p">();</span>
+                <span class="n">edgeFinderH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">edgeFinder</span><span class="p">);</span>
+                <span class="n">edgeFinder</span><span class="p">.</span><span class="n">DestroyTestSplitter</span><span class="p">(</span><span class="n">m_ecs</span><span class="p">);</span>
+
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physics_fracture_test_system.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

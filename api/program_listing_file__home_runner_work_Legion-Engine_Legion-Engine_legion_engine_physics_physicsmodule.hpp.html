@@ -52,6 +52,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;physics/systems/physicssystem.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/components/physics_component.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/components/rigidbody.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/mesh_splitter.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
@@ -66,7 +67,8 @@
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
-
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">MeshSplitter</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="c1">//reportComponentType &lt;addRB&gt;();</span>
         <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="n">priority_type</span> <span class="n">priority</span><span class="p">()</span> <span class="k">override</span>

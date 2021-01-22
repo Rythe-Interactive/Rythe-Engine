@@ -51,6 +51,7 @@
 
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/types/unordered_map.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/types/memory.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cereal/types/vector.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/json.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/portable_binary.hpp&gt;</span><span class="cp"></span>
 
@@ -141,7 +142,7 @@
         <span class="k">static</span> <span class="kt">void</span> <span class="n">JSONSerialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="n">T</span> <span class="n">serializable</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span> <span class="n">archive</span><span class="p">(</span><span class="n">os</span><span class="p">);</span><span class="c1">// Create an output archive, Output as outputing to a string stream</span>
-            <span class="n">archive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Entity&quot;</span><span class="p">,</span> <span class="n">serializable</span><span class="p">));</span> <span class="c1">// Read the data to the archive</span>
+            <span class="n">archive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="n">name</span><span class="p">(),</span><span class="n">serializable</span><span class="p">));</span> <span class="c1">// Read the data to the archive</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>

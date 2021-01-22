@@ -1,0 +1,13 @@
+.. _exhale_function_mesh__importers_8cpp_1a925c6780e89d22e163ed4e210195e4ad:
+
+Template Function legion::core::detail::handleGltfBuffer
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_importers_mesh_importers.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::detail::handleGltfBuffer(const tinygltf::Buffer&, const tinygltf::BufferView&, std::vector<T> *)

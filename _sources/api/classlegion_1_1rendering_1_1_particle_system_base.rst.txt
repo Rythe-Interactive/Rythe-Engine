@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1rendering_1_1_particle_system_base:
+
+Class ParticleSystemBase
+========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_particle_system_base.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public PointCloudParticleSystem`` (:ref:`exhale_class_class_point_cloud_particle_system`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::ParticleSystemBase
+   :members:
+   :protected-members:
+   :undoc-members:

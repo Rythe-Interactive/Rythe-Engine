@@ -1,0 +1,13 @@
+.. _exhale_enum_imnodes_8cpp_1a494ab5d1b9043945ff353adcf0db91c5:
+
+Enum ClickInteractionType
+=========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: imgui::nodes::@272::ClickInteractionType

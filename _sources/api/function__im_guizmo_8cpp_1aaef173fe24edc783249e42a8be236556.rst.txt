@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1aaef173fe24edc783249e42a8be236556:
+
+Function imgui::gizmo::ComputeCameraRay
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::ComputeCameraRay(vec_t&, vec_t&, ImVec2, ImVec2)

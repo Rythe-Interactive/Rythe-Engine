@@ -19,6 +19,8 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1application_1_1char__input`
 
+- :ref:`exhale_struct_structlegion_1_1application_1_1context__guard`
+
 - :ref:`exhale_struct_structlegion_1_1application_1_1input__action`
 
 - :ref:`exhale_struct_structlegion_1_1application_1_1input__axis`
@@ -26,6 +28,8 @@ Classes
 - :ref:`exhale_struct_structlegion_1_1application_1_1inputmap`
 
 - :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1action__data`
+
+- :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1axis__command__queue`
 
 - :ref:`exhale_struct_structlegion_1_1application_1_1_input_system_1_1axis__data`
 

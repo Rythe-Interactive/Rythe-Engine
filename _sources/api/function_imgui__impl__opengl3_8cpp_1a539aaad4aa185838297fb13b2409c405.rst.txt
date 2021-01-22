@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__impl__opengl3_8cpp_1a539aaad4aa185838297fb13b2409c405:
+
+Function ImGui_ImplOpenGL3_DestroyFontsTexture
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_opengl3.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImGui_ImplOpenGL3_DestroyFontsTexture()

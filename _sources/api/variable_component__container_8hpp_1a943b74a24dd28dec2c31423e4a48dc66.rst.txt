@@ -1,0 +1,13 @@
+.. _exhale_variable_component__container_8hpp_1a943b74a24dd28dec2c31423e4a48dc66:
+
+Variable legion::core::ecs::invalid_container
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::ecs::invalid_container

@@ -1,0 +1,13 @@
+.. _exhale_variable__im_guizmo_8cpp_1a946a6ea4a2021bbeac407af8d852a3cb:
+
+Variable lgn__hack_line_thickness
+=================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: lgn__hack_line_thickness

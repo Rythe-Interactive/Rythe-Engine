@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1aa21fbf7266b5aa1d675ab958126bc2b8:
+
+Function imgui::nodes::EndStaticAttribute
+=========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::EndStaticAttribute()

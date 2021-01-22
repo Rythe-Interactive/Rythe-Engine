@@ -1,0 +1,73 @@
+
+.. _file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGradient.cpp:
+
+File ImGradient.cpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/ImGradient.cpp``)
+----------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGradient.cpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``imgui/ImGradient.h``
+
+- ``imgui/imgui.h``
+
+- ``imgui/imgui_internal.h``
+
+- ``set`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_assetimporter.cpp`)
+
+- ``stdint.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_ImGradient`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function__im_gradient_8cpp_1a494a356e29467deeafed7b57385ee15b`
+
+- :ref:`exhale_function__im_gradient_8cpp_1a00fb3ab77dde3d2c6d4277af77894900`
+
+- :ref:`exhale_function__im_gradient_8cpp_1a45c1c7eb28e661cf518bf4e19a5354d2`
+
+- :ref:`exhale_function__im_gradient_8cpp_1a4732ebf5c9e2adb5c1b9236db7088b5b`
+
+- :ref:`exhale_function__im_gradient_8cpp_1a6de1101df3e3e7a3483ec5d3bd9227d4`
+
+- :ref:`exhale_function__im_gradient_8cpp_1a3fe02fd3c8430d2eaa968071dd5e7942`
+
+- :ref:`exhale_function__im_gradient_8cpp_1a791581aaf01c07425ea4c341f131625a`
+
+- :ref:`exhale_function__im_gradient_8cpp_1a4915943c707d23037f54262d14789c06`
+

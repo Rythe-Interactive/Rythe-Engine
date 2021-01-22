@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1aa5d8df6fcb8101ce4923ee1df0cbfbcc:
+
+Function imgui::nodes::IsNodeHovered
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::IsNodeHovered(int *const)

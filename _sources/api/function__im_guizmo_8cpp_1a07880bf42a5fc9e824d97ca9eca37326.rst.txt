@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a07880bf42a5fc9e824d97ca9eca37326:
+
+Function imgui::gizmo::Perspective
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::Perspective(float, float, float, float, float *)

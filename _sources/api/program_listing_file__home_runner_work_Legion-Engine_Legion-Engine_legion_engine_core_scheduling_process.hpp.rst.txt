@@ -16,6 +16,8 @@ Program Listing for File process.hpp
    #include <core/containers/containers.hpp>
    #include <core/time/time.hpp>
    
+   #include <Optick/optick.h>
+   
    namespace legion::core::scheduling
    {
        class Process
@@ -31,6 +33,7 @@ Program Listing for File process.hpp
            time::time_span<fast_time> m_timeBuffer;
            time::clock<fast_time> m_clock;
            bool m_fixedTimeStep;
+           bool firstStep = true;
        public:
    
            template<size_type charc>
@@ -63,6 +66,12 @@ Program Listing for File process.hpp
            {
                time::time_span<fast_time> deltaTime = m_clock.restart();
    
+               if (firstStep)
+               {
+                   deltaTime = 0;
+                   firstStep = false;
+               }
+   
                deltaTime *= timeScale;
    
                if (deltaTime < 0)
@@ -70,6 +79,8 @@ Program Listing for File process.hpp
    
                if (!m_fixedTimeStep)
                {
+                   OPTICK_EVENT("Execute process");
+                   OPTICK_TAG("Process", m_name.c_str());
                    m_operation.invoke(deltaTime);
                    return true;
                }
@@ -78,12 +89,13 @@ Program Listing for File process.hpp
    
                if (m_timeBuffer >= m_interval)
                {
+                   OPTICK_EVENT("Execute process");
+                   OPTICK_TAG("Process", m_name.c_str());
                    m_timeBuffer -= m_interval;
-   
                    m_operation.invoke(m_interval);
                }
    
-               return m_timeBuffer < m_interval;
+               return true;
            }
        };
    }

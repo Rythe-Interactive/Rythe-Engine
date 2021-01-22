@@ -1,0 +1,13 @@
+.. _exhale_function_archetype_8hpp_1a259309ff52dd5e0a470382efb0592dd2:
+
+Template Function std::get(legion::core::ecs::archetype<Args...>&)
+==================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: std::get(legion::core::ecs::archetype<Args...>&)

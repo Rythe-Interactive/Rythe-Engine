@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1rendering_1_1_debug_render_stage:
+
+Class DebugRenderStage
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_debugrenderstage.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::rendering::RenderStage< DebugRenderStage >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::rendering::DebugRenderStage
+   :members:
+   :protected-members:
+   :undoc-members:

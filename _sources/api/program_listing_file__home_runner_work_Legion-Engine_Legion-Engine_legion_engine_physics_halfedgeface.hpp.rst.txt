@@ -19,14 +19,57 @@ Program Listing for File halfedgeface.hpp
    
        struct HalfEdgeFace
        {
+           enum struct face_angle_relation : int
+           {
+               coplanar = 0,
+               convex,
+               concave
+           };
+   
            HalfEdgeEdge* startEdge;
            math::vec3 normal;
            math::vec3 centroid;
+           math::color DEBUG_color;
            
            HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
    
+           void deleteEdges();
+   
+           void setFaceForAllEdges();
+   
            void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
-           
+   
+           void inverse();
+   
+           bool testConvexity(const HalfEdgeFace& other) const;
+   
+           bool makeNormalsConvexWithFace(HalfEdgeFace& other);
+   
+           face_angle_relation getAngleRelation(const HalfEdgeFace& other);
+   
+           static bool testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second);
+   
+           static bool makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second);
+   
+           static HalfEdgeEdge* findMiddleEdge(const HalfEdgeFace& first, const HalfEdgeFace& second);
+   
+           static HalfEdgeFace* mergeFaces(HalfEdgeEdge& middleEdge);
+   
+           friend bool operator==(const HalfEdgeFace& lhs, const HalfEdgeFace& rhs)
+           {
+               // Because the centroid is dependent on all edges, we do not need to check the edge positions
+               return lhs.normal == rhs.normal && lhs.centroid == rhs.centroid;
+           }
+   
+           static std::string to_string(const face_angle_relation& relation)
+           {
+               if (relation == face_angle_relation::coplanar) return "coplanar";
+               if (relation == face_angle_relation::convex) return "convex";
+               if (relation == face_angle_relation::concave) return "concave";
+           }
+   
+           void DEBUG_DrawFace(const math::mat4& transform, const math::color& debugColor,  float time = 20.0f);
+   
            ~HalfEdgeFace();
        };
    }

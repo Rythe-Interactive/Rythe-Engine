@@ -53,6 +53,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;stdexcept&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
 
@@ -89,8 +90,6 @@
     <span class="k">template</span> <span class="o">&lt;&gt;</span>                         <span class="k">class</span> <span class="nc">ok_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ok_ident</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">ok_proxy</span><span class="p">(</span><span class="n">ok_proxy</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="n">ok_proxy</span><span class="p">()</span> <span class="p">{}</span>
         <span class="k">operator</span> <span class="n">ok_proxy</span><span class="o">&lt;&gt;</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
     <span class="p">};</span>
     <span class="k">template</span> <span class="o">&lt;&gt;</span>                         <span class="k">class</span> <span class="nc">ok_proxy</span><span class="o">&lt;&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ok_ident</span>
@@ -151,14 +150,17 @@
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">{};</span>
     <span class="p">}</span>
-    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span><span class="p">,</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span>
+        <span class="n">CNDOXY</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
     <span class="kr">inline</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Ok</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="n">Any</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">any</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="n">any</span><span class="p">)...);</span>
     <span class="p">}</span>
-    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span><span class="p">,</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span>
+        <span class="n">CNDOXY</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
     <span class="kr">inline</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Ok</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="n">Any</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">any</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">ok_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="n">any</span><span class="p">)...);</span>
@@ -242,16 +244,15 @@
         <span class="k">return</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">{};</span>
     <span class="p">}</span>
 
-
-
-    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span><span class="p">,</span>
-         <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span>
+        <span class="n">CNDOXY</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
     <span class="kr">inline</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Err</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="n">Any</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">any</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="n">any</span><span class="p">)...);</span>
     <span class="p">}</span>
-    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span><span class="p">,</span>
-       <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">&gt;</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span><span class="n">Any</span>
+        <span class="n">CNDOXY</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of_v</span><span class="o">&lt;</span><span class="n">result_ident</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span> <span class="o">&amp;&amp;</span> <span class="k">sizeof</span><span class="p">...(</span><span class="n">Any</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
     <span class="kr">inline</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">Err</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="n">Any</span><span class="o">&amp;&amp;</span> <span class="p">...</span> <span class="n">any</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">err_proxy</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">Any</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="n">any</span><span class="p">)...);</span>
@@ -307,6 +308,96 @@
         <span class="p">}</span>
         <span class="k">operator</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">ok_result_t</span><span class="p">,</span> <span class="n">ok_type</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
             <span class="k">return</span> <span class="n">get</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Func</span><span class="p">,</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">except</span><span class="p">(</span><span class="n">Func</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">,</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">has_err</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">invoke</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">get_error</span><span class="p">(),</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">get</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Func</span><span class="p">,</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">except</span><span class="p">(</span><span class="k">const</span> <span class="n">Func</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">has_err</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">invoke</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">get_error</span><span class="p">(),</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">get</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">valid</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_ok</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="n">has_err</span><span class="p">()</span> <span class="k">noexcept</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_err</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">m_ok</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="p">,</span> <span class="n">err_type</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&amp;</span> <span class="n">get_error</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_err</span><span class="p">)</span> <span class="k">return</span> <span class="n">try_static_cast</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">m_err</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;this result would have been valid!&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">L_NODISCARD</span> <span class="k">typename</span> <span class="n">try_static_cast_result</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="p">,</span> <span class="n">err_type</span><span class="o">&gt;::</span><span class="n">type</span> <span class="n">get_error</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_err</span><span class="p">)</span> <span class="k">return</span> <span class="n">try_static_cast</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">m_err</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;this result would have been valid!&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">L_NORETURN</span> <span class="kt">void</span> <span class="n">rethrow</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="n">try_static_cast</span><span class="o">&lt;</span><span class="n">err_result_t</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">m_err</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kt">void</span> <span class="n">maybe_rethrow</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">has_err</span><span class="p">())</span> <span class="n">rethrow</span><span class="p">();</span>
+        <span class="p">}</span>
+
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">err_type</span><span class="o">&gt;</span> <span class="n">m_err</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ok_type</span><span class="o">&gt;</span> <span class="n">m_ok</span><span class="p">;</span>
+    <span class="p">};</span>
+
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">ErrType</span><span class="p">,</span> <span class="k">class</span> <span class="nc">OkResultType</span><span class="p">,</span> <span class="k">class</span> <span class="nc">ErrResultType</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">result_impl</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span> <span class="n">ErrType</span><span class="p">,</span> <span class="n">OkResultType</span><span class="p">,</span> <span class="n">ErrResultType</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">err_type</span> <span class="o">=</span> <span class="n">ErrType</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">ok_type</span> <span class="o">=</span> <span class="kt">void</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">err_result_t</span> <span class="o">=</span> <span class="n">ErrResultType</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">ok_result_t</span> <span class="o">=</span> <span class="n">OkResultType</span><span class="p">;</span>
+
+        <span class="n">result_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">ok_type</span><span class="o">&gt;</span>  <span class="n">ok</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">err_type</span><span class="o">&gt;</span>  <span class="n">err</span><span class="p">)</span> <span class="o">:</span>
+            <span class="n">m_err</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">err</span><span class="p">)),</span> <span class="n">m_ok</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ok</span><span class="p">))</span> <span class="p">{}</span>
+        <span class="n">result_impl</span><span class="p">(</span><span class="k">const</span> <span class="n">result_impl</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">result_impl</span><span class="p">(</span><span class="n">result_impl</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">result_impl</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">result_impl</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">result_impl</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">result_impl</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">result_impl</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Func</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">except</span><span class="p">(</span><span class="n">Func</span> <span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">has_err</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">invoke</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">get_error</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Func</span><span class="p">,</span> <span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">except</span><span class="p">(</span><span class="k">const</span> <span class="n">Func</span> <span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">has_err</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">invoke</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">get_error</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">valid</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
@@ -426,6 +517,19 @@
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
         <span class="p">}</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Func</span><span class="p">,</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">except</span><span class="p">(</span><span class="n">Func</span><span class="o">&amp;&amp;</span> <span class="n">f</span><span class="p">,</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">except</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Func</span><span class="o">&gt;</span><span class="p">(</span><span class="n">f</span><span class="p">),</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Func</span><span class="p">,</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">except</span><span class="p">(</span><span class="k">const</span> <span class="n">Func</span><span class="o">&amp;</span> <span class="n">f</span><span class="p">,</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_r</span><span class="p">.</span><span class="n">except</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+        <span class="p">}</span>
+
 
         <span class="n">err_type</span> <span class="n">get_error</span><span class="p">()</span>
         <span class="p">{</span>

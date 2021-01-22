@@ -47,14 +47,182 @@
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-renderstage-hpp"></span><h1>Program Listing for File renderstage.hpp<a class="headerlink" href="#program-listing-for-file-renderstage-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-renderstage-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/base/renderstage.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;application/application.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/components/camera.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/base/pipelinebase.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#define setup_priority 64</span>
+<span class="cp">#define opaque_priority 32</span>
+<span class="c1">//      default_priority 0</span>
+<span class="cp">#define transparent_priority -16</span>
+<span class="cp">#define volumetric_priority -32</span>
+<span class="cp">#define post_fx_priority -48</span>
+<span class="cp">#define ui_priority -64</span>
+<span class="cp">#define submit_priority -96</span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
 <span class="p">{</span>
-    <span class="k">class</span> <span class="nc">RenderStage</span>
+    <span class="k">class</span> <span class="nc">RenderPipelineBase</span><span class="p">;</span>
+
+    <span class="k">class</span> <span class="nc">RenderStageBase</span>
     <span class="p">{</span>
+        <span class="k">friend</span> <span class="k">class</span> <span class="nc">Renderer</span><span class="p">;</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="kt">bool</span> <span class="n">m_isInitialized</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">m_ecs</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">schd</span><span class="o">::</span><span class="n">Scheduler</span><span class="o">*</span> <span class="n">m_scheduler</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">m_eventBus</span><span class="p">;</span>
+
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">setup</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
+
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">static</span> <span class="n">RenderPipelineBase</span><span class="o">*</span> <span class="n">m_pipeline</span><span class="p">;</span>
+
+        <span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">isInitialized</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_isInitialized</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Setup render stage&quot;</span><span class="p">);</span>
+            <span class="n">m_isInitialized</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">setup</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">render</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">,</span> <span class="n">camera</span><span class="o">&amp;</span> <span class="n">cam</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span> <span class="n">LEGION_PURE</span><span class="p">;</span>
+        <span class="k">virtual</span> <span class="n">priority_type</span> <span class="nf">priority</span><span class="p">()</span> <span class="n">LEGION_IMPURE_RETURN</span><span class="p">(</span><span class="n">default_priority</span><span class="p">);</span>
+
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="kt">void</span> <span class="n">abort</span><span class="p">();</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">has_meta</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="n">T</span><span class="o">*</span> <span class="n">create_meta</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="n">T</span><span class="o">*</span> <span class="n">get_meta</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">has_meta</span><span class="p">(</span><span class="n">id_type</span> <span class="n">nameHash</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="n">T</span><span class="o">*</span> <span class="n">create_meta</span><span class="p">(</span><span class="n">id_type</span> <span class="n">nameHash</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">args</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="n">T</span><span class="o">*</span> <span class="n">get_meta</span><span class="p">(</span><span class="n">id_type</span> <span class="n">nameHash</span><span class="p">);</span>
+
+        <span class="n">framebuffer</span><span class="o">*</span> <span class="nf">addFramebuffer</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">target</span> <span class="o">=</span> <span class="n">GL_FRAMEBUFFER</span><span class="p">);</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="nf">hasFramebuffer</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">target</span> <span class="o">=</span> <span class="n">GL_FRAMEBUFFER</span><span class="p">);</span>
+        <span class="n">L_NODISCARD</span> <span class="n">framebuffer</span><span class="o">*</span> <span class="nf">getFramebuffer</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+        <span class="n">framebuffer</span><span class="o">*</span> <span class="nf">addFramebuffer</span><span class="p">(</span><span class="n">id_type</span> <span class="n">nameHash</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">target</span> <span class="o">=</span> <span class="n">GL_FRAMEBUFFER</span><span class="p">);</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="nf">hasFramebuffer</span><span class="p">(</span><span class="n">id_type</span> <span class="n">nameHash</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">target</span> <span class="o">=</span> <span class="n">GL_FRAMEBUFFER</span><span class="p">);</span>
+        <span class="n">L_NODISCARD</span> <span class="n">framebuffer</span><span class="o">*</span> <span class="nf">getFramebuffer</span><span class="p">(</span><span class="n">id_type</span> <span class="n">nameHash</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">SelfType</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">RenderStage</span> <span class="o">:</span> <span class="k">public</span> <span class="n">RenderStageBase</span>
+    <span class="p">{</span>
+    <span class="k">protected</span><span class="o">:</span>
+        <span class="n">L_NODISCARD</span> <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">createEntity</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">component_types</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EntityQuery</span> <span class="n">createQuery</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createQuery</span><span class="o">&lt;</span><span class="n">component_types</span><span class="p">...</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">L_NODISCARD</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EntityQuery</span> <span class="n">createQuery</span><span class="p">(</span><span class="k">const</span> <span class="n">hashed_sparse_set</span><span class="o">&lt;</span><span class="n">id_type</span><span class="o">&gt;&amp;</span> <span class="n">componentTypes</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createQuery</span><span class="p">(</span><span class="n">componentTypes</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">raiseEvent</span><span class="p">(</span><span class="n">Args</span><span class="p">...</span> <span class="n">arguments</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">arguments</span><span class="p">...);</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">raiseEvent</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">event_base</span><span class="o">&gt;&amp;&amp;</span> <span class="n">value</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">raiseEventUnsafe</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">event_base</span><span class="o">&gt;&amp;&amp;</span> <span class="n">value</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEventUnsafe</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">checkEvent</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">checkEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="n">size_type</span> <span class="n">getEventCount</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">getEventCount</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">event_type</span><span class="o">&amp;</span> <span class="n">getEvent</span><span class="p">(</span><span class="n">index_type</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">getEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">event_type</span><span class="o">&amp;</span> <span class="n">getLastEvent</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">getLastEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">clearEvent</span><span class="p">(</span><span class="n">index_type</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">clearEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">clearLastEvent</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">clearLastEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">SelfType</span><span class="o">::*</span> <span class="n">func_type</span><span class="p">)(</span><span class="n">event_type</span><span class="o">*</span><span class="p">)</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">bindToEvent</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">bindToEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;::</span><span class="k">template</span> <span class="n">create</span><span class="o">&lt;</span><span class="n">SelfType</span><span class="p">,</span> <span class="n">func_type</span><span class="o">&gt;</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">SelfType</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">)));</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">event_type</span> <span class="n">CNDOXY</span><span class="p">(</span><span class="n">inherits_from</span><span class="o">&lt;</span><span class="n">event_type</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">bindToEvent</span><span class="p">(</span><span class="n">delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">callback</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">bindToEvent</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">callback</span><span class="p">);</span>
+        <span class="p">}</span>
 
     <span class="p">};</span>
 <span class="p">}</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/base/renderstage.inl&gt;</span><span class="cp"></span>
 </pre></div>
 </div>
 </div>

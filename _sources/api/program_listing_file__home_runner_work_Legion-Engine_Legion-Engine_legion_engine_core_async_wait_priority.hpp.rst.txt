@@ -1,0 +1,21 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_wait_priority.hpp:
+
+Program Listing for File wait_priority.hpp
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_wait_priority.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/async/wait_priority.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   namespace legion::core::async
+   {
+       enum struct wait_priority : int { normal, sleep, real_time };
+   
+       inline constexpr wait_priority wait_priority_normal = wait_priority::normal;
+       inline constexpr wait_priority wait_priority_sleep = wait_priority::sleep;
+       inline constexpr wait_priority wait_priority_real_time = wait_priority::real_time;
+   }

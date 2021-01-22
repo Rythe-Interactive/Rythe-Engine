@@ -1,0 +1,13 @@
+.. _exhale_function__im_guizmo_8cpp_1a9b6ed8e40ab2e1a8b29bbc303ae08fbf:
+
+Function imgui::gizmo::Dot(const float \*, const float \*)
+==========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::gizmo::Dot(const float *, const float *)

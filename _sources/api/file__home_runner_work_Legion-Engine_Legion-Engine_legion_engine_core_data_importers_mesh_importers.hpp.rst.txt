@@ -59,5 +59,9 @@ Classes
 -------
 
 
+- :ref:`exhale_class_structlegion_1_1core_1_1gltf__ascii__mesh__loader`
+
+- :ref:`exhale_class_structlegion_1_1core_1_1gltf__binary__mesh__loader`
+
 - :ref:`exhale_class_structlegion_1_1core_1_1obj__mesh__loader`
 

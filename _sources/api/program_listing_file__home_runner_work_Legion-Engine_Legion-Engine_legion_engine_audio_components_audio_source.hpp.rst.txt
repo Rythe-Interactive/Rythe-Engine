@@ -25,12 +25,13 @@ Program Listing for File audio_source.hpp
        public:
            enum sound_properties
            {
-               pitch = 1,
-               gain = 2,
-               playState = 4,
-               doRewind = 8,
-               audioHandle = 16,
-               rollOffFactor = 32,
+               pitch = 1 << 0,
+               gain = 1 << 1,
+               playState = 1 << 2,
+               doRewind = 1 << 3,
+               audioHandle = 1 << 4,
+               rollOffFactor = 1 << 5,
+               looping = 1 << 6
            };
    
            enum playstate
@@ -40,36 +41,36 @@ Program Listing for File audio_source.hpp
                paused,
            };
    
-           void setPitch(const float pitch)
+           void setPitch(float pitch) noexcept
            {
                m_changes |= sound_properties::pitch; // set b0
                m_pitch = legion::math::max(0.0f, pitch);
            }
-           float getPitch() const { return m_pitch; }
-           void setGain(const float gain)
+           float getPitch() const noexcept { return m_pitch; }
+           void setGain(float gain) noexcept
            {
                m_changes |= sound_properties::gain; // set b1
                m_gain = legion::math::max(0.0f, gain);
            }
-           float getGain() const { return m_gain; };
+           float getGain() const noexcept { return m_gain; }
    
-           void setRollOffFactor(float factor)
+           void setRollOffFactor(float factor) noexcept
            {
                m_changes = sound_properties::rollOffFactor;
                m_rolloffFactor = factor;
            }
    
-           void disableSpatialAudio()
+           void disableSpatialAudio() noexcept
            {
                setRollOffFactor(0.0f);
            }
    
-           void enableSpatialAudio()
+           void enableSpatialAudio() noexcept
            {
                setRollOffFactor(1.0f);
            }
    
-           void play()
+           void play() noexcept
            {
                // If the file is already playing or if the file will be played on next update > return
                if (m_nextPlayState == playstate::playing) return;
@@ -78,7 +79,7 @@ Program Listing for File audio_source.hpp
                // Do not set playstate to playing - audiosystem will set it accordingly
            }
    
-           void pause()
+           void pause() noexcept
            {
                // If the file is already playing or if the file will be played on next update > return
                if (m_nextPlayState == playstate::paused) return;
@@ -87,7 +88,7 @@ Program Listing for File audio_source.hpp
                // Do not set playstate to paused - audiosystem will set it accordingly
            }
    
-           void stop()
+           void stop() noexcept
            {
                // If the file is already playing or if the file will be played on next update > return
                if (m_nextPlayState == playstate::stopped) return;
@@ -96,56 +97,70 @@ Program Listing for File audio_source.hpp
                // Do not set playstate to stopped - audiosystem will set it accordingly
            }
    
-           bool isPlaying() const
+           bool isPlaying() const noexcept
            {
                return m_playState == playstate::playing;
            }
    
-           bool isPaused() const
+           bool isPaused() const noexcept
            {
                return m_playState == playstate::paused;
            }
    
-           bool isStopped() const
+           bool isStopped() const noexcept
            {
                return m_playState == playstate::stopped;
            }
    
-           void setAudioHandle(audio_segment_handle handle)
+           void setAudioHandle(audio_segment_handle handle) noexcept
            {
                if (handle == m_audio_handle) return;
                m_changes |= sound_properties::audioHandle;
                m_audio_handle = handle;
            }
    
-           void rewind()
+           void rewind() noexcept
            {
                m_changes |= sound_properties::doRewind;
            }
    
-           audio_segment_handle getAudioHandle() const
+           audio_segment_handle getAudioHandle() const noexcept
            {
                return m_audio_handle;
            }
    
-           int getChannels()
+           int getChannels() const
            {
-               int channels = 0;
-               {
-                   async::readonly_guard guard(m_audio_handle.get().first);
-                   channels = m_audio_handle.get().second.channels;
-               }
-               return channels;
+               async::readonly_guard guard(m_audio_handle.get().first);
+               return m_audio_handle.get().second.channels;
            }
    
-           bool isStereo()
+           bool isStereo() const noexcept
            {
                return getChannels() == 2;
            }
-   
-           bool isMono()
+           bool isMono() const noexcept
            {
                return getChannels() == 1;
+           }
+   
+           void setLooping(bool state = false) noexcept
+           {
+               if (state != m_looping) {
+                   m_looping = state;
+                   m_changes |= looping;
+               }
+           }
+   
+           bool isLooping() const noexcept
+           {
+               return m_looping;
+           }
+   
+   
+           operator ALuint() const
+           {
+               return m_sourceId;
            }
    
        private:
@@ -153,7 +168,7 @@ Program Listing for File audio_source.hpp
            {
                m_changes ^= m_changes; // Reset
                // The next play state also needs to be reset to be able to properly switch play states
-               m_nextPlayState = m_playState; 
+               m_nextPlayState = m_playState;
            }
    
            ALuint m_sourceId;
@@ -161,6 +176,8 @@ Program Listing for File audio_source.hpp
    
            float m_pitch = 1.0f;
            float m_gain = 1.0f;
+   
+           bool m_looping = false;
    
            playstate m_playState = playstate::stopped;
            playstate m_nextPlayState = playstate::stopped;

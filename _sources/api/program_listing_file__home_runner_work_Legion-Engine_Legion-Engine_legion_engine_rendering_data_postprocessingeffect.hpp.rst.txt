@@ -1,0 +1,76 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_postprocessingeffect.hpp:
+
+Program Listing for File postprocessingeffect.hpp
+=================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_postprocessingeffect.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/postprocessingeffect.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <rendering/data/vertexarray.hpp>
+   #include <rendering/data/buffer.hpp>
+   
+   
+   #include <rendering/data/framebuffer.hpp>
+   #include <rendering/data/shader.hpp>
+   
+   #include <rendering/data/screen_quad.hpp>
+   
+   namespace legion::rendering
+   {
+       class PostProcessingEffectBase
+       {
+       public:
+           std::vector<delegate<void(framebuffer&, texture_handle, texture_handle, time::span)>> renderPasses;
+           virtual id_type getId() const LEGION_PURE;
+           virtual const std::string& getName() const LEGION_PURE;
+           void init(app::window& context)
+           {
+               m_initialized = true;
+               m_quad = screen_quad(nullptr);
+               setup(context);
+           }
+   
+           bool isInitialized() const { return m_initialized; }
+   
+       protected:
+           virtual void setup(app::window& context) LEGION_PURE;
+           void renderQuad()
+           {
+               OPTICK_EVENT();
+               m_quad.render();
+           }
+       private:
+           bool m_initialized = false;
+           screen_quad m_quad;
+       };
+   
+       struct framebuffer;
+       template<typename Self>
+       class PostProcessingEffect : public PostProcessingEffectBase
+       {
+       public:
+           virtual id_type getId() const override { return id; }
+           virtual const std::string& getName() const override { return name; }
+           static const id_type id;
+           static const std::string name;
+   
+       protected:
+           template<void(Self::* func_type)(framebuffer&, texture_handle, texture_handle, time::span)>
+           void addRenderPass()
+           {
+               renderPasses.push_back(delegate<void(framebuffer&, texture_handle, texture_handle, time::span)>::create<Self, func_type>(reinterpret_cast<Self*>(this)));
+           }
+       };
+   
+       template<typename Self>
+       const id_type PostProcessingEffect<Self>::id = typeHash<Self>();
+   
+       template<typename Self>
+       const std::string PostProcessingEffect<Self>::name = typeName<Self>();
+   
+   }

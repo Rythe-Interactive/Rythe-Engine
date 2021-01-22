@@ -35,6 +35,8 @@ Includes
 
 - ``physics/halfedgeface.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeface.hpp`)
 
+- ``rendering/debugrendering.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_debugrendering.hpp`)
+
 
 
 Included By

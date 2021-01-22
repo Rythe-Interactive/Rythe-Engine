@@ -1,9 +1,18 @@
 .. _exhale_class_classlegion_1_1rendering_1_1_render_stage:
 
-Class RenderStage
-=================
+Template Class RenderStage
+==========================
 
 - Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::rendering::RenderStageBase`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage_base`)
 
 
 Class Documentation

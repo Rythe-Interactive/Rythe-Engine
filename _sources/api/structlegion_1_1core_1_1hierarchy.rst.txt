@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1hierarchy:
+
+Struct hierarchy
+================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_defaults_defaultcomponents.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::hierarchy
+   :members:
+   :protected-members:
+   :undoc-members:

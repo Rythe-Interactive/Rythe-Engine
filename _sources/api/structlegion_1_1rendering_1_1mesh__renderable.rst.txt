@@ -1,0 +1,25 @@
+.. _exhale_struct_structlegion_1_1rendering_1_1mesh__renderable:
+
+Struct mesh_renderable
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::core::ecs::archetype< mesh_filter, mesh_renderer >`` (:ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1archetype`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::rendering::mesh_renderable
+   :members:
+   :protected-members:
+   :undoc-members:

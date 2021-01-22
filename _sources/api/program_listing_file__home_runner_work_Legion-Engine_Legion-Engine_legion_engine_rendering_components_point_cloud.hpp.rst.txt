@@ -1,0 +1,57 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_point_cloud.hpp:
+
+Program Listing for File point_cloud.hpp
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_point_cloud.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/components/point_cloud.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include<core/core.hpp>
+   #include <core/math/math.hpp>
+   #include <core/logging/logging.hpp>
+   #include <application/application.hpp>
+   
+   #include <core/compute/context.hpp>
+   #include <core/compute/kernel.hpp>
+   
+   
+   namespace legion::rendering
+   {
+       struct point_cloud
+       {
+       public:
+   
+           point_cloud(mesh_handle newMesh, transform newTrans, material_handle mat, image_handle heightMap, uint maxPoints = 100, float radius = 0.2f)
+           {
+               m_mesh = newMesh;
+               m_trans = newTrans;
+               m_heightMap = heightMap;
+               //m_samplesPerTriangle = calculateSamplesPerTriangle(maxPoints);
+               m_pointRadius = radius;
+               m_Material = mat;
+               m_maxPoints = maxPoints;
+           }
+           point_cloud() = default;
+   
+       private:
+           friend class PointCloudGeneration;
+           //used to check if a new point cloud needs to be generated
+           bool m_hasBeenGenerated = false;
+   
+           //point cloud parameters
+           float m_heightStrength = 0.2f;
+           float m_pointRadius;
+           transform m_trans;
+           mesh_handle m_mesh;
+           uint m_samplesPerTriangle;
+           uint m_sampleDepth;
+           uint m_maxPoints;
+           material_handle m_Material;
+           image_handle m_heightMap;
+       };
+   }

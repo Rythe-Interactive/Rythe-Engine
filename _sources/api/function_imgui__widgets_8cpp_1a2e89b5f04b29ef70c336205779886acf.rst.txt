@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1a2e89b5f04b29ef70c336205779886acf:
+
+Function ImStb::STB_TEXTEDIT_INSERTCHARS
+========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStb::STB_TEXTEDIT_INSERTCHARS(STB_TEXTEDIT_STRING *, int, const ImWchar *, int)

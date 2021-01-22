@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1async_1_1this__job:
+
+Struct this_job
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_job_pool.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::async::this_job
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_variable_imgui_8cpp_1ab6bee9ea01e0feab33c8263be3f58bca:
+
+Variable WINDOWS_RESIZE_FROM_EDGES_FEEDBACK_TIMER
+=================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: WINDOWS_RESIZE_FROM_EDGES_FEEDBACK_TIMER

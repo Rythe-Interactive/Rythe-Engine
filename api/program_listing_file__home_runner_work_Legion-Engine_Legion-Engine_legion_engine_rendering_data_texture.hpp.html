@@ -71,7 +71,9 @@
     <span class="p">{</span>
         <span class="n">depth</span> <span class="o">=</span> <span class="n">GL_DEPTH_COMPONENT</span><span class="p">,</span>
         <span class="n">stencil</span> <span class="o">=</span> <span class="n">GL_STENCIL_INDEX</span><span class="p">,</span>
-        <span class="n">depth_stencil</span> <span class="o">=</span> <span class="n">GL_DEPTH_STENCIL</span><span class="p">,</span>
+        <span class="n">depth_stencil</span> <span class="o">=</span> <span class="n">GL_DEPTH24_STENCIL8</span><span class="p">,</span>
+        <span class="n">rgba_hdr</span> <span class="o">=</span> <span class="n">GL_RGBA32F</span><span class="p">,</span>
+        <span class="n">rgb_hdr</span> <span class="o">=</span> <span class="n">GL_RGB32F</span><span class="p">,</span>
         <span class="n">red</span> <span class="o">=</span> <span class="n">GL_RED</span><span class="p">,</span>
         <span class="n">rg</span> <span class="o">=</span> <span class="n">GL_RG</span><span class="p">,</span>
         <span class="n">rgb</span> <span class="o">=</span> <span class="n">GL_RGB</span><span class="p">,</span>
@@ -81,16 +83,16 @@
         <span class="n">red_int</span> <span class="o">=</span> <span class="n">GL_RED_INTEGER</span><span class="p">,</span>
         <span class="n">rg_int</span> <span class="o">=</span> <span class="n">GL_RG_INTEGER</span><span class="p">,</span>
         <span class="n">rgb_int</span> <span class="o">=</span> <span class="n">GL_RGB_INTEGER</span><span class="p">,</span>
-        <span class="n">rgba_int</span> <span class="o">=</span> <span class="n">GL_RGBL_INTEGER</span><span class="p">,</span>
+        <span class="n">rgba_int</span> <span class="o">=</span> <span class="n">GL_RGBA_INTEGER</span><span class="p">,</span>
         <span class="n">bgr_int</span> <span class="o">=</span> <span class="n">GL_BGR_INTEGER</span><span class="p">,</span>
-        <span class="n">bgra_int</span> <span class="o">=</span> <span class="n">GL_BGRL_INTEGER</span><span class="p">,</span>
+        <span class="n">bgra_int</span> <span class="o">=</span> <span class="n">GL_BGRA_INTEGER</span><span class="p">,</span>
     <span class="p">};</span>
 
     <span class="k">using</span> <span class="n">texture_components</span> <span class="o">=</span> <span class="n">image_components</span><span class="p">;</span>
 
-    <span class="k">constexpr</span> <span class="n">GLenum</span> <span class="n">components_to_format</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RED</span><span class="p">,</span> <span class="n">GL_RG</span><span class="p">,</span> <span class="n">GL_RGB</span><span class="p">,</span> <span class="n">GL_RGBA</span> <span class="p">};</span>
+    <span class="k">constexpr</span> <span class="n">GLenum</span> <span class="n">components_to_format</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_RED</span><span class="p">,</span> <span class="n">GL_RG</span><span class="p">,</span> <span class="n">GL_RGB</span><span class="p">,</span> <span class="n">GL_RGBA</span><span class="p">,</span> <span class="n">GL_DEPTH_COMPONENT</span><span class="p">,</span> <span class="n">GL_STENCIL_INDEX</span><span class="p">,</span> <span class="n">GL_DEPTH_STENCIL</span> <span class="p">};</span>
 
-    <span class="k">constexpr</span> <span class="n">GLenum</span> <span class="n">channels_to_glenum</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">GL_UNSIGNED_SHORT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_FLOAT</span> <span class="p">};</span>
+    <span class="k">constexpr</span> <span class="n">GLenum</span> <span class="n">channels_to_glenum</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">GL_UNSIGNED_INT_24_8</span><span class="p">,</span> <span class="n">GL_UNSIGNED_BYTE</span><span class="p">,</span> <span class="n">GL_UNSIGNED_SHORT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GL_FLOAT</span> <span class="p">};</span>
 
     <span class="k">enum</span> <span class="k">struct</span> <span class="nl">texture_mipmap</span> <span class="p">:</span> <span class="n">GLint</span>
     <span class="p">{</span>
@@ -119,12 +121,15 @@
     <span class="p">{</span>
         <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">textureId</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
 
-        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">;</span>
         <span class="n">texture_components</span> <span class="n">channels</span><span class="p">;</span>
         <span class="n">texture_type</span> <span class="n">type</span><span class="p">;</span>
+        <span class="n">texture_format</span> <span class="n">format</span><span class="p">;</span>
+        <span class="n">channel_format</span> <span class="n">fileFormat</span><span class="p">;</span>
 
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">to_resource</span><span class="p">(</span><span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">*</span> <span class="n">resource</span><span class="p">,</span> <span class="k">const</span> <span class="n">texture</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">from_resource</span><span class="p">(</span><span class="n">texture</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">resize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="k">struct</span> <span class="n">texture_handle</span>
@@ -165,7 +170,7 @@
         <span class="k">friend</span> <span class="k">struct</span> <span class="n">texture_handle</span><span class="p">;</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">texture</span><span class="o">&gt;</span> <span class="n">m_textures</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_textureLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_textureLock</span><span class="p">;</span>
 
         <span class="k">static</span> <span class="k">const</span> <span class="n">texture</span><span class="o">&amp;</span> <span class="n">get_texture</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">texture_data</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
@@ -173,6 +178,7 @@
     <span class="k">public</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">texture_handle</span> <span class="n">create_texture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="n">texture_handle</span> <span class="nf">create_texture_from_image</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">texture_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_texture_settings</span><span class="p">);</span>
 

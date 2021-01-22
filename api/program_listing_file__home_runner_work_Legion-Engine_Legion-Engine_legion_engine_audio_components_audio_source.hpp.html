@@ -61,12 +61,13 @@
     <span class="k">public</span><span class="o">:</span>
         <span class="k">enum</span> <span class="n">sound_properties</span>
         <span class="p">{</span>
-            <span class="n">pitch</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="n">gain</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="n">playState</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
-            <span class="n">doRewind</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
-            <span class="n">audioHandle</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
-            <span class="n">rollOffFactor</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span>
+            <span class="n">pitch</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="n">gain</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">playState</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="n">doRewind</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="n">audioHandle</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="n">rollOffFactor</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="n">looping</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span>
         <span class="p">};</span>
 
         <span class="k">enum</span> <span class="n">playstate</span>
@@ -76,36 +77,36 @@
             <span class="n">paused</span><span class="p">,</span>
         <span class="p">};</span>
 
-        <span class="kt">void</span> <span class="nf">setPitch</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span> <span class="n">pitch</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="nf">setPitch</span><span class="p">(</span><span class="kt">float</span> <span class="n">pitch</span><span class="p">)</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">pitch</span><span class="p">;</span> <span class="c1">// set b0</span>
             <span class="n">m_pitch</span> <span class="o">=</span> <span class="n">legion</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="n">pitch</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="kt">float</span> <span class="nf">getPitch</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_pitch</span><span class="p">;</span> <span class="p">}</span>
-        <span class="kt">void</span> <span class="nf">setGain</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span> <span class="n">gain</span><span class="p">)</span>
+        <span class="kt">float</span> <span class="nf">getPitch</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_pitch</span><span class="p">;</span> <span class="p">}</span>
+        <span class="kt">void</span> <span class="nf">setGain</span><span class="p">(</span><span class="kt">float</span> <span class="n">gain</span><span class="p">)</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">gain</span><span class="p">;</span> <span class="c1">// set b1</span>
             <span class="n">m_gain</span> <span class="o">=</span> <span class="n">legion</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">,</span> <span class="n">gain</span><span class="p">);</span>
         <span class="p">}</span>
-        <span class="kt">float</span> <span class="nf">getGain</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_gain</span><span class="p">;</span> <span class="p">};</span>
+        <span class="kt">float</span> <span class="nf">getGain</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_gain</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">setRollOffFactor</span><span class="p">(</span><span class="kt">float</span> <span class="n">factor</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="nf">setRollOffFactor</span><span class="p">(</span><span class="kt">float</span> <span class="n">factor</span><span class="p">)</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="n">m_changes</span> <span class="o">=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">rollOffFactor</span><span class="p">;</span>
             <span class="n">m_rolloffFactor</span> <span class="o">=</span> <span class="n">factor</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">disableSpatialAudio</span><span class="p">()</span>
+        <span class="kt">void</span> <span class="nf">disableSpatialAudio</span><span class="p">()</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="n">setRollOffFactor</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">enableSpatialAudio</span><span class="p">()</span>
+        <span class="kt">void</span> <span class="nf">enableSpatialAudio</span><span class="p">()</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="n">setRollOffFactor</span><span class="p">(</span><span class="mf">1.0f</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">play</span><span class="p">()</span>
+        <span class="kt">void</span> <span class="nf">play</span><span class="p">()</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="c1">// If the file is already playing or if the file will be played on next update &gt; return</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_nextPlayState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">playing</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
@@ -114,7 +115,7 @@
             <span class="c1">// Do not set playstate to playing - audiosystem will set it accordingly</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">pause</span><span class="p">()</span>
+        <span class="kt">void</span> <span class="nf">pause</span><span class="p">()</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="c1">// If the file is already playing or if the file will be played on next update &gt; return</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_nextPlayState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">paused</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
@@ -123,7 +124,7 @@
             <span class="c1">// Do not set playstate to paused - audiosystem will set it accordingly</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">stop</span><span class="p">()</span>
+        <span class="kt">void</span> <span class="nf">stop</span><span class="p">()</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="c1">// If the file is already playing or if the file will be played on next update &gt; return</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_nextPlayState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
@@ -132,56 +133,70 @@
             <span class="c1">// Do not set playstate to stopped - audiosystem will set it accordingly</span>
         <span class="p">}</span>
 
-        <span class="kt">bool</span> <span class="nf">isPlaying</span><span class="p">()</span> <span class="k">const</span>
+        <span class="kt">bool</span> <span class="nf">isPlaying</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_playState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">playing</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">bool</span> <span class="nf">isPaused</span><span class="p">()</span> <span class="k">const</span>
+        <span class="kt">bool</span> <span class="nf">isPaused</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_playState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">paused</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">bool</span> <span class="nf">isStopped</span><span class="p">()</span> <span class="k">const</span>
+        <span class="kt">bool</span> <span class="nf">isStopped</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_playState</span> <span class="o">==</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">setAudioHandle</span><span class="p">(</span><span class="n">audio_segment_handle</span> <span class="n">handle</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="nf">setAudioHandle</span><span class="p">(</span><span class="n">audio_segment_handle</span> <span class="n">handle</span><span class="p">)</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">m_audio_handle</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
             <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">audioHandle</span><span class="p">;</span>
             <span class="n">m_audio_handle</span> <span class="o">=</span> <span class="n">handle</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">rewind</span><span class="p">()</span>
+        <span class="kt">void</span> <span class="nf">rewind</span><span class="p">()</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">sound_properties</span><span class="o">::</span><span class="n">doRewind</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="n">audio_segment_handle</span> <span class="nf">getAudioHandle</span><span class="p">()</span> <span class="k">const</span>
+        <span class="n">audio_segment_handle</span> <span class="nf">getAudioHandle</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">m_audio_handle</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">int</span> <span class="nf">getChannels</span><span class="p">()</span>
+        <span class="kt">int</span> <span class="nf">getChannels</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">channels</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="p">{</span>
-                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_audio_handle</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">first</span><span class="p">);</span>
-                <span class="n">channels</span> <span class="o">=</span> <span class="n">m_audio_handle</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">second</span><span class="p">.</span><span class="n">channels</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">return</span> <span class="n">channels</span><span class="p">;</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_audio_handle</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">m_audio_handle</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">second</span><span class="p">.</span><span class="n">channels</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">bool</span> <span class="nf">isStereo</span><span class="p">()</span>
+        <span class="kt">bool</span> <span class="nf">isStereo</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">getChannels</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="p">;</span>
         <span class="p">}</span>
-
-        <span class="kt">bool</span> <span class="nf">isMono</span><span class="p">()</span>
+        <span class="kt">bool</span> <span class="nf">isMono</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">getChannels</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">setLooping</span><span class="p">(</span><span class="kt">bool</span> <span class="n">state</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span> <span class="k">noexcept</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">state</span> <span class="o">!=</span> <span class="n">m_looping</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">m_looping</span> <span class="o">=</span> <span class="n">state</span><span class="p">;</span>
+                <span class="n">m_changes</span> <span class="o">|=</span> <span class="n">looping</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="nf">isLooping</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_looping</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+        <span class="k">operator</span> <span class="nf">ALuint</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_sourceId</span><span class="p">;</span>
         <span class="p">}</span>
 
     <span class="k">private</span><span class="o">:</span>
@@ -197,6 +212,8 @@
 
         <span class="kt">float</span> <span class="n">m_pitch</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
         <span class="kt">float</span> <span class="n">m_gain</span> <span class="o">=</span> <span class="mf">1.0f</span><span class="p">;</span>
+
+        <span class="kt">bool</span> <span class="n">m_looping</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 
         <span class="n">playstate</span> <span class="n">m_playState</span> <span class="o">=</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>
         <span class="n">playstate</span> <span class="n">m_nextPlayState</span> <span class="o">=</span> <span class="n">playstate</span><span class="o">::</span><span class="n">stopped</span><span class="p">;</span>

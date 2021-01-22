@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File imgui_impl_glfw.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File imgui_impl_glfw.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-imgui-impl-glfw-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-impl-glfw-cpp"></span><h1>Program Listing for File imgui_impl_glfw.cpp<a class="headerlink" href="#program-listing-for-file-imgui-impl-glfw-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-imgui-impl-imgui-impl-glfw-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/imgui_impl/imgui_impl_glfw.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// dear imgui: Platform Backend for GLFW</span>
+<span class="c1">// This needs to be used along with a Renderer (e.g. OpenGL3, Vulkan..)</span>
+<span class="c1">// (Info: GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan graphics context creation, etc.)</span>
+<span class="c1">// (Requires: GLFW 3.1+)</span>
+
+<span class="c1">// Implemented features:</span>
+<span class="c1">//  [X] Platform: Clipboard support.</span>
+<span class="c1">//  [X] Platform: Gamepad support. Enable with &#39;io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad&#39;.</span>
+<span class="c1">//  [X] Platform: Mouse cursor shape and visibility. Disable with &#39;io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange&#39; (note: the resizing cursors requires GLFW 3.4+).</span>
+<span class="c1">//  [X] Platform: Keyboard arrays indexed using GLFW_KEY_* codes, e.g. ImGui::IsKeyPressed(GLFW_KEY_SPACE).</span>
+
+<span class="c1">// You can copy and use unmodified imgui_impl_* files in your project. See examples/ folder for examples of using this.</span>
+<span class="c1">// If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.</span>
+<span class="c1">// Read online: https://github.com/ocornut/imgui/tree/master/docs</span>
+
+<span class="c1">// CHANGELOG</span>
+<span class="c1">// (minor and older changes stripped away, please see git history for details)</span>
+<span class="c1">//  2020-01-17: Inputs: Disable error callback while assigning mouse cursors because some X11 setup don&#39;t have them and it generates errors.</span>
+<span class="c1">//  2019-12-05: Inputs: Added support for new mouse cursors added in GLFW 3.4+ (resizing cursors, not allowed cursor).</span>
+<span class="c1">//  2019-10-18: Misc: Previously installed user callbacks are now restored on shutdown.</span>
+<span class="c1">//  2019-07-21: Inputs: Added mapping for ImGuiKey_KeyPadEnter.</span>
+<span class="c1">//  2019-05-11: Inputs: Don&#39;t filter value from character callback before calling AddInputCharacter().</span>
+<span class="c1">//  2019-03-12: Misc: Preserve DisplayFramebufferScale when main window is minimized.</span>
+<span class="c1">//  2018-11-30: Misc: Setting up io.BackendPlatformName so it can be displayed in the About Window.</span>
+<span class="c1">//  2018-11-07: Inputs: When installing our GLFW callbacks, we save user&#39;s previously installed ones - if any - and chain call them.</span>
+<span class="c1">//  2018-08-01: Inputs: Workaround for Emscripten which doesn&#39;t seem to handle focus related calls.</span>
+<span class="c1">//  2018-06-29: Inputs: Added support for the ImGuiMouseCursor_Hand cursor.</span>
+<span class="c1">//  2018-06-08: Misc: Extracted imgui_impl_glfw.cpp/.h away from the old combined GLFW+OpenGL/Vulkan examples.</span>
+<span class="c1">//  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.</span>
+<span class="c1">//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value, passed to glfwSetCursor()).</span>
+<span class="c1">//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.</span>
+<span class="c1">//  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.</span>
+<span class="c1">//  2018-01-25: Inputs: Added gamepad support if ImGuiConfigFlags_NavEnableGamepad is set.</span>
+<span class="c1">//  2018-01-25: Inputs: Honoring the io.WantSetMousePos by repositioning the mouse (when using navigation and ImGuiConfigFlags_NavMoveMouse is set).</span>
+<span class="c1">//  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.</span>
+<span class="c1">//  2018-01-18: Inputs: Added mapping for ImGuiKey_Insert.</span>
+<span class="c1">//  2017-08-25: Inputs: MousePos set to -FLT_MAX,-FLT_MAX when mouse is unavailable/missing (instead of -1,-1).</span>
+<span class="c1">//  2016-10-15: Misc: Added a void* user_data parameter to Clipboard function handlers.</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;imgui/imgui.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;imgui/backends/imgui_impl_glfw.h&gt;</span><span class="cp"></span>
+
+<span class="c1">// GLFW</span>
+<span class="cp">#include</span> <span class="cpf">&lt;GLFW/glfw3.h&gt;</span><span class="cp"></span>
+<span class="cp">#ifdef _WIN32</span>
+<span class="cp">#undef APIENTRY</span>
+<span class="cp">#define GLFW_EXPOSE_NATIVE_WIN32</span>
+<span class="cp">#include</span> <span class="cpf">&lt;GLFW/glfw3native.h&gt;   // for glfwGetWin32Window</span><span class="cp"></span>
+<span class="cp">#endif</span>
+<span class="cp">#define GLFW_HAS_WINDOW_TOPMOST       (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 &gt;= 3200) </span><span class="c1">// 3.2+ GLFW_FLOATING</span>
+<span class="cp">#define GLFW_HAS_WINDOW_HOVERED       (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 &gt;= 3300) </span><span class="c1">// 3.3+ GLFW_HOVERED</span>
+<span class="cp">#define GLFW_HAS_WINDOW_ALPHA         (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 &gt;= 3300) </span><span class="c1">// 3.3+ glfwSetWindowOpacity</span>
+<span class="cp">#define GLFW_HAS_PER_MONITOR_DPI      (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 &gt;= 3300) </span><span class="c1">// 3.3+ glfwGetMonitorContentScale</span>
+<span class="cp">#define GLFW_HAS_VULKAN               (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 &gt;= 3200) </span><span class="c1">// 3.2+ glfwCreateWindowSurface</span>
+<span class="cp">#ifdef GLFW_RESIZE_NESW_CURSOR  </span><span class="c1">// let&#39;s be nice to people who pulled GLFW between 2019-04-16 (3.4 define) and 2019-11-29 (cursors defines) // FIXME: Remove when GLFW 3.4 is released?</span>
+<span class="cp">#define GLFW_HAS_NEW_CURSORS          (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 &gt;= 3400) </span><span class="c1">// 3.4+ GLFW_RESIZE_ALL_CURSOR, GLFW_RESIZE_NESW_CURSOR, GLFW_RESIZE_NWSE_CURSOR, GLFW_NOT_ALLOWED_CURSOR</span>
+<span class="cp">#else</span>
+<span class="cp">#define GLFW_HAS_NEW_CURSORS          (0)</span>
+<span class="cp">#endif</span>
+
+<span class="c1">// Data</span>
+<span class="k">enum</span> <span class="n">GlfwClientApi</span>
+<span class="p">{</span>
+    <span class="n">GlfwClientApi_Unknown</span><span class="p">,</span>
+    <span class="n">GlfwClientApi_OpenGL</span><span class="p">,</span>
+    <span class="n">GlfwClientApi_Vulkan</span>
+<span class="p">};</span>
+<span class="k">static</span> <span class="n">GLFWwindow</span><span class="o">*</span>          <span class="n">g_Window</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>    <span class="c1">// Main window</span>
+<span class="k">static</span> <span class="n">GlfwClientApi</span>        <span class="n">g_ClientApi</span> <span class="o">=</span> <span class="n">GlfwClientApi_Unknown</span><span class="p">;</span>
+<span class="k">static</span> <span class="kt">double</span>               <span class="n">g_Time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="k">static</span> <span class="kt">bool</span>                 <span class="n">g_MouseJustPressed</span><span class="p">[</span><span class="n">ImGuiMouseButton_COUNT</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="k">static</span> <span class="n">GLFWcursor</span><span class="o">*</span>          <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_COUNT</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="k">static</span> <span class="kt">bool</span>                 <span class="n">g_InstalledCallbacks</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+<span class="c1">// Chain GLFW callbacks: our callbacks will call the user&#39;s previously installed callbacks, if any.</span>
+<span class="k">static</span> <span class="n">GLFWmousebuttonfun</span>   <span class="n">g_PrevUserCallbackMousebutton</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">GLFWscrollfun</span>        <span class="n">g_PrevUserCallbackScroll</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">GLFWkeyfun</span>           <span class="n">g_PrevUserCallbackKey</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="k">static</span> <span class="n">GLFWcharfun</span>          <span class="n">g_PrevUserCallbackChar</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="nf">ImGui_ImplGlfw_GetClipboardText</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">glfwGetClipboardString</span><span class="p">((</span><span class="n">GLFWwindow</span><span class="o">*</span><span class="p">)</span><span class="n">user_data</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_SetClipboardText</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">user_data</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">text</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">glfwSetClipboardString</span><span class="p">((</span><span class="n">GLFWwindow</span><span class="o">*</span><span class="p">)</span><span class="n">user_data</span><span class="p">,</span> <span class="n">text</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_MouseButtonCallback</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">button</span><span class="p">,</span> <span class="kt">int</span> <span class="n">action</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mods</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_PrevUserCallbackMousebutton</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="n">g_PrevUserCallbackMousebutton</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">button</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">mods</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">action</span> <span class="o">==</span> <span class="n">GLFW_PRESS</span> <span class="o">&amp;&amp;</span> <span class="n">button</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">button</span> <span class="o">&lt;</span> <span class="n">IM_ARRAYSIZE</span><span class="p">(</span><span class="n">g_MouseJustPressed</span><span class="p">))</span>
+        <span class="n">g_MouseJustPressed</span><span class="p">[</span><span class="n">button</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_ScrollCallback</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">double</span> <span class="n">xoffset</span><span class="p">,</span> <span class="kt">double</span> <span class="n">yoffset</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_PrevUserCallbackScroll</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="n">g_PrevUserCallbackScroll</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">xoffset</span><span class="p">,</span> <span class="n">yoffset</span><span class="p">);</span>
+
+    <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">MouseWheelH</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">xoffset</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">MouseWheel</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">yoffset</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_KeyCallback</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">scancode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">action</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mods</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_PrevUserCallbackKey</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="n">g_PrevUserCallbackKey</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">scancode</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">mods</span><span class="p">);</span>
+
+    <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">action</span> <span class="o">==</span> <span class="n">GLFW_PRESS</span><span class="p">)</span>
+        <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">action</span> <span class="o">==</span> <span class="n">GLFW_RELEASE</span><span class="p">)</span>
+        <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+    <span class="c1">// Modifiers are not reliable across systems</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyCtrl</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">GLFW_KEY_LEFT_CONTROL</span><span class="p">]</span> <span class="o">||</span> <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">GLFW_KEY_RIGHT_CONTROL</span><span class="p">];</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyShift</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">GLFW_KEY_LEFT_SHIFT</span><span class="p">]</span> <span class="o">||</span> <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">GLFW_KEY_RIGHT_SHIFT</span><span class="p">];</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyAlt</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">GLFW_KEY_LEFT_ALT</span><span class="p">]</span> <span class="o">||</span> <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">GLFW_KEY_RIGHT_ALT</span><span class="p">];</span>
+<span class="cp">#ifdef _WIN32</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeySuper</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="cp">#else</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeySuper</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">GLFW_KEY_LEFT_SUPER</span><span class="p">]</span> <span class="o">||</span> <span class="n">io</span><span class="p">.</span><span class="n">KeysDown</span><span class="p">[</span><span class="n">GLFW_KEY_RIGHT_SUPER</span><span class="p">];</span>
+<span class="cp">#endif</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_CharCallback</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_PrevUserCallbackChar</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="n">g_PrevUserCallbackChar</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+
+    <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">AddInputCharacter</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">bool</span> <span class="nf">ImGui_ImplGlfw_Init</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">install_callbacks</span><span class="p">,</span> <span class="n">GlfwClientApi</span> <span class="n">client_api</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">g_Window</span> <span class="o">=</span> <span class="n">window</span><span class="p">;</span>
+    <span class="n">g_Time</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+
+    <span class="c1">// Setup backend capabilities flags</span>
+    <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">BackendFlags</span> <span class="o">|=</span> <span class="n">ImGuiBackendFlags_HasMouseCursors</span><span class="p">;</span>         <span class="c1">// We can honor GetMouseCursor() values (optional)</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">BackendFlags</span> <span class="o">|=</span> <span class="n">ImGuiBackendFlags_HasSetMousePos</span><span class="p">;</span>          <span class="c1">// We can honor io.WantSetMousePos requests (optional, rarely used)</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">BackendPlatformName</span> <span class="o">=</span> <span class="s">&quot;imgui_impl_glfw&quot;</span><span class="p">;</span>
+
+    <span class="c1">// Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Tab</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_TAB</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_LeftArrow</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_LEFT</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_RightArrow</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_RIGHT</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_UpArrow</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_UP</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_DownArrow</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_DOWN</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_PageUp</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_PAGE_UP</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_PageDown</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_PAGE_DOWN</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Home</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_HOME</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_End</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_END</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Insert</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_INSERT</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Delete</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_DELETE</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Backspace</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_BACKSPACE</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Space</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_SPACE</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Enter</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_ENTER</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Escape</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_ESCAPE</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_KeyPadEnter</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_KP_ENTER</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_A</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_A</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_C</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_C</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_V</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_V</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_X</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_X</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Y</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_Y</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">KeyMap</span><span class="p">[</span><span class="n">ImGuiKey_Z</span><span class="p">]</span> <span class="o">=</span> <span class="n">GLFW_KEY_Z</span><span class="p">;</span>
+
+    <span class="n">io</span><span class="p">.</span><span class="n">SetClipboardTextFn</span> <span class="o">=</span> <span class="n">ImGui_ImplGlfw_SetClipboardText</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">GetClipboardTextFn</span> <span class="o">=</span> <span class="n">ImGui_ImplGlfw_GetClipboardText</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">ClipboardUserData</span> <span class="o">=</span> <span class="n">g_Window</span><span class="p">;</span>
+<span class="cp">#if defined(_WIN32)</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">ImeWindowHandle</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">glfwGetWin32Window</span><span class="p">(</span><span class="n">g_Window</span><span class="p">);</span>
+<span class="cp">#endif</span>
+
+    <span class="c1">// Create mouse cursors</span>
+    <span class="c1">// (By design, on X11 cursors are user configurable and some cursors may be missing. When a cursor doesn&#39;t exist,</span>
+    <span class="c1">// GLFW will emit an error which will often be printed by the app, so we temporarily disable error reporting.</span>
+    <span class="c1">// Missing cursors will return NULL and our _UpdateMouseCursor() function will use the Arrow cursor instead.)</span>
+    <span class="n">GLFWerrorfun</span> <span class="n">prev_error_callback</span> <span class="o">=</span> <span class="n">glfwSetErrorCallback</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_Arrow</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_ARROW_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_TextInput</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_IBEAM_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_ResizeNS</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_VRESIZE_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_ResizeEW</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_HRESIZE_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_Hand</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_HAND_CURSOR</span><span class="p">);</span>
+<span class="cp">#if GLFW_HAS_NEW_CURSORS</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_ResizeAll</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_RESIZE_ALL_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_ResizeNESW</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_RESIZE_NESW_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_ResizeNWSE</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_RESIZE_NWSE_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_NotAllowed</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_NOT_ALLOWED_CURSOR</span><span class="p">);</span>
+<span class="cp">#else</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_ResizeAll</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_ARROW_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_ResizeNESW</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_ARROW_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_ResizeNWSE</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_ARROW_CURSOR</span><span class="p">);</span>
+    <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_NotAllowed</span><span class="p">]</span> <span class="o">=</span> <span class="n">glfwCreateStandardCursor</span><span class="p">(</span><span class="n">GLFW_ARROW_CURSOR</span><span class="p">);</span>
+<span class="cp">#endif</span>
+    <span class="n">glfwSetErrorCallback</span><span class="p">(</span><span class="n">prev_error_callback</span><span class="p">);</span>
+
+    <span class="c1">// Chain GLFW callbacks: our callbacks will call the user&#39;s previously installed callbacks, if any.</span>
+    <span class="n">g_PrevUserCallbackMousebutton</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">g_PrevUserCallbackScroll</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">g_PrevUserCallbackKey</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">g_PrevUserCallbackChar</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">install_callbacks</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">g_InstalledCallbacks</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">g_PrevUserCallbackMousebutton</span> <span class="o">=</span> <span class="n">glfwSetMouseButtonCallback</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">ImGui_ImplGlfw_MouseButtonCallback</span><span class="p">);</span>
+        <span class="n">g_PrevUserCallbackScroll</span> <span class="o">=</span> <span class="n">glfwSetScrollCallback</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">ImGui_ImplGlfw_ScrollCallback</span><span class="p">);</span>
+        <span class="n">g_PrevUserCallbackKey</span> <span class="o">=</span> <span class="n">glfwSetKeyCallback</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">ImGui_ImplGlfw_KeyCallback</span><span class="p">);</span>
+        <span class="n">g_PrevUserCallbackChar</span> <span class="o">=</span> <span class="n">glfwSetCharCallback</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">ImGui_ImplGlfw_CharCallback</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">g_ClientApi</span> <span class="o">=</span> <span class="n">client_api</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="nf">ImGui_ImplGlfw_InitForOpenGL</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">install_callbacks</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">ImGui_ImplGlfw_Init</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">install_callbacks</span><span class="p">,</span> <span class="n">GlfwClientApi_OpenGL</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span> <span class="nf">ImGui_ImplGlfw_InitForVulkan</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">install_callbacks</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">ImGui_ImplGlfw_Init</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">install_callbacks</span><span class="p">,</span> <span class="n">GlfwClientApi_Vulkan</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_Shutdown</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">g_InstalledCallbacks</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">glfwSetMouseButtonCallback</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="n">g_PrevUserCallbackMousebutton</span><span class="p">);</span>
+        <span class="n">glfwSetScrollCallback</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="n">g_PrevUserCallbackScroll</span><span class="p">);</span>
+        <span class="n">glfwSetKeyCallback</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="n">g_PrevUserCallbackKey</span><span class="p">);</span>
+        <span class="n">glfwSetCharCallback</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="n">g_PrevUserCallbackChar</span><span class="p">);</span>
+        <span class="n">g_InstalledCallbacks</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">ImGuiMouseCursor</span> <span class="n">cursor_n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">cursor_n</span> <span class="o">&lt;</span> <span class="n">ImGuiMouseCursor_COUNT</span><span class="p">;</span> <span class="n">cursor_n</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">glfwDestroyCursor</span><span class="p">(</span><span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">cursor_n</span><span class="p">]);</span>
+        <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">cursor_n</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">g_ClientApi</span> <span class="o">=</span> <span class="n">GlfwClientApi_Unknown</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_UpdateMousePosAndButtons</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// Update buttons</span>
+    <span class="k">static</span> <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">IM_ARRAYSIZE</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">MouseDown</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// If a mouse press event came, always pass it as &quot;mouse held this frame&quot;, so we don&#39;t miss click-release events that are shorter than 1 frame.</span>
+        <span class="n">io</span><span class="p">.</span><span class="n">MouseDown</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">g_MouseJustPressed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">||</span> <span class="n">glfwGetMouseButton</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">g_MouseJustPressed</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Update mouse position</span>
+    <span class="k">const</span> <span class="n">ImVec2</span> <span class="n">mouse_pos_backup</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span><span class="p">;</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">(</span><span class="o">-</span><span class="n">FLT_MAX</span><span class="p">,</span> <span class="o">-</span><span class="n">FLT_MAX</span><span class="p">);</span>
+<span class="cp">#ifdef __EMSCRIPTEN__</span>
+    <span class="k">const</span> <span class="kt">bool</span> <span class="n">focused</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// Emscripten</span>
+<span class="cp">#else</span>
+    <span class="k">const</span> <span class="kt">bool</span> <span class="n">focused</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="cp">#endif</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">focused</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">WantSetMousePos</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">glfwSetCursorPos</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">mouse_pos_backup</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">mouse_pos_backup</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">mouse_x</span><span class="p">,</span> <span class="n">mouse_y</span><span class="p">;</span>
+            <span class="n">glfwGetCursorPos</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">mouse_x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">mouse_y</span><span class="p">);</span>
+            <span class="n">io</span><span class="p">.</span><span class="n">MousePos</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">mouse_x</span><span class="p">,</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">mouse_y</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_UpdateMouseCursor</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">io</span><span class="p">.</span><span class="n">ConfigFlags</span> <span class="o">&amp;</span> <span class="n">ImGuiConfigFlags_NoMouseCursorChange</span><span class="p">)</span> <span class="o">||</span> <span class="n">glfwGetInputMode</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="n">GLFW_CURSOR</span><span class="p">)</span> <span class="o">==</span> <span class="n">GLFW_CURSOR_DISABLED</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+
+    <span class="n">ImGuiMouseCursor</span> <span class="n">imgui_cursor</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetMouseCursor</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">imgui_cursor</span> <span class="o">==</span> <span class="n">ImGuiMouseCursor_None</span> <span class="o">||</span> <span class="n">io</span><span class="p">.</span><span class="n">MouseDrawCursor</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Hide OS mouse cursor if imgui is drawing it or if it wants no cursor</span>
+        <span class="n">glfwSetInputMode</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="n">GLFW_CURSOR</span><span class="p">,</span> <span class="n">GLFW_CURSOR_HIDDEN</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="c1">// Show OS mouse cursor</span>
+        <span class="c1">// FIXME-PLATFORM: Unfocused windows seems to fail changing the mouse cursor with GLFW 3.2, but 3.3 works here.</span>
+        <span class="n">glfwSetCursor</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">imgui_cursor</span><span class="p">]</span> <span class="o">?</span> <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">imgui_cursor</span><span class="p">]</span> <span class="o">:</span> <span class="n">g_MouseCursors</span><span class="p">[</span><span class="n">ImGuiMouseCursor_Arrow</span><span class="p">]);</span>
+        <span class="n">glfwSetInputMode</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="n">GLFW_CURSOR</span><span class="p">,</span> <span class="n">GLFW_CURSOR_NORMAL</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_UpdateGamepads</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">NavInputs</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">NavInputs</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">io</span><span class="p">.</span><span class="n">ConfigFlags</span> <span class="o">&amp;</span> <span class="n">ImGuiConfigFlags_NavEnableGamepad</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+
+    <span class="c1">// Update gamepad inputs</span>
+    <span class="cp">#define MAP_BUTTON(NAV_NO, BUTTON_NO)       { if (buttons_count &gt; BUTTON_NO &amp;&amp; buttons[BUTTON_NO] == GLFW_PRESS) io.NavInputs[NAV_NO] = 1.0f; }</span>
+    <span class="cp">#define MAP_ANALOG(NAV_NO, AXIS_NO, V0, V1) { float v = (axes_count &gt; AXIS_NO) ? axes[AXIS_NO] : V0; v = (v - V0) / (V1 - V0); if (v &gt; 1.0f) v = 1.0f; if (io.NavInputs[NAV_NO] &lt; v) io.NavInputs[NAV_NO] = v; }</span>
+    <span class="kt">int</span> <span class="n">axes_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">buttons_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">float</span><span class="o">*</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">glfwGetJoystickAxes</span><span class="p">(</span><span class="n">GLFW_JOYSTICK_1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">axes_count</span><span class="p">);</span>
+    <span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">buttons</span> <span class="o">=</span> <span class="n">glfwGetJoystickButtons</span><span class="p">(</span><span class="n">GLFW_JOYSTICK_1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buttons_count</span><span class="p">);</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_Activate</span><span class="p">,</span>   <span class="mi">0</span><span class="p">);</span>     <span class="c1">// Cross / A</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_Cancel</span><span class="p">,</span>     <span class="mi">1</span><span class="p">);</span>     <span class="c1">// Circle / B</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_Menu</span><span class="p">,</span>       <span class="mi">2</span><span class="p">);</span>     <span class="c1">// Square / X</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_Input</span><span class="p">,</span>      <span class="mi">3</span><span class="p">);</span>     <span class="c1">// Triangle / Y</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_DpadLeft</span><span class="p">,</span>   <span class="mi">13</span><span class="p">);</span>    <span class="c1">// D-Pad Left</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_DpadRight</span><span class="p">,</span>  <span class="mi">11</span><span class="p">);</span>    <span class="c1">// D-Pad Right</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_DpadUp</span><span class="p">,</span>     <span class="mi">10</span><span class="p">);</span>    <span class="c1">// D-Pad Up</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_DpadDown</span><span class="p">,</span>   <span class="mi">12</span><span class="p">);</span>    <span class="c1">// D-Pad Down</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_FocusPrev</span><span class="p">,</span>  <span class="mi">4</span><span class="p">);</span>     <span class="c1">// L1 / LB</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_FocusNext</span><span class="p">,</span>  <span class="mi">5</span><span class="p">);</span>     <span class="c1">// R1 / RB</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_TweakSlow</span><span class="p">,</span>  <span class="mi">4</span><span class="p">);</span>     <span class="c1">// L1 / LB</span>
+    <span class="n">MAP_BUTTON</span><span class="p">(</span><span class="n">ImGuiNavInput_TweakFast</span><span class="p">,</span>  <span class="mi">5</span><span class="p">);</span>     <span class="c1">// R1 / RB</span>
+    <span class="n">MAP_ANALOG</span><span class="p">(</span><span class="n">ImGuiNavInput_LStickLeft</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.3f</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.9f</span><span class="p">);</span>
+    <span class="n">MAP_ANALOG</span><span class="p">(</span><span class="n">ImGuiNavInput_LStickRight</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>  <span class="o">+</span><span class="mf">0.3f</span><span class="p">,</span>  <span class="o">+</span><span class="mf">0.9f</span><span class="p">);</span>
+    <span class="n">MAP_ANALOG</span><span class="p">(</span><span class="n">ImGuiNavInput_LStickUp</span><span class="p">,</span>   <span class="mi">1</span><span class="p">,</span>  <span class="o">+</span><span class="mf">0.3f</span><span class="p">,</span>  <span class="o">+</span><span class="mf">0.9f</span><span class="p">);</span>
+    <span class="n">MAP_ANALOG</span><span class="p">(</span><span class="n">ImGuiNavInput_LStickDown</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.3f</span><span class="p">,</span>  <span class="o">-</span><span class="mf">0.9f</span><span class="p">);</span>
+    <span class="cp">#undef MAP_BUTTON</span>
+    <span class="cp">#undef MAP_ANALOG</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">axes_count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">buttons_count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">io</span><span class="p">.</span><span class="n">BackendFlags</span> <span class="o">|=</span> <span class="n">ImGuiBackendFlags_HasGamepad</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">io</span><span class="p">.</span><span class="n">BackendFlags</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="n">ImGuiBackendFlags_HasGamepad</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">ImGui_ImplGlfw_NewFrame</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="n">ImGuiIO</span><span class="o">&amp;</span> <span class="n">io</span> <span class="o">=</span> <span class="n">ImGui</span><span class="o">::</span><span class="n">GetIO</span><span class="p">();</span>
+    <span class="n">IM_ASSERT</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">Fonts</span><span class="o">-&gt;</span><span class="n">IsBuilt</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="s">&quot;Font atlas not built! It is generally built by the renderer backend. Missing call to renderer _NewFrame() function? e.g. ImGui_ImplOpenGL3_NewFrame().&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Setup display size (every frame to accommodate for window resizing)</span>
+    <span class="kt">int</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">display_w</span><span class="p">,</span> <span class="n">display_h</span><span class="p">;</span>
+    <span class="n">glfwGetWindowSize</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">w</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">h</span><span class="p">);</span>
+    <span class="n">glfwGetFramebufferSize</span><span class="p">(</span><span class="n">g_Window</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">display_w</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">display_h</span><span class="p">);</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">DisplaySize</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">h</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">h</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">io</span><span class="p">.</span><span class="n">DisplayFramebufferScale</span> <span class="o">=</span> <span class="n">ImVec2</span><span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">display_w</span> <span class="o">/</span> <span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">display_h</span> <span class="o">/</span> <span class="n">h</span><span class="p">);</span>
+
+    <span class="c1">// Setup time step</span>
+    <span class="kt">double</span> <span class="n">current_time</span> <span class="o">=</span> <span class="n">glfwGetTime</span><span class="p">();</span>
+    <span class="n">io</span><span class="p">.</span><span class="n">DeltaTime</span> <span class="o">=</span> <span class="n">g_Time</span> <span class="o">&gt;</span> <span class="mf">0.0</span> <span class="o">?</span> <span class="p">(</span><span class="kt">float</span><span class="p">)(</span><span class="n">current_time</span> <span class="o">-</span> <span class="n">g_Time</span><span class="p">)</span> <span class="o">:</span> <span class="p">(</span><span class="kt">float</span><span class="p">)(</span><span class="mf">1.0f</span> <span class="o">/</span> <span class="mf">60.0f</span><span class="p">);</span>
+    <span class="n">g_Time</span> <span class="o">=</span> <span class="n">current_time</span><span class="p">;</span>
+
+    <span class="n">ImGui_ImplGlfw_UpdateMousePosAndButtons</span><span class="p">();</span>
+    <span class="n">ImGui_ImplGlfw_UpdateMouseCursor</span><span class="p">();</span>
+
+    <span class="c1">// Update game controllers (if enabled and available)</span>
+    <span class="n">ImGui_ImplGlfw_UpdateGamepads</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_impl_glfw.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

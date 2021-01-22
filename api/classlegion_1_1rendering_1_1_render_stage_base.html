@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class RenderStageBase &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class shader" href="class_structlegion_1_1rendering_1_1shader.html" />
+    <link rel="prev" title="Template Class RenderStage" href="classlegion_1_1rendering_1_1_render_stage.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1rendering_1_1shader.html" title="Class shader"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1rendering_1_1_render_stage.html" title="Template Class RenderStage"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class RenderStageBase</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-renderstagebase">
+<span id="exhale-class-classlegion-1-1rendering-1-1-render-stage-base"></span><h1>Class RenderStageBase<a class="headerlink" href="#class-renderstagebase" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_base_renderstage.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-base-renderstage-hpp"><span class="std std-ref">File renderstage.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="derived-types">
+<h3>Derived Types<a class="headerlink" href="#derived-types" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">SelfType</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">ClearStage</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">DebugRenderStage</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">FramebufferResizeStage</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">ImGuiStage</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">LightBufferStage</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">MeshBatchingStage</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">MeshRenderStage</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">PostProcessingStage</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::rendering::RenderStage&lt;</span> <span class="pre">SubmitStage</span> <span class="pre">&gt;</span></code> (<a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#exhale-class-classlegion-1-1rendering-1-1-render-stage"><span class="std std-ref">Template Class RenderStage</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion9rendering15RenderStageBaseE">
+<span id="_CPPv3N6legion9rendering15RenderStageBaseE"></span><span id="_CPPv2N6legion9rendering15RenderStageBaseE"></span><span id="legion::rendering::RenderStageBase"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">RenderStageBase</code><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBaseE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Subclassed by <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; SelfType &gt;</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; ClearStage &gt;</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; DebugRenderStage &gt;</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; FramebufferResizeStage &gt;</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; ImGuiStage &gt;</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; LightBufferStage &gt;</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; MeshBatchingStage &gt;</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; MeshRenderStage &gt;</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; PostProcessingStage &gt;</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_render_stage.html#classlegion_1_1rendering_1_1_render_stage"><span class="std std-ref">legion::rendering::RenderStage&lt; SubmitStage &gt;</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase13isInitializedEv">
+<span id="_CPPv3N6legion9rendering15RenderStageBase13isInitializedEv"></span><span id="_CPPv2N6legion9rendering15RenderStageBase13isInitializedEv"></span><span id="legion::rendering::RenderStageBase::isInitialized"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1ad7932147c54f3115d9650301cb32bb8e"></span>bool <code class="sig-name descname">isInitialized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase13isInitializedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase4initERN3app6windowE">
+<span id="_CPPv3N6legion9rendering15RenderStageBase4initERN3app6windowE"></span><span id="_CPPv2N6legion9rendering15RenderStageBase4initERN3app6windowE"></span><span id="legion::rendering::RenderStageBase::init__app::windowR"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a429c1736cc3b947f0f2ee61b1a665c17"></span>void <code class="sig-name descname">init</code><span class="sig-paren">(</span>app::window &amp;<em>context</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase4initERN3app6windowE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase6renderERN3app6windowER6cameraRKN6camera12camera_inputEN4time4spanE">
+<span id="_CPPv3N6legion9rendering15RenderStageBase6renderERN3app6windowER6cameraRKN6camera12camera_inputEN4time4spanE"></span><span id="_CPPv2N6legion9rendering15RenderStageBase6renderERN3app6windowER6cameraRKN6camera12camera_inputEN4time4spanE"></span><span id="legion::rendering::RenderStageBase::render__app::windowR.cameraR.camera::camera_inputCR.time::span"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a6069311f31abf96e82e8d676b6d256ab"></span>void <code class="sig-name descname">render</code><span class="sig-paren">(</span>app::window &amp;<em>context</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1camera.html#_CPPv4N6legion9rendering6cameraE" title="legion::rendering::camera">camera</a> &amp;<em>cam</em>, <em class="property">const</em> <a class="reference internal" href="class_structlegion_1_1rendering_1_1camera.html#_CPPv4N6legion9rendering6cameraE" title="legion::rendering::camera">camera</a>::<a class="reference internal" href="class_structlegion_1_1rendering_1_1camera.html#_CPPv4N6legion9rendering6camera12camera_inputE" title="legion::rendering::camera::camera_input">camera_input</a> &amp;<em>camInput</em>, time::span <em>deltaTime</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase6renderERN3app6windowER6cameraRKN6camera12camera_inputEN4time4spanE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase8priorityEv">
+<span id="_CPPv3N6legion9rendering15RenderStageBase8priorityEv"></span><span id="_CPPv2N6legion9rendering15RenderStageBase8priorityEv"></span><span id="legion::rendering::RenderStageBase::priority"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a52d0922efc07f8eca32fa3b374e892a2"></span>priority_type <code class="sig-name descname">priority</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase8priorityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase10m_pipelineE">
+<span id="_CPPv3N6legion9rendering15RenderStageBase10m_pipelineE"></span><span id="_CPPv2N6legion9rendering15RenderStageBase10m_pipelineE"></span><span id="legion::rendering::RenderStageBase::m_pipeline__RenderPipelineBaseP"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1ac3b0970bbb86cb9d9e057c77a12fcb8e"></span><a class="reference internal" href="classlegion_1_1rendering_1_1_render_pipeline_base.html#_CPPv4N6legion9rendering18RenderPipelineBaseE" title="legion::rendering::RenderPipelineBase">RenderPipelineBase</a> *<code class="sig-name descname">m_pipeline</code><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase10m_pipelineE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase5setupERN3app6windowE">
+<span id="_CPPv3N6legion9rendering15RenderStageBase5setupERN3app6windowE"></span><span id="_CPPv2N6legion9rendering15RenderStageBase5setupERN3app6windowE"></span><span id="legion::rendering::RenderStageBase::setup__app::windowR"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a2ce1b2cfda803bdc8e23ef7d0f14e61b"></span>void <code class="sig-name descname">setup</code><span class="sig-paren">(</span>app::window &amp;<em>context</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase5setupERN3app6windowE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase5abortEv">
+<span id="_CPPv3N6legion9rendering15RenderStageBase5abortEv"></span><span id="_CPPv2N6legion9rendering15RenderStageBase5abortEv"></span><span id="legion::rendering::RenderStageBase::abort"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1abb2fbe8cafd35bb9385d557e5c2d442f"></span>void <code class="sig-name descname">abort</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase5abortEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering15RenderStageBase8has_metaEbRKNSt6stringE">
+<span id="_CPPv3I0EN6legion9rendering15RenderStageBase8has_metaERKNSt6stringE"></span><span id="_CPPv2I0EN6legion9rendering15RenderStageBase8has_metaERKNSt6stringE"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a450a2cb566ba3663b0d60cb54f892974"></span>bool <code class="sig-name descname">has_meta</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering15RenderStageBase8has_metaEbRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0DpEN6legion9rendering15RenderStageBase11create_metaEP1TRKNSt6stringEDpRR4Args">
+<span id="_CPPv3I0DpEN6legion9rendering15RenderStageBase11create_metaERKNSt6stringEDpRR4Args"></span><span id="_CPPv2I0DpEN6legion9rendering15RenderStageBase11create_metaERKNSt6stringEDpRR4Args"></span>template&lt;typename <code class="sig-name descname">T</code>, typename ...<code class="sig-name descname">Args</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a99f460c37699e994555d9e19f69cf3a5"></span><a class="reference internal" href="#_CPPv4I0DpEN6legion9rendering15RenderStageBase11create_metaEP1TRKNSt6stringEDpRR4Args" title="legion::rendering::RenderStageBase::create_meta::T">T</a> *<code class="sig-name descname">create_meta</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em>, <a class="reference internal" href="#_CPPv4I0DpEN6legion9rendering15RenderStageBase11create_metaEP1TRKNSt6stringEDpRR4Args" title="legion::rendering::RenderStageBase::create_meta::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN6legion9rendering15RenderStageBase11create_metaEP1TRKNSt6stringEDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering15RenderStageBase8get_metaEP1TRKNSt6stringE">
+<span id="_CPPv3I0EN6legion9rendering15RenderStageBase8get_metaERKNSt6stringE"></span><span id="_CPPv2I0EN6legion9rendering15RenderStageBase8get_metaERKNSt6stringE"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a11db43e3ad420cee56e1c74f51d2a1bd"></span><a class="reference internal" href="#_CPPv4I0EN6legion9rendering15RenderStageBase8get_metaEP1TRKNSt6stringE" title="legion::rendering::RenderStageBase::get_meta::T">T</a> *<code class="sig-name descname">get_meta</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering15RenderStageBase8get_metaEP1TRKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering15RenderStageBase8has_metaEb7id_type">
+<span id="_CPPv3I0EN6legion9rendering15RenderStageBase8has_metaE7id_type"></span><span id="_CPPv2I0EN6legion9rendering15RenderStageBase8has_metaE7id_type"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a42cefbf9723c1405847a5d61137aff2e"></span>bool <code class="sig-name descname">has_meta</code><span class="sig-paren">(</span>id_type <em>nameHash</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering15RenderStageBase8has_metaEb7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0DpEN6legion9rendering15RenderStageBase11create_metaEP1T7id_typeDpRR4Args">
+<span id="_CPPv3I0DpEN6legion9rendering15RenderStageBase11create_metaE7id_typeDpRR4Args"></span><span id="_CPPv2I0DpEN6legion9rendering15RenderStageBase11create_metaE7id_typeDpRR4Args"></span>template&lt;typename <code class="sig-name descname">T</code>, typename ...<code class="sig-name descname">Args</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a43e68efa872743184a3a7396e5c174a0"></span><a class="reference internal" href="#_CPPv4I0DpEN6legion9rendering15RenderStageBase11create_metaEP1T7id_typeDpRR4Args" title="legion::rendering::RenderStageBase::create_meta::T">T</a> *<code class="sig-name descname">create_meta</code><span class="sig-paren">(</span>id_type <em>nameHash</em>, <a class="reference internal" href="#_CPPv4I0DpEN6legion9rendering15RenderStageBase11create_metaEP1T7id_typeDpRR4Args" title="legion::rendering::RenderStageBase::create_meta::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN6legion9rendering15RenderStageBase11create_metaEP1T7id_typeDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering15RenderStageBase8get_metaEP1T7id_type">
+<span id="_CPPv3I0EN6legion9rendering15RenderStageBase8get_metaE7id_type"></span><span id="_CPPv2I0EN6legion9rendering15RenderStageBase8get_metaE7id_type"></span>template&lt;typename <code class="sig-name descname">T</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a436ac44dbd5828e77bf1cadcdf011308"></span><a class="reference internal" href="#_CPPv4I0EN6legion9rendering15RenderStageBase8get_metaEP1T7id_type" title="legion::rendering::RenderStageBase::get_meta::T">T</a> *<code class="sig-name descname">get_meta</code><span class="sig-paren">(</span>id_type <em>nameHash</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering15RenderStageBase8get_metaEP1T7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase14addFramebufferERKNSt6stringE6GLenum">
+<span id="_CPPv3N6legion9rendering15RenderStageBase14addFramebufferERKNSt6stringE6GLenum"></span><span id="_CPPv2N6legion9rendering15RenderStageBase14addFramebufferERKNSt6stringE6GLenum"></span><span id="legion::rendering::RenderStageBase::addFramebuffer__ssCR.GLenum"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a3e940fb9a1b4173a98777492c9923427"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a> *<code class="sig-name descname">addFramebuffer</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em>, GLenum <em>target</em> = GL_FRAMEBUFFER<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase14addFramebufferERKNSt6stringE6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase14hasFramebufferERKNSt6stringE6GLenum">
+<span id="_CPPv3N6legion9rendering15RenderStageBase14hasFramebufferERKNSt6stringE6GLenum"></span><span id="_CPPv2N6legion9rendering15RenderStageBase14hasFramebufferERKNSt6stringE6GLenum"></span><span id="legion::rendering::RenderStageBase::hasFramebuffer__ssCR.GLenum"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1abbc49cf805d5a437e0cac46b04f7a084"></span>bool <code class="sig-name descname">hasFramebuffer</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em>, GLenum <em>target</em> = GL_FRAMEBUFFER<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase14hasFramebufferERKNSt6stringE6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase14getFramebufferERKNSt6stringE">
+<span id="_CPPv3N6legion9rendering15RenderStageBase14getFramebufferERKNSt6stringE"></span><span id="_CPPv2N6legion9rendering15RenderStageBase14getFramebufferERKNSt6stringE"></span><span id="legion::rendering::RenderStageBase::getFramebuffer__ssCR"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a70af089b511db2e9c0f0e0705aa3fae1"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a> *<code class="sig-name descname">getFramebuffer</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase14getFramebufferERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase14addFramebufferE7id_type6GLenum">
+<span id="_CPPv3N6legion9rendering15RenderStageBase14addFramebufferE7id_type6GLenum"></span><span id="_CPPv2N6legion9rendering15RenderStageBase14addFramebufferE7id_type6GLenum"></span><span id="legion::rendering::RenderStageBase::addFramebuffer__id_type.GLenum"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a1aa16bddf74096d1962e19da0b24c07c"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a> *<code class="sig-name descname">addFramebuffer</code><span class="sig-paren">(</span>id_type <em>nameHash</em>, GLenum <em>target</em> = GL_FRAMEBUFFER<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase14addFramebufferE7id_type6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase14hasFramebufferE7id_type6GLenum">
+<span id="_CPPv3N6legion9rendering15RenderStageBase14hasFramebufferE7id_type6GLenum"></span><span id="_CPPv2N6legion9rendering15RenderStageBase14hasFramebufferE7id_type6GLenum"></span><span id="legion::rendering::RenderStageBase::hasFramebuffer__id_type.GLenum"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a92da515c352bd37e439534790cb6215c"></span>bool <code class="sig-name descname">hasFramebuffer</code><span class="sig-paren">(</span>id_type <em>nameHash</em>, GLenum <em>target</em> = GL_FRAMEBUFFER<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase14hasFramebufferE7id_type6GLenum" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase14getFramebufferE7id_type">
+<span id="_CPPv3N6legion9rendering15RenderStageBase14getFramebufferE7id_type"></span><span id="_CPPv2N6legion9rendering15RenderStageBase14getFramebufferE7id_type"></span><span id="legion::rendering::RenderStageBase::getFramebuffer__id_type"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a053cb35300247980c6010a7e974d4b33"></span><a class="reference internal" href="class_structlegion_1_1rendering_1_1framebuffer.html#_CPPv4N6legion9rendering11framebufferE" title="legion::rendering::framebuffer">framebuffer</a> *<code class="sig-name descname">getFramebuffer</code><span class="sig-paren">(</span>id_type <em>nameHash</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase14getFramebufferE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Static Attributes</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase5m_ecsE">
+<span id="_CPPv3N6legion9rendering15RenderStageBase5m_ecsE"></span><span id="_CPPv2N6legion9rendering15RenderStageBase5m_ecsE"></span><span id="legion::rendering::RenderStageBase::m_ecs__ecs::EcsRegistryP"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a6743cb5f8ca2b1bf14d51314a846008d"></span>ecs::EcsRegistry *<code class="sig-name descname">m_ecs</code><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase5m_ecsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase11m_schedulerE">
+<span id="_CPPv3N6legion9rendering15RenderStageBase11m_schedulerE"></span><span id="_CPPv2N6legion9rendering15RenderStageBase11m_schedulerE"></span><span id="legion::rendering::RenderStageBase::m_scheduler__schd::SchedulerP"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a75572315164d0b3fea2835468bf7632b"></span>schd::Scheduler *<code class="sig-name descname">m_scheduler</code><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase11m_schedulerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion9rendering15RenderStageBase10m_eventBusE">
+<span id="_CPPv3N6legion9rendering15RenderStageBase10m_eventBusE"></span><span id="_CPPv2N6legion9rendering15RenderStageBase10m_eventBusE"></span><span id="legion::rendering::RenderStageBase::m_eventBus__events::EventBusP"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_base_1a6de11e5b8b1562382b0c69e5b59f9d41"></span>events::EventBus *<code class="sig-name descname">m_eventBus</code><a class="headerlink" href="#_CPPv4N6legion9rendering15RenderStageBase10m_eventBusE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class RenderStageBase</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#derived-types">Derived Types</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1rendering_1_1_render_stage.html" title="previous chapter">Template Class RenderStage</a></li>
+      <li>Next: <a href="class_structlegion_1_1rendering_1_1shader.html" title="next chapter">Class shader</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1rendering_1_1_render_stage_base.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

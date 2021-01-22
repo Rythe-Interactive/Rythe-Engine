@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1abd416e6de6b9a37e5e4476187b315a46:
+
+Function GetClipboardTextFn_DefaultImpl
+=======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: GetClipboardTextFn_DefaultImpl(void *)

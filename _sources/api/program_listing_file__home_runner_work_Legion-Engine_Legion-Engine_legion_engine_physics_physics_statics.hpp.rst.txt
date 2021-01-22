@@ -15,6 +15,8 @@ Program Listing for File physics_statics.hpp
    #include <physics/colliders/convexcollider.hpp>
    #include <physics/data/pointer_encapsulator.hpp>
    #include <physics/data/contact_vertex.hpp>
+   #include <Voro++/voro++.hh>
+   #include <rendering/debugrendering.hpp>
    
    namespace legion::physics
    {
@@ -43,6 +45,9 @@ Program Listing for File physics_statics.hpp
                        worldSupportPoint = transformedVert;
                    }
                }
+   
+   
+   
            }
    
            static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
@@ -50,11 +55,12 @@ Program Listing for File physics_statics.hpp
            {
                float currentMaximumSeperation = std::numeric_limits<float>::lowest();
    
-   
                for (auto face : convexB->GetHalfEdgeFaces())
                {
+   
+                   //og::debug("face->normal {} ", math::to_string( face->normal));
                    //get inverse normal
-                   math::vec3 seperatingAxis = math::normalize(transformB * math::vec4(face->normal, 0));
+                   math::vec3 seperatingAxis = math::normalize(transformB * math::vec4(math::normalize(face->normal), 0));
    
                    math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
    
@@ -88,14 +94,13 @@ Program Listing for File physics_statics.hpp
                const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
                math::vec3& seperatingAxisFound, float& maximumSeperation)
            {
-               float currentMaximumSeperation = std::numeric_limits<float>::lowest();
+               float currentMinimumSeperation = std::numeric_limits<float>::max();
    
                math::vec3 positionA = transformA[3];
    
                for (const auto faceA : convexA->GetHalfEdgeFaces())
                {
                    //----------------- Get all edges of faceA ------------//
-   
                    std::vector<HalfEdgeEdge*> convexAHalfEdges;
    
                    auto lambda = [&convexAHalfEdges](HalfEdgeEdge* edge)
@@ -108,7 +113,6 @@ Program Listing for File physics_statics.hpp
                    for (const auto faceB : convexB->GetHalfEdgeFaces())
                    {
                        //----------------- Get all edges of faceB ------------//
-   
                        std::vector<HalfEdgeEdge*> convexBHalfEdges;
    
                        auto lambda = [&convexBHalfEdges](HalfEdgeEdge* edge)
@@ -117,7 +121,7 @@ Program Listing for File physics_statics.hpp
                        };
    
                        faceB->forEachEdge(lambda);
-   
+         
                        for (HalfEdgeEdge* edgeA : convexAHalfEdges)
                        {
                            for (HalfEdgeEdge* edgeB : convexBHalfEdges)
@@ -126,12 +130,12 @@ Program Listing for File physics_statics.hpp
                                if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
                                {
                                    //get world edge direction
-                                   math::vec3 edgeADirection= transformA * math::vec4(*edgeA->nextEdge->edgePositionPtr, 1) - 
-                                       transformA * math::vec4(*edgeA->edgePositionPtr, 1);
+                                   math::vec3 edgeADirection= transformA * math::vec4(edgeA->nextEdge->edgePosition, 1) - 
+                                       transformA * math::vec4(edgeA->edgePosition, 1);
    
    
-                                   math::vec3 edgeBDirection = transformB * math::vec4(*edgeB->nextEdge->edgePositionPtr, 1) -
-                                       transformB * math::vec4(*edgeB->edgePositionPtr, 1);
+                                   math::vec3 edgeBDirection = transformB * math::vec4(edgeB->nextEdge->edgePosition, 1) -
+                                       transformB * math::vec4(edgeB->edgePosition, 1);
    
                                    edgeADirection = math::normalize(edgeADirection);
                                    edgeBDirection = math::normalize(edgeBDirection);
@@ -147,8 +151,8 @@ Program Listing for File physics_statics.hpp
                                    seperatingAxis = math::normalize(seperatingAxis);
    
                                    //get world edge position
-                                   math::vec3 edgeAtransformedPosition = transformA * math::vec4(*edgeA->edgePositionPtr, 1);
-                                   math::vec3 edgeBtransformedPosition = transformB * math::vec4(*edgeB->edgePositionPtr, 1);
+                                   math::vec3 edgeAtransformedPosition = transformA * math::vec4(edgeA->edgePosition, 1);
+                                   math::vec3 edgeBtransformedPosition = transformB * math::vec4(edgeB->edgePosition, 1);
    
                                    //check if its pointing in the right direction 
                                    if (math::dot(seperatingAxis, edgeAtransformedPosition - positionA) < 0)
@@ -158,29 +162,25 @@ Program Listing for File physics_statics.hpp
    
                                    //check if given edges create a seperating axis
                                    float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
-   
-                                   if (distance > currentMaximumSeperation)
+                                  
+                                   if (distance < currentMinimumSeperation)
                                    {                                 
                                        refEdge.ptr = edgeA;
                                        incEdge.ptr = edgeB;
    
                                        seperatingAxisFound = seperatingAxis;
-                                       currentMaximumSeperation = distance;
+                                       currentMinimumSeperation = distance;
                                    }
    
-                                   if (distance > 0.0f)
-                                   {
-                                       maximumSeperation = currentMaximumSeperation;
-                                       return true;
-                                   }
                                }
                            }
                        }
                    }
                }
    
-               maximumSeperation = currentMaximumSeperation;
-               return false;
+               //log::debug("a id  {}  b id {} combination {} ", std::get<0>(ids), std::get<1>(ids), std::get<2>(ids));
+               maximumSeperation = currentMinimumSeperation;
+               return currentMinimumSeperation > 0.0f;
            }
    
            //---------------------------------------------------------- Polyhedron Clipping ----------------------------------------------------------------------------//
@@ -253,10 +253,6 @@ Program Listing for File physics_statics.hpp
                            outputList.push_back(ContactVertex(intersectionPoint, label));
                        }
                    }
-   
-   
-   
-   
                }
            }
    
@@ -359,15 +355,64 @@ Program Listing for File physics_statics.hpp
    
                float t = FindLineToPointInterpolant(startPoint, endPoint, planePosition, planeNormal);
    
-               intersectionPoint = startPoint + math::normalize(direction) * t;
+               intersectionPoint = startPoint + direction * t;
    
                return true;
            }
    
+           static bool FindLineToPlaneIntersectionPoint(const math::vec3& planeNormal, const math::vec3& planePosition,
+               const math::vec3& startPoint, const math::vec3& endPoint, math::vec3& intersectionPoint,float& interpolant)
+           {
+               math::vec3 direction = endPoint - startPoint;
+   
+               if (math::epsilonEqual(math::dot(direction, planeNormal), 0.0f, math::epsilon<float>()))
+               {
+                   return false;
+               }
+   
+               interpolant = FindLineToPointInterpolant(startPoint, endPoint, planePosition, planeNormal);
+               
+   
+               intersectionPoint = startPoint + direction * interpolant;
+   
+               return true;
+           }
+   
+   
+   
            static float FindLineToPointInterpolant(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
                const math::vec3& planeNormal)
            {
-               return math::dot(planePosition - startPoint, planeNormal) / math::dot(math::normalize(endPoint - startPoint), planeNormal);
+               return math::dot(planePosition - startPoint, planeNormal) / math::dot(endPoint - startPoint, planeNormal);
+           }
+   
+           static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,math::vec2 xRange, math::vec2 yRange, math::vec2 zRange, math::vec3 containerResolution, bool xPeriodic = false, bool yPeriodic = false, bool zPeriodic = false, int initMem = 8)
+           {
+               return GenerateVoronoi(points,xRange.x,xRange.y,yRange.x,yRange.y,zRange.x,zRange.y,containerResolution.x,containerResolution.y,containerResolution.z,xPeriodic,yPeriodic,zPeriodic,initMem);
+           }
+   
+           static std::vector<std::vector<math::vec4>> GenerateVoronoi(std::vector<math::vec3> points,const double xMin = -5, const double xMax = 5, const double yMin = -5, const double yMax = 5, const double zMin = -5, const double zMax = 5,const double conResX = 10,const double conResY = 10 , const double conResZ = 10,bool xPeriodic = false,bool yPeriodic = false,bool zPeriodic = false,int initMem = 8)
+           {
+               voro::container con(xMin, xMax, yMin, yMax, zMin, zMax, conResX, conResY, conResZ, xPeriodic, yPeriodic, zPeriodic, initMem);
+               return GenerateVoronoi(con,points);
+           }
+   
+           static std::vector<std::vector<math::vec4>> GenerateVoronoi(voro::container& con,std::vector<math::vec3> points)
+           {
+               int i = 0;
+               for (math::vec3 point : points)
+               {
+                   con.put(i,point.x,point.y,point.z);
+                   i++;
+               }
+               return GenerateVoronoi(con);
+           }
+   
+           static std::vector<std::vector<math::vec4>> GenerateVoronoi(voro::container& con)
+           {
+               con.draw_cells_json("assets/voronoi/output/cells.json");
+               std::ifstream f("assets/voronoi/output/cells.json");
+               return serialization::SerializationUtil::JSONDeserialize< std::vector<std::vector<math::vec4>>>(f);
            }
    
        private:
@@ -377,21 +422,26 @@ Program Listing for File physics_statics.hpp
            {
                const math::vec3 transformedA1 = transformA * math::vec4(edgeA->getLocalNormal(), 0);
                const math::vec3 transformedA2 = transformA * math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
+               const math::vec3 transformedEdgeDirectionA = transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
    
                const math::vec3 transformedB1 = transformB * math::vec4(edgeB->getLocalNormal(), 0);
                const math::vec3 transformedB2 = transformB * math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
+               const math::vec3 transformedEdgeDirectionB = transformB * math::vec4(edgeB->getLocalEdgeDirection(), 0);
    
-               return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2);
+               math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
+   
+               return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2
+                   , transformedEdgeDirectionA, transformedEdgeDirectionB);
            }
    
-           static bool isMinkowskiFace(const math::vec3 transformedA1, const math::vec3 transformedA2,
-               const math::vec3 transformedB1, const math::vec3 transformedB2)
+           static bool isMinkowskiFace(const math::vec3& transformedA1, const math::vec3& transformedA2,
+               const math::vec3& transformedB1, const math::vec3& transformedB2
+               ,const math::vec3& planeANormal, const math::vec3& planeBNormal)
            {
                //------------------------ Check if normals created by arcA seperate normals of B --------------------------------------//
-   
-               math::vec3 planeANormal = math::cross(transformedA1, transformedA2);
-   
+               //CBA
                float planeADotB1 = math::dot(planeANormal, transformedB1);
+               //DBA
                float planeADotB2 = math::dot(planeANormal, transformedB2);
    
                float dotMultiplyResultA =
@@ -404,9 +454,9 @@ Program Listing for File physics_statics.hpp
    
                //------------------------ Check if normals created by arcB seperate normals of A --------------------------------------//
    
-               math::vec3 planeBNormal = math::cross(transformedB1, transformedB2);
-   
+               //ADC
                float planeBDotA1 = math::dot(planeBNormal, transformedA1);
+               //BDC
                float planeBDotA2 = math::dot(planeBNormal, transformedA2);
    
                float  dotMultiplyResultB = planeBDotA1 * planeBDotA2;
@@ -418,14 +468,9 @@ Program Listing for File physics_statics.hpp
    
                //------------------------ Check if arcA and arcB are in the same hemisphere --------------------------------------------//
    
-               math::vec3 abNormal = math::cross(transformedA2, transformedB2);
+               float dotMultiplyResultAB = planeADotB1 * planeBDotA2;
    
-               float planeABDotA1 = math::dot(abNormal, transformedA1);
-               float planeABDotB1 = math::dot(abNormal, transformedB1);
-   
-               float dotMultiplyResultAB = planeABDotA1 * planeABDotB1;
-   
-               if (dotMultiplyResultAB < 0.0f || math::epsilonEqual(dotMultiplyResultAB, 0.0f, math::epsilon<float>()))
+               if (planeADotB1  * planeBDotA2  < 0.0f || math::epsilonEqual(dotMultiplyResultAB, 0.0f, math::epsilon<float>()))
                {
                    return false;
                }

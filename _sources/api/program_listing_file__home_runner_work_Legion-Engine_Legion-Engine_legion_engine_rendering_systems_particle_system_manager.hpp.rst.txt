@@ -1,0 +1,58 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_particle_system_manager.hpp:
+
+Program Listing for File particle_system_manager.hpp
+====================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_particle_system_manager.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/systems/particle_system_manager.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/core.hpp>
+   #include <rendering/data/particle_system_base.hpp>
+   
+   namespace legion::rendering
+   {
+       class ParticleSystemManager : public System<ParticleSystemManager>
+       {
+       public:
+           ParticleSystemManager()
+           {
+               ParticleSystemBase::m_registry = m_ecs;
+           }
+           void setup()
+           {
+               createProcess<&ParticleSystemManager::update>("Update");
+           }
+           void update(time::span deltaTime)
+           {
+               static auto emitters = createQuery<particle_emitter>();
+               emitters.queryEntities();
+               for (auto entity : emitters)
+               {
+                   //Gets emitter handle and emitter.
+                   auto emitterHandle = entity.get_component_handle<particle_emitter>();
+                   auto emit = emitterHandle.read();
+                   //Checks if emitter was already initialized.
+                   if (!emit.setupCompleted)
+                   {
+                       //If NOT then it goes through the particle system setup.
+                       emit.setupCompleted = true;
+                       emitterHandle.write(emit);
+   
+                       const ParticleSystemBase* particleSystem = emit.particleSystemHandle.get();
+                       particleSystem->setup(emitterHandle);
+                   }
+                   else
+                   {
+                       //If it IS then it runs the emitter through the particle system update.
+                       const ParticleSystemBase* particleSystem = emit.particleSystemHandle.get();
+                       particleSystem->update(emit.livingParticles, emitterHandle, deltaTime);
+                   }
+               }
+           }
+       };
+   }

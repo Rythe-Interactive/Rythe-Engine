@@ -1,0 +1,25 @@
+.. _exhale_struct_structstd_1_1tuple__size_3_01const_01volatile_01legion_1_1core_1_1ecs_1_1archetype_3_01_types_8_8_8_01_4_01_4:
+
+Template Struct tuple_size< const volatile legion::core::ecs::archetype< Types... > >
+=====================================================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_archetype.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public std::integral_constant< std::size_t, sizeof...(Types)>``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: std::tuple_size< const volatile legion::core::ecs::archetype< Types... > >
+   :members:
+   :protected-members:
+   :undoc-members:

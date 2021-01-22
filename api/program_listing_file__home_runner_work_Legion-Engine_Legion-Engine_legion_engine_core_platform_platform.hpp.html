@@ -48,10 +48,26 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_platform.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-platform-platform-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/platform/platform.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 
+<span class="cp">#if !defined(PROJECT_NAME)</span>
+<span class="cp">#define PROJECT_NAME user_project</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#define CONCAT(A, B) A ## B</span>
+
+<span class="cp">#define CONCAT_DEFINE(A, B) CONCAT(A, B)</span>
+
 <span class="cp">#define LEGION_CPP17V 201703L</span>
 
 <span class="cp">#define LEGION_DEBUG_VALUE 1</span>
 <span class="cp">#define LEGION_RELEASE_VALUE 2</span>
+
+<span class="cp">#if defined(DOXY_EXCLUDE)</span>
+<span class="cp">#define NDOXY(...)</span>
+<span class="cp">#define CNDOXY(...)</span>
+<span class="cp">#else</span>
+<span class="cp">#define NDOXY(args...) args</span>
+<span class="cp">#define CNDOXY(args...) , args</span>
+<span class="cp">#endif</span>
 
 <span class="cp">#if defined(_DEBUG) || defined(DEBUG)</span>
 
@@ -69,7 +85,7 @@
 <span class="cp">#endif</span>
 
 
-<span class="cp">#if defined(_MSC_VER)</span>
+<span class="cp">#if defined(_WIN64)</span>
 
     <span class="cp">#define LEGION_WINDOWS</span>
 
@@ -85,6 +101,7 @@
 
     <span class="cp">#define LEGION_LINUX</span>
 
+    <span class="cp">#include</span> <span class="cpf">&lt;sys/prctl.h&gt;</span><span class="cp"></span>
     <span class="cp">#include</span> <span class="cpf">&lt;sys/resource.h&gt;</span><span class="cp"></span>
     <span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp"></span>
     <span class="cp">#include</span> <span class="cpf">&lt;sys/wait.h&gt;</span><span class="cp"></span>
@@ -107,6 +124,26 @@
     <span class="cp">#endif</span>
 <span class="cp">#endif</span>
 
+<span class="cp">#if defined(__clang__)</span>
+    <span class="c1">// clang</span>
+<span class="cp">#define LEGION_CLANG</span>
+
+<span class="cp">#if defined(__GNUG__) || (defined(__GNUC__) &amp;&amp; defined(__cplusplus))</span>
+<span class="cp">#define LEGION_CLANG_GCC</span>
+<span class="cp">#elif defined(_MSC_VER)</span>
+<span class="cp">#define LEGION_CLANG_MSVC</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#define L_PAUSE_INSTRUCTION __builtin_ia32_pause</span>
+<span class="cp">#elif defined(__GNUG__) || (defined(__GNUC__) &amp;&amp; defined(__cplusplus))</span>
+    <span class="c1">// gcc</span>
+<span class="cp">#define LEGION_GCC</span>
+<span class="cp">#define L_PAUSE_INSTRUCTION __builtin_ia32_pause</span>
+<span class="cp">#elif defined(_MSC_VER)</span>
+    <span class="c1">// msvc</span>
+<span class="cp">#define LEGION_MSVC</span>
+<span class="cp">#define L_PAUSE_INSTRUCTION _mm_pause</span>
+<span class="cp">#endif</span>
 
 <span class="cp">#if (defined(LEGION_WINDOWS) &amp;&amp; !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)</span>
 
@@ -140,6 +177,15 @@
 <span class="cp">#else</span>
 <span class="cp">#define L_NODISCARD</span>
 <span class="cp">#endif</span>
+
+<span class="cp">#if __cplusplus &gt;= LEGION_CPP17V || L_HASCPPATTRIB(maybe_unused) || defined(DOXY_INCLUDE)</span>
+
+<span class="cp">#define L_MAYBEUNUSED [[maybe_unused]]</span>
+<span class="cp">#else</span>
+<span class="cp">#define L_MAYBEUNUSED</span>
+<span class="cp">#endif</span>
+
+
 
 <span class="cp">#if __cplusplus &gt; LEGION_CPP17V || L_HASCPPATTRIB(noreturn) || defined(DOXY_INCLUDE)</span>
 

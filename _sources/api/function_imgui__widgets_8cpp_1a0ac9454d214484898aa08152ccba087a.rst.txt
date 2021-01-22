@@ -1,0 +1,13 @@
+.. _exhale_function_imgui__widgets_8cpp_1a0ac9454d214484898aa08152ccba087a:
+
+Function ImStb::stb_textedit_replace
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_widgets.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStb::stb_textedit_replace(STB_TEXTEDIT_STRING *, STB_TexteditState *, const STB_TEXTEDIT_CHARTYPE *, int)

@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File Octree.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File Octree.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-octree-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-octree-hpp"></span><h1>Program Listing for File Octree.hpp<a class="headerlink" href="#program-listing-for-file-octree-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_Octree.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-octree-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/Octree.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/debugrendering.hpp&gt;</span><span class="cp"></span>
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">ValueType</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">Octree</span>
+    <span class="p">{</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">enum</span> <span class="nl">Subsection</span> <span class="p">:</span> <span class="n">uint8</span>
+        <span class="p">{</span>
+            <span class="n">TopLeftFront</span><span class="p">,</span>
+            <span class="n">TopRightFront</span><span class="p">,</span>
+            <span class="n">BotRightFront</span><span class="p">,</span>
+            <span class="n">BotLeftFront</span><span class="p">,</span>
+            <span class="n">TopLeftBack</span><span class="p">,</span>
+            <span class="n">TopRightBack</span><span class="p">,</span>
+            <span class="n">BotRightBack</span><span class="p">,</span>
+            <span class="n">BotLeftBack</span>
+        <span class="p">};</span>
+
+    <span class="k">public</span><span class="o">:</span>
+
+        <span class="n">Octree</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">Octree</span><span class="p">(</span><span class="k">const</span> <span class="n">Octree</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">Octree</span><span class="p">(</span><span class="n">Octree</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">Octree</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Octree</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">Octree</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Octree</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">Octree</span><span class="p">(</span><span class="n">size_type</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">min</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">max</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">position</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">m_capacity</span><span class="p">(</span><span class="n">capacity</span><span class="p">),</span> <span class="n">m_min</span><span class="p">(</span><span class="n">min</span><span class="p">),</span> <span class="n">m_max</span><span class="p">(</span><span class="n">max</span><span class="p">),</span> <span class="n">m_position</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> <span class="p">{};</span>
+
+        <span class="n">Octree</span><span class="p">(</span><span class="n">size_type</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">min</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">max</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">m_capacity</span><span class="p">(</span><span class="n">capacity</span><span class="p">),</span> <span class="n">m_min</span><span class="p">(</span><span class="n">min</span><span class="p">),</span> <span class="n">m_max</span><span class="p">(</span><span class="n">max</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">m_position</span> <span class="o">=</span> <span class="p">(</span><span class="n">min</span> <span class="o">+</span> <span class="n">max</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="kt">void</span> <span class="nf">insertNode</span><span class="p">(</span><span class="n">ValueType</span> <span class="n">item</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">pos</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//check if there are no children</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_children</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//store item if possible</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_items</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">m_capacity</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">m_items</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">item</span><span class="p">));</span>
+                    <span class="k">return</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="c1">//initialize children since capacity is full</span>
+                <span class="n">m_children</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">Octree</span><span class="p">,</span> <span class="mi">8</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+                <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">Subsection</span><span class="o">::</span><span class="n">TopLeftFront</span><span class="p">)</span> <span class="o">=</span> <span class="n">Octree</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_min</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+                <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">Subsection</span><span class="o">::</span><span class="n">TopRightFront</span><span class="p">)</span> <span class="o">=</span> <span class="n">Octree</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_max</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+                <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">Subsection</span><span class="o">::</span><span class="n">BotRightFront</span><span class="p">)</span> <span class="o">=</span> <span class="n">Octree</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_max</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+                <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">Subsection</span><span class="o">::</span><span class="n">BotLeftFront</span><span class="p">)</span> <span class="o">=</span> <span class="n">Octree</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_min</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+                <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">Subsection</span><span class="o">::</span><span class="n">TopLeftBack</span><span class="p">)</span> <span class="o">=</span> <span class="n">Octree</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_min</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+                <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">Subsection</span><span class="o">::</span><span class="n">TopRightBack</span><span class="p">)</span> <span class="o">=</span> <span class="n">Octree</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_max</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+                <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">Subsection</span><span class="o">::</span><span class="n">BotRightBack</span><span class="p">)</span> <span class="o">=</span> <span class="n">Octree</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_max</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+                <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">Subsection</span><span class="o">::</span><span class="n">BotLeftBack</span><span class="p">)</span> <span class="o">=</span> <span class="n">Octree</span><span class="o">&lt;</span><span class="n">ValueType</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_capacity</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_min</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_position</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+
+            <span class="p">}</span>
+            <span class="c1">//there are children, insert into child</span>
+            <span class="kt">int</span> <span class="n">childIndex</span> <span class="o">=</span> <span class="n">GetChildIndex</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+            <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">childIndex</span><span class="p">).</span><span class="n">insertNode</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">pos</span><span class="p">);</span>
+        <span class="p">};</span>
+        <span class="kt">void</span> <span class="nf">DrawTree</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">debug</span><span class="o">::</span><span class="n">drawCube</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_min</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_min</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_max</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">m_max</span><span class="p">.</span><span class="n">z</span><span class="p">),</span> <span class="n">math</span><span class="o">::</span><span class="n">colors</span><span class="o">::</span><span class="n">black</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//for all children draw tree if its not a leaf</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">DrawTree</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="kt">int</span> <span class="nf">GetTreeDepth</span><span class="p">(</span><span class="kt">int</span> <span class="n">inputDepth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="n">inputDepth</span><span class="p">;</span>
+
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//iterate child octants and get their largest depth</span>
+                <span class="kt">int</span> <span class="n">newDepth</span> <span class="o">=</span> <span class="o">-</span><span class="n">INT16_MAX</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">GetTreeDepth</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">newDepth</span><span class="p">)</span>  <span class="n">newDepth</span> <span class="o">=</span> <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">GetTreeDepth</span><span class="p">(</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="n">depth</span> <span class="o">+</span> <span class="n">newDepth</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">depth</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//gets data of the tree starting at defined depth</span>
+        <span class="kt">void</span> <span class="nf">GetData</span><span class="p">(</span><span class="kt">int</span> <span class="n">depth</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;*</span> <span class="n">Data</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//get data for current tree depth</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">itemPos</span><span class="p">,</span> <span class="n">item</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_items</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">Data</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">itemPos</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="c1">//check if this tree has children</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//if depth 0 has not been reached go deeper and decrease depth</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">GetData</span><span class="p">(</span><span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Data</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//gets data from starting depth until end depth</span>
+        <span class="kt">void</span> <span class="nf">GetDataRange</span><span class="p">(</span><span class="kt">int</span> <span class="n">startingDepth</span><span class="p">,</span> <span class="kt">int</span> <span class="n">endDepth</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;*</span> <span class="n">Data</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//check if starting depth has been reached</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">startingDepth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//if there are children go deeper</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">GetDataRange</span><span class="p">(</span><span class="n">startingDepth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">endDepth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Data</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="c1">//only continue if end depth has not been reached</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">endDepth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="c1">//start depth has been reached, end depth has not yet been reached, start getting data and go deeper</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">itemPos</span><span class="p">,</span> <span class="n">item</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_items</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">Data</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">itemPos</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="c1">//if there are children go deeper</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">GetDataRange</span><span class="p">(</span><span class="n">startingDepth</span><span class="p">,</span> <span class="n">endDepth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Data</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="c1">//checks for the index of the proper child quadrant</span>
+        <span class="kt">int</span> <span class="n">GetChildIndex</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">pos</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">m_position</span><span class="p">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="n">Subsection</span><span class="o">::</span><span class="n">TopLeftFront</span><span class="p">;</span>
+                    <span class="k">else</span>
+                        <span class="k">return</span> <span class="n">Subsection</span><span class="o">::</span><span class="n">TopLeftBack</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="n">Subsection</span><span class="o">::</span><span class="n">BotLeftFront</span><span class="p">;</span>
+                    <span class="k">else</span>
+                        <span class="k">return</span> <span class="n">Subsection</span><span class="o">::</span><span class="n">BotLeftBack</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">m_position</span><span class="p">.</span><span class="n">y</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="n">Subsection</span><span class="o">::</span><span class="n">TopRightFront</span><span class="p">;</span>
+                    <span class="k">else</span>
+                        <span class="k">return</span> <span class="n">Subsection</span><span class="o">::</span><span class="n">TopRightBack</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="p">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">m_position</span><span class="p">.</span><span class="n">z</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="n">Subsection</span><span class="o">::</span><span class="n">BotRightFront</span><span class="p">;</span>
+                    <span class="k">else</span>
+                        <span class="k">return</span> <span class="n">Subsection</span><span class="o">::</span><span class="n">BotRightBack</span><span class="p">;</span>
+                <span class="p">}</span>
+
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">Octree</span><span class="p">,</span> <span class="mi">8</span><span class="o">&gt;&gt;</span>  <span class="n">m_children</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">ValueType</span><span class="o">&gt;&gt;</span><span class="n">m_items</span><span class="p">;</span>
+        <span class="c1">//capacity of octree level</span>
+        <span class="n">size_type</span> <span class="n">m_capacity</span><span class="p">;</span>
+        <span class="c1">//tree bounds</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">m_min</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">m_max</span><span class="p">;</span>
+        <span class="c1">//tree posiiton</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">m_position</span><span class="p">;</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_Octree.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

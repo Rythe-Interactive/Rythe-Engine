@@ -51,11 +51,12 @@
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;&gt;</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">;</span>
-    <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;&gt;</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">;</span>
+    <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">;</span>
 
     <span class="kt">void</span> <span class="n">mesh</span><span class="o">::</span><span class="n">to_resource</span><span class="p">(</span><span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">*</span> <span class="n">resource</span><span class="p">,</span> <span class="k">const</span> <span class="n">mesh</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">// Erase all previous data.</span>
         <span class="n">resource</span><span class="o">-&gt;</span><span class="n">clear</span><span class="p">();</span>
 
@@ -63,6 +64,7 @@
         <span class="k">auto</span><span class="o">&amp;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">();</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">fileName</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">colors</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">normals</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">uvs</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">tangents</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
@@ -82,6 +84,7 @@
 
     <span class="kt">void</span> <span class="n">mesh</span><span class="o">::</span><span class="n">from_resource</span><span class="p">(</span><span class="n">mesh</span><span class="o">*</span> <span class="n">value</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">&amp;</span> <span class="n">resource</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="o">*</span><span class="n">value</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">{};</span>
 
         <span class="c1">// Get point from which to start reading.</span>
@@ -90,6 +93,7 @@
         <span class="c1">// Read data</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">fileName</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">vertices</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">colors</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">normals</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">uvs</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
@@ -112,6 +116,7 @@
 
     <span class="kt">void</span> <span class="n">mesh</span><span class="o">::</span><span class="n">calculate_tangents</span><span class="p">(</span><span class="n">mesh</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">// https://learnopengl.com/Advanced-Lighting/Normal-Mapping</span>
         <span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">normals</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 
@@ -176,8 +181,9 @@
                 <span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">data</span><span class="o">-&gt;</span><span class="n">tangents</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
     <span class="p">}</span>
 
-    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&amp;&gt;</span> <span class="n">mesh_handle</span><span class="o">::</span><span class="n">get</span><span class="p">()</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&amp;&gt;</span> <span class="n">mesh_handle</span><span class="o">::</span><span class="n">get</span><span class="p">()</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">);</span>
         <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">mesh</span><span class="p">]</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
         <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">lock</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="n">mesh</span><span class="p">));</span>
@@ -185,6 +191,7 @@
 
     <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">create_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">mesh_import_settings</span> <span class="n">settings</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="c1">// Get ID.</span>
         <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
 
@@ -211,15 +218,29 @@
 
         <span class="p">{</span> <span class="c1">// Insert the mesh into the mesh list.</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_meshesLock</span><span class="p">);</span>
-            <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">data</span><span class="p">)));</span>
-            <span class="n">m_meshes</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">pair_ptr</span><span class="p">)));</span>
+            <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">pair_ptr</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+            <span class="n">m_meshes</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">pair_ptr</span><span class="p">));</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
     <span class="p">}</span>
 
+    <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">create_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">mesh</span><span class="o">&amp;</span> <span class="n">meshData</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">newId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span> <span class="c1">// Get the new id.</span>
+
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_meshesLock</span><span class="p">);</span>
+        <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">pair_ptr</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">meshData</span><span class="p">);</span>
+        <span class="n">m_meshes</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">newId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">pair_ptr</span><span class="p">));</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">newId</span> <span class="p">};</span>
+    <span class="p">}</span>
+
     <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">copy_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">newName</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span> <span class="c1">// Get the id of the original mesh.</span>
         <span class="n">id_type</span> <span class="n">newId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">newName</span><span class="p">);</span> <span class="c1">// Get the new id.</span>
 
@@ -235,7 +256,8 @@
             <span class="p">}</span>
             <span class="k">else</span> <span class="c1">// If the new mesh doesn&#39;t exist yet create it with the copy.</span>
             <span class="p">{</span>
-                <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">(),</span> <span class="n">data</span><span class="p">));</span>
+                <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">();</span>
+                <span class="n">pair_ptr</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
                 <span class="n">m_meshes</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">newId</span><span class="p">,</span> <span class="n">pair_ptr</span><span class="p">));</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -244,6 +266,7 @@
 
     <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">copy_mesh</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">newName</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">id_type</span> <span class="n">newId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">newName</span><span class="p">);</span> <span class="c1">// Get the new id.</span>
 
         <span class="p">{</span>
@@ -258,7 +281,8 @@
             <span class="p">}</span>
             <span class="k">else</span> <span class="c1">// If the new mesh doesn&#39;t exist yet create it with the copy.</span>
             <span class="p">{</span>
-                <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span><span class="p">(),</span> <span class="n">data</span><span class="p">));</span>
+                <span class="k">auto</span><span class="o">*</span> <span class="n">pair_ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;</span><span class="p">();</span>
+                <span class="n">pair_ptr</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
                 <span class="n">m_meshes</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">newId</span><span class="p">,</span> <span class="n">pair_ptr</span><span class="p">));</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -267,6 +291,7 @@
 
     <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
@@ -276,6 +301,7 @@
 
     <span class="n">mesh_handle</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
             <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>

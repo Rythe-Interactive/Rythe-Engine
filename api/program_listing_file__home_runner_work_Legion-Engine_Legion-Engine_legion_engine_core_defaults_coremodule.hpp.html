@@ -53,7 +53,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/data/importers/image_importers.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/provider_registry.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/basic_resolver.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;core/defaults/hierarchysystem.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/compute/context.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/scenemanagement/scene.hpp&gt;</span><span class="cp"></span>
 
@@ -64,10 +64,13 @@
     <span class="k">public</span><span class="o">:</span>
         <span class="k">virtual</span> <span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="k">override</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="n">filesystem</span><span class="o">::</span><span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_create_resolver</span><span class="o">&lt;</span><span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resolver</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;assets://&quot;</span><span class="p">,</span> <span class="s">&quot;./assets&quot;</span><span class="p">);</span>
             <span class="n">filesystem</span><span class="o">::</span><span class="n">provider_registry</span><span class="o">::</span><span class="n">domain_create_resolver</span><span class="o">&lt;</span><span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resolver</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;engine://&quot;</span><span class="p">,</span> <span class="s">&quot;./engine&quot;</span><span class="p">);</span>
 
             <span class="n">filesystem</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">reportConverter</span><span class="o">&lt;</span><span class="n">obj_mesh_loader</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;.obj&quot;</span><span class="p">);</span>
+            <span class="n">filesystem</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">reportConverter</span><span class="o">&lt;</span><span class="n">gltf_binary_mesh_loader</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;.glb&quot;</span><span class="p">);</span>
+            <span class="n">filesystem</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">reportConverter</span><span class="o">&lt;</span><span class="n">gltf_ascii_mesh_loader</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;.gltf&quot;</span><span class="p">);</span>
 
             <span class="k">for</span> <span class="p">(</span><span class="n">cstring</span> <span class="nl">extension</span> <span class="p">:</span> <span class="n">stb_image_loader</span><span class="o">::</span><span class="n">extensions</span><span class="p">)</span>
                 <span class="n">filesystem</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">reportConverter</span><span class="o">&lt;</span><span class="n">stb_image_loader</span><span class="o">&gt;</span><span class="p">(</span><span class="n">extension</span><span class="p">);</span>
@@ -79,8 +82,11 @@
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">position</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">rotation</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">scale</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">velocity</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">mesh_filter</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">reportComponentType</span><span class="o">&lt;</span><span class="n">scenemanagement</span><span class="o">::</span><span class="n">scene</span><span class="o">&gt;</span><span class="p">();</span>
-            <span class="n">reportSystem</span> <span class="o">&lt;</span><span class="n">scenemanagement</span><span class="o">::</span><span class="n">SceneManager</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportSystem</span><span class="o">&lt;</span><span class="n">HierarchySystem</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">reportSystem</span><span class="o">&lt;</span><span class="n">scenemanagement</span><span class="o">::</span><span class="n">SceneManager</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="n">priority_type</span> <span class="n">priority</span><span class="p">()</span> <span class="k">override</span>

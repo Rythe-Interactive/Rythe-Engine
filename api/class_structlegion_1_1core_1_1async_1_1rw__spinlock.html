@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class rw_spinlock &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class spinlock" href="class_structlegion_1_1core_1_1async_1_1spinlock.html" />
+    <link rel="prev" title="Class ring_sync_lock" href="class_structlegion_1_1core_1_1async_1_1ring__sync__lock.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1core_1_1async_1_1spinlock.html" title="Class spinlock"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="class_structlegion_1_1core_1_1async_1_1ring__sync__lock.html" title="Class ring_sync_lock"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class rw_spinlock</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-rw-spinlock">
+<span id="exhale-class-structlegion-1-1core-1-1async-1-1rw-spinlock"></span><h1>Class rw_spinlock<a class="headerlink" href="#class-rw-spinlock" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-async-rw-spinlock-hpp"><span class="std std-ref">File rw_spinlock.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion4core5async11rw_spinlockE">
+<span id="_CPPv3N6legion4core5async11rw_spinlockE"></span><span id="_CPPv2N6legion4core5async11rw_spinlockE"></span><span id="legion::core::async::rw_spinlock"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core::async<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">rw_spinlock</code><a class="headerlink" href="#_CPPv4N6legion4core5async11rw_spinlockE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Lock used with ::async::readonly_guard and ::async::readwrite_guard. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Read-only operations can happen simultaneously without waiting for each other. Read-only operations will only wait for Read-Write operations to be finished. </p>
+</dd>
+<dt><strong>Note</strong></dt><dd><p>Read-Write operations cannot happen simultaneously and will wait for each other. Read-Write operations will also wait for any Read-only operations to be finished. <a class="reference internal" href="classlegion_1_1core_1_1async_1_1readonly__guard.html#classlegion_1_1core_1_1async_1_1readonly__guard"><span class="std std-ref">legion::core::async::readonly_guard</span></a> <a class="reference internal" href="classlegion_1_1core_1_1async_1_1readwrite__guard.html#classlegion_1_1core_1_1async_1_1readwrite__guard"><span class="std std-ref">legion::core::async::readwrite_guard</span></a> <a class="reference internal" href="classlegion_1_1core_1_1async_1_1readonly__multiguard.html#classlegion_1_1core_1_1async_1_1readonly__multiguard"><span class="std std-ref">legion::core::async::readonly_multiguard</span></a> <a class="reference internal" href="classlegion_1_1core_1_1async_1_1readwrite__multiguard.html#classlegion_1_1core_1_1async_1_1readwrite__multiguard"><span class="std std-ref">legion::core::async::readwrite_multiguard</span></a> <a class="reference internal" href="classlegion_1_1core_1_1async_1_1mixed__multiguard.html#classlegion_1_1core_1_1async_1_1mixed__multiguard"><span class="std std-ref">legion::core::async::mixed_multiguard</span></a> </p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async11rw_spinlock11rw_spinlockEv">
+<span id="_CPPv3N6legion4core5async11rw_spinlock11rw_spinlockEv"></span><span id="_CPPv2N6legion4core5async11rw_spinlock11rw_spinlockEv"></span><span id="legion::core::async::rw_spinlock::rw_spinlock"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1ad3adee71c7d1fa84c44eb0763c30a0f8"></span><code class="sig-name descname">rw_spinlock</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core5async11rw_spinlock11rw_spinlockEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async11rw_spinlock11rw_spinlockERR11rw_spinlock">
+<span id="_CPPv3N6legion4core5async11rw_spinlock11rw_spinlockERR11rw_spinlock"></span><span id="_CPPv2N6legion4core5async11rw_spinlock11rw_spinlockERR11rw_spinlock"></span><span id="legion::core::async::rw_spinlock::rw_spinlock__rw_spinlockRR"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1aabae0bb6c1fdb1b136f79022a39995b3"></span><code class="sig-name descname">rw_spinlock</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core5async11rw_spinlock11rw_spinlockERR11rw_spinlock" title="legion::core::async::rw_spinlock::rw_spinlock">rw_spinlock</a> &amp;&amp;<em>source</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core5async11rw_spinlock11rw_spinlockERR11rw_spinlock" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async11rw_spinlockaSERR11rw_spinlock">
+<span id="_CPPv3N6legion4core5async11rw_spinlockaSERR11rw_spinlock"></span><span id="_CPPv2N6legion4core5async11rw_spinlockaSERR11rw_spinlock"></span><span id="legion::core::async::rw_spinlock::assign-operator__rw_spinlockRR"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1a96e17b2b15e6c3454960b064caf9e420"></span><a class="reference internal" href="#_CPPv4N6legion4core5async11rw_spinlockE" title="legion::core::async::rw_spinlock">rw_spinlock</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6legion4core5async11rw_spinlockE" title="legion::core::async::rw_spinlock">rw_spinlock</a> &amp;&amp;<em>source</em><span class="sig-paren">)</span> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4N6legion4core5async11rw_spinlockaSERR11rw_spinlock" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async11rw_spinlock11rw_spinlockERK11rw_spinlock">
+<span id="_CPPv3N6legion4core5async11rw_spinlock11rw_spinlockERK11rw_spinlock"></span><span id="_CPPv2N6legion4core5async11rw_spinlock11rw_spinlockERK11rw_spinlock"></span><span id="legion::core::async::rw_spinlock::rw_spinlock__rw_spinlockCR"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1ae903816a9ee8abfd04d999d97cc2f476"></span><code class="sig-name descname">rw_spinlock</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core5async11rw_spinlock11rw_spinlockERK11rw_spinlock" title="legion::core::async::rw_spinlock::rw_spinlock">rw_spinlock</a>&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async11rw_spinlock11rw_spinlockERK11rw_spinlock" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async11rw_spinlockaSERK11rw_spinlock">
+<span id="_CPPv3N6legion4core5async11rw_spinlockaSERK11rw_spinlock"></span><span id="_CPPv2N6legion4core5async11rw_spinlockaSERK11rw_spinlock"></span><span id="legion::core::async::rw_spinlock::assign-operator__rw_spinlockCR"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1a600228ea8012e91673449cba0d4257d5"></span><a class="reference internal" href="#_CPPv4N6legion4core5async11rw_spinlockE" title="legion::core::async::rw_spinlock">rw_spinlock</a> &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N6legion4core5async11rw_spinlockE" title="legion::core::async::rw_spinlock">rw_spinlock</a>&amp;<span class="sig-paren">)</span> = delete<a class="headerlink" href="#_CPPv4N6legion4core5async11rw_spinlockaSERK11rw_spinlock" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core5async11rw_spinlock4lockE10lock_state13wait_priority">
+<span id="_CPPv3NK6legion4core5async11rw_spinlock4lockE10lock_state13wait_priority"></span><span id="_CPPv2NK6legion4core5async11rw_spinlock4lockE10lock_state13wait_priority"></span><span id="legion::core::async::rw_spinlock::lock__lock_state.wait_priorityC"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1a63d11ccbeedb008ff23189f6b9c68720"></span>void <code class="sig-name descname">lock</code><span class="sig-paren">(</span><a class="reference internal" href="enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4.html#_CPPv4N6legion4core5async10lock_stateE" title="legion::core::async::lock_state">lock_state</a> <em>permissionLevel</em> = <a class="reference internal" href="enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4.html#_CPPv4N6legion4core5async10lock_stateE" title="legion::core::async::lock_state">lock_state</a>::<a class="reference internal" href="enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4.html#_CPPv4N6legion4core5async10lock_state5writeE" title="legion::core::async::lock_state::write">write</a>, <a class="reference internal" href="enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233.html#_CPPv4N6legion4core5async13wait_priorityE" title="legion::core::async::wait_priority">wait_priority</a> <em>priority</em> = <a class="reference internal" href="enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233.html#_CPPv4N6legion4core5async13wait_priorityE" title="legion::core::async::wait_priority">wait_priority</a>::<a class="reference internal" href="enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233.html#_CPPv4N6legion4core5async13wait_priority9real_timeE" title="legion::core::async::wait_priority::real_time">real_time</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core5async11rw_spinlock4lockE10lock_state13wait_priority" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Lock for a certain permission level. (locking for idle does nothing) </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Locking stacks, locking for readonly multiple times will remain readonly. Locking for write after already being locked for readonly in the same thread will attempt to elevate lock permission of this thread to write. Locking for write multiple times will remain in write. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">permissionLevel</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core5async11rw_spinlock8try_lockE10lock_state">
+<span id="_CPPv3NK6legion4core5async11rw_spinlock8try_lockE10lock_state"></span><span id="_CPPv2NK6legion4core5async11rw_spinlock8try_lockE10lock_state"></span><span id="legion::core::async::rw_spinlock::try_lock__lock_stateC"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1a98cd033716c805f4ea4acbae5b3573ab"></span>bool <code class="sig-name descname">try_lock</code><span class="sig-paren">(</span><a class="reference internal" href="enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4.html#_CPPv4N6legion4core5async10lock_stateE" title="legion::core::async::lock_state">lock_state</a> <em>permissionLevel</em> = <a class="reference internal" href="enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4.html#_CPPv4N6legion4core5async10lock_stateE" title="legion::core::async::lock_state">lock_state</a>::<a class="reference internal" href="enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4.html#_CPPv4N6legion4core5async10lock_state5writeE" title="legion::core::async::lock_state::write">write</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core5async11rw_spinlock8try_lockE10lock_state" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Try to lock for a certain permission level. If it fails it will return false otherwise true. (locking for idle does nothing) </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Locking stacks, locking for readonly multiple times will remain readonly. Locking for write after already being locked for readonly in the same thread will attempt to elevate lock permission of this thread to write. Locking for write multiple times will remain in write. </p>
+</dd>
+<dt><strong>Return</strong></dt><dd><p>bool True when locked. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">permissionLevel</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core5async11rw_spinlock6unlockE10lock_state">
+<span id="_CPPv3NK6legion4core5async11rw_spinlock6unlockE10lock_state"></span><span id="_CPPv2NK6legion4core5async11rw_spinlock6unlockE10lock_state"></span><span id="legion::core::async::rw_spinlock::unlock__lock_stateC"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1a29c4c350aa8475b12d3ddb0d9f75f591"></span>void <code class="sig-name descname">unlock</code><span class="sig-paren">(</span><a class="reference internal" href="enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4.html#_CPPv4N6legion4core5async10lock_stateE" title="legion::core::async::lock_state">lock_state</a> <em>permissionLevel</em> = <a class="reference internal" href="enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4.html#_CPPv4N6legion4core5async10lock_stateE" title="legion::core::async::lock_state">lock_state</a>::<a class="reference internal" href="enum_rw__spinlock_8hpp_1a3096c2c85c62f32858727a0dc8ba9ce4.html#_CPPv4N6legion4core5async10lock_state5writeE" title="legion::core::async::lock_state::write">write</a><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core5async11rw_spinlock6unlockE10lock_state" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Unlock from a certain permission level. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>If both read and write locks have been requested before and write is unlocked then the lock will return to readonly state. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">permissionLevel</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core5async11rw_spinlock11lock_sharedEv">
+<span id="_CPPv3NK6legion4core5async11rw_spinlock11lock_sharedEv"></span><span id="_CPPv2NK6legion4core5async11rw_spinlock11lock_sharedEv"></span><span id="legion::core::async::rw_spinlock::lock_sharedC"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1a5a8a230e57ceb7579df62023d6d66299"></span>void <code class="sig-name descname">lock_shared</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core5async11rw_spinlock11lock_sharedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Locks the rw_spinlockfor shared ownership, blocks if the rw_spinlockis not available. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core5async11rw_spinlock15try_lock_sharedEv">
+<span id="_CPPv3NK6legion4core5async11rw_spinlock15try_lock_sharedEv"></span><span id="_CPPv2NK6legion4core5async11rw_spinlock15try_lock_sharedEv"></span><span id="legion::core::async::rw_spinlock::try_lock_sharedC"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1adc400d1aeaa7fdcf08e5adea5094b9e4"></span>bool <code class="sig-name descname">try_lock_shared</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core5async11rw_spinlock15try_lock_sharedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Tries to lock the rw_spinlockfor shared ownership, returns if the rw_spinlockis not available. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion4core5async11rw_spinlock13unlock_sharedEv">
+<span id="_CPPv3NK6legion4core5async11rw_spinlock13unlock_sharedEv"></span><span id="_CPPv2NK6legion4core5async11rw_spinlock13unlock_sharedEv"></span><span id="legion::core::async::rw_spinlock::unlock_sharedC"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1a185e2ac4a7a525b960c0aad24ced5373"></span>void <code class="sig-name descname">unlock_shared</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion4core5async11rw_spinlock13unlock_sharedEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Unlocks the mutex (shared ownership) </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I00ENK6legion4core5async11rw_spinlock16critical_sectionEDcRK4Func">
+<span id="_CPPv3I00ENK6legion4core5async11rw_spinlock16critical_sectionERK4Func"></span><span id="_CPPv2I00ENK6legion4core5async11rw_spinlock16critical_sectionERK4Func"></span>template&lt;typename <code class="sig-name descname">Guard</code>, typename <code class="sig-name descname">Func</code>&gt;<br /><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1aef4ffc9e80d8fe70ee8f42c78e03223d"></span>auto <code class="sig-name descname">critical_section</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4I00ENK6legion4core5async11rw_spinlock16critical_sectionEDcRK4Func" title="legion::core::async::rw_spinlock::critical_section::Func">Func</a> &amp;<em>func</em><span class="sig-paren">)</span> <em class="property">const</em> -&gt; decltype(auto)<a class="headerlink" href="#_CPPv4I00ENK6legion4core5async11rw_spinlock16critical_sectionEDcRK4Func" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Execute a function inside a critical section locked by a certain guard. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Return value of func. </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Guard</span></code>: Guard type to lock the lock with. </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">func</span></code>: Function to execute. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core5async11rw_spinlock13force_releaseEb">
+<span id="_CPPv3N6legion4core5async11rw_spinlock13force_releaseEb"></span><span id="_CPPv2N6legion4core5async11rw_spinlock13force_releaseEb"></span><span id="legion::core::async::rw_spinlock::force_release__b"></span><span class="target" id="structlegion_1_1core_1_1async_1_1rw__spinlock_1a4293317cd88f29ad8cae259285ee4cfc"></span>void <code class="sig-name descname">force_release</code><span class="sig-paren">(</span>bool <em>release</em> = true<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core5async11rw_spinlock13force_releaseEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class rw_spinlock</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="class_structlegion_1_1core_1_1async_1_1ring__sync__lock.html" title="previous chapter">Class ring_sync_lock</a></li>
+      <li>Next: <a href="class_structlegion_1_1core_1_1async_1_1spinlock.html" title="next chapter">Class spinlock</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/class_structlegion_1_1core_1_1async_1_1rw__spinlock.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -62,7 +62,7 @@
     <span class="k">struct</span> <span class="n">ShaderCache</span><span class="p">;</span>
     <span class="k">struct</span> <span class="n">shader_handle</span><span class="p">;</span>
 
-    <span class="k">using</span> <span class="n">shader_ilo</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">GLuint</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="p">;</span> <span class="c1">// Shader intermediate language object.</span>
+    <span class="k">using</span> <span class="n">shader_ilo</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">GLuint</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;&gt;</span><span class="p">;</span> <span class="c1">// Shader intermediate language object.</span>
     <span class="k">using</span> <span class="n">shader_state</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">GLenum</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="cp">#pragma region shader parameters</span>
@@ -75,12 +75,14 @@
         <span class="n">GLenum</span> <span class="n">m_type</span><span class="p">;</span>
         <span class="n">GLint</span> <span class="n">m_location</span><span class="p">;</span>
 
+        <span class="n">shader_parameter_base</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span> <span class="n">t</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_shaderId</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">),</span> <span class="n">m_name</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">),</span> <span class="n">m_type</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">m_location</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{};</span>
+
         <span class="n">shader_parameter_base</span><span class="p">(</span><span class="n">id_type</span> <span class="n">shaderId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">type</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">location</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_shaderId</span><span class="p">(</span><span class="n">shaderId</span><span class="p">),</span> <span class="n">m_name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">m_type</span><span class="p">(</span><span class="n">type</span><span class="p">),</span> <span class="n">m_location</span><span class="p">(</span><span class="n">location</span><span class="p">)</span> <span class="p">{};</span>
 
     <span class="k">public</span><span class="o">:</span>
         <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">is_valid</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">m_location</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">m_shaderId</span> <span class="o">!=</span> <span class="n">invalid_id</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">m_location</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="n">GLenum</span> <span class="n">get_type</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_type</span><span class="p">;</span> <span class="p">}</span>
@@ -103,8 +105,8 @@
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
         <span class="n">uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">shaderId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">type</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">location</span><span class="p">)</span> <span class="o">:</span> <span class="n">shader_parameter_base</span><span class="p">(</span><span class="n">shaderId</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">)</span> <span class="p">{}</span>
-
-        <span class="kt">void</span> <span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
+        <span class="n">uniform</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span> <span class="n">t</span><span class="p">)</span> <span class="o">:</span> <span class="n">shader_parameter_base</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">{};</span>
+        <span class="kt">void</span> <span class="nf">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
     <span class="p">};</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -113,18 +115,26 @@
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;&gt;</span>
-    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">struct</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span> <span class="o">:</span> <span class="k">public</span> <span class="n">shader_parameter_base</span>
     <span class="p">{</span>
-        <span class="n">texture</span> <span class="n">tex</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
-            <span class="n">tex</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">get_texture</span><span class="p">();</span>
-        <span class="k">else</span>
-            <span class="n">tex</span> <span class="o">=</span> <span class="n">invalid_texture_handle</span><span class="p">.</span><span class="n">get_texture</span><span class="p">();</span>
+        <span class="n">uint</span> <span class="n">m_textureUnit</span><span class="p">;</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">shaderId</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">name</span><span class="p">,</span> <span class="n">GLenum</span> <span class="n">type</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">location</span><span class="p">,</span> <span class="n">uint</span> <span class="n">textureUnit</span><span class="p">)</span> <span class="o">:</span> <span class="n">shader_parameter_base</span><span class="p">(</span><span class="n">shaderId</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">location</span><span class="p">),</span> <span class="n">m_textureUnit</span><span class="p">(</span><span class="n">textureUnit</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">uniform</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nullptr_t</span> <span class="n">t</span><span class="p">)</span> <span class="o">:</span> <span class="n">shader_parameter_base</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">{};</span>
+        <span class="kt">void</span> <span class="nf">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">texture</span> <span class="n">tex</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">is_valid</span><span class="p">())</span>
+                <span class="n">tex</span> <span class="o">=</span> <span class="n">value</span><span class="p">.</span><span class="n">get_texture</span><span class="p">();</span>
+            <span class="k">else</span>
+                <span class="n">tex</span> <span class="o">=</span> <span class="n">invalid_texture_handle</span><span class="p">.</span><span class="n">get_texture</span><span class="p">();</span>
 
-        <span class="n">glActiveTexture</span><span class="p">(</span><span class="n">GL_TEXTURE0</span> <span class="o">+</span> <span class="n">m_location</span><span class="p">);</span>
-        <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">tex</span><span class="p">.</span><span class="n">textureId</span><span class="p">);</span>
-        <span class="n">glUniform1i</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="n">m_location</span><span class="p">);</span>
-    <span class="p">}</span>
+            <span class="n">glActiveTexture</span><span class="p">(</span><span class="n">GL_TEXTURE0</span> <span class="o">+</span> <span class="n">m_textureUnit</span><span class="p">);</span>
+            <span class="n">glBindTexture</span><span class="p">(</span><span class="n">GL_TEXTURE_2D</span><span class="p">,</span> <span class="n">tex</span><span class="p">.</span><span class="n">textureId</span><span class="p">);</span>
+            <span class="n">glUniform1i</span><span class="p">(</span><span class="n">m_location</span><span class="p">,</span> <span class="n">m_textureUnit</span><span class="p">);</span>
+            <span class="n">glActiveTexture</span><span class="p">(</span><span class="n">GL_TEXTURE0</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
 
     <span class="k">template</span><span class="o">&lt;&gt;</span>
     <span class="kr">inline</span> <span class="kt">void</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">&gt;::</span><span class="n">set_value</span><span class="p">(</span><span class="k">const</span> <span class="n">uint</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
@@ -264,13 +274,29 @@
 
 <span class="cp">#pragma endregion</span>
 
-    <span class="k">struct</span> <span class="n">shader</span>
+    <span class="k">struct</span> <span class="n">shader_variant</span>
     <span class="p">{</span>
         <span class="n">GLint</span> <span class="n">programId</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">shader_parameter_base</span><span class="o">&gt;&gt;</span> <span class="n">uniforms</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">attribute</span><span class="o">&gt;&gt;</span> <span class="n">attributes</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">GLint</span><span class="p">,</span> <span class="n">id_type</span><span class="o">&gt;</span> <span class="n">idOfLocation</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+        <span class="n">id_type</span> <span class="n">nameHash</span><span class="p">;</span>
+
         <span class="n">shader_state</span> <span class="n">state</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLint</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">get_uniform_info</span><span class="p">();</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="n">shader</span>
+    <span class="p">{</span>
+        <span class="k">friend</span> <span class="k">class</span> <span class="nc">ShaderCache</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="k">struct</span> <span class="n">shader_handle</span><span class="p">;</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">mutable</span> <span class="n">shader_variant</span><span class="o">*</span> <span class="n">m_currentShaderVariant</span><span class="p">;</span>
+        <span class="k">mutable</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">shader_variant</span><span class="o">&gt;</span> <span class="n">m_variants</span><span class="p">;</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
 
         <span class="c1">// Since copying would mean that the in-vram version of the actual shader would also need to be copied, we don&#39;t allow copying.</span>
         <span class="n">shader</span><span class="p">(</span><span class="k">const</span> <span class="n">shader</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
@@ -281,6 +307,16 @@
         <span class="n">shader</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">shader</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">shader</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">shader</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
 
+        <span class="kt">bool</span> <span class="nf">has_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="nf">has_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">configure_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">configure_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">shader_variant</span><span class="o">&amp;</span> <span class="n">get_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">);</span>
+        <span class="n">shader_variant</span><span class="o">&amp;</span> <span class="n">get_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">);</span>
+        <span class="k">const</span> <span class="n">shader_variant</span><span class="o">&amp;</span> <span class="n">get_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="k">const</span> <span class="n">shader_variant</span><span class="o">&amp;</span> <span class="n">get_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
         <span class="kt">void</span> <span class="nf">bind</span><span class="p">();</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">release</span><span class="p">();</span>
 
@@ -290,58 +326,141 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
         <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="o">*</span><span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">uniforms</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">)].</span><span class="n">get</span><span class="p">());</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_currentShaderVariant</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current shader variant configured for shader {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">uniforms</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">)].</span><span class="n">get</span><span class="p">());</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Uniform of type {} does not exist with name {}.&quot;</span><span class="p">,</span> <span class="n">typeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">name</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="kt">bool</span> <span class="n">has_uniform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_currentShaderVariant</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current shader variant configured for shader {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">uniforms</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">uniforms</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">())</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
         <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="o">*</span><span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">uniforms</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_currentShaderVariant</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current shader variant configured for shader {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">uniforms</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Uniform of type {} does not exist with id {}.&quot;</span><span class="p">,</span> <span class="n">typeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">id</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="n">attribute</span> <span class="n">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="kt">bool</span> <span class="n">has_uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">attributes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
-                <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_currentShaderVariant</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current shader variant configured for shader {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
 
-            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Shader {} does not contain attribute {}&quot;</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
-            <span class="k">return</span> <span class="n">invalid_attribute</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">uniforms</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">uniforms</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">())</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="n">attribute</span> <span class="n">get_attribute</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform_with_location</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">attributes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
-                <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="n">attributes</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get</span><span class="p">());</span>
-            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Shader {} does not contain attribute with id {}&quot;</span><span class="p">,</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
-            <span class="k">return</span> <span class="n">invalid_attribute</span><span class="p">;</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_currentShaderVariant</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current shader variant configured for shader {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">uniforms</span><span class="p">[</span><span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">idOfLocation</span><span class="p">[</span><span class="n">location</span><span class="p">]].</span><span class="n">get</span><span class="p">());</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Uniform of type {} does not exist with location {}.&quot;</span><span class="p">,</span> <span class="n">typeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">location</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLint</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">get_uniform_info</span><span class="p">()</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="kt">bool</span> <span class="n">has_uniform_with_location</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLint</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">info</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">_</span><span class="p">,</span> <span class="n">uniform</span><span class="p">]</span> <span class="o">:</span> <span class="n">uniforms</span><span class="p">)</span>
-                <span class="n">info</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">uniform</span><span class="o">-&gt;</span><span class="n">get_name</span><span class="p">(),</span> <span class="n">uniform</span><span class="o">-&gt;</span><span class="n">get_location</span><span class="p">(),</span> <span class="n">uniform</span><span class="o">-&gt;</span><span class="n">get_type</span><span class="p">()));</span>
-            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">info</span><span class="p">);</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_currentShaderVariant</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;No current shader variant configured for shader {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">return</span> <span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">uniforms</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">idOfLocation</span><span class="p">[</span><span class="n">location</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">uniforms</span><span class="p">[</span><span class="n">m_currentShaderVariant</span><span class="o">-&gt;</span><span class="n">idOfLocation</span><span class="p">[</span><span class="n">location</span><span class="p">]].</span><span class="n">get</span><span class="p">())</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span>
         <span class="p">}</span>
+
+        <span class="n">attribute</span> <span class="n">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="n">attribute</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+
     <span class="p">};</span>
 
     <span class="k">struct</span> <span class="n">shader_handle</span>
     <span class="p">{</span>
         <span class="k">using</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="p">;</span>
         <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
+
+        <span class="kt">bool</span> <span class="nf">has_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="nf">has_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">configure_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">);</span>
+        <span class="kt">void</span> <span class="nf">configure_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">);</span>
+
+        <span class="n">shader_variant</span><span class="o">&amp;</span> <span class="n">get_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">);</span>
+        <span class="n">shader_variant</span><span class="o">&amp;</span> <span class="n">get_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">);</span>
+        <span class="k">const</span> <span class="n">shader_variant</span><span class="o">&amp;</span> <span class="n">get_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="k">const</span> <span class="n">shader_variant</span><span class="o">&amp;</span> <span class="n">get_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
         <span class="n">GLuint</span> <span class="nf">get_uniform_block_index</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
         <span class="kt">void</span> <span class="nf">bind_uniform_block</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">uniformBlockIndex</span><span class="p">,</span> <span class="n">GLuint</span> <span class="n">uniformBlockBinding</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">get_name</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLint</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">get_uniform_info</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLint</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;&gt;</span> <span class="n">get_uniform_info</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLint</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">get_uniform_info</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GLint</span><span class="p">,</span> <span class="n">GLenum</span><span class="o">&gt;&gt;</span> <span class="n">get_uniform_info</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
         <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="kt">bool</span> <span class="n">has_uniform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
         <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">uniformId</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="kt">bool</span> <span class="n">has_uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">uniformId</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">get_uniform_with_location</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">);</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+        <span class="kt">bool</span> <span class="n">has_uniform_with_location</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">);</span>
 
         <span class="n">attribute</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 
@@ -364,15 +483,18 @@
     <span class="k">private</span><span class="o">:</span>
 
         <span class="k">static</span> <span class="n">sparse_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">shader</span><span class="o">&gt;</span> <span class="n">m_shaders</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">readonly_rw_spinlock</span> <span class="n">m_shaderLock</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_shaderLock</span><span class="p">;</span>
 
         <span class="k">static</span> <span class="n">shader</span><span class="o">*</span> <span class="nf">get_shader</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">process_io</span><span class="p">(</span><span class="n">shader</span><span class="o">&amp;</span> <span class="n">shader</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">compile_shader</span><span class="p">(</span><span class="n">GLuint</span> <span class="n">shaderType</span><span class="p">,</span> <span class="n">cstring</span> <span class="n">source</span><span class="p">,</span> <span class="n">GLint</span> <span class="n">sourceLength</span><span class="p">);</span>
 
-        <span class="k">static</span> <span class="kt">bool</span> <span class="nf">load_precompiled</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">shader_ilo</span><span class="o">&amp;</span> <span class="n">ilo</span><span class="p">,</span> <span class="n">shader_state</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">);</span>
-        <span class="k">static</span> <span class="kt">void</span> <span class="nf">store_precompiled</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="k">const</span> <span class="n">shader_ilo</span><span class="o">&amp;</span> <span class="n">ilo</span><span class="p">,</span> <span class="k">const</span> <span class="n">shader_state</span><span class="o">&amp;</span> <span class="n">state</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">bool</span> <span class="nf">load_precompiled</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">shader_ilo</span><span class="o">&amp;</span> <span class="n">ilo</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">shader_state</span><span class="o">&gt;&amp;</span> <span class="n">state</span><span class="p">);</span>
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">store_precompiled</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="k">const</span> <span class="n">shader_ilo</span><span class="o">&amp;</span> <span class="n">ilo</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">shader_state</span><span class="o">&gt;&amp;</span> <span class="n">state</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">shader_handle</span> <span class="nf">create_invalid_shader</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">shader_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_shader_settings</span><span class="p">);</span>
+
     <span class="k">public</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">shader_handle</span> <span class="n">create_shader</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">shader_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_shader_settings</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">shader_handle</span> <span class="nf">create_shader</span><span class="p">(</span><span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">shader_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_shader_settings</span><span class="p">);</span>
@@ -383,14 +505,45 @@
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
     <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_uniform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">has_uniform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">has_uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
     <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">uniformId</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">uniformId</span><span class="p">);</span>
     <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">has_uniform</span><span class="p">(</span><span class="n">id_type</span> <span class="n">uniformId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">has_uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">uniformId</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="n">uniform</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">get_uniform_with_location</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">location</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">shader_handle</span><span class="o">::</span><span class="n">has_uniform_with_location</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">get_shader</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">has_uniform_with_location</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">location</span><span class="p">);</span>
+    <span class="p">}</span>
+
 <span class="p">}</span>
 </pre></div>
 </div>

@@ -19,6 +19,8 @@ Program Listing for File program.hpp
    #include <functional>
    #include <string>
    
+   #include <Optick/optick.h>
+   
    namespace legion::core::compute {
    
        class Program
@@ -39,6 +41,7 @@ Program Listing for File program.hpp
    
            cl_command_queue make_cq() const
            {
+               OPTICK_EVENT();
                return make_command_queue();
            }
    

@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1adff1a1bf60752cd3395dae990cc2e34f:
+
+Function ImStricmp
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ImStricmp(const char *, const char *)

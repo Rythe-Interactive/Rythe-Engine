@@ -30,6 +30,14 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1inout__ident`
 
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1invalid__karg__type`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1karg`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1_kernel_1_1d2`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1_kernel_1_1d3`
+
 - :ref:`exhale_struct_structlegion_1_1core_1_1compute_1_1out__ident`
 
 - :ref:`exhale_class_classlegion_1_1core_1_1compute_1_1_buffer`
@@ -55,15 +63,15 @@ Enums
 
 - :ref:`exhale_enum_kernel_8hpp_1a9ab46e1041dc2bdce31c5899eb361ede`
 
-- :ref:`exhale_enum_buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0`
+- :ref:`exhale_enum_core_2compute_2buffer_8hpp_1a7e33690cda6ca2c7eee105bf5e28a0b0`
 
 
 Functions
 ---------
 
 
-- :ref:`exhale_function_buffer_8cpp_1a695235fb2d9e5438db1f87bd07d2c9f6`
+- :ref:`exhale_function_core_2compute_2buffer_8cpp_1a695235fb2d9e5438db1f87bd07d2c9f6`
 
-- :ref:`exhale_function_buffer_8hpp_1a82a0d5cd18aa1549402dceebbdbed0b7`
+- :ref:`exhale_function_core_2compute_2buffer_8hpp_1a82a0d5cd18aa1549402dceebbdbed0b7`
 
-- :ref:`exhale_function_buffer_8hpp_1af327ae4b79c2f85f761673cff545eb80`
+- :ref:`exhale_function_core_2compute_2buffer_8hpp_1af327ae4b79c2f85f761673cff545eb80`

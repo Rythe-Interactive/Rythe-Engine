@@ -46,412 +46,409 @@
   <div class="section" id="program-listing-for-file-logging-hpp">
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-core-logging-logging-hpp"></span><h1>Program Listing for File logging.hpp<a class="headerlink" href="#program-listing-for-file-logging-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_logging_logging.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-core-logging-logging-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/logging/logging.hpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
-
-<span class="cp">#define SPDLOG_HEADER_ONLY</span>
-<span class="cp">#include</span> <span class="cpf">&lt;sstream&gt;</span><span class="cp"></span>
-
-<span class="cp">#if !defined(DOXY_EXCLUDE)</span>
-<span class="cp">#include</span> <span class="cpf">&lt;spdlog/spdlog.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;spdlog/sinks/stdout_color_sinks.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;spdlog/sinks/rotating_file_sink.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;spdlog/pattern_formatter.h&gt;</span><span class="cp"></span>
-<span class="cp">#endif</span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;core/types/type_util.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/math/math.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;core/common/exception.hpp&gt;</span><span class="cp"></span>
-
-<span class="cp">#if !defined(DOXY_EXCLUDE)</span>
-<span class="k">namespace</span> <span class="n">fmt</span>
-<span class="p">{</span>
-    <span class="k">template</span> <span class="o">&lt;&gt;</span>
-    <span class="k">struct</span> <span class="n">formatter</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&gt;</span>
-    <span class="p">{</span>
-
-        <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
-                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
-            <span class="k">return</span> <span class="n">it</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
-        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">oss</span><span class="p">;</span>
-            <span class="n">oss</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">;</span>
-            <span class="k">return</span> <span class="nf">format_to</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span> <span class="s">&quot;</span><span class="p">{}</span><span class="s">&quot;, oss.str());</span>
-        <span class="p">}</span>
-
-    <span class="p">};</span>
-
-    <span class="k">template</span> <span class="o">&lt;&gt;</span>
-    <span class="k">struct</span> <span class="n">formatter</span><span class="o">&lt;</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">exception</span><span class="o">&gt;</span>
-    <span class="p">{</span>
-
-        <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
-                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
-            <span class="k">return</span> <span class="n">it</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
-        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span> <span class="s">&quot;[{}({}) T {}(...)] {}&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">.</span><span class="n">file</span><span class="p">(),</span> <span class="n">error</span><span class="p">.</span><span class="n">line</span><span class="p">(),</span> <span class="n">error</span><span class="p">.</span><span class="n">func</span><span class="p">(),</span> <span class="n">error</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">template</span> <span class="o">&lt;&gt;</span>
-    <span class="k">struct</span> <span class="n">formatter</span><span class="o">&lt;</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">fs_error</span><span class="o">&gt;</span>
-    <span class="p">{</span>
-
-        <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
-                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
-            <span class="k">return</span> <span class="n">it</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
-        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">fs_error</span><span class="o">&amp;</span> <span class="n">error</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span> <span class="s">&quot;[{}({}) T {}(...)] {}&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">.</span><span class="n">file</span><span class="p">(),</span> <span class="n">error</span><span class="p">.</span><span class="n">line</span><span class="p">(),</span> <span class="n">error</span><span class="p">.</span><span class="n">func</span><span class="p">(),</span> <span class="n">error</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">template</span> <span class="o">&lt;&gt;</span>
-    <span class="k">struct</span> <span class="n">fmt</span><span class="o">::</span><span class="n">formatter</span><span class="o">&lt;</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="c1">// Presentation format: &#39;f&#39; - fixed, &#39;e&#39; - exponential.</span>
-        <span class="kt">char</span> <span class="n">presentation</span> <span class="o">=</span> <span class="sc">&#39;f&#39;</span><span class="p">;</span>
-
-        <span class="c1">// Parses format specifications of the form [&#39;f&#39; | &#39;e&#39;].</span>
-        <span class="k">constexpr</span> <span class="k">auto</span> <span class="nf">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// auto parse(format_parse_context &amp;ctx) -&gt; decltype(ctx.begin()) // c++11</span>
-              <span class="c1">// [ctx.begin(), ctx.end()) is a character range that contains a part of</span>
-              <span class="c1">// the format string starting from the format specifications to be parsed,</span>
-              <span class="c1">// e.g. in</span>
-              <span class="c1">//</span>
-              <span class="c1">//   fmt::format(&quot;{:f} - point of interest&quot;, point{1, 2});</span>
-              <span class="c1">//</span>
-              <span class="c1">// the range will contain &quot;f} - point of interest&quot;. The formatter should</span>
-              <span class="c1">// parse specifiers until &#39;}&#39; or the end of the range. In this example</span>
-              <span class="c1">// the formatter should parse the &#39;f&#39; specifier and return an iterator</span>
-              <span class="c1">// pointing to &#39;}&#39;.</span>
-
-              <span class="c1">// Parse the presentation format and store it in the formatter:</span>
-            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">||</span> <span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;e&#39;</span><span class="p">))</span> <span class="n">presentation</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="o">++</span><span class="p">;</span>
-
-            <span class="c1">// Check if reached the end of the range:</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
-                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
-
-            <span class="c1">// Return an iterator past the end of the parsed range:</span>
-            <span class="k">return</span> <span class="n">it</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="c1">// Formats the point p using the parsed format specification (presentation)</span>
-        <span class="c1">// stored in this formatter.</span>
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
-        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// auto format(const point &amp;p, FormatContext &amp;ctx) -&gt; decltype(ctx.out()) // c++11</span>
-              <span class="c1">// ctx.out() is an output iterator to write to.</span>
-            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span>
-                <span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span>
-                <span class="n">presentation</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">?</span> <span class="s">&quot;({:.1f}, {:.1f})&quot;</span> <span class="o">:</span> <span class="s">&quot;({:.1e}, {:.1e})&quot;</span><span class="p">,</span>
-                <span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">template</span> <span class="o">&lt;&gt;</span>
-    <span class="k">struct</span> <span class="n">fmt</span><span class="o">::</span><span class="n">formatter</span><span class="o">&lt;</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="c1">// Presentation format: &#39;f&#39; - fixed, &#39;e&#39; - exponential.</span>
-        <span class="kt">char</span> <span class="n">presentation</span> <span class="o">=</span> <span class="sc">&#39;f&#39;</span><span class="p">;</span>
-
-        <span class="c1">// Parses format specifications of the form [&#39;f&#39; | &#39;e&#39;].</span>
-        <span class="k">constexpr</span> <span class="k">auto</span> <span class="nf">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// auto parse(format_parse_context &amp;ctx) -&gt; decltype(ctx.begin()) // c++11</span>
-              <span class="c1">// [ctx.begin(), ctx.end()) is a character range that contains a part of</span>
-              <span class="c1">// the format string starting from the format specifications to be parsed,</span>
-              <span class="c1">// e.g. in</span>
-              <span class="c1">//</span>
-              <span class="c1">//   fmt::format(&quot;{:f} - point of interest&quot;, point{1, 2});</span>
-              <span class="c1">//</span>
-              <span class="c1">// the range will contain &quot;f} - point of interest&quot;. The formatter should</span>
-              <span class="c1">// parse specifiers until &#39;}&#39; or the end of the range. In this example</span>
-              <span class="c1">// the formatter should parse the &#39;f&#39; specifier and return an iterator</span>
-              <span class="c1">// pointing to &#39;}&#39;.</span>
-
-              <span class="c1">// Parse the presentation format and store it in the formatter:</span>
-            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">||</span> <span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;e&#39;</span><span class="p">))</span> <span class="n">presentation</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="o">++</span><span class="p">;</span>
-
-            <span class="c1">// Check if reached the end of the range:</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
-                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
-
-            <span class="c1">// Return an iterator past the end of the parsed range:</span>
-            <span class="k">return</span> <span class="n">it</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="c1">// Formats the point p using the parsed format specification (presentation)</span>
-        <span class="c1">// stored in this formatter.</span>
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
-        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">ivec2</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// auto format(const point &amp;p, FormatContext &amp;ctx) -&gt; decltype(ctx.out()) // c++11</span>
-              <span class="c1">// ctx.out() is an output iterator to write to.</span>
-            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span>
-                <span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span>
-                <span class="n">presentation</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">?</span> <span class="s">&quot;({:.1f}, {:.1f})&quot;</span> <span class="o">:</span> <span class="s">&quot;({:.1e}, {:.1e})&quot;</span><span class="p">,</span>
-                <span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">template</span> <span class="o">&lt;&gt;</span>
-    <span class="k">struct</span> <span class="n">fmt</span><span class="o">::</span><span class="n">formatter</span><span class="o">&lt;</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="kt">char</span> <span class="n">presentation</span> <span class="o">=</span> <span class="sc">&#39;f&#39;</span><span class="p">;</span>
-
-        <span class="k">constexpr</span> <span class="k">auto</span> <span class="nf">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">||</span> <span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;e&#39;</span><span class="p">))</span> <span class="n">presentation</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="o">++</span><span class="p">;</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
-                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
-
-            <span class="k">return</span> <span class="n">it</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
-        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span>
-                <span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span>
-                <span class="n">presentation</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">?</span> <span class="s">&quot;({:.1f}, {:.1f}, {:.1f})&quot;</span> <span class="o">:</span> <span class="s">&quot;({:.1e}, {:.1e}, {:.1e})&quot;</span><span class="p">,</span>
-                <span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">template</span> <span class="o">&lt;&gt;</span>
-    <span class="k">struct</span> <span class="n">fmt</span><span class="o">::</span><span class="n">formatter</span><span class="o">&lt;</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="kt">char</span> <span class="n">presentation</span> <span class="o">=</span> <span class="sc">&#39;f&#39;</span><span class="p">;</span>
-
-        <span class="k">constexpr</span> <span class="k">auto</span> <span class="nf">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">||</span> <span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;e&#39;</span><span class="p">))</span> <span class="n">presentation</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="o">++</span><span class="p">;</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
-                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
-
-            <span class="k">return</span> <span class="n">it</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
-        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span>
-                <span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span>
-                <span class="n">presentation</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">?</span> <span class="s">&quot;({:.1f}, {:.1f}, {:.1f}, {:.1f})&quot;</span> <span class="o">:</span> <span class="s">&quot;({:.1e}, {:.1e}, {:.1e}, {:.1e})&quot;</span><span class="p">,</span>
-                <span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">template</span> <span class="o">&lt;&gt;</span>
-    <span class="k">struct</span> <span class="n">fmt</span><span class="o">::</span><span class="n">formatter</span><span class="o">&lt;</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">quat</span><span class="o">&gt;</span> <span class="p">{</span>
-        <span class="kt">char</span> <span class="n">presentation</span> <span class="o">=</span> <span class="sc">&#39;f&#39;</span><span class="p">;</span>
-
-        <span class="k">constexpr</span> <span class="k">auto</span> <span class="nf">parse</span><span class="p">(</span><span class="n">format_parse_context</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">end</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">||</span> <span class="o">*</span><span class="n">it</span> <span class="o">==</span> <span class="sc">&#39;e&#39;</span><span class="p">))</span> <span class="n">presentation</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="o">++</span><span class="p">;</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">it</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
-                <span class="k">throw</span> <span class="n">format_error</span><span class="p">(</span><span class="s">&quot;invalid format&quot;</span><span class="p">);</span>
-
-            <span class="k">return</span> <span class="n">it</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">FormatContext</span><span class="o">&gt;</span>
-        <span class="k">auto</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">math</span><span class="o">::</span><span class="n">quat</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="n">FormatContext</span><span class="o">&amp;</span> <span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">format_to</span><span class="p">(</span>
-                <span class="n">ctx</span><span class="p">.</span><span class="n">out</span><span class="p">(),</span>
-                <span class="n">presentation</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span> <span class="o">?</span> <span class="s">&quot;(({:.1f}, {:.1f}, {:.1f}),r: {:.1f})&quot;</span> <span class="o">:</span> <span class="s">&quot;(({:.1e}, {:.1e}, {:.1e}),r: {:.1e})&quot;</span><span class="p">,</span>
-                <span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-<span class="p">}</span>
-<span class="cp">#endif</span>
-
-
-<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">log</span>
-<span class="p">{</span>
-    <span class="k">struct</span> <span class="n">impl</span> <span class="p">{</span>
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">spdlog</span><span class="o">::</span><span class="n">logger</span><span class="o">&gt;</span> <span class="n">file_logger</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">spdlog</span><span class="o">::</span><span class="n">logger</span><span class="o">&gt;</span> <span class="n">console_logger</span><span class="p">;</span>
-        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">thread_names</span><span class="p">;</span>
-    <span class="p">};</span>
-
-
-    <span class="k">const</span> <span class="k">static</span> <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">time_point</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">&gt;</span> <span class="n">genesis</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
-
-    <span class="k">class</span> <span class="nc">genesis_formatter_flag</span> <span class="o">:</span> <span class="k">public</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">custom_flag_formatter</span>
-    <span class="p">{</span>
-    <span class="k">public</span><span class="o">:</span>
-        <span class="kt">void</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">details</span><span class="o">::</span><span class="n">log_msg</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tm</span><span class="o">&amp;</span> <span class="n">tm_time</span><span class="p">,</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">memory_buf_t</span><span class="o">&amp;</span> <span class="n">dest</span><span class="p">)</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="c1">//get seconds since engine start</span>
-            <span class="k">const</span> <span class="k">auto</span> <span class="n">now</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
-            <span class="k">const</span> <span class="k">auto</span> <span class="n">time_since_genesis</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">genesis</span><span class="p">;</span>
-            <span class="k">const</span> <span class="k">auto</span> <span class="n">seconds</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ratio</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">time_since_genesis</span><span class="p">).</span><span class="n">count</span><span class="p">();</span>
-
-            <span class="c1">//convert to &quot;--s.ms---&quot;</span>
-            <span class="k">const</span> <span class="k">auto</span> <span class="n">str</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">seconds</span><span class="p">);</span>
-
-            <span class="c1">//append to data</span>
-            <span class="n">dest</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">str</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">str</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">str</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
-
-        <span class="p">}</span>
-
-        <span class="c1">//generates a new formatter flag</span>
-        <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">custom_flag_formatter</span><span class="o">&gt;</span> <span class="n">clone</span><span class="p">()</span> <span class="k">const</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">details</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">genesis_formatter_flag</span><span class="o">&gt;</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-    <span class="k">class</span> <span class="nc">thread_name_formatter_flag</span> <span class="o">:</span> <span class="k">public</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">custom_flag_formatter</span>
-    <span class="p">{</span>
-        <span class="kt">void</span> <span class="n">format</span><span class="p">(</span><span class="k">const</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">details</span><span class="o">::</span><span class="n">log_msg</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">tm</span><span class="o">&amp;</span> <span class="n">tm_time</span><span class="p">,</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">memory_buf_t</span><span class="o">&amp;</span> <span class="n">dest</span><span class="p">)</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">thread_ident</span><span class="p">;</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">impl</span><span class="o">::</span><span class="n">thread_names</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">());</span> <span class="n">it</span> <span class="o">!=</span> <span class="n">impl</span><span class="o">::</span><span class="n">thread_names</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
-            <span class="p">{</span>
-                <span class="n">thread_ident</span> <span class="o">=</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span>
-            <span class="p">{</span>
-                <span class="n">std</span><span class="o">::</span><span class="n">ostringstream</span> <span class="n">oss</span><span class="p">;</span>
-                <span class="n">oss</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">();</span>
-                <span class="n">thread_ident</span> <span class="o">=</span> <span class="n">oss</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
-
-                <span class="c1">//NOTE(algo-ryth-mix): this conversion is not portable</span>
-                <span class="c1">//thread_ident = std::to_string(legion::core::force_value_cast&lt;uint&gt;(std::this_thread::get_id()));</span>
-            <span class="p">}</span>
-
-            <span class="n">dest</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">thread_ident</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">thread_ident</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">thread_ident</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
-        <span class="p">}</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">custom_flag_formatter</span><span class="o">&gt;</span> <span class="n">clone</span><span class="p">()</span> <span class="k">const</span> <span class="k">override</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">details</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">thread_name_formatter_flag</span><span class="o">&gt;</span><span class="p">();</span>
-
-        <span class="p">}</span>
-    <span class="p">};</span>
-
-
-
-<span class="cp">#if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)</span>
-
-<span class="cp">#define LOG_FILE &quot;stdout&quot;</span>
-<span class="cp">#define logger impl::console_logger</span>
-
-<span class="cp">#else</span>
-
-<span class="cp">#define LOG_FILE &quot;logs/args-engine.log&quot;</span>
-<span class="cp">#define logger impl::file_logger</span>
-
-<span class="cp">#endif</span>
-
-    <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">auto</span> <span class="n">f</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">spdlog</span><span class="o">::</span><span class="n">pattern_formatter</span><span class="o">&gt;</span><span class="p">();</span>
-
-        <span class="n">f</span><span class="o">-&gt;</span><span class="n">add_flag</span><span class="o">&lt;</span><span class="n">thread_name_formatter_flag</span><span class="o">&gt;</span><span class="p">(</span><span class="sc">&#39;f&#39;</span><span class="p">);</span>
-        <span class="n">f</span><span class="o">-&gt;</span><span class="n">add_flag</span><span class="o">&lt;</span><span class="n">genesis_formatter_flag</span><span class="o">&gt;</span><span class="p">(</span><span class="sc">&#39;*&#39;</span><span class="p">);</span>
-        <span class="n">f</span><span class="o">-&gt;</span><span class="n">set_pattern</span><span class="p">(</span><span class="s">&quot;T+ %* [%^%=7l%$] [%=13!f] : %v&quot;</span><span class="p">);</span>
-
-        <span class="n">logger</span><span class="o">-&gt;</span><span class="n">set_formatter</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
-    <span class="p">}</span>
-
-    <span class="k">enum</span> <span class="k">class</span> <span class="nc">severity</span>
-    <span class="p">{</span>
-        <span class="n">trace</span><span class="p">,</span>   <span class="c1">// lowest severity</span>
-        <span class="n">debug</span><span class="p">,</span>
-        <span class="n">info</span><span class="p">,</span>
-        <span class="n">warn</span><span class="p">,</span>
-        <span class="n">error</span><span class="p">,</span>
-        <span class="n">fatal</span> <span class="c1">// highest severity</span>
-    <span class="p">};</span>
-
-    <span class="kr">inline</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">level</span><span class="o">::</span><span class="n">level_enum</span> <span class="n">args2spdlog</span><span class="p">(</span><span class="n">severity</span> <span class="n">s</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">switch</span> <span class="p">(</span><span class="n">s</span><span class="p">)</span>
-        <span class="p">{</span>
-        <span class="k">case</span> <span class="n">severity</span><span class="o">::</span><span class="nl">trace</span><span class="p">:</span><span class="k">return</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">level</span><span class="o">::</span><span class="n">trace</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">severity</span><span class="o">::</span><span class="nl">debug</span><span class="p">:</span><span class="k">return</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">level</span><span class="o">::</span><span class="n">debug</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">severity</span><span class="o">::</span><span class="nl">info</span><span class="p">:</span> <span class="k">return</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">level</span><span class="o">::</span><span class="n">info</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">severity</span><span class="o">::</span><span class="nl">warn</span><span class="p">:</span> <span class="k">return</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">level</span><span class="o">::</span><span class="n">warn</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">severity</span><span class="o">::</span><span class="nl">error</span><span class="p">:</span><span class="k">return</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">level</span><span class="o">::</span><span class="n">err</span><span class="p">;</span>
-        <span class="k">case</span> <span class="n">severity</span><span class="o">::</span><span class="nl">fatal</span><span class="p">:</span><span class="k">return</span> <span class="n">spdlog</span><span class="o">::</span><span class="n">level</span><span class="o">::</span><span class="n">critical</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">template</span> <span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">class</span> <span class="nc">FormatString</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">println</span><span class="p">(</span><span class="n">severity</span> <span class="n">s</span><span class="p">,</span> <span class="k">const</span> <span class="n">FormatString</span><span class="o">&amp;</span> <span class="n">format</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">a</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">logger</span><span class="o">-&gt;</span><span class="n">log</span><span class="p">(</span><span class="n">args2spdlog</span><span class="p">(</span><span class="n">s</span><span class="p">),</span><span class="n">format</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">)...);</span>
-    <span class="p">}</span>
-
-
-    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">filter</span><span class="p">(</span><span class="n">severity</span> <span class="n">level</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">logger</span><span class="o">-&gt;</span><span class="n">set_level</span><span class="p">(</span><span class="n">args2spdlog</span><span class="p">(</span><span class="n">level</span><span class="p">));</span>
-    <span class="p">}</span>
-
-    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">class</span> <span class="nc">FormatString</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">trace</span><span class="p">(</span><span class="k">const</span> <span class="n">FormatString</span><span class="o">&amp;</span> <span class="n">format</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">a</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="n">severity</span><span class="o">::</span><span class="n">trace</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">)...);</span>
-    <span class="p">}</span>
-
-    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">class</span> <span class="nc">FormatString</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">debug</span><span class="p">(</span><span class="k">const</span> <span class="n">FormatString</span><span class="o">&amp;</span> <span class="n">format</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">a</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="n">severity</span><span class="o">::</span><span class="n">debug</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">)...);</span>
-    <span class="p">}</span>
-
-    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">class</span> <span class="nc">FormatString</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">info</span><span class="p">(</span><span class="k">const</span> <span class="n">FormatString</span><span class="o">&amp;</span> <span class="n">format</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">a</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="n">severity</span><span class="o">::</span><span class="n">info</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">)...);</span>
-    <span class="p">}</span>
-
-    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">class</span> <span class="nc">FormatString</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">warn</span><span class="p">(</span><span class="k">const</span> <span class="n">FormatString</span><span class="o">&amp;</span> <span class="n">format</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">a</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="n">severity</span><span class="o">::</span><span class="n">warn</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">)...);</span>
-    <span class="p">}</span>
-
-    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">class</span> <span class="nc">FormatString</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">error</span><span class="p">(</span><span class="k">const</span> <span class="n">FormatString</span><span class="o">&amp;</span> <span class="n">format</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">a</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="n">severity</span><span class="o">::</span><span class="n">error</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">)...);</span>
-    <span class="p">}</span>
-
-    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Args</span><span class="p">,</span> <span class="k">class</span> <span class="nc">FormatString</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">fatal</span><span class="p">(</span><span class="k">const</span> <span class="n">FormatString</span><span class="o">&amp;</span> <span class="n">format</span><span class="p">,</span> <span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="n">a</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="n">severity</span><span class="o">::</span><span class="n">fatal</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">)...);</span>
-    <span class="p">}</span>
-
-<span class="p">}</span>
-<span class="cp">#undef logger</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>#pragma once
+
+#define SPDLOG_HEADER_ONLY
+#include &lt;sstream&gt;
+
+#if !defined(DOXY_EXCLUDE)
+#include &lt;spdlog/spdlog.h&gt;
+#include &lt;spdlog/sinks/stdout_color_sinks.h&gt;
+#include &lt;spdlog/sinks/rotating_file_sink.h&gt;
+#include &lt;spdlog/pattern_formatter.h&gt;
+#endif
+
+#include &lt;core/platform/platform.hpp&gt;
+#include &lt;thread&gt;
+#include &lt;core/math/math.hpp&gt;
+#include &lt;core/common/exception.hpp&gt;
+
+#if !defined(DOXY_EXCLUDE)
+namespace fmt
+{
+    template &lt;&gt;
+    struct formatter&lt;std::thread::id&gt;
+    {
+
+        constexpr auto parse(format_parse_context&amp; ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+            return it++;
+        }
+
+        template &lt;typename FormatContext&gt;
+        auto format(const std::thread::id&amp; p, FormatContext&amp; ctx) {
+            std::ostringstream oss;
+            oss &lt;&lt; p;
+            return format_to(ctx.out(), &quot;{}&quot;, oss.str());
+        }
+
+    };
+
+    template &lt;&gt;
+    struct formatter&lt;legion::core::exception&gt;
+    {
+
+        constexpr auto parse(format_parse_context&amp; ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+            return it++;
+        }
+
+        template &lt;typename FormatContext&gt;
+        auto format(const legion::core::exception&amp; error, FormatContext&amp; ctx)
+        {
+            return format_to(ctx.out(), &quot;[{}({}) T {}(...)] {}&quot;, error.file(), error.line(), error.func(), error.what());
+        }
+    };
+
+    template &lt;&gt;
+    struct formatter&lt;legion::core::fs_error&gt;
+    {
+
+        constexpr auto parse(format_parse_context&amp; ctx)
+        {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+            return it++;
+        }
+
+        template &lt;typename FormatContext&gt;
+        auto format(const legion::core::fs_error&amp; error, FormatContext&amp; ctx)
+        {
+            return format_to(ctx.out(), &quot;[{}({}) T {}(...)] {}&quot;, error.file(), error.line(), error.func(), error.what());
+        }
+    };
+
+    template &lt;&gt;
+    struct fmt::formatter&lt;legion::core::math::vec2&gt; {
+        // Presentation format: &#39;f&#39; - fixed, &#39;e&#39; - exponential.
+        char presentation = &#39;f&#39;;
+
+        // Parses format specifications of the form [&#39;f&#39; | &#39;e&#39;].
+        constexpr auto parse(format_parse_context&amp; ctx) {
+            // auto parse(format_parse_context &amp;ctx) -&gt; decltype(ctx.begin()) // c++11
+              // [ctx.begin(), ctx.end()) is a character range that contains a part of
+              // the format string starting from the format specifications to be parsed,
+              // e.g. in
+              //
+              //   fmt::format(&quot;{:f} - point of interest&quot;, point{1, 2});
+              //
+              // the range will contain &quot;f} - point of interest&quot;. The formatter should
+              // parse specifiers until &#39;}&#39; or the end of the range. In this example
+              // the formatter should parse the &#39;f&#39; specifier and return an iterator
+              // pointing to &#39;}&#39;.
+
+              // Parse the presentation format and store it in the formatter:
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end &amp;&amp; (*it == &#39;f&#39; || *it == &#39;e&#39;)) presentation = *it++;
+
+            // Check if reached the end of the range:
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+
+            // Return an iterator past the end of the parsed range:
+            return it;
+        }
+
+        // Formats the point p using the parsed format specification (presentation)
+        // stored in this formatter.
+        template &lt;typename FormatContext&gt;
+        auto format(const legion::core::math::vec2&amp; p, FormatContext&amp; ctx) {
+            // auto format(const point &amp;p, FormatContext &amp;ctx) -&gt; decltype(ctx.out()) // c++11
+              // ctx.out() is an output iterator to write to.
+            return format_to(
+                ctx.out(),
+                presentation == &#39;f&#39; ? &quot;({:.1f}, {:.1f})&quot; : &quot;({:.1e}, {:.1e})&quot;,
+                p.x, p.y);
+        }
+    };
+
+    template &lt;&gt;
+    struct fmt::formatter&lt;legion::core::math::ivec2&gt; {
+
+        constexpr auto parse(format_parse_context&amp; ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+            return it++;
+        }
+
+        template &lt;typename FormatContext&gt;
+        auto format(const legion::core::math::ivec2&amp; p, FormatContext&amp; ctx) {
+            return format_to(
+                ctx.out(),
+                &quot;({}, {})&quot;,
+                p.x, p.y);
+        }
+    };
+
+    template &lt;&gt;
+    struct fmt::formatter&lt;legion::core::math::vec3&gt; {
+        char presentation = &#39;f&#39;;
+
+        constexpr auto parse(format_parse_context&amp; ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end &amp;&amp; (*it == &#39;f&#39; || *it == &#39;e&#39;)) presentation = *it++;
+
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+
+            return it;
+        }
+
+        template &lt;typename FormatContext&gt;
+        auto format(const legion::core::math::vec3&amp; p, FormatContext&amp; ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == &#39;f&#39; ? &quot;({:.1f}, {:.1f}, {:.1f})&quot; : &quot;({:.1e}, {:.1e}, {:.1e})&quot;,
+                p.x, p.y, p.z);
+        }
+    };
+
+    template &lt;&gt;
+    struct fmt::formatter&lt;legion::core::math::vec4&gt; {
+        char presentation = &#39;f&#39;;
+
+        constexpr auto parse(format_parse_context&amp; ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end &amp;&amp; (*it == &#39;f&#39; || *it == &#39;e&#39;)) presentation = *it++;
+
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+
+            return it;
+        }
+
+        template &lt;typename FormatContext&gt;
+        auto format(const legion::core::math::vec4&amp; p, FormatContext&amp; ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == &#39;f&#39; ? &quot;({:.1f}, {:.1f}, {:.1f}, {:.1f})&quot; : &quot;({:.1e}, {:.1e}, {:.1e}, {:.1e})&quot;,
+                p.x, p.y, p.z, p.w);
+        }
+    };
+
+    template &lt;&gt;
+    struct fmt::formatter&lt;legion::core::math::color&gt; {
+        char presentation = &#39;f&#39;;
+
+        constexpr auto parse(format_parse_context&amp; ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end &amp;&amp; (*it == &#39;f&#39; || *it == &#39;e&#39;)) presentation = *it++;
+
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+
+            return it;
+        }
+
+        template &lt;typename FormatContext&gt;
+        auto format(const legion::core::math::color&amp; p, FormatContext&amp; ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == &#39;f&#39; ? &quot;({:.1f}, {:.1f}, {:.1f}, {:.1f})&quot; : &quot;({:.1e}, {:.1e}, {:.1e}, {:.1e})&quot;,
+                p.r, p.g, p.b, p.a);
+        }
+    };
+
+    template &lt;&gt;
+    struct fmt::formatter&lt;legion::core::math::quat&gt; {
+        char presentation = &#39;f&#39;;
+
+        constexpr auto parse(format_parse_context&amp; ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end &amp;&amp; (*it == &#39;f&#39; || *it == &#39;e&#39;)) presentation = *it++;
+
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+
+            return it;
+        }
+
+        template &lt;typename FormatContext&gt;
+        auto format(const legion::core::math::quat&amp; p, FormatContext&amp; ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == &#39;f&#39; ? &quot;(({:.1f}, {:.1f}, {:.1f}),r: {:.1f})&quot; : &quot;(({:.1e}, {:.1e}, {:.1e}),r: {:.1e})&quot;,
+                p.x, p.y, p.z, p.w);
+        }
+    };
+
+}
+#endif
+
+
+namespace legion::core::log
+{
+    struct impl {
+        static cstring log_file;
+        static std::shared_ptr&lt;spdlog::logger&gt; logger;
+        static std::shared_ptr&lt;spdlog::logger&gt; file_logger;
+        static std::shared_ptr&lt;spdlog::logger&gt; console_logger;
+        static std::unordered_map&lt;std::thread::id, std::string&gt; thread_names;
+    };
+
+
+    const static inline std::chrono::time_point&lt;std::chrono::high_resolution_clock&gt; genesis = std::chrono::high_resolution_clock::now();
+
+    class genesis_formatter_flag : public spdlog::custom_flag_formatter
+    {
+    public:
+        void format(const spdlog::details::log_msg&amp; msg, const std::tm&amp; tm_time, spdlog::memory_buf_t&amp; dest) override
+        {
+            //get seconds since engine start
+            const auto now = std::chrono::high_resolution_clock::now();
+            const auto time_since_genesis = now - genesis;
+            const auto seconds = std::chrono::duration_cast&lt;std::chrono::duration&lt;float, std::ratio&lt;1, 1&gt;&gt;&gt;(time_since_genesis).count();
+
+            //convert to &quot;--s.ms---&quot;
+            const auto str = std::to_string(seconds);
+
+            //append to data
+            dest.append(str.data(), str.data() + str.size());
+
+        }
+
+        //generates a new formatter flag
+        L_NODISCARD std::unique_ptr&lt;custom_flag_formatter&gt; clone() const override
+        {
+            return spdlog::details::make_unique&lt;genesis_formatter_flag&gt;();
+        }
+    };
+
+    class thread_name_formatter_flag : public spdlog::custom_flag_formatter
+    {
+        void format(const spdlog::details::log_msg&amp; msg, const std::tm&amp; tm_time, spdlog::memory_buf_t&amp; dest) override
+        {
+            std::string thread_ident;
+
+            if (const auto it = impl::thread_names.find(std::this_thread::get_id()); it != impl::thread_names.end())
+            {
+                thread_ident = it-&gt;second;
+            }
+            else
+            {
+                std::ostringstream oss;
+                oss &lt;&lt; std::this_thread::get_id();
+                thread_ident = oss.str();
+
+                //NOTE(algo-ryth-mix): this conversion is not portable
+                //thread_ident = std::to_string(legion::core::force_value_cast&lt;uint&gt;(std::this_thread::get_id()));
+            }
+
+            dest.append(thread_ident.data(), thread_ident.data() + thread_ident.size());
+        }
+        std::unique_ptr&lt;custom_flag_formatter&gt; clone() const override
+        {
+            return spdlog::details::make_unique&lt;thread_name_formatter_flag&gt;();
+
+        }
+    };
+
+
+#define logger impl::logger
+
+
+    inline void setup()
+    {
+#if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
+        logger = impl::console_logger;
+#else
+        impl::file_logger = spdlog::rotating_logger_mt(impl::log_file, impl::log_file, 1&#39;048&#39;576, 5);
+        logger = impl::file_logger;
+#endif
+        auto f = std::make_unique&lt;spdlog::pattern_formatter&gt;();
+
+        f-&gt;add_flag&lt;thread_name_formatter_flag&gt;(&#39;f&#39;);
+        f-&gt;add_flag&lt;genesis_formatter_flag&gt;(&#39;*&#39;);
+        f-&gt;set_pattern(&quot;T+ %* [%^%=7l%$] [%=13!f] : %v&quot;);
+
+        logger-&gt;set_formatter(std::move(f));
+    }
+
+    enum class severity
+    {
+        trace,   // lowest severity
+        debug,
+        info,
+        warn,
+        error,
+        fatal // highest severity
+    };
+
+    inline spdlog::level::level_enum args2spdlog(severity s)
+    {
+        switch (s)
+        {
+        case severity::trace:return spdlog::level::trace;
+        case severity::debug:return spdlog::level::debug;
+        case severity::info: return spdlog::level::info;
+        case severity::warn: return spdlog::level::warn;
+        case severity::error:return spdlog::level::err;
+        case severity::fatal:return spdlog::level::critical;
+        }
+    }
+
+    template &lt;class... Args, class FormatString&gt;
+    void println(severity s, const FormatString&amp; format, Args&amp;&amp;... a)
+    {
+        logger-&gt;log(args2spdlog(s),format,std::forward&lt;Args&gt;(a)...);
+    }
+
+
+    inline void filter(severity level)
+    {
+        logger-&gt;set_level(args2spdlog(level));
+    }
+
+    template&lt;class... Args, class FormatString&gt;
+    void trace(const FormatString&amp; format, Args&amp;&amp;... a)
+    {
+        println(severity::trace, format, std::forward&lt;Args&gt;(a)...);
+    }
+
+    template&lt;class... Args, class FormatString&gt;
+    void debug(const FormatString&amp; format, Args&amp;&amp;...a)
+    {
+        println(severity::debug, format, std::forward&lt;Args&gt;(a)...);
+    }
+
+    template&lt;class... Args, class FormatString&gt;
+    void info(const FormatString&amp; format, Args&amp;&amp;...a)
+    {
+        println(severity::info, format, std::forward&lt;Args&gt;(a)...);
+    }
+
+    template&lt;class... Args, class FormatString&gt;
+    void warn(const FormatString&amp; format, Args&amp;&amp;...a)
+    {
+        println(severity::warn, format, std::forward&lt;Args&gt;(a)...);
+    }
+
+    template&lt;class... Args, class FormatString&gt;
+    void error(const FormatString&amp; format, Args&amp;&amp;...a)
+    {
+        println(severity::error, format, std::forward&lt;Args&gt;(a)...);
+    }
+
+    template&lt;class... Args, class FormatString&gt;
+    void fatal(const FormatString&amp; format, Args&amp;&amp;...a)
+    {
+        println(severity::fatal, format, std::forward&lt;Args&gt;(a)...);
+    }
+
+}
+#undef logger
 </pre></div>
 </div>
 </div>

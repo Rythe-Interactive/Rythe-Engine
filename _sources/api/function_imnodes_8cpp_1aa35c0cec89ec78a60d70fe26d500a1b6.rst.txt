@@ -1,0 +1,13 @@
+.. _exhale_function_imnodes_8cpp_1aa35c0cec89ec78a60d70fe26d500a1b6:
+
+Function imgui::nodes::SaveCurrentEditorStateToIniString
+========================================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: imgui::nodes::SaveCurrentEditorStateToIniString(size_t *const)

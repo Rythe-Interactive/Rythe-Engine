@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1a5285257b8b97a192295521df12094982:
+
+Variable bottom_right
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: bottom_right

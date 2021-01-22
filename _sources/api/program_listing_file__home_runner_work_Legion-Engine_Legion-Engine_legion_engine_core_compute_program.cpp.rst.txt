@@ -16,12 +16,11 @@ Program Listing for File program.cpp
    #include <core/filesystem/resource.hpp>
    #include <core/compute/context.hpp>
    
-   
    namespace legion::core::compute {
    
    
        Program::Program(cl_context ctx, cl_device_id device, filesystem::basic_resource container /* , bool source_is_il */) {
-   
+           OPTICK_EVENT();
            //bind command queue creation to surrogate
            this->make_command_queue = std::function([ctx, device]() -> cl_command_queue
                {
@@ -72,7 +71,7 @@ Program Listing for File program.cpp
            //check if we are running in debug and adjust build command accordingly
            if constexpr (LEGION_CONFIGURATION == LEGION_DEBUG_VALUE) {
                //DEBUG
-               ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DLEGION_LIBRARY -DDEBUG", nullptr, nullptr);
+               ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DLEGION_LIBRARY -DDEBUG ", nullptr, nullptr);
            } else {
                //NDEBUG
                ret = clBuildProgram(m_program, 1, &device, "-cl-std=CL2.0 -cl-kernel-arg-info -DLEGION_LIBRARY -DNDEBUG", nullptr, nullptr);
@@ -82,6 +81,13 @@ Program Listing for File program.cpp
            if (ret != CL_SUCCESS)
            {
                log::error("clBuildProgram failed");
+   
+               size_t length;
+               char buffer[8192*4];
+   
+               clGetProgramBuildInfo(m_program,device,CL_PROGRAM_BUILD_LOG,sizeof(buffer),buffer,&length);
+               buffer[length] = NULL;
+               log::warn("BUILD LOG:\n{}",buffer);
            }
    
            /*}*/
@@ -89,6 +95,7 @@ Program Listing for File program.cpp
    
        Kernel Program::kernelContext(const std::string& name)
        {
+           OPTICK_EVENT();
            // check if we already have the kernel and create a context from it if we do, otherwise initialize it
    
            if (const auto it = m_kernelCache.find(name); it != m_kernelCache.end())
@@ -105,6 +112,7 @@ Program Listing for File program.cpp
    
        cl_kernel Program::prewarm(const std::string& name)
        {
+           OPTICK_EVENT();
            // create the kernel and push it into the cache
            // do some error checking along the way
    
@@ -122,6 +130,7 @@ Program Listing for File program.cpp
    
        void Program::from_resource(Program* value, const filesystem::basic_resource& resource)
        {
+           OPTICK_EVENT();
            *value = Context::createProgram(resource);
        }
    }

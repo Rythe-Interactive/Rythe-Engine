@@ -1,0 +1,13 @@
+.. _exhale_define__im_guizmo_8cpp_1adf4d73301961430d50d7edd96f92ce38:
+
+Define IMGUI_DEFINE_MATH_OPERATORS
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_ImGuizmo.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: IMGUI_DEFINE_MATH_OPERATORS

@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__draw_8cpp_1a37ec4d14918346d3451d4f44f24d4710:
+
+Define STBTT_ifloor
+===================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STBTT_ifloor

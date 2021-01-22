@@ -17,14 +17,21 @@ Classes
 -------
 
 
-- :ref:`exhale_struct_structstd_1_1hash_3_01args_1_1core_1_1detail_1_1vertex__hash_01_4`
+- :ref:`exhale_struct_structstd_1_1tuple__element_3_01_i_00_01legion_1_1core_1_1ecs_1_1archetype_3_01_args_8_8_8_01_4_01_4`
 
-- :ref:`exhale_struct_structstd_1_1hash_3_01args_1_1core_1_1ecs_1_1component__handle_3_01component__type_01_4_01_4`
+- :ref:`exhale_struct_structstd_1_1tuple__size_3_01const_01legion_1_1core_1_1ecs_1_1archetype_3_01_types_8_8_8_01_4_01_4`
 
-- :ref:`exhale_struct_structstd_1_1hash_3_01args_1_1core_1_1math_1_1color_01_4`
+- :ref:`exhale_struct_structstd_1_1tuple__size_3_01const_01volatile_01legion_1_1core_1_1ecs_1_1archetype_3_01_types_8_8_8_01_4_01_4`
 
-- :ref:`exhale_struct_structstd_1_1hash_3_01args_1_1debug_1_1debug__line_01_4`
+- :ref:`exhale_struct_structstd_1_1tuple__size_3_01legion_1_1core_1_1ecs_1_1archetype_3_01_types_8_8_8_01_4_01_4`
 
-- :ref:`exhale_struct_structstd_1_1hash_3_01args_1_1rendering_1_1material__handle_01_4`
+- :ref:`exhale_struct_structstd_1_1tuple__size_3_01volatile_01legion_1_1core_1_1ecs_1_1archetype_3_01_types_8_8_8_01_4_01_4`
 
-- :ref:`exhale_struct_structstd_1_1hash_3_01args_1_1rendering_1_1model__handle_01_4`
+
+Functions
+---------
+
+
+- :ref:`exhale_function_archetype_8hpp_1a9fa919b127dd81db4650bb126ebd1e03`
+
+- :ref:`exhale_function_archetype_8hpp_1a259309ff52dd5e0a470382efb0592dd2`

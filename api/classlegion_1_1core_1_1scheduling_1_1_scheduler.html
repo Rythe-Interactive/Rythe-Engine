@@ -18,7 +18,7 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Class Scheduler::runnable" href="class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.html" />
+    <link rel="next" title="Class SerializationUtil" href="classlegion_1_1core_1_1serialization_1_1_serialization_util.html" />
     <link rel="prev" title="Class ProcessChain" href="classlegion_1_1core_1_1scheduling_1_1_process_chain.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -36,7 +36,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.html" title="Class Scheduler::runnable"
+          <a href="classlegion_1_1core_1_1serialization_1_1_serialization_util.html" title="Class SerializationUtil"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="classlegion_1_1core_1_1scheduling_1_1_process_chain.html" title="Class ProcessChain"
@@ -62,7 +62,6 @@
 <div class="section" id="nested-types">
 <h3>Nested Types<a class="headerlink" href="#nested-types" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><a class="reference internal" href="class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.html#exhale-class-structlegion-1-1core-1-1scheduling-1-1-scheduler-1-1runnable"><span class="std std-ref">Class Scheduler::runnable</span></a></p></li>
 <li><p><a class="reference internal" href="structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1thread__error.html#exhale-struct-structlegion-1-1core-1-1scheduling-1-1-scheduler-1-1thread-error"><span class="std std-ref">Struct Scheduler::thread_error</span></a></p></li>
 </ul>
 </div>
@@ -135,13 +134,13 @@
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core10scheduling9Scheduler11sendCommandENSt6thread2idE8delegateIFvPvEEPv">
-<span id="_CPPv3N6legion4core10scheduling9Scheduler11sendCommandENSt6thread2idE8delegateIFvPvEEPv"></span><span id="_CPPv2N6legion4core10scheduling9Scheduler11sendCommandENSt6thread2idE8delegateIFvPvEEPv"></span><span class="target" id="classlegion_1_1core_1_1scheduling_1_1_scheduler_1aaec0574dbcd4c3010c6553142e2a5943"></span>void <code class="sig-name descname">sendCommand</code><span class="sig-paren">(</span>std::thread::id <em>id</em>, <a class="reference internal" href="classlegion_1_1core_1_1delegate.html#_CPPv4I0EN6legion4core8delegateE" title="legion::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span>void*<span class="sig-paren">)</span>&gt; <em>command</em>, void *<em>parameter</em> = nullptr, <span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core10scheduling9Scheduler11sendCommandENSt6thread2idE8delegateIFvPvEEPv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN6legion4core10scheduling9Scheduler11sendCommandEDaNSt6thread2idERK4Func">
+<span id="_CPPv3I0EN6legion4core10scheduling9Scheduler11sendCommandENSt6thread2idERK4Func"></span><span id="_CPPv2I0EN6legion4core10scheduling9Scheduler11sendCommandENSt6thread2idERK4Func"></span>template&lt;typename <code class="sig-name descname">Func</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1scheduling_1_1_scheduler_1af10d9b62fda562be9f1d701d09ad5b25"></span>auto <code class="sig-name descname">sendCommand</code><span class="sig-paren">(</span>std::thread::id <em>id</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core10scheduling9Scheduler11sendCommandEDaNSt6thread2idERK4Func" title="legion::core::scheduling::Scheduler::sendCommand::Func">Func</a> &amp;<em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core10scheduling9Scheduler11sendCommandEDaNSt6thread2idERK4Func" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core10scheduling9Scheduler8queueJobE8delegateIFvPvEEPv">
-<span id="_CPPv3N6legion4core10scheduling9Scheduler8queueJobE8delegateIFvPvEEPv"></span><span id="_CPPv2N6legion4core10scheduling9Scheduler8queueJobE8delegateIFvPvEEPv"></span><span class="target" id="classlegion_1_1core_1_1scheduling_1_1_scheduler_1ae858410f6158cbc88db8ca5e0e1ef701"></span>void <code class="sig-name descname">queueJob</code><span class="sig-paren">(</span><a class="reference internal" href="classlegion_1_1core_1_1delegate.html#_CPPv4I0EN6legion4core8delegateE" title="legion::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span>void*<span class="sig-paren">)</span>&gt; <em>job</em>, void *<em>parameter</em>, <span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core10scheduling9Scheduler8queueJobE8delegateIFvPvEEPv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4I0EN6legion4core10scheduling9Scheduler9queueJobsEDa9size_typeRK4Func">
+<span id="_CPPv3I0EN6legion4core10scheduling9Scheduler9queueJobsE9size_typeRK4Func"></span><span id="_CPPv2I0EN6legion4core10scheduling9Scheduler9queueJobsE9size_typeRK4Func"></span>template&lt;typename <code class="sig-name descname">Func</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1scheduling_1_1_scheduler_1a7836fe8ce46e7fe746f9581fe41f2075"></span>auto <code class="sig-name descname">queueJobs</code><span class="sig-paren">(</span><a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <em>count</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0EN6legion4core10scheduling9Scheduler9queueJobsEDa9size_typeRK4Func" title="legion::core::scheduling::Scheduler::queueJobs::Func">Func</a> &amp;<em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core10scheduling9Scheduler9queueJobsEDa9size_typeRK4Func" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
@@ -264,43 +263,14 @@
 </dd></dl>
 
 </div>
-<dl class="cpp class">
-<dt id="_CPPv4N6legion4core10scheduling9Scheduler8runnableE">
-<span id="_CPPv3N6legion4core10scheduling9Scheduler8runnableE"></span><span id="_CPPv2N6legion4core10scheduling9Scheduler8runnableE"></span><span id="legion::core::scheduling::Scheduler::runnable"></span><span class="target" id="structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable"></span><em class="property">class </em><code class="sig-name descname">runnable</code><br /></dt>
-<dd><p>A data structure encapsulating commands and jobs sent to any thread and it’s parameters. </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="cpp function">
-<dt id="_CPPv4N6legion4core10scheduling9Scheduler8runnable8runnableEv">
-<span id="_CPPv3N6legion4core10scheduling9Scheduler8runnable8runnableEv"></span><span id="_CPPv2N6legion4core10scheduling9Scheduler8runnable8runnableEv"></span><span id="legion::core::scheduling::Scheduler::runnable::runnable"></span><span class="target" id="structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1a12d92dc6b9a9717220309c65d0446902"></span><code class="sig-name descname">runnable</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4N6legion4core10scheduling9Scheduler8runnable8runnableERK8delegateIFvPvEEPv">
-<span id="_CPPv3N6legion4core10scheduling9Scheduler8runnable8runnableERK8delegateIFvPvEEPv"></span><span id="_CPPv2N6legion4core10scheduling9Scheduler8runnable8runnableERK8delegateIFvPvEEPv"></span><span class="target" id="structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1ac1068c88289e271a01d0faf2c194887e"></span><code class="sig-name descname">runnable</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="classlegion_1_1core_1_1delegate.html#_CPPv4I0EN6legion4core8delegateE" title="legion::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span>void*<span class="sig-paren">)</span>&gt; &amp;<em>func</em>, void *<em>param</em>, <span class="sig-paren">)</span><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt id="_CPPv4N6legion4core10scheduling9Scheduler8runnableclEv">
-<span id="_CPPv3N6legion4core10scheduling9Scheduler8runnableclEv"></span><span id="_CPPv2N6legion4core10scheduling9Scheduler8runnableclEv"></span><span id="legion::core::scheduling::Scheduler::runnable::call-operator__void"></span><span class="target" id="structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1ab0db784fd943588fd6a42637f3b688ff"></span>void <code class="sig-name descname">operator()</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><br /></dt>
-<dd></dd></dl>
+<p class="breathe-sectiondef-title rubric">Friends</p>
+<dl class="friendclass">
+<dt>
+<em class="property">friend struct</em> legion::core::async::job_pool_base</dt>
+</dl>
 
 </div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Members</p>
-<dl class="cpp var">
-<dt id="_CPPv4N6legion4core10scheduling9Scheduler8runnable4funcE">
-<span id="_CPPv3N6legion4core10scheduling9Scheduler8runnable4funcE"></span><span id="_CPPv2N6legion4core10scheduling9Scheduler8runnable4funcE"></span><span class="target" id="structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1a8310f03cf384a9eb6d320ce222b1e700"></span><a class="reference internal" href="classlegion_1_1core_1_1delegate.html#_CPPv4I0EN6legion4core8delegateE" title="legion::core::delegate">delegate</a>&lt;void<span class="sig-paren">(</span>void*<span class="sig-paren">)</span>&gt; <code class="sig-name descname">func</code><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp var">
-<dt id="_CPPv4N6legion4core10scheduling9Scheduler8runnable5paramE">
-<span id="_CPPv3N6legion4core10scheduling9Scheduler8runnable5paramE"></span><span id="_CPPv2N6legion4core10scheduling9Scheduler8runnable5paramE"></span><span id="legion::core::scheduling::Scheduler::runnable::param__voidP"></span><span class="target" id="structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable_1a67a075b1cd18ed86efc38bf71505691f"></span>void *<code class="sig-name descname">param</code><br /></dt>
-<dd></dd></dl>
-
-</div>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -329,7 +299,7 @@
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
       <li>Previous: <a href="classlegion_1_1core_1_1scheduling_1_1_process_chain.html" title="previous chapter">Class ProcessChain</a></li>
-      <li>Next: <a href="class_structlegion_1_1core_1_1scheduling_1_1_scheduler_1_1runnable.html" title="next chapter">Class Scheduler::runnable</a></li>
+      <li>Next: <a href="classlegion_1_1core_1_1serialization_1_1_serialization_util.html" title="next chapter">Class SerializationUtil</a></li>
   </ul></li>
   </ul></li>
 </ul>

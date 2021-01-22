@@ -1,0 +1,144 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_postprocessingstage.cpp:
+
+Program Listing for File postprocessingstage.cpp
+================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_postprocessingstage.cpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/default/stages/postprocessingstage.cpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
+   
+   namespace legion::rendering
+   {
+   
+       std::multimap<priority_type, std::unique_ptr<PostProcessingEffectBase>, std::greater<>> PostProcessingStage::m_effects;
+   
+   
+       void PostProcessingStage::setup(app::window& context)
+       {
+           OPTICK_EVENT();
+           using namespace legion::core::fs::literals;
+   
+           app::context_guard guard(context);
+   
+           m_screenQuad = screen_quad::generate();
+   
+           m_drawFBO = framebuffer(GL_FRAMEBUFFER);
+   
+           m_swapTexture = TextureCache::create_texture("color_swap_image", math::ivec2(1, 1), {
+           texture_type::two_dimensional, channel_format::float_hdr, texture_format::rgba_hdr,
+           texture_components::rgb, true, true, texture_mipmap::linear, texture_mipmap::linear,
+           texture_wrap::repeat, texture_wrap::repeat, texture_wrap::repeat });
+   
+           m_screenShader = ShaderCache::create_shader("screen shader", "engine://shaders/screenshader.shs"_view);
+       }
+   
+       void PostProcessingStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
+       {
+           OPTICK_EVENT();
+           static id_type mainId = nameHash("main");
+   
+           auto fbo = getFramebuffer(mainId);
+           if (!fbo)
+           {
+               log::error("Main frame buffer is missing.");
+               abort();
+               return;
+           }
+   
+           app::context_guard guard(context);
+           if (!guard.contextIsValid())
+           {
+               abort();
+               return;
+           }
+   
+           auto [valid, message] = fbo->verify();
+           if (!valid)
+           {
+               log::error("Main frame buffer isn't complete: {}", message);
+               abort();
+               return;
+           }
+   
+           auto colorAttachment = fbo->getAttachment(FRAGMENT_ATTACHMENT);
+           if (std::holds_alternative<std::monostate>(colorAttachment))
+           {
+               log::error("Color attachment was not found.");
+               return;
+           }
+           if (!std::holds_alternative<texture_handle>(colorAttachment))
+           {
+               log::error("Color attachment needs to be a texture to be able to use it for post processing.");
+               return;
+           }
+   
+           texture_handle textures[] = { std::get<texture_handle>(colorAttachment), m_swapTexture };
+   
+           math::ivec2 attachmentSize = textures[0].get_texture().size();
+           auto tex = m_swapTexture.get_texture();
+           if (attachmentSize != tex.size())
+               tex.resize(attachmentSize);
+   
+           int index = 0;
+   
+           bool stencil = false;
+           auto depthAttachment = fbo->getAttachment(GL_DEPTH);
+           if (std::holds_alternative<std::monostate>(depthAttachment))
+           {
+               stencil = true;
+               depthAttachment = fbo->getAttachment(GL_DEPTH_STENCIL);
+           }
+   
+           texture_handle depthTexture = invalid_texture_handle;
+           if (std::holds_alternative<texture_handle>(depthAttachment))
+               depthTexture = std::get<texture_handle>(depthAttachment);
+           glDisable(GL_DEPTH_TEST);
+   
+           fbo->bind();
+           uint attachment = FRAGMENT_ATTACHMENT;
+           glDrawBuffers(1, &attachment);
+           fbo->release();
+   
+           for (auto& [_, effect] : m_effects)
+           {
+               OPTICK_EVENT("Rendering effect");
+               OPTICK_TAG("Effect", effect->getName().c_str());
+   
+               if (!effect->isInitialized()) effect->init(context);
+               for (auto& pass : effect->renderPasses)
+               {
+                   OPTICK_EVENT("Effect pass");
+                   fbo->attach(textures[!index], FRAGMENT_ATTACHMENT);
+                   
+                   pass.invoke(*fbo, textures[index], depthTexture, deltaTime);
+                                   
+                   index = !index;
+               }
+           }
+   
+           if (index)
+           {
+               fbo->attach(textures[0], FRAGMENT_ATTACHMENT);
+               fbo->bind();
+               m_screenShader.bind();
+               m_screenShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(textures[1]);
+               m_screenQuad.render();
+               fbo->release();
+           }
+   
+           rendering::shader::release();
+   
+           glEnable(GL_DEPTH_TEST);
+       }
+   
+       priority_type PostProcessingStage::priority()
+       {
+           return post_fx_priority;
+       }
+   
+   }

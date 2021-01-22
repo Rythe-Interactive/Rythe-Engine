@@ -1,0 +1,13 @@
+.. _exhale_define_imgui__draw_8cpp_1aa595f4d7f5dca6ca04e5b1648e84f0d6:
+
+Define IM_NORMALIZE2F_OVER_ZERO
+===============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui_draw.cpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: IM_NORMALIZE2F_OVER_ZERO

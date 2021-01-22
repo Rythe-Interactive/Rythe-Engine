@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a4192614e5b95b319b523efde1a92a9a4:
+
+Function CalcWindowContentSize
+==============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: CalcWindowContentSize(ImGuiWindow *)

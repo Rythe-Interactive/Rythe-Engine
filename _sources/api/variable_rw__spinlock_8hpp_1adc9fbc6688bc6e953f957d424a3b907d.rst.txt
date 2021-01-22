@@ -1,0 +1,13 @@
+.. _exhale_variable_rw__spinlock_8hpp_1adc9fbc6688bc6e953f957d424a3b907d:
+
+Variable legion::core::async::lock_state_write
+==============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::async::lock_state_write

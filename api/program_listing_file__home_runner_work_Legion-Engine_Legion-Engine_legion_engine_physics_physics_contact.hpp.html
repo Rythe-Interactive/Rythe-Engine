@@ -183,6 +183,9 @@
 
             <span class="kt">float</span> <span class="n">minJV</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">JVx</span> <span class="o">+</span> <span class="n">JVy</span> <span class="o">+</span> <span class="n">JVz</span> <span class="o">+</span> <span class="n">JVw</span><span class="p">);</span>
 
+
+            <span class="c1">//log::debug(&quot;CALCULATE&quot;);</span>
+
             <span class="c1">//-------------------------- Positional Constraint ----------------------------------//</span>
 
             <span class="c1">//resolve the position violation by adding it into the lambda</span>
@@ -200,14 +203,21 @@
 
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">minWaCrossRa</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="o">-</span><span class="n">wa</span><span class="p">,</span> <span class="n">Ra</span><span class="p">);</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">WbCrossRb</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
+
             <span class="c1">//restitution is based on the relative velocities of the 2 rigidbodies</span>
-            <span class="kt">float</span> <span class="n">restitutionConstraint</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">((</span><span class="o">-</span><span class="n">va</span> <span class="o">+</span> <span class="n">minWaCrossRa</span> <span class="o">+</span> <span class="n">vb</span> <span class="o">+</span> <span class="n">WbCrossRb</span><span class="p">),</span><span class="n">collisionNormal</span><span class="p">)</span> <span class="o">*</span> <span class="n">restCoeff</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">dotResult</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">((</span><span class="o">-</span><span class="n">va</span> <span class="o">+</span> <span class="n">minWaCrossRa</span> <span class="o">+</span> <span class="n">vb</span> <span class="o">+</span> <span class="n">WbCrossRb</span><span class="p">),</span> <span class="n">collisionNormal</span><span class="p">);</span>
+
+            <span class="kt">float</span> <span class="n">restitutionConstraint</span> <span class="o">=</span> <span class="n">dotResult</span> <span class="o">*</span> <span class="n">restCoeff</span><span class="p">;</span>
+
             <span class="n">restitutionConstraint</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">restitutionConstraint</span> <span class="o">-</span> <span class="n">physics</span><span class="o">::</span><span class="n">constants</span><span class="o">::</span><span class="n">restitutionSlop</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">);</span>
 
             <span class="c1">//-------------------------- Velocity Constraint ----------------------------------//</span>
+
+
+
             <span class="kt">float</span> <span class="n">biasFactor</span> <span class="o">=</span> <span class="n">baumgarteConstraint</span> <span class="o">+</span> <span class="n">restitutionConstraint</span><span class="p">;</span>
 
-            <span class="kt">float</span> <span class="n">foundLambda</span> <span class="o">=</span> <span class="p">(</span><span class="n">minJV</span> <span class="o">+</span> <span class="n">biasFactor</span> <span class="p">)</span> <span class="o">/</span> <span class="n">effectiveMass</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">foundLambda</span> <span class="o">=</span> <span class="p">(</span><span class="n">minJV</span> <span class="o">+</span> <span class="n">biasFactor</span><span class="p">)</span> <span class="o">/</span> <span class="n">effectiveMass</span><span class="p">;</span>
 
             <span class="kt">float</span> <span class="n">oldTotalLambda</span> <span class="o">=</span> <span class="n">totalLambda</span><span class="p">;</span>
             <span class="n">totalLambda</span> <span class="o">+=</span> <span class="n">foundLambda</span><span class="p">;</span>
@@ -215,9 +225,6 @@
             <span class="n">totalLambda</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">clamp</span><span class="p">(</span><span class="n">totalLambda</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">());</span>
 
             <span class="kt">float</span> <span class="n">lambdaApplied</span> <span class="o">=</span> <span class="n">totalLambda</span> <span class="o">-</span> <span class="n">oldTotalLambda</span><span class="p">;</span>
-
-            <span class="k">auto</span> <span class="n">idHandleRef</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
-            <span class="k">auto</span> <span class="n">idHandleInc</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
 
             <span class="n">ApplyImpulse</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">lambdaApplied</span><span class="p">,</span>
                 <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
@@ -404,7 +411,7 @@
 
         <span class="kt">void</span> <span class="nf">logRigidbodyState</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="c1">//log::debug(&quot;//--------logRigidbodyState----------//&quot;);</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;//--------logRigidbodyState----------//&quot;</span><span class="p">);</span>
             <span class="k">auto</span> <span class="n">incRb</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
             <span class="k">auto</span> <span class="n">refRb</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
             <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;incRb.velocity {} &quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">incRb</span><span class="p">.</span><span class="n">velocity</span><span class="p">));</span>
