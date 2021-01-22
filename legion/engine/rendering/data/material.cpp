@@ -206,7 +206,9 @@ namespace legion::rendering
 
     void material::set_variant(const std::string& variant)
     {
-        id_type variantId = nameHash(variant);
+        std::string variantName = variant;
+        std::replace(variantName.begin(), variantName.end(), ' ', '_');
+        id_type variantId = nameHash(variantName);
         if (m_shader.has_variant(variantId))
             m_currentVariant = variantId;
         else

@@ -1032,7 +1032,9 @@ namespace legion::rendering
 
     bool shader::has_variant(const std::string& variant) const
     {
-        return m_variants.count(nameHash(variant));
+        std::string variantName = variant;
+        std::replace(variantName.begin(), variantName.end(), ' ', '_');
+        return m_variants.count(nameHash(variantName));
     }
 
     void shader::configure_variant(id_type variantId) const
@@ -1045,7 +1047,9 @@ namespace legion::rendering
 
     void shader::configure_variant(const std::string& variant) const
     {
-        id_type variantId = nameHash(variant);
+        std::string variantName = variant;
+        std::replace(variantName.begin(), variantName.end(), ' ', '_');
+        id_type variantId = nameHash(variantName);
         if (m_variants.count(variantId))
             m_currentShaderVariant = &m_variants.at(variantId);
     }
