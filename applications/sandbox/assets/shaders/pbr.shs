@@ -1,6 +1,14 @@
 #version 450
 #state CULL BACK
 
+variant(shadow pass)
+{
+    #state CULL FRONT
+    #state BLEND OFF
+
+    #define SHADOW_PASS
+}
+
 generate(fragment, vertex)
 
 #include <stdio.shinc>
@@ -17,30 +25,41 @@ shader(vertex)
 
 shader(fragment)
 {
-    uniform bool discardExcess;
-    uniform vec4 skycolor;
-
-    void main(void)
+    variant(shadow pass)
     {
-        Camera camera = GetCamera();
+        void main(void)
+        {
+            fragment_color = vec4(0.0);
+        }
+    }
 
-        vec3 worldNormal = GetWorldNormal();
-        Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal));
+    variant(default)
+    {
+        uniform bool discardExcess;
+        uniform vec4 skycolor;
 
-        if(discardExcess)
-            if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
-                discard;
+        void main(void)
+        {
+            Camera camera = GetCamera();
 
-        vec3 worldpos = (worldNormal * material.height) + GetWorldPosition();
+            vec3 worldNormal = GetWorldNormal();
+            Material material = ExtractMaterial(stdio(uv), camera, worldNormal, GetWorldTangent(worldNormal));
 
-        vec3 lighting = GetAllLighting(material, camera, worldpos);
+            if(discardExcess)
+                if(material.texcoords.x < 0 || material.texcoords.x > 1 || material.texcoords.y < 0 || material.texcoords.y > 1)
+                    discard;
 
-        vec3 unitDir = reflect(-normalize(camera.toView), material.normal);
-        float reflectance = clamp01(0.01 + (pow(max(0.0, (1.0 - material.roughness)), 4) * 0.99));
-        vec3 reflection = mix(mix(vec3(average(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), (vec3(average(skycolor.rgb)) + skycolor.rgb)*0.5, material.roughness);
+            vec3 worldpos = (worldNormal * material.height) + GetWorldPosition();
 
-        lighting += reflection * mix(vec3(1.0), material.albedo.rgb, material.metallic) * reflectance;
+            vec3 lighting = GetAllLighting(material, camera, worldpos);
 
-        SubmitOutput(vec4(lighting, material.albedo.a), material.normal, worldpos, material.emissive);
+            vec3 unitDir = reflect(-normalize(camera.toView), material.normal);
+            float reflectance = clamp01(0.01 + (pow(max(0.0, (1.0 - material.roughness)), 4) * 0.99));
+            vec3 reflection = mix(mix(vec3(average(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), (vec3(average(skycolor.rgb)) + skycolor.rgb)*0.5, material.roughness);
+
+            lighting += reflection * mix(vec3(1.0), material.albedo.rgb, material.metallic) * reflectance;
+
+            SubmitOutput(vec4(lighting, material.albedo.a), material.normal, worldpos, material.emissive);
+        }
     }
 }
