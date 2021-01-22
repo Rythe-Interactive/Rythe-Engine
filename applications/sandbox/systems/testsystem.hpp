@@ -321,13 +321,25 @@ public:
             pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
             pbrH.set_variant("shadow_pass");
 
-            copperH = rendering::MaterialCache::create_material("copper", pbrShader);
-            copperH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo-512.png"_view));
-            copperH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight-512.png"_view));
-            copperH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo-512.png"_view));
-            copperH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive-512.png"_view));
-            copperH.set_param(SV_HEIGHTSCALE, 1.f);
-            copperH.set_param("discardExcess", false);
+            //copperH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo-512.png"_view));
+            //copperH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight-512.png"_view));
+            //copperH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo-512.png"_view));
+            auto default_lit = gfx::ShaderCache::create_shader("default lit", "engine://shaders/default_lit.shs"_view);
+
+            copperH = rendering::MaterialCache::create_material("copper", default_lit);
+            copperH.set_param("alphaCutoff", 0.5f);
+            copperH.set_param("useAlbedoTex", false);
+            copperH.set_param("albedoColor", math::color(1.0f, 1.0f, 1.0f));
+            copperH.set_param("useMetallicTex", false);
+            copperH.set_param("metallicValue", 1.0f);
+            copperH.set_param("useRoughnessTex", false);
+            copperH.set_param("roughnessValue", 1.0f);
+            copperH.set_param("useMetallicRoughness", false);
+            copperH.set_param("useEmissiveTex", false);
+            copperH.set_param("emissiveColor", math::color(0.0f, 0.0f, 0.0f));
+            copperH.set_param("useNormal", false);
+            copperH.set_param("useAmbientOcclusion", false);
+            copperH.set_param("useHeight", false);
             copperH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);

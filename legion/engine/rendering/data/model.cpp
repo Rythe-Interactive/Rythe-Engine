@@ -154,31 +154,47 @@ namespace legion::rendering
         // Check if the file is valid to load.
         if (!file.is_valid() || !file.file_info().is_file)
             return invalid_model_handle;
+        // Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
 
         model model{};
         std::string meshName;
 
-        {// Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
-            if (settings.contextFolder.get_virtual_path() == "")
-            {
-                settings.contextFolder = file.parent();
-            }
-
-            auto handle = MeshCache::create_mesh(name, file, settings);
-            if (handle == invalid_mesh_handle)
-            {
-                log::error("Failed to load model {}", name);
-                return invalid_model_handle;
-            }
-
-            // Copy the sub-mesh data.
-            auto [lock, data] = handle.get();
-            async::readonly_guard guard(lock);
-            meshName = data.fileName;
-
-            for (auto& submeshData : data.submeshes)
-                model.submeshes.push_back(submeshData);
+        material_list matList;
+        material_list* materials;
+        if (settings.materials)
+            materials = settings.materials;
+        else
+        {
+            materials = &matList;
+            settings.materials = &matList;
         }
+
+        if (settings.contextFolder.get_virtual_path() == "")
+        {
+            settings.contextFolder = file.parent();
+        }
+
+        auto handle = MeshCache::create_mesh(name, file, settings);
+        if (handle == invalid_mesh_handle)
+        {
+            log::error("Failed to load model {}", name);
+            return invalid_model_handle;
+        }
+
+        //if (materials && materials->size() > 0)
+        //{
+        //    material_data& mat = materials->at(0);
+
+        //    
+        //}
+
+        // Copy the sub-mesh data.
+        auto [lock, data] = handle.get();
+        async::readonly_guard guard(lock);
+        meshName = data.fileName;
+
+        for (auto& submeshData : data.submeshes)
+            model.submeshes.push_back(submeshData);
 
         // The model still needs to be buffered on the rendering thread.
         model.buffered = false;
