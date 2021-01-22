@@ -11,7 +11,7 @@
 
 #include <rendering/systems/pointcloudgeneration.hpp>
 
-#include <physics/systems/physics_fracture_test_system.h>
+#include <physics/systems/physics_fracture_test_system.hpp>
 
 
 #include "../data/animation.hpp"

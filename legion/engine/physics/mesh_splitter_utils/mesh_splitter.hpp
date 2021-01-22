@@ -3,15 +3,15 @@
 #include <core/core.hpp>
 #include <physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp>
 #include <physics/mesh_splitter_utils/mesh_half_edge.hpp>
-#include <physics/mesh_splitter_utils/splittable_polygon.h>
+#include <physics/mesh_splitter_utils/splittable_polygon.hpp>
 #include <rendering/components/renderable.hpp>
-#include <physics/mesh_splitter_utils/primitive_mesh.h>
+#include <physics/mesh_splitter_utils/primitive_mesh.hpp>
 #include <rendering/components/renderable.hpp>
-#include <physics/mesh_splitter_utils/half_edge_finder.h>
-#include <physics/mesh_splitter_utils/mesh_splitter_debug_helpers.h>
+#include <physics/mesh_splitter_utils/half_edge_finder.hpp>
+#include <physics/mesh_splitter_utils/mesh_splitter_debug_helpers.hpp>
 #include <physics/mesh_splitter_utils/intersecting_polygon_organizer.hpp>
 #include <physics/mesh_splitter_utils/mesh_split_params.hpp>
-#include <physics/mesh_splitter_utils/intersection_edge_info.h>
+#include <physics/mesh_splitter_utils/intersection_edge_info.hpp>
 
 namespace legion::physics
 {

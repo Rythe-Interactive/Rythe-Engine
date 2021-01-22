@@ -5,7 +5,7 @@
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/mesh_splitter_utils/mesh_splitter.hpp>
-#include <physics/components/fracturer.h>
+#include <physics/components/fracturer.hpp>
 
 namespace legion::physics
 {

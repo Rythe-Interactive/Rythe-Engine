@@ -1,4 +1,4 @@
-#include <physics/mesh_splitter_utils/splittable_polygon.h>
+#include <physics/mesh_splitter_utils/splittable_polygon.hpp>
 #include <physics/physics_statics.hpp>
 #include <physics/physicsconstants.hpp>
 #include <physics/mesh_splitter_utils/mesh_half_edge.hpp>

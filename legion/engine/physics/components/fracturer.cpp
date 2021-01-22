@@ -1,4 +1,4 @@
-#include <physics/components/fracturer.h>
+#include <physics/components/fracturer.hpp>
 #include <physics/data/physics_manifold.hpp>
 #include <physics/physics_statics.hpp>
 #include <physics/colliders/convexcollider.hpp>
@@ -43,8 +43,8 @@ namespace legion::physics
         math::vec3 third = max - (differenceQuadrant * 2);
         VoronoiPoints.push_back(third);
 
-        math::vec3 fourth = third + math::vec3(0.1f,0,0);
-        VoronoiPoints.push_back(fourth);
+        //math::vec3 fourth = third + math::vec3(0.1f,0,0);
+        //VoronoiPoints.push_back(fourth);
 
         //math::vec3 fifth = third + math::vec3(0.1f, 0, -0.0f);
         //VoronoiPoints.push_back(fifth);

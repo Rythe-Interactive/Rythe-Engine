@@ -31,13 +31,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colliders\convexcollider.hpp" />
-    <ClInclude Include="components\fracturer.h" />
+    <ClInclude Include="components\fracturer.hpp" />
     <ClInclude Include="data\contact_vertex.hpp" />
     <ClInclude Include="data\convergance_identifier.hpp" />
     <ClInclude Include="data\convexconvexpenetrationquery.hpp" />
     <ClInclude Include="cube_collider_params.hpp" />
     <ClInclude Include="data\convex_convergance_identifier.hpp" />
-    <ClInclude Include="data\convex_convex_collision_info.h" />
+    <ClInclude Include="data\convex_convex_collision_info.hpp" />
     <ClInclude Include="data\edgepenetrationquery.hpp" />
     <ClInclude Include="data\edge_label.hpp" />
     <ClInclude Include="data\identifier.hpp" />
@@ -49,21 +49,21 @@
     <ClInclude Include="halfedgeedge.hpp" />
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
-    <ClInclude Include="data\penetrationquery.h" />
-    <ClInclude Include="mesh_splitter_utils\half_edge_finder.h" />
+    <ClInclude Include="data\penetrationquery.hpp" />
+    <ClInclude Include="mesh_splitter_utils\half_edge_finder.hpp" />
     <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp" />
-    <ClInclude Include="mesh_splitter_utils\intersection_edge_info.h" />
+    <ClInclude Include="mesh_splitter_utils\intersection_edge_info.hpp" />
     <ClInclude Include="mesh_splitter_utils\mesh_split_params.hpp" />
     <ClInclude Include="mesh_splitter_utils\mesh_splitter.hpp" />
     <ClInclude Include="mesh_splitter_utils\mesh_half_edge.hpp" />
-    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.h" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.hpp" />
     <ClInclude Include="mesh_splitter_utils\mesh_splitter_typedefs.hpp" />
-    <ClInclude Include="mesh_splitter_utils\primitive_mesh.h" />
-    <ClInclude Include="mesh_splitter_utils\splittable_polygon.h" />
+    <ClInclude Include="mesh_splitter_utils\primitive_mesh.hpp" />
+    <ClInclude Include="mesh_splitter_utils\splittable_polygon.hpp" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.hpp" />
     <ClInclude Include="physics_contact.hpp" />
-    <ClInclude Include="systems\physics_fracture_test_system.h" />
+    <ClInclude Include="systems\physics_fracture_test_system.hpp" />
     <ClInclude Include="systems\physicssystem.hpp" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="data\physics_manifold.hpp" />

@@ -1,9 +1,9 @@
 #pragma once
 #include <core/core.hpp>
-#include <physics/mesh_splitter_utils/splittable_polygon.h>
+#include <physics/mesh_splitter_utils/splittable_polygon.hpp>
 #include <physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp>
-#include <physics/mesh_splitter_utils/mesh_splitter_debug_helpers.h>
-#include <physics/mesh_splitter_utils/intersection_edge_info.h>
+#include <physics/mesh_splitter_utils/mesh_splitter_debug_helpers.hpp>
+#include <physics/mesh_splitter_utils/intersection_edge_info.hpp>
 
 namespace legion::physics
 {

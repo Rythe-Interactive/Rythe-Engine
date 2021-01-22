@@ -9,7 +9,7 @@
 #include <physics/events/events.hpp>
 #include <memory>
 #include <rendering/debugrendering.hpp>
-#include <physics/components/fracturer.h>
+#include <physics/components/fracturer.hpp>
 
 namespace legion::physics
 {

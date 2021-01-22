@@ -1,4 +1,4 @@
-#include <physics/mesh_splitter_utils/primitive_mesh.h>
+#include <physics/mesh_splitter_utils/primitive_mesh.hpp>
 #include <rendering/components/renderable.hpp>
 
 namespace legion::physics

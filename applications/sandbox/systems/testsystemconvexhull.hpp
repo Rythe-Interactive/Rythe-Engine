@@ -8,7 +8,7 @@
 
 #include <rendering/components/renderable.hpp>
 #include <physics/components/physics_component.hpp>
-#include <physics/components/fracturer.h>
+#include <physics/components/fracturer.hpp>
 
 #include <rendering/components/particle_emitter.hpp>
 #include <physics/halfedgeedge.hpp>

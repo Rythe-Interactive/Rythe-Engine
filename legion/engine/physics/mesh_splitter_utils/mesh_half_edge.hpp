@@ -1,6 +1,6 @@
 #pragma once
 #include <core/core.hpp>
-#include <physics/mesh_splitter_utils/splittable_polygon.h>
+#include <physics/mesh_splitter_utils/splittable_polygon.hpp>
 #include <physics/physics_statics.hpp>
 
 namespace legion::physics

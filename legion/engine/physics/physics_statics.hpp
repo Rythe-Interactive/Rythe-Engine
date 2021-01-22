@@ -5,7 +5,7 @@
 #include <physics/data/contact_vertex.hpp>
 #include <Voro++/voro++.hh>
 #include <rendering/debugrendering.hpp>
-#include <physics/data/convex_convex_collision_info.h>
+#include <physics/data/convex_convex_collision_info.hpp>
 
 namespace legion::physics
 {

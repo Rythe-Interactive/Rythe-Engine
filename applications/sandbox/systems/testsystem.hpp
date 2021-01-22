@@ -11,7 +11,7 @@
 #include <physics/data/physics_manifold_precursor.h>
 #include <physics/systems/physicssystem.hpp>
 #include <physics/halfedgeface.hpp>
-#include <physics/data/penetrationquery.h>
+#include <physics/data/penetrationquery.hpp>
 
 
 #include <core/compute/context.hpp>

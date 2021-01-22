@@ -1,9 +1,9 @@
-#include <physics/systems/physics_fracture_test_system.h>
+#include <physics/systems/physics_fracture_test_system.hpp>
 #include <physics/mesh_splitter_utils/mesh_splitter.hpp>
-#include <physics/mesh_splitter_utils/splittable_polygon.h>
+#include <physics/mesh_splitter_utils/splittable_polygon.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/systems/physicssystem.hpp>
-#include <physics/components/fracturer.h>
+#include <physics/components/fracturer.hpp>
 #include <rendering/debugrendering.hpp>
 
 namespace legion::physics
