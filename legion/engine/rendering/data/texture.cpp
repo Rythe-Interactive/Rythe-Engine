@@ -4,6 +4,7 @@ namespace legion::rendering
 {
     void texture::to_resource(fs::basic_resource* resource, const texture& value)
     {
+        OPTICK_EVENT();
         resource->clear();
         appendBinaryData(&value.textureId, resource->get());
         appendBinaryData(&value.channels, resource->get());
@@ -12,6 +13,7 @@ namespace legion::rendering
 
     void texture::from_resource(texture* value, const fs::basic_resource& resource)
     {
+        OPTICK_EVENT();
         byte_vec::const_iterator start = resource.begin();
         retrieveBinaryData(value->textureId, start);
         retrieveBinaryData(value->channels, start);
@@ -20,6 +22,7 @@ namespace legion::rendering
 
     math::ivec2 texture::size() const
     {
+        OPTICK_EVENT();
         math::ivec2 texSize;
         glBindTexture(static_cast<GLenum>(type), textureId);
         glGetTexLevelParameteriv(static_cast<GLenum>(type), 0, GL_TEXTURE_WIDTH, &texSize.x);
@@ -30,6 +33,7 @@ namespace legion::rendering
 
     void texture::resize(math::ivec2 newSize) const
     {
+        OPTICK_EVENT();
         glBindTexture(static_cast<GLenum>(type), textureId);
         glTexImage2D(
             static_cast<GLenum>(type),
@@ -50,16 +54,19 @@ namespace legion::rendering
 
     texture_data texture_handle::get_data() const
     {
+        OPTICK_EVENT();
         return TextureCache::get_data(id);
     }
 
     const texture& texture_handle::get_texture() const
     {
+        OPTICK_EVENT();
         return TextureCache::get_texture(id);
     }
 
     const texture& TextureCache::get_texture(id_type id)
     {
+        OPTICK_EVENT();
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
 
@@ -71,6 +78,7 @@ namespace legion::rendering
 
     texture_data TextureCache::get_data(id_type id)
     {
+        OPTICK_EVENT();
         texture texture;
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
@@ -96,6 +104,7 @@ namespace legion::rendering
 
     texture_handle TextureCache::create_texture(const std::string& name, const fs::view& file, texture_import_settings settings)
     {
+        OPTICK_EVENT();
         if (m_invalidTexture.id == invalid_id)
         {
             m_invalidTexture.id = 1;
@@ -129,11 +138,13 @@ namespace legion::rendering
 
     texture_handle TextureCache::create_texture(const fs::view& file, texture_import_settings settings)
     {
+        OPTICK_EVENT();
         return create_texture(file.get_filename(), file, settings);
     }
 
     texture_handle TextureCache::create_texture(const std::string& name, math::ivec2 size, texture_import_settings settings)
     {
+        OPTICK_EVENT();
         id_type id = nameHash(name);
         {
             async::readonly_guard guard(m_textureLock);
@@ -192,6 +203,7 @@ namespace legion::rendering
 
     texture_handle TextureCache::create_texture_from_image(const std::string& name, texture_import_settings settings)
     {
+        OPTICK_EVENT();
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
 
@@ -207,6 +219,7 @@ namespace legion::rendering
 
     texture_handle TextureCache::create_texture_from_image(image_handle image, texture_import_settings settings)
     {
+        OPTICK_EVENT();
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
 
@@ -280,6 +293,7 @@ namespace legion::rendering
 
     texture_handle TextureCache::get_handle(const std::string& name)
     {
+        OPTICK_EVENT();
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
 
@@ -292,6 +306,7 @@ namespace legion::rendering
 
     texture_handle TextureCache::get_handle(id_type id)
     {
+        OPTICK_EVENT();
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
 

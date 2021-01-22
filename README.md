@@ -23,6 +23,9 @@ The Legion-Core is built on an async compute minded design to take care of the l
 ### Physics
 - Convex quick hull generation
 - Diviner physics engine
+#### Preview Feature
+- Dynamic Destruction
+![Demo](https://cdn.discordapp.com/attachments/682321169541890070/802090059788582912/fracturebasics.gif)
 
 ### ECS
 - Data oriented

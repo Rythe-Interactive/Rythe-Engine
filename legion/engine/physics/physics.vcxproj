@@ -12,11 +12,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="colliders\convexcollider.cpp" />
+    <ClCompile Include="components\fracturer.cpp" />
     <ClCompile Include="data\convexconvexpenetrationquery.cpp" />
     <ClCompile Include="data\edgepenetrationquery.cpp" />
     <ClCompile Include="halfedgeface.cpp" />
     <ClCompile Include="components\physics_component.cpp" />
+    <ClCompile Include="mesh_splitter_utils\primitive_mesh.cpp" />
+    <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp" />
     <ClCompile Include="systems\physicssystem.cpp" />
+    <ClCompile Include="systems\physics_fracture_test_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -25,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colliders\convexcollider.hpp" />
+    <ClInclude Include="components\fracturer.h" />
     <ClInclude Include="data\contact_vertex.hpp" />
     <ClInclude Include="data\convergance_identifier.hpp" />
     <ClInclude Include="data\convexconvexpenetrationquery.hpp" />
@@ -41,9 +46,20 @@
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.h" />
+    <ClInclude Include="mesh_splitter_utils\half_edge_finder.h" />
+    <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp" />
+    <ClInclude Include="mesh_splitter_utils\intersection_edge_info.h" />
+    <ClInclude Include="mesh_splitter_utils\mesh_split_params.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_half_edge.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.h" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter_typedefs.hpp" />
+    <ClInclude Include="mesh_splitter_utils\primitive_mesh.h" />
+    <ClInclude Include="mesh_splitter_utils\splittable_polygon.h" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.hpp" />
     <ClInclude Include="physics_contact.hpp" />
+    <ClInclude Include="systems\physics_fracture_test_system.hpp" />
     <ClInclude Include="systems\physicssystem.hpp" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="data\physics_manifold.hpp" />

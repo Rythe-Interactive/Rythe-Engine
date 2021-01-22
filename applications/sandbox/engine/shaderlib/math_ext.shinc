@@ -10,6 +10,21 @@
 
 const vec4 ones = vec4(1.0);
 
+float average(vec2 v)
+{
+    return (v.x + v.y)/2.0;
+}
+
+float average(vec3 v)
+{
+    return (v.x + v.y + v.z)/3.0;
+}
+
+float average(vec4 v)
+{
+    return (v.x + v.y + v.z + v.w)/4.0;
+}
+
 float sum(vec2 v)
 {
     return dot(v, ones.xy);

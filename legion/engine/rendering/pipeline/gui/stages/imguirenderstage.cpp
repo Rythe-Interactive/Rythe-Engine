@@ -1,3 +1,4 @@
+#include <imgui/ImGuizmo.h>
 #include <imgui/imnodes.h>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
@@ -7,7 +8,7 @@ namespace legion::rendering
 {
     void ImGuiStage::setup(app::window& context)
     {
-
+        OPTICK_EVENT();
         //make context current
         application::context_guard guard(context);
 
@@ -24,6 +25,7 @@ namespace legion::rendering
     void ImGuiStage::render(app::window& context, camera& cam, const camera::camera_input& camInput,
         time::span deltaTime)
     {
+        OPTICK_EVENT();
         static id_type mainId = nameHash("main");
 
         auto fbo = getFramebuffer(mainId);
@@ -56,6 +58,8 @@ namespace legion::rendering
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
+        imgui::gizmo::BeginFrame();
+
 
         //call gui callback
         if (!m_onGuiRender.isNull())

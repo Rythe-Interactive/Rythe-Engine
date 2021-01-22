@@ -29,6 +29,7 @@ namespace legion::rendering
         stencil = GL_STENCIL_INDEX,
         depth_stencil = GL_DEPTH24_STENCIL8,
         rgba_hdr = GL_RGBA32F,
+        rgb_hdr = GL_RGB32F,
         red = GL_RED,
         rg = GL_RG,
         rgb = GL_RGB,
@@ -38,9 +39,9 @@ namespace legion::rendering
         red_int = GL_RED_INTEGER,
         rg_int = GL_RG_INTEGER,
         rgb_int = GL_RGB_INTEGER,
-        rgba_int = GL_RGBL_INTEGER,
+        rgba_int = GL_RGBA_INTEGER,
         bgr_int = GL_BGR_INTEGER,
-        bgra_int = GL_BGRL_INTEGER,
+        bgra_int = GL_BGRA_INTEGER,
     };
 
     /**@brief Internal channel layout of the colors.

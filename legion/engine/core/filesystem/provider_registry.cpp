@@ -29,13 +29,14 @@ namespace legion::core::filesystem
 
 	std::unordered_set<provider_registry::domain> provider_registry::domains()
 	{
+        OPTICK_EVENT();
 
 		//get map driver
 		static auto& driver = get_driver();
 
 		std::unordered_set<domain> _domains;
 
-		for(auto& key : iterator::keys_only(*driver.m_domain_resolver_map))
+		for(auto& key : keys_only(*driver.m_domain_resolver_map))
 		{
 			//unordered_sets are unique by default no need to worry about duplicates
 			_domains.insert(key);	
@@ -45,7 +46,8 @@ namespace legion::core::filesystem
 
 	bool provider_registry::has_domain(domain d)
 	{
-		//get map driver
+        OPTICK_EVENT();
+        //get map driver
 		static auto& driver = get_driver();
 
 		return driver.m_domain_resolver_map->find(d) != driver.m_domain_resolver_map->end();
@@ -55,7 +57,8 @@ namespace legion::core::filesystem
 
 	void provider_registry::domain_add_resolver(domain d, resolver_ptr r)
 	{
-		//get map driver
+        OPTICK_EVENT();
+        //get map driver
 		static auto& driver = get_driver();
 
 		//insert a resolver
@@ -65,14 +68,15 @@ namespace legion::core::filesystem
 
 	std::vector<provider_registry::resolver_ptr> provider_registry::domain_get_resolvers(domain d)
 	{
-		//get map driver
+        OPTICK_EVENT();
+        //get map driver
 		static auto& driver = get_driver();
 		std::vector<resolver_ptr> resolvers;
 
 		//get range for domains
 		const auto& iterator_pair = driver.m_domain_resolver_map->equal_range(d);
 
-		for(auto& [_,value] : iterator::pair_range(iterator_pair))
+		for(auto& [_,value] : pair_range(iterator_pair))
 		{
 			resolvers.emplace_back(value.get());
 		}
@@ -101,7 +105,8 @@ namespace legion::core::filesystem
 
 	provider_registry::resolver_sentinel provider_registry::domain_get_first_resolver(domain d)
 	{
-		if(has_domain(d))
+        OPTICK_EVENT();
+        if(has_domain(d))
 		{
 			return resolver_sentinel{0,d};
 		} else {
@@ -111,8 +116,8 @@ namespace legion::core::filesystem
 
 	provider_registry::resolver_sentinel provider_registry::domain_get_prev_resolver(const resolver_sentinel& iterator)
 	{
-
-		if(iterator.index == 0){
+        OPTICK_EVENT();
+        if(iterator.index == 0){
 			return resolver_sentinel{nullptr};
 		} else {
 			return resolver_sentinel{iterator.index-1,iterator.inspected_domain};
@@ -121,7 +126,8 @@ namespace legion::core::filesystem
 
 	provider_registry::resolver_sentinel provider_registry::domain_get_next_resolver(const resolver_sentinel& iterator)
 	{
-		//get map driver
+        OPTICK_EVENT();
+        //get map driver
 		static auto& driver = get_driver();
 		
 		if(iterator.index >= driver.m_domain_resolver_map->count(iterator.inspected_domain)){
@@ -138,7 +144,8 @@ namespace legion::core::filesystem
 
 	provider_registry::resolver_ptr provider_registry::domain_get_resolver_at(const resolver_sentinel& iterator)
 	{
-		//check against sentinel value
+        OPTICK_EVENT();
+        //check against sentinel value
 		if(iterator == resolver_sentinel{nullptr}) return nullptr;
 		
 		//get map driver
@@ -147,7 +154,7 @@ namespace legion::core::filesystem
 		//get range of domains
 		auto real_iterator = driver.m_domain_resolver_map->find(iterator.inspected_domain);
 
-		if(!iterator::checked_next(real_iterator,driver.m_domain_resolver_map->end(),iterator.index))
+		if(!checked_next(real_iterator,driver.m_domain_resolver_map->end(),iterator.index))
 		{
 			return nullptr;
 		}

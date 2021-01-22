@@ -165,10 +165,10 @@ __kernel void Main
     __global const float* vertices,
     __global const uint* indices,
     __global const float2* uvs,
+    __global const uint* samples,
     __read_only image2d_t normalMap,
-    //__global const float* normalMap,
-    const uint samplePerTri,
-    const uint sampleWidth,
+    //const uint samplesPerTri,
+//    const uint sampleWidth,
     const float normalStrength,
     const uint textureSize,
     __global float4* points
@@ -177,7 +177,7 @@ __kernel void Main
     //init indices and rand state
     int n=get_global_id(0)*3;
     state= get_global_id(0);
-    int resultIndex = get_global_id(0)*samplePerTri;
+//    int resultIndex = get_global_id(0)*samplePerTri;
   
     //get vertex indices
     uint vertex1Index = indices[n];
@@ -206,19 +206,44 @@ __kernel void Main
     float4 vertC = (float4)(v3a,v3b,v3c,1.0f);
     float2 uvC =uvs[indices[n+2]];
 
+    //calculate current sample count
+    float lengthA = length(vertC-vertA);
+    float lengthB = length(vertB-vertA);
+    float lengthC = length(vertC-vertB);
+    float size = lengthA+lengthB+lengthC;
+
+    uint newSampleCount = samples[get_global_id(0)];
+    uint resultIndex=0;
+    //calculate new result ID, accumulate previous sample counts
+    for(int i=0; i< get_global_id(0); i++)
+    {
+        resultIndex+= samples[i];
+    }
+
+    //calculate the sample width for the newly generated sample count
+    uint currentIt=0;
+    uint sum =0;
+    while(sum< newSampleCount)
+    {
+        currentIt++;
+        sum +=currentIt;
+    }
+    uint sampleWidth=currentIt;
+
+
     //generate normal && scale by strength
     float4 normal = normalize(cross(vertB-vertA,vertC-vertA));
     normal*=normalStrength;
-
+    
     //generate samples
     __local float2 uniformOutput[maxPointsPerTri];
-    sampleUniformly(uniformOutput,samplePerTri,sampleWidth);
+    sampleUniformly(uniformOutput,newSampleCount,sampleWidth);
     //__local float2 poissonOutput[maxPointsPerTri];
     //PoissionSampling(poissonOutput,samplePerTri);
 
 
     //store generated samples
-    for(int i =0; i <samplePerTri; i++)
+    for(int i =0; i <newSampleCount; i++)
     {
         int index= resultIndex + i;
         //sample point position

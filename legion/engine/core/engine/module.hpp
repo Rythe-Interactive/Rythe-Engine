@@ -41,9 +41,10 @@ namespace legion::core
             m_scheduler->addProcessChain<charc>(name);
         }
 
-        template<typename SystemType, typename... Args, inherits_from<SystemType, System<SystemType>> = 0>
+        template<typename SystemType, typename... Args CNDOXY(inherits_from<SystemType, System<SystemType>> = 0)>
         void reportSystem(Args&&... args)
         {
+            OPTICK_EVENT();
             m_systems.insert(typeHash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...));
         }
 

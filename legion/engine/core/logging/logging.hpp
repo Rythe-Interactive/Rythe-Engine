@@ -10,7 +10,7 @@
 #include <spdlog/pattern_formatter.h>
 #endif
 
-#include <core/types/type_util.hpp>
+#include <core/platform/platform.hpp>
 #include <thread>
 #include <core/math/math.hpp>
 #include <core/common/exception.hpp>
@@ -192,6 +192,29 @@ namespace fmt
     };
 
     template <>
+    struct fmt::formatter<legion::core::math::color> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const legion::core::math::color& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e}, {:.1e})",
+                p.r, p.g, p.b, p.a);
+        }
+    };
+
+    template <>
     struct fmt::formatter<legion::core::math::quat> {
         char presentation = 'f';
 
@@ -222,6 +245,8 @@ namespace legion::core::log
 {
     /** @brief Holds the non const static data of logging. */
     struct impl {
+        static cstring log_file;
+        static std::shared_ptr<spdlog::logger> logger;
         static std::shared_ptr<spdlog::logger> file_logger;
         static std::shared_ptr<spdlog::logger> console_logger;
         static std::unordered_map<std::thread::id, std::string> thread_names;
@@ -292,22 +317,18 @@ namespace legion::core::log
     };
 
 
+#define logger impl::logger
 
-#if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
-
-#define LOG_FILE "stdout"
-#define logger impl::console_logger
-
-#else
-
-#define LOG_FILE "logs/args-engine.log"
-#define logger impl::file_logger
-
-#endif
 
     /** @brief sets up logging (do not call, invoked by engine) */
     inline void setup()
     {
+#if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
+        logger = impl::console_logger;
+#else
+        impl::file_logger = spdlog::rotating_logger_mt(impl::log_file, impl::log_file, 1'048'576, 5);
+        logger = impl::file_logger;
+#endif
         auto f = std::make_unique<spdlog::pattern_formatter>();
 
         f->add_flag<thread_name_formatter_flag>('f');

@@ -2,9 +2,10 @@
 
 namespace legion::rendering
 {
-    template<typename Pipeline, typename ...Args, inherits_from<Pipeline, RenderPipeline<Pipeline>>>
+    template<typename Pipeline, typename ...Args CNDOXY(inherits_from<Pipeline, RenderPipeline<Pipeline>>)>
     inline void Renderer::setPipeline(Args&&... args)
     {
+        OPTICK_EVENT();
         m_pipelineProvider = delegate<RenderPipelineBase* (app::window&)>::create([&](app::window& context)
         {
             static std::unordered_map<app::window, std::unique_ptr<Pipeline>> m_pipelines;

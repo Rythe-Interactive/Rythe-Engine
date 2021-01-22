@@ -7,6 +7,7 @@ namespace legion::rendering
 
     void SubmitStage::setup(app::window& context)
     {
+        OPTICK_EVENT();
         app::context_guard guard(context);
         float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
           // positions         // texCoords
@@ -33,6 +34,7 @@ namespace legion::rendering
 
     void SubmitStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        OPTICK_EVENT();
         (void)deltaTime;
         (void)camInput;
 
@@ -55,7 +57,7 @@ namespace legion::rendering
 
         auto viewportSize = context.framebufferSize();
 
-        auto colorAttachment = fbo->getAttachment(GL_COLOR_ATTACHMENT0);
+        auto colorAttachment = fbo->getAttachment(FRAGMENT_ATTACHMENT);
         if (std::holds_alternative<std::monostate>(colorAttachment) || !std::holds_alternative<texture_handle>(colorAttachment))
         {
             log::error("Color attachment of main FBO was invalid.");
@@ -78,7 +80,6 @@ namespace legion::rendering
 
         glViewport(0, 0, viewportSize.x, viewportSize.y);
         glDisable(GL_DEPTH_TEST);
-        glClear(GL_COLOR_BUFFER_BIT);
 
         m_screenShader.bind();
         m_screenShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(screenTexture);

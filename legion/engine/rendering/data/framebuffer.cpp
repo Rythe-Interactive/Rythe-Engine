@@ -181,6 +181,7 @@ namespace legion::rendering
 
     void framebuffer::attach(renderbuffer rbo, GLenum attachment)
     {
+        OPTICK_EVENT();
 #if defined(LEGION_DEBUG)
         if (!app::ContextHelper::getCurrentContext())
         {
@@ -202,6 +203,7 @@ namespace legion::rendering
 
     void framebuffer::attach(texture_handle texture, GLenum attachment)
     {
+        OPTICK_EVENT();
 #if defined(LEGION_DEBUG)
         if (!app::ContextHelper::getCurrentContext())
         {
@@ -221,8 +223,36 @@ namespace legion::rendering
         m_attachments[attachment] = texture; // Insert the texture into the map of attachments.
     }
 
+    void framebuffer::detach(GLenum attachment)
+    {
+        if (m_id.value == 0)
+        {
+            log::error("Attempting to detach render targets to default framebuffer.");
+            return;
+        }
+
+        if (!m_attachments.count(attachment))
+            return;
+
+        auto att = m_attachments.at(attachment); // Otherwise return the active attachment.
+
+        if (std::holds_alternative<std::monostate>(att))
+            return;
+
+        glBindFramebuffer(m_target, m_id);
+        if (std::holds_alternative<texture_handle>(att))
+            glNamedFramebufferTexture(m_id, attachment, 0, 0); // Attach the texture.
+        else
+            glNamedFramebufferRenderbuffer(m_id, attachment, GL_RENDERBUFFER, 0); // Attach the renderbuffer.
+
+        glBindFramebuffer(m_target, 0);
+
+        m_attachments.erase(attachment);
+    }
+
     void framebuffer::attach(attachment att, GLenum attachment)
     {
+        OPTICK_EVENT();
 #if defined(LEGION_DEBUG)
         if (!app::ContextHelper::getCurrentContext())
         {
@@ -255,6 +285,7 @@ namespace legion::rendering
 
     L_NODISCARD const attachment& framebuffer::getAttachment(GLenum attachment) const
     {
+        OPTICK_EVENT();
         if (m_id.value == 0)
         {
             log::error("Attempting to attach render targets to default framebuffer.");

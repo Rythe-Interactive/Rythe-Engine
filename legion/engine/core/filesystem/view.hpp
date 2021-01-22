@@ -5,6 +5,8 @@
 
 #include <core/common/exception.hpp>
 
+#include <Optick/optick.h>
+
 #include "mem_filesystem_resolver.hpp"
 #include "navigator.hpp"
 #include "detail/traits.hpp"
@@ -101,6 +103,7 @@ namespace legion::core::filesystem
         template <class T,class... Args>
         auto load_as(Args&&...args) -> decltype(auto)
         {
+            OPTICK_EVENT();
             return get().decay().to<T>(std::forward<Args>(args)...);
         }
 

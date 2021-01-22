@@ -8,6 +8,7 @@
 #include <cereal/types/memory.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
+#include <core/ecs/component_handle.hpp>
 
 
 namespace legion::core
@@ -66,21 +67,25 @@ namespace legion::core
 
         L_NODISCARD math::vec3 right()
         {
+            OPTICK_EVENT();
             return math::toMat3(*this) * math::vec3::right;
         }
 
         L_NODISCARD math::vec3 up()
         {
+            OPTICK_EVENT();
             return math::toMat3(*this) * math::vec3::up;
         }
 
         L_NODISCARD math::vec3 forward()
         {
+            OPTICK_EVENT();
             return math::toMat3(*this) * math::vec3::forward;
         }
 
         L_NODISCARD math::mat3 matrix()
         {
+            OPTICK_EVENT();
             return math::toMat3(*this);
         }
 
@@ -89,9 +94,15 @@ namespace legion::core
 
     L_NODISCARD inline rotation rotation::lookat(math::vec3 position, math::vec3 center, math::vec3 up)
     {
+        OPTICK_EVENT();
         return math::conjugate(math::normalize(math::toQuat(math::lookAt(position, center, up))));
     }
 
+    struct hierarchy
+    {
+        ecs::entity_handle parent;
+        ecs::entity_set children;
+    };
 
     struct scale : public math::vec3
     {
@@ -120,7 +131,6 @@ namespace legion::core
 
     };
 
-
     struct transform : public ecs::archetype<position, rotation, scale>
     {
         using base = ecs::archetype<position, rotation, scale>;
@@ -128,42 +138,23 @@ namespace legion::core
         transform() = default;
         transform(const base::handleGroup& handles) : base(handles) {}
 
-        L_NODISCARD std::tuple<position, rotation, scale> get_world_components()
-        {
-            math::mat4 worldMatrix = get_world_to_local_matrix();
-            math::vec3 p;
-            math::quat r;
-            math::vec3 s;
-
-            math::decompose(worldMatrix, s, r, p);
-
-            return std::make_tuple<position, rotation, scale>(p, r, s);
-        }
+        L_NODISCARD std::tuple<position, rotation, scale> get_local_components();
 
         L_NODISCARD math::mat4 get_world_to_local_matrix()
         {
+            OPTICK_EVENT();
             return math::inverse(get_local_to_world_matrix());
         }
 
-        L_NODISCARD math::mat4 get_local_to_world_matrix()
-        {
-            auto& [positionH, rotationH, scaleH] = handles;
-            auto parent = positionH.entity.get_parent();
-
-            if (parent && parent.has_components<transform>())
-            {
-                transform transf = parent.get_component_handles<transform>();
-                return transf.get_local_to_world_matrix() * math::compose(scaleH.read(), rotationH.read(), positionH.read());
-            }
-
-            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
-        }
+        L_NODISCARD math::mat4 get_local_to_world_matrix();
 
         L_NODISCARD math::mat4 get_local_to_parent_matrix()
         {
-            auto& [positionH, rotationH, scaleH] = handles;
-            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
+            OPTICK_EVENT();
+            auto [position, rotation, scale] = get_local_components();
+            return math::compose(scale, rotation, position);
         }
+
     };
 
     struct velocity : public math::vec3

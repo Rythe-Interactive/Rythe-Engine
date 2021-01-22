@@ -60,7 +60,7 @@ namespace legion::core::math {
 
         else {
             using lowest_t = typename lowest_precision<NUM_TYPE1,NUM_TYPE2>::type;
-            return std::abs(lowest_t(lhs) - lowest_t(rhs) <= get_highest_epsilon(lhs,rhs));
+            return std::abs(lowest_t(lhs) - lowest_t(rhs)) <= get_highest_epsilon(lhs,rhs);
         }
     }
 }

@@ -4,6 +4,8 @@
 #include <core/ecs/entity_handle.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 
+#include <Optick/optick.h>
+
 namespace legion::core::ecs
 {
     EntityQuery::EntityQuery(id_type id, QueryRegistry* registry, EcsRegistry* ecsRegistry) : m_registry(registry), m_ecsRegistry(ecsRegistry), m_id(id)
@@ -45,9 +47,22 @@ namespace legion::core::ecs
         return *this;
     }
 
+    component_container_base& EntityQuery::get(id_type componentTypeId)
+    {
+        OPTICK_EVENT();
+        return m_registry->getComponents(m_id, componentTypeId);
+    }
+
+    void EntityQuery::submit(id_type componentTypeId)
+    {
+        OPTICK_EVENT();
+        m_registry->submit(m_id, componentTypeId);
+    }
+
     void EntityQuery::queryEntities()
     {
-        m_localcopy = m_registry->getEntities(m_id);
+        OPTICK_EVENT();
+        m_localcopy = &m_registry->getEntities(m_id);
     }
 
     EntityQuery::~EntityQuery()
@@ -58,18 +73,19 @@ namespace legion::core::ecs
         }
     }
 
-    entity_set::const_iterator EntityQuery::begin() const
+    entity_container::const_iterator EntityQuery::begin() const
     {
-        return m_localcopy.begin();
+        return m_localcopy->begin();
     }
 
-    entity_set::const_iterator EntityQuery::end() const
+    entity_container::const_iterator EntityQuery::end() const
     {
-        return m_localcopy.end();
+        return m_localcopy->end();
     }
 
     void EntityQuery::addComponentType(id_type componentTypeId)
     {
+        OPTICK_EVENT();
         hashed_sparse_set<id_type> componentTypes;
         if (m_id)
             componentTypes = m_registry->getComponentTypes(m_id); // If this query is a valid query fetch a copy of the component types we're already querying.
@@ -101,6 +117,7 @@ namespace legion::core::ecs
 
     void EntityQuery::removeComponentType(id_type componentTypeId)
     {
+        OPTICK_EVENT();
         if (!m_id) // We're not pointing to a valid query, there's nothing to remove from.
             return;
 
@@ -133,11 +150,13 @@ namespace legion::core::ecs
 
     entity_handle EntityQuery::operator[](size_type index)
     {
-        return m_localcopy[index];
+        OPTICK_EVENT();
+        return m_localcopy->at(index);
     }
 
     size_type EntityQuery::size()
     {
-        return m_localcopy.size();
+        OPTICK_EVENT();
+        return m_localcopy->size();
     }
 }

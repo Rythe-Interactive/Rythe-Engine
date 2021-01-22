@@ -9,8 +9,11 @@ namespace legion::rendering
         static std::atomic<float> m_renderScale;
 
         math::ivec2 m_framebufferSize;
-        texture_handle m_colorTexture;
-        texture_handle m_depthStencilTexture;
+        texture_handle m_colorTexture[2];
+        texture_handle m_normalTexture[2];
+        texture_handle m_positionTexture[2];
+        texture_handle m_overdrawTexture[2];
+        texture_handle m_depthStencilTexture[2];
 
     public:
         static void setRenderScale(float renderScale);

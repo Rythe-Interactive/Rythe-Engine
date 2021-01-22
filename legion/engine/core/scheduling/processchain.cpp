@@ -16,36 +16,56 @@ namespace legion::core::scheduling
     {
         log::info("Chain started.");
         chain->m_scheduler->subscribeToSync();
-       /* try
-        {*/
-            while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
+
+#if USE_OPTICK
+        Optick::Event* frameEvent = nullptr;
+#endif
+
+        while (!chain->m_exit->load(std::memory_order_acquire)) // Check for exit flag.
+        {
+#if USE_OPTICK
+            if (frameEvent)
+                delete frameEvent;
+
+            if (chain->m_name == "Rendering")
             {
-                chain->runInCurrentThread(); // Execute all processes.
+                static Optick::ThreadScope mainThreadScope("Rendering");
+                OPTICK_UNUSED(mainThreadScope);
+                Optick::EndFrame();
+                Optick::Update();
+                uint32_t frameNumber = ::Optick::BeginFrame();
 
-                if (chain->m_scheduler->syncRequested()) // Sync if requested.
-                    chain->m_scheduler->waitForProcessSync();
+                frameEvent = new Optick::Event(*::Optick::GetFrameDescription());
 
-                if (chain->m_low_power)
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-                else
-                {
-                    L_PAUSE_INSTRUCTION();
-                    std::this_thread::yield();
-                }
+                OPTICK_TAG("Frame", frameNumber);
             }
-            chain->m_scheduler->unsubscribeFromSync();
-            chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.
-       ///* }
-       // catch (const legion::core::exception& e)
-       // {*/
-       //     chain->m_scheduler->unsubscribeFromSync();
-       //     chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
-       ///* }
-       // catch (const std::exception& e)
-       // {*/
-       //     chain->m_scheduler->unsubscribeFromSync();
-       //     chain->m_scheduler->reportExitWithError(chain->m_name, std::this_thread::get_id(), e); // Mark error.
-       // //}
+            else
+            {
+                static Optick::EventDescription* frameEventDesc = Optick::CreateDescription(OPTICK_FUNC, __FILE__, __LINE__);
+
+                frameEvent = new Optick::Event(*frameEventDesc);
+            }
+#endif
+
+            chain->runInCurrentThread(); // Execute all processes.
+
+            if (chain->m_scheduler->syncRequested()) // Sync if requested.
+                chain->m_scheduler->waitForProcessSync();
+
+            {
+                OPTICK_CATEGORY("Relieve LSU contention", Optick::Category::Wait);
+                L_PAUSE_INSTRUCTION();
+                std::this_thread::yield();
+            }
+        }
+
+#if USE_OPTICK
+        if (frameEvent)
+            delete frameEvent;
+#endif
+
+        chain->m_scheduler->unsubscribeFromSync();
+        chain->m_scheduler->reportExit(chain->m_threadId); // Mark Exit.
     }
 
     bool ProcessChain::run(bool low_power)
@@ -57,7 +77,7 @@ namespace legion::core::scheduling
         {
             m_threadId = threadId;
 
-            m_scheduler->sendCommand(threadId, [](void* param) { ProcessChain::threadedRun(reinterpret_cast<ProcessChain*>(param)); }, this);
+            m_scheduler->sendCommand(threadId, [&]() { ProcessChain::threadedRun(reinterpret_cast<ProcessChain*>(this)); });
 
             return true;
         }
@@ -71,6 +91,9 @@ namespace legion::core::scheduling
 
     void ProcessChain::runInCurrentThread()
     {
+        OPTICK_EVENT("Run process chain");
+        OPTICK_TAG("Process chain", m_name.c_str());
+
         {
             async::readonly_guard guard(m_callbackLock);
             m_onFrameStart();
@@ -95,6 +118,7 @@ namespace legion::core::scheduling
 
     void ProcessChain::addProcess(Process* process)
     {
+        OPTICK_EVENT();
         async::readwrite_guard guard(m_processesLock);
         if (m_processes.insert(process->id(), process).second)
             process->m_hooks.insert(m_nameHash);
@@ -102,6 +126,7 @@ namespace legion::core::scheduling
 
     void ProcessChain::removeProcess(Process* process)
     {
+        OPTICK_EVENT();
         async::readwrite_guard guard(m_processesLock);
         if (m_processes.erase(process->id()))
             process->m_hooks.erase(m_nameHash);
