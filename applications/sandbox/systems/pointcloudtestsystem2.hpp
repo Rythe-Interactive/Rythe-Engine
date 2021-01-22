@@ -81,11 +81,11 @@ public:
         //mesh_handle CarnegieMansion = MeshCache::get_handle("CarnegieMansion");
         auto ent2 = createEntity();
         auto trans2 = ent2.add_components<transform>(position(0, 1, 5), rotation(), scale(0.5f));
-        ent2.add_component<point_cloud>(point_cloud(sphereMesh, trans2, billboardMat, albedo, normal, 20000, 0.025f));
+        ent2.add_component<point_cloud>(point_cloud(sphereMesh, trans2, billboardMat, albedo, normal, 50000, 0.005f));
 
         auto ent1 = createEntity();
         auto trans1 = ent1.add_components<transform>(position(1.5f, 1, 5), rotation(), scale(0.5f));
-        ent1.add_component<point_cloud>(point_cloud(suzanneeMesh, trans1, billboardMat, albedo2, normal, 10000, 0.025f));
+        ent1.add_component<point_cloud>(point_cloud(suzanneeMesh, trans1, billboardMat, albedo2, normal, 50000, 0.005f));
 
 
        /* auto ent4 = createEntity();

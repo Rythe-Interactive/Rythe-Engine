@@ -348,8 +348,6 @@ private:
 
         return particularParticle.get_component_handle<transform>();
     }
-
     mutable  std::vector<math::vec3> m_positions;
     mutable  std::vector<math::vec4> m_colors;
-
 };

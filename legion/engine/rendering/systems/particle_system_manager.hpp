@@ -84,10 +84,7 @@ namespace legion::rendering
 
                     }
                 }
-
             }
         }
-
-        bool hasWrittenBuffer = false;
     };
 }
