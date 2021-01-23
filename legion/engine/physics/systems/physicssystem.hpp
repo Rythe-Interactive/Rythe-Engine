@@ -1,7 +1,7 @@
 #pragma once
 #include <core/core.hpp>
 #include <physics/components/rigidbody.hpp>
-#include <physics/data/physics_manifold_precursor.h>
+#include <physics/data/physics_manifold_precursor.hpp>
 #include <physics/data/physics_manifold.hpp>
 #include <physics/physics_contact.hpp>
 #include <physics/components/physics_component.hpp>

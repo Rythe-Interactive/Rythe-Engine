@@ -68,9 +68,6 @@
     <ClInclude Include="physicsmodule.hpp">
       <Filter>module</Filter>
     </ClInclude>
-    <ClInclude Include="data\physics_manifold_precursor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="components\physics_component.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -180,6 +177,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\convex_convex_collision_info.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\physics_manifold_precursor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

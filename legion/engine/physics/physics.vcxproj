@@ -41,7 +41,7 @@
     <ClInclude Include="data\edgepenetrationquery.hpp" />
     <ClInclude Include="data\edge_label.hpp" />
     <ClInclude Include="data\identifier.hpp" />
-    <ClInclude Include="data\physics_manifold_precursor.h" />
+    <ClInclude Include="data\physics_manifold_precursor.hpp" />
     <ClInclude Include="data\edgepenetrationquery.h" />
     <ClInclude Include="data\pointer_encapsulator.hpp" />
     <ClInclude Include="data\VoronoiAABB.hpp" />
