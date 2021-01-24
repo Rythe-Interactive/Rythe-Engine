@@ -121,6 +121,7 @@ public:
     rendering::material_handle skyboxH;
     rendering::material_handle gnomeMH;
     rendering::material_handle textureBillboardH;
+    std::vector<gfx::material_handle> suzanneMaterials;
 
     //Friction Test
     std::vector<ecs::entity_handle> physicsFrictionTestRotators;
@@ -137,8 +138,8 @@ public:
     {
 
         physics::PrimitiveMesh::SetECSRegistry(m_ecs);
-        
-        #pragma region Input binding
+
+#pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
 
@@ -260,7 +261,7 @@ public:
             cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
             cylinderH = rendering::ModelCache::create_model("cylinder", "assets://models/cylinder.obj"_view);
             sphereH = rendering::ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
-            suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
+            suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne-test.obj"_view, suzanneMaterials);
             gnomeH = rendering::ModelCache::create_model("gnome", "assets://models/wizardgnomeretop.obj"_view);
             uvsphereH = rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
             axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view);
@@ -319,27 +320,14 @@ public:
             pbrH.set_param(SV_HEIGHTSCALE, 1.f);
             pbrH.set_param("discardExcess", false);
             pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-            pbrH.set_variant("shadow_pass");
 
-            //copperH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo-512.png"_view));
-            //copperH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight-512.png"_view));
-            //copperH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo-512.png"_view));
-            auto default_lit = gfx::ShaderCache::create_shader("default lit", "engine://shaders/default_lit.shs"_view);
-
-            copperH = rendering::MaterialCache::create_material("copper", default_lit);
-            copperH.set_param("alphaCutoff", 0.5f);
-            copperH.set_param("useAlbedoTex", false);
-            copperH.set_param("albedoColor", math::color(1.0f, 1.0f, 1.0f));
-            copperH.set_param("useMetallicTex", false);
-            copperH.set_param("metallicValue", 1.0f);
-            copperH.set_param("useRoughnessTex", false);
-            copperH.set_param("roughnessValue", 1.0f);
-            copperH.set_param("useMetallicRoughness", false);
-            copperH.set_param("useEmissiveTex", false);
-            copperH.set_param("emissiveColor", math::color(0.0f, 0.0f, 0.0f));
-            copperH.set_param("useNormal", false);
-            copperH.set_param("useAmbientOcclusion", false);
-            copperH.set_param("useHeight", false);
+            copperH = rendering::MaterialCache::create_material("copper", pbrShader);
+            copperH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("assets://textures/copper/copper-albedo-512.png"_view));
+            copperH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/copper/copper-normalHeight-512.png"_view));
+            copperH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/copper/copper-MRDAo-512.png"_view));
+            copperH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/copper/copper-emissive-512.png"_view));
+            copperH.set_param(SV_HEIGHTSCALE, 1.f);
+            copperH.set_param("discardExcess", false);
             copperH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
             aluminumH = rendering::MaterialCache::create_material("aluminum", pbrShader);
@@ -588,9 +576,16 @@ public:
             ent.add_components<transform>(position(10, 1, 0), rotation(), scale());
         }
 
+
         {
             auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(normalH));
+            if (suzanneMaterials.size() > 0)
+            {
+                suzanneMaterials[0].set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(suzanneMaterials[0]));
+            }
+            else
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(gfx::invalid_material_handle));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, 5.1f), rotation(), scale());
         }
@@ -650,7 +645,7 @@ public:
             audio::audio_source source;
             source.setAudioHandle(segment);
             source.disableSpatialAudio();
-            
+
             eventAudio.add_components<transform>();
             eventAudio.add_component<audio::audio_source>(source);
         }
@@ -861,7 +856,7 @@ public:
         //physicsUpdate(time::span deltaTime)
         createProcess<&TestSystem::update>("Update");
         createProcess<&TestSystem::drawInterval>("Update");
-  //      createProcess<&TestSystem::physicsUpdate>("Physics", 0.02f);
+        //      createProcess<&TestSystem::physicsUpdate>("Physics", 0.02f);
     }
 
     void setupMeshSplitterTest(rendering::model_handle planeH, rendering::model_handle cubeH
@@ -2095,70 +2090,80 @@ public:
                     numbers[id] += id * scalar;
                 }).wait();
 
-        auto elapsed = t.end();
-        for (int i = 0; i < 5; i++)
-        {
-            log::debug(numbers[i]);
-        }
-        log::debug("...");
-        log::debug("dispatches took {}ms", elapsed.milliseconds());
-
-        static bool on = true;
-
-        static auto decalH = gfx::MaterialCache::get_material("decal");
-
-        if (!action->value)
-        {
-            //auto light = sun.read_component<rendering::light>();
-            if (on)
-            {
-                /*light.set_intensity(0.f);
-                sun.write_component(light);*/
-
-                if (sun)
-                    sun.destroy();
-
-                decalH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                pbrH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                copperH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                aluminumH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                ironH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                slateH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                rockH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                rock2H.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                fabricH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                bogH.set_param("skycolor", math::color(0.002f, 0.003f, 0.0035f));
-                paintH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
-                skyboxH.set_param("skycolor", math::color(0.002f, 0.003f, 0.0035f));
-            }
-            else
-            {
-                if (!sun)
+                auto elapsed = t.end();
+                for (int i = 0; i < 5; i++)
                 {
-                    sun = createEntity();
-                    sun.add_components<rendering::mesh_renderable>(
-                        mesh_filter(MeshCache::get_handle("directional light")),
-                        rendering::mesh_renderer(rendering::MaterialCache::get_material("directional light")));
-
-                    sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
-                    sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
+                    log::debug(numbers[i]);
                 }
+                log::debug("...");
+                log::debug("dispatches took {}ms", elapsed.milliseconds());
 
-                decalH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                copperH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                aluminumH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                ironH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                slateH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                rockH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                rock2H.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                fabricH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                bogH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                paintH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-                skyboxH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-            }
-            on = !on;
-        }
+                static bool on = true;
+
+                static auto decalH = gfx::MaterialCache::get_material("decal");
+
+                if (!action->value)
+                {
+                    //auto light = sun.read_component<rendering::light>();
+                    if (on)
+                    {
+                        /*light.set_intensity(0.f);
+                        sun.write_component(light);*/
+
+                        if (sun)
+                            sun.destroy();
+
+                        decalH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        pbrH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        copperH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        aluminumH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        ironH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        slateH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        rockH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        rock2H.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        fabricH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        bogH.set_param("skycolor", math::color(0.002f, 0.003f, 0.0035f));
+                        paintH.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        skyboxH.set_param("skycolor", math::color(0.002f, 0.003f, 0.0035f));
+
+                        for (auto& mat : suzanneMaterials)
+                        {
+                            mat.set_param("skycolor", math::color(0.005f, 0.0055f, 0.0065f));
+                        }
+                    }
+                    else
+                    {
+                        if (!sun)
+                        {
+                            sun = createEntity();
+                            sun.add_components<rendering::mesh_renderable>(
+                                mesh_filter(MeshCache::get_handle("directional light")),
+                                rendering::mesh_renderer(rendering::MaterialCache::get_material("directional light")));
+
+                            sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
+                            sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
+                        }
+
+                        decalH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        copperH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        aluminumH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        ironH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        slateH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        rockH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        rock2H.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        fabricH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        bogH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        paintH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        skyboxH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+
+                        for (auto& mat : suzanneMaterials)
+                        {
+                            mat.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+                        }
+                    }
+                    on = !on;
+                }
     }
 
     void onTonemapSwitch(tonemap_switch* action)
@@ -2341,7 +2346,7 @@ public:
         {
             timer -= 1.f;
             log::debug("frametime {}ms, fps {}", avgdt, 1.f / avgdt);
-        }            
+        }
 
         //static auto sahQuery = createQuery<sah, rotation, position, scale>();
         static auto sahQuery = createQuery<sah, position>();
@@ -2363,46 +2368,46 @@ public:
                 pos += math::vec3(math::sin(t) * 0.01f, math::sin(t + 1.f) * 0.01f, math::sin(t - 1.f) * 0.01f);
                 //rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
             }).wait();
-        sahQuery.submit<position>();
-        //sahQuery.submit<rotation>();
+            sahQuery.submit<position>();
+            //sahQuery.submit<rotation>();
 
-        //if (rotate && !physics::PhysicsSystem::IsPaused)
-        //{
-        //    for (auto entity : physicsFrictionTestRotators)
-        //    {
-        //        auto rot = entity.read_component<rotation>();
+            //if (rotate && !physics::PhysicsSystem::IsPaused)
+            //{
+            //    for (auto entity : physicsFrictionTestRotators)
+            //    {
+            //        auto rot = entity.read_component<rotation>();
 
-        //        rot *= math::angleAxis(math::deg2rad(-20.f * deltaTime), math::vec3(0, 0, 1));
+            //        rot *= math::angleAxis(math::deg2rad(-20.f * deltaTime), math::vec3(0, 0, 1));
 
-        //        entity.write_component(rot);
-        //    }
-        //}
+            //        entity.write_component(rot);
+            //    }
+            //}
 
-        //static auto posQuery = createQuery<position>();
+            //static auto posQuery = createQuery<position>();
 
-        //posQuery.queryEntities();
-        //for (auto entity : posQuery)
-        //{
-        //    auto pos = entity.read_component<position>();
+            //posQuery.queryEntities();
+            //for (auto entity : posQuery)
+            //{
+            //    auto pos = entity.read_component<position>();
 
-        //    debug::drawLine(pos, pos + math::vec3(0,1,0), math::colors::blue,10.0f,0.0f);
+            //    debug::drawLine(pos, pos + math::vec3(0,1,0), math::colors::blue,10.0f,0.0f);
 
-        //}
+            //}
 
 
 
-        //if (buffer > 1.f)
-        //{
-        //    buffer -= 1.f;
+            //if (buffer > 1.f)
+            //{
+            //    buffer -= 1.f;
 
-        //    for (auto entity : query)
-        //    {
-        //        auto comp = entity.get_component_handle<sah>();
-        //        std::cout << "component value: " << comp.read().value << std::endl;
-        //    }
+            //    for (auto entity : query)
+            //    {
+            //        auto comp = entity.get_component_handle<sah>();
+            //        std::cout << "component value: " << comp.read().value << std::endl;
+            //    }
 
-        //    std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-        //}
+            //    std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+            //}
     }
 
     void physicsUpdate(time::span deltaTime)

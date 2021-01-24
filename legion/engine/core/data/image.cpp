@@ -288,6 +288,7 @@ namespace legion::core
             async::readwrite_guard guard(m_imagesLock);
             auto* pair_ptr = new std::pair<async::rw_spinlock, image>();
             pair_ptr->second = std::move(result.decay());
+            pair_ptr->second.name = name;
             pair_ptr->second.m_id = id;
             m_images.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, image>>(pair_ptr)));
         }
@@ -300,12 +301,12 @@ namespace legion::core
         return create_image(file.get_filename(), file, settings);
     }
 
-    image_handle ImageCache::insert_image(const std::string& name, image&& img)
+    image_handle ImageCache::insert_image(image&& img)
     {
-        id_type id = nameHash(name);
+        id_type id = nameHash(img.name);
         async::readwrite_guard guard(m_imagesLock);
         auto* pair_ptr = new std::pair<async::rw_spinlock, image>();
-        pair_ptr->second = std::move(img);
+        pair_ptr->second = img;
         pair_ptr->second.m_id = id;
         m_images.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, image>>(pair_ptr)));
         return { id };

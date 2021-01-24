@@ -3,6 +3,7 @@
 #include <rendering/components/particle.hpp>
 #include <rendering/components/particle_emitter.hpp>
 #include <rendering/data/material.hpp>
+#include <rendering/data/model.hpp>
 
 namespace legion::rendering
 {

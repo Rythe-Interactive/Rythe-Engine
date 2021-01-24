@@ -42,6 +42,7 @@ namespace legion::core
     {
         friend class ImageCache;
 
+        std::string name;
         math::ivec2 size;
         channel_format format;
         image_components components;
@@ -76,7 +77,7 @@ namespace legion::core
 
         image() = default;
 
-        image(const image& other) : size(other.size), format(other.format), components(other.components), m_id(other.m_id), dataSize(other.dataSize), data(other.data)
+        image(const image& other) : name(other.name), size(other.size), format(other.format), components(other.components), m_id(other.m_id), dataSize(other.dataSize), data(other.data)
         {
             if (m_id)
             {
@@ -85,7 +86,14 @@ namespace legion::core
             }
         }
 
-        image(image&& other) : size(other.size), format(other.format), components(other.components), m_id(other.m_id), dataSize(other.dataSize), data(other.data)
+        image(image&& other)
+            : name(std::move(other.name)),
+            size(std::move(other.size)),
+            format(std::move(other.format)),
+            components(std::move(other.components)),
+            m_id(std::move(other.m_id)),
+            dataSize(std::move(other.dataSize)),
+            data(other.data)
         {
             if (m_id)
             {
@@ -116,6 +124,7 @@ namespace legion::core
                 m_refs[m_id]++;
             }
 
+            name = other.name;
             size = other.size;
             format = other.format;
             components = other.components;
@@ -145,10 +154,11 @@ namespace legion::core
                 m_refs[m_id]++;
             }
 
-            size = other.size;
-            format = other.format;
-            components = other.components;
-            dataSize = other.dataSize;
+            name = std::move(other.name);
+            size = std::move(other.size);
+            format = std::move(other.format);
+            components = std::move(other.components);
+            dataSize = std::move(other.dataSize);
             data = other.data;
             return *this;
         }
@@ -286,7 +296,7 @@ namespace legion::core
          */
         static image_handle create_image(const std::string& name, const filesystem::view& file, image_import_settings settings = default_image_settings);
         static image_handle create_image(const filesystem::view& file, image_import_settings settings = default_image_settings);
-        static image_handle insert_image(const std::string& name, image&& img);
+        static image_handle insert_image(image&& img);
 
         /**@brief Returns a handle to a image with a certain name. Will return invalid_image_handle if the requested image doesn't exist.
          */

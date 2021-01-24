@@ -49,13 +49,16 @@ namespace legion::core::detail
             return handle;
 
         image image{};
+        image.name = img.name;
+        image.size.x = img.width;
+        image.size.y = img.height;
         image.format = img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE ? channel_format::eight_bit : img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT ? channel_format::sixteen_bit : channel_format::float_hdr;
         image.components = img.component == 1 ? image_components::grey : img.component == 2 ? image_components::grey_alpha : img.component == 3 ? image_components::rgb : image_components::rgba;
         image.dataSize = img.image.size();
         image.data = new byte[image.dataSize];
 
         memcpy(image.data, img.image.data(), img.image.size());
-        return ImageCache::insert_image(img.name, std::move(image));
+        return ImageCache::insert_image(std::move(image));
     }
 
     /**
