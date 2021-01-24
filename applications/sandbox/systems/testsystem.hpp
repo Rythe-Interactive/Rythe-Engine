@@ -8,10 +8,10 @@
 #include <physics/components/physics_component.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/cube_collider_params.hpp>
-#include <physics/data/physics_manifold_precursor.h>
+#include <physics/data/physics_manifold_precursor.hpp>
 #include <physics/systems/physicssystem.hpp>
 #include <physics/halfedgeface.hpp>
-#include <physics/data/penetrationquery.h>
+#include <physics/data/penetrationquery.hpp>
 
 
 #include <core/compute/context.hpp>
@@ -131,13 +131,13 @@ public:
     ecs::entity_handle Point6FrictionBody;
     ecs::entity_handle FullFrictionBody;
 
-    //ecs::EntityQuery halfEdgeQuery;
+    ecs::EntityQuery halfEdgeQuery;
 
     virtual void setup()
     {
 
         physics::PrimitiveMesh::SetECSRegistry(m_ecs);
-        
+
         #pragma region Input binding
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::LEFT, -1.f);
         app::InputSystem::createBinding<physics_test_move>(app::inputmap::method::RIGHT, 1.f);
@@ -203,7 +203,7 @@ public:
         //bindToEvent< activateFrictionTest, &TestSystem::FrictionTestActivate>();
 
         bindToEvent< nextEdge_action, &TestSystem::OnNextEdge>();
-        bindToEvent<nextPairing_action, &TestSystem::OnNextPair>();
+        
 
         //bindToEvent< extendedPhysicsContinue, &TestSystem::onExtendedPhysicsContinueRequest>();
         //bindToEvent<nextPhysicsTimeStepContinue, &TestSystem::onNextPhysicsTimeStepRequest>();
@@ -212,7 +212,7 @@ public:
 
 #pragma endregion
 
-#pragma region Model and material loading
+        #pragma region Model and material loading
         const float additionalLightIntensity = 0.5f;
 
         rendering::model_handle directionalLightH;
@@ -419,9 +419,10 @@ public:
 
             app::ContextHelper::makeContextCurrent(nullptr);
         }
-#pragma endregion
 
-#pragma region Entities
+        #pragma endregion
+
+        #pragma region Entities
         {
             auto ent = createEntity();
             ent.add_component(rendering::mesh_renderer(slateH, planeH));
@@ -522,12 +523,6 @@ public:
 
         {
             auto ent = createEntity();
-            ent.add_component(gfx::mesh_renderer(particleMH, billboardH));
-            ent.add_components<transform>(position(-9, 0.5, 10), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
             ent.add_component(gfx::mesh_renderer(fixedSizeParticleMH, billboardH));
             ent.add_components<transform>(position(-9, 0.5, 8), rotation(), scale());
         }
@@ -560,6 +555,12 @@ public:
             ent.add_components<transform>(position(0, 1, 0), rotation(), scale());
         }
 
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
+        //    ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
+        //    ent.add_components<transform>(position(0, 1, 0), rotation(), scale());
+        //}
 
         {
             auto ent = createEntity();
@@ -568,11 +569,24 @@ public:
             ent.add_components<transform>(position(-10, 1, 0), rotation(), scale());
         }
 
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
+        //    ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
+        //    ent.add_components<transform>(position(-10, 1, 0), rotation(), scale());
+        //}
 
         {
             auto ent = createEntity();
             ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
             ent.add_component<rendering::light>(rendering::light::point(math::colors::red, additionalLightIntensity, 50.f));
+            ent.add_components<transform>(position(10, 1, 0), rotation(), scale());
+        }
+
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(pointLightH.get_mesh()), rendering::mesh_renderer(pointLightMH));
+            ent.add_component<rendering::light>(rendering::light::point(math::colors::red, 1.f));
             ent.add_components<transform>(position(10, 1, 0), rotation(), scale());
         }
 
@@ -598,30 +612,15 @@ public:
             ent.add_components<transform>(position(0, 3, 11.1f), rotation(), scale());
         }
 
-        {
-            auto ent = m_ecs->createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(gnomeH.get_mesh()), rendering::mesh_renderer(gnomeMH));
-            ent.add_component<sah>({});
+        //{
+        //    auto ent = m_ecs->createEntity();
+        //    ent.add_component<sah>();
+        //    m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent), { gnomeH, normalH });
 
-            ent.add_components<transform>(position(), rotation(), scale());
-        }
-
-        /*   {
-               auto ent = m_ecs->createEntity();
-               ent.add_component<sah>();
-               m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent), { gnomeH, normalH });
-
-               auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
-               positionH.write(math::vec3(0, 2, 15.1f));
-               scaleH.write(math::vec3(1.f));
-           }*/
-
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(submeshtestH.get_mesh()), rendering::mesh_renderer(pbrH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(0, 10, 0), rotation(), scale());
-        }
+        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponent<transform>(ent);
+        //    positionH.write(math::vec3(0, 2, 15.1f));
+        //    scaleH.write(math::vec3(1.f));
+        //}
 
         {
             auto ent = createEntity();
@@ -643,6 +642,14 @@ public:
             eventAudio.add_component<audio::audio_source>(source);
         }
 #endif
+        position positions[1000];
+        for (int i = 0; i < 1000; i++)
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(axesH.get_mesh()), rendering::mesh_renderer(vertexColorH));
+            ent.add_components<transform>();
+        }
+
         //position positions[1000];
         //for (int i = 0; i < 1000; i++)
         //{
@@ -798,271 +805,30 @@ public:
        // }
 #pragma endregion
 
-        //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
-
-        //setupPhysicsCDUnitTest(cubeH, wireframeH);
-
-        //----------- Rigidbody-Collider AABB Test------------//
-
-        //physics::HalfEdgeFinder finder;
-        //std::vector<std::shared_ptr<physics::MeshHalfEdge>> physics;
-        //std::vector<int> indices;
-        //std::vector<math::vec3> vertices;
-        //finder.FindHalfEdge(indices, vertices, math::mat4(1.0), physics);
-        //setupPhysicsFrictionUnitTest(cubeH, uvH);
-
-        //setupPhysicsStackingUnitTest(cubeH,uvH,TextureH);
-
-        //setupMeshSplitterTest(planeH,cubeH, cylinderH, magneticLowH,texture2H);
-//        setupPhysicsCompositeTest(cubeH, texture2H);
-        //setupPhysicsCRUnitTest(cubeH, texture2H);
-
-        physics::cube_collider_params cubeParams;
-        cubeParams.breadth = 1.0f;
-        cubeParams.width = 1.0f;
-        cubeParams.height = 1.0f;
-        //setupPhysicsCRUnitTest(cubeH, uvH);
-
-
-        //auto sceneEntity = createEntity();
-        //std::vector<ecs::entity_handle> children;
-        //for (size_type i = 0; i < m_ecs->world.child_count(); i++)
-        //{
-        //    children.push_back(m_ecs->world.get_child(i));
-        //}
-        //for (auto child : children)
-        //{
-        //    if (child != sceneEntity)
-        //    {
-        //        child.set_parent(sceneEntity);
-        //    }
-        //}
+        /*auto sceneEntity = createEntity();
+        std::vector<ecs::entity_handle> children;
+        for (size_type i = 0; i < m_ecs->world.child_count(); i++)
+        {
+            children.push_back(m_ecs->world.get_child(i));
+        }
+        for (auto child : children)
+        {
+            if (child != sceneEntity)
+            {
+                child.set_parent(sceneEntity);
+            }
+        }*/
 
         //scenemanagement::SceneManager::createScene("Main", sceneEntity);
 
         //sceneEntity.destroy();
 
-        //scenemanagement::SceneManager::loadScene("ImposterFlake");
+        scenemanagement::SceneManager::loadScene("ImposterFlake");
 
-        //CreateCubeStack(3, 2, 2, math::vec3(0, -3.0f, 8.0f), math::vec3(1, 1, 1)
-        //    ,cubeParams, 0.1f, cubeH, wireframeH);
-        //physicsUpdate(time::span deltaTime)
-        createProcess<&TestSystem::update>("Update");
-        createProcess<&TestSystem::drawInterval>("Update");
-  //      createProcess<&TestSystem::physicsUpdate>("Physics", 0.02f);
-    }
-
-    void setupMeshSplitterTest(rendering::model_handle planeH, rendering::model_handle cubeH
-        , rendering::model_handle cylinderH, rendering::model_handle complexH, rendering::material_handle TextureH)
-    {
-        physics::cube_collider_params cubeParams;
-        cubeParams.breadth = 2.0f;
-        cubeParams.width = 2.0f;
-        cubeParams.height = 2.0f;
-        ecs::entity_handle cubeSplit2;
-        {
-            auto splitter = m_ecs->createEntity();
-            cubeSplit2 = splitter;
-
-            auto entPhyHande = splitter.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-            physicsComponent2.AddBox(cubeParams);
-
-            entPhyHande.write(physicsComponent2);
-
-            splitter.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(TextureH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
-            positionH.write(math::vec3(36, 1.0f, 10.0f));
-            scaleH.write(math::vec3(0.01f));
-
-            auto rotation = rotationH.read();
-
-            rotation *= math::angleAxis(math::deg2rad(-60.0f), math::vec3(1, 0, 0));
-
-            splitter.write_component(rotation);
-
-        }
-        //Cube split plane
-        ecs::entity_handle cubeSplit;
-        {
-            /* auto splitter = m_ecs->createEntity();
-             cubeSplit = splitter;
-
-             auto entPhyHande = splitter.add_component<physics::physicsComponent>();
-
-             physics::physicsComponent physicsComponent2;
-             physics::physicsComponent::init(physicsComponent2);
-
-             physicsComponent2.AddBox(cubeParams);
-
-             entPhyHande.write(physicsComponent2);
-
-             splitter.add_components<rendering::mesh_renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
-
-             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitter);
-             positionH.write(math::vec3(37, 1.5f, 10.0f));
-             scaleH.write(math::vec3(0.01f));
-
-             auto rotation = rotationH.read();
-
-             rotation *= math::angleAxis(math::deg2rad(60.0f), math::vec3(1, 0, 0));
-
-             splitter.write_component(rotation);*/
-
-        }
-
-
-
-
-        //Cube 
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-            //ent.add_component<addRB>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-
-            entPhyHande.write(physicsComponent2);
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
-            //renderableHandle.write({ cubeH,TextureH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(37, 1.5f, 10.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "AABBRbStable";
-            idHandle.write(id);
-
-            auto finderH = ent.add_component<physics::MeshSplitter>();
-
-            auto finder = finderH.read();
-            //finder.splitTester.push_back(cubeSplit);
-            finder.splitTester.push_back(cubeSplit2);
-            finder.InitializePolygons(ent);
-            finderH.write(finder);
-
-        }
-
-        //Split plane
-        ecs::entity_handle cylinderSplit;
-        {
-            //auto splitterCylinder = m_ecs->createEntity();
-            //cylinderSplit = splitterCylinder;
-
-            ////auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            ////auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-            //splitterCylinder.add_components<rendering::mesh_renderable>(planeH.get_mesh(), rendering::mesh_renderer(TextureH));
-
-            //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(splitterCylinder);
-            //positionH.write(math::vec3(37, 1.5f, 15.0f));
-            //scaleH.write(math::vec3(0.02f));
-
-        }
-
-        //Cylinder
-        {
-            //auto ent = m_ecs->createEntity();
-
-            //auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            //physics::physicsComponent physicsComponent;
-            //physics::physicsComponent::init(physicsComponent);
-
-            //physicsComponent.AddBox(cubeParams);
-            //entPhyHande.write(physicsComponent);
-
-            //
-
-            ////auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            ////auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(ent);
-            //renderableHandle.write({ cylinderH,TextureH });
-
-            //auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            //positionH.write(math::vec3(37, 1.5f, 15.0f));
-            //scaleH.write(math::vec3(1.0f));
-
-            //auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            //auto id = idHandle.read();
-            //id.id = "AABBRbStable";
-            //idHandle.write(id);
-
-
-            //auto finderH = ent.add_component<physics::MeshSplitter>();
-
-            //auto finder = finderH.read();
-            //finder.splitTester = cylinderSplit;
-            //finder.InitializePolygons(ent);
-            //finderH.write(finder);
-        }
-
-        //Complex Mesh
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-
-            entPhyHande.write(physicsComponent2);
-
-            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(complexH.get_mesh()), rendering::mesh_renderer(TextureH));
-
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(37, 1.5f, 20.0f));
-            scaleH.write(math::vec3(5.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "AABBRbStable";
-            idHandle.write(id);
-
-
-            /*auto finderH = ent.add_component<physics::HalfEdgeFinder>();
-
-            auto finder = finderH.read();
-            finder.InitializePolygons(ent);
-            finderH.write(finder);*/
-        }
-
-        //Complex Mesh
 
         createProcess<&TestSystem::update>("Update");
-        ext::AnimationEditor::onRenderCustomEventGUI(ext::void_animation_event::id, [this](id_type id, ext::animation_event_base* ebase)
-            {
-                imgui::base::Text("Void Animations Custom Edit Frontend!");
-
-                static bool showBaseRenderLayer = false;
-                if (imgui::base::Button(fmt::format("Show Base Renderer [{}]", showBaseRenderLayer).c_str()))
-                {
-                    showBaseRenderLayer = !showBaseRenderLayer;
-                }
-                return showBaseRenderLayer;
-            });
-        //createProcess<&TestSystem::drawInterval>("TestChain");
+        
     }
-
-
 
     void onVoidAnimationEvent(ext::void_animation_event* evnt)
     {
@@ -1078,990 +844,7 @@ public:
         log::debug("received trigger event {}", evnt->manifold.isColliding);
     }
 
-    void setupPhysicsCDUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
-    {
-        physics::cube_collider_params cubeParams;
-        cubeParams.breadth = 2.0f;
-        cubeParams.width = 2.0f;
-        cubeParams.height = 2.0f;
-
-        physics::cube_collider_params cubeParams2;
-        cubeParams2.breadth = 3.0f;
-        cubeParams2.width = 3.0f;
-        cubeParams2.height = 3.0f;
-
-        //----------- AABB to AABB Test(Single Axis)  ------------//
-        //**
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, -3.0f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsUnitTestCD.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = true;
-            entPhyHande.write(physicsComponent2);
-
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(3.0, -3.0f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
-        }
-
-
-
-        //----------- AABB to AABB Test  ------------//
-        //**
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, -3.0f, 5.0f));
-            scaleH.write(math::vec3(1.0f));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsUnitTestCD.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = true;
-            entPhyHande.write(physicsComponent2);
-
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(3.0, -2.0f, 4.0f));
-            scaleH.write(math::vec3(1.0f));
-        }
-        //*/
-
-        //----------- AABB to OBB Test  ------------//
-        //**
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, -3.0f, -2.0f));
-            scaleH.write(math::vec3(1.0f));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsUnitTestCD.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = true;
-            entPhyHande.write(physicsComponent2);
-
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(3.0, -3.0f, -2.0f));
-
-            auto rot = rotationH.read();
-            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-            rot *= math::angleAxis(45.f, math::vec3(0, 0, 1));
-
-            rotationH.write(rot);
-
-            scaleH.write(math::vec3(1.0f));
-        }
-        //*/
-
-        //----------- OBB to OBB Test  ------------//
-        //**
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, -3.0f, -7.0f));
-
-            auto rot = rotationH.read();
-            rot *= math::angleAxis(20.f, math::vec3(0, 1, 0));
-            rotationH.write(rot);
-
-            scaleH.write(math::vec3(1.0f));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsUnitTestCD.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = true;
-            entPhyHande.write(physicsComponent2);
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(3.0, -3.0f, -7.0f));
-
-            auto rot = rotationH.read();
-            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-            rot *= math::angleAxis(45.f, math::vec3(0, 0, 1));
-
-            rotationH.write(rot);
-
-            scaleH.write(math::vec3(1.0f));
-        }
-        //*/
-
-        //----------- OBB Edge-Edge Test  ------------//
-        //**
-        {
-            auto ent = m_ecs->createEntity();
-            //physicsUnitTestObjects.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(0, -3.0f, -12.0f));
-
-            auto rot = rotationH.read();
-            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-            rotationH.write(rot);
-
-            scaleH.write(math::vec3(1.0f));
-        }
-        {
-            auto ent = m_ecs->createEntity();
-            physicsUnitTestCD.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = true;
-            entPhyHande.write(physicsComponent2);
-
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(3.0, -3.0f, -13.0f));
-
-            auto rot = rotationH.read();
-            rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
-            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-            rotationH.write(rot);
-
-            scaleH.write(math::vec3(1.0f));
-        }
-        //*/
-    }
-    //10,0,15
-
-    void setupPhysicsCRUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
-    {
-        physics::cube_collider_params cubeParams;
-        cubeParams.breadth = 1.0f;
-        cubeParams.width = 1.0f;
-        cubeParams.height = 1.0f;
-
-        physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 2.5f;
-        staticBlockParams.width = 2.5f;
-        staticBlockParams.height = 1.0f;
-
-        float testPos = 10.0f;
-        //----------- Static Block To AABB Body Stability Test ------------//
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto idComp = idHandle.read();
-            idComp.id = "AABBStaticStable";
-            idHandle.write(idComp);
-
-        }
-
-        {
-            staticToAABBEntLinear = m_ecs->createEntity();
-            physicsUnitTestCD.push_back(staticToAABBEntLinear);
-            auto entPhyHande = staticToAABBEntLinear.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            entPhyHande.write(physicsComponent2);
-
-            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToAABBEnt);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntLinear);
-            positionH.write(math::vec3(testPos, -0.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntLinear);
-            auto id = idHandle.read();
-            id.id = "AABBRbStable";
-            idHandle.write(id);
-        }
-
-        //{
-        //    auto ent = m_ecs->createEntity();
-        //    //physicsUnitTestCD.push_back(staticToAABBEntLinear);
-        //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-        //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
-
-
-        //    physicsComponent2.AddBox(cubeParams);
-        //    entPhyHande.write(physicsComponent2);
-
-        //    auto crb = m_ecs->createComponent<physics::rigidbody>(ent);
-        //    auto rbHandle = ent.add_component<physics::rigidbody>();
-
-        //    //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToAABBEnt);
-        //    //renderableHandle.write({ cubeH), wireframeH });
-
-        //    auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-        //    positionH.write(math::vec3(testPos+0.5f, -1.0f, 15.0f));
-        //    scaleH.write(math::vec3(1.0f));
-
-        //    auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-        //    auto id = idHandle.read();
-        //    id.id = "AABBRbStable";
-        //    idHandle.write(id);
-        //}
-
-        //----------- Static Block To AABB Body Rotation Test------------//
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto idComp = idHandle.read();
-            idComp.id = "AABBStatic";
-            idHandle.write(idComp);
-
-
-        }
-
-        {
-            staticToAABBEntRotation = m_ecs->createEntity();
-            physicsUnitTestCD.push_back(staticToAABBEntRotation);
-            auto entPhyHande = staticToAABBEntRotation.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-            physicsComponent2.AddBox(cubeParams);
-            entPhyHande.write(physicsComponent2);
-
-            //auto crb = m_ecs->createComponent<physics::rigidbody>(staticToAABBEnt);
-            //auto rbHandle = staticToAABBEnt.add_component<physics::rigidbody>();
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToAABBEnt);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToAABBEntRotation);
-            positionH.write(math::vec3(testPos - 2.7f, -0.0f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToAABBEntRotation);
-            auto id = idHandle.read();
-            id.id = "AABBRb";
-            idHandle.write(id);
-        }
-
-        //----------- Static Block To Rotated Body ------------//
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 2.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 2.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "OBBStatic";
-            idHandle.write(id);
-        }
-
-        {
-            staticToOBBEnt = m_ecs->createEntity();
-
-            auto entPhyHande = staticToOBBEnt.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(staticToOBBEnt);
-            //renderableHandle.write({ cubeH, wireframeH });
-            staticToOBBEnt.add_components<rendering::mesh_renderable>
-                (mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToOBBEnt);
-            positionH.write(math::vec3(testPos, -0.0f, 2.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto rot = rotationH.read();
-            /*rot *= math::angleAxis(math::radians(90.f), math::vec3(0, 0, 1));
-            rot *= math::angleAxis(math::radians(40.f), math::vec3(1, 0, 0));
-            rot *= math::angleAxis(math::radians(42.f), math::vec3(0, 1, 0));*/
-            //rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-            rotationH.write(rot);
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToOBBEnt);
-            auto id = idHandle.read();
-            id.id = "NON_STATIC";
-            idHandle.write(id);
-
-
-            //log::debug("rb.angularVelocity {}", rb.angularVelocity);
-
-        }
-
-        //----------- Static Block To Rotated Body Edge ------------//
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, -4.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, -4.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "OBBFoundationStaticEdge";
-            idHandle.write(id);
-        }
-
-        {
-            staticToEdgeEnt = m_ecs->createEntity();
-
-            auto entPhyHande = staticToEdgeEnt.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            entPhyHande.write(physicsComponent2);
-
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(staticToEdgeEnt);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(staticToEdgeEnt);
-            positionH.write(math::vec3(testPos + 3.0f, 2.0f, -4.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto rot = rotationH.read();
-            rot *= math::angleAxis(45.f, math::vec3(1, 0, 0));
-            rot *= math::angleAxis(45.f, math::vec3(0, 1, 0));
-            rotationH.write(rot);
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(staticToEdgeEnt);
-            auto id = idHandle.read();
-            id.id = "OBBRb";
-            idHandle.write(id);
-
-
-            //log::debug("rb.angularVelocity {}", rb.angularVelocity);
-
-        }
-
-
-    }
-    //15,0,15
-    void setupPhysicsFrictionUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
-    {
-        float testPos = 20.f;
-        physics::cube_collider_params cubeParams;
-        cubeParams.breadth = 1.0f;
-        cubeParams.width = 1.0f;
-        cubeParams.height = 1.0f;
-
-        physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 5.0f;
-        staticBlockParams.width = 5.0f;
-        staticBlockParams.height = 2.0f;
-
-        //NO Friction
-        {
-            auto ent = m_ecs->createEntity();
-            physicsFrictionTestRotators.push_back(ent);
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsFrictionTestRotators.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto idComp = idHandle.read();
-            idComp.id = "StaticNoFriction";
-            idHandle.write(idComp);
-
-
-        }
-
-        {
-            NoFrictionBody = m_ecs->createEntity();
-
-            auto entPhyHande = NoFrictionBody.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(NoFrictionBody);
-            positionH.write(math::vec3(testPos - 1.0f, -1.5f, 15.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(NoFrictionBody);
-            auto idComp = idHandle.read();
-            idComp.id = "NoFriction";
-            idHandle.write(idComp);
-
-        }
-
-        //0.3f Friction
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsFrictionTestRotators.push_back(ent);
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsFrictionTestRotators.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto idComp = idHandle.read();
-            idComp.id = "StaticNoFriction";
-            idHandle.write(idComp);
-
-
-        }
-
-        {
-            Point3FrictionBody = m_ecs->createEntity();
-
-            auto entPhyHande = Point3FrictionBody.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(Point3FrictionBody);
-            positionH.write(math::vec3(testPos - 1.0f, -1.5f, 8.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(Point3FrictionBody);
-            auto idComp = idHandle.read();
-            idComp.id = "Point3Friction";
-            idHandle.write(idComp);
-
-        }
-
-
-        //0.6f Friction
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsFrictionTestRotators.push_back(ent);
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 1.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsFrictionTestRotators.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 1.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto idComp = idHandle.read();
-            idComp.id = "StaticNoFriction";
-            idHandle.write(idComp);
-
-
-        }
-
-        {
-            Point6FrictionBody = m_ecs->createEntity();
-
-            auto entPhyHande = Point6FrictionBody.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(Point6FrictionBody);
-            positionH.write(math::vec3(testPos - 1.0f, -1.5f, 1.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(Point6FrictionBody);
-            auto idComp = idHandle.read();
-            idComp.id = "NoFriction";
-            idHandle.write(idComp);
-
-        }
-
-        //1.0f Friction
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsFrictionTestRotators.push_back(ent);
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, -6.0f));
-            scaleH.write(math::vec3(2.5f, 1.0f, 2.5f));
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-            physicsFrictionTestRotators.push_back(ent);
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, -6.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto idComp = idHandle.read();
-            idComp.id = "StaticNoFriction";
-            idHandle.write(idComp);
-
-
-        }
-
-        {
-            FullFrictionBody = m_ecs->createEntity();
-
-            auto entPhyHande = FullFrictionBody.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            //auto renderableHandle = m_ecs->createComponent<rendering::mesh_renderable>(mesh_filter(ent);
-            //renderableHandle.write({ cubeH), wireframeH });
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(FullFrictionBody);
-            positionH.write(math::vec3(testPos - 1.0f, -1.5f, -6.0f));
-            scaleH.write(math::vec3(1.0f));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(FullFrictionBody);
-            auto idComp = idHandle.read();
-            idComp.id = "FullFrictionBody";
-            idHandle.write(idComp);
-
-        }
-
-        //
-
-
-    }
-    //20,0,15
-
-    void setupPhysicsCompositeTest(rendering::model_handle cubeH, rendering::material_handle TextureH)
-    {
-        float testPos = 20.f;
-        physics::cube_collider_params cubeParams;
-        cubeParams.breadth = 1.0f;
-        cubeParams.width = 1.0f;
-        cubeParams.height = 1.0f;
-
-        physics::cube_collider_params staticBlockParams;
-        staticBlockParams.breadth = 2.0f;
-        staticBlockParams.width = 2.0f;
-        staticBlockParams.height = 1.0f;
-
-        //BLOCK
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(2.0f, 1.0f, 2.0f));
-
-            //auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-           /* physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);*/
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "STATIC_BLOCK";
-            idHandle.write(id);
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -3.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
-            physicsComponent2.AddBox(staticBlockParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "STATIC_BLOCK";
-            idHandle.write(id);
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
-        }
-
-        {
-            auto ent = m_ecs->createEntity();
-
-            auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
-            positionH.write(math::vec3(testPos, -1.0f, 15.0f));
-            scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
-
-            auto entPhyHande = ent.add_component<physics::physicsComponent>();
-
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-            physicsComponent2.AddBox(cubeParams);
-            physicsComponent2.isTrigger = false;
-            entPhyHande.write(physicsComponent2);
-
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
-
-            auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
-            auto id = idHandle.read();
-            id.id = "NON_STATIC";
-            idHandle.write(id);
-
-            //rotation *= math::angleAxis(math::deg2rad(30.0f), math::vec3(1, 0, 0));
-
-            auto rbHandle = ent.add_component<physics::rigidbody>();
-        }
-
-
-
-
-
-    }
-
-
-#pragma region input stuff
+    #pragma region input stuff
     void onLightSwitch(light_switch* action)
     {
         size_type dispatch_size = 2000;
@@ -2316,8 +1099,6 @@ public:
     }
 #pragma endregion
 
-
-
     void update(time::span deltaTime)
     {
         static float timer = 0;
@@ -2420,7 +1201,7 @@ public:
 
             auto getEdge = entity.get_component_handle<physics::identifier>();
 
-            for (size_t i = 0; i < splitter.debugHelper.intersectionIslands.size(); i++)
+            /*for (size_t i = 0; i < splitter.debugHelper.intersectionIslands.size(); i++)
             {
                 auto maxColor = splitter.debugHelper.colors.size();
                 math::color color = splitter.debugHelper.colors[i % maxColor];
@@ -2434,7 +1215,7 @@ public:
                 }
 
 
-            }
+            }*/
 
             /* for (auto intersectingPosition : edgeFinder.debugHelper.intersectionsPolygons)
              {
@@ -2442,11 +1223,11 @@ public:
                  debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::blue, 10.0f, 0.0f);
              }*/
 
-            for (auto intersectingPosition : splitter.debugHelper.nonIntersectionPolygons)
-            {
-                math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
-                debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::yellow, 10.0f, 0.0f);
-            }
+            //for (auto intersectingPosition : splitter.debugHelper.nonIntersectionPolygons)
+            //{
+            //    math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
+            //    debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::yellow, 10.0f, 0.0f);
+            //}
 
 
             //log::debug("Count boundary polygon {} ");
@@ -2480,14 +1261,14 @@ public:
 
             }
 
-            auto& boundaryInfoList = splitter.debugHelper.boundaryEdgesForPolygon;
+            //auto& boundaryInfoList = splitter.debugHelper.boundaryEdgesForPolygon;
 
             /* debug::drawLine(splitter.debugHelper.cuttingSetting.first
                  , splitter.debugHelper.cuttingSetting.first + (splitter.debugHelper.cuttingSetting.second) * 2.0f, math::colors::cyan, 5.0f, 0.0f, false);*/
 
 
 
-            for (size_t i = 0; i < boundaryInfoList.size(); i++)
+          /*  for (size_t i = 0; i < boundaryInfoList.size(); i++)
             {
                 auto& boundaryInfo = boundaryInfoList[i];
                 math::color color = boundaryInfo.drawColor;
@@ -2525,7 +1306,7 @@ public:
 
                 debug::drawLine(boundaryInfo.intersectionEdge + polygonNormalOffset
                     , boundaryInfo.intersectionEdge + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::magenta, 10.0f, 0.0f, false);
-            }
+            }*/
 
         }
     }
@@ -2563,7 +1344,7 @@ public:
         accumulated += deltaTime;
         frameCount++;
 
-        /* if (buffer > 1.f)
+         if (buffer > 1.f)
          {
              buffer -= 1.f;
 
@@ -2574,186 +1355,17 @@ public:
              }
 
              std::cout << "This is a different thread!! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-         }*/
+         }
 
-         //if (accumulated > 10.f)
-         //{
-         //	std::cout << "raising exit event" << std::endl;
-         //	raiseEvent<events::exit>();
-         //	//throw legion_exception_msg("hehehe fuck you >:D");
-         //}
+         if (accumulated > 10.f)
+         {
+         	std::cout << "raising exit event" << std::endl;
+         	raiseEvent<events::exit>();
+         	//throw legion_exception_msg("hehehe fuck you >:D");
+         }
     }
 
-    void drawInterval(time::span deltaTime)
-    {
-        static auto physicsQuery = createQuery< physics::physicsComponent>();
-        uint i = 0;
-
-        float duration = 0.02f;
-
-        for (auto penetration : physics::PhysicsSystem::penetrationQueries)
-        {
-            debug::drawLine(penetration->faceCentroid
-                , penetration->faceCentroid + penetration->normal, math::vec4(1, 0, 1, 1), 15.0f, duration);
-            auto x = 1;
-        }
-
-
-        //--------------------------------------- Draw contact points ---------------------------------------//
-
-
-
-        for (int i = 0; i < physics::PhysicsSystem::contactPoints.size(); i++)
-        {
-            //ref is red
-            //inc is blue
-
-            auto& contact = physics::PhysicsSystem::contactPoints.at(i);
-
-            debug::drawLine(contact.refRBCentroid
-                , contact.RefWorldContact, math::vec4(1, 0, 0, 1), 5.0f, duration, true);
-
-            debug::drawLine(contact.incRBCentroid
-                , contact.IncWorldContact, math::vec4(0, 0, 1, 1), 5.0f, duration, true);
-
-            debug::drawLine(contact.IncWorldContact
-                , contact.IncWorldContact + math::vec3(0, 0.1f, 0), math::vec4(0.5, 0.5, 0.5, 1), 5.0f, duration, true);
-
-            debug::drawLine(contact.refRBCentroid
-                , contact.refRBCentroid + math::vec3(0, 0.1f, 0), math::vec4(0, 0, 0, 1), 5.0f, duration, true);
-
-        }
-
-        //--------------------------------------- Draw extreme points ---------------------------------------//
-
-        i = 0;
-        for (auto penetration : physics::PhysicsSystem::aPoint)
-        {
-            debug::drawLine(penetration
-                , penetration + math::vec3(0, 0.2, 0), math::vec4(1, 0, 0, 1), 15.0f);
-
-        }
-        i = 0;
-        for (auto penetration : physics::PhysicsSystem::bPoint)
-        {
-            debug::drawLine(penetration
-                , penetration + math::vec3(0, 0.2, 0), math::vec4(0, 0, 1, 1), 15.0f);
-
-        }
-
-        physics::PhysicsSystem::contactPoints.clear();
-        physics::PhysicsSystem::penetrationQueries.clear();
-        physics::PhysicsSystem::aPoint.clear();
-        physics::PhysicsSystem::bPoint.clear();
-
-        //physicsQuery.queryEntities();
-        //auto size = physicsQuery.size();
-        ////this is called so that i can draw stuff
-        //for (auto entity : physicsQuery)
-        //{
-        //    auto rotationHandle = entity.get_component_handle<rotation>();
-        //    auto positionHandle = entity.get_component_handle<position>();
-        //    auto scaleHandle = entity.get_component_handle<scale>();
-        //    auto physicsComponentHandle = entity.get_component_handle<physics::physicsComponent>();
-
-        //    bool hasTransform = rotationHandle && positionHandle && scaleHandle;
-        //    bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
-
-        //    if (hasNecessaryComponentsForPhysicsManifold)
-        //    {
-        //        auto rbColor = math::color(0.0, 0.5, 0, 1);
-        //        auto statibBlockColor = math::color(0, 1, 0, 1);
-
-        //        rotation rot = rotationHandle.read();
-        //        position pos = positionHandle.read();
-        //        scale scale = scaleHandle.read();
-
-        //        auto usedColor = statibBlockColor;
-        //        bool useDepth = false;
-
-        //        if (entity.get_component_handle<physics::rigidbody>())
-        //        {
-        //            usedColor = rbColor;
-        //        }
-
-
-        //        //assemble the local transform matrix of the entity
-        //        math::mat4 localTransform;
-        //        math::compose(localTransform, scale, rot, pos);
-
-        //        auto physicsComponent = physicsComponentHandle.read();
-
-        //        i = 0;
-        //        for (auto physCollider : *physicsComponent.colliders)
-        //        {
-        //            //--------------------------------- Draw Collider Outlines ---------------------------------------------//
-
-        //            for (auto face : physCollider->GetHalfEdgeFaces())
-        //            {
-        //                //face->forEachEdge(drawFunc);
-        //                physics::HalfEdgeEdge* initialEdge = face->startEdge;
-        //                physics::HalfEdgeEdge* currentEdge = face->startEdge;
-
-        //                math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
-        //                math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0)));
-
-        //                //debug::drawLine(faceStart, faceEnd, math::colors::green, 5.0f);
-
-        //                if (!currentEdge) { return; }
-
-        //                do
-        //                {
-        //                    physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
-        //                    currentEdge = currentEdge->nextEdge;
-
-        //                    math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
-        //                    math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
-
-        //                    debug::drawLine(worldStart, worldEnd, usedColor, 2.0f, 0.0f, useDepth);
-
-        //                } while (initialEdge != currentEdge && currentEdge != nullptr);
-        //            }
-        //        }
-
-        //    }
-
-        //}
-
-        //FindClosestPointsToLineSegment unit test
-
-
-       /* math::vec3 p1(5, -0.5, 0);
-        math::vec3 p2(5, 0.5, 0);
-
-        math::vec3 p3(6, 0, -0.5);
-        math::vec3 p4(6, 0, 0.5);
-
-        math::vec3 p1p2;
-        math::vec3 p3p4;
-
-        debug::drawLine(p1, p2, math::colors::red, 5.0f);
-        debug::drawLine(p3, p4, math::colors::red, 5.0f);
-
-        physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
-
-        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);
-
-        p1 = math::vec3(8, 0, 0);
-        p2 = p1 + math::vec3(0, 1.0f, 0);
-
-        p3 = math::vec3(10, 0, 0) + math::vec3(1.0f);
-        p4 = p3 - math::vec3(1.0f);
-
-        debug::drawLine(p1, p2, math::colors::red, 5.0f);
-        debug::drawLine(p3, p4, math::colors::red, 5.0f);
-
-        physics::PhysicsStatics::FindClosestPointsToLineSegment(p1, p2, p3, p4, p1p2, p3p4);
-
-        debug::drawLine(p1p2, p3p4, math::colors::green, 5.0f);*/
-
-    }
-
-    void onActivateUnitTest2(activate_CRtest2* action)
+        void onActivateUnitTest2(activate_CRtest2* action)
     {
         static bool activated = false;
 
@@ -2797,7 +1409,7 @@ public:
     //}
 
 
-    /*void FrictionTestActivate(activateFrictionTest* action)
+    void FrictionTestActivate(activateFrictionTest* action)
     {
         if (action->value)
         {
@@ -2844,7 +1456,7 @@ public:
 
 
         }
-    }*/
+    }
 
     void CreateCubeStack(int height, int width, int breadth, math::vec3 startPosition, math::vec3 offset,
         physics::cube_collider_params cubeParams, float cubeFriction, rendering::model_handle cubeH, rendering::material_handle wireframeH, bool addRigidbody = true)
@@ -2886,11 +1498,11 @@ public:
 
                     }
 
-                    auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
+                    /*auto idHandle = m_ecs->createComponent<physics::identifier>(ent);
                     auto idComp = idHandle.read();
                     idComp.id = "Stack" + std::to_string(l);
                     l++;
-                    idHandle.write(idComp);
+                    idHandle.write(idComp);*/
 
                 }
             }
@@ -2899,7 +1511,7 @@ public:
 
     void OnNextEdge(nextEdge_action* action)
     {
-        /*static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
 
         if (action->value)
         {
@@ -2912,42 +1524,16 @@ public:
                 auto splitter = edgeFinderH.read();
 
 
-                splitter .edgeFinder.currentPtr = splitter .edgeFinder.currentPtr->nextEdge;
+                //splitter .edgeFinder.currentPtr = splitter .edgeFinder.currentPtr->nextEdge;
 
                 edgeFinderH.write(splitter);
 
             }
-        }*/
-
-
+        }
     }
-
-    void OnNextPair(nextPairing_action* action)
-    {
-        /*static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
-
-        if (action->value)
-        {
-            log::debug("OnNextPair(nextPairing_action * action)");
-            for (auto entity : halfEdgeQuery)
-            {
-
-                auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
-
-                auto splitter = edgeFinderH.read();
-
-                splitter .edgeFinder.currentPtr = splitter .edgeFinder.currentPtr->pairingEdge;
-
-
-                edgeFinderH.write(splitter);
-
-            }
-        }*/
-
-    }
-
-
-
 
 
 };
+
+
+
