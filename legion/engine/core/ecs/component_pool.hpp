@@ -81,7 +81,7 @@ namespace legion::core::ecs
                             "Serialized Objects should not have load&save pairs and a serialization function simultaneously");
 
             OPTICK_EVENT();
-            std::string componentType = std::string(typeName<component_type>());
+            std::string componentType = std::string(nameOfType<component_type>());
 
             if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
             {
@@ -107,7 +107,7 @@ namespace legion::core::ecs
                             "Serialized Objects should not have load&save pairs and a serialization function simultaneously");
 
             OPTICK_EVENT();
-            std::string componentType = std::string(typeName<component_type>());
+            std::string componentType = std::string(nameOfType<component_type>());
 
             if constexpr (serialization::has_serialize<component_type, void(cereal::BinaryOutputArchive&)>::value)
             {
@@ -135,7 +135,7 @@ namespace legion::core::ecs
 
             OPTICK_EVENT();
 
-            std::string componentType = std::string(typeName<component_type>());
+            std::string componentType = std::string(nameOfType<component_type>());
             if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
             {
                 async::readonly_guard guard(m_lock);
@@ -162,7 +162,7 @@ namespace legion::core::ecs
 
             OPTICK_EVENT();
 
-            std::string componentType = std::string(typeName<component_type>());
+            std::string componentType = std::string(nameOfType<component_type>());
             if constexpr (serialization::has_serialize<component_type, void(cereal::BinaryInputArchive&)>::value)
             {
                 async::readonly_guard guard(m_lock);

@@ -81,7 +81,7 @@ namespace legion::core::ecs
             async::readwrite_guard guard(m_familyLock);
             if (!m_families.count(typeHash<component_type>())) {
                 m_families[typeHash<component_type>()] = std::make_unique<component_pool<component_type>>(this, m_eventBus);
-                m_prettyNames[typeHash<component_type>()] = std::string(typeName<component_type>());
+                m_prettyNames[typeHash<component_type>()] = std::string(nameOfType<component_type>());
             }
         }
 
