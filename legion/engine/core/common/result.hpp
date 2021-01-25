@@ -59,8 +59,6 @@ namespace legion::core::common {
     template <>                         class ok_proxy<void> : public ok_ident
     {
     public:
-        ok_proxy(ok_proxy&&) noexcept = default;
-        ok_proxy() {}
         operator ok_proxy<>() const;
     };
     template <>                         class ok_proxy<> : public ok_ident
@@ -299,6 +297,77 @@ namespace legion::core::common {
                 return std::invoke(f,get_error(),std::forward<Args>(args)...);
             }
             return get();
+        }
+
+        L_NODISCARD bool valid() const noexcept
+        {
+            return m_ok != nullptr;
+        }
+        bool has_err() noexcept
+        {
+            return m_err != nullptr && m_ok == nullptr;
+        }
+
+        L_NODISCARD const typename try_static_cast_result<err_result_t, err_type>::type& get_error() const
+        {
+            if (m_err) return try_static_cast<err_result_t>(*m_err);
+            throw std::runtime_error("this result would have been valid!");
+        }
+
+        L_NODISCARD typename try_static_cast_result<err_result_t, err_type>::type get_error()
+        {
+            if (m_err) return try_static_cast<err_result_t>(*m_err);
+            throw std::runtime_error("this result would have been valid!");
+        }
+
+        L_NORETURN void rethrow()
+        {
+            throw try_static_cast<err_result_t>(*m_err);
+        }
+        void maybe_rethrow()
+        {
+            if (has_err()) rethrow();
+        }
+
+    protected:
+        std::unique_ptr<err_type> m_err;
+        std::unique_ptr<ok_type> m_ok;
+    };
+
+
+    template <class ErrType, class OkResultType, class ErrResultType>
+    class result_impl<void, ErrType, OkResultType, ErrResultType>
+    {
+    public:
+        using err_type = ErrType;
+        using ok_type = void;
+        using err_result_t = ErrResultType;
+        using ok_result_t = OkResultType;
+
+        result_impl(std::unique_ptr<ok_type>  ok, std::unique_ptr<err_type>  err) :
+            m_err(std::move(err)), m_ok(std::move(ok)) {}
+        result_impl(const result_impl&) = delete;
+        result_impl(result_impl&&) noexcept = default;
+        result_impl& operator=(const result_impl&) = delete;
+        result_impl& operator=(result_impl&&) noexcept = default;
+
+        virtual ~result_impl() = default;
+
+        template <class Func, class... Args>
+        void except(Func && f, Args&&... args)
+        {
+            if (has_err())
+            {
+                return std::invoke(f, get_error(), std::forward<Args>(args)...);
+            }
+        }
+        template <class Func, class... Args>
+        void except(const Func & f, Args&&... args)
+        {
+            if (has_err())
+            {
+                return std::invoke(f, get_error(), std::forward<Args>(args)...);
+            }
         }
 
         L_NODISCARD bool valid() const noexcept
