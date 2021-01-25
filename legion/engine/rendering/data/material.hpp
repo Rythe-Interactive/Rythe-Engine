@@ -336,7 +336,7 @@ namespace legion::rendering
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
             static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->set_value(value);
         else
-            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, typeName<math::color>());
+            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<math::color>());
     }
 
     template<>
@@ -361,7 +361,7 @@ namespace legion::rendering
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
             return static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->get_value();
 
-        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, typeName<math::color>());
+        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<math::color>());
         return math::color();
     }
 
@@ -373,14 +373,14 @@ namespace legion::rendering
 
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
 
         id_type id = submaterial.idOfLocation[location];
 
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
             static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->set_value(value);
         else
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
     }
 
     template<>
@@ -391,13 +391,13 @@ namespace legion::rendering
 
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
 
         id_type id = submaterial.idOfLocation[location];
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
             return static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->get_value();
 
-        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
+        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
         return math::color();
     }
 
@@ -426,7 +426,7 @@ namespace legion::rendering
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
             static_cast<material_parameter<T>*>(submaterial.parameters[id].get())->set_value(value);
         else
-            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, typeName<T>());
+            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<T>());
     }
 
     template<typename T>
@@ -451,7 +451,7 @@ namespace legion::rendering
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
             return static_cast<material_parameter<T>*>(submaterial.parameters[id].get())->get_value();
 
-        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, typeName<T>());
+        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<T>());
         return T();
     }
 
@@ -463,14 +463,14 @@ namespace legion::rendering
 
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<T>());
 
         id_type id = submaterial.idOfLocation[location];
 
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
             static_cast<material_parameter<T>*>(submaterial.parameters[id].get())->set_value(value);
         else
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<T>());
     }
 
     template<typename T>
@@ -481,13 +481,13 @@ namespace legion::rendering
 
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<T>());
 
         id_type id = submaterial.idOfLocation[location];
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
             return static_cast<material_parameter<T>*>(submaterial.parameters[id].get())->get_value();
 
-        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
+        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<T>());
         return T();
     }
 

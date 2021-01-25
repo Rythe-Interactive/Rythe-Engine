@@ -332,7 +332,7 @@ namespace legion::rendering
             auto* ptr = dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[nameHash(name)].get());
             if (ptr)
                 return *ptr;
-            log::error("Uniform of type {} does not exist with name {}.", typeName<T>(), name);
+            log::error("Uniform of type {} does not exist with name {}.", nameOfType<T>(), name);
             return uniform<T>(nullptr);
         }
 
@@ -363,7 +363,7 @@ namespace legion::rendering
             auto* ptr = dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[id].get());
             if (ptr)
                 return *ptr;
-            log::error("Uniform of type {} does not exist with id {}.", typeName<T>(), id);
+            log::error("Uniform of type {} does not exist with id {}.", nameOfType<T>(), id);
             return uniform<T>(nullptr);
         }
 
@@ -393,7 +393,7 @@ namespace legion::rendering
             auto* ptr = dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[m_currentShaderVariant->idOfLocation[location]].get());
             if (ptr)
                 return *ptr;
-            log::error("Uniform of type {} does not exist with location {}.", typeName<T>(), location);
+            log::error("Uniform of type {} does not exist with location {}.", nameOfType<T>(), location);
             return uniform<T>(nullptr);
         }
 
