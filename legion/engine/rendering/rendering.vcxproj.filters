@@ -101,6 +101,7 @@
     <ClInclude Include="components\point.hpp" />
     <ClInclude Include="components\point_emitter_data.hpp" />
     <ClInclude Include="pipeline\default\postfx\bloom.hpp" />
+    <ClInclude Include="components\point_cloud_particle_container.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\buffer.inl" />
