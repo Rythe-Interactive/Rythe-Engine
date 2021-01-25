@@ -692,7 +692,6 @@ namespace legion::rendering
 
         shader shader;
         shader.name = name;
-        shader.state = state;
         shader.path = file.get_virtual_path();
 
         for (auto& [variant, variantState] : state)

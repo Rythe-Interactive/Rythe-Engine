@@ -293,7 +293,6 @@ namespace legion::rendering
     public:
         std::string name;
         std::string path;
-        std::unordered_map<std::string,rendering::shader_state> state;
 
         // Since copying would mean that the in-vram version of the actual shader would also need to be copied, we don't allow copying.
         shader(const shader&) = delete;
