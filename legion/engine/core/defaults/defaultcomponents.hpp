@@ -211,8 +211,8 @@ namespace legion::core
             std::string filepath;
             oa(id,cereal::make_nvp("Filepath", filepath));
             auto copy = default_mesh_settings;
-            copy.contextFolder = fs::view(filepath).parent();
-            id = MeshCache::create_mesh(filepath, fs::view(filepath), copy).id;
+            copy.contextFolder = filesystem::view(filepath).parent();
+            id = MeshCache::create_mesh(filepath, filesystem::view(filepath), copy).id;
         }
     };
 }
