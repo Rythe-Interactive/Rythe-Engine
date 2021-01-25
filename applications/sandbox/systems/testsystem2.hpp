@@ -91,7 +91,7 @@ public:
               params.particleMaterial = vertexColor,
                   params.particleModel = cube
               };
-              auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
+              auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params);
 
   #pragma region entities
 
@@ -138,7 +138,7 @@ public:
             pointCloudColor,
                 particleSphere
             };
-            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, pos);
+            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params);
 
 
             explosionParameters explosionParams{
