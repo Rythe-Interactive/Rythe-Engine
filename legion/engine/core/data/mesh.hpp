@@ -108,12 +108,12 @@ namespace legion::core
         material_list* materials = nullptr;
         bool triangulate = true;
         bool vertex_color = false;
-        filesystem::view contextFolder = filesystem::view(""sv);
+        filesystem::view contextFolder = filesystem::view(std::string_view(""));
     };
 
     /**@brief Default mesh import settings.
      */
-    const mesh_import_settings default_mesh_settings{ nullptr, true, false, filesystem::view(""sv) };
+    const mesh_import_settings default_mesh_settings{ nullptr, true, false, filesystem::view(std::string_view("")) };
 
     /**@class MeshCache
      * @brief Data cache for loading, storing and managing raw meshes.

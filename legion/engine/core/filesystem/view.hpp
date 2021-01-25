@@ -7,9 +7,6 @@
 
 #include <Optick/optick.h>
 
-#include <string_view>
-using namespace std::literals;
-
 #include "mem_filesystem_resolver.hpp"
 #include "navigator.hpp"
 #include "detail/traits.hpp"
