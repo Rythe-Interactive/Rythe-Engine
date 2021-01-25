@@ -243,7 +243,7 @@ namespace legion::rendering
             {
                 static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
 
-                auto material = MaterialCache::create_material(name + ":" + mat.name, defaultLitShader);
+                auto material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
 
                 if (mat.doubleSided)
                     material.set_variant("double_sided");
@@ -335,7 +335,7 @@ namespace legion::rendering
                 }
 
                 materials.push_back(material);
-                log::debug("Loaded embedded material {}:{}", name, mat.name);
+                log::debug("Loaded embedded material {}/{}", name, mat.name);
             }
         }
 
