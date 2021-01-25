@@ -102,36 +102,22 @@ public:
         skybox = createEntity();
         auto skyboxMat = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
         skyboxMat.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-        skybox.add_components<mesh_renderer>(
-            { skyboxMat, ModelCache::create_model("cube","assets://models/cube.obj"_view) });
-        skybox.add_components<transform>();
+        skybox.add_components<rendering::mesh_renderable>(mesh_filter(rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view).get_mesh()), rendering::mesh_renderer(skyboxMat));
+        skybox.add_components<transform>(position(), rotation(), scale(1000.f));
 
         groundplane = createEntity();
         auto groundmat = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.shs"_view);
         groundmat.set_param("floorTile", rendering::TextureCache::create_texture("floorTile", "engine://resources/default/tile.png"_view));
         groundplane.add_component<rendering::mesh_renderer>({ groundmat, rendering::ModelCache::create_model("floor", "assets://models/plane.obj"_view) });
         groundplane.add_components<transform>();
-
+        groundplane.write_component(scale(250.f));
         camera = createEntity();
         camera.add_components<transform>(position(0.f, 3.f, 0.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
-        //no audio for you
-#if !defined(SUPER_LOW_POWER)
-        camera.add_component<audio::audio_listener>();
-#endif
+        //camera.add_component<audio::audio_listener>();
+
         rendering::camera cam;
         cam.set_projection(22.5f, 0.001f, 1000.f);
         camera.add_component<rendering::camera>(cam);
-
-        auto ent = createEntity();
-        ent.add_component<rendering::mesh_renderer>({ rendering::MaterialCache::get_material("pbr"), rendering::ModelCache::get_handle("cube") });
-        ent.add_components<transform>(position(-5.f, 2.f, 10.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
-        ent.add_component<sah>();
-        ent.set_parent(camera);
-
-        auto ent2 = createEntity();
-        ent2.add_component<mesh_renderer>({ rendering::MaterialCache::get_material("pbr"), rendering::ModelCache::get_handle("cube") });
-        ent2.add_components<transform>(position(-7.f, 2.f, 10.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
-        ent2.set_parent(ent);
     }
 
 #pragma region input stuff
@@ -189,9 +175,13 @@ public:
 
         auto posH = camera.get_component_handle<position>();
         auto rot = camera.get_component_handle<rotation>().read();
-        math::vec3 move = toMat3(rot) * math::vec3::forward;
-        move = normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * movementspeed;
+        math::vec3 move = math::toMat3(rot) * math::vec3(0.f, 0.f, 1.f);
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * movementspeed;
         posH.fetch_add(move);
+
+        auto pos = posH.read();
+        skybox.write_component(pos);
+        groundplane.write_component(position(pos.x, 0, pos.z));
     }
 
     void onPlayerStrive(player_strive* action)
@@ -201,9 +191,13 @@ public:
 
         auto posH = camera.get_component_handle<position>();
         auto rot = camera.get_component_handle<rotation>().read();
-        math::vec3 move = toMat3(rot) * math::vec3::right;
-        move = normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * movementspeed;
+        math::vec3 move = math::toMat3(rot) * math::vec3(1.f, 0.f, 0.f);
+        move = math::normalize(move * math::vec3(1, 0, 1)) * action->value * action->input_delta * movementspeed;
         posH.fetch_add(move);
+
+        auto pos = posH.read();
+        skybox.write_component(pos);
+        groundplane.write_component(position(pos.x, 0, pos.z));
     }
 
     void onPlayerFly(player_fly* action)
@@ -215,6 +209,7 @@ public:
         posH.fetch_add(math::vec3(0.f, action->value * action->input_delta * movementspeed, 0.f));
 
         auto pos = posH.read();
+        skybox.write_component(pos);
     }
 
     void onPlayerLookX(player_look_x* action)
@@ -223,9 +218,17 @@ public:
             return;
 
         auto rotH = camera.get_component_handle<rotation>();
-        rotH.read_modify_write([&](rotation& src)
+        rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(0, 1, 0)));
+        rotH.read_modify_write([](rotation& src)
             {
-                src = angleAxis(action->value * action->input_delta * 500.f, math::vec3::up) * src;
+                math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
+                if (fwd.y < -0.95f)
+                    fwd.y = -0.95f;
+                else if (fwd.y > 0.95f)
+                    fwd.y = 0.95f;
+                fwd = math::normalize(fwd);
+                math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
+                src = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
             });
     }
 
@@ -235,24 +238,17 @@ public:
             return;
 
         auto rotH = camera.get_component_handle<rotation>();
-        rotH.read_modify_write([&](rotation& src)
+        rotH.fetch_multiply(math::angleAxis(action->value * action->input_delta * 500.f, math::vec3(1, 0, 0)));
+        rotH.read_modify_write([](rotation& src)
             {
-                math::mat3 rot = toMat3(src);
-                math::vec3 right = rot * math::vec3::right;
-                math::vec3 fwd = normalize(cross(right, math::vec3::up));
-                math::vec3 up = rot * math::vec3::up;
-                float angle = orientedAngle(fwd, up, right);
-
-                angle += action->value * action->input_delta * 500.f;
-
-                if (angle > -0.001f)
-                    angle = -0.001f;
-                if (angle < -(math::pi<float>() - 0.001f))
-                    angle = -(math::pi<float>() - 0.001f);
-
-                up = math::mat3(axisAngleMatrix(right, angle)) * fwd;
-                fwd = cross(right, up);
-                src = (rotation)conjugate(toQuat(lookAt(math::vec3::zero, fwd, up)));
+                math::vec3 fwd = math::toMat3(src) * math::vec3(0.f, 0.f, 1.f);
+                if (fwd.y < -0.95f)
+                    fwd.y = -0.95f;
+                else if (fwd.y > 0.95f)
+                    fwd.y = 0.95f;
+                fwd = math::normalize(fwd);
+                math::vec3 right = math::cross(fwd, math::vec3(0.f, 1.f, 0.f));
+                src = (rotation)math::conjugate(math::toQuat(math::lookAt(math::vec3(0.f, 0.f, 0.f), fwd, math::cross(right, fwd))));
             });
     }
 #pragma endregion
