@@ -80,18 +80,18 @@ namespace legion::core::ecs
             if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
             {
                 async::readonly_guard guard(m_lock);
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                oarchive(cereal::make_nvp("Component Name", std::string(nameOfType<component_type>())));
                 m_components[entityId].serialize(oarchive);
             }
             else
             {
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                oarchive(cereal::make_nvp("Component Name", std::string(nameOfType<component_type>())));
             }
         }
         virtual void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) override
         {
             OPTICK_EVENT();
-            oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+            oarchive(cereal::make_nvp("Component Name", std::string(nameOfType<component_type>())));
         }
         virtual void serialize(cereal::JSONInputArchive& oarchive, id_type entityId) override
         {
@@ -99,18 +99,18 @@ namespace legion::core::ecs
             if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
             {
                 async::readonly_guard guard(m_lock);
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                oarchive(cereal::make_nvp("Component Name", std::string(nameOfType<component_type>())));
                 m_components[entityId].serialize(oarchive);
             }
             else
             {
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                oarchive(cereal::make_nvp("Component Name", std::string(nameOfType<component_type>())));
             }
         }
         virtual void serialize(cereal::BinaryInputArchive& oarchive, id_type entityId) override
         {
             OPTICK_EVENT();
-            oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+            oarchive(cereal::make_nvp("Component Name", std::string(nameOfType<component_type>())));
         }
 
         /**@brief Get the rw_spinlock of this container.

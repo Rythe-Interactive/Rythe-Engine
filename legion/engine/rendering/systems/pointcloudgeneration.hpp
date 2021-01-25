@@ -182,7 +182,7 @@ namespace legion::rendering
         void GenerateParticles(pointCloudParameters params, std::vector<math::vec3> input, std::vector<math::vec4> inputColor, transform trans)
         {
             //generate particle system
-            std::string name = typeName<PointCloudParticleSystem>();
+            std::string name = nameOfType<PointCloudParticleSystem>();
 
 
 

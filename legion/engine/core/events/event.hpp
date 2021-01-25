@@ -19,7 +19,7 @@ namespace legion::core::events
         template<typename T>
         id_type reportEventType()
         {
-            eventNames[typeHash<T>()] = typeName<T>();
+            eventNames[typeHash<T>()] = nameOfType<T>();
             return typeHash<T>();
         }
     }
