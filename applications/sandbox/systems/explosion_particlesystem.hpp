@@ -91,20 +91,22 @@ public:
             scale.write(math::vec3(m_startingSize)* scaleOfEmitter);
 
             //Populates the particle with the appropriate stuffs.
-            createParticle(particleComponent, trans);
-            #pragma endregion 
+            createParticle(ent);
+            #pragma endregion
+
             #pragma region Set directions
             //Calculates position offset from center to create a direction for the velocity.
             math::vec3 pointPos = emitterPos + vert_position;
             math::vec3 pointDirection = normalize(pointPos - emitterPos);
             #pragma endregion
+
             #pragma region Set parameter values
             //Read particle component to set its lifetime and its velocity.
             rendering::particle particularParticle = particleComponent.read();
             particularParticle.lifeTime = 0;
             particularParticle.particleVelocity = m_startingVelocity.x * pointDirection * scaleOfEmitter.r;
             particleComponent.write(particularParticle);
-#           pragma endregion
+            #pragma endregion
         }
     }
 
@@ -114,6 +116,7 @@ public:
     void update(
         std::vector<ecs::entity_handle>& particle_list,
         ecs::component_handle<particle_emitter> particle_emitter,
+        ecs::EntityQuery&,
         time::span delta_time) const override
     {
         //Read the scale of the emitter.

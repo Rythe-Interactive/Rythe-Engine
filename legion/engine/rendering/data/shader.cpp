@@ -981,6 +981,11 @@ namespace legion::rendering
         return ShaderCache::get_shader(id)->name;
     }
 
+    std::string shader_handle::get_path() const
+    {
+        return ShaderCache::get_shader(id)->path;
+    }
+
     std::unordered_map<id_type, std::vector<std::tuple<std::string, GLint, GLenum>>> shader_handle::get_uniform_info() const
     {
         auto* shader = ShaderCache::get_shader(id);

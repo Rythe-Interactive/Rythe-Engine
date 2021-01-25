@@ -159,7 +159,10 @@ namespace legion::rendering
 
         L_NODISCARD const std::unordered_map<id_type, std::unique_ptr<material_parameter_base>>& get_params()
         {
-            return m_parameters;
+            if (m_currentVariant == 0)
+                m_currentVariant = nameHash("default");
+   
+            return m_variants[m_currentVariant].parameters;
         }
     };
 

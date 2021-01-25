@@ -135,7 +135,7 @@ public:
             //auto it = container.colorBufferData.begin() + data.bufferPosition + data.emitterSize + index;
             container.colorBufferData.push_back(newColor);
             //Populates the particle with the appropriate stuffs.
-            createParticle(trans);
+            createParticle(trans.entity);
             index++;
 
         }

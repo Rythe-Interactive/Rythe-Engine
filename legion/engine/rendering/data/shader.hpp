@@ -292,6 +292,8 @@ namespace legion::rendering
         mutable std::unordered_map<id_type, shader_variant> m_variants;
     public:
         std::string name;
+        std::string path;
+        std::unordered_map<std::string,rendering::shader_state> state;
 
         // Since copying would mean that the in-vram version of the actual shader would also need to be copied, we don't allow copying.
         shader(const shader&) = delete;
@@ -434,6 +436,7 @@ namespace legion::rendering
         void bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const;
 
         std::string get_name() const;
+        std::string get_path() const;
 
         std::unordered_map<id_type, std::vector<std::tuple<std::string, GLint, GLenum>>> get_uniform_info() const;
         std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info(id_type variantId) const;
