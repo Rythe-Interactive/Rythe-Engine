@@ -64,6 +64,6 @@ namespace legion::rendering
     const id_type PostProcessingEffect<Self>::id = typeHash<Self>();
 
     template<typename Self>
-    const std::string PostProcessingEffect<Self>::name = typeName<Self>();
+    const std::string PostProcessingEffect<Self>::name = nameOfType<Self>();
 
 }

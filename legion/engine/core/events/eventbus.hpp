@@ -46,7 +46,7 @@ namespace legion::core::events
             if (m_eventCallbacks.contains(event_type::id))
             {
                 OPTICK_EVENT("Event callbacks");
-                OPTICK_TAG("Event", typeName<event_type>());
+                OPTICK_TAG("Event", nameOfType<event_type>());
                 force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(eventptr); // Notify.
             }
         }
