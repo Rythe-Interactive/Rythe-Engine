@@ -28,8 +28,8 @@ namespace legion::rendering
         attachStage<PostProcessingStage>();
         attachStage<SubmitStage>();
 
-        PostProcessingStage::addEffect<Bloom>();
-        PostProcessingStage::addEffect<Tonemapping>(-64);
+        PostProcessingStage::addEffect<Tonemapping>();
+        PostProcessingStage::addEffect<Bloom>(-64);
         PostProcessingStage::addEffect<FXAA>(-100);
         PostProcessingStage::addEffect<DepthOfField>(-101);
 

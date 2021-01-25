@@ -142,29 +142,36 @@ namespace legion::rendering
 
     void Bloom::renderPass(framebuffer& fbo, RenderPipelineBase* pipeline, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
-        //// If a brightness threshold texture had not been created yet, create one.
-        //texture_handle overdrawTexture;
+        // If a brightness threshold texture had not been created yet, create one.
+        texture_handle overdrawTexture;
 
-        //{
-        //    auto attachment = fbo.getAttachment(OVERDRAW_ATTACHMENT);
-        //    if (std::holds_alternative<texture_handle>(attachment))
-        //        overdrawTexture = std::get<texture_handle>(attachment);
-        //}
+        //Try to get color attachment.
+        auto color_attachment = fbo.getAttachment(FRAGMENT_ATTACHMENT);
+        if (!std::holds_alternative<texture_handle>(color_attachment)) return;
 
-        //// Get brightest parts of the scene and append to overdraw buffer.
-        //seperateOverdraw(fbo, colortexture, overdrawTexture);
+        //Get color texture.
+        auto color_texture = std::get<texture_handle>(color_attachment);
 
-        //// Gets the size of the lighting data texture.
-        //math::ivec2 framebufferSize = colortexture.get_texture().size();
+        {
+            auto attachment = fbo.getAttachment(OVERDRAW_ATTACHMENT);
+            if (std::holds_alternative<texture_handle>(attachment))
+                overdrawTexture = std::get<texture_handle>(attachment);
+        }
 
-        //// Mix slight part of the previous frame overdraw into the current frame to reduce flickering and introduce slight trail when it's dark.
-        //historyMixOverdraw(fbo, overdrawTexture);
+        // Get brightest parts of the scene and append to overdraw buffer.
+        seperateOverdraw(fbo, color_texture, overdrawTexture);
 
-        //// Blur the overdraw buffer.
-        //texture_handle blurredImage = blurOverdraw(framebufferSize, overdrawTexture);
+        // Gets the size of the lighting data texture.
+        math::ivec2 framebufferSize = color_texture.get_texture().size();
 
-        //// Recombine the overdraw texture with the scene color.
-        //combineImages(fbo, colortexture, blurredImage);
+        // Mix slight part of the previous frame overdraw into the current frame to reduce flickering and introduce slight trail when it's dark.
+        historyMixOverdraw(fbo, overdrawTexture);
+
+        // Blur the overdraw buffer.
+        texture_handle blurredImage = blurOverdraw(framebufferSize, overdrawTexture);
+
+        // Recombine the overdraw texture with the scene color.
+        combineImages(fbo, color_texture, blurredImage);
     }
 
 }

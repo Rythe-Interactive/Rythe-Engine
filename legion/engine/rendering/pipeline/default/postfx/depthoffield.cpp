@@ -138,6 +138,7 @@ namespace legion::rendering
 
     void DepthOfField::postFilter(framebuffer& fbo, texture_handle& color_texture)
     {
+        //Blurs the bokeh blur to make it look like actual blur.
         fbo.attach(m_destinationTexture, FRAGMENT_ATTACHMENT);
         fbo.bind();
         m_postFilterShader.bind();
@@ -149,6 +150,7 @@ namespace legion::rendering
 
     void DepthOfField::preFilter(framebuffer& fbo, texture_handle& color_texture)
     {
+        //Resizes and prepares the scene color texture.
         fbo.attach(m_halfres1, FRAGMENT_ATTACHMENT);
         fbo.bind();
         m_preFilterShader.bind();
@@ -162,6 +164,7 @@ namespace legion::rendering
 
     void DepthOfField::combine(framebuffer& fbo, texture_handle& color_texture)
     {
+        //The final pass used to combine all the gathered textures.
         fbo.attach(color_texture, FRAGMENT_ATTACHMENT);
         fbo.bind();
         m_combineShader.bind();

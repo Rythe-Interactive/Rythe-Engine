@@ -23,10 +23,12 @@ shader(fragment)
     uniform vec2 scale;
     uniform float bokehRadius;
 
-    float Weigh (float coc, float radius) 
+    float Weigh (float coc, float radius)
     {
         return clamp01((coc - radius + 2) / 2);
     }
+
+    
 
     void main(void)
     {
@@ -55,9 +57,16 @@ shader(fragment)
             vec2(0.6234897, -0.7818316),
             vec2(0.90096885, -0.43388376),
         };
-        vec3 color = SceneColor(stdin(uv)/scale).rgb;
-        float weight = 1;
+        // vec3 color = SceneColor(stdin(uv)/scale).rgb;
+        // float weight = 1;
         const vec2 texelSize = 1.0 / textureSize(lgn_sceneColor, 0);
+
+        float aof = SceneColor(stdin(uv)).a;
+
+        vec3 bgColor = vec3(0.0);
+        vec3 fgColor = vec3(0.0);
+        float bgWeight = 0;
+        float fgWeight = 0;
 
         for(int k = 0; k < kernelSampleCount; k++)
         {
@@ -66,16 +75,25 @@ shader(fragment)
             o *= texelSize;
             vec4 s = SceneColor(stdin(uv)/scale+o);
 
-            float sw = Weigh(abs(s.a), radius);
-            color += s.rgb * sw;
-            weight += sw;
+            float bgw = Weigh(max(0,min(s.a,aof)), radius);
+            bgColor += s.rgb * bgw;
+            bgWeight += bgw;
 
+            float fgw = Weigh(-s.a, radius);
+            fgColor += s.rgb * fgw;
+            fgWeight += fgw;
+            //float sw = Weigh(abs(s.a), radius);
+            //color += s.rgb * sw;
+            //weight += sw;
         }
 
-        color *= 1.0 / weight;
+        //color *= 1.0 / weight;
+        bgColor *= 1.0/(bgWeight + int(bgWeight == 0));
+        fgColor *= 1.0/(fgWeight + int(fgWeight == 0));
+        float bgfg = clamp01(min(1, fgWeight * 3.14159265359 / kernelSampleCount));
+        vec3 color = mix(bgColor,fgColor, bgfg);
 
-
-        fragment_color = vec4(color, 1.0);
+        fragment_color = vec4(color, bgfg);
     }
 }
 
