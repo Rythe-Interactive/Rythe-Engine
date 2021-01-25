@@ -33,7 +33,7 @@ namespace legion::core
      */
     struct mesh
     {
-        std::string fileName;
+        std::string filePath;
         std::vector<math::vec3> vertices;
         std::vector<math::color> colors;
         std::vector<math::vec3> normals;
@@ -125,7 +125,10 @@ namespace legion::core
         static std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>> m_meshes;
         static async::rw_spinlock m_meshesLock;
 
+
     public:
+        static id_type debugId;
+
         /**@brief Create a new mesh and load it from a file if a mesh with the same name doesn't exist yet.
          * @param name Identifying name for the mesh.
          * @param file File to load from.

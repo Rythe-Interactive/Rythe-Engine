@@ -128,6 +128,8 @@ namespace legion::rendering
             return invalid_texture_handle;
 
         {
+            texture t = result.decay();
+            t.path = file.get_virtual_path();
             async::readwrite_guard guard(m_textureLock);
             m_textures.insert(id, result);
             m_textures.at(id).name = name;

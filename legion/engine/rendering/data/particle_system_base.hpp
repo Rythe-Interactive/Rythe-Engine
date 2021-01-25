@@ -37,7 +37,7 @@ namespace legion::rendering
          * @param transformHandle The transform component of the particle.
          */
         virtual void createParticle(
-            ecs::component_handle<transform> transformHandle) const;
+            ecs::entity_handle ent) const;
         /**
          * @brief The function used to clean up particles that have outlived their lifeTime.
          * @param particleHandle The particle that is to be cleaned up.

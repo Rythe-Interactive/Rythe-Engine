@@ -44,6 +44,7 @@ namespace legion::core::ecs
 
         mutable async::rw_spinlock m_familyLock;
         std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_families;
+        std::unordered_map<id_type, std::string> m_prettyNames;
 
         mutable async::rw_spinlock m_entityDataLock;
         std::unordered_map<id_type, entity_data> m_entityData;
@@ -78,8 +79,10 @@ namespace legion::core::ecs
         {
             OPTICK_EVENT();
             async::readwrite_guard guard(m_familyLock);
-            if (!m_families.count(typeHash<component_type>()))
+            if (!m_families.count(typeHash<component_type>())) {
                 m_families[typeHash<component_type>()] = std::make_unique<component_pool<component_type>>(this, m_eventBus);
+                m_prettyNames[typeHash<component_type>()] = std::string(nameOfType<component_type>());
+            }
         }
 
         /**@brief Get component storage of a certain type.
@@ -91,6 +94,21 @@ namespace legion::core::ecs
         L_NODISCARD component_pool<component_type>* getFamily()
         {
             return static_cast<component_pool<component_type>*>(getFamily(typeHash<component_type>()));
+        }
+
+        async::rw_spinlock& getEntityLock() const
+        {
+            return m_entityLock;
+        }
+
+        /**@brief  TODO*/
+        std::string getFamilyName(id_type id)
+        {
+            if (const auto itr = m_prettyNames.find(id); itr != m_prettyNames.end())
+            {
+                return itr->second;
+            }
+            return "";
         }
 
         /**@brief Get component storage of a certain type.
@@ -299,7 +317,9 @@ namespace legion::core::ecs
         /**@brief Create new entity.
          * @returns entity_handle Entity handle pointing to the newly created entity.
          */
-        L_NODISCARD entity_handle createEntity(id_type entityId = invalid_id);
+        L_NODISCARD entity_handle createEntity(bool worldChild = true, id_type entityId = invalid_id);
+
+        L_NODISCARD entity_handle createEntity(id_type entityId,bool worldChild = true);
 
         /**@brief Destroys entity and all of its components.
          * @param entityId Id of entity you wish to destroy.

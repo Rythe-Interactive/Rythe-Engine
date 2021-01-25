@@ -7,7 +7,8 @@
 #include <core/filesystem/basic_resolver.hpp>
 #include <core/defaults/hierarchysystem.hpp>
 #include <core/compute/context.hpp>
-#include <core/scenemanagement/scene.hpp>
+#include <core/scenemanagement/components/scene.hpp>
+#include <core/serialization/serializationUtil.hpp>
 
 namespace legion::core
 {

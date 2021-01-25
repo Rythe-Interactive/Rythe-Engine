@@ -46,7 +46,7 @@ namespace legion::core::events
     };
 
     /**@class event
-     * @brief Base class all use defined events should inherit from. This ensures that each event has it's type id and that it can statically be requested.
+     * @brief Base class all user defined events should inherit from. This ensures that each event has it's type id and that it can statically be requested.
      */
     template<typename Self>
     struct event : public event_base

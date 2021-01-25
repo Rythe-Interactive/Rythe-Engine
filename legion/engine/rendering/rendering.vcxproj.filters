@@ -44,6 +44,7 @@
     <ClCompile Include="pipeline\default\postfx\fxaa.cpp" />
     <ClCompile Include="pipeline\default\stages\debugrenderstage.cpp" />
     <ClCompile Include="pipeline\default\postfx\bloom.cpp" />
+    <ClCompile Include="util\matini.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />

@@ -11,10 +11,9 @@
  * @file audiosystem.hpp
  */
 
-
-
 namespace legion::audio
 {
+
     inline void openal_error()
     {
         ALCenum error;

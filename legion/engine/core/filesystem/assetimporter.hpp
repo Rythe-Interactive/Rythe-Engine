@@ -1,4 +1,5 @@
 #pragma once
+#include <any>
 #include <core/containers/containers.hpp>
 #include <core/filesystem/resource.hpp>
 #include <core/filesystem/view.hpp>
@@ -21,6 +22,7 @@ namespace legion::core::filesystem
         {
             virtual id_type result_type() LEGION_PURE;
         };
+
     }
 
     /**@class resource_converter
@@ -31,9 +33,12 @@ namespace legion::core::filesystem
     template<typename result, typename... Settings>
     struct resource_converter : public detail::resource_converter_base
     {
+
         virtual id_type result_type() override { return typeHash<result>(); }
 
+        virtual common::result_decay_more<result, fs_error> load_default(const basic_resource& resource) LEGION_PURE;
         virtual common::result_decay_more<result, fs_error> load(const basic_resource& resource, Settings&&...) LEGION_PURE;
+
     };
 
     /**@class basic_resource_converter
@@ -41,6 +46,7 @@ namespace legion::core::filesystem
      */
     struct basic_resource_converter final : public resource_converter<basic_resource>
     {
+        common::result_decay_more<basic_resource, fs_error> load_default(const basic_resource& resource) override { return load(resource); }
         virtual common::result_decay_more<basic_resource, fs_error> load(const basic_resource& resource) override { return common::result_decay_more<basic_resource, fs_error>(common::Ok(basic_resource(resource))); }
     };
 
@@ -51,7 +57,7 @@ namespace legion::core::filesystem
     template<typename T>
     struct basic_converter final : public resource_converter<T>
     {
-        virtual common::result_decay_more<T, fs_error> load(const basic_resource& resource) override { return common::result_decay_more<T, fs_error>(common::Ok(from_resource<T>(resource))); }
+        virtual common::result_decay_more<T, fs_error> load(const basic_resource& resource) { return common::result_decay_more<T, fs_error>(common::Ok(from_resource<T>(resource))); }
     };
 
     /**@class AssetImporter
@@ -73,6 +79,7 @@ namespace legion::core::filesystem
             OPTICK_EVENT();
             m_converters[nameHash(extension)].push_back(new T());
         }
+
 
         /**@brief Attempt to load an object from a file using the pre-reported converters.
          * @param view filesystem::view to the file to load.
@@ -116,7 +123,7 @@ namespace legion::core::filesystem
                     // Attempt the conversion and return the result.
                     auto loadresult = converter->load(result, std::forward<Settings>(settings)...);
                     if (loadresult == common::valid)
-                        return decay(Ok((T)loadresult));
+                        return decay(Ok(static_cast<T>(loadresult)));
 
                     return decay(Err(loadresult.get_error()));
                 }

@@ -46,16 +46,7 @@ namespace legion::rendering
 
         mesh_handle get_mesh() const;
         const model& get_model() const;
-
-        template<typename Archive>
-        void serialize(Archive& archive);
     };
-
-    template<typename Archive>
-    void model_handle::serialize(Archive& archive)
-    {
-        archive(id);
-    }
 
     constexpr model_handle invalid_model_handle { invalid_id };
 

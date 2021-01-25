@@ -54,7 +54,7 @@ public:
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
           {
-              async::readwrite_guard guard(*window.lock);
+              app::context_guard guard(window);
               app::ContextHelper::makeContextCurrent(window);
 
 
@@ -91,7 +91,7 @@ public:
               params.particleMaterial = vertexColor,
                   params.particleModel = cube
               };
-              auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
+              auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params);
 
   #pragma region entities
 
@@ -115,7 +115,7 @@ public:
             y = -height + rnd() * (height - (-height));
             z = -depth + rnd() * (depth - (-depth));
             points.push_back(math::vec3(x, y, z));*/
-            async::readwrite_guard guard(*window.lock);
+            app::context_guard guard(window);
             app::ContextHelper::makeContextCurrent(window);
 
 
@@ -138,7 +138,7 @@ public:
             pointCloudColor,
                 particleSphere
             };
-            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, pos);
+            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params);
 
 
             explosionParameters explosionParams{

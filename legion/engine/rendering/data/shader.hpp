@@ -270,6 +270,7 @@ namespace legion::rendering
         std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
         std::unordered_map<GLint, id_type> idOfLocation;
         std::string name;
+        std::string path;
         id_type nameHash;
 
         /**@brief Data-structure to hold mapping of context functions and parameters.
@@ -291,6 +292,7 @@ namespace legion::rendering
         mutable std::unordered_map<id_type, shader_variant> m_variants;
     public:
         std::string name;
+        std::string path;
 
         // Since copying would mean that the in-vram version of the actual shader would also need to be copied, we don't allow copying.
         shader(const shader&) = delete;
@@ -433,6 +435,7 @@ namespace legion::rendering
         void bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const;
 
         std::string get_name() const;
+        std::string get_path() const;
 
         std::unordered_map<id_type, std::vector<std::tuple<std::string, GLint, GLenum>>> get_uniform_info() const;
         std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info(id_type variantId) const;
@@ -465,8 +468,16 @@ namespace legion::rendering
 
         bool operator==(const shader_handle& other) const { return id == other.id; }
         bool operator!=(const shader_handle& other) const { return id != other.id; }
-        operator bool() { return id != invalid_id; }
+        operator bool() const noexcept { return id != invalid_id; }
+
+        template<typename Archive>
+        void serialize(Archive& archive);
     };
+    template<class Archive>
+    void shader_handle::serialize(Archive& archive)
+    {
+        archive(id);
+    }
 
     constexpr shader_handle invalid_shader_handle{ invalid_id };
 

@@ -107,6 +107,7 @@ namespace legion::core::filesystem
             return get().decay().to<T>(std::forward<Args>(args)...);
         }
 
+        L_NODISCARD common::result_decay_more<std::vector<view>,fs_error> ls() const;
 
 #if  !defined( LEGION_DISABLE_POTENTIALLY_WEIRD_SYNTAX )
 
