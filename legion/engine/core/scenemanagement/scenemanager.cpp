@@ -97,7 +97,6 @@ namespace legion::core::scenemanagement
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
         currentScene = name;
 
-        doNotCreateEntities = true;
         //SceneManager::saveScene(name, sceneEntity);
         //log::debug("........Done saving scene");
         return true;

@@ -144,7 +144,7 @@ namespace legion::rendering
         // Copy the sub-mesh data.
         auto [lock, data] = handle.get();
         async::readonly_guard guard(lock);
-        meshName = data.fileName;
+        meshName = data.filePath;
 
         for (auto& submeshData : data.submeshes)
             model.submeshes.push_back(submeshData);
