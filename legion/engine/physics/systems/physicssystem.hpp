@@ -254,6 +254,10 @@ namespace legion::physics
                 manifoldValidity.at(i) = currentManifoldValidity;
             }
 
+
+
+
+
             //-------------------------------------------------- Collision Solver ---------------------------------------------------//
             //for both contact and friction resolution, an iterative algorithm is used.
             //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
@@ -263,7 +267,30 @@ namespace legion::physics
             //the effective mass remains the same for every iteration of the solver. This means that we can precalculate it before
             //we start the solver
 
-            //log::debug("--------------Logging contacts for manifold -------------------");
+            log::debug("--------------Logging contacts for manifold -------------------");
+
+            for (const auto& manifold : manifoldsToSolve)
+            {
+
+                std::string str1, str2;
+                manifold.GetPairID(str1, str2);
+
+                //log::debug("manifold pairing: {},{}", str1, str2);
+
+                if (manifold.DEBUG_checkID("problem", "floor"))
+                {
+                    
+
+                    for (auto contact : manifold.contacts)
+                    {
+                       /* debug::user_projectDrawLine(
+                            contact.RefWorldContact,
+                            contact.IncWorldContact, math::colors::red, 4.0f, 3.0f, true);*/
+                    }
+                }
+            }
+
+
 
             initializeManifolds(manifoldsToSolve, manifoldValidity);
 
@@ -373,9 +400,15 @@ namespace legion::physics
             manifold.transformA = precursorA.worldTransform;
             manifold.transformB = precursorB.worldTransform;
 
+            //manifold.DEBUG_checkID("floor", "problem");
+
             // log::debug("colliderA->CheckCollision(colliderB, manifold)");
             colliderA->CheckCollision(colliderB, manifold);
 
+            if (manifold.DEBUG_checkID("floor", "problem"))
+            {
+                log::debug("floor and problem colliding {} ", manifold.isColliding);
+            }
         }
 
         /** @brief gets all the entities with a rigidbody component and calls the integrate function on them

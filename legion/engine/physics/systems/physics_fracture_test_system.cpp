@@ -645,10 +645,6 @@ namespace legion::physics
             auto id = idHandle.read();
             id.id = "OBBRb";
             idHandle.write(id);
-
-            
-
-
             //log::debug("rb.angularVelocity {}", rb.angularVelocity);
 
         }
@@ -795,7 +791,7 @@ namespace legion::physics
             id.id = "WALL";
             idH.write(id);
 
-            
+       
 
         }
 
@@ -848,6 +844,12 @@ namespace legion::physics
 
             //floor.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(woodTextureH));
 
+            auto idH = floor.add_component<physics::identifier>();
+            auto id = idH.read();
+            id.id = "floor";
+            idH.write(id);
+
+
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(floor);
             positionH.write(math::vec3(0, 1.0f, 10.0f));
             scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
@@ -857,11 +859,17 @@ namespace legion::physics
         {
             floor2 = m_ecs->createEntity();
 
-            floor2.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(woodTextureH));
+            floor2.add_components<rendering::mesh_renderable>
+                (mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(woodTextureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(floor2);
             positionH.write(math::vec3(0, 1.0f, 10.0f));
             scaleH.write(math::vec3(5.0f, 1.0f, 5.0f));
+
+
+
+            bool isDirectChildOfWorld = floor2.get_parent() == m_ecs->world;
+            log::debug("isDirectChildOfWorld {} ", isDirectChildOfWorld);
         }
 
     }

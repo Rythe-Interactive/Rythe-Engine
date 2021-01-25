@@ -65,8 +65,11 @@ namespace legion::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation)
+            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation,bool shouldDebug = false)
         {
+            //shouldDebug = false;
+
+
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
             for (auto face : convexB->GetHalfEdgeFaces())
@@ -74,7 +77,7 @@ namespace legion::physics
 
                 //og::debug("face->normal {} ", math::to_string( face->normal));
                 //get inverse normal
-                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4(math::normalize(face->normal), 0));
+                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4((face->normal), 0));
 
                 math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
 
@@ -100,6 +103,7 @@ namespace legion::physics
             }
             //no seperating axis was found
             maximumSeperation = currentMaximumSeperation;
+
 
             return false;
         }

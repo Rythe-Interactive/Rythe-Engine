@@ -22,6 +22,9 @@ namespace legion::physics
 
         auto collider = isfracturingA ? manifold.colliderA: manifold.colliderB;
         auto fractureInstigatorEnt = isfracturingA ? manifold.physicsCompA.entity : manifold.physicsCompB.entity;
+        std::string dbg = isfracturingA ? "entityA is instigator" : "entityB is instigator";
+        //log::debug( dbg);
+        assert(fractureInstigatorEnt);
 
         auto [min,max] = collider->GetMinMaxWorldAABB();
 
@@ -43,33 +46,33 @@ namespace legion::physics
         math::vec3 third = max - (differenceQuadrant * 2);
         VoronoiPoints.push_back(third);
 
-        //math::vec3 fourth = third + math::vec3(0.1f,0,0);
-        //VoronoiPoints.push_back(fourth);
+        math::vec3 fourth = third + math::vec3(0.2f,0,0);
+        VoronoiPoints.push_back(fourth);
 
-        //math::vec3 fifth = third + math::vec3(0.1f, 0, -0.0f);
+        //math::vec3 fifth = third + math::vec3(-0.2f, 0, -0.0f);
         //VoronoiPoints.push_back(fifth);
 
-        /*math::vec3 fourth = max - (differenceQuadrant * 2) + math::vec3(0,0.1f,0);
-        VoronoiPoints.push_back(fourth);*/
-
-        math::vec3 fifth = min + differenceQuadrant - math::vec3(0, 0.0f, -0.2f);
+        math::vec3 fifth = third + math::vec3(0,-0.1f,0);
         VoronoiPoints.push_back(fifth);
+
+        //math::vec3 fifth = min + differenceQuadrant - math::vec3(0, 0.0f, -0.2f);
+        //VoronoiPoints.push_back(fifth);
 
         for (auto point : VoronoiPoints)
         {
-            debug::user_projectDrawLine(point,
-                point + math::vec3(0, 0.1f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);
+          /*  debug::user_projectDrawLine(point,
+                point + math::vec3(0, 0.1f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);*/
         }
 
         auto vectorList = PhysicsStatics::GenerateVoronoi(VoronoiPoints, min.x, max.x, min.y, max.y, min.z, max.z,1,1,1);
 
         vectorList.pop_back();
 
-        debug::user_projectDrawLine(min,
+      /*  debug::user_projectDrawLine(min,
             min + math::vec3(0, 0.5f, 0), math::colors::red, 8.0f, FLT_MAX, true);
 
         debug::user_projectDrawLine(max,
-            max + math::vec3(0, 0.5f, 0), math::colors::blue, 8.0f, FLT_MAX, true);
+            max + math::vec3(0, 0.5f, 0), math::colors::blue, 8.0f, FLT_MAX, true);*/
 
         std::vector<std::vector<math::vec3>> groupedPoints(VoronoiPoints.size());
 
@@ -132,14 +135,14 @@ namespace legion::physics
 
         //make sure fractureInstigatorEnt is a direct child of the world, the initial instigator will always
         //be either a direct parent of the world, or a grandchild of the world
-        bool isInstigatorDirectParent = fractureInstigatorEnt.get_parent() == registry->world;
 
-        if (!isInstigatorDirectParent)
-        {
-            //log::debug("instigator is not direct parent");
-            fractureInstigatorEnt = fractureInstigatorEnt.get_parent();
-        }
-
+        //bool isInstigatorDirectParent = fractureInstigatorEnt.get_parent() == registry->world;
+        //log::debug("isInstigatorDirectParent{} ", isInstigatorDirectParent);
+        //if (!isInstigatorDirectParent)
+        //{
+        //    //log::debug("instigator is not direct parent");
+        //    fractureInstigatorEnt = fractureInstigatorEnt.get_parent();
+        //}
 
 
         InstantiateColliderMeshPairingWithEntity(fractureInstigatorEnt,
@@ -184,8 +187,8 @@ namespace legion::physics
                 
                 if (manifold.isColliding)
                 {
-                    //if (fractureID != 3 || fractureID != 2) { continue; }
-                    //{
+                    if (fractureID <= 999 ) //2
+                    {
                         //log::debug("-> Collision Found");
 
                         std::vector<MeshSplitParams> splittingParams;
@@ -207,10 +210,21 @@ namespace legion::physics
                         splitter.MultipleSplitMesh(splittingParams, entitiesGenerated, true, -1);
                         meshToColliderPairing.meshSplitterPairing.write(splitter);
 
-                    //}
-                    fractureID++;
+                        if (fractureID == 1)
+                        {
+                            auto ent = entitiesGenerated.back();
+                            auto idH = ent.add_component<identifier>();
+                            auto id = idH.read();
+                            id.id = "problem";
+                            idH.write(id);
+
+                        }
+
+
+                    }
+                    
                 }
-                
+                fractureID++;
             
             }
         }
@@ -223,27 +237,34 @@ namespace legion::physics
         int colliderIter = 0;
         for (auto ent : entitiesGenerated)
         {
-            
-            auto physicsCompHandle = ent.add_component<physicsComponent>();
-            auto physicsComp = physicsCompHandle.read();
+            /*if (colliderIter == 1)
+            {*/
+                auto physicsCompHandle = ent.add_component<physicsComponent>();
+                auto physicsComp = physicsCompHandle.read();
 
-            auto meshFilter = ent.read_component<mesh_filter>();
+                auto meshFilter = ent.read_component<mesh_filter>();
 
-            auto vertices = meshFilter.get().second.vertices;
+                auto vertices = meshFilter.get().second.vertices;
 
-            //log::debug("cch");
-            bool debug = colliderIter == entitiesGenerated.size() - 1;
-            //log::debug("debug {} ", debug);
-            physicsComp.ConstructConvexHull(meshFilter, debug);
+                //log::debug("cch");
+                bool debug = false;
+                //log::debug("debug {} ", debug);
+                physicsComp.ConstructConvexHull(meshFilter, debug);
+
+
+                auto posHandle = ent.get_component_handle<position>();
+
+                /* debug::user_projectDrawLine(posHandle.read(),
+                     posHandle.read() + math::vec3(0,0.2f,0),math::colors::red,15.0f,FLT_MAX,true);*/
+                ent.add_component<rigidbody>();
+            //}
+           
+
+
             colliderIter++;
-
-            auto posHandle = ent.get_component_handle<position>();
-
-           /* debug::user_projectDrawLine(posHandle.read(),
-                posHandle.read() + math::vec3(0,0.2f,0),math::colors::red,15.0f,FLT_MAX,true);*/
-
-            ent.add_component<rigidbody>();
         }
+
+        //registry->destroyEntity(fractureInstigatorEnt);
 
         log::debug("all fragments have convex hulls");
         //for each pair list
@@ -285,19 +306,7 @@ namespace legion::physics
     void Fracturer::InstantiateColliderMeshPairingWithEntity(ecs::entity_handle ent,
         std::vector<FracturerColliderToMeshPairing>& colliderToMeshPairings)
     {
-        //the fracturer is setup in a way that fragments are all stored in a different entity
-        auto physicsCompHandle = ent.get_component_handle<physics::physicsComponent>();
-        std::shared_ptr<ConvexCollider> convexCollider = nullptr;
 
-        auto physicsCollider = physicsCompHandle.read().colliders->at(0);
-
-        if (physicsCompHandle)
-        {
-            convexCollider = std::dynamic_pointer_cast<ConvexCollider>(physicsCollider);
-        }
-
-        auto meshSplitterHandle = ent.get_component_handle<MeshSplitter>();
-        //assert(meshSplitterHandle);
 
         if (auto idH = ent.get_component_handle<physics::identifier>())
         {
@@ -309,6 +318,22 @@ namespace legion::physics
         {
             log::debug("NO ID");
         }
+        //the fracturer is setup in a way that fragments are all stored in a different entity
+        auto physicsCompHandle = ent.get_component_handle<physics::physicsComponent>();
+        std::shared_ptr<ConvexCollider> convexCollider = nullptr;
+        assert(physicsCompHandle);
+
+        auto physicsComp = physicsCompHandle.read();
+        auto physicsCollider = physicsComp.colliders->at(0);
+
+        if (physicsCompHandle)
+        {
+            convexCollider = std::dynamic_pointer_cast<ConvexCollider>(physicsCollider);
+        }
+
+        auto meshSplitterHandle = ent.get_component_handle<MeshSplitter>();
+        //assert(meshSplitterHandle);
+
 
 
         if (meshSplitterHandle && convexCollider)

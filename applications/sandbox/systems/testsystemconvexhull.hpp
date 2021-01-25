@@ -283,7 +283,7 @@ public:
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + worldNormal * 0.1f;
                         
-                        //debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 5.0f);
+                        debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 5.0f);
 
                         if (!currentEdge) { return; }
 

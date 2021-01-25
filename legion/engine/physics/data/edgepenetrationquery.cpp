@@ -15,10 +15,13 @@ namespace legion::physics
 
 
     void EdgePenetrationQuery::populateContactList(physics_manifold& manifold,
-        math::mat4& refTransform, math::mat4 incTransform, std::shared_ptr<PhysicsCollider> refCollider)
+        math::mat4& refTransform, math::mat4 incTransform)
     {
         //------------------- The contact points between 2 edges are the closest points between the 2 edges --------------------//
         //log::debug("EdgePenetrationQuery::populateContactList");
+
+
+        auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
 
         math::vec3 p1 = refTransform * math::vec4(refEdge->edgePosition, 1);
         math::vec3 p2 = refTransform * math::vec4(refEdge->nextEdge->edgePosition, 1);

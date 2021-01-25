@@ -131,7 +131,7 @@ namespace legion::rendering
 
                 if (mesh.submeshes.empty())
                 {
-                    log::warn("Empty mesh found.");
+                    //log::warn("Empty mesh found.");
                     continue;
                 }
 

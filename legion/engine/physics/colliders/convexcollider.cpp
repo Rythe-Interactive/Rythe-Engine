@@ -11,6 +11,8 @@ namespace legion::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
+        bool shouldDebug = false;// manifold.DEBUG_checkID("problem", "floor");
+
         auto compIDA = manifold.physicsCompA.entity.get_component_handle<identifier>();
         auto compIDB = manifold.physicsCompB.entity.get_component_handle<identifier>();
 
@@ -30,17 +32,25 @@ namespace legion::physics
             manifold.isColliding = false;
             return;
         }
+
+
+      
      
         PointerEncapsulator < HalfEdgeFace> BRefFace;
         //log::debug("Face Check B");
         float BRefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
-            this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
+            this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation, shouldDebug) || !BRefFace.ptr)
         {
             //log::debug("Not Found on B ");
             manifold.isColliding = false;
             return;
         }
+
+        //if (shouldDebug)
+        //{
+        //    BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 5.0f);
+        //}
 
         PointerEncapsulator< HalfEdgeEdge> edgeRef;
         PointerEncapsulator< HalfEdgeEdge> edgeInc;
@@ -95,6 +105,13 @@ namespace legion::physics
                 aToBEdgeSeperation, false);
 
         std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery, abPenetrationQuery, baPenetrationQuery  };
+
+        if (shouldDebug)
+        {
+            log::debug("abPenetrationQuery->penetration {} ", abPenetrationQuery->penetration);
+            log::debug("baPenetrationQuery->penetration {} ", baPenetrationQuery->penetration);
+            log::debug(" abEdgePenetrationQuery->penetration {} ", abEdgePenetrationQuery->penetration);
+        }
 
         //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
 
@@ -156,6 +173,11 @@ namespace legion::physics
 
     void ConvexCollider::PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold)
     {
+        if (manifold.DEBUG_checkID("problem", "floor"))
+        {
+            log::debug("reached populate contacts on problem");
+        }
+
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
@@ -165,7 +187,12 @@ namespace legion::physics
         auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
         auto incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
 
-        manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform,refCollider);
+        manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform);
+
+        if (manifold.DEBUG_checkID("problem", "floor"))
+        {
+            log::debug("--------- final number of contacts {} ", manifold.contacts.size());
+        }
 
         ecs::component_handle<rigidbody> refRB = refPhysicsCompHandle.entity.get_component_handle<rigidbody>();
         ecs::component_handle<rigidbody>  incRB = incPhysicsCompHandle.entity.get_component_handle<rigidbody>();
@@ -784,7 +811,12 @@ namespace legion::physics
 
                 j++;
 
-                if (j > 999) { return; }
+                if (j > 999)
+                {
+                    edges.clear();
+                    log::error("Quickhull: Stuck in while loop at horizon jumping");
+                    return;
+                }
             }
             j = 0;
 
