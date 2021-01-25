@@ -598,6 +598,42 @@ namespace legion::core
             return decay(Err(legion_fs_error("Failed to parse glTF")));
         }
 
+        if (settings.materials)
+        {
+            for (auto& srcMat : model.materials)
+            {
+                auto& material = settings.materials->emplace_back();
+                auto& pbrData = srcMat.pbrMetallicRoughness;
+
+                material.name = srcMat.name;
+                material.opaque = srcMat.alphaMode == "OPAQUE" || srcMat.alphaMode == "MASK";
+                material.alphaCutoff = srcMat.alphaCutoff;
+                material.doubleSided = srcMat.doubleSided;
+
+                material.albedoValue = math::color(pbrData.baseColorFactor[0], pbrData.baseColorFactor[1], pbrData.baseColorFactor[2], pbrData.baseColorFactor[3]);
+                if (pbrData.baseColorTexture.index >= 0)
+                    material.albedoMap = detail::loadGLTFImage(model.images[model.textures[pbrData.baseColorTexture.index].source]);
+
+                material.metallicValue = static_cast<float>(pbrData.metallicFactor);
+                material.roughnessValue = static_cast<float>(pbrData.roughnessFactor);
+
+                if (pbrData.metallicRoughnessTexture.index >= 0)
+                    material.metallicRoughnessMap = detail::loadGLTFImage(model.images[model.textures[pbrData.metallicRoughnessTexture.index].source]);
+
+                material.emissiveValue = math::color(srcMat.emissiveFactor[0], srcMat.emissiveFactor[1], srcMat.emissiveFactor[2]);
+                if (srcMat.emissiveTexture.index >= 0)
+                    material.emissiveMap = detail::loadGLTFImage(model.images[model.textures[srcMat.emissiveTexture.index].source]);
+
+                if (srcMat.normalTexture.index >= 0)
+                    material.normalMap = detail::loadGLTFImage(model.images[model.textures[srcMat.normalTexture.index].source]);
+
+                if (srcMat.occlusionTexture.index >= 0)
+                    material.aoMap = detail::loadGLTFImage(model.images[model.textures[srcMat.occlusionTexture.index].source]);
+
+                material.heightMap = invalid_image_handle;
+            }
+        }
+
         size_t offset = 0;
         core::mesh meshData;
         for (auto& mesh : model.meshes)
