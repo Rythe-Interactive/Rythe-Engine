@@ -794,43 +794,43 @@ public:
             ent2.get_component_handle<position>().write(pos);
 
         }
-//#if defined(LEGION_DEBUG)
-//        for (int i = 0; i < 2000; i++)
-//#else
-//        for (int i = 0; i < 20000; i++)
-//#endif
-//        {
-//            auto ent = createEntity();
-//            ent.add_components<rendering::mesh_renderable>(mesh_filter(billboardH.get_mesh()), rendering::mesh_renderer(textureBillboardH));
-//            ent.add_component<sah>({});
-//            ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale(0.1f));
-//        }
+#if defined(LEGION_DEBUG)
+        for (int i = 0; i < 2000; i++)
+#else
+        for (int i = 0; i < 20000; i++)
+#endif
+        {
+            auto ent = createEntity(false);
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(billboardH.get_mesh()), rendering::mesh_renderer(textureBillboardH));
+            ent.add_component<sah>({});
+            ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale(0.1f));
+        }
 
         //audioSphereLeft setup
-        //{
-        //    audioSphereLeft = createEntity();
-        //    audioSphereLeft.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
-        //    audioSphereLeft.add_components<transform>(position(-5, 1, 10), rotation(), scale(0.5));
+        {
+            audioSphereLeft = createEntity();
+            audioSphereLeft.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
+            audioSphereLeft.add_components<transform>(position(-5, 1, 10), rotation(), scale(0.5));
 
-        //    auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
+            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland_stereo32.wav"_view, { audio::audio_import_settings::channel_processing_setting::split_channels });
 
-        //    audio::audio_source source;
-        //    source.setAudioHandle(segment);
-        //    audioSphereLeft.add_component<audio::audio_source>(source);
-        //}
-        ////audioSphereRight setup
-        //{
-        //    audioSphereRight = createEntity();
-        //    audioSphereRight.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
-        //    audioSphereRight.add_components<transform>(position(5, 1, 10), rotation(), scale(0.5));
+            audio::audio_source source;
+            source.setAudioHandle(segment);
+            audioSphereLeft.add_component<audio::audio_source>(source);
+        }
+        //audioSphereRight setup
+        {
+            audioSphereRight = createEntity();
+            audioSphereRight.add_components<rendering::mesh_renderable>(mesh_filter(audioSourceH.get_mesh()), rendering::mesh_renderer(gizmoMH));
+            audioSphereRight.add_components<transform>(position(5, 1, 10), rotation(), scale(0.5));
 
-        //    auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
+            auto segment = audio::AudioSegmentCache::getAudioSegment("kilogram_channel1");
 
-        //    audio::audio_source source;
-        //    source.setAudioHandle(segment);
-        //    source.setLooping(true);
-        //    audioSphereRight.add_component<audio::audio_source>(source);
-       // }
+            audio::audio_source source;
+            source.setAudioHandle(segment);
+            source.setLooping(true);
+            audioSphereRight.add_component<audio::audio_source>(source);
+        }
 #pragma endregion
 
         //---------------------------------------------------------- Physics Collision Unit Test -------------------------------------------------------------------//
@@ -2362,214 +2362,214 @@ public:
 
     void update(time::span deltaTime)
     {
-        //static float timer = 0;
+        static float timer = 0;
 
-        //static float avgdt = deltaTime;
-        //avgdt = (avgdt + deltaTime) / 2.f;
-        //timer += deltaTime;
-        //if (timer > 1.f)
-        //{
-        //    timer -= 1.f;
-        //    log::debug("frametime {}ms, fps {}", avgdt, 1.f / avgdt);
-        //}            
+        static float avgdt = deltaTime;
+        avgdt = (avgdt + deltaTime) / 2.f;
+        timer += deltaTime;
+        if (timer > 1.f)
+        {
+            timer -= 1.f;
+            log::debug("frametime {}ms, fps {}", avgdt, 1.f / avgdt);
+        }            
 
-        ////static auto sahQuery = createQuery<sah, rotation, position, scale>();
-        //static auto sahQuery = createQuery<sah, position>();
-        //sahQuery.queryEntities();
+        //static auto sahQuery = createQuery<sah, rotation, position, scale>();
+        static auto sahQuery = createQuery<sah, position>();
+        sahQuery.queryEntities();
 
-        ////auto& rotations = sahQuery.get<rotation>();
-        //auto& positions = sahQuery.get<position>();
-        ////auto& scales = sahQuery.get<scale>();
+        //auto& rotations = sahQuery.get<rotation>();
+        auto& positions = sahQuery.get<position>();
+        //auto& scales = sahQuery.get<scale>();
 
-        //float dt = deltaTime;
+        float dt = deltaTime;
 
-        //m_scheduler->queueJobs(sahQuery.size(), [&]()
-        //    {
-        //        id_type idx = async::this_job::get_id();
-        //        //auto& rot = rotations[idx];
-        //        auto& pos = positions[idx];
-        //        //auto& scale = scales[idx];
-        //        float t = time::mainClock.elapsedTime();
-        //        pos += math::vec3(math::sin(t) * 0.01f, math::sin(t + 1.f) * 0.01f, math::sin(t - 1.f) * 0.01f);
-        //        //rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
-        //    }).wait();
-        //sahQuery.submit<position>();
+        m_scheduler->queueJobs(sahQuery.size(), [&]()
+            {
+                id_type idx = async::this_job::get_id();
+                //auto& rot = rotations[idx];
+                auto& pos = positions[idx];
+                //auto& scale = scales[idx];
+                float t = time::mainClock.elapsedTime();
+                pos += math::vec3(math::sin(t) * 0.01f, math::sin(t + 1.f) * 0.01f, math::sin(t - 1.f) * 0.01f);
+                //rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
+            }).wait();
+        sahQuery.submit<position>();
         //sahQuery.submit<rotation>();
 
-        //if (rotate && !physics::PhysicsSystem::IsPaused)
-        //{
-        //    for (auto entity : physicsFrictionTestRotators)
-        //    {
-        //        auto rot = entity.read_component<rotation>();
+        if (rotate && !physics::PhysicsSystem::IsPaused)
+        {
+            for (auto entity : physicsFrictionTestRotators)
+            {
+                auto rot = entity.read_component<rotation>();
 
-        //        rot *= math::angleAxis(math::deg2rad(-20.f * deltaTime), math::vec3(0, 0, 1));
+                rot *= math::angleAxis(math::deg2rad(-20.f * deltaTime), math::vec3(0, 0, 1));
 
-        //        entity.write_component(rot);
-        //    }
-        //}
+                entity.write_component(rot);
+            }
+        }
 
-        //static auto posQuery = createQuery<position>();
+        static auto posQuery = createQuery<position>();
 
-        //posQuery.queryEntities();
-        //for (auto entity : posQuery)
-        //{
-        //    auto pos = entity.read_component<position>();
+        posQuery.queryEntities();
+        for (auto entity : posQuery)
+        {
+            auto pos = entity.read_component<position>();
 
-        //    debug::drawLine(pos, pos + math::vec3(0,1,0), math::colors::blue,10.0f,0.0f);
+            debug::drawLine(pos, pos + math::vec3(0,1,0), math::colors::blue,10.0f,0.0f);
 
-        //}
+        }
 
 
 
-        //if (buffer > 1.f)
-        //{
-        //    buffer -= 1.f;
+       /* if (buffer > 1.f)
+        {
+            buffer -= 1.f;
 
-        //    for (auto entity : query)
-        //    {
-        //        auto comp = entity.get_component_handle<sah>();
-        //        std::cout << "component value: " << comp.read().value << std::endl;
-        //    }
+            for (auto entity : query)
+            {
+                auto comp = entity.get_component_handle<sah>();
+                std::cout << "component value: " << comp.read().value << std::endl;
+            }
 
-        //    std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
-        //}
+            std::cout << "Hi! " << (frameCount / accumulated) << "fps " << deltaTime.milliseconds() << "ms" << std::endl;
+        }*/
     }
 
     void physicsUpdate(time::span deltaTime)
     {
-        //static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
+        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
 
-        //halfEdgeQuery.queryEntities();
-        ////log::debug("halfEdgeQuery.size() {} ", halfEdgeQuery.size());
-        //for (auto entity : halfEdgeQuery)
-        //{
-        //    auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
-        //    auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
+        halfEdgeQuery.queryEntities();
+        //log::debug("halfEdgeQuery.size() {} ", halfEdgeQuery.size());
+        for (auto entity : halfEdgeQuery)
+        {
+            auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
+            auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
 
-        //    math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+            math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
-        //    auto splitter = edgeFinderH.read();
+            auto splitter = edgeFinderH.read();
 
-        //    //auto edgePtr = splitter.edgeFinder.currentPtr;
+            //auto edgePtr = splitter.edgeFinder.currentPtr;
 
-        //    //math::vec3 worldPos = transform * math::vec4(edgePtr->position, 1);
-        //    //math::vec3 worldNextPos = transform * math::vec4(edgePtr->nextEdge->position, 1);
+            //math::vec3 worldPos = transform * math::vec4(edgePtr->position, 1);
+            //math::vec3 worldNextPos = transform * math::vec4(edgePtr->nextEdge->position, 1);
 
-        //    //debug::drawLine(worldPos, worldNextPos, math::colors::red, 1.0f, 0.0f, true);
+            //debug::drawLine(worldPos, worldNextPos, math::colors::red, 1.0f, 0.0f, true);
 
-        //    //debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1f, 0), math::colors::green, 5.0f, 0.0f, true);
-        //    //debug::drawLine(worldNextPos, worldNextPos + math::vec3(0, 0.1f, 0), math::colors::blue, 5.0f, 0.0f, true);
+            //debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1f, 0), math::colors::green, 5.0f, 0.0f, true);
+            //debug::drawLine(worldNextPos, worldNextPos + math::vec3(0, 0.1f, 0), math::colors::blue, 5.0f, 0.0f, true);
 
-        //    auto getEdge = entity.get_component_handle<physics::identifier>();
+            auto getEdge = entity.get_component_handle<physics::identifier>();
 
-        //    for (size_t i = 0; i < splitter.debugHelper.intersectionIslands.size(); i++)
-        //    {
-        //        auto maxColor = splitter.debugHelper.colors.size();
-        //        math::color color = splitter.debugHelper.colors[i % maxColor];
+            for (size_t i = 0; i < splitter.debugHelper.intersectionIslands.size(); i++)
+            {
+                auto maxColor = splitter.debugHelper.colors.size();
+                math::color color = splitter.debugHelper.colors[i % maxColor];
 
-        //        auto island = splitter.debugHelper.intersectionIslands.at(i);
+                auto island = splitter.debugHelper.intersectionIslands.at(i);
 
-        //        for (auto pos : island)
-        //        {
-        //            math::vec3 worldIntersect = transform * math::vec4(pos, 1);
-        //            debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), color, 10.0f, 0.0f);
-        //        }
-
-
-        //    }
-
-        //    /* for (auto intersectingPosition : edgeFinder.debugHelper.intersectionsPolygons)
-        //     {
-        //         math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
-        //         debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::blue, 10.0f, 0.0f);
-        //     }*/
-
-        //    for (auto intersectingPosition : splitter.debugHelper.nonIntersectionPolygons)
-        //    {
-        //        math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
-        //        debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::yellow, 10.0f, 0.0f);
-        //    }
+                for (auto pos : island)
+                {
+                    math::vec3 worldIntersect = transform * math::vec4(pos, 1);
+                    debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), color, 10.0f, 0.0f);
+                }
 
 
-        //    //log::debug("Count boundary polygon {} ");
-        //    for (auto polygon : splitter.meshPolygons)
-        //    {
-        //        int boundaryCount = 0;
-        //        math::vec3 worldCentroid = transform * math::vec4(polygon->localCentroid, 1);
+            }
 
-        //        for (auto edge : polygon->GetMeshEdges())
-        //        {
-        //            if (edge->isBoundary)
-        //            {
-        //                boundaryCount++;
+            /* for (auto intersectingPosition : edgeFinder.debugHelper.intersectionsPolygons)
+             {
+                 math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
+                 debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::blue, 10.0f, 0.0f);
+             }*/
 
-        //                math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
-        //                math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
-
-        //                math::vec3 edgeToCentroid = (worldCentroid - worldEdgePos) * 0.05f;
-        //                math::vec3 nextEdgeToCentroid = (worldCentroid - worldEdgeNextPos) * 0.05f;
-
-        //                debug::drawLine(worldEdgePos + edgeToCentroid
-        //                    , worldEdgeNextPos + nextEdgeToCentroid, polygon->debugColor, 5.0f, 0.0f, false);
-        //            }
-
-        //        }
-        //        /*              math::vec3 normalWorld = transform * math::vec4(polygon->localNormal, 0);
-        //                      debug::drawLine(worldCentroid
-        //                          , worldCentroid + (normalWorld), polygon->debugColor, 5.0f, 0.0f, false);*/
-
-        //                          // log::debug("polygon boundaryCount {} ", boundaryCount);
-
-        //    }
-
-        //    auto& boundaryInfoList = splitter.debugHelper.boundaryEdgesForPolygon;
-
-        //    /* debug::drawLine(splitter.debugHelper.cuttingSetting.first
-        //         , splitter.debugHelper.cuttingSetting.first + (splitter.debugHelper.cuttingSetting.second) * 2.0f, math::colors::cyan, 5.0f, 0.0f, false);*/
+            for (auto intersectingPosition : splitter.debugHelper.nonIntersectionPolygons)
+            {
+                math::vec3 worldIntersect = transform * math::vec4(intersectingPosition, 1);
+                debug::drawLine(worldIntersect, worldIntersect + math::vec3(0, 0.1f, 0), math::colors::yellow, 10.0f, 0.0f);
+            }
 
 
+            //log::debug("Count boundary polygon {} ");
+            for (auto polygon : splitter.meshPolygons)
+            {
+                int boundaryCount = 0;
+                math::vec3 worldCentroid = transform * math::vec4(polygon->localCentroid, 1);
 
-        //    for (size_t i = 0; i < boundaryInfoList.size(); i++)
-        //    {
-        //        auto& boundaryInfo = boundaryInfoList[i];
-        //        math::color color = boundaryInfo.drawColor;
+                for (auto edge : polygon->GetMeshEdges())
+                {
+                    if (edge->isBoundary)
+                    {
+                        boundaryCount++;
 
-        //        if (i != splitter.debugHelper.polygonToDisplay) { continue; }
+                        math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
+                        math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
 
-        //        math::vec3 polygonNormalOffset = boundaryInfo.worldNormal * 0.01f;
+                        math::vec3 edgeToCentroid = (worldCentroid - worldEdgePos) * 0.05f;
+                        math::vec3 nextEdgeToCentroid = (worldCentroid - worldEdgeNextPos) * 0.05f;
 
-        //        debug::drawLine(boundaryInfo.intersectionPoints.first
-        //            , boundaryInfo.intersectionPoints.second, math::colors::magenta, 10.0f, 0.0f, false);
+                        debug::drawLine(worldEdgePos + edgeToCentroid
+                            , worldEdgeNextPos + nextEdgeToCentroid, polygon->debugColor, 5.0f, 0.0f, false);
+                    }
 
-        //        for (int j = 0; j < boundaryInfo.boundaryEdges.size(); j++)
-        //        {
-        //            auto edge = boundaryInfo.boundaryEdges.at(j);
+                }
+                /*              math::vec3 normalWorld = transform * math::vec4(polygon->localNormal, 0);
+                              debug::drawLine(worldCentroid
+                                  , worldCentroid + (normalWorld), polygon->debugColor, 5.0f, 0.0f, false);*/
 
-        //            math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
-        //            math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
+                                  // log::debug("polygon boundaryCount {} ", boundaryCount);
 
-        //            float interpolant = (float)j / boundaryInfo.boundaryEdges.size();
+            }
 
-        //            debug::drawLine(worldEdgePos
-        //                , worldEdgeNextPos, math::lerp(color, math::colors::black, interpolant), 10.0f, 0.0f, false);
+            auto& boundaryInfoList = splitter.debugHelper.boundaryEdgesForPolygon;
 
-        //        }
+            /* debug::drawLine(splitter.debugHelper.cuttingSetting.first
+                 , splitter.debugHelper.cuttingSetting.first + (splitter.debugHelper.cuttingSetting.second) * 2.0f, math::colors::cyan, 5.0f, 0.0f, false);*/
 
-        //        math::vec3 basePos = boundaryInfo.base + polygonNormalOffset;
-        //        debug::drawLine(basePos
-        //            , boundaryInfo.base + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::red, 10.0f, 0.0f, false);
 
-        //        debug::drawLine(boundaryInfo.prevSupport + polygonNormalOffset
-        //            , boundaryInfo.prevSupport + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::green, 10.0f, 0.0f, false);
 
-        //        debug::drawLine(boundaryInfo.nextSupport + polygonNormalOffset
-        //            , boundaryInfo.nextSupport + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::blue, 10.0f, 0.0f, false);
+            for (size_t i = 0; i < boundaryInfoList.size(); i++)
+            {
+                auto& boundaryInfo = boundaryInfoList[i];
+                math::color color = boundaryInfo.drawColor;
 
-        //        debug::drawLine(boundaryInfo.intersectionEdge + polygonNormalOffset
-        //            , boundaryInfo.intersectionEdge + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::magenta, 10.0f, 0.0f, false);
-        //    }
+                if (i != splitter.debugHelper.polygonToDisplay) { continue; }
 
-        //}
+                math::vec3 polygonNormalOffset = boundaryInfo.worldNormal * 0.01f;
+
+                debug::drawLine(boundaryInfo.intersectionPoints.first
+                    , boundaryInfo.intersectionPoints.second, math::colors::magenta, 10.0f, 0.0f, false);
+
+                for (int j = 0; j < boundaryInfo.boundaryEdges.size(); j++)
+                {
+                    auto edge = boundaryInfo.boundaryEdges.at(j);
+
+                    math::vec3 worldEdgePos = transform * math::vec4(edge->position, 1);
+                    math::vec3 worldEdgeNextPos = transform * math::vec4(edge->nextEdge->position, 1);
+
+                    float interpolant = (float)j / boundaryInfo.boundaryEdges.size();
+
+                    debug::drawLine(worldEdgePos
+                        , worldEdgeNextPos, math::lerp(color, math::colors::black, interpolant), 10.0f, 0.0f, false);
+
+                }
+
+                math::vec3 basePos = boundaryInfo.base + polygonNormalOffset;
+                debug::drawLine(basePos
+                    , boundaryInfo.base + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::red, 10.0f, 0.0f, false);
+
+                debug::drawLine(boundaryInfo.prevSupport + polygonNormalOffset
+                    , boundaryInfo.prevSupport + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::green, 10.0f, 0.0f, false);
+
+                debug::drawLine(boundaryInfo.nextSupport + polygonNormalOffset
+                    , boundaryInfo.nextSupport + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::blue, 10.0f, 0.0f, false);
+
+                debug::drawLine(boundaryInfo.intersectionEdge + polygonNormalOffset
+                    , boundaryInfo.intersectionEdge + math::vec3(0, 0.1f, 0) + polygonNormalOffset, math::colors::magenta, 10.0f, 0.0f, false);
+            }
+
+        }
     }
 
     void differentInterval(time::span deltaTime)

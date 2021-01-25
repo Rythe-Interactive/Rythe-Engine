@@ -278,10 +278,10 @@ namespace legion::audio
         log::debug("Destroying Audio Listener...");
 
         listenerCount = math::max(static_cast<int>(listenerCount - 1), 0);
-        if (listenerCount == 0 && scenemanagement::SceneManager::doNotCreateEntities == false)
+        if (listenerCount == 0)
         {
             log::debug("No Listeners left, resetting listener");
-            m_listenerEnt = ecs::entity_handle();
+            //m_listenerEnt = ecs::entity_handle();
             // Reset listener
             std::lock_guard guard(contextLock);
             alcMakeContextCurrent(alcContext);

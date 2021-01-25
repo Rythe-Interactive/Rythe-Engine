@@ -196,30 +196,24 @@ namespace legion::core
         {
             bool debug = false;
             if (id != invalid_id)
-                oa(id, cereal::make_nvp("Debug", debug), cereal::make_nvp("Filepath", get().second.filePath));
+                oa(id, cereal::make_nvp("Filepath", get().second.filePath));
             else
             {
                 log::error("Deserialized Mesh was missing!");
                 std::string missing = "engine://resources/invalid/missing_mesh.obj";
-                oa(id, cereal::make_nvp("Debug", debug), cereal::make_nvp("Filepath", missing));
+                oa(id, cereal::make_nvp("Filepath", missing));
             }
         }
 
         template<class Archive>
         void load(Archive& oa)
         {
-            bool debug;
             std::string filepath;
-            oa(id, cereal::make_nvp("Debug", debug),cereal::make_nvp("Filepath", filepath));
+            oa(id,cereal::make_nvp("Filepath", filepath));
             auto copy = default_mesh_settings;
             copy.contextFolder = fs::view(filepath).parent();
             id = MeshCache::create_mesh(filepath, fs::view(filepath), copy).id;
-            if (debug)
-            {
-                MeshCache::debugId = id;
-            }
         }
-
     };
 }
 

@@ -12,7 +12,6 @@ namespace legion::core::scenemanagement
     std::string SceneManager::currentScene = "Main";
     std::unordered_map < id_type, std::string> SceneManager::sceneNames;
     std::unordered_map<id_type, ecs::component_handle<scene>> SceneManager::sceneList;
-    std::atomic_bool SceneManager::doNotCreateEntities{ false };
 
     ecs::entity_handle SceneManager::create_scene_entity()
     {
@@ -84,7 +83,6 @@ namespace legion::core::scenemanagement
 
         std::ifstream inFile("assets/scenes/" + filename);
 
-        doNotCreateEntities = true;
         auto hry = world.read_component<hierarchy>();
         log::debug("Child Count Before: {}", hry.children.size());
         for(auto child : hry.children)

@@ -44,7 +44,7 @@ namespace legion::core::ecs
 
         mutable async::rw_spinlock m_familyLock;
         std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_families;
-        std::unordered_map<id_type,std::string> m_prettyNames;
+        std::unordered_map<id_type, std::string> m_prettyNames;
 
         mutable async::rw_spinlock m_entityDataLock;
         std::unordered_map<id_type, entity_data> m_entityData;
@@ -96,7 +96,7 @@ namespace legion::core::ecs
             return static_cast<component_pool<component_type>*>(getFamily(typeHash<component_type>()));
         }
 
-        async::rw_spinlock& getEntityLock() const 
+        async::rw_spinlock& getEntityLock() const
         {
             return m_entityLock;
         }
@@ -104,7 +104,7 @@ namespace legion::core::ecs
         /**@brief  TODO*/
         std::string getFamilyName(id_type id)
         {
-            if(const auto itr = m_prettyNames.find(id);itr != m_prettyNames.end())
+            if (const auto itr = m_prettyNames.find(id); itr != m_prettyNames.end())
             {
                 return itr->second;
             }
@@ -317,7 +317,9 @@ namespace legion::core::ecs
         /**@brief Create new entity.
          * @returns entity_handle Entity handle pointing to the newly created entity.
          */
-        L_NODISCARD entity_handle createEntity(id_type entityId = invalid_id);
+        L_NODISCARD entity_handle createEntity(bool worldChild = true, id_type entityId = invalid_id);
+
+        L_NODISCARD entity_handle createEntity(id_type entityId,bool worldChild = true);
 
         /**@brief Destroys entity and all of its components.
          * @param entityId Id of entity you wish to destroy.
