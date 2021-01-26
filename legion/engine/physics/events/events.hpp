@@ -25,8 +25,8 @@ namespace legion::physics {
         L_NODISCARD std::pair<ecs::entity_handle,ecs::entity_handle> participants() const
         {
             return std::make_pair(
-                manifold.physicsCompA.entity,
-                manifold.physicsCompB.entity
+                manifold.entityA,
+                manifold.entityB
             );
         }
 
