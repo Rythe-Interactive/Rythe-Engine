@@ -174,6 +174,9 @@ namespace legion::physics
             //------------------------------------------------------ Narrowphase -----------------------------------------------------//
             std::vector<physics_manifold> manifoldsToSolve;
 
+            log::debug("Groupings: {}", manifoldPrecursorGrouping.size());
+            size_t totalchecks = 0;
+
             for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
             {
                 if (manifoldPrecursor.size() == 0) { continue; }
@@ -183,6 +186,7 @@ namespace legion::physics
                     for (int j = i+1; j < manifoldPrecursor.size(); j++)
                     {
                         assert(j != manifoldPrecursor.size());
+                        totalchecks++;
 
                         physics_manifold_precursor& precursorA = manifoldPrecursor.at(i);
                         physics_manifold_precursor& precursorB = manifoldPrecursor.at(j);
@@ -220,6 +224,7 @@ namespace legion::physics
                     }
                 }
             }
+            log::debug("total checks: {}", totalchecks);
 
             //------------------------------------------------ Pre Colliison Solve Events --------------------------------------------//
 
