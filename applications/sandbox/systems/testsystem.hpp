@@ -872,7 +872,6 @@ public:
             auto entPhyHande = splitter.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
             physicsComponent2.AddBox(cubeParams);
 
@@ -899,8 +898,8 @@ public:
 
              auto entPhyHande = splitter.add_component<physics::physicsComponent>();
 
-             physics::physicsComponent physicsComponent2;
-             physics::physicsComponent::init(physicsComponent2);
+            physics::physicsComponent physicsComponent2;
+            
 
              physicsComponent2.AddBox(cubeParams);
 
@@ -931,7 +930,6 @@ public:
             //ent.add_component<addRB>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1021,7 +1019,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1103,7 +1100,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1123,7 +1119,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1148,7 +1143,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1169,7 +1163,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1193,7 +1186,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1214,7 +1206,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1245,7 +1236,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1271,7 +1261,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1301,7 +1290,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1326,7 +1314,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1381,7 +1368,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -1408,7 +1394,6 @@ public:
             auto entPhyHande = staticToAABBEntLinear.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1436,7 +1421,7 @@ public:
         //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
         //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
+        //    
 
 
         //    physicsComponent2.AddBox(cubeParams);
@@ -1476,7 +1461,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -1504,7 +1488,6 @@ public:
             auto entPhyHande = staticToAABBEntRotation.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
             physicsComponent2.AddBox(cubeParams);
             entPhyHande.write(physicsComponent2);
@@ -1542,9 +1525,7 @@ public:
 
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
+            physics::physicsComponent physicsComponent2;   
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -1569,9 +1550,7 @@ public:
 
             auto entPhyHande = staticToOBBEnt.add_component<physics::physicsComponent>();
 
-            physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
+            physics::physicsComponent physicsComponent2;   
 
             physicsComponent2.AddBox(cubeParams);
             physicsComponent2.isTrigger = false;
@@ -1622,9 +1601,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
-
 
             physicsComponent2.AddBox(staticBlockParams);
             physicsComponent2.isTrigger = false;
@@ -1649,8 +1625,6 @@ public:
             auto entPhyHande = staticToEdgeEnt.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
-
 
             physicsComponent2.AddBox(cubeParams);
             entPhyHande.write(physicsComponent2);
@@ -1711,7 +1685,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -1739,7 +1712,6 @@ public:
             auto entPhyHande = NoFrictionBody.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
             physicsComponent2.AddBox(cubeParams);
             physicsComponent2.isTrigger = false;
@@ -1777,7 +1749,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -1805,7 +1776,6 @@ public:
             auto entPhyHande = Point3FrictionBody.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1845,7 +1815,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -1873,7 +1842,6 @@ public:
             auto entPhyHande = Point6FrictionBody.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -1912,7 +1880,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -1940,7 +1907,6 @@ public:
             auto entPhyHande = FullFrictionBody.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -2016,7 +1982,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -2041,7 +2006,6 @@ public:
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
             physicsComponent2.AddBox(cubeParams);
             physicsComponent2.isTrigger = false;
@@ -2880,7 +2844,6 @@ public:
                     ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(wireframeH));
 
                     physics::physicsComponent physicsComponent;
-                    physics::physicsComponent::init(physicsComponent);
                     physicsComponent.AddBox(cubeParams);
                     physicsComponent.isTrigger = false;
                     entPhyHande.write(physicsComponent);

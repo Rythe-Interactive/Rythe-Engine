@@ -8,19 +8,9 @@ namespace legion::physics
 {
 	struct physicsComponent
 	{
-        static void init(physicsComponent& comp)
-        {
-            comp.colliders = new std::vector<std::shared_ptr<PhysicsCollider>>();
-        }
-
-        static void destroy(physicsComponent& comp)
-        {
-            delete comp.colliders;
-        }
-
 		//physics material
 
-        std::vector<std::shared_ptr<PhysicsCollider>>* colliders;
+        std::vector<std::shared_ptr<PhysicsCollider>> colliders;
 
         bool isTrigger =false;
 

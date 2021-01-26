@@ -1,5 +1,8 @@
 #pragma once
 #include <core/core.hpp>
+#include <physics/broadphase_collision_algorithms/broadphasecollisionalgorithm.hpp>
+#include <physics/broadphase_collision_algorithms/broadphase_uniformgrid.hpp>
+#include <physics/broadphase_collision_algorithms/broadphase_bruteforce.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/data/physics_manifold_precursor.hpp>
 #include <physics/data/physics_manifold.hpp>
@@ -20,8 +23,6 @@ namespace legion::physics
         math::color Color;
     };
 
-    typedef std::shared_ptr<PhysicsCollider> PhysicsColliderPtr;
-
     class PhysicsSystem final : public System<PhysicsSystem>
     {
     public:
@@ -38,15 +39,7 @@ namespace legion::physics
 
             rigidbodyIntegrationQuery = createQuery<rigidbody, position, rotation,physicsComponent>();
 
-            auto broadPhaseLambda = [this]
-            (std::vector<physics_manifold_precursor>& manifoldPrecursors
-                , std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
-            {
-                bruteForceBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
-            };
-
-            m_optimizeBroadPhase = broadPhaseLambda;
-
+            m_broadPhase = std::make_unique<BroadphaseBruteforce>();
         }
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
@@ -80,7 +73,7 @@ namespace legion::physics
         * @param parentTransform The world transform of the initialEntity. If 'initialEntity' is the world, parentTransform would be the identity matrix
         * @param id An integer that is used to identiy a physics_manifold_precursor from one another
         */
-        inline static void recursiveRetrievePreManifoldData(std::vector<physics_manifold_precursor>& manifoldPrecursors,
+        static void recursiveRetrievePreManifoldData(std::vector<physics_manifold_precursor>& manifoldPrecursors,
             const ecs::entity_handle& initialEntity, math::mat4 parentTransform = math::mat4(1.0f), int id = 0)
         {
             math::mat4 rootTransform = parentTransform;
@@ -114,7 +107,7 @@ namespace legion::physics
 
                 auto physicsComponent = physicsComponentHandle.read();
 
-                for (auto physCollider : *physicsComponent.colliders)
+                for (auto physCollider : physicsComponent.colliders)
                 {
                     //physCollider->DrawColliderRepresentation(rootTransform);
                     physCollider->UpdateTransformedTightBoundingVolume(rootTransform);
@@ -124,27 +117,51 @@ namespace legion::physics
             }
 
             //call recursiveRetrievePreManifoldData on its children
-            for (int i = 0; i < initialEntity.child_count(); i++)
+            if (initialEntity.has_component<hierarchy>())
             {
-                colliderID++;
-                auto child = initialEntity.get_child(i);
-                recursiveRetrievePreManifoldData(manifoldPrecursors, child, rootTransform, colliderID);
+                hierarchy hry = initialEntity.read_component<hierarchy>();
+
+                //call recursiveRetrievePreManifoldData on its children
+                for (auto& child : hry.children)
+                {
+                    colliderID++;
+                    recursiveRetrievePreManifoldData(manifoldPrecursors, child, rootTransform, colliderID);
+                }
             }
 
 
         }
 
+        /**@brief Sets the broad phase collision detection method
+         * Use BroadPhaseBruteForce to not use any broad phase collision detection 
+         */
+        template <typename BroadPhaseType, typename ...Args>
+        static void setBroadPhaseCollisionDetection(Args&& ...args)
+        {
+            static_assert(std::is_base_of_v<BroadPhaseCollisionAlgorithm, BroadPhaseType>, "Broadphase type did not inherit from BroadPhaseCollisionAlgorithm");
+            log::debug("Gonna start doing the thing");
+            m_broadPhase = std::make_unique<BroadPhaseType>(std::forward<Args>(args)...);
+            log::debug("Did the thing");
+        }
+
 
     private:
 
-        legion::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> m_optimizeBroadPhase;
+        static std::unique_ptr<BroadPhaseCollisionAlgorithm> m_broadPhase;
+        //legion::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> m_optimizeBroadPhase;
         const float m_timeStep = 0.02f;
+        
+
+        math::ivec3 uniformGridCellSize = math::ivec3(1, 1, 1);
 
         /** @brief Performs the entire physics pipeline (
          * Broadphase Collision Detection, Narrowphase Collision Detection, and the Collision Resolution)
         */
         void runPhysicsPipeline(float dt)
         {
+            static time::timer physicsTimer;
+            log::debug("{}ms", physicsTimer.restart().milliseconds());
+
             //-------------------------------------------------Broadphase Optimization-----------------------------------------------//
             int initialColliderID = 0;
 
@@ -152,10 +169,9 @@ namespace legion::physics
             std::vector<physics_manifold_precursor> manifoldPrecursors;
             recursiveRetrievePreManifoldData(manifoldPrecursors, ecs::entity_handle(world_entity_id), math::mat4(1.0f), initialColliderID);
 
-            //log::debug(" manifold precursor {}", manifoldPrecursors.size());
-
             std::vector<std::vector<physics_manifold_precursor>> manifoldPrecursorGrouping;
-            m_optimizeBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
+            //m_optimizeBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
+            m_broadPhase->collectPairs(manifoldPrecursors, manifoldPrecursorGrouping);
 
             //------------------------------------------------------ Narrowphase -----------------------------------------------------//
             std::vector<physics_manifold> manifoldsToSolve;
@@ -303,17 +319,6 @@ namespace legion::physics
 
         }
 
-
-
-        /**@brief moves all physics_manifold_precursor into a singular std::vector. This esentially means that no optimization was done.
-        * @note This should only be used for testing/debugging purposes
-        */
-        void bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
-            std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping);
-
-        
-
-
         /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA
         * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list
         * @param manifoldsToSolve [out] a std::vector of physics_manifold that will store the manifolds created
@@ -326,9 +331,9 @@ namespace legion::physics
             auto physicsComponentA = precursorA.physicsComponentHandle.read();
             auto physicsComponentB = precursorB.physicsComponentHandle.read();
 
-            for (auto colliderA : *physicsComponentA.colliders)
+            for (auto colliderA : physicsComponentA.colliders)
             {
-                for (auto colliderB : *physicsComponentB.colliders)
+                for (auto colliderB : physicsComponentB.colliders)
                 {
                     physics::physics_manifold m;
                     constructManifoldWithCollider(colliderA, colliderB, precursorA, precursorB, m);
