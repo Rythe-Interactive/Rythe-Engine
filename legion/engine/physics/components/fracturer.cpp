@@ -21,7 +21,7 @@ namespace legion::physics
         //-----------------------------------------------------------------------------------------------------------------------------//
 
         auto collider = isfracturingA ? manifold.colliderA: manifold.colliderB;
-        auto fractureInstigatorEnt = isfracturingA ? manifold.physicsCompA.entity : manifold.physicsCompB.entity;
+        auto fractureInstigatorEnt = isfracturingA ? manifold.entityA : manifold.entityB;
 
         auto [min,max] = collider->GetMinMaxWorldAABB();
 

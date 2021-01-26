@@ -11,8 +11,8 @@ namespace legion::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
-        auto compIDA = manifold.physicsCompA.entity.get_component_handle<identifier>();
-        auto compIDB = manifold.physicsCompB.entity.get_component_handle<identifier>();
+        auto compIDA = manifold.entityA.get_component_handle<identifier>();
+        auto compIDB = manifold.entityB.get_component_handle<identifier>();
 
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA
@@ -159,16 +159,16 @@ namespace legion::physics
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
-        auto refPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
-        auto incPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
+        auto refPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
+        auto incPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
 
         auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
         auto incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
 
         manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform,refCollider);
 
-        ecs::component_handle<rigidbody> refRB = refPhysicsCompHandle.entity.get_component_handle<rigidbody>();
-        ecs::component_handle<rigidbody>  incRB = incPhysicsCompHandle.entity.get_component_handle<rigidbody>();
+        ecs::component_handle<rigidbody> refRB = manifold.penetrationInformation->isARef ? manifold. : manifold.physicsCompB;
+        ecs::component_handle<rigidbody> incRB = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
 
         math::vec3 refWorldCentroid = refTransform * math::vec4(refPhysicsCompHandle.read().localCenterOfMass,1);
         math::vec3 incWorldCentroid = incTransform * math::vec4(incPhysicsCompHandle.read().localCenterOfMass,1);
