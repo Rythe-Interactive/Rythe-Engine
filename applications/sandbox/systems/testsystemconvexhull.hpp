@@ -38,6 +38,8 @@ public:
 
     virtual void setup()
     {
+        physics::constants::gravity = math::vec3::zero;
+
         app::InputSystem::createBinding<physics_step>(app::inputmap::method::ENTER);
         app::InputSystem::createBinding<collider_move>(app::inputmap::method::LEFT, -1);
         app::InputSystem::createBinding<collider_move>(app::inputmap::method::RIGHT, 1);
