@@ -18,6 +18,7 @@ struct physics_step : public app::input_action<physics_step> {};
 struct collider_move : public app::input_axis<collider_move> {};
 struct collider_move_up : public app::input_axis<collider_move_up> {};
 struct uniform_grid_broad_phase : public app::input_action<uniform_grid_broad_phase> {};
+struct uniform_grid_broad_phase_large : public app::input_action<uniform_grid_broad_phase_large> {};
 
 struct followerData
 {
@@ -46,11 +47,13 @@ public:
         app::InputSystem::createBinding<collider_move_up>(app::inputmap::method::UP, 1);
         app::InputSystem::createBinding<collider_move_up>(app::inputmap::method::DOWN, -1);
         app::InputSystem::createBinding<uniform_grid_broad_phase>(app::inputmap::method::K);
+        app::InputSystem::createBinding<uniform_grid_broad_phase_large>(app::inputmap::method::L);
 
         bindToEvent<physics_step, &TestSystemConvexHull::physicsStep>();
         bindToEvent<collider_move, &TestSystemConvexHull::colliderMove>();
         bindToEvent<collider_move_up, &TestSystemConvexHull::colliderMoveUp>();
         bindToEvent<uniform_grid_broad_phase, &TestSystemConvexHull::setUniformGrid>();
+        bindToEvent<uniform_grid_broad_phase_large, &TestSystemConvexHull::setUniformGridLarge>();
 
         createProcess<&TestSystemConvexHull::update>("Update");
 
@@ -121,6 +124,7 @@ public:
                 ent.add_component<physics::rigidbody>();
             }
 
+#if 1
             for (int i = 0; i < 1000; ++i)
             {
                 auto ent = createEntity();
@@ -139,6 +143,7 @@ public:
                 auto physH = ent.add_component<physics::physicsComponent>();
                 physH.read().AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));*/
             }
+#endif
         }
     }
 
@@ -199,8 +204,17 @@ public:
     {
         if (action->value)
         {
-            log::debug("Did the first step for the thing");
-            physics::PhysicsSystem::setBroadPhaseCollisionDetection<physics::BroadphaseUniformGrid>(math::ivec3(1, 1, 1));
+            physics::PhysicsSystem::setBroadPhaseCollisionDetection<physics::BroadphaseUniformGrid>(math::ivec3(2, 2, 2));
+            log::debug("Set broad phase 4");
+        }
+    }
+
+    void setUniformGridLarge(uniform_grid_broad_phase_large* action)
+    {
+        if (action->value)
+        {
+            physics::PhysicsSystem::setBroadPhaseCollisionDetection<physics::BroadphaseUniformGrid>(math::ivec3(3, 3, 3));
+            log::debug("Set broad phase 3");
         }
     }
 

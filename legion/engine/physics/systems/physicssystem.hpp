@@ -139,9 +139,7 @@ namespace legion::physics
         static void setBroadPhaseCollisionDetection(Args&& ...args)
         {
             static_assert(std::is_base_of_v<BroadPhaseCollisionAlgorithm, BroadPhaseType>, "Broadphase type did not inherit from BroadPhaseCollisionAlgorithm");
-            log::debug("Gonna start doing the thing");
             m_broadPhase = std::make_unique<BroadPhaseType>(std::forward<Args>(args)...);
-            log::debug("Did the thing");
         }
 
 

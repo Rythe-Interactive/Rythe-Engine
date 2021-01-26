@@ -11,6 +11,14 @@ namespace legion::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
+        // Middle-phase collision detection
+        // Do AABB collision to check whether collision is possible
+        auto aabbThis = this->GetMinMaxWorldAABB();
+        auto aabbOther = convexCollider->GetMinMaxWorldAABB();
+        auto& [low0, high0] = aabbThis;
+        auto& [low1, high1] = aabbOther;
+        if (!physics::PhysicsStatics::CollideAABB(low0, high0, low1, high1)) return;
+
         auto compIDA = manifold.physicsCompA.entity.get_component_handle<identifier>();
         auto compIDB = manifold.physicsCompB.entity.get_component_handle<identifier>();
 

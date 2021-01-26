@@ -543,6 +543,20 @@ namespace legion::physics
             return serialization::SerializationUtil::JSONDeserialize< std::vector<std::vector<math::vec4>>>(f);
         }
 
+        static bool CollideAABB(const math::vec3 low0, const math::vec3 high0, const math::vec3 low1, const math::vec3 high1)
+        {
+            return low0.x <= high1.x && high0.x >= low1.x &&
+                low0.y <= high1.y && high0.y >= low1.y
+                && low0.z <= high1.z && high0.z >= low1.z;
+        }
+
+        static bool CollideAABB(const std::pair<math::vec3, math::vec3> col0, const std::pair<math::vec3, math::vec3> col1)
+        {
+            auto& [low0, high0] = col0;
+            auto& [low1, high1] = col1;
+            return CollideAABB(low0, high0, low1, high1);
+        }
+
     private:
 
         /** @brief Given 2 HalfEdgeEdges and their respective transforms, transforms their normals and checks if they create a minkowski face
