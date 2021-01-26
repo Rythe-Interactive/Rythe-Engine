@@ -136,12 +136,6 @@ public:
                 ent.add_component(p);
 
                 auto rbH = ent.add_component<physics::rigidbody>();
-
-                /*auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
-                ent.add_components<transform>(position(math::linearRand(math::vec3(-10, 0, -10), math::vec3(10, 20, 10))), rotation(math::angleAxis(math::linearRand(-math::pi<float>(), math::pi<float>()), math::normalize(math::linearRand(-math::vec3::one, math::vec3::one)))), scale(1.f));
-                auto physH = ent.add_component<physics::physicsComponent>();
-                physH.read().AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));*/
             }
 #endif
         }
@@ -151,10 +145,6 @@ public:
 
     void update(time::span deltaTime)
     {
-        //physics::PhysicsSystem::IsPaused = false;
-        //debug::user_projectdrawLine(math::vec3(1, 0, 0), math::vec3(1, 1, 0), math::colors::magenta, 10.0f, 20.0f);
-        //drawPhysicsColliders();
-
         auto [posH, rotH, scaleH] = physicsEnt.get_component_handles<transform>();
 
         if (!isUpdating)
@@ -205,7 +195,7 @@ public:
         if (action->value)
         {
             physics::PhysicsSystem::setBroadPhaseCollisionDetection<physics::BroadphaseUniformGrid>(math::ivec3(2, 2, 2));
-            log::debug("Set broad phase 4");
+            log::debug("Set broad phase 2x2x2");
         }
     }
 
@@ -214,7 +204,7 @@ public:
         if (action->value)
         {
             physics::PhysicsSystem::setBroadPhaseCollisionDetection<physics::BroadphaseUniformGrid>(math::ivec3(3, 3, 3));
-            log::debug("Set broad phase 3");
+            log::debug("Set broad phase 3x3x3");
         }
     }
 
