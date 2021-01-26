@@ -140,10 +140,17 @@ namespace legion::rendering
         fbo.release();
     }
 
-    void Bloom::renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime)
+    void Bloom::renderPass(framebuffer& fbo, RenderPipelineBase* pipeline, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
         // If a brightness threshold texture had not been created yet, create one.
         texture_handle overdrawTexture;
+
+        //Try to get color attachment.
+        auto color_attachment = fbo.getAttachment(FRAGMENT_ATTACHMENT);
+        if (!std::holds_alternative<texture_handle>(color_attachment)) return;
+
+        //Get color texture.
+        auto color_texture = std::get<texture_handle>(color_attachment);
 
         {
             auto attachment = fbo.getAttachment(OVERDRAW_ATTACHMENT);
@@ -152,10 +159,10 @@ namespace legion::rendering
         }
 
         // Get brightest parts of the scene and append to overdraw buffer.
-        seperateOverdraw(fbo, colortexture, overdrawTexture);
+        seperateOverdraw(fbo, color_texture, overdrawTexture);
 
         // Gets the size of the lighting data texture.
-        math::ivec2 framebufferSize = colortexture.get_texture().size();
+        math::ivec2 framebufferSize = color_texture.get_texture().size();
 
         // Mix slight part of the previous frame overdraw into the current frame to reduce flickering and introduce slight trail when it's dark.
         historyMixOverdraw(fbo, overdrawTexture);
@@ -164,7 +171,7 @@ namespace legion::rendering
         texture_handle blurredImage = blurOverdraw(framebufferSize, overdrawTexture);
 
         // Recombine the overdraw texture with the scene color.
-        combineImages(fbo, colortexture, blurredImage);
+        combineImages(fbo, color_texture, blurredImage);
     }
 
 }

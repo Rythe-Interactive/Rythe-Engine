@@ -25,18 +25,27 @@ namespace legion::core::scenemanagement
             sceneEntity.add_component<hierarchy>();
             sceneEntity.add_component<scene>();
             std::vector<ecs::entity_handle> children;
-            for (size_type i = 0; i < m_ecs->world.child_count(); i++)
+            auto hry = world.read_component<hierarchy>();
+
+            for (auto& child : hry.children)
             {
-                children.push_back(m_ecs->world.get_child(i));
+                children.push_back(child);
             }
-            log::debug("Child count {}",m_ecs->world.child_count());
-            for (auto child : children)
+            int i = 0;
+            sceneEntity.write_component(hry);
+
+            for (ecs::entity_handle child : children)
             {
-                if (child == sceneEntity)
-                    continue;
-                child.set_parent(sceneEntity,true);
+                if (child.has_component<hierarchy>())
+                {
+                    auto h = child.read_component<hierarchy>();
+                    h.parent = sceneEntity;
+                    child.write_component(h);
+                }
             }
-            m_ecs->world.read_component<hierarchy>().children.clear();
+            hry.children.clear();
+            hry.children.insert(sceneEntity);
+            world.write_component(hry);
         }
         else
         {
@@ -85,7 +94,7 @@ namespace legion::core::scenemanagement
 
         auto hry = world.read_component<hierarchy>();
         log::debug("Child Count Before: {}", hry.children.size());
-        for(auto child : hry.children)
+        for (auto child : hry.children)
         {
             log::debug("children remaining {}", world.child_count());
             child.destroy(true);

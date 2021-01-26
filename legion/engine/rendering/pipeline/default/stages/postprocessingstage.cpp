@@ -65,14 +65,9 @@ namespace legion::rendering
             return;
         }
 
-        texture_handle textures[] = { std::get<texture_handle>(colorAttachment), m_swapTexture };
+        texture_handle texture = std::get<texture_handle>(colorAttachment);
 
-        math::ivec2 attachmentSize = textures[0].get_texture().size();
-        auto tex = m_swapTexture.get_texture();
-        if (attachmentSize != tex.size())
-            tex.resize(attachmentSize);
-
-        int index = 0;
+        math::ivec2 attachmentSize = texture.get_texture().size();
 
         bool stencil = false;
         auto depthAttachment = fbo->getAttachment(GL_DEPTH);
@@ -101,22 +96,8 @@ namespace legion::rendering
             for (auto& pass : effect->renderPasses)
             {
                 OPTICK_EVENT("Effect pass");
-                fbo->attach(textures[!index], FRAGMENT_ATTACHMENT);
-                
-                pass.invoke(*fbo, textures[index], depthTexture, deltaTime);
-                                
-                index = !index;
+                pass.invoke(*fbo, m_pipeline, cam, camInput, deltaTime);
             }
-        }
-
-        if (index)
-        {
-            fbo->attach(textures[0], FRAGMENT_ATTACHMENT);
-            fbo->bind();
-            m_screenShader.bind();
-            m_screenShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(textures[1]);
-            m_screenQuad.render();
-            fbo->release();
         }
 
         rendering::shader::release();

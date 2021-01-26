@@ -85,15 +85,15 @@ public:
 
     void setupCameraEntity()
     {
-        material_handle pbrH = MaterialCache::get_material("pbr");
-        if (pbrH == invalid_material_handle)
+        rendering::material_handle pbrH = rendering::MaterialCache::get_material("pbr");
+        if (pbrH == rendering::invalid_material_handle)
         {
-            const auto pbrShader = ShaderCache::create_shader("pbr", "assets://shaders/pbr.shs"_view);
-            pbrH = MaterialCache::create_material("pbr", pbrShader);
-            pbrH.set_param(SV_ALBEDO, TextureCache::create_texture("engine://resources/default/albedo"_view));
-            pbrH.set_param(SV_NORMALHEIGHT, TextureCache::create_texture("engine://resources/default/normalHeight"_view));
-            pbrH.set_param(SV_MRDAO, TextureCache::create_texture("engine://resources/default/MRDAo"_view));
-            pbrH.set_param(SV_EMISSIVE, TextureCache::create_texture("engine://resources/default/emissive"_view));
+            const auto pbrShader = rendering::ShaderCache::create_shader("pbr", "assets://shaders/pbr.shs"_view);
+            pbrH = rendering::MaterialCache::create_material("pbr", pbrShader);
+            pbrH.set_param(SV_ALBEDO, rendering::TextureCache::create_texture("engine://resources/default/albedo"_view));
+            pbrH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("engine://resources/default/normalHeight"_view));
+            pbrH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("engine://resources/default/MRDAo"_view));
+            pbrH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("engine://resources/default/emissive"_view));
             pbrH.set_param(SV_HEIGHTSCALE, 1.f);
             pbrH.set_param("discardExcess", false);
             pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
