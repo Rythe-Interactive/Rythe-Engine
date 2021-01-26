@@ -141,7 +141,6 @@ namespace legion::physics
             auto entPhyHande = splitter.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
             physicsComponent2.AddBox(cubeParams);
 
@@ -170,7 +169,6 @@ namespace legion::physics
              auto entPhyHande = splitter.add_component<physics::physicsComponent>();
 
              physics::physicsComponent physicsComponent2;
-             physics::physicsComponent::init(physicsComponent2);
 
              physicsComponent2.AddBox(cubeParams);
 
@@ -198,7 +196,6 @@ namespace legion::physics
             //ent.add_component<addRB>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -252,7 +249,6 @@ namespace legion::physics
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent;
-            physics::physicsComponent::init(physicsComponent);
 
             physicsComponent.AddBox(cubeParams);
             entPhyHande.write(physicsComponent);
@@ -289,7 +285,6 @@ namespace legion::physics
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -354,7 +349,6 @@ namespace legion::physics
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -381,7 +375,7 @@ namespace legion::physics
             auto entPhyHande = staticToAABBEntLinear.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -409,7 +403,7 @@ namespace legion::physics
         //    auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
         //    physics::physicsComponent physicsComponent2;
-        //    physics::physicsComponent::init(physicsComponent2);
+        //    
 
 
         //    physicsComponent2.AddBox(cubeParams);
@@ -449,7 +443,7 @@ namespace legion::physics
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -477,7 +471,7 @@ namespace legion::physics
             auto entPhyHande = staticToAABBEntRotation.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
             physicsComponent2.AddBox(cubeParams);
             entPhyHande.write(physicsComponent2);
@@ -516,7 +510,7 @@ namespace legion::physics
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
 
 
@@ -543,7 +537,7 @@ namespace legion::physics
             auto entPhyHande = staticToOBBEnt.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -595,7 +589,7 @@ namespace legion::physics
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
 
 
@@ -622,7 +616,7 @@ namespace legion::physics
             auto entPhyHande = staticToEdgeEnt.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
 
             physicsComponent2.AddBox(cubeParams);
@@ -697,7 +691,7 @@ namespace legion::physics
             composite.add_component < physics::rigidbody>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
             physicsComponent2.AddBox(cubeParams);
 
@@ -726,7 +720,7 @@ namespace legion::physics
 
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
             physicsComponent2.AddBox(cubeParams);
 
@@ -768,7 +762,7 @@ namespace legion::physics
             wall.add_component<physics::Fracturer>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
             physicsComponent2.AddBox(cubeParams);
 
@@ -815,7 +809,7 @@ namespace legion::physics
             rbH.write(rb);
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
+            
 
             physicsComponent2.AddBox(cubeParams);
 
@@ -842,7 +836,6 @@ namespace legion::physics
             auto entPhyHande = floor.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            physics::physicsComponent::init(physicsComponent2);
             physicsComponent2.AddBox(scaledCubeParams);
             entPhyHande.write(physicsComponent2);
 

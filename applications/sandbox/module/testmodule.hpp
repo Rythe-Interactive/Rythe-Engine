@@ -23,8 +23,17 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
-        //reportSystem<TestSystemConvexHull>();
-        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1920, 1080), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
+
+        // Create the request for the main window.
+        app::WindowSystem::requestWindow(
+            world_entity_id,
+            math::ivec2(1920, 1080),
+            "LEGION Engine",
+            "Legion Icon",
+            nullptr,
+            nullptr,
+            1
+        );
 
         reportComponentType<sah>();
         reportSystem<TestSystem>();
@@ -35,6 +44,7 @@ public:
         reportSystem<ext::AnimationEditor>();
         reportSystem<GuiTestSystem>();
         reportSystem<physics::PhysicsFractureTestSystem>();
+        reportSystem<TestSystemConvexHull>();
 
     }
 
