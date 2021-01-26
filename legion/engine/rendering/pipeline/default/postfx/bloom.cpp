@@ -16,7 +16,7 @@ namespace legion::rendering
         for (int i = 0; i < 2; i++)
         {
             m_pingpongFrameBuffers[i] = framebuffer(GL_FRAMEBUFFER);
-            m_pingpongTextureBuffers[i] = rendering::TextureCache::create_texture("blurTexture" + i, context.size(), settings);
+            m_pingpongTextureBuffers[i] = rendering::TextureCache::create_texture("blurTexture" + std::to_string(i), context.size(), settings);
             m_pingpongFrameBuffers[i].attach(m_pingpongTextureBuffers[i], FRAGMENT_ATTACHMENT);
         }
         // Adding itself to the post processing renderpass.

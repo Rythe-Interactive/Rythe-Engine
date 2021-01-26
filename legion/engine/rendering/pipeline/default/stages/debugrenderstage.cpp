@@ -14,6 +14,8 @@ namespace legion::rendering
 
     void DebugRenderStage::endDebugDomain()
     {
+        if (!localLines) return;
+            //localLines = new std::unordered_set<debug::debug_line_event>();*/
         size_type size = localLines->size();
 
         if (size == 0)

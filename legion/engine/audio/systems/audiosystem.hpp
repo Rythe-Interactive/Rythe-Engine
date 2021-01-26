@@ -11,10 +11,9 @@
  * @file audiosystem.hpp
  */
 
-
-
 namespace legion::audio
 {
+
     inline void openal_error()
     {
         ALCenum error;
@@ -82,7 +81,7 @@ namespace legion::audio
         ecs::entity_handle m_listenerEnt;
 
         position m_listenerPosition;
-        std::unordered_map <ecs::component_handle<audio_source>, position > m_sourcePositions;
+        std::unordered_map<ecs::component_handle<audio_source>, position> m_sourcePositions;
 
         static ALCdevice* alDevice;
         static unsigned int sourceCount;

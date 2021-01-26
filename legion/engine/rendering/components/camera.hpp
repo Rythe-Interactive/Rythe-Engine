@@ -94,5 +94,18 @@ namespace legion::rendering
         {
             return math::perspective(math::deg2rad(fov * ratio), ratio, farz, nearz);
         }
+
+        template <class Archive>
+        void serialize(Archive& oa)
+        {
+            using cereal::make_nvp;
+
+            oa(
+                make_nvp("Fov",fov),
+                make_nvp("NearZ", nearz),
+                make_nvp("FarZ",farz)
+            );
+        }
+
     };
 }

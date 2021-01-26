@@ -14,7 +14,10 @@ namespace legion::rendering
 
         OPTICK_EVENT();
         if (!log::impl::thread_names.count(std::this_thread::get_id()))
+        {
             log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
+            async::set_thread_name("OpenGL");
+        }
 
         cstring s;
         switch (source)
@@ -99,7 +102,10 @@ namespace legion::rendering
     {
         OPTICK_EVENT();
         if (!log::impl::thread_names.count(std::this_thread::get_id()))
+        {
             log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
+            async::set_thread_name("OpenGL");
+        }
 
         cstring s;
         switch (source)
@@ -175,7 +181,10 @@ namespace legion::rendering
     {
         OPTICK_EVENT();
         if (!log::impl::thread_names.count(std::this_thread::get_id()))
+        {
             log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
+            async::set_thread_name("OpenGL");
+        }
 
         cstring c;
         switch (category)
@@ -347,8 +356,8 @@ namespace legion::rendering
 
     void Renderer::render(time::span deltatime)
     {
-        OPTICK_FRAME("Rendering");
         OPTICK_EVENT();
+
         if (m_pipelineProvider.isNull())
             return;
 

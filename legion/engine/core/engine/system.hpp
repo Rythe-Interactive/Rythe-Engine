@@ -42,7 +42,7 @@ namespace legion::core
         void createProcess(const char(&processChainName)[charc], time::time_span<fast_time> interval = 0)
         {
             OPTICK_EVENT();
-            std::string name = std::string(processChainName) + typeName<SelfType>() + std::to_string(interval) + std::to_string(force_cast<intptr_t>(func_type)[0]);
+            std::string name = std::string(processChainName) + nameOfType<SelfType>() + std::to_string(interval) + std::to_string(force_cast<intptr_t>(func_type)[0]);
             id_type id = nameHash(name);
             std::unique_ptr<scheduling::Process> process = std::make_unique<scheduling::Process>(name, id, interval);
             process->setOperation(delegate<void(time::time_span<fast_time>)>::create<SelfType, func_type>((SelfType*)this));
@@ -54,7 +54,7 @@ namespace legion::core
         void createProcess(cstring processChainName, delegate<void(time::time_span<fast_time>)>&& operation, time::time_span<fast_time> interval = 0)
         {
             OPTICK_EVENT();
-            std::string name = std::string(processChainName) + typeName<SelfType>() + std::to_string(interval);
+            std::string name = std::string(processChainName) + nameOfType<SelfType>() + std::to_string(interval);
             id_type id = nameHash(name);
 
             std::unique_ptr<scheduling::Process> process = std::make_unique<scheduling::Process>(name, id, interval);
@@ -67,7 +67,7 @@ namespace legion::core
         void destroyProcess(cstring processChainName, time::time_span<fast_time> interval = 0)
         {
             OPTICK_EVENT();
-            std::string name = std::string(processChainName) + typeName<SelfType>() + std::to_string(interval);
+            std::string name = std::string(processChainName) + nameOfType<SelfType>() + std::to_string(interval);
             id_type id = nameHash(name);
             m_scheduler->unhookProcess(processChainName, m_processes[id].get());
             if (!m_processes[id]->inUse())
@@ -82,10 +82,10 @@ namespace legion::core
 
         /**@brief Create a new entity and return the handle.
          */
-        L_NODISCARD ecs::entity_handle createEntity()
+        L_NODISCARD ecs::entity_handle createEntity(bool worldChild = true)
         {
             OPTICK_EVENT();
-            return m_ecs->createEntity();
+            return m_ecs->createEntity(worldChild);
         }
 
         template<typename... component_types>
@@ -101,7 +101,7 @@ namespace legion::core
             return m_ecs->createQuery(componentTypes);
         }
 
-        template<typename event_type, typename... Args, inherits_from<event_type, events::event<event_type>> = 0>
+        template<typename event_type, typename... Args CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void raiseEvent(Args... arguments)
         {
             OPTICK_EVENT();
@@ -120,56 +120,56 @@ namespace legion::core
             m_eventBus->raiseEventUnsafe(std::move(value), id);
         }
 
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD bool checkEvent() const
         {
             OPTICK_EVENT();
             return m_eventBus->checkEvent<event_type>();
         }
 
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD size_type getEventCount() const
         {
             OPTICK_EVENT();
             return m_eventBus->getEventCount<event_type>();
         }
 
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD const event_type& getEvent(index_type index = 0) const
         {
             OPTICK_EVENT();
             return m_eventBus->getEvent<event_type>(index);
         }
 
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD const event_type& getLastEvent() const
         {
             OPTICK_EVENT();
             return m_eventBus->getLastEvent<event_type>();
         }
 
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void clearEvent(index_type index = 0)
         {
             OPTICK_EVENT();
             m_eventBus->clearEvent<event_type>(index);
         }
 
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void clearLastEvent()
         {
             OPTICK_EVENT();
             m_eventBus->clearLastEvent<event_type>();
         }
 
-        template <typename event_type, void(SelfType::* func_type)(event_type*), inherits_from<event_type, events::event<event_type>> = 0>
+        template <typename event_type, void(SelfType::* func_type)(event_type*) CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void bindToEvent()
         {
             OPTICK_EVENT();
             m_eventBus->bindToEvent<event_type>(delegate<void(event_type*)>::template create<SelfType, func_type>(static_cast<SelfType*>(this)));
         }
 
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
+        template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void bindToEvent(delegate<void(event_type*)> callback)
         {
             OPTICK_EVENT();
@@ -177,6 +177,6 @@ namespace legion::core
         }
 
     public:
-        System() : SystemBase(typeHash<SelfType>(), typeName<SelfType>()) {}
+        System() : SystemBase(typeHash<SelfType>(), nameOfType<SelfType>()) {}
     };
 }

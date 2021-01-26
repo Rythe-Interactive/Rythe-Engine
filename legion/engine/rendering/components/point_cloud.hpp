@@ -24,15 +24,16 @@ namespace legion::rendering
          * @param maxPoints is used to calculate the samples for each triangle of the mesh,
          * @param radius defines point scale.
          */
-        point_cloud(mesh_handle newMesh, transform newTrans, material_handle mat, image_handle heightMap, uint maxPoints = 100, float radius = 0.2f)
+        point_cloud(mesh_handle newMesh, transform newTrans, material_handle mat, image_handle albedoMap, image_handle heightMap, uint maxPoints = 100, float radius = 0.2f)
         {
             m_mesh = newMesh;
             m_trans = newTrans;
             m_heightMap = heightMap;
+            m_AlbedoMap = albedoMap;
             //m_samplesPerTriangle = calculateSamplesPerTriangle(maxPoints);
             m_pointRadius = radius;
             m_Material = mat;
-            InitSampleValues(maxPoints);
+            m_maxPoints = maxPoints;
         }
         point_cloud() = default;
 
@@ -48,55 +49,9 @@ namespace legion::rendering
         mesh_handle m_mesh;
         uint m_samplesPerTriangle;
         uint m_sampleDepth;
+        uint m_maxPoints;
         material_handle m_Material;
         image_handle m_heightMap;
-
-        void InitSampleValues(uint maxPoints)
-        {
-            uint samplesPerTri = calculateSamplesPerTriangle(maxPoints);
-            //3 is the minimum value that works, if its smaller it will break the compute shader
-            if (samplesPerTri <= 3) samplesPerTri = 3;
-            //generate sample width
-            uint currentIterator = 0;
-            uint sum = 0;
-            uint previousSum = 0;
-            //iterate until the samples reach the max sample per triangle
-            // add more rows until the sum of all rows exceeds the sample per triangle count:
-            // *
-            // *  *
-            // *  *  *
-            // *  *  *  *
-            while (sum < samplesPerTri)
-            {
-                previousSum = sum;
-                sum = 0;
-                currentIterator++;
-                //exit if too many iterations are made 
-                if (currentIterator > 45)
-                {
-                    log::error("please decrease max sample points for point cloud object");
-                    return;
-                }
-
-                for (int i = currentIterator; i > 0; i--)
-                {
-                    sum += i;
-                }
-            }
-            m_samplesPerTriangle = previousSum;
-            m_sampleDepth = currentIterator - 1;
-            log::debug("samples per tri " + std::to_string(m_samplesPerTriangle));
-            log::debug("samples depth " + std::to_string(m_sampleDepth));
-
-        }
-        uint calculateSamplesPerTriangle(uint maxPoints)
-        {
-            if (!m_mesh) return 0;
-            auto mesh = m_mesh.get();
-            auto indices = mesh.second.indices;
-            uint triangleCount = indices.size() / 3;
-            return maxPoints / triangleCount;
-        }
-
+        image_handle  m_AlbedoMap;
     };
 }

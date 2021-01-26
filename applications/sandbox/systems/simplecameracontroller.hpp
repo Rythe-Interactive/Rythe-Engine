@@ -69,10 +69,36 @@ public:
             app::context_guard guard(window);
             setupCameraEntity();
         }
+
+        createProcess<&SimpleCameraController::onGetCamera>("Update", 0.5f);
+    }
+
+    void onGetCamera(time::span)
+    {
+        static auto query = createQuery<rendering::camera>();
+        query.queryEntities();
+        if (query.size())
+        {
+            camera = query[0];
+        }
     }
 
     void setupCameraEntity()
     {
+        material_handle pbrH = MaterialCache::get_material("pbr");
+        if (pbrH == invalid_material_handle)
+        {
+            const auto pbrShader = ShaderCache::create_shader("pbr", "assets://shaders/pbr.shs"_view);
+            pbrH = MaterialCache::create_material("pbr", pbrShader);
+            pbrH.set_param(SV_ALBEDO, TextureCache::create_texture("engine://resources/default/albedo"_view));
+            pbrH.set_param(SV_NORMALHEIGHT, TextureCache::create_texture("engine://resources/default/normalHeight"_view));
+            pbrH.set_param(SV_MRDAO, TextureCache::create_texture("engine://resources/default/MRDAo"_view));
+            pbrH.set_param(SV_EMISSIVE, TextureCache::create_texture("engine://resources/default/emissive"_view));
+            pbrH.set_param(SV_HEIGHTSCALE, 1.f);
+            pbrH.set_param("discardExcess", false);
+            pbrH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
+        }
+
         skybox = createEntity();
         auto skyboxMat = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
         skyboxMat.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
@@ -87,7 +113,7 @@ public:
         groundplane.write_component(scale(250.f));
         camera = createEntity();
         camera.add_components<transform>(position(0.f, 3.f, 0.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
-        camera.add_component<audio::audio_listener>();
+        //camera.add_component<audio::audio_listener>();
 
         rendering::camera cam;
         cam.set_projection(22.5f, 0.001f, 1000.f);

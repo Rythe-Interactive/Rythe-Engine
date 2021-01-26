@@ -46,6 +46,25 @@ namespace legion::rendering
         L_NODISCARD static light spot(math::color color = math::colors::white, float angle = 0.785398f, float intensity = 1.0, float attenuation = 10, float falloff = 3.141592f);
         L_NODISCARD static light point(math::color color = math::colors::white, float intensity = 1.0, float attenuation = 10, float falloff = 3.141592f);
 
+
+        template <class Archive>
+        void serialize(Archive& archive)
+        {
+            using cereal::make_nvp;
+
+            archive(
+                make_nvp("LightType",*reinterpret_cast<uint*>(&m_type)),
+                make_nvp("Attenuation",m_attenuation),
+                make_nvp("Intensity",m_intensity),
+                make_nvp("Index",m_index),
+                make_nvp("Direction",m_direction),
+                make_nvp("Falloff",m_falloff),
+                make_nvp("Position",m_position),
+                make_nvp("Angle",m_angle),
+                make_nvp("Color",*reinterpret_cast<math::vec4*>(&m_color))
+            );
+        }
+
     protected:
         union
         {

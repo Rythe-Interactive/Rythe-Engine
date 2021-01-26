@@ -37,6 +37,8 @@
     <ClCompile Include="async\spinlock.cpp" />
     <ClCompile Include="async\async_operation.cpp" />
     <ClCompile Include="async\job_pool.cpp" />
+    <ClCompile Include="defaults\hierarchysystem.cpp" />
+    <ClCompile Include="defaults\defaultcomponents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -55,7 +57,6 @@
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
-    <ClInclude Include="ecs\component_container.hpp" />
     <ClInclude Include="ecs\component_handle.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
     <ClInclude Include="ecs\ecsregistry.hpp" />
@@ -421,6 +422,11 @@
     <ClInclude Include="containers\runnable.hpp" />
     <ClInclude Include="async\wait_priority.hpp" />
     <ClInclude Include="async\async_runnable.hpp" />
+    <ClInclude Include="ecs\component_pool.hpp" />
+    <ClInclude Include="ecs\component_container.hpp" />
+    <ClInclude Include="defaults\hierarchysystem.hpp" />
+    <ClInclude Include="time\defaults.hpp" />
+    <ClInclude Include="async\thread_util.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

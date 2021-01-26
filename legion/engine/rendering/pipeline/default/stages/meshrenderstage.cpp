@@ -1,6 +1,7 @@
 #include <rendering/pipeline/default/stages/meshrenderstage.hpp>
 #include <rendering/components/light.hpp>
 #include <rendering/data/buffer.hpp>
+#include <rendering/data/model.hpp>
 
 namespace legion::rendering
 {
@@ -23,7 +24,8 @@ namespace legion::rendering
         // static id_type sceneColorId = nameHash("scene color history");
         // static id_type sceneDepthId = nameHash("scene depth history");
 
-        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
+        //auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity_handle>>>>(batchesId);
+        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::vector<math::mat4>>>>(batchesId);
         if (!batches)
             return;
 
@@ -39,7 +41,7 @@ namespace legion::rendering
         if (!modelMatrixBuffer)
             return;
 
-        auto fbo = getFramebuffer(mainId);
+        auto* fbo = getFramebuffer(mainId);
         if (!fbo)
         {
             log::error("Main frame buffer is missing.");
@@ -69,7 +71,7 @@ namespace legion::rendering
 
         texture_handle sceneDepth;
         auto depthAttachment = fbo->getAttachment(GL_DEPTH_ATTACHMENT);
-        if(std::holds_alternative<std::monostate>(depthAttachment))
+        if (std::holds_alternative<std::monostate>(depthAttachment))
             depthAttachment = fbo->getAttachment(GL_DEPTH_STENCIL_ATTACHMENT);
         if (std::holds_alternative<texture_handle>(depthAttachment))
             sceneDepth = std::get<texture_handle>(depthAttachment);
@@ -120,41 +122,47 @@ namespace legion::rendering
 
             for (auto [modelHandle, instances] : instancesPerMaterial)
             {
-                OPTICK_EVENT("Rendering instances");
+                ModelCache::create_model(modelHandle.id);
                 auto modelName = ModelCache::get_model_name(modelHandle.id);
+                OPTICK_EVENT("Rendering instances");
                 OPTICK_TAG("Model", modelName.c_str());
 
-                if (!modelHandle.is_buffered())
+                const model& mesh = modelHandle.get_model();
+                if (!mesh.buffered)
                     modelHandle.buffer_data(*modelMatrixBuffer);
 
-                model mesh = modelHandle.get_model();
                 if (mesh.submeshes.empty())
                 {
-                    log::warn("Empty mesh found.");
+
+                    log::warn("Empty mesh found. Model name: {},  Model ID {}", modelName, modelHandle.get_mesh().id);
                     continue;
                 }
 
                 {
                     OPTICK_EVENT("Calculating matrices");
-                    m_matrices.resize(instances.size());
+                    /*m_matrices.resize(instances.size());
                     int i = 0;
                     for (auto& ent : instances)
                     {
                         m_matrices[i] = transform(ent.get_component_handles<transform>()).get_local_to_world_matrix();
                         i++;
-                    }
+                    }*/
+
+                    modelMatrixBuffer->bufferData(instances);
                 }
-                modelMatrixBuffer->bufferData(m_matrices);
 
-                mesh.vertexArray.bind();
-                mesh.indexBuffer.bind();
-                lightsBuffer->bind();
-                for (auto submesh : mesh.submeshes)
-                    glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
+                {
+                    OPTICK_EVENT("Draw call");
+                    mesh.vertexArray.bind();
+                    mesh.indexBuffer.bind();
+                    lightsBuffer->bind();
+                    for (auto submesh : mesh.submeshes)
+                        glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
 
-                lightsBuffer->release();
-                mesh.indexBuffer.release();
-                mesh.vertexArray.release();
+                    lightsBuffer->release();
+                    mesh.indexBuffer.release();
+                    mesh.vertexArray.release();
+                }
             }
 
             material.release();

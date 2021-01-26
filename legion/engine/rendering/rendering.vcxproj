@@ -55,6 +55,7 @@
     <ClCompile Include="data\particle_system_base.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
     <ClCompile Include="util\ini.c" />
+    <ClCompile Include="util\matini.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="components\point.hpp" />
     <ClInclude Include="components\pointcloud_renderable.hpp" />
     <ClInclude Include="components\point_cloud.hpp" />
+    <ClInclude Include="components\point_cloud_particle_container.hpp" />
     <ClInclude Include="components\point_emitter_data.hpp" />
     <ClInclude Include="data\Octree.hpp" />
     <ClInclude Include="data\postprocessingeffect.hpp" />
@@ -196,7 +198,9 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </Lib>
     <PreBuildEvent>
       <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
+
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
+
 del ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>

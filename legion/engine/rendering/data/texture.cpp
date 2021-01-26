@@ -128,8 +128,11 @@ namespace legion::rendering
             return invalid_texture_handle;
 
         {
+            texture t = result.decay();
+            t.path = file.get_virtual_path();
             async::readwrite_guard guard(m_textureLock);
             m_textures.insert(id, result);
+            m_textures.at(id).name = name;
         }
         log::debug("Created texture {} with file: {}", name, file.get_filename().decay());
 
@@ -154,7 +157,7 @@ namespace legion::rendering
 
         texture texture{};
         texture.type = settings.type;
-
+        texture.name = name;
         // Allocate and bind the texture.
         glGenTextures(1, &texture.textureId);
         glBindTexture(static_cast<GLenum>(settings.type), texture.textureId);
@@ -259,8 +262,8 @@ namespace legion::rendering
         auto [lock, img] = image.get_raw_image();
         {
             async::readonly_guard guard(lock);
-
             texture.channels = img.components;
+            texture.name = img.name;
 
             // Construct the texture using the loaded data.
             glTexImage2D(
@@ -281,12 +284,12 @@ namespace legion::rendering
 
         glBindTexture(static_cast<GLenum>(settings.type), 0);
 
+        log::debug("Created texture from image {}", texture.name);
+
         {
             async::readwrite_guard guard(m_textureLock);
-            m_textures.insert(id, texture);
+            m_textures.insert(id, std::move(texture));
         }
-
-        log::debug("Created texture from image {}", image.id);
 
         return { id };
     }

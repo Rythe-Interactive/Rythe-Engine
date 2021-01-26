@@ -4,20 +4,27 @@
 
 namespace legion::core::async
 {
+    size_type async_progress::size() const noexcept
+    {
+        return m_size;
+    }
+
+    size_type async_progress::rawProgress() const noexcept
+    {
+        return m_progress.load(std::memory_order_relaxed);
+    }
+
     void async_progress::complete() noexcept
     {
         m_progress.store(m_size, std::memory_order_release);
     }
 
-    void async_progress::setProgress(size_type progress) noexcept
+    void async_progress::advance_progress(size_type progress) noexcept
     {
-        size_type currentProgress = m_progress.load(std::memory_order_relaxed);
-        while (!m_progress.compare_exchange_weak(currentProgress, progress, std::memory_order_release, std::memory_order_relaxed))
-            if (currentProgress >= progress)
-                break;
+        m_progress.fetch_add(progress, std::memory_order_release);
     }
 
-    bool async_progress::isDone() const noexcept
+    bool async_progress::is_done() const noexcept
     {
         return m_progress.load(std::memory_order_relaxed) >= m_size;
     }

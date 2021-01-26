@@ -5,9 +5,10 @@
 #include <core/data/importers/image_importers.hpp>
 #include <core/filesystem/provider_registry.hpp>
 #include <core/filesystem/basic_resolver.hpp>
-
+#include <core/defaults/hierarchysystem.hpp>
 #include <core/compute/context.hpp>
-#include <core/scenemanagement/scene.hpp>
+#include <core/scenemanagement/components/scene.hpp>
+#include <core/serialization/serializationUtil.hpp>
 
 namespace legion::core
 {
@@ -37,7 +38,8 @@ namespace legion::core
             reportComponentType<velocity>();
             reportComponentType<mesh_filter>();
             reportComponentType<scenemanagement::scene>();
-            reportSystem <scenemanagement::SceneManager>();
+            reportSystem<HierarchySystem>();
+            reportSystem<scenemanagement::SceneManager>();
         }
 
         virtual priority_type priority() override

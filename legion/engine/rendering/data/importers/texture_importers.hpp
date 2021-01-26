@@ -15,6 +15,7 @@ namespace legion::rendering
         // All file extensions supported by stb_image
         constexpr static cstring extensions[] = { "", ".png", ".jpg", ".jpeg", ".jpe", ".jfif", ".jfi", ".jif", ".bmp", ".dib", ".raw", ".psd", ".psb", ".tga", ".icb", ".vda", ".vst", ".hdr", ".ppm", ".pgm" };
 
+        common::result_decay_more<texture, fs_error> load_default(const filesystem::basic_resource& resource) override { return load(resource,texture_import_settings(default_texture_settings)); }
         virtual common::result_decay_more<texture, fs_error> load(const fs::basic_resource& resource, texture_import_settings&& settings) override;
     };
 }

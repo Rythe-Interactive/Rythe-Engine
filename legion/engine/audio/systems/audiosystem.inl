@@ -1,4 +1,5 @@
 #pragma once
+#include <core/scenemanagement/scenemanager.hpp>
 
 namespace legion::audio
 {
@@ -65,6 +66,7 @@ namespace legion::audio
         std::lock_guard guard(contextLock);
         alcMakeContextCurrent(alcContext);
 
+        sourceQuery.queryEntities();
         for (auto entity : sourceQuery)
         {
             auto sourceHandle = entity.get_component_handle<audio_source>();
@@ -275,11 +277,11 @@ namespace legion::audio
     {
         log::debug("Destroying Audio Listener...");
 
-        listenerCount = math::max((int)(listenerCount - 1), 0);
+        listenerCount = math::max(static_cast<int>(listenerCount - 1), 0);
         if (listenerCount == 0)
         {
             log::debug("No Listeners left, resetting listener");
-            m_listenerEnt = ecs::entity_handle();
+            //m_listenerEnt = ecs::entity_handle();
             // Reset listener
             std::lock_guard guard(contextLock);
             alcMakeContextCurrent(alcContext);

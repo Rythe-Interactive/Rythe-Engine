@@ -54,7 +54,7 @@ public:
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
           {
-              async::readwrite_guard guard(*window.lock);
+              app::context_guard guard(window);
               app::ContextHelper::makeContextCurrent(window);
 
 
@@ -62,9 +62,8 @@ public:
               directionalLightMH = rendering::MaterialCache::create_material("directional light", colorshader);
               directionalLightMH.set_param("color", math::color(1, 1, 0.8f));
 
-                cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+              cube = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
               vertexColor = rendering::MaterialCache::create_material("vertex color", "assets://shaders/vertexcolor.shs"_view);
-
 
               std::vector<math::vec3> positions{
                   math::vec3(0,1.0f,0),
@@ -92,7 +91,7 @@ public:
               params.particleMaterial = vertexColor,
                   params.particleModel = cube
               };
-              auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, positions);
+              auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params);
 
   #pragma region entities
 
@@ -116,7 +115,7 @@ public:
             y = -height + rnd() * (height - (-height));
             z = -depth + rnd() * (depth - (-depth));
             points.push_back(math::vec3(x, y, z));*/
-            async::readwrite_guard guard(*window.lock);
+            app::context_guard guard(window);
             app::ContextHelper::makeContextCurrent(window);
 
 
@@ -139,7 +138,7 @@ public:
             pointCloudColor,
                 particleSphere
             };
-            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params, pos);
+            auto pointcloud = rendering::ParticleSystemCache::createParticleSystem<PointCloudParticleSystem>("point_cloud", params);
 
 
             explosionParameters explosionParams{
