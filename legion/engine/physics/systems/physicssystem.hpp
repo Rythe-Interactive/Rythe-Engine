@@ -54,7 +54,7 @@ namespace legion::physics
             {
                 OPTICK_EVENT("Fetching data");
                 manifoldPrecursorQuery.queryEntities();
-                
+
                 rigidbodies.resize(manifoldPrecursorQuery.size());
                 hasRigidBodies.resize(manifoldPrecursorQuery.size());
 
@@ -361,22 +361,21 @@ namespace legion::physics
 
                     colliderA->PopulateContactPoints(colliderB.get(), m);
 
-                    if (isRigidbodyInvolved && !isTriggerInvolved)
-                    {
-                        manifoldsToSolve.push_back(m);
-                        raiseEvent<collision_event>(m, m_timeStep);
-                    }
-
                     if (isTriggerInvolved)
                     {
                         //notify the event-bus
-                        raiseEvent<trigger_event>(m, m_timeStep);
+                        raiseEvent<trigger_event>(&m, m_timeStep);
                         //notify both the trigger and triggerer
                         //TODO:(Developer-The-Great): the triggerer and trigger should probably received this event
                         //TODO:(cont.) through the event bus, we should probably create a filterable system here to
                         //TODO:(cont.) uniquely identify involved objects and then redirect only required messages
                     }
 
+                    if (isRigidbodyInvolved && !isTriggerInvolved)
+                    {
+                        raiseEvent<collision_event>(&m, m_timeStep);
+                        manifoldsToSolve.emplace_back(std::move(m));
+                    }
                 }
             }
         }
@@ -411,7 +410,6 @@ namespace legion::physics
 
             // log::debug("colliderA->CheckCollision(colliderB, manifold)");
             colliderA->CheckCollision(colliderB, manifold);
-
         }
 
         /** @brief gets all the entities with a rigidbody component and calls the integrate function on them

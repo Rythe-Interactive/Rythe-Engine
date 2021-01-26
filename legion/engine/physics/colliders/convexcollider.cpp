@@ -18,7 +18,11 @@ namespace legion::physics
         auto aabbOther = convexCollider->GetMinMaxWorldAABB();
         auto& [low0, high0] = aabbThis;
         auto& [low1, high1] = aabbOther;
-        if (!physics::PhysicsStatics::CollideAABB(low0, high0, low1, high1)) return;
+        if (!physics::PhysicsStatics::CollideAABB(low0, high0, low1, high1))
+        {
+            manifold.isColliding = false;
+            return;
+        }
 
         auto compIDA = manifold.entityA.get_component_handle<identifier>();
         auto compIDB = manifold.entityB.get_component_handle<identifier>();
@@ -92,36 +96,34 @@ namespace legion::physics
         math::vec3 worldEdgeNormal = edgeNormal;
 
         auto abPenetrationQuery =
-            std::make_shared< ConvexConvexPenetrationQuery>(ARefFace.ptr
+            std::make_unique< ConvexConvexPenetrationQuery>(ARefFace.ptr
                 , BRefFace.ptr, worldFaceCentroidA,worldFaceNormalA, ARefSeperation,true);
 
         auto baPenetrationQuery =
-            std::make_shared < ConvexConvexPenetrationQuery>(BRefFace.ptr, ARefFace.ptr,
+            std::make_unique < ConvexConvexPenetrationQuery>(BRefFace.ptr, ARefFace.ptr,
                 worldFaceCentroidB, worldFaceNormalB, BRefSeperation, false);
 
         auto abEdgePenetrationQuery = 
-            std::make_shared < EdgePenetrationQuery>(edgeRef.ptr, edgeInc.ptr,worldEdgeAPosition,worldEdgeNormal,
+            std::make_unique < EdgePenetrationQuery>(edgeRef.ptr, edgeInc.ptr,worldEdgeAPosition,worldEdgeNormal,
                 aToBEdgeSeperation, false);
-
-        std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery, abPenetrationQuery, baPenetrationQuery  };
 
         //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
 
         if (abPenetrationQuery->penetration + physics::constants::faceToFacePenetrationBias >
             baPenetrationQuery->penetration)
         {
-            manifold.penetrationInformation = abPenetrationQuery;
+            manifold.penetrationInformation = std::move(abPenetrationQuery);
         }
         else
         {
-            manifold.penetrationInformation = baPenetrationQuery;
+            manifold.penetrationInformation = std::move(baPenetrationQuery);
         }
 
 
         if (abEdgePenetrationQuery->penetration >
             manifold.penetrationInformation->penetration + physics::constants::faceToEdgePenetrationBias)
         {
-            manifold.penetrationInformation = abEdgePenetrationQuery;
+            manifold.penetrationInformation = std::move(abEdgePenetrationQuery);
         }
 
         manifold.isColliding = true;

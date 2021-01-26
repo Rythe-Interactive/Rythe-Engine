@@ -1,10 +1,12 @@
 #pragma once
 
 #include <core/core.hpp>
-#include <physics/data/physics_manifold.hpp>
 
 namespace legion::physics
 {
+    struct physics_manifold;
+    class PhysicsCollider;
+
     //After a collision is found, stores the necessary information to create contact points
     class PenetrationQuery
     {

@@ -12,6 +12,8 @@ namespace legion::physics
         std::unordered_map<math::ivec3, int> cellIndices;
         for (auto& precursor : manifoldPrecursors)
         {
+            OPTICK_EVENT("Processing entity");
+
             std::vector<legion::physics::PhysicsColliderPtr>& colliders = precursor.physicsComp->colliders;
             if (colliders.size() == 0) continue;
 
@@ -25,22 +27,28 @@ namespace legion::physics
             }
             math::ivec3 startCellIndex = calculateCellIndex(aabb.first);
             math::ivec3 endCellIndex = calculateCellIndex(aabb.second);
-            for (int x = startCellIndex.x; x <= endCellIndex.x; ++x)
+
             {
-                for (int y = startCellIndex.y; y <= endCellIndex.y; ++y)
+                OPTICK_EVENT("Iterating overlapping cells");
+
+                for (int x = startCellIndex.x; x <= endCellIndex.x; ++x)
                 {
-                    for (int z = startCellIndex.z; z <= endCellIndex.z; ++z)
+                    for (int y = startCellIndex.y; y <= endCellIndex.y; ++y)
                     {
-                        math::ivec3 currentCellIndex = math::ivec3(x, y, z);
-                        if (cellIndices.find(currentCellIndex) != cellIndices.end())
+                        for (int z = startCellIndex.z; z <= endCellIndex.z; ++z)
                         {
-                            manifoldPrecursorGrouping.at(cellIndices.at(currentCellIndex)).push_back(precursor);
-                        }
-                        else
-                        {
-                            cellIndices.emplace(currentCellIndex, manifoldPrecursorGrouping.size());
-                            manifoldPrecursorGrouping.push_back(std::vector<physics_manifold_precursor>());
-                            manifoldPrecursorGrouping.at(manifoldPrecursorGrouping.size() - 1).push_back(precursor);
+                            OPTICK_EVENT("Inserting entity");
+                            math::ivec3 currentCellIndex = math::ivec3(x, y, z);
+                            if (cellIndices.count(currentCellIndex))
+                            {
+                                manifoldPrecursorGrouping.at(cellIndices.at(currentCellIndex)).push_back(precursor);
+                            }
+                            else
+                            {
+                                cellIndices.emplace(currentCellIndex, manifoldPrecursorGrouping.size());
+                                manifoldPrecursorGrouping.emplace_back();
+                                manifoldPrecursorGrouping.at(manifoldPrecursorGrouping.size() - 1).push_back(precursor);
+                            }
                         }
                     }
                 }

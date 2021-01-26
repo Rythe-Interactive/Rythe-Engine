@@ -5,12 +5,11 @@
 #include <physics/physics_contact.hpp>
 #include <core/core.hpp>
 #include <physics/components/physics_component.hpp>
-
+#include <physics/data/penetrationquery.hpp>
 
 namespace legion::physics
 {
     class PhysicsCollider;
-    class PenetrationQuery;
 
     /** @struct physics_manifold
     * @brief contains the necessary information to detect and resolve a collision
@@ -34,7 +33,7 @@ namespace legion::physics
         physics::rigidbody* rigidbodyA;
         physics::rigidbody* rigidbodyB;
 
-        std::shared_ptr<PenetrationQuery> penetrationInformation;
+        std::unique_ptr<PenetrationQuery> penetrationInformation;
 
         bool isColliding;
 
