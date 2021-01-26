@@ -244,7 +244,7 @@ namespace legion::core::ecs
                 return;
 #endif
 
-            static component_container<component_type> modifications;
+            component_container<component_type> modifications;
             modifications.resize(entities.size());
 
             {

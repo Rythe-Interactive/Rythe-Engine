@@ -22,11 +22,17 @@ namespace legion::physics
         math::mat4 transformA;
         math::mat4 transformB;
 
-        std::shared_ptr<PhysicsCollider> colliderA;
-        std::shared_ptr<PhysicsCollider> colliderB;
+        PhysicsCollider* colliderA;
+        PhysicsCollider* colliderB;
 
-        ecs::component_handle<physics::physicsComponent> physicsCompA;
-        ecs::component_handle<physics::physicsComponent> physicsCompB;
+        ecs::entity_handle entityA;
+        ecs::entity_handle entityB;
+
+        physics::physicsComponent* physicsCompA;
+        physics::physicsComponent* physicsCompB;
+
+        physics::rigidbody* rigidbodyA;
+        physics::rigidbody* rigidbodyB;
 
         std::shared_ptr<PenetrationQuery> penetrationInformation;
 
