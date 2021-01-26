@@ -24,13 +24,18 @@ shader(fragment)
 
     void main(void)
     {
+        //Samples the source color.
         vec4 source = SceneColor(stdin(uv));
+        //Samples the area of focus texture.
         float coc = texture(cocTexture, stdin(uv)).r;
+        //Samples the blurred bokeh texture.
         vec4 dof = texture(dofTexture, stdin(uv));
 
-
+        //Finds out the strength of the dof at the current position.
         float dofStrength = smoothstep(0.1,1.0,abs(coc));
+        //Blends the bokeh texture and source texture depending on the strength of the area of focus.
         vec3 color = mix(source.rgb, dof.rgb, clamp01(dofStrength + dof.a/2.0));
+        //Output.
         fragment_color = vec4(color, source.a);
     }
 }
