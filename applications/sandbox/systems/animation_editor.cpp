@@ -335,6 +335,12 @@ namespace ext
 
                     m_cubeEntity.get_component_handle<position>().write(pos);
                 }
+                if(m_applyCopy)
+                {
+                    //if P was pressed we copy the position of the camera
+                    pos = m_copiedPosition;
+                    m_applyCopy = false;
+                }
             }
 
             //check if dp is rotation
@@ -367,6 +373,13 @@ namespace ext
 
                     m_cubeEntity.get_component_handle<rotation>().write(rot);
                 }
+                if(m_applyCopy)
+                {
+                    //if P was pressed we copy the rotation of the camera
+                    rot = m_copiedRotation;
+                    m_applyCopy = false;
+                }
+
             }
 
             //check if dp is scale
