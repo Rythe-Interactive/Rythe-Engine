@@ -44,32 +44,43 @@ namespace legion::physics
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            manifoldPrecursorQuery.queryEntities();
+            static time::timer physicsTimer;
+            log::debug("{}ms", physicsTimer.restart().milliseconds());
+            OPTICK_EVENT();
+
+            ecs::component_container<rigidbody> rigidbodies;
+            std::vector<byte> hasRigidBodies;
+
+            {
+                OPTICK_EVENT("Fetching data");
+                manifoldPrecursorQuery.queryEntities();
+                
+                rigidbodies.resize(manifoldPrecursorQuery.size());
+                hasRigidBodies.resize(manifoldPrecursorQuery.size());
+
+                m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+                    id_type index = async::this_job::get_id();
+                    auto entity = manifoldPrecursorQuery[index];
+                    if (entity.has_component<rigidbody>())
+                    {
+                        hasRigidBodies[index] = true;
+                        rigidbodies[index] = entity.read_component<rigidbody>();
+                    }
+                    else
+                        hasRigidBodies[index] = false;
+                    }).wait();
+            }
+
             auto& physComps = manifoldPrecursorQuery.get<physicsComponent>();
             auto& positions = manifoldPrecursorQuery.get<position>();
             auto& rotations = manifoldPrecursorQuery.get<rotation>();
             auto& scales = manifoldPrecursorQuery.get<scale>();
-            ecs::component_container<rigidbody> rigidbodies(manifoldPrecursorQuery.size());
-            std::vector<bool> hasRigidBodies(manifoldPrecursorQuery.size());
-
-            m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
-                id_type index = async::this_job::get_id();
-                auto entity = manifoldPrecursorQuery[index];
-                if (entity.has_component<rigidbody>())
-                {
-                    hasRigidBodies[index] = true;
-                    rigidbodies[index] = entity.read_component<rigidbody>();
-                }
-                else
-                    hasRigidBodies[index] = false;
-                });
 
             if (!IsPaused)
             {
                 integrateRigidbodies(hasRigidBodies, rigidbodies, deltaTime);
                 runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, deltaTime);
                 integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, deltaTime);
-
             }
 
             if (oneTimeRunActive)
@@ -81,18 +92,21 @@ namespace legion::physics
                 integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, deltaTime);
             }
 
-            m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
-                id_type index = async::this_job::get_id();
-                if (hasRigidBodies[index])
-                {
-                    auto entity = manifoldPrecursorQuery[index];
-                    entity.write_component(rigidbodies[index]);
-                }
-                });
+            {
+                OPTICK_EVENT("Writing data");
+                m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+                    id_type index = async::this_job::get_id();
+                    if (hasRigidBodies[index])
+                    {
+                        auto entity = manifoldPrecursorQuery[index];
+                        entity.write_component(rigidbodies[index]);
+                    }
+                    }).wait();
 
-            manifoldPrecursorQuery.submit<physicsComponent>();
-            manifoldPrecursorQuery.submit<position>();
-            manifoldPrecursorQuery.submit<rotation>();
+                    manifoldPrecursorQuery.submit<physicsComponent>();
+                    manifoldPrecursorQuery.submit<position>();
+                    manifoldPrecursorQuery.submit<rotation>();
+            }
         }
 
         //The following function is public static so that it can be called by testSystem
@@ -103,14 +117,19 @@ namespace legion::physics
             ecs::component_container<scale>& scales,
             std::vector<physics_manifold_precursor>& manifoldPrecursors)
         {
+            OPTICK_EVENT();
             manifoldPrecursors.resize(physComps.size());
 
             m_scheduler->queueJobs(physComps.size(), [&]() {
                 id_type index = async::this_job::get_id();
                 math::mat4 transf;
                 math::compose(transf, scales[index], rotations[index], positions[index]);
+
+                for (auto& collider : physComps[index].colliders)
+                    collider->UpdateTransformedTightBoundingVolume(transf);
+
                 manifoldPrecursors[index] = { transf, &physComps[index], static_cast<int>(index) };
-                });
+                }).wait();
         }
 
         /**@brief Sets the broad phase collision detection method
@@ -139,7 +158,7 @@ namespace legion::physics
          * Broadphase Collision Detection, Narrowphase Collision Detection, and the Collision Resolution)
         */
         void runPhysicsPipeline(
-            std::vector<bool> hasRigidBodies,
+            std::vector<byte>& hasRigidBodies,
             ecs::component_container<rigidbody>& rigidbodies,
             ecs::component_container<physicsComponent>& physComps,
             ecs::component_container<position>& positions,
@@ -147,8 +166,7 @@ namespace legion::physics
             ecs::component_container<scale>& scales,
             float deltaTime)
         {
-            static time::timer physicsTimer;
-            log::debug("{}ms", physicsTimer.restart().milliseconds());
+            OPTICK_EVENT();
 
             //-------------------------------------------------Broadphase Optimization-----------------------------------------------//
 
@@ -163,93 +181,101 @@ namespace legion::physics
             //------------------------------------------------------ Narrowphase -----------------------------------------------------//
             std::vector<physics_manifold> manifoldsToSolve;
 
-            for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
             {
-                for (int i = 0; i < manifoldPrecursor.size() - 1; i++)
+                OPTICK_EVENT("Narrowphase");
+                size_type totalChecks = 0;
+                for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
                 {
-                    for (int j = i + 1; j < manifoldPrecursor.size(); j++)
+                    for (int i = 0; i < manifoldPrecursor.size() - 1; i++)
                     {
-                        assert(j != manifoldPrecursor.size());
-
-                        physics_manifold_precursor& precursorA = manifoldPrecursor.at(i);
-                        physics_manifold_precursor& precursorB = manifoldPrecursor.at(j);
-
-                        auto& precursorPhyCompA = *precursorA.physicsComp;
-                        auto& precursorPhyCompB = *precursorB.physicsComp;
-
-                        auto& precursorRigidbodyA = rigidbodies[precursorA.id];
-                        auto& precursorRigidbodyB = rigidbodies[precursorB.id];
-
-                        //only construct a manifold if at least one of these requirement are fulfilled
-                        //1. One of the physicsComponents is a trigger and the other one is not
-                        //2. One of the physicsComponent's entity has a rigidbody and the other one is not a trigger
-                        //3. Both have a rigidbody
-
-                        bool isBetweenTriggerAndNonTrigger =
-                            (precursorPhyCompA.isTrigger && !precursorPhyCompB.isTrigger) || (!precursorPhyCompA.isTrigger && precursorPhyCompB.isTrigger);
-
-                        bool isBetweenRigidbodyAndNonTrigger =
-                            (hasRigidBodies[precursorA.id] && !precursorPhyCompB.isTrigger) || (hasRigidBodies[precursorB.id] && !precursorPhyCompA.isTrigger);
-
-                        bool isBetween2Rigidbodies = (hasRigidBodies[precursorA.id] && hasRigidBodies[precursorB.id]);
-
-
-                        if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
+                        for (int j = i + 1; j < manifoldPrecursor.size(); j++)
                         {
-                            constructManifoldsWithPrecursors(rigidbodies, hasRigidBodies, precursorA, precursorB,
-                                manifoldsToSolve,
-                                hasRigidBodies[precursorA.id] || hasRigidBodies[precursorB.id]
-                                , precursorPhyCompA.isTrigger || precursorPhyCompB.isTrigger);
+                            totalChecks++;
+                            assert(j != manifoldPrecursor.size());
+
+                            physics_manifold_precursor& precursorA = manifoldPrecursor.at(i);
+                            physics_manifold_precursor& precursorB = manifoldPrecursor.at(j);
+
+                            auto& precursorPhyCompA = *precursorA.physicsComp;
+                            auto& precursorPhyCompB = *precursorB.physicsComp;
+
+                            auto& precursorRigidbodyA = rigidbodies[precursorA.id];
+                            auto& precursorRigidbodyB = rigidbodies[precursorB.id];
+
+                            //only construct a manifold if at least one of these requirement are fulfilled
+                            //1. One of the physicsComponents is a trigger and the other one is not
+                            //2. One of the physicsComponent's entity has a rigidbody and the other one is not a trigger
+                            //3. Both have a rigidbody
+
+                            bool isBetweenTriggerAndNonTrigger =
+                                (precursorPhyCompA.isTrigger && !precursorPhyCompB.isTrigger) || (!precursorPhyCompA.isTrigger && precursorPhyCompB.isTrigger);
+
+                            bool isBetweenRigidbodyAndNonTrigger =
+                                (hasRigidBodies[precursorA.id] && !precursorPhyCompB.isTrigger) || (hasRigidBodies[precursorB.id] && !precursorPhyCompA.isTrigger);
+
+                            bool isBetween2Rigidbodies = (hasRigidBodies[precursorA.id] && hasRigidBodies[precursorB.id]);
+
+
+                            if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
+                            {
+                                constructManifoldsWithPrecursors(rigidbodies, hasRigidBodies, precursorA, precursorB,
+                                    manifoldsToSolve,
+                                    hasRigidBodies[precursorA.id] || hasRigidBodies[precursorB.id]
+                                    , precursorPhyCompA.isTrigger || precursorPhyCompB.isTrigger);
+                            }
                         }
                     }
                 }
+                log::debug("groupings {}", manifoldPrecursorGrouping.size());
+                log::debug("total checks {}", totalChecks);
             }
 
-            //------------------------------------------------ Pre Colliison Solve Events --------------------------------------------//
+            //------------------------------------------------ Pre Collision Solve Events --------------------------------------------//
 
             // all manifolds are initially valid
 
-            std::vector<bool> manifoldValidity(manifoldsToSolve.size(), true);
+            std::vector<byte> manifoldValidity(manifoldsToSolve.size(), true);
 
             //TODO we are currently hard coding fracture, this should be an event at some point
-
-            for (size_t i = 0; i < manifoldsToSolve.size(); i++)
             {
-                auto& manifold = manifoldsToSolve.at(i);
-
-                auto& entityHandleA = manifold.entityA;
-                auto& entityHandleB = manifold.entityB;
-
-                auto fracturerHandleA = entityHandleA.get_component_handle<Fracturer>();
-                auto fracturerHandleB = entityHandleB.get_component_handle<Fracturer>();
-
-                bool currentManifoldValidity = manifoldValidity.at(i);
-
-                //log::debug("- A Fracture Check");
-
-                if (fracturerHandleA)
+                OPTICK_EVENT("Fracture");
+                for (size_t i = 0; i < manifoldsToSolve.size(); i++)
                 {
-                    auto fracturerA = fracturerHandleA.read();
-                    //log::debug(" A is fracturable");
-                    fracturerA.HandleFracture(manifold, currentManifoldValidity, true);
+                    auto& manifold = manifoldsToSolve.at(i);
 
-                    fracturerHandleA.write(fracturerA);
+                    auto& entityHandleA = manifold.entityA;
+                    auto& entityHandleB = manifold.entityB;
+
+                    auto fracturerHandleA = entityHandleA.get_component_handle<Fracturer>();
+                    auto fracturerHandleB = entityHandleB.get_component_handle<Fracturer>();
+
+                    bool currentManifoldValidity = manifoldValidity.at(i);
+
+                    //log::debug("- A Fracture Check");
+
+                    if (fracturerHandleA)
+                    {
+                        auto fracturerA = fracturerHandleA.read();
+                        //log::debug(" A is fracturable");
+                        fracturerA.HandleFracture(manifold, currentManifoldValidity, true);
+
+                        fracturerHandleA.write(fracturerA);
+                    }
+
+                    //log::debug("- B Fracture Check");
+
+                    if (fracturerHandleB)
+                    {
+                        auto fracturerB = fracturerHandleB.read();
+                        //log::debug(" B is fracturable");
+                        fracturerB.HandleFracture(manifold, currentManifoldValidity, false);
+
+                        fracturerHandleB.write(fracturerB);
+                    }
+
+                    manifoldValidity.at(i) = currentManifoldValidity;
                 }
-
-                //log::debug("- B Fracture Check");
-
-                if (fracturerHandleB)
-                {
-                    auto fracturerB = fracturerHandleB.read();
-                    //log::debug(" B is fracturable");
-                    fracturerB.HandleFracture(manifold, currentManifoldValidity, false);
-
-                    fracturerHandleB.write(fracturerB);
-                }
-
-                manifoldValidity.at(i) = currentManifoldValidity;
             }
-
             //-------------------------------------------------- Collision Solver ---------------------------------------------------//
             //for both contact and friction resolution, an iterative algorithm is used.
             //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
@@ -260,42 +286,53 @@ namespace legion::physics
             //we start the solver
 
             //log::debug("--------------Logging contacts for manifold -------------------");
-
-            initializeManifolds(manifoldsToSolve, manifoldValidity);
-
-            //resolve contact constraint
-            for (size_t contactIter = 0;
-                contactIter < constants::contactSolverIterationCount; contactIter++)
             {
-                resolveContactConstraint(manifoldsToSolve, manifoldValidity, deltaTime, contactIter);
-            }
+                OPTICK_EVENT("Resolve collisions");
 
-            //resolve friction constraint
-            for (size_t frictionIter = 0;
-                frictionIter < constants::frictionSolverIterationCount; frictionIter++)
-            {
-                resolveFrictionConstraint(manifoldsToSolve, manifoldValidity);
-            }
+                initializeManifolds(manifoldsToSolve, manifoldValidity);
 
-
-            //reset convergance identifiers for all colliders
-            for (auto& manifold : manifoldsToSolve)
-            {
-                manifold.colliderA->converganceIdentifiers.clear();
-                manifold.colliderB->converganceIdentifiers.clear();
-            }
-
-            //using the known lambdas of this time step, add it as a convergance identifier
-            for (auto& manifold : manifoldsToSolve)
-            {
-                for (auto& contact : manifold.contacts)
                 {
-                    contact.refCollider->AddConverganceIdentifier(contact);
+                    OPTICK_EVENT("Resolve contact constraints");
+
+                    //resolve contact constraint
+                    for (size_t contactIter = 0;
+                        contactIter < constants::contactSolverIterationCount; contactIter++)
+                    {
+                        resolveContactConstraint(manifoldsToSolve, manifoldValidity, deltaTime, contactIter);
+                    }
+                }
+
+                {
+                    OPTICK_EVENT("Resolve friction constraints");
+
+                    //resolve friction constraint
+                    for (size_t frictionIter = 0;
+                        frictionIter < constants::frictionSolverIterationCount; frictionIter++)
+                    {
+                        resolveFrictionConstraint(manifoldsToSolve, manifoldValidity);
+                    }
+                }
+
+                {
+                    OPTICK_EVENT("Converge manifolds");
+
+                    //reset convergance identifiers for all colliders
+                    for (auto& manifold : manifoldsToSolve)
+                    {
+                        manifold.colliderA->converganceIdentifiers.clear();
+                        manifold.colliderB->converganceIdentifiers.clear();
+                    }
+
+                    //using the known lambdas of this time step, add it as a convergance identifier
+                    for (auto& manifold : manifoldsToSolve)
+                    {
+                        for (auto& contact : manifold.contacts)
+                        {
+                            contact.refCollider->AddConverganceIdentifier(contact);
+                        }
+                    }
                 }
             }
-
-
-
 
         }
 
@@ -305,9 +342,10 @@ namespace legion::physics
         * @param isRigidbodyInvolved A bool that indicates whether a rigidbody is involved in this manifold
         * @param isTriggerInvolved A bool that indicates whether a physicsComponent with a physicsComponent::isTrigger set to true is involved in this manifold
         */
-        void constructManifoldsWithPrecursors(ecs::component_container<rigidbody>& rigidbodies, std::vector<bool>& hasRigidBodies, physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
+        void constructManifoldsWithPrecursors(ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies, physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
             std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved)
         {
+            OPTICK_EVENT();
             auto& physicsComponentA = *precursorA.physicsComp;
             auto& physicsComponentB = *precursorB.physicsComp;
 
@@ -346,10 +384,11 @@ namespace legion::physics
         }
 
         void constructManifoldWithCollider(
-            ecs::component_container<rigidbody>& rigidbodies, std::vector<bool>& hasRigidBodies,
+            ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies,
             PhysicsCollider* colliderA, PhysicsCollider* colliderB
             , physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB, physics_manifold& manifold)
         {
+            OPTICK_EVENT();
             manifold.colliderA = colliderA;
             manifold.colliderB = colliderB;
 
@@ -379,8 +418,9 @@ namespace legion::physics
 
         /** @brief gets all the entities with a rigidbody component and calls the integrate function on them
         */
-        void integrateRigidbodies(std::vector<bool> hasRigidBodies, ecs::component_container<rigidbody>& rigidbodies, float deltaTime)
+        void integrateRigidbodies(std::vector<byte>& hasRigidBodies, ecs::component_container<rigidbody>& rigidbodies, float deltaTime)
         {
+            OPTICK_EVENT();
             m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
                 if (!hasRigidBodies[async::this_job::get_id()])
                     return;
@@ -396,16 +436,17 @@ namespace legion::physics
                 rb.angularVelocity += (angularAcc)*deltaTime;
 
                 rb.resetAccumulators();
-                });
+                }).wait();
         }
 
         void integrateRigidbodyQueryPositionAndRotation(
-            std::vector<bool> hasRigidBodies,
+            std::vector<byte>& hasRigidBodies,
             ecs::component_container<position>& positions,
             ecs::component_container<rotation>& rotations,
             ecs::component_container<rigidbody>& rigidbodies,
             float deltaTime)
         {
+            OPTICK_EVENT();
             m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
                 id_type index = async::this_job::get_id();
                 if (!hasRigidBodies[index])
@@ -435,11 +476,12 @@ namespace legion::physics
                 rb.globalCentreOfMass = pos;
 
                 rb.UpdateInertiaTensor(rot);
-                });
+                }).wait();
         }
 
-        void initializeManifolds(std::vector<physics_manifold>& manifoldsToSolve, std::vector<bool>& manifoldValidity)
+        void initializeManifolds(std::vector<physics_manifold>& manifoldsToSolve, std::vector<byte>& manifoldValidity)
         {
+            OPTICK_EVENT();
             for (int i = 0; i < manifoldsToSolve.size(); i++)
             {
                 if (manifoldValidity.at(i))
@@ -456,8 +498,10 @@ namespace legion::physics
             }
         }
 
-        void resolveContactConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<bool>& manifoldValidity, float dt, int contactIter)
+        void resolveContactConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<byte>& manifoldValidity, float dt, int contactIter)
         {
+            OPTICK_EVENT();
+
             for (int manifoldIter = 0;
                 manifoldIter < manifoldsToSolve.size(); manifoldIter++)
             {
@@ -473,8 +517,10 @@ namespace legion::physics
             }
         }
 
-        void resolveFrictionConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<bool>& manifoldValidity)
+        void resolveFrictionConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<byte>& manifoldValidity)
         {
+            OPTICK_EVENT();
+
             for (int manifoldIter = 0;
                 manifoldIter < manifoldsToSolve.size(); manifoldIter++)
             {

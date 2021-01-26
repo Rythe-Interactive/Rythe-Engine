@@ -46,6 +46,8 @@ namespace legion::physics
 
         void ApplyWarmStarting()
         {
+            OPTICK_EVENT();
+
             math::vec3 Ra = RefWorldContact - refRBCentroid;
             math::vec3 Rb = IncWorldContact - incRBCentroid;
 
@@ -58,6 +60,8 @@ namespace legion::physics
         */
         void resolveContactConstraint(float dt, int i)
         {
+            OPTICK_EVENT();
+
             //the idea behind this collision resolution strategy (Sequential Impulses) 
             //is we resolve the collision by giving an impulse towards both 
             //rigidbodies so that the collision would resolve itself in the next time step.
@@ -118,15 +122,12 @@ namespace legion::physics
             math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
             calculateJacobianComponents(collisionNormal, Ra, minRaCrossN, Rb, RbCrossN);
 
-            auto& RefRB = *rbRef;
-            auto& IncRB = *rbInc;
-
             math::vec3 va, wa, vb, wb;
 
-            va = rbRef->velocity;
-            wa = rbRef->angularVelocity;
-            vb = rbInc->velocity;
-            wb = rbInc->angularVelocity;
+            va = rbRef ? rbRef->velocity : math::vec3::zero;
+            wa = rbRef ? rbRef->angularVelocity : math::vec3::zero;
+            vb = rbInc ? rbInc->velocity : math::vec3::zero;
+            wb = rbInc ? rbInc->angularVelocity : math::vec3::zero;
 
             float JVx = math::dot(-collisionNormal, va);
             float JVy = math::dot(minRaCrossN, wa);
@@ -151,7 +152,7 @@ namespace legion::physics
             //-------------------------- Restitution Constraint ----------------------------------//
 
             //calculate restitution between the 2 bodies
-            float restCoeff = rigidbody::calculateRestitution(rbRef->restitution, rbInc->restitution);
+            float restCoeff = rigidbody::calculateRestitution(rbRef? rbRef->restitution : 0.3f, rbInc? rbInc->restitution : 0.3f);
 
             math::vec3 minWaCrossRa = math::cross(-wa, Ra);
             math::vec3 WbCrossRb = math::cross(wb, Rb);
@@ -185,7 +186,9 @@ namespace legion::physics
 
         void resolveFrictionConstraint()
         {
-            float frictionCoeff = rigidbody::calculateFriction(rbRef->friction, rbInc->friction);
+            OPTICK_EVENT();
+
+            float frictionCoeff = rigidbody::calculateFriction(rbRef ? rbRef->friction : 0.3f, rbInc ? rbInc->friction : 0.3f);
             float frictionConstraint = totalLambda * frictionCoeff;
 
             math::vec3 Ra = RefWorldContact - refRBCentroid;
@@ -232,6 +235,7 @@ namespace legion::physics
         */
         void preCalculateEffectiveMass()
         {
+            OPTICK_EVENT();
             //calculate tangent vectors
 
             //--------------------------- pre calculate contact constraint effective mass -----------------------------------//
@@ -259,10 +263,10 @@ namespace legion::physics
 
             math::vec3 va, wa, vb, wb;
 
-            va = rbRef->velocity;
-            wa = rbRef->angularVelocity;
-            vb = rbInc->velocity;
-            wb = rbInc->angularVelocity;
+            va = rbRef ? rbRef->velocity : math::vec3::zero;
+            wa = rbRef ? rbRef->angularVelocity : math::vec3::zero;
+            vb = rbInc ? rbInc->velocity : math::vec3::zero;
+            wb = rbInc ? rbInc->angularVelocity : math::vec3::zero;
 
             float JVx = math::dot(-normal, va);
             float JVy = math::dot(minRaCrossN, wa);
@@ -282,9 +286,9 @@ namespace legion::physics
 
             //calculate M-1
             math::mat3 ma = math::mat3(maUnit);
-            math::mat3 Ia = rbRef ? rbRef->globalInverseInertiaTensor : math::mat3(0.0f);
-            math::mat3 mb = math::mat3(mbUnit);
-            math::mat3 Ib = rbInc ? rbInc->globalInverseInertiaTensor : math::mat3(0.0f);
+            math::mat3 Ia = rbRef ? rbRef->globalInverseInertiaTensor : math::mat3(1.f);
+            math::mat3 mb = math::mat3(mbUnit);                                
+            math::mat3 Ib = rbInc ? rbInc->globalInverseInertiaTensor : math::mat3(1.f);
 
             //calculate M^-1 J^T
             math::vec3 jx = ma * -normal;
@@ -314,7 +318,7 @@ namespace legion::physics
             math::vec3 torqueDirectionA = math::cross(-ra, normal);
             math::vec3 torqueDirectionB = math::cross(rb, normal);
 
-            math::vec3 angularImpulseA = torqueDirectionA * lambda;
+            math::vec3 angularImpulseA = torqueDirectionA * lambda;      
             math::vec3 angularImpulseB = torqueDirectionB * lambda;
 
             if (rbRef)

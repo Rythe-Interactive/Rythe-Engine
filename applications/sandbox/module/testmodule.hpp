@@ -13,7 +13,7 @@
 #include "../data/animation.hpp"
 #include "../systems/animation_editor.hpp"
 #include "../systems/animator.hpp"
-
+#include "../systems/testsystemconvexhull.hpp"
 
 
 using namespace legion;

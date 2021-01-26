@@ -11,6 +11,7 @@ namespace legion::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
+        OPTICK_EVENT();
         auto compIDA = manifold.entityA.get_component_handle<identifier>();
         auto compIDB = manifold.entityB.get_component_handle<identifier>();
 
@@ -156,6 +157,7 @@ namespace legion::physics
 
     void ConvexCollider::PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold)
     {
+        OPTICK_EVENT();
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
@@ -237,6 +239,7 @@ namespace legion::physics
 
     void ConvexCollider::ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount,bool shouldDebug)
     {
+        OPTICK_EVENT();
         //log::debug("-------------------------------- ConstructConvexHullWithMesh ----------------------------------");
         // Step 0 - Create inital hull
         /*if (step == 0)

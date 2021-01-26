@@ -6,6 +6,9 @@ namespace legion::physics
     void BroadphaseUniformGrid::collectPairs(std::vector<physics_manifold_precursor>&& manifoldPrecursors,
         std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
     {
+        log::debug("Uniform grid!");
+        log::debug("cell size {}", m_cellSize);
+        OPTICK_EVENT();
         std::unordered_map<math::ivec3, int> cellIndices;
         for (auto& precursor : manifoldPrecursors)
         {
