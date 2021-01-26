@@ -55,6 +55,6 @@ namespace legion::rendering
          * @param depthtexture The depth data gathered from previous renderpasses.
          * @param deltaTime Current delta time.
          */
-        void renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime);
+        void renderPass(framebuffer& fbo, RenderPipelineBase* pipeline, camera& cam, const camera::camera_input& camInput, time::span deltaTime);
     };
 }
