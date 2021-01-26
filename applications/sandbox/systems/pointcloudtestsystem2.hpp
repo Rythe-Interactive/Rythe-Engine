@@ -25,9 +25,17 @@ public:
     struct player_look_x : public app::input_axis<player_look_x> {};
     struct player_look_y : public app::input_axis<player_look_y> {};
 
-
     virtual void setup() override
     {
+        //get mesh
+        ModelCache::create_model("cube", "assets://models/Cube.obj"_view);
+        ModelCache::create_model("plane", "assets://models/plane.obj"_view);
+        ModelCache::create_model("billboard", "assets://models/billboard.obj"_view);
+
+        ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view);
+        ModelCache::create_model("sphere", "assets://models/sphere.obj"_view);
+        ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
+
 
         //create particle system material
         material_handle particleMaterial;

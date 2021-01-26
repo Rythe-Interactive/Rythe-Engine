@@ -327,6 +327,11 @@ vec3 ViewToWorldSpacePostion(vec3 viewSpacePos)
 {
     return (inverse(ViewMatrix) * vec4(viewSpacePos, 1.0)).xyz;
 }
+
+vec3 WorldToViewSpacePostion(vec3 worldSpacePos)
+{
+    return (ViewMatrix * vec4(worldSpacePos, 1.0)).xyz;
+}
 #endif
 
 #if defined(GEOMETRY_SHADER)  // Geometry shader

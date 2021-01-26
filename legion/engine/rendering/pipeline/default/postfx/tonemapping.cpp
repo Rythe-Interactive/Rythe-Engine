@@ -49,8 +49,15 @@ namespace legion::rendering
         exposure = 0.5f;
     }
 
-    void Tonemapping::renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime)
+    void Tonemapping::renderPass(framebuffer& fbo, RenderPipelineBase* pipeline, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        //Try to get color attachment.
+        auto color_attachment = fbo.getAttachment(FRAGMENT_ATTACHMENT);
+        if (!std::holds_alternative<texture_handle>(color_attachment)) return;
+
+        //Get color texture.
+        auto color_texture = std::get<texture_handle>(color_attachment);
+
         OPTICK_EVENT();
         static id_type exposureId = nameHash("exposure");
         //static bool firstFrame = true;
@@ -89,7 +96,7 @@ namespace legion::rendering
 
         shader.get_uniform<float>(exposureId).set_value(exposure);
 
-        shader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(colortexture);
+        shader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(color_texture);
         renderQuad();
         shader.release();
         fbo.release();
@@ -99,5 +106,4 @@ namespace legion::rendering
         //    glGenerateTextureMipmap(tex.textureId);
         //}
     }
-
 }

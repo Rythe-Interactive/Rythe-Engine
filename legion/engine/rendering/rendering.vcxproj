@@ -22,6 +22,7 @@
     <ClCompile Include="data\renderbuffer.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="pipeline\default\postfx\depthoffield.cpp" />
     <ClCompile Include="imgui_impl\ImCurveEdit.cpp" />
     <ClCompile Include="imgui_impl\ImGradient.cpp" />
     <ClCompile Include="imgui_impl\imgui.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="data\Octree.hpp" />
     <ClInclude Include="data\postprocessingeffect.hpp" />
     <ClInclude Include="data\screen_quad.hpp" />
+    <ClInclude Include="pipeline\default\postfx\depthoffield.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
     <ClInclude Include="pipeline\default\postfx\fxaa.hpp" />
     <ClInclude Include="pipeline\default\postfx\bloom.hpp" />

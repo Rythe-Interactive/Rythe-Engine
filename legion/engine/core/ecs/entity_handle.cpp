@@ -112,7 +112,7 @@ namespace legion::core::ecs
                 }
                 else if (addHierarchyIfAbsent)
                 {
-                    hierarchy parentData;;
+                    hierarchy parentData;
                     parentData.children.insert(*this);
                     data.parent.add_component<hierarchy>(parentData);
                 }
