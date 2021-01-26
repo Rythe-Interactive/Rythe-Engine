@@ -1,8 +1,8 @@
 #pragma once
 #include <core/core.hpp>
-#include <physics/broadphase_collision_algorithms/broadphasecollisionalgorithm.hpp>
-#include <physics/broadphase_collision_algorithms/broadphase_uniformgrid.hpp>
-#include <physics/broadphase_collision_algorithms/broadphase_bruteforce.hpp>
+#include <physics/broadphasecollisionalgorithms/broadphasecollisionalgorithm.hpp>
+#include <physics/broadphasecollisionalgorithms/broadphaseuniformgrid.hpp>
+#include <physics/broadphasecollisionalgorithms/broadphasebruteforce.hpp>
 #include <physics/components/rigidbody.hpp>
 #include <physics/data/physics_manifold_precursor.hpp>
 #include <physics/data/physics_manifold.hpp>

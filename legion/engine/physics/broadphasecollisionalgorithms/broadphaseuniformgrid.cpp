@@ -1,4 +1,4 @@
-#include <physics/broadphase_collision_algorithms/broadphase_uniformgrid.hpp>
+#include <physics/broadphasecollisionalgorithms/broadphaseuniformgrid.hpp>
 #include <physics/physics_contact.hpp>
 
 namespace legion::physics

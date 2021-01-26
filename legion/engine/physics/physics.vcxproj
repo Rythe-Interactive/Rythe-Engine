@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="broadphase_collision_algorithms\broadphase_uniformgrid.cpp" />
+    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp" />
     <ClCompile Include="colliders\convexcollider.cpp" />
     <ClCompile Include="components\fracturer.cpp" />
     <ClCompile Include="data\convexconvexpenetrationquery.cpp" />
@@ -31,9 +31,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="broadphase_collision_algorithms\broadphase_bruteforce.hpp" />
-    <ClInclude Include="broadphase_collision_algorithms\broadphasecollisionalgorithm.hpp" />
-    <ClInclude Include="broadphase_collision_algorithms\broadphase_uniformgrid.hpp" />
+    <ClInclude Include="broadphasecollisionalgorithms\broadphasebruteforce.hpp" />
+    <ClInclude Include="broadphasecollisionalgorithms\broadphasecollisionalgorithm.hpp" />
+    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgrid.hpp" />
     <ClInclude Include="colliders\convexcollider.hpp" />
     <ClInclude Include="components\fracturer.h" />
     <ClInclude Include="components\fracturer.hpp" />

@@ -60,7 +60,7 @@
     <ClCompile Include="mesh_splitter_utils\mesh_splitter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="broadphase_collision_algorithms\broadphase_uniformgrid.cpp">
+    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -155,15 +155,6 @@
     <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="broadphase_collision_algorithms\broadphasecollisionalgorithm.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="broadphase_collision_algorithms\broadphase_uniformgrid.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="broadphase_collision_algorithms\broadphase_bruteforce.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="components\fracturer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -222,6 +213,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mesh_splitter_utils\half_edge_finder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="broadphasecollisionalgorithms\broadphasebruteforce.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="broadphasecollisionalgorithms\broadphasecollisionalgorithm.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgrid.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
