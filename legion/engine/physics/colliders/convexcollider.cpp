@@ -159,27 +159,27 @@ namespace legion::physics
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
-        auto refPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
-        auto incPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
+        physicsComponent* refPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
+        physicsComponent* incPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
 
-        auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
-        auto incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
+        PhysicsCollider* refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
+        PhysicsCollider* incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
 
-        manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform,refCollider);
+        manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform, refCollider);
 
-        ecs::component_handle<rigidbody> refRB = manifold.penetrationInformation->isARef ? manifold. : manifold.physicsCompB;
-        ecs::component_handle<rigidbody> incRB = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
+        rigidbody* refRB = manifold.penetrationInformation->isARef ? manifold.rigidbodyA : manifold.rigidbodyB;
+        rigidbody* incRB = manifold.penetrationInformation->isARef ? manifold.rigidbodyB : manifold.rigidbodyA;
 
-        math::vec3 refWorldCentroid = refTransform * math::vec4(refPhysicsCompHandle.read().localCenterOfMass,1);
-        math::vec3 incWorldCentroid = incTransform * math::vec4(incPhysicsCompHandle.read().localCenterOfMass,1);
+        math::vec3 refWorldCentroid = refTransform * math::vec4(refPhysicsComp->localCenterOfMass,1);
+        math::vec3 incWorldCentroid = incTransform * math::vec4(incPhysicsComp->localCenterOfMass,1);
 
         for ( auto& contact : manifold.contacts)
         {
             contact.incTransform = incTransform;
             contact.refTransform = refTransform;
 
-            contact.rbIncHandle = incRB;
-            contact.rbRefHandle = refRB;
+            contact.rbInc = incRB;
+            contact.rbRef = refRB;
            
             contact.collisionNormal = manifold.penetrationInformation->normal;
 

@@ -14,7 +14,7 @@ namespace legion::physics
     }
 
     void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform
-        , math::mat4 incTransform, std::shared_ptr<PhysicsCollider> refCollider)
+        , math::mat4 incTransform, PhysicsCollider* refCollider)
     {
         //log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
 

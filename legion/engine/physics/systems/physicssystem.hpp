@@ -69,7 +69,7 @@ namespace legion::physics
                 integrateRigidbodies(hasRigidBodies, rigidbodies, deltaTime);
                 runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, deltaTime);
                 integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, deltaTime);
-                
+
             }
 
             if (oneTimeRunActive)
@@ -81,7 +81,16 @@ namespace legion::physics
                 integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, deltaTime);
             }
 
-            manifoldPrecursorQuery.submit<rigidbody>();
+            m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+                id_type index = async::this_job::get_id();
+                if (hasRigidBodies[index])
+                {
+                    auto entity = manifoldPrecursorQuery[index];
+                    entity.write_component(rigidbodies[index]);
+                }
+                });
+
+            manifoldPrecursorQuery.submit<physicsComponent>();
             manifoldPrecursorQuery.submit<position>();
             manifoldPrecursorQuery.submit<rotation>();
         }
@@ -105,7 +114,7 @@ namespace legion::physics
         }
 
         /**@brief Sets the broad phase collision detection method
-         * Use BroadPhaseBruteForce to not use any broad phase collision detection 
+         * Use BroadPhaseBruteForce to not use any broad phase collision detection
          */
         template <typename BroadPhaseType, typename ...Args>
         static void setBroadPhaseCollisionDetection(Args&& ...args)
@@ -122,7 +131,7 @@ namespace legion::physics
         static std::unique_ptr<BroadPhaseCollisionAlgorithm> m_broadPhase;
         //legion::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> m_optimizeBroadPhase;
         const float m_timeStep = 0.02f;
-        
+
 
         math::ivec3 uniformGridCellSize = math::ivec3(1, 1, 1);
 
@@ -156,9 +165,9 @@ namespace legion::physics
 
             for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
             {
-                for (int i = 0; i < manifoldPrecursor.size()-1; i++)
+                for (int i = 0; i < manifoldPrecursor.size() - 1; i++)
                 {
-                    for (int j = i+1; j < manifoldPrecursor.size(); j++)
+                    for (int j = i + 1; j < manifoldPrecursor.size(); j++)
                     {
                         assert(j != manifoldPrecursor.size());
 
@@ -233,7 +242,7 @@ namespace legion::physics
                 {
                     auto fracturerB = fracturerHandleB.read();
                     //log::debug(" B is fracturable");
-                    fracturerB.HandleFracture(manifold, currentManifoldValidity,false);
+                    fracturerB.HandleFracture(manifold, currentManifoldValidity, false);
 
                     fracturerHandleB.write(fracturerB);
                 }
@@ -260,7 +269,7 @@ namespace legion::physics
             {
                 resolveContactConstraint(manifoldsToSolve, manifoldValidity, deltaTime, contactIter);
             }
-            
+
             //resolve friction constraint
             for (size_t frictionIter = 0;
                 frictionIter < constants::frictionSolverIterationCount; frictionIter++)
@@ -268,7 +277,7 @@ namespace legion::physics
                 resolveFrictionConstraint(manifoldsToSolve, manifoldValidity);
             }
 
-           
+
             //reset convergance identifiers for all colliders
             for (auto& manifold : manifoldsToSolve)
             {
@@ -319,13 +328,13 @@ namespace legion::physics
                     if (isRigidbodyInvolved && !isTriggerInvolved)
                     {
                         manifoldsToSolve.push_back(m);
-                        raiseEvent<collision_event>(m,m_timeStep);
+                        raiseEvent<collision_event>(m, m_timeStep);
                     }
 
                     if (isTriggerInvolved)
                     {
                         //notify the event-bus
-                        raiseEvent<trigger_event>(m,m_timeStep);
+                        raiseEvent<trigger_event>(m, m_timeStep);
                         //notify both the trigger and triggerer
                         //TODO:(Developer-The-Great): the triggerer and trigger should probably received this event
                         //TODO:(cont.) through the event bus, we should probably create a filterable system here to
@@ -347,6 +356,16 @@ namespace legion::physics
             manifold.entityA = manifoldPrecursorQuery[precursorA.id];
             manifold.entityB = manifoldPrecursorQuery[precursorB.id];
 
+            if (hasRigidBodies[precursorA.id])
+                manifold.rigidbodyA = &rigidbodies[precursorA.id];
+            else
+                manifold.rigidbodyA = nullptr;
+
+            if (hasRigidBodies[precursorB.id])
+                manifold.rigidbodyB = &rigidbodies[precursorB.id];
+            else
+                manifold.rigidbodyB = nullptr;
+
             manifold.physicsCompA = precursorA.physicsComp;
             manifold.physicsCompB = precursorB.physicsComp;
 
@@ -360,7 +379,7 @@ namespace legion::physics
 
         /** @brief gets all the entities with a rigidbody component and calls the integrate function on them
         */
-        void integrateRigidbodies(std::vector<bool> hasRigidBodies, ecs::component_container<rigidbody>& rigidbodies,  float deltaTime)
+        void integrateRigidbodies(std::vector<bool> hasRigidBodies, ecs::component_container<rigidbody>& rigidbodies, float deltaTime)
         {
             m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
                 if (!hasRigidBodies[async::this_job::get_id()])
@@ -437,7 +456,7 @@ namespace legion::physics
             }
         }
 
-        void resolveContactConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<bool>& manifoldValidity,float dt,int contactIter)
+        void resolveContactConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<bool>& manifoldValidity, float dt, int contactIter)
         {
             for (int manifoldIter = 0;
                 manifoldIter < manifoldsToSolve.size(); manifoldIter++)
