@@ -145,10 +145,10 @@ namespace legion::physics
         InstantiateColliderMeshPairingWithEntity(fractureInstigatorEnt,
             colliderToMeshPairings);
 
-        for (size_t i = 0; i < fractureInstigatorEnt.child_count() ; i++)
-        {
-            auto child = fractureInstigatorEnt.get_child(i);
+        hierarchy hry = fractureInstigatorEnt.read_component<hierarchy>();
 
+        for (auto& child : hry.children)
+        {
             InstantiateColliderMeshPairingWithEntity(child,
                 colliderToMeshPairings);
         }
@@ -289,7 +289,7 @@ namespace legion::physics
         auto physicsCompHandle = ent.get_component_handle<physics::physicsComponent>();
         std::shared_ptr<ConvexCollider> convexCollider = nullptr;
 
-        auto physicsCollider = physicsCompHandle.read().colliders->at(0);
+        auto physicsCollider = physicsCompHandle.read().colliders.at(0);
 
         if (physicsCompHandle)
         {

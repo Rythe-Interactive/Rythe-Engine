@@ -9,6 +9,8 @@
 
 namespace legion::physics
 {
+    typedef std::shared_ptr<PhysicsCollider> PhysicsColliderPtr;
+
     struct HalfEdgeFace;
 
     class PhysicsStatics
@@ -226,6 +228,13 @@ namespace legion::physics
         static std::tuple< math::vec3, math::vec3> ConstructAABBFromVertices(const std::vector<math::vec3>& vertices);
 
         static std::tuple< math::vec3, math::vec3> ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices,const math::mat4& transform);
+
+        /**@brief Creates one big AABB from two AABBs
+         * The first element in the tuple will be the lower bounds
+         * The second element in the tuple will be the higher bounds
+         * The AABB will be between the two vec3's in the tuple 
+         */
+        static std::tuple<math::vec3, math::vec3> CombineAABB(const std::tuple<math::vec3, math::vec3>& first, const std::tuple<math::vec3, math::vec3>& second);
 
         //---------------------------------------------------------- Polyhedron Clipping ----------------------------------------------------------------------------//
 

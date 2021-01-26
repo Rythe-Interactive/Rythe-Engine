@@ -25,7 +25,6 @@ class TestModule : public Module
 public:
     void setup() override
     {
-        //reportSystem<TestSystemConvexHull>();
 
         // Create the request for the main window.
         app::WindowSystem::requestWindow(
@@ -46,6 +45,7 @@ public:
         //reportSystem<SceneTestSystem1>();
         reportSystem<SimpleCameraController>();
         reportSystem<GuiTestSystem>();
+        reportSystem<TestSystemConvexHull>();
         //reportSystem<physics::PhysicsFractureTestSystem>();
 
     }

@@ -180,5 +180,23 @@ namespace legion::physics
         return std::make_tuple(min, max);
     }
 
+    std::tuple<math::vec3, math::vec3> PhysicsStatics::CombineAABB(const std::tuple<math::vec3, math::vec3>& first, const std::tuple<math::vec3, math::vec3>& second)
+    {
+        math::vec3 firstLow = std::get<0>(first);
+        math::vec3 firstHigh = std::get<1>(first);
+        math::vec3 secondLow = std::get<0>(second);
+        math::vec3 secondHigh = std::get<1>(second);
+        math::vec3 lowBounds = secondLow;
+        math::vec3 highBounds = secondHigh;
+        if (firstLow.x < secondLow.x)   lowBounds.x    = firstLow.x;
+        if (firstLow.y < secondLow.y)   lowBounds.y    = firstLow.y;
+        if (firstLow.z < secondLow.z)   lowBounds.z    = firstLow.z;
+        if (firstHigh.x > secondHigh.x) highBounds.x   = firstHigh.x;
+        if (firstHigh.y > secondHigh.y) highBounds.y   = firstHigh.y;
+        if (firstHigh.z > secondHigh.z) highBounds.z   = firstHigh.z;
+
+        return std::make_tuple(lowBounds, highBounds);
+    }
+
 };
 
