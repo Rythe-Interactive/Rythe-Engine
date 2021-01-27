@@ -191,11 +191,6 @@ namespace legion::physics
                     {
                         log::debug("indexCurrent {} ", indexCurrent);
                         log::debug("generatedIntersectionEdges {} ", generatedIntersectionEdges.size());
-                        /*
-                        math::vec3 first = debugHelper.DEBUG_transform * math::vec4(generatedIntersectionEdges.back().first, 1);
-                        math::vec3 second = debugHelper.DEBUG_transform * math::vec4(generatedIntersectionEdges.back().second, 1);
-
-                        debug::user_projectDrawLine(first, second, math::colors::magenta, 12.0f, FLT_MAX, true);*/
                     }
                     
 

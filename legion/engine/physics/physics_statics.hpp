@@ -47,10 +47,40 @@ namespace legion::physics
                     worldSupportPoint = transformedVert;
                 }
             }
-
-
-
         }
+
+        /** @brief Given a transformed ConvexCollider and a direction, Gets the vertex furthest in the given direction
+        * @param planePosition The position of the support plane in world space
+        * @param direction The direction we would like to know the support point of
+        * @param collider The ConvexCollider in question
+        * @param colliderTransform A mat4 describing the transform of the collider
+        * @param worldSupportPoint [out] the resulting support point
+        * @return returns true if a seperating axis was found
+        */
+        static void GetSupportPointNoTransform( math::vec3 planePosition,  math::vec3 direction, ConvexCollider* collider, const math::mat4& colliderTransform
+            , math::vec3& worldSupportPoint)
+        {
+            float largestDistanceInDirection = std::numeric_limits<float>::lowest();
+            planePosition = math::inverse(colliderTransform) * math::vec4(planePosition, 1);
+            direction = math::inverse(colliderTransform) * math::vec4(direction, 0);
+
+            for (const auto& vert : collider->GetVertices())
+            {
+                math::vec3 transformedVert = math::vec4(vert, 1);
+
+                float dotResult = math::dot(transformedVert - planePosition, direction);
+
+                if (dotResult > largestDistanceInDirection)
+                {
+                    largestDistanceInDirection = dotResult;
+                    worldSupportPoint = transformedVert;
+                }
+            }
+
+            worldSupportPoint = colliderTransform * math::vec4(worldSupportPoint, 1);
+        }
+
+
 
         static float GetSupportPoint(const std::vector<math::vec3>& vertices, const math::vec3& direction, math::vec3& outVec);
         
@@ -68,7 +98,6 @@ namespace legion::physics
             , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation,bool shouldDebug = false)
         {
             //shouldDebug = false;
-
 
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
@@ -103,7 +132,6 @@ namespace legion::physics
             }
             //no seperating axis was found
             maximumSeperation = currentMaximumSeperation;
-
 
             return false;
         }
@@ -220,6 +248,9 @@ namespace legion::physics
             maximumSeperation = currentMinimumSeperation;
             return currentMinimumSeperation > 0.0f;
         }
+
+        static bool DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,
+             float& maximumSeperation);
 
 
         static std::tuple< math::vec3,math::vec3> ConstructAABBFromPhysicsComponentWithTransform

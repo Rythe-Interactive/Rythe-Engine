@@ -41,6 +41,19 @@ namespace legion::physics
         void InstantiateColliderMeshPairingWithEntity(ecs::entity_handle ent,
             std::vector< FracturerColliderToMeshPairing>& colliderToMeshPairings);
 
+        void GetVoronoiPoints(std::vector<std::vector<math::vec3>>& groupedPoints,
+            std::vector<math::vec3>& voronoiPoints, math::vec3 min, math::vec3 max);
+
+        void InstantiateVoronoiColliders(std::vector<std::shared_ptr<ConvexCollider>>& voronoiColliders
+            , std::vector<std::vector<math::vec3>>& groupedPoints);
+
+        void GenerateFractureFragments(std::vector<ecs::entity_handle>& entitiesGenerated
+            , std::vector< FracturerColliderToMeshPairing>& colliderToMeshPairings
+            , std::vector< std::shared_ptr<ConvexCollider>>& voronoiColliders
+            , ecs::entity_handle fracturedEnt);
+
+        math::vec3 GetImpactPointFromManifold(physics_manifold& manifold);
+
         int fractureCount = 0;
 
         std::vector<std::vector<math::vec3>> verticesList;

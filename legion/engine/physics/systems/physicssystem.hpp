@@ -267,28 +267,39 @@ namespace legion::physics
             //the effective mass remains the same for every iteration of the solver. This means that we can precalculate it before
             //we start the solver
 
-            log::debug("--------------Logging contacts for manifold -------------------");
+            //log::debug("--------------Logging contacts for manifold -------------------");
 
             for (const auto& manifold : manifoldsToSolve)
             {
+                 for (auto contact : manifold.contacts)
+                 {
+                   /*  debug::user_projectDrawLine(
+                         contact.refRBCentroid,
+                         contact.refRBCentroid + math::vec3(0,0.2f,0), math::colors::red, 4.0f, 3.0f, true);
 
-                std::string str1, str2;
-                manifold.GetPairID(str1, str2);
-
-                //log::debug("manifold pairing: {},{}", str1, str2);
-
-                if (manifold.DEBUG_checkID("problem", "floor"))
-                {
-                    
-
-                    for (auto contact : manifold.contacts)
-                    {
-                       /* debug::user_projectDrawLine(
-                            contact.RefWorldContact,
-                            contact.IncWorldContact, math::colors::red, 4.0f, 3.0f, true);*/
-                    }
-                }
+                     debug::user_projectDrawLine(
+                         contact.RefWorldContact,
+                         contact.IncWorldContact, math::colors::blue, 4.0f, 3.0f, true);*/
+                 }
             }
+
+            //    std::string str1, str2;
+            //    manifold.GetPairID(str1, str2);
+
+            //    //log::debug("manifold pairing: {},{}", str1, str2);
+
+            //    if (manifold.DEBUG_checkID("problem", "floor"))
+            //    {
+            //        
+
+            //        for (auto contact : manifold.contacts)
+            //        {
+            //           /* debug::user_projectDrawLine(
+            //                contact.RefWorldContact,
+            //                contact.IncWorldContact, math::colors::red, 4.0f, 3.0f, true);*/
+            //        }
+            //    }
+            //}
 
 
 
@@ -404,11 +415,6 @@ namespace legion::physics
 
             // log::debug("colliderA->CheckCollision(colliderB, manifold)");
             colliderA->CheckCollision(colliderB, manifold);
-
-            if (manifold.DEBUG_checkID("floor", "problem"))
-            {
-                log::debug("floor and problem colliding {} ", manifold.isColliding);
-            }
         }
 
         /** @brief gets all the entities with a rigidbody component and calls the integrate function on them

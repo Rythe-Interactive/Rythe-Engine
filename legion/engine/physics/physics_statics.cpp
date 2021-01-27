@@ -60,6 +60,54 @@ namespace legion::physics
         return currentMaximumSupportPoint;
     }
 
+    bool PhysicsStatics::DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,
+        float& maximumSeperation)
+    {
+        //-----------------  check if the seperating axis is the line generated between the centroid of the hull and sphereWorldPosition ------------------//
+
+        math::vec3 worldHullCentroid = transformA * math::vec4(convexA->GetLocalCentroid(), 1);
+        math::vec3 centroidSeperatingAxis = math::normalize(worldHullCentroid - sphereWorldPosition);
+
+        math::vec3 seperatingPlanePosition = sphereWorldPosition + centroidSeperatingAxis * sphereRadius;
+
+        math::vec3 worldSupportPoint;
+        GetSupportPoint(seperatingPlanePosition, -centroidSeperatingAxis, convexA, transformA, worldSupportPoint);
+
+        float seperation = math::dot(worldSupportPoint - seperatingPlanePosition, centroidSeperatingAxis);
+
+        if (seperation > 0.0f)
+        {
+            maximumSeperation = seperation;
+            return false;
+        }
+
+        maximumSeperation = std::numeric_limits<float>::lowest();
+
+        //--------------------------------- check if the seperating axis one of the faces of the convex hull ----------------------------------------------//
+
+        for (auto faceA : convexA->GetHalfEdgeFaces())
+        {
+            math::vec3 worldFaceCentroid = transformA * math::vec4(faceA->centroid, 1);
+            math::vec3 worldFaceNormal = math::normalize(transformA * math::vec4(faceA->normal, 0));
+
+            float seperation = PointDistanceToPlane(worldFaceNormal, worldFaceCentroid, seperatingPlanePosition );
+
+            if (seperation > maximumSeperation)
+            {
+                maximumSeperation = seperation;
+            }
+
+            if (seperation > sphereRadius)
+            {
+                return false;
+            }
+
+        }
+
+
+        return true;
+    }
+
     std::tuple< math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromPhysicsComponentWithTransform
     (ecs::component_handle<physicsComponent> physicsComponentToUse,const math::mat4& transform)
     {

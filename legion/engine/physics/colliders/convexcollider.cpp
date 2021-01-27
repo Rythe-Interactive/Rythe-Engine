@@ -33,7 +33,7 @@ namespace legion::physics
             return;
         }
 
-
+  
       
      
         PointerEncapsulator < HalfEdgeFace> BRefFace;
@@ -51,6 +51,8 @@ namespace legion::physics
         //{
         //    BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 5.0f);
         //}
+        //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::blue, 10.0f);
+        //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 10.0f);
 
         PointerEncapsulator< HalfEdgeEdge> edgeRef;
         PointerEncapsulator< HalfEdgeEdge> edgeInc;
@@ -66,7 +68,7 @@ namespace legion::physics
             return;
         }
 
-
+      
        /* ConvexConvexCollisionInfo convexCollisionInfo;
        
         PhysicsStatics::DetectConvexConvexCollision(this,convexCollider, 
@@ -105,13 +107,6 @@ namespace legion::physics
                 aToBEdgeSeperation, false);
 
         std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery, abPenetrationQuery, baPenetrationQuery  };
-
-        if (shouldDebug)
-        {
-            log::debug("abPenetrationQuery->penetration {} ", abPenetrationQuery->penetration);
-            log::debug("baPenetrationQuery->penetration {} ", baPenetrationQuery->penetration);
-            log::debug(" abEdgePenetrationQuery->penetration {} ", abEdgePenetrationQuery->penetration);
-        }
 
         //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
 
@@ -173,10 +168,6 @@ namespace legion::physics
 
     void ConvexCollider::PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold)
     {
-        if (manifold.DEBUG_checkID("problem", "floor"))
-        {
-            log::debug("reached populate contacts on problem");
-        }
 
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
@@ -188,11 +179,6 @@ namespace legion::physics
         auto incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
 
         manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform);
-
-        if (manifold.DEBUG_checkID("problem", "floor"))
-        {
-            log::debug("--------- final number of contacts {} ", manifold.contacts.size());
-        }
 
         ecs::component_handle<rigidbody> refRB = refPhysicsCompHandle.entity.get_component_handle<rigidbody>();
         ecs::component_handle<rigidbody>  incRB = incPhysicsCompHandle.entity.get_component_handle<rigidbody>();
@@ -789,7 +775,7 @@ namespace legion::physics
         }
         else
         {
-            log::error("Horizon Edge NOT FOUND!");
+            //log::error("Horizon Edge NOT FOUND!");
             return;
         }
 

@@ -26,7 +26,7 @@ namespace legion::physics
             log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
         }
 
-        //
+        
         float largestDotResult = std::numeric_limits<float>::lowest();
 
         for (auto face : incCollider->GetHalfEdgeFaces())
@@ -58,10 +58,7 @@ namespace legion::physics
         incFace->forEachEdge(sendToInitialOutput);
 
 
-        if (shouldDebug)
-        {
-            log::debug("initial input size {} ", outputContactPoints.size());
-        }
+
         //------------------------------- clip vertices with faces that are the neighbors of refFace  ---------------------------------//
         auto clipNeigboringFaceWithOutput = [&refTransform,&outputContactPoints,shouldDebug](HalfEdgeEdge* edge)
         {
@@ -72,30 +69,13 @@ namespace legion::physics
             auto inputContactList = outputContactPoints;
             outputContactPoints.clear();
 
-            if (shouldDebug)
-            {
-                log::debug("splitting with plane position {} and normal {} ",
-                    math::to_string(planePosition), math::to_string(planeNormal));
-            }
 
             PhysicsStatics::SutherlandHodgmanFaceClip(planeNormal, planePosition, inputContactList, outputContactPoints,edge);
-
-            if (shouldDebug)
-            {
-                log::debug("outputContactPoints {} ",
-                    outputContactPoints.size());
-            }
 
         };
 
         refFace->forEachEdge(clipNeigboringFaceWithOutput);
 
-      
-
-        if (shouldDebug)
-        {
-            log::debug("->  iterating through contacts");
-        }
 
         for (const auto& incidentContact : outputContactPoints)
         {

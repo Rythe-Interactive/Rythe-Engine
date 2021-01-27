@@ -228,6 +228,7 @@ public:
 
     void drawPhysicsColliders()
     {
+        static float offset = 0.000f;
         static auto physicsQuery = createQuery< physics::physicsComponent>();
         physicsQuery.queryEntities();
 
@@ -283,10 +284,10 @@ public:
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + worldNormal * 0.1f;
                         
-                        debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 5.0f);
+                        //debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 5.0f);
 
                         if (!currentEdge) { return; }
-
+                        
                         do
                         {
                             physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
@@ -295,7 +296,7 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
                             math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
 
-                            debug::user_projectDrawLine(worldStart + worldNormal * 0.005f, worldEnd + worldNormal * 0.005f, usedColor, 3.0f, 0.0f, useDepth);
+                            debug::user_projectDrawLine(worldStart + worldNormal * offset, worldEnd + worldNormal * offset, usedColor, 3.0f, 0.0f, useDepth);
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }

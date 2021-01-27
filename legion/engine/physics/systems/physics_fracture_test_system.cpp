@@ -697,7 +697,7 @@ namespace legion::physics
 
             physicsComponent2.AddBox(cubeParams);
 
-            physicsComponent2.AddBox(cube_collider_params(1.0f,1.0f,1.0f,math::vec3(0.5f,-0.5f,0.5f)));
+            physicsComponent2.AddBox(cube_collider_params(1.0f,1.0f,1.0f,math::vec3(1.0f,-1.0f,1.0f)));
 
             entPhyHande.write(physicsComponent2);
 
@@ -820,7 +820,7 @@ namespace legion::physics
             block.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(block);
-            positionH.write(math::vec3(-5, 3.5f, 10.0f));
+            positionH.write(math::vec3(-5, 3.5f, 9.8f));
             scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
 
             auto rotation = rotationH.read();
@@ -871,6 +871,9 @@ namespace legion::physics
             bool isDirectChildOfWorld = floor2.get_parent() == m_ecs->world;
             log::debug("isDirectChildOfWorld {} ", isDirectChildOfWorld);
         }
+
+
+
 
     }
 
