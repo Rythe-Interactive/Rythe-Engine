@@ -109,8 +109,7 @@ namespace legion::physics
             }
         }
 
-        //The following function is public static so that it can be called by testSystem
-        static void bulkRetrievePreManifoldData(
+        void bulkRetrievePreManifoldData(
             ecs::component_container<physicsComponent>& physComps,
             ecs::component_container<position>& positions,
             ecs::component_container<rotation>& rotations,
@@ -128,7 +127,7 @@ namespace legion::physics
                 for (auto& collider : physComps[index].colliders)
                     collider->UpdateTransformedTightBoundingVolume(transf);
 
-                manifoldPrecursors[index] = { transf, &physComps[index], static_cast<int>(index) };
+                manifoldPrecursors[index] = { transf, &physComps[index], index, manifoldPrecursorQuery[index] };
                 }).wait();
         }
 
@@ -389,8 +388,8 @@ namespace legion::physics
             manifold.colliderA = colliderA;
             manifold.colliderB = colliderB;
 
-            manifold.entityA = manifoldPrecursorQuery[precursorA.id];
-            manifold.entityB = manifoldPrecursorQuery[precursorB.id];
+            manifold.entityA = precursorA.entity;
+            manifold.entityB = precursorB.entity;
 
             if (hasRigidBodies[precursorA.id])
                 manifold.rigidbodyA = &rigidbodies[precursorA.id];

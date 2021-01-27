@@ -42,8 +42,8 @@ namespace legion::physics {
 
         /** @brief gets the colliders themselves
          */
-        L_NODISCARD std::pair<std::shared_ptr<PhysicsCollider>,
-                              std::shared_ptr<PhysicsCollider>> colliders() const noexcept
+        L_NODISCARD std::pair<PhysicsCollider*,
+                             PhysicsCollider*> colliders() const noexcept
         {
             return std::make_pair(manifold->colliderA, manifold->colliderB);
         }
