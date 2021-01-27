@@ -36,7 +36,7 @@ namespace legion::physics
                     contact.tangent1Lambda, contact.tangent2Lambda, GetColliderID()));
         }
 
-        void CheckCollision(std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) override
+        void CheckCollision(PhysicsCollider* physicsCollider, physics_manifold& manifold) override
         {
             physicsCollider->CheckCollisionWith(this, manifold);
         }
@@ -46,7 +46,7 @@ namespace legion::physics
         */
         void CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) override;
 
-        void PopulateContactPoints(std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) override
+        void PopulateContactPoints(PhysicsCollider* physicsCollider, physics_manifold& manifold) override
         {
             physicsCollider->PopulateContactPointsWith(this, manifold);
         }

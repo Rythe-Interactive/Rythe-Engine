@@ -11,8 +11,21 @@ namespace legion::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
-        auto compIDA = manifold.physicsCompA.entity.get_component_handle<identifier>();
-        auto compIDB = manifold.physicsCompB.entity.get_component_handle<identifier>();
+        OPTICK_EVENT();
+        // Middle-phase collision detection
+        // Do AABB collision to check whether collision is possible
+        auto aabbThis = this->GetMinMaxWorldAABB();
+        auto aabbOther = convexCollider->GetMinMaxWorldAABB();
+        auto& [low0, high0] = aabbThis;
+        auto& [low1, high1] = aabbOther;
+        if (!physics::PhysicsStatics::CollideAABB(low0, high0, low1, high1))
+        {
+            manifold.isColliding = false;
+            return;
+        }
+
+        auto compIDA = manifold.entityA.get_component_handle<identifier>();
+        auto compIDB = manifold.entityB.get_component_handle<identifier>();
 
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA
@@ -83,36 +96,34 @@ namespace legion::physics
         math::vec3 worldEdgeNormal = edgeNormal;
 
         auto abPenetrationQuery =
-            std::make_shared< ConvexConvexPenetrationQuery>(ARefFace.ptr
+            std::make_unique< ConvexConvexPenetrationQuery>(ARefFace.ptr
                 , BRefFace.ptr, worldFaceCentroidA,worldFaceNormalA, ARefSeperation,true);
 
         auto baPenetrationQuery =
-            std::make_shared < ConvexConvexPenetrationQuery>(BRefFace.ptr, ARefFace.ptr,
+            std::make_unique < ConvexConvexPenetrationQuery>(BRefFace.ptr, ARefFace.ptr,
                 worldFaceCentroidB, worldFaceNormalB, BRefSeperation, false);
 
         auto abEdgePenetrationQuery = 
-            std::make_shared < EdgePenetrationQuery>(edgeRef.ptr, edgeInc.ptr,worldEdgeAPosition,worldEdgeNormal,
+            std::make_unique < EdgePenetrationQuery>(edgeRef.ptr, edgeInc.ptr,worldEdgeAPosition,worldEdgeNormal,
                 aToBEdgeSeperation, false);
-
-        std::array<std::shared_ptr<PenetrationQuery>, 3> penetrationQueryArray{ abEdgePenetrationQuery, abPenetrationQuery, baPenetrationQuery  };
 
         //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
 
         if (abPenetrationQuery->penetration + physics::constants::faceToFacePenetrationBias >
             baPenetrationQuery->penetration)
         {
-            manifold.penetrationInformation = abPenetrationQuery;
+            manifold.penetrationInformation = std::move(abPenetrationQuery);
         }
         else
         {
-            manifold.penetrationInformation = baPenetrationQuery;
+            manifold.penetrationInformation = std::move(baPenetrationQuery);
         }
 
 
         if (abEdgePenetrationQuery->penetration >
             manifold.penetrationInformation->penetration + physics::constants::faceToEdgePenetrationBias)
         {
-            manifold.penetrationInformation = abEdgePenetrationQuery;
+            manifold.penetrationInformation = std::move(abEdgePenetrationQuery);
         }
 
         manifold.isColliding = true;
@@ -156,30 +167,31 @@ namespace legion::physics
 
     void ConvexCollider::PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold)
     {
+        OPTICK_EVENT();
         math::mat4& refTransform = manifold.penetrationInformation->isARef ? manifold.transformA : manifold.transformB;
         math::mat4& incTransform = manifold.penetrationInformation->isARef ? manifold.transformB : manifold.transformA;
 
-        auto refPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
-        auto incPhysicsCompHandle = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
+        physicsComponent* refPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompA : manifold.physicsCompB;
+        physicsComponent* incPhysicsComp = manifold.penetrationInformation->isARef ? manifold.physicsCompB : manifold.physicsCompA;
 
-        auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
-        auto incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
+        PhysicsCollider* refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
+        PhysicsCollider* incCollider = manifold.penetrationInformation->isARef ? manifold.colliderB : manifold.colliderA;
 
-        manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform,refCollider);
+        manifold.penetrationInformation->populateContactList(manifold, refTransform, incTransform, refCollider);
 
-        ecs::component_handle<rigidbody> refRB = refPhysicsCompHandle.entity.get_component_handle<rigidbody>();
-        ecs::component_handle<rigidbody>  incRB = incPhysicsCompHandle.entity.get_component_handle<rigidbody>();
+        rigidbody* refRB = manifold.penetrationInformation->isARef ? manifold.rigidbodyA : manifold.rigidbodyB;
+        rigidbody* incRB = manifold.penetrationInformation->isARef ? manifold.rigidbodyB : manifold.rigidbodyA;
 
-        math::vec3 refWorldCentroid = refTransform * math::vec4(refPhysicsCompHandle.read().localCenterOfMass,1);
-        math::vec3 incWorldCentroid = incTransform * math::vec4(incPhysicsCompHandle.read().localCenterOfMass,1);
+        math::vec3 refWorldCentroid = refTransform * math::vec4(refPhysicsComp->localCenterOfMass,1);
+        math::vec3 incWorldCentroid = incTransform * math::vec4(incPhysicsComp->localCenterOfMass,1);
 
         for ( auto& contact : manifold.contacts)
         {
             contact.incTransform = incTransform;
             contact.refTransform = refTransform;
 
-            contact.rbIncHandle = incRB;
-            contact.rbRefHandle = refRB;
+            contact.rbInc = incRB;
+            contact.rbRef = refRB;
            
             contact.collisionNormal = manifold.penetrationInformation->normal;
 
@@ -237,6 +249,7 @@ namespace legion::physics
 
     void ConvexCollider::ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount,bool shouldDebug)
     {
+        OPTICK_EVENT();
         //log::debug("-------------------------------- ConstructConvexHullWithMesh ----------------------------------");
         // Step 0 - Create inital hull
         /*if (step == 0)
