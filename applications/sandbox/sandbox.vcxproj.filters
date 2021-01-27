@@ -80,6 +80,9 @@
     <ClInclude Include="module\testmodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="systems\final_presentation_system.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\kernels\vadd_kernel.cl" />

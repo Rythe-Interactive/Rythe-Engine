@@ -29,9 +29,9 @@ namespace legion::rendering
         attachStage<SubmitStage>();
 
         PostProcessingStage::addEffect<Tonemapping>();
-        PostProcessingStage::addEffect<Bloom>(-64);
+        //PostProcessingStage::addEffect<Bloom>(-64);
         PostProcessingStage::addEffect<FXAA>(-100);
-        PostProcessingStage::addEffect<DepthOfField>(-101);
+        //PostProcessingStage::addEffect<DepthOfField>(-101);
 
         buffer modelMatrixBuffer;
 
