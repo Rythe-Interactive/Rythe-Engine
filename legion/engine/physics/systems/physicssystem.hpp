@@ -54,7 +54,7 @@ namespace legion::physics
             {
                 OPTICK_EVENT("Fetching data");
                 manifoldPrecursorQuery.queryEntities();
-                
+
                 rigidbodies.resize(manifoldPrecursorQuery.size());
                 hasRigidBodies.resize(manifoldPrecursorQuery.size());
 
@@ -109,8 +109,7 @@ namespace legion::physics
             }
         }
 
-        //The following function is public static so that it can be called by testSystem
-        static void bulkRetrievePreManifoldData(
+        void bulkRetrievePreManifoldData(
             ecs::component_container<physicsComponent>& physComps,
             ecs::component_container<position>& positions,
             ecs::component_container<rotation>& rotations,
@@ -128,7 +127,7 @@ namespace legion::physics
                 for (auto& collider : physComps[index].colliders)
                     collider->UpdateTransformedTightBoundingVolume(transf);
 
-                manifoldPrecursors[index] = { transf, &physComps[index], static_cast<int>(index) };
+                manifoldPrecursors[index] = { transf, &physComps[index], index, manifoldPrecursorQuery[index] };
                 }).wait();
         }
 
@@ -139,9 +138,7 @@ namespace legion::physics
         static void setBroadPhaseCollisionDetection(Args&& ...args)
         {
             static_assert(std::is_base_of_v<BroadPhaseCollisionAlgorithm, BroadPhaseType>, "Broadphase type did not inherit from BroadPhaseCollisionAlgorithm");
-            log::debug("Gonna start doing the thing");
             m_broadPhase = std::make_unique<BroadPhaseType>(std::forward<Args>(args)...);
-            log::debug("Did the thing");
         }
 
 
@@ -363,22 +360,21 @@ namespace legion::physics
 
                     colliderA->PopulateContactPoints(colliderB.get(), m);
 
-                    if (isRigidbodyInvolved && !isTriggerInvolved)
-                    {
-                        manifoldsToSolve.push_back(m);
-                        raiseEvent<collision_event>(m, m_timeStep);
-                    }
-
                     if (isTriggerInvolved)
                     {
                         //notify the event-bus
-                        raiseEvent<trigger_event>(m, m_timeStep);
+                        raiseEvent<trigger_event>(&m, m_timeStep);
                         //notify both the trigger and triggerer
                         //TODO:(Developer-The-Great): the triggerer and trigger should probably received this event
                         //TODO:(cont.) through the event bus, we should probably create a filterable system here to
                         //TODO:(cont.) uniquely identify involved objects and then redirect only required messages
                     }
 
+                    if (isRigidbodyInvolved && !isTriggerInvolved)
+                    {
+                        raiseEvent<collision_event>(&m, m_timeStep);
+                        manifoldsToSolve.emplace_back(std::move(m));
+                    }
                 }
             }
         }
@@ -392,8 +388,8 @@ namespace legion::physics
             manifold.colliderA = colliderA;
             manifold.colliderB = colliderB;
 
-            manifold.entityA = manifoldPrecursorQuery[precursorA.id];
-            manifold.entityB = manifoldPrecursorQuery[precursorB.id];
+            manifold.entityA = precursorA.entity;
+            manifold.entityB = precursorB.entity;
 
             if (hasRigidBodies[precursorA.id])
                 manifold.rigidbodyA = &rigidbodies[precursorA.id];
@@ -413,7 +409,6 @@ namespace legion::physics
 
             // log::debug("colliderA->CheckCollision(colliderB, manifold)");
             colliderA->CheckCollision(colliderB, manifold);
-
         }
 
         /** @brief gets all the entities with a rigidbody component and calls the integrate function on them
