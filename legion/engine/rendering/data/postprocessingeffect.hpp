@@ -8,12 +8,14 @@
 
 #include <rendering/data/screen_quad.hpp>
 
+#include <rendering/pipeline/base/pipelinebase.hpp>
+
 namespace legion::rendering
 {
     class PostProcessingEffectBase
     {
     public:
-        std::vector<delegate<void(framebuffer&, texture_handle, texture_handle, time::span)>> renderPasses;
+        std::vector<delegate<void(framebuffer&, RenderPipelineBase*, camera&, const camera::camera_input&, time::span)>> renderPasses;
         virtual id_type getId() const LEGION_PURE;
         virtual const std::string& getName() const LEGION_PURE;
         void init(app::window& context)
@@ -53,10 +55,10 @@ namespace legion::rendering
         static const std::string name;
 
     protected:
-        template<void(Self::* func_type)(framebuffer&, texture_handle, texture_handle, time::span)>
+        template<void(Self::* func_type)(framebuffer&, RenderPipelineBase* ,camera&, const camera::camera_input&, time::span)>
         void addRenderPass()
         {
-            renderPasses.push_back(delegate<void(framebuffer&, texture_handle, texture_handle, time::span)>::create<Self, func_type>(reinterpret_cast<Self*>(this)));
+            renderPasses.push_back(delegate<void(framebuffer&, RenderPipelineBase*, camera&, const camera::camera_input&, time::span)>::create<Self, func_type>(reinterpret_cast<Self*>(this)));
         }
     };
 
@@ -64,6 +66,6 @@ namespace legion::rendering
     const id_type PostProcessingEffect<Self>::id = typeHash<Self>();
 
     template<typename Self>
-    const std::string PostProcessingEffect<Self>::name = typeName<Self>();
+    const std::string PostProcessingEffect<Self>::name = nameOfType<Self>();
 
 }

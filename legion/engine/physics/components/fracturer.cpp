@@ -11,6 +11,7 @@ namespace legion::physics
 
     void Fracturer::HandleFracture(physics_manifold& manifold, bool& manifoldValid,bool isfracturingA)
     {
+        OPTICK_EVENT();
         if (!IsFractureConditionMet() || manifold.contacts.empty()) { return; }
        
 
@@ -23,12 +24,7 @@ namespace legion::physics
         //-----------------------------------------------------------------------------------------------------------------------------//
 
         auto collider = isfracturingA ? manifold.colliderA: manifold.colliderB;
-        auto fracturedEnt = isfracturingA ? manifold.physicsCompA.entity : manifold.physicsCompB.entity;
-
-
-        std::string dbg = isfracturingA ? "entityA is instigator" : "entityB is instigator";
-        //log::debug( dbg);
-        assert(fracturedEnt);
+        auto fracturedEnt = isfracturingA ? manifold.entityA : manifold.entityB;
 
         auto [min,max] = collider->GetMinMaxWorldAABB();
 
@@ -381,8 +377,7 @@ namespace legion::physics
         std::shared_ptr<ConvexCollider> convexCollider = nullptr;
         assert(physicsCompHandle);
 
-        auto physicsComp = physicsCompHandle.read();
-        auto physicsCollider = physicsComp.colliders->at(0);
+        auto physicsCollider = physicsCompHandle.read().colliders.at(0);
 
         if (physicsCompHandle)
         {

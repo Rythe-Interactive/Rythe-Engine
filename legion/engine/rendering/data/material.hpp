@@ -1,6 +1,8 @@
 #pragma once
 #include <rendering/data/shader.hpp>
 #include <memory>
+#include <core/filesystem/filesystem.hpp>
+#include <rendering/util/matini.hpp>
 
 /**
  * @file material.hpp
@@ -30,6 +32,10 @@ namespace legion::rendering
         /**@brief Get the type hash of the variable type of this parameter.
          */
         id_type type() { return m_typeId; }
+
+        /**@brief Get the name of the parameter
+         */
+        L_NODISCARD std::string get_name() const { return m_name; }
 
         /**@internal
          */
@@ -145,6 +151,19 @@ namespace legion::rendering
         {
             return m_shader.get_attribute(nameHash(name));
         }
+
+        L_NODISCARD const std::string& get_name()
+        {
+            return m_name;
+        }
+
+        L_NODISCARD const std::unordered_map<id_type, std::unique_ptr<material_parameter_base>>& get_params()
+        {
+            if (m_currentVariant == 0)
+                m_currentVariant = nameHash("default");
+   
+            return m_variants[m_currentVariant].parameters;
+        }
     };
 
     /**@class material_handle
@@ -171,8 +190,6 @@ namespace legion::rendering
         {
             shader_handle::release();
         }
-
-        std::string get_name();
 
         /**@brief Set the value of a parameter by name.
          */
@@ -204,20 +221,23 @@ namespace legion::rendering
         template<typename T>
         L_NODISCARD T get_param(GLint location);
 
+        L_NODISCARD const std::string& get_name();
+
+        L_NODISCARD const std::unordered_map<id_type, std::unique_ptr<material_parameter_base>>& get_params();
+
         /**@brief Get attribute bound to a certain name.
          */
         attribute get_attribute(const std::string& name);
 
         bool operator==(const material_handle& other) const { return id == other.id; }
 
-        template<typename Archive>
-        void serialize(Archive& archive);
+        template<class Archive>
+        void save(Archive& oa) const;
+
+        template<class Archive>
+        void load(Archive& oa);
     };
-    template<typename Archive>
-    void material_handle::serialize(Archive& archive)
-    {
-        archive(id);
-    }
+    
 
     /**@brief Default invalid material handle.
      */
@@ -316,7 +336,7 @@ namespace legion::rendering
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
             static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->set_value(value);
         else
-            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, typeName<math::color>());
+            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<math::color>());
     }
 
     template<>
@@ -341,7 +361,7 @@ namespace legion::rendering
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
             return static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->get_value();
 
-        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, typeName<math::color>());
+        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<math::color>());
         return math::color();
     }
 
@@ -353,14 +373,14 @@ namespace legion::rendering
 
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
 
         id_type id = submaterial.idOfLocation[location];
 
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
             static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->set_value(value);
         else
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
     }
 
     template<>
@@ -371,13 +391,13 @@ namespace legion::rendering
 
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
 
         id_type id = submaterial.idOfLocation[location];
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<math::vec4>())
             return static_cast<material_parameter<math::vec4>*>(submaterial.parameters[id].get())->get_value();
 
-        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<math::color>());
+        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<math::color>());
         return math::color();
     }
 
@@ -406,7 +426,7 @@ namespace legion::rendering
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
             static_cast<material_parameter<T>*>(submaterial.parameters[id].get())->set_value(value);
         else
-            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, typeName<T>());
+            log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<T>());
     }
 
     template<typename T>
@@ -431,7 +451,7 @@ namespace legion::rendering
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
             return static_cast<material_parameter<T>*>(submaterial.parameters[id].get())->get_value();
 
-        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, typeName<T>());
+        log::warn("material {} does not have a parameter named {} of type {}", m_name, name, nameOfType<T>());
         return T();
     }
 
@@ -443,14 +463,14 @@ namespace legion::rendering
 
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<T>());
 
         id_type id = submaterial.idOfLocation[location];
 
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
             static_cast<material_parameter<T>*>(submaterial.parameters[id].get())->set_value(value);
         else
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<T>());
     }
 
     template<typename T>
@@ -461,13 +481,13 @@ namespace legion::rendering
 
         variant_submaterial& submaterial = m_variants.at(m_currentVariant);
         if (!submaterial.idOfLocation.count(location))
-            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
+            log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<T>());
 
         id_type id = submaterial.idOfLocation[location];
         if (submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>())
             return static_cast<material_parameter<T>*>(submaterial.parameters[id].get())->get_value();
 
-        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, typeName<T>());
+        log::warn("material {} does not have a parameter at location {} of type {}", m_name, location, nameOfType<T>());
         return T();
     }
 
@@ -485,6 +505,117 @@ namespace legion::rendering
         return submaterial.parameters.count(id) && submaterial.parameters[id]->type() == typeHash<T>();
     }
 #pragma endregion
+
+    template <class Archive>
+    void material_handle::save(Archive& oa) const
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        material& m = MaterialCache::m_materials[id];
+
+
+        //Bob the ini builder
+        detail::IniBuilder bob;
+
+        //Generate some Metadata 
+        bob.comment("File is autogenerated by Bob the IniBuilder, please do not edit");
+        bob.comment("(c) Legion-Engine 2021 MIT-License");
+        bob.comment("");
+        bob.comment("Base parameters contains static information about the material");
+
+        // Generate base section
+        // Currently includes only the shader path of the material
+        bob.section("base").glyph("shader").eq().value(m.m_shader.get_path()).finish_entry();
+        bob.comment("Custom Parameters contains dynamic information about the material");
+        bob.comment("if you _really_ need to edit this file, it is probably something here!");
+        bob.section("custom");
+
+
+        // Iterate over all parameters in the material
+        for (auto& [key, value] : m.get_params())
+        {
+            // get the string key to the value
+            std::string kv = value->get_name();
+
+            // check if the material prop is internal and should not be safed
+            if (common::starts_with(kv, "lgn_"))
+                continue;
+
+            // check if the key ends with a trailing NUL for whatever reason,
+            // and just remove it
+            if (common::ends_with(kv, "\0"))
+                kv.resize(kv.size() - 1);
+
+            // add the key + the equals sign
+            // for instance
+            // "material_input.emissive="
+            bob.glyph(kv).eq();
+
+            // determine  what type of variable we are dealing with
+            if (value->type() == typeHash<bool>())
+            {
+                // add the value and finish the entry
+                bob.value(static_cast<material_parameter<bool>*>(value.get())->get_value()).finish_entry();
+                continue;
+            }
+            if (value->type() == typeHash<float>())
+            {
+                bob.value(static_cast<material_parameter<float>*>(value.get())->get_value()).finish_entry();
+                continue;
+            }
+            if (value->type() == typeHash<int>())
+            {
+                bob.value(static_cast<material_parameter<int>*>(value.get())->get_value()).finish_entry();
+                continue;
+            }
+            if (value->type() == typeHash<math::vec3>())
+            {
+                bob.value(static_cast<material_parameter<math::vec3>*>(value.get())->get_value()).finish_entry();
+                continue;
+            }
+            if (value->type() == typeHash<math::vec4>())
+            {
+                bob.value(static_cast<material_parameter<math::vec4>*>(value.get())->get_value()).finish_entry();
+                continue;
+            }
+            if (value->type() == typeHash<math::ivec3>())
+            {
+                bob.value(static_cast<material_parameter<math::ivec3>*>(value.get())->get_value()).finish_entry();
+                continue;
+            }
+            if (value->type() == typeHash<math::ivec4>())
+            {
+                bob.value(static_cast<material_parameter<math::ivec4>*>(value.get())->get_value()).finish_entry();
+                continue;
+            }
+            if (value->type() == typeHash<texture_handle>())
+            {
+                //for the texture handle we need to extract the texture first and ask it for its path
+                texture_handle th = static_cast<material_parameter<texture_handle>*>(value.get())->get_value();
+                bob.value(th.get_texture().path).finish_entry();
+                continue;
+            }
+        }
+
+        //TODO(algo-ryth-mix): there needs to be a san step here to avoid impossible filenames!
+        fs::view file("assets://materials/" + m.get_name() + ".material");
+        file.set(fs::basic_resource(bob.get()));
+        oa(cereal::make_nvp("MaterialFile", file.get_virtual_path()));
+    }
+    template <class Archive>
+    void material_handle::load(Archive& ia)
+    {
+        std::string filepath;
+        ia(cereal::make_nvp("MaterialFile", filepath));
+        const fs::view file(filepath);
+
+        const auto shader_location = extract_string("base", "shader", file);
+
+        async::readwrite_guard guard(MaterialCache::m_materialLock);
+        id = MaterialCache::create_material(filepath, fs::view(shader_location)).id;
+        apply_material_conf(*this, "custom", file);
+    }
+
+
 }
 
 

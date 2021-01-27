@@ -177,7 +177,7 @@ namespace legion::core::ecs
         return m_entities.contains(entityId);
     }
 
-    entity_handle EcsRegistry::createEntity(id_type entityId)
+    entity_handle EcsRegistry::createEntity(bool worldChild, id_type entityId)
     {
         OPTICK_EVENT();
         id_type id;
@@ -190,7 +190,7 @@ namespace legion::core::ecs
         }
 
         if (validateEntity(id))
-            return createEntity();
+            return createEntity(worldChild);
 
         entity_data data{};
 
@@ -199,10 +199,13 @@ namespace legion::core::ecs
             m_entityData.emplace(id, std::move(data));
         }
 
-        component_pool<hierarchy>* family = getFamily<hierarchy>();
+        if (worldChild)
         {
-            async::readonly_guard rguard(family->get_lock());
-            family->get_component(world_entity_id).children.insert(id);
+            component_pool<hierarchy>* family = getFamily<hierarchy>();
+            {
+                async::readonly_guard rguard(family->get_lock());
+                family->get_component(world_entity_id).children.insert(id);
+            }
         }
 
         async::readwrite_guard guard(m_entityLock); // No scope needed because we also need read permission in the return line.
@@ -210,6 +213,13 @@ namespace legion::core::ecs
 
         return entity_handle(id);
     }
+
+    entity_handle EcsRegistry::createEntity(id_type entityId, bool worldChild)
+    {
+        return createEntity(worldChild,entityId);
+    }
+
+
 
     void EcsRegistry::destroyEntity(id_type entityId, bool recurse)
     {
@@ -229,6 +239,13 @@ namespace legion::core::ecs
             m_entities.erase(entity); // Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.
         }
 
+        auto children = entity.children();
+        for (entity_handle& child : children.reverse_range())
+            if (recurse)
+                recursiveDestroyEntityInternal(child); // Recursively destroy all children
+            else
+                child.set_parent(invalid_id, false); // Remove parent from children.
+
         entity_data data = {};
 
         {
@@ -243,14 +260,7 @@ namespace legion::core::ecs
             {
                 m_families[componentTypeId]->destroy_component(entityId);
             }
-        }
-
-        auto children = entity.children();
-        for (entity_handle& child : children.reverse_range())
-            if (recurse)
-                recursiveDestroyEntityInternal(child); // Recursively destroy all children
-            else
-                child.set_parent(invalid_id, false); // Remove parent from children.
+        }        
     }
 
     L_NODISCARD entity_handle EcsRegistry::getEntity(id_type entityId)

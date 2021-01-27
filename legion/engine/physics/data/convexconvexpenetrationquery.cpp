@@ -14,26 +14,17 @@ namespace legion::physics
     }
 
     void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform
-        , math::mat4 incTransform)
+        , math::mat4 incTransform, PhysicsCollider* refCollider)
     {
-        bool shouldDebug = false;// manifold.DEBUG_checkID("floor", "problem");
         auto refCollider = isARef ? manifold.colliderA : manifold.colliderB;
         auto incCollider = isARef ? manifold.colliderB : manifold.colliderA;
-
-        //penetration
-        if (shouldDebug)
-        {
-            log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
-        }
-
-        
         float largestDotResult = std::numeric_limits<float>::lowest();
 
         for (auto face : incCollider->GetHalfEdgeFaces())
         {
             math::vec3 worldFaceNormal = incTransform * math::vec4(face->normal, 0);
-            float currentDotResult = math::dot(-normal, worldFaceNormal);
 
+            float currentDotResult = math::dot(-normal, worldFaceNormal);
             if (currentDotResult > largestDotResult)
             {
                 largestDotResult = currentDotResult;

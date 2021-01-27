@@ -1,7 +1,13 @@
 #pragma once
 #include <core/engine/system.hpp>
 #include <core/ecs/component_handle.hpp>
+#include <core/filesystem/filesystem.hpp>
+#include <core/filesystem/view.hpp>
+#include <tinygltf/json.hpp>
 
+/**
+*@file scenemanager.hpp
+*/
 namespace legion::core::scenemanagement
 {
     struct scene;
@@ -9,69 +15,79 @@ namespace legion::core::scenemanagement
     class SceneManager final : public core::System<SceneManager>
     {
     public:
-        int sceneCount;
+        static int sceneCount;
+        static std::string currentScene;
         static std::unordered_map < id_type, std::string> sceneNames;
         static std::unordered_map < id_type, ecs::component_handle <scene > > sceneList;
 
         SceneManager() = default;
 
         /**@brief Initialization of the SceneManager
-          * @note Not used yet.
+          * @note During the setup we attempt to find all .cornflake files and preload them.
           */
         virtual void setup()
         {
-
+            fs::view fileView = fs::view("assets://scenes/");
+            auto files = fileView.ls();
+            if (files == common::valid)
+            {
+                for (auto file : files.decay())
+                {
+                    if (file.get_extension() == common::valid)
+                    {
+                        if (file.get_extension().decay() == ".cornflake")
+                        {
+                            auto fileName = file.get_filename().decay();
+                            log::debug("Added {}",fileName);
+                            sceneNames.emplace(nameHash(fileName), fileName);
+                        }
+                    }
+                }
+            }
         }
 
-        /**@brief Updates the SceneManager.
-         * @note Not used yet
+        /**@brief Creates a scene entity, to store all objects
          */
-        void update()
-        {
-
-        }
+        static ecs::entity_handle create_scene_entity();
 
         /**@brief Creates a scene with given name.
-          * @param name string of the name you wish to set the scene
-          * @returns a bool signifying whether it was successful
+          * @param name The name you wish to set the scene.
+          * @returns bool Signifying whether it was successful.
           */
-        static bool createScene(const std::string& name);
+        static bool create_scene(const std::string& name);
 
         /**@brief Creates a scene with given name.
-          * @param name string of the name you wish to set the scene to
-          * @param ent a specific entity to create a scene from
-          * @returns a bool signifying whether it was successful
+          * @param name The name you wish to set the scene to.
+          * @param ent A specific entity to create a scene from.
+          * @returns bool Signifying whether it was successful.
           */
-        static bool createScene(const std::string& name, ecs::entity_handle& ent);
+        static bool create_scene(const std::string& name, ecs::entity_handle& ent);
 
-        /**@brief Deserializes the scene from the disk
-         * @param name of the file to deserialize
-         * @note Not yet implemented
+        /**@brief Deserializes the scene from the disk.
+         * @param name The name of the file to deserialize.
+         * @returns bool Signifying whether it was successful.
          */
-        static bool loadScene(const std::string& name);
-
-
-        /**@brief Gets a scene
-          * @param name string of the scenes name that you wish to get
-          * @returns the component_handle<scene> for the scene
-          */
-        static ecs::component_handle<scene> getScene(std::string name);
-
-        /**@brief Gets a scene
-         * @param name string of the scenes name that you wish to get
-         * @returns the entity_handle of the scene
-         */
-        static ecs::entity_handle getSceneEntity(std::string name);
-
-
+        static bool load_scene(const std::string& name);
 
         /**@brief Serializes a scene to disk
-          * @param .name of the file to save as, default is the scenes name
-          * @note Not yet implemented
-          */
-        void saveScene()
-        {
+          * @param name string of the name of the scene you wish to save.
+          * @param ent a specific entity to serialize.
+          * @returns bool Signifying whether it was successful.
+         */
+        static bool save_scene(const std::string& name, ecs::entity_handle& ent);
 
-        }
+        /**@brief Gets a scene from the scene list.
+          * @param name The name of the scene that you wish to save.
+          * @returns component_handle<scene> The component handle for the scene component stored in the sceneList.
+          */
+        static ecs::component_handle<scene> get_scene(std::string name);
+
+        /**@brief Gets a scene.
+         * @param name string of the scenes name that you wish to get.
+         * @returns entiyt_handle The entity handle of the scene.
+         */
+        static ecs::entity_handle get_scene_entity(std::string name);
+
+       
     };
 }

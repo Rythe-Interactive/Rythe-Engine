@@ -1,4 +1,5 @@
 #pragma once
+#include <any>
 #include <core/containers/containers.hpp>
 #include <core/filesystem/resource.hpp>
 #include <core/filesystem/view.hpp>
@@ -21,6 +22,7 @@ namespace legion::core::filesystem
         {
             virtual id_type result_type() LEGION_PURE;
         };
+
     }
 
     /**@class resource_converter
@@ -31,9 +33,12 @@ namespace legion::core::filesystem
     template<typename result, typename... Settings>
     struct resource_converter : public detail::resource_converter_base
     {
+
         virtual id_type result_type() override { return typeHash<result>(); }
 
+        virtual common::result_decay_more<result, fs_error> load_default(const basic_resource& resource) LEGION_PURE;
         virtual common::result_decay_more<result, fs_error> load(const basic_resource& resource, Settings&&...) LEGION_PURE;
+
     };
 
     /**@class basic_resource_converter
@@ -41,6 +46,7 @@ namespace legion::core::filesystem
      */
     struct basic_resource_converter final : public resource_converter<basic_resource>
     {
+        common::result_decay_more<basic_resource, fs_error> load_default(const basic_resource& resource) override { return load(resource); }
         virtual common::result_decay_more<basic_resource, fs_error> load(const basic_resource& resource) override { return common::result_decay_more<basic_resource, fs_error>(common::Ok(basic_resource(resource))); }
     };
 
@@ -51,7 +57,7 @@ namespace legion::core::filesystem
     template<typename T>
     struct basic_converter final : public resource_converter<T>
     {
-        virtual common::result_decay_more<T, fs_error> load(const basic_resource& resource) override { return common::result_decay_more<T, fs_error>(common::Ok(from_resource<T>(resource))); }
+        virtual common::result_decay_more<T, fs_error> load(const basic_resource& resource) { return common::result_decay_more<T, fs_error>(common::Ok(from_resource<T>(resource))); }
     };
 
     /**@class AssetImporter
@@ -74,6 +80,7 @@ namespace legion::core::filesystem
             m_converters[nameHash(extension)].push_back(new T());
         }
 
+
         /**@brief Attempt to load an object from a file using the pre-reported converters.
          * @param view filesystem::view to the file to load.
          * @param settings... Settings to pass to the load function of the converter.
@@ -90,11 +97,11 @@ namespace legion::core::filesystem
 
             // Debug log the settings used for loading the files so that you can track down why something got loaded wrong if it did.
             if constexpr (sizeof...(settings) == 0)
-                log::trace("Tried to load asset of type{}", typeName<T>());
+                log::trace("Tried to load asset of type{}", nameOfType<T>());
             else if constexpr (sizeof...(settings) == 1)
-                log::trace("Tried to load asset of type{} with settings of type:{}", typeName<T>(), (std::string(typeName<Settings>()) + ...));
+                log::trace("Tried to load asset of type{} with settings of type:{}", nameOfType<T>(), (std::string(nameOfType<Settings>()) + ...));
             else
-                log::trace("Tried to load asset of type{} with settings of types:{}", typeName<T>(), ((std::string(typeName<Settings>()) + ", ") + ...));
+                log::trace("Tried to load asset of type{} with settings of types:{}", nameOfType<T>(), ((std::string(nameOfType<Settings>()) + ", ") + ...));
 
             // Check if the view is valid to load as a file.
             if (!view.is_valid() || !view.file_info().is_file)
@@ -116,7 +123,7 @@ namespace legion::core::filesystem
                     // Attempt the conversion and return the result.
                     auto loadresult = converter->load(result, std::forward<Settings>(settings)...);
                     if (loadresult == common::valid)
-                        return decay(Ok((T)loadresult));
+                        return decay(Ok(static_cast<T>(loadresult)));
 
                     return decay(Err(loadresult.get_error()));
                 }

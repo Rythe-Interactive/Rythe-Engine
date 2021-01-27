@@ -15,21 +15,16 @@
  */
 namespace legion::core::common {
 
+    inline bool starts_with(const std::string& src, cstring value)
+    {
+        return src.rfind(value,0) == 0;
+    }
+
     inline bool ends_with(const std::string& src, cstring value)
     {
-        auto valueLength = strlen(value);
-        if (src.size() < valueLength)
-            return false;
-
-        std::string_view srcEnd(src.data() + (src.size() - valueLength), valueLength);
-
-        for (int i = 0; i < valueLength; i++)
-        {
-            if (srcEnd[i] != value[i])
-                return false;
-        }
-
-        return true;
+        std::string end (value);
+        if (end.size() > src.size()) return false;
+        return std::equal(end.rbegin(),end.rend(),src.rbegin());
     }
 
     /**@brief Replace each occurrence of [item] in [source] with [value].

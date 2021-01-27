@@ -112,7 +112,7 @@ namespace legion::core::ecs
                 }
                 else if (addHierarchyIfAbsent)
                 {
-                    hierarchy parentData;;
+                    hierarchy parentData;
                     parentData.children.insert(*this);
                     data.parent.add_component<hierarchy>(parentData);
                 }
@@ -196,7 +196,11 @@ namespace legion::core::ecs
         else
             ent = m_registry->getEntity(m_id);
 
+
         oarchive(cereal::make_nvp("Components", components), cereal::make_nvp("Children", children));
+
+
+
         for (auto child : children)
         {
             child.set_parent(m_id);
@@ -244,7 +248,7 @@ namespace legion::core::ecs
     void entity_handle::add_child(id_type childId)
     {
         if (!has_component<hierarchy>())
-            return;
+            m_registry->getEntity(childId).add_component<hierarchy>();
 
         OPTICK_EVENT();
         entity_handle child = m_registry->getEntity(childId);

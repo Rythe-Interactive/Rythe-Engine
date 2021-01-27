@@ -12,7 +12,6 @@ namespace legion::rendering
         mesh_renderer() = default;
         explicit mesh_renderer(const material_handle& src) { material = src; }
         mesh_renderer(const material_handle& src, const model_handle& model) { material = src; m_tempHandle = model; }
-
         static void init(mesh_renderer& src, ecs::entity_handle owner)
         {
             OPTICK_EVENT();
@@ -23,6 +22,17 @@ namespace legion::rendering
         }
 
         material_handle material = invalid_material_handle;
+
+        template <class Archive>
+        void save(Archive& oa)
+        {
+            oa(CEREAL_NVP(material));
+        }
+        template <class Archive>
+        void load(Archive& ia)
+        {
+            ia(CEREAL_NVP(material));
+        }
     };
 
 
@@ -45,15 +55,5 @@ namespace legion::rendering
         {
             return get<mesh_renderer>().read().material;
         }
-
-        template<typename Archive>
-        void serialize(Archive& archive);
     };
-
-    template<typename Archive>
-    void mesh_renderable::serialize(Archive& archive)
-    {
-        OPTICK_EVENT();
-        archive(get_model(), get_material());
-    }
 }

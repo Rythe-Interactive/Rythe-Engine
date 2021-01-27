@@ -692,6 +692,7 @@ namespace legion::rendering
 
         shader shader;
         shader.name = name;
+        shader.path = file.get_virtual_path();
 
         for (auto& [variant, variantState] : state)
         {
@@ -977,6 +978,11 @@ namespace legion::rendering
     std::string shader_handle::get_name() const
     {
         return ShaderCache::get_shader(id)->name;
+    }
+
+    std::string shader_handle::get_path() const
+    {
+        return ShaderCache::get_shader(id)->path;
     }
 
     std::unordered_map<id_type, std::vector<std::tuple<std::string, GLint, GLenum>>> shader_handle::get_uniform_info() const

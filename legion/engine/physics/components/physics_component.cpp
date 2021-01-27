@@ -23,7 +23,7 @@ namespace legion::physics
         collider->ConstructConvexHullWithMesh(meshHandle,shouldDebug);
         //collider->doStep(meshHandle);
 
-        colliders->push_back(collider);
+        colliders.push_back(collider);
 
         calculateNewLocalCenterOfMass();
         //log::debug("collider returned");
@@ -48,7 +48,7 @@ namespace legion::physics
 
         cuboidCollider->CreateBox(cubeParams);
 
-        colliders->push_back(cuboidCollider);
+        colliders.push_back(cuboidCollider);
 
         calculateNewLocalCenterOfMass();
     }

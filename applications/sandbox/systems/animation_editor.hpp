@@ -7,10 +7,14 @@
 
 
 #include "../data/animation.hpp"
+#include <application/input/inputsystem.hpp>
 
+struct copy_key_frame : application::input_action<copy_key_frame>{};
 
 namespace ext
 {
+
+
     using namespace legion;
 
     namespace detail {
@@ -101,6 +105,13 @@ namespace ext
     class AnimationEditor : public System<AnimationEditor>
     {
         ecs::entity_handle m_cubeEntity;
+
+        //this is for copying the camera position and rotation to the current animator values
+        //
+        position m_copiedPosition;
+        rotation m_copiedRotation;
+        bool m_applyCopy = false;
+
         int m_selectedEntry = 0;
         int m_firstFrame = 0;
         detail::AnimationSequencer m_sequencer;
@@ -119,7 +130,7 @@ namespace ext
             //we use _view, thus we need access to the literals namespace
             using namespace filesystem::literals;
 
-            app::window window = m_ecs->world.get_component_handle<app::window>().read();
+            app::window window = world.get_component_handle<app::window>().read();
 
             rendering::model_handle cubeModel;
             rendering::material_handle vertexColorMaterial;
@@ -134,7 +145,7 @@ namespace ext
                 vertexColorMaterial = rendering::MaterialCache::create_material("color shader - Animator", "assets://shaders/texture.shs"_view);
             }
 
-            // create a new entity that we can attach the animation to 
+            // create a new entity that we can attach the animation to
             m_cubeEntity = createEntity();
             //TODO(algo-ryth-mix): In the future this boilerplate code should
             //TODO(cont.)          go in favor of a raycasting system.
@@ -144,7 +155,7 @@ namespace ext
             m_cubeEntity.add_components<rendering::mesh_renderable>(mesh_filter(cubeModel.get_mesh()), rendering::mesh_renderer(vertexColorMaterial));
 
             //create new running & looping animation
-            ext::animation anim{ true };
+            animation anim{ true };
 
             //load animation data from disk
             filesystem::basic_resource res = fs::view("assets://test.anim").get().except([](auto err)
@@ -160,10 +171,31 @@ namespace ext
 
             //add custom gui stage
             rendering::ImGuiStage::addGuiRender<AnimationEditor, &AnimationEditor::onGUI>(this);
+
+            application::InputSystem::createBinding<copy_key_frame>(application::inputmap::method::P);
+            bindToEvent<copy_key_frame,&AnimationEditor::onCopyKeyFrame>();
+
         }
 
+        void onCopyKeyFrame(copy_key_frame* evt)
+        {
+            //get camera
+            static auto cameraQuery = createQuery<rendering::camera>();
+            cameraQuery.queryEntities();
+            if(cameraQuery.size() != 0)
+            {
 
-        void onGUI(application::window&, rendering::camera& cam, const rendering::camera::camera_input& cInput,
+                //copy pos and rot to applycopy
+                auto [posH,rotH,_]= cameraQuery[0].get_component_handles<transform>();
+                m_copiedRotation = rotH.read();
+                m_copiedPosition = posH.read();
+                m_applyCopy = true;
+            }
+
+        }
+
+        void onGUI(application::window&, rendering::camera
+            &cam, const rendering::camera::camera_input& cInput,
             time::span);
 
     public:
