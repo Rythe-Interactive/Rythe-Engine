@@ -98,7 +98,7 @@ namespace legion::physics
         /**@brief Constructs a polyhedron-shaped convex hull that encompasses the given mesh.
         * @param meshHandle - The mesh handle to lock the mesh and the mesh to create a hull from
         */
-        void ConstructConvexHullWithMesh(legion::core::mesh_handle& meshHandle,bool shouldDebug = true)
+        void ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle,bool shouldDebug = true)
         {
             auto meshLockPair = meshHandle.get();
 
