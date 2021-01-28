@@ -44,9 +44,6 @@ namespace legion::physics
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            static time::timer physicsTimer;
-            log::debug("------------------------------------------------");
-            log::debug("{}ms", physicsTimer.restart().milliseconds());
             OPTICK_EVENT();
 
             ecs::component_container<rigidbody> rigidbodies;
