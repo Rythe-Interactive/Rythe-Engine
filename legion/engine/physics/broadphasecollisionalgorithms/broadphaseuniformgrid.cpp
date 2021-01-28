@@ -8,11 +8,22 @@ namespace legion::physics
         std::vector<physics_manifold_precursor>&& manifoldPrecursors)
     {
         OPTICK_EVENT();
+
+        // Check if the amount of empty cells is higher than the threshhold. If it is, clear the cached data
+        if (m_emptyCellDestroyThreshold > 0 && m_emptyCells.size() > m_emptyCellDestroyThreshold)
+        {
+            // This function is called since it clears all data. A few cpu cycles are lost to settings the m_cellsize to itself.
+            setCellSize(m_cellSize);
+        }
+
         for (auto& precursor : manifoldPrecursors)
         {
             OPTICK_EVENT("Processing entity");
 
-            math::vec3 pos = precursor.worldTransform[3].xyz;
+            math::vec3 pos;
+            pos.x = precursor.worldTransform[3].x;
+            pos.y = precursor.worldTransform[3].y;
+            pos.z = precursor.worldTransform[3].z;
             id_type id = precursor.entity;
             if (m_collectedEntities.count(id))
             {
@@ -131,13 +142,6 @@ namespace legion::physics
                 }
 
             }
-        }
-
-        // Check if the amount of empty cells is higher than the threshhold. If it is, clear the cached data
-        if (m_emptyCellDestroyThreshold > 0 && m_emptyCells.size() > m_emptyCellDestroyThreshold)
-        {
-            // This function is called since it clears all data. A few cpu cycles are lost to settings the m_cellsize to itself.
-            setCellSize(m_cellSize);
         }
 
         return m_groupings;
