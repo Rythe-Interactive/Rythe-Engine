@@ -46,8 +46,8 @@ namespace legion::physics
         {
             OPTICK_EVENT();
 
-            static time::timer pt;
-            log::debug("frametime: {}ms", pt.restart().milliseconds());
+            //static time::timer pt;
+            //log::debug("frametime: {}ms", pt.restart().milliseconds());
 
             ecs::component_container<rigidbody> rigidbodies;
             std::vector<byte> hasRigidBodies;
