@@ -229,8 +229,8 @@ namespace legion::physics
                         }
                     }
                 }
-                log::debug("groupings {}", manifoldPrecursorGrouping.size());
-                log::debug("total checks {}", totalChecks);
+                //log::debug("groupings {}", manifoldPrecursorGrouping.size());
+                //log::debug("total checks {}", totalChecks);
             }
 
             //------------------------------------------------ Pre Collision Solve Events --------------------------------------------//

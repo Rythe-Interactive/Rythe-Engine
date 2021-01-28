@@ -24,11 +24,16 @@ namespace legion::physics
 
         /**@brief Collects collider pairs that have a chance of colliding and should be checked in narrow-phase collision detection
          * @param manifoldPrecursors all the physics components
-         * @param manifoldPrecursorGrouping a list-list of colliders that have a chance of colliding and should be checked
+         * @return a list-list of colliders that have a chance of colliding and should be checked
          */
         const std::vector<std::vector<physics_manifold_precursor>>& collectPairs(
             std::vector<physics_manifold_precursor>&& manifoldPrecursors) override;
 
+        /**@brief Collects collider pairs that have a chance of colliding and should be checked in narrow-phase collision detection.
+         * Unlike collectPairs this function ignores all the cached data and reconstructs the grid every time
+         * @param manifoldPrecursors all the physics components
+         * @return a list-list of colliders that have a chance of colliding and should be checked
+         */
         const std::vector<std::vector<physics_manifold_precursor>>& reConstruct(
             std::vector<physics_manifold_precursor>&& manifoldPrecursors);
 
@@ -42,9 +47,9 @@ namespace legion::physics
             m_oldPositions.clear();
             m_groupings.clear();
             m_entityOccupiedCells.clear();
+            m_emptyCells.clear();
 
             m_cellSize = cellSize;
-            m_emptyCells.clear();
         }
 
         void debugDraw() override;

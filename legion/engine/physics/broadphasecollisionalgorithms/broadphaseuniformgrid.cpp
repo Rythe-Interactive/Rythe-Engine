@@ -7,8 +7,8 @@ namespace legion::physics
     const std::vector<std::vector<physics_manifold_precursor>>& BroadphaseUniformGrid::collectPairs(
         std::vector<physics_manifold_precursor>&& manifoldPrecursors)
     {
-        log::debug("Uniform grid!");
-        log::debug("cell size {}", m_cellSize);
+        //log::debug("Uniform grid!");
+        //log::debug("cell size {}", m_cellSize);
         OPTICK_EVENT();
         for (auto& precursor : manifoldPrecursors)
         {
@@ -92,9 +92,9 @@ namespace legion::physics
                             else
                             {
                                 // A new cell is created
+                                cellIndices.emplace(currentCellIndex, m_groupings.size());
                                 m_groupings.emplace_back();
                                 m_groupings.at(m_groupings.size() - 1).push_back(precursor);
-                                cellIndices.emplace(currentCellIndex, m_groupings.size());
 
                                 // Since the cell is new, it will never have existed in the empty cells list
                             }
