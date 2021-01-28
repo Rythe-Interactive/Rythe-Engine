@@ -25,18 +25,21 @@ namespace legion::physics
                 }
                 else
                 {
+                    // The entity moved, so we store its new position
                     m_oldPositions.at(id) = pos;
                 }
             }
             else
             {
-                // A new entity has entered the broadphase
+                // A new entity has entered the broadphase, prepare its data
                 m_collectedEntities.insert(id);
                 m_oldPositions.emplace(id, pos);
                 m_entityOccupiedCells.emplace(id, std::unordered_set<math::ivec3>());
             }
 
+            // Get all the colliders of the entity
             std::vector<legion::physics::PhysicsColliderPtr>& colliders = precursor.physicsComp->colliders;
+            // If the entity has no colliders, we can skip it
             if (colliders.size() == 0) continue;
 
             // Get the biggest AABB collider of this physics component
@@ -47,13 +50,15 @@ namespace legion::physics
             {
                 aabb = PhysicsStatics::CombineAABB(colliders.at(i)->GetMinMaxWorldAABB(), aabb);
             }
+
+            // We get the start and end cell indices for this entity. This way we know which groupings/cells should contain this entity
             math::ivec3 startCellIndex = calculateCellIndex(aabb.first);
             math::ivec3 endCellIndex = calculateCellIndex(aabb.second);
 
             {
                 OPTICK_EVENT("Iterating overlapping cells");
-                math::ivec3 iterationIndex;
 
+                // We store visitedCellIndex since the entities old occupied cells may change and may have to be removed
                 std::unordered_set<math::ivec3> visitedCells;
 
                 for (int x = startCellIndex.x; x <= endCellIndex.x; ++x)
@@ -63,40 +68,46 @@ namespace legion::physics
                         for (int z = startCellIndex.z; z <= endCellIndex.z; ++z)
                         {
                             OPTICK_EVENT("Inserting entity");
+                            // Get current cell index
                             math::ivec3 currentCellIndex = math::ivec3(x, y, z);
+                            // Store cell in visited
                             visitedCells.insert(currentCellIndex);
 
+                            // If the entity already occupies this cell, skip it
                             if (m_entityOccupiedCells.at(id).count(currentCellIndex)) continue;
+
                             // Add this cell to the cells of the entity
                             m_entityOccupiedCells.at(id).insert(currentCellIndex);
 
                             // If the current cell already exist we can push this object into that cell
-                            // otherwise the create the cell
+                            // otherwise the cell is created
                             if (cellIndices.count(currentCellIndex))
                             {
+                                // Cell already exist, push this object into it
                                 m_groupings.at(cellIndices.at(currentCellIndex)).push_back(precursor);
-                                if (m_emptyCells.count(currentCellIndex))
-                                {
-                                    m_emptyCells.erase(currentCellIndex);
-                                }
+
+                                // We do not need to check if the object was already in the set, since the set will do nothing if it wasn't there to be removed
+                                m_emptyCells.erase(currentCellIndex);
                             }
                             else
                             {
-                                cellIndices.emplace(currentCellIndex, m_groupings.size());
-
+                                // A new cell is created
                                 m_groupings.emplace_back();
                                 m_groupings.at(m_groupings.size() - 1).push_back(precursor);
+                                cellIndices.emplace(currentCellIndex, m_groupings.size());
+
+                                // Since the cell is new, it will never have existed in the empty cells list
                             }
-                            ++iterationIndex.z;
                         }
-                        ++iterationIndex.y;
                     }
-                    ++iterationIndex.x;
                 }
 
+                // We keep track of the cells that are to be removed from the occupied cells list of the entity
                 std::vector<math::ivec3> toRemove;
                 for (auto& cellIndex : m_entityOccupiedCells.at(id))
                 {
+                    // If the occupied cell has not been visisted this iteration
+                    // Remove if from groupings
                     if (!visitedCells.count(cellIndex))
                     {
                         int index = cellIndices.at(cellIndex);
@@ -106,13 +117,16 @@ namespace legion::physics
                                 m_groupings.at(cellIndices.at(cellIndex)).end(),
                                 precursor), m_groupings.at(cellIndices.at(cellIndex)).end()
                         );
+                        // If the cell is now empty, store it in the empty cell list
                         if (m_groupings.at(index).size() == 0)
                         {
                             m_emptyCells.insert(cellIndex);
                         }
+                        // Push this cell into the toRemove
                         toRemove.push_back(cellIndex);
                     }
                 }
+                // Remove all the toRemove cells from the entity occupied cells
                 for (auto& item : toRemove)
                 {
                     m_entityOccupiedCells.at(id).erase(item);
@@ -121,7 +135,7 @@ namespace legion::physics
             }
         }
 
-        log::debug("emptycell count: {}", m_emptyCells.size());
+        // Check if the amount of empty cells is higher than the threshhold. If it is, clear the cached data
         if (m_emptyCellDestroyThreshold > 0 && m_emptyCells.size() > m_emptyCellDestroyThreshold)
         {
             //log::debug("Destroying empty cells");
@@ -139,9 +153,9 @@ namespace legion::physics
             //{
             //    m_groupings.erase(m_groupings.begin() + index);
             //}
-            setCellSize(m_cellSize);
-            m_emptyCells.clear();
 
+            // This function is called since it clears all data. A few cpu cycles are lost to settings the m_cellsize to itself.
+            setCellSize(m_cellSize);
         }
 
         return m_groupings;
