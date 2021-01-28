@@ -11,6 +11,7 @@ namespace legion::physics
 
     void Fracturer::HandleFracture(physics_manifold& manifold, bool& manifoldValid,bool isfracturingA)
     {
+        OPTICK_EVENT();
         if (!IsFractureConditionMet()) { return; }
         //log::debug("manifold invalidated");
         manifoldValid = false;
@@ -21,7 +22,7 @@ namespace legion::physics
         //-----------------------------------------------------------------------------------------------------------------------------//
 
         auto collider = isfracturingA ? manifold.colliderA: manifold.colliderB;
-        auto fractureInstigatorEnt = isfracturingA ? manifold.physicsCompA.entity : manifold.physicsCompB.entity;
+        auto fractureInstigatorEnt = isfracturingA ? manifold.entityA : manifold.entityB;
 
         auto [min,max] = collider->GetMinMaxWorldAABB();
 
@@ -57,7 +58,7 @@ namespace legion::physics
 
         for (auto point : VoronoiPoints)
         {
-            debug::user_projectDrawLine(point,
+            debug::drawLine(point,
                 point + math::vec3(0, 0.1f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);
         }
 
@@ -65,10 +66,10 @@ namespace legion::physics
 
         vectorList.pop_back();
 
-        debug::user_projectDrawLine(min,
+        debug::drawLine(min,
             min + math::vec3(0, 0.5f, 0), math::colors::red, 8.0f, FLT_MAX, true);
 
-        debug::user_projectDrawLine(max,
+        debug::drawLine(max,
             max + math::vec3(0, 0.5f, 0), math::colors::blue, 8.0f, FLT_MAX, true);
 
         std::vector<std::vector<math::vec3>> groupedPoints(VoronoiPoints.size());

@@ -59,13 +59,13 @@ void legion::core::HierarchySystem::onPositionBulkModified(events::bulk_componen
 
     size_type count = entities.size();
 
-    static ecs::component_container<position> diffs;
+    ecs::component_container<position> diffs;
     diffs.resize(count);
 
-    static std::vector<bool> hasChildren;
+    std::vector<byte> hasChildren;
     hasChildren.resize(count);
 
-    static std::vector<ecs::entity_set> children;
+    std::vector<ecs::entity_set> children;
     children.resize(count);
 
     m_scheduler->queueJobs(count, [&]()
@@ -108,13 +108,13 @@ void legion::core::HierarchySystem::onRotationBulkModified(events::bulk_componen
 
     size_type count = entities.size();
 
-    static ecs::component_container<rotation> diffs;
+    ecs::component_container<rotation> diffs;
     diffs.resize(count);
 
-    static std::vector<bool> hasChildren;
+    std::vector<byte> hasChildren;
     hasChildren.resize(count);
 
-    static std::vector<ecs::entity_set> children;
+    std::vector<ecs::entity_set> children;
     children.resize(count);
 
     m_scheduler->queueJobs(count, [&]()
@@ -160,13 +160,13 @@ void legion::core::HierarchySystem::onScaleBulkModified(events::bulk_component_m
 
     size_type count = entities.size();
 
-    static ecs::component_container<scale> diffs;
+    ecs::component_container<scale> diffs;
     diffs.resize(count);
 
-    static std::vector<bool> hasChildren;
+    std::vector<byte> hasChildren;
     hasChildren.resize(count);
 
-    static std::vector<ecs::entity_set> children;
+    std::vector<ecs::entity_set> children;
     children.resize(count);
 
     m_scheduler->queueJobs(count, [&]()

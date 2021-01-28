@@ -23,7 +23,7 @@ class GuiTestSystem : public System<GuiTestSystem>
     math::mat4 projection = math::mat4(1.0f);
     math::mat4 model = math::mat4(1.0f);
 
-    bool* showSave = false;
+    bool* showSave = nullptr;
 
     void setup() override
     {

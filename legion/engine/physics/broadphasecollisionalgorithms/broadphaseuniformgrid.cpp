@@ -3,53 +3,57 @@
 
 namespace legion::physics
 {
-    void BroadphaseUniformGrid::collectPairs(std::vector<physics_manifold_precursor>& manifoldPrecursors,
+    void BroadphaseUniformGrid::collectPairs(std::vector<physics_manifold_precursor>&& manifoldPrecursors,
         std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
     {
+        log::debug("Uniform grid!");
+        log::debug("cell size {}", m_cellSize);
+        OPTICK_EVENT();
         std::unordered_map<math::ivec3, int> cellIndices;
         for (auto& precursor : manifoldPrecursors)
         {
-            std::vector<legion::physics::PhysicsColliderPtr> colliders = precursor.physicsComponentHandle.read().colliders;
+            OPTICK_EVENT("Processing entity");
+
+            std::vector<legion::physics::PhysicsColliderPtr>& colliders = precursor.physicsComp->colliders;
             if (colliders.size() == 0) continue;
 
             // Get the biggest AABB collider of this physics component
             // If it has one collider we can simply retrieve it
             // Oherwise we have to combine the bounds of all its colliders
-            std::tuple<math::vec3, math::vec3> aabb = colliders.at(0)->GetMinMaxWorldAABB();
+            std::pair<math::vec3, math::vec3> aabb = colliders.at(0)->GetMinMaxWorldAABB();
             for (int i = 1; i < colliders.size(); ++i)
             {
                 aabb = PhysicsStatics::CombineAABB(colliders.at(i)->GetMinMaxWorldAABB(), aabb);
             }
-            math::ivec3 startCellIndex = calculateCellIndex(std::get<0>(aabb));
-            math::ivec3 endCellIndex = calculateCellIndex(std::get<1>(aabb));
-            for (int x = startCellIndex.x; x <= endCellIndex.x; ++x)
+            math::ivec3 startCellIndex = calculateCellIndex(aabb.first);
+            math::ivec3 endCellIndex = calculateCellIndex(aabb.second);
+
             {
-                for (int y = startCellIndex.y; y <= endCellIndex.y; ++y)
+                OPTICK_EVENT("Iterating overlapping cells");
+
+                for (int x = startCellIndex.x; x <= endCellIndex.x; ++x)
                 {
-                    for (int z = startCellIndex.z; z <= endCellIndex.z; ++z)
+                    for (int y = startCellIndex.y; y <= endCellIndex.y; ++y)
                     {
-                        math::ivec3 currentCellIndex = math::ivec3(x, y, z);
-                        if (cellIndices.find(currentCellIndex) != cellIndices.end())
+                        for (int z = startCellIndex.z; z <= endCellIndex.z; ++z)
                         {
-                            manifoldPrecursorGrouping.at(cellIndices.at(currentCellIndex)).push_back(precursor);
-                        }
-                        else
-                        {
-                            cellIndices.emplace(currentCellIndex, manifoldPrecursorGrouping.size());
-                            manifoldPrecursorGrouping.push_back(std::vector<physics_manifold_precursor>());
-                            manifoldPrecursorGrouping.at(manifoldPrecursorGrouping.size() - 1).push_back(precursor);
+                            OPTICK_EVENT("Inserting entity");
+                            math::ivec3 currentCellIndex = math::ivec3(x, y, z);
+                            if (cellIndices.count(currentCellIndex))
+                            {
+                                manifoldPrecursorGrouping.at(cellIndices.at(currentCellIndex)).push_back(precursor);
+                            }
+                            else
+                            {
+                                cellIndices.emplace(currentCellIndex, manifoldPrecursorGrouping.size());
+                                manifoldPrecursorGrouping.emplace_back();
+                                manifoldPrecursorGrouping.at(manifoldPrecursorGrouping.size() - 1).push_back(precursor);
+                            }
                         }
                     }
                 }
             }
         }
-
-        /*for (auto& [index, precursorIndex] : cellIndices )
-        {
-            int childCount = manifoldPrecursorGrouping.at(precursorIndex).size();
-
-            debug::drawCube(index, index + m_cellSize, childCount > 1 ? math::colors::red:math::colors::blue, 5.0f);
-        }*/
     }
 
     math::ivec3 BroadphaseUniformGrid::calculateCellIndex(const math::vec3 point)
