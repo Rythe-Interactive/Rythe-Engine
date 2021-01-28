@@ -60,7 +60,7 @@ namespace legion::physics
         return currentMaximumSupportPoint;
     }
 
-    std::tuple< math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromPhysicsComponentWithTransform
+    std::pair< math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromPhysicsComponentWithTransform
     (ecs::component_handle<physicsComponent> physicsComponentToUse,const math::mat4& transform)
     {
         math::vec3 min, max;
@@ -87,7 +87,7 @@ namespace legion::physics
         ////get backward
 
 
-        return std::make_tuple(min,max);
+        return std::make_pair(min,max);
     }
 
     float PhysicsStatics::GetPhysicsComponentSupportPointAtDirection(math::vec3 direction, physicsComponent& physicsComponentToUse)
@@ -116,7 +116,7 @@ namespace legion::physics
         return currentMaximumSupportPoint;
     }
 
-    std::tuple<math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromVertices(const std::vector<math::vec3>& vertices)
+    std::pair<math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromVertices(const std::vector<math::vec3>& vertices)
     {
         math::vec3 min, max;
 
@@ -136,10 +136,10 @@ namespace legion::physics
         ////backward
         //min.z = GetSupportPoint(vertices, math::vec3(0, 0, -1));
 
-        return std::make_tuple(min,max);
+        return std::make_pair(min,max);
     }
 
-    std::tuple<math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices, const math::mat4& transform)
+    std::pair<math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices, const math::mat4& transform)
     {
         math::vec3 min, max;
         math::vec3 worldPos = transform[3];
@@ -177,15 +177,15 @@ namespace legion::physics
 
       
 
-        return std::make_tuple(min, max);
+        return std::make_pair(min, max);
     }
 
-    std::tuple<math::vec3, math::vec3> PhysicsStatics::CombineAABB(const std::tuple<math::vec3, math::vec3>& first, const std::tuple<math::vec3, math::vec3>& second)
+    std::pair<math::vec3, math::vec3> PhysicsStatics::CombineAABB(const std::pair<math::vec3, math::vec3>& first, const std::pair<math::vec3, math::vec3>& second)
     {
-        math::vec3 firstLow = std::get<0>(first);
-        math::vec3 firstHigh = std::get<1>(first);
-        math::vec3 secondLow = std::get<0>(second);
-        math::vec3 secondHigh = std::get<1>(second);
+        auto& firstLow = first.first;
+        auto& firstHigh = first.second;
+        auto& secondLow = second.first;
+        auto& secondHigh = second.second;
         math::vec3 lowBounds = secondLow;
         math::vec3 highBounds = secondHigh;
         if (firstLow.x < secondLow.x)   lowBounds.x    = firstLow.x;
@@ -195,7 +195,7 @@ namespace legion::physics
         if (firstHigh.y > secondHigh.y) highBounds.y   = firstHigh.y;
         if (firstHigh.z > secondHigh.z) highBounds.z   = firstHigh.z;
 
-        return std::make_tuple(lowBounds, highBounds);
+        return std::make_pair(lowBounds, highBounds);
     }
 
 };

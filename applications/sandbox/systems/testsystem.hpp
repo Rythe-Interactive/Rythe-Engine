@@ -1080,7 +1080,7 @@ public:
 
     void testPhysicsEvent(physics::trigger_event* evnt)
     {
-        log::debug("received trigger event {}", evnt->manifold.isColliding);
+        log::debug("received trigger event {}", evnt->manifold->isColliding);
     }
 
     void setupPhysicsCDUnitTest(rendering::model_handle cubeH, rendering::material_handle wireframeH)
