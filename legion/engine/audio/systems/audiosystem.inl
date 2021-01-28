@@ -50,7 +50,7 @@ namespace legion::audio
 
         sourceQuery = createQuery<audio_source>();
 
-        createProcess<&AudioSystem::update>("Audio");
+        createProcess<&AudioSystem::update>("Update");
         bindToEvent<events::component_creation<audio_source>, &AudioSystem::onAudioSourceComponentCreate>();
         bindToEvent<events::component_destruction<audio_source>, &AudioSystem::onAudioSourceComponentDestroy>();
         bindToEvent<events::component_creation<audio_listener>, &AudioSystem::onAudioListenerComponentCreate>();

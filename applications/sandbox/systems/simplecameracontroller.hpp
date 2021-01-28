@@ -3,6 +3,7 @@
 #include <audio/audio.hpp>
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
+#include "../data/crosshair.hpp"
 
 using namespace legion;
 
@@ -31,6 +32,8 @@ public:
 
     virtual void setup()
     {
+        Crosshair::setScale(math::vec2(1.5f));
+        gfx::PostProcessingStage::addEffect<Crosshair>(-100);
 #pragma region Input binding
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
@@ -67,6 +70,10 @@ public:
 
         {
             app::context_guard guard(window);
+            Crosshair::setTexture(gfx::TextureCache::create_texture("assets://textures/crosshair.png"_view, {
+        gfx::texture_type::two_dimensional, channel_format::eight_bit, gfx::texture_format::rgba,
+        gfx::texture_components::rgba, true, true, gfx::texture_mipmap::linear, gfx::texture_mipmap::linear,
+        gfx::texture_wrap::edge_clamp, gfx::texture_wrap::edge_clamp, gfx::texture_wrap::edge_clamp }));
             setupCameraEntity();
         }
 
