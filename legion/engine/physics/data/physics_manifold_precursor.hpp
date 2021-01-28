@@ -21,6 +21,11 @@ namespace legion::physics
         {
 
         }
+
+        bool operator==(const physics_manifold_precursor& rhs)
+        {
+            return entity == rhs.entity;
+        }
     };
 
 }
