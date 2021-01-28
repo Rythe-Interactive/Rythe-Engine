@@ -95,7 +95,7 @@ public:
             {
                 colliderEnt = createEntity();
                 colliderEnt.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
-                colliderEnt.add_components<transform>(position(0,1.0f, 0), rotation(), scale(1));
+                colliderEnt.add_components<transform>(position(0, 5.0f, 0), rotation(), scale(1));
                 auto physH = colliderEnt.add_component<physics::physicsComponent>();
                 auto p = physH.read();
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
@@ -106,7 +106,7 @@ public:
             {
                 auto ent = createEntity();
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
-                ent.add_components<transform>(position(0, 3.0f, 0), rotation(), scale(1));
+                ent.add_components<transform>(position(0, 7.0f, 0), rotation(), scale(1));
                 auto physH = ent.add_component<physics::physicsComponent>();
                 auto p = physH.read();
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
@@ -117,7 +117,7 @@ public:
             {
                 auto ent = createEntity();
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
-                ent.add_components<transform>(position(0, 5.0f, 0), rotation(), scale(1));
+                ent.add_components<transform>(position(0, 9.0f, 0), rotation(), scale(1));
                 physics::physicsComponent p;
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 ent.add_component(p);
@@ -145,6 +145,8 @@ public:
 
     void update(time::span deltaTime)
     {
+        //physics::PhysicsSystem::drawBroadPhase();
+
         auto [posH, rotH, scaleH] = physicsEnt.get_component_handles<transform>();
 
         if (!isUpdating)
