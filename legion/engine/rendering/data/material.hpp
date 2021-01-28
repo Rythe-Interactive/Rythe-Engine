@@ -610,7 +610,6 @@ namespace legion::rendering
                 if(path.empty())
                 {
                     bob.pop_state();
-                    __debugbreak();
                     continue;
                 }
                 bob.value(path).finish_entry();
