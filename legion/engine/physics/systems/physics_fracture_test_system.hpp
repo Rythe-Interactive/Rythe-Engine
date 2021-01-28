@@ -1,7 +1,7 @@
 #pragma once
 #include <core/core.hpp>
 #include <rendering/components/renderable.hpp>
-
+#include <physics/cube_collider_params.hpp>
 using namespace legion;
 
 struct extendedPhysicsContinue : public app::input_action<extendedPhysicsContinue> {};
@@ -20,6 +20,11 @@ namespace legion::physics
 
     private:
 
+        void CreateElongatedFloor(math::vec3 position,math::quat rot, math::vec3 scale);
+
+        void CreateSplitTestBox(physics::cube_collider_params cubeParams, math::vec3 position,
+            math::quat rotation, bool isFracturable);
+
         void OnSplit(physics_split_test* action);
 
         void meshSplittingTest(rendering::model_handle planeH, rendering::model_handle cubeH
@@ -27,6 +32,8 @@ namespace legion::physics
 
         void collisionResolutionTest(rendering::model_handle cubeH,
             rendering::material_handle wireframeH);
+
+        void numericalRobustnessTest();
 
         void extendedContinuePhysics(extendedPhysicsContinue * action);
 

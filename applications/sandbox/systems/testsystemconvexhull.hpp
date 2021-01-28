@@ -9,9 +9,10 @@
 #include <rendering/components/renderable.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/components/fracturer.hpp>
-
+#include <physics/systems/physicssystem.hpp>
 #include <rendering/components/particle_emitter.hpp>
 #include <physics/halfedgeedge.hpp>
+
 using namespace legion;
 
 struct physics_step : public app::input_action<physics_step> {};
@@ -39,7 +40,7 @@ public:
 
     virtual void setup()
     {
-        physics::constants::gravity = math::vec3::zero;
+        //physics::constants::gravity = math::vec3::zero;
 
         app::InputSystem::createBinding<physics_step>(app::inputmap::method::ENTER);
         app::InputSystem::createBinding<collider_move>(app::inputmap::method::LEFT, -1);
@@ -92,7 +93,7 @@ public:
                 rbH.write(rb);
             }*/
 
-            {
+           /* {
                 colliderEnt = createEntity();
                 colliderEnt.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
                 colliderEnt.add_components<transform>(position(0,1.0f, 0), rotation(), scale(1));
@@ -122,9 +123,10 @@ public:
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 ent.add_component(p);
                 ent.add_component<physics::rigidbody>();
-            }
+            }*/
 
-#if 1
+
+#if 0
             for (int i = 0; i < 1000; ++i)
             {
                 auto ent = createEntity();
@@ -145,6 +147,7 @@ public:
 
     void update(time::span deltaTime)
     {
+        drawPhysicsColliders();
         auto [posH, rotH, scaleH] = physicsEnt.get_component_handles<transform>();
 
         if (!isUpdating)
@@ -166,6 +169,7 @@ public:
     {
         if (action->value)
         {
+           
             physics::PhysicsSystem::IsPaused = !physics::PhysicsSystem::IsPaused;
         }
         /*else
@@ -261,10 +265,10 @@ public:
                         //face->forEachEdge(drawFunc);
                         physics::HalfEdgeEdge* initialEdge = face->startEdge;
                         physics::HalfEdgeEdge* currentEdge = face->startEdge;
-
+                        math::vec3 worldNormal = (localTransform * math::vec4(face->normal, 0));
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
-                        math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0))) * 0.1f;
-                        
+                        math::vec3 faceEnd = faceStart + worldNormal * 0.1f;
+               
                         //debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 2.0f);
 
                         if (!currentEdge) { return; }

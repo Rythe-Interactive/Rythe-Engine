@@ -152,104 +152,8 @@ namespace legion::physics
          */
         static bool FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB,
             const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
-            math::vec3& seperatingAxisFound, float& maximumSeperation)
-        {
-            float currentMinimumSeperation = std::numeric_limits<float>::max();
-
-            math::vec3 centroidDir = transformA * math::vec4(convexA->GetLocalCentroid(), 0);
-            math::vec3 positionA = math::vec3(transformA[3]) + centroidDir;
-
-            for (const auto faceA : convexA->GetHalfEdgeFaces())
-            {
-                //----------------- Get all edges of faceA ------------//
-                std::vector<HalfEdgeEdge*> convexAHalfEdges;
-
-                auto lambda = [&convexAHalfEdges](HalfEdgeEdge* edge)
-                {
-                    convexAHalfEdges.push_back(edge);
-                };
-
-                faceA->forEachEdge(lambda);
-
-                for (const auto faceB : convexB->GetHalfEdgeFaces())
-                {
-                    //----------------- Get all edges of faceB ------------//
-                    std::vector<HalfEdgeEdge*> convexBHalfEdges;
-
-                    auto lambda = [&convexBHalfEdges](HalfEdgeEdge* edge)
-                    {
-                        convexBHalfEdges.push_back(edge);
-                    };
-
-                    faceB->forEachEdge(lambda);
+            math::vec3& seperatingAxisFound, float& maximumSeperation, bool shouldDebug = false);
       
-                    for (HalfEdgeEdge* edgeA : convexAHalfEdges)
-                    {
-                        for (HalfEdgeEdge* edgeB : convexBHalfEdges)
-                        {
-                            //if the given edges creates a minkowski face
-                            if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
-                            {
-                                //get world edge direction
-                                math::vec3 edgeADirection = transformA * math::vec4(edgeA->nextEdge->edgePosition, 1) - 
-                                    transformA * math::vec4(edgeA->edgePosition, 1);
-
-
-                                math::vec3 edgeBDirection = transformB * math::vec4(edgeB->nextEdge->edgePosition, 1) -
-                                    transformB * math::vec4(edgeB->edgePosition, 1);
-
-                                edgeADirection = math::normalize(edgeADirection);
-                                edgeBDirection = math::normalize(edgeBDirection);
-
-                                //get the seperating axis
-                                math::vec3 seperatingAxis = math::cross(edgeADirection, edgeBDirection);
-
-                                if (math::epsilonEqual(math::length(seperatingAxis), 0.0f, math::epsilon<float>()))
-                                {
-                                    continue;
-                                }
-
-                                seperatingAxis = math::normalize(seperatingAxis);
-
-                                //get world edge position
-                                math::vec3 edgeAtransformedPosition = transformA * math::vec4(edgeA->edgePosition, 1);
-                                math::vec3 edgeBtransformedPosition = transformB * math::vec4(edgeB->edgePosition, 1);
-
-                                //check if its pointing in the right direction 
-                                if (math::dot(seperatingAxis, edgeAtransformedPosition - positionA) < 0)
-                                {
-                                    seperatingAxis = -seperatingAxis;
-                                }
-
-                                //check if given edges create a seperating axis
-                                float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
-                                //log::debug("distance {} , currentMinimumSeperation {}", distance, currentMinimumSeperation);
-                                if (distance < currentMinimumSeperation)
-                                {                                 
-                                    refEdge.ptr = edgeA;
-                                    incEdge.ptr = edgeB;
-
-                                    seperatingAxisFound = seperatingAxis;
-                                    currentMinimumSeperation = distance;
-                                }
-                                //log::debug("BUILT MINKOWSKI");
-                            }
-                            else
-                            {
-                                //log::debug("NOT BUILT");
-                            }
-                        }
-                    }
-                }
-            }
-            /*assert(refEdge.ptr);
-            assert(incEdge.ptr);*/
-            //log::debug("a id  {}  b id {} combination {} ", std::get<0>(ids), std::get<1>(ids), std::get<2>(ids));
-            //refEdge.ptr->DEBUG_drawEdge(transformA, math::colors::red);
-            //incEdge.ptr->DEBUG_drawEdge(transformB, math::colors::red);
-            maximumSeperation = currentMinimumSeperation;
-            return currentMinimumSeperation > 0.0f;
-        }
 
         static bool DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,
              float& maximumSeperation);
@@ -623,7 +527,7 @@ namespace legion::physics
             math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
 
             return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2
-                , transformedEdgeDirectionA, transformedEdgeDirectionB);
+                , transformedEdgeDirectionA, -transformedEdgeDirectionB);
         }
 
         /** @brief Given 2 arcs, one that starts from transformedA1 and ends at transformedA2 and another arc

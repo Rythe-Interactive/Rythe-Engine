@@ -121,7 +121,7 @@ namespace legion::physics
 
         //draw impact sphere
 
-        debug::user_projectDrawLine
+      /*  debug::user_projectDrawLine
         (impactPoint, impactPoint + math::vec3(0, impactRadius, 0), math::colors::blue, 3.0f, FLT_MAX, true);
         debug::user_projectDrawLine
         (impactPoint, impactPoint + math::vec3(0, -impactRadius, 0), math::colors::blue, 3.0f, FLT_MAX, true);
@@ -134,7 +134,7 @@ namespace legion::physics
         debug::user_projectDrawLine
         (impactPoint, impactPoint + math::vec3(0, 0, impactRadius), math::colors::blue, 3.0f, FLT_MAX, true);
         debug::user_projectDrawLine
-        (impactPoint, impactPoint + math::vec3(0, 0, -impactRadius), math::colors::blue, 3.0f, FLT_MAX, true);
+        (impactPoint, impactPoint + math::vec3(0, 0, -impactRadius), math::colors::blue, 3.0f, FLT_MAX, true);*/
 
 
 
@@ -145,13 +145,10 @@ namespace legion::physics
             auto physicsComp = physicsCompHandle.read();
 
             auto meshFilter = ent.read_component<mesh_filter>();
-
-            auto vertices = meshFilter.get().second.vertices;
-
-            //log::debug("cch");
             bool debug = false;
             //log::debug("debug {} ", debug);
             auto convexCollider = physicsComp.ConstructConvexHull(meshFilter, debug);
+            physicsCompHandle.write(physicsComp);
 
             auto posHandle = ent.get_component_handle<position>();
             /* debug::user_projectDrawLine(posHandle.read(),
@@ -174,7 +171,7 @@ namespace legion::physics
             colliderIter++;
         }
 
-        //registry->destroyEntity(fractureInstigatorEnt);
+        registry->destroyEntity(fracturedEnt);
 
         //log::debug("all fragments have convex hulls");
         //for each pair list
@@ -295,7 +292,7 @@ namespace legion::physics
 
                 if (manifold.isColliding)
                 {
-                    if (fractureID < 9) //2
+                    if (fractureID < 999) //2
                     {
                         //log::debug("-> Collision Found");
 
@@ -322,15 +319,15 @@ namespace legion::physics
 
                         meshToColliderPairing.meshSplitterPairing.write(splitter);
 
-                        //if (fractureID == 1)
-                        //{
-                        //    auto ent = entitiesGenerated.back();
-                        //    auto idH = ent.add_component<identifier>();
-                        //    auto id = idH.read();
-                        //    id.id = "problem";
-                        //    idH.write(id);
+                        if (fractureID == 0)
+                        {
+                            auto ent = entitiesGenerated.back();
+                            auto idH = ent.add_component<identifier>();
+                            auto id = idH.read();
+                            id.id = "problem";
+                            idH.write(id);
 
-                        //}
+                        }
 
 
                     }

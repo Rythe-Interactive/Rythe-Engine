@@ -21,9 +21,6 @@ namespace legion::physics
         //------------------- The contact points between 2 edges are the closest points between the 2 edges --------------------//
         //log::debug("EdgePenetrationQuery::populateContactList");
 
-
-        auto refCollider = manifold.penetrationInformation->isARef ? manifold.colliderA : manifold.colliderB;
-
         math::vec3 p1 = refTransform * math::vec4(refEdge->edgePosition, 1);
         math::vec3 p2 = refTransform * math::vec4(refEdge->nextEdge->edgePosition, 1);
 

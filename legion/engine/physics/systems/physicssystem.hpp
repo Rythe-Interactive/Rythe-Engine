@@ -33,19 +33,13 @@ namespace legion::physics
 
         //TODO move implementation to a seperate cpp file
 
-        virtual void setup()
-        {
-            createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
-
-            manifoldPrecursorQuery = createQuery<position, rotation, scale, physicsComponent>();
-
-            m_broadPhase = std::make_unique<BroadphaseBruteforce>();
-        }
+        virtual void setup();
+     
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
             static time::timer physicsTimer;
-            log::debug("{}ms", physicsTimer.restart().milliseconds());
+            //log::debug("{}ms", physicsTimer.restart().milliseconds());
             OPTICK_EVENT();
 
             ecs::component_container<rigidbody> rigidbodies;
@@ -223,8 +217,8 @@ namespace legion::physics
                         }
                     }
                 }
-                log::debug("groupings {}", manifoldPrecursorGrouping.size());
-                log::debug("total checks {}", totalChecks);
+                //log::debug("groupings {}", manifoldPrecursorGrouping.size());
+                //log::debug("total checks {}", totalChecks);
             }
 
             //------------------------------------------------ Pre Collision Solve Events --------------------------------------------//

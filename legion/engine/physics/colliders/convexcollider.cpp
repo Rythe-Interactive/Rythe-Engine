@@ -11,7 +11,7 @@ namespace legion::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
-        bool shouldDebug = false;// manifold.DEBUG_checkID("problem", "floor");
+        bool shouldDebug = manifold.DEBUG_checkID("problem","floor");
         OPTICK_EVENT();
         // Middle-phase collision detection
         // Do AABB collision to check whether collision is possible
@@ -59,12 +59,8 @@ namespace legion::physics
             return;
         }
 
-        //if (shouldDebug)
-        //{
-        //    BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 5.0f);
-        //}
-        //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::blue, 10.0f);
-        //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 10.0f);
+
+   
 
         PointerEncapsulator< HalfEdgeEdge> edgeRef;
         PointerEncapsulator< HalfEdgeEdge> edgeInc;
@@ -73,12 +69,19 @@ namespace legion::physics
         float aToBEdgeSeperation;
         //log::debug("Edge Check");
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformB, manifold.transformA,
-            edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation) || !edgeRef.ptr)
+            edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation, shouldDebug) || !edgeRef.ptr)
         {
-            //log::debug("aToBEdgeSeperation {} " , aToBEdgeSeperation);
+            //
             manifold.isColliding = false;
             return;
         }
+
+        //if (shouldDebug)
+        //{
+        //    log::debug("-> collision detected for debug ");
+        //    ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::blue, 5.0f);
+        //    BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 5.0f);
+        //}
 
       
        /* ConvexConvexCollisionInfo convexCollisionInfo;
@@ -90,7 +93,7 @@ namespace legion::physics
         {
             return;
         }*/
-
+  
     
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
 
@@ -137,6 +140,10 @@ namespace legion::physics
             manifold.penetrationInformation = std::move(abEdgePenetrationQuery);
         }
 
+        if (shouldDebug)
+        {
+            //log::debug("manifold.penetrationInformation chosen {} ", manifold.penetrationInformation->debugID);
+        }
         manifold.isColliding = true;
 
         //keeping this here so i can copy pasta when i need it again

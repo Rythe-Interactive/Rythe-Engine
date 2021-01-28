@@ -14,7 +14,7 @@ namespace legion::physics
         void collectPairs(std::vector<physics_manifold_precursor>&& manifoldPrecursors,
             std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping) override
         {
-            log::debug("Brute force!");
+            //log::debug("Brute force!");
             manifoldPrecursorGrouping.emplace_back(std::move(manifoldPrecursors));
         }
     };

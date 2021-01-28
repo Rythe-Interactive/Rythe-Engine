@@ -8,12 +8,12 @@ namespace legion::physics
     {
         localCenterOfMass = math::vec3::zero;
 
-        for (auto collider : *colliders)
+        for (auto collider : colliders)
         {
             localCenterOfMass += collider->GetLocalCentroid();
         }
 
-        localCenterOfMass /= static_cast<float>(colliders->size());
+        localCenterOfMass /= static_cast<float>(colliders.size());
     }
 
     std::shared_ptr<ConvexCollider> physicsComponent::ConstructConvexHull(legion::core::mesh_handle& meshHandle, bool shouldDebug )

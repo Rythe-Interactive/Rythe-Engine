@@ -39,8 +39,8 @@ namespace legion::physics
 
         void DEBUG_checkIDAndBreak(std::string firstID,std::string secondID) const
         {
-            auto idHA = physicsCompA.entity.get_component_handle<identifier>();
-            auto idHB = physicsCompB.entity.get_component_handle<identifier>();
+            auto idHA = entityA.get_component_handle<identifier>();
+            auto idHB = entityB.get_component_handle<identifier>();
 
             if (idHA && idHB)
             {
@@ -76,8 +76,8 @@ namespace legion::physics
 
         void GetPairID(std::string& str1, std::string& str2) const
         {
-            auto idHA = physicsCompA.entity.get_component_handle<identifier>();
-            auto idHB = physicsCompB.entity.get_component_handle<identifier>();
+            auto idHA = entityA.get_component_handle<identifier>();
+            auto idHB = entityB.get_component_handle<identifier>();
 
             str1 = "" ;
             str2 = "" ;

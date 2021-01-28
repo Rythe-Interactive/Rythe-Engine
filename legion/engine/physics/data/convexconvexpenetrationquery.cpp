@@ -16,7 +16,7 @@ namespace legion::physics
     void ConvexConvexPenetrationQuery::populateContactList(physics_manifold& manifold, math::mat4& refTransform
         , math::mat4 incTransform, PhysicsCollider* refCollider)
     {
-        auto refCollider = isARef ? manifold.colliderA : manifold.colliderB;
+        
         auto incCollider = isARef ? manifold.colliderB : manifold.colliderA;
         float largestDotResult = std::numeric_limits<float>::lowest();
 
@@ -32,6 +32,11 @@ namespace legion::physics
             }
         }
 
+        if (manifold.DEBUG_checkID("floor", "problem"))
+        {
+            //incFace->DEBUG_DrawFace(incTransform, math::colors::magenta, 5.0f);
+        }
+  
 
         //------------------------------- get all world vertex positions in incFace -------------------------------------------------//
         std::vector<ContactVertex> outputContactPoints;
@@ -51,7 +56,7 @@ namespace legion::physics
 
 
         //------------------------------- clip vertices with faces that are the neighbors of refFace  ---------------------------------//
-        auto clipNeigboringFaceWithOutput = [&refTransform,&outputContactPoints,shouldDebug](HalfEdgeEdge* edge)
+        auto clipNeigboringFaceWithOutput = [&refTransform,&outputContactPoints](HalfEdgeEdge* edge)
         {
             HalfEdgeFace* neighborFace = edge->pairingEdge->face;
             math::vec3 planePosition = refTransform * math::vec4(neighborFace->centroid, 1);
