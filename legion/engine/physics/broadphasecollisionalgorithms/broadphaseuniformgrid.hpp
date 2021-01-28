@@ -12,7 +12,7 @@ namespace legion::physics
     class BroadphaseUniformGrid : public BroadPhaseCollisionAlgorithm
     {
     public:
-        BroadphaseUniformGrid(math::ivec3 cellSize) : m_cellSize(cellSize)
+        BroadphaseUniformGrid(math::ivec3 cellSize, size_type emptyCellDestroyThreshold = 0) : m_cellSize(cellSize), m_emptyCellDestroyThreshold(emptyCellDestroyThreshold)
         {
         }
 
@@ -38,12 +38,14 @@ namespace legion::physics
             m_entityOccupiedCells.clear();
 
             m_cellSize = cellSize;
+            m_emptyCells.clear();
         }
 
         void debugDraw() override;
 
     private:
         math::ivec3 m_cellSize;
+        size_type m_emptyCellDestroyThreshold;
 
         /**@brief Calculates a cell index from a point. i.e. calculates in which cell in the uniform grid a point will be. 
          */
@@ -53,5 +55,6 @@ namespace legion::physics
         std::unordered_set<id_type> m_collectedEntities;
         std::unordered_map<id_type, math::vec3> m_oldPositions;
         std::unordered_map<id_type, std::unordered_set<math::ivec3>> m_entityOccupiedCells;
+        std::unordered_set<math::ivec3> m_emptyCells;
     };
 }

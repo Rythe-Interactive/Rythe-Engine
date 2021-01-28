@@ -1,15 +1,12 @@
 #include <physics/broadphasecollisionalgorithms/broadphaseuniformgrid.hpp>
 #include <physics/physics_contact.hpp>
 
+
 namespace legion::physics
 {
     const std::vector<std::vector<physics_manifold_precursor>>& BroadphaseUniformGrid::collectPairs(
         std::vector<physics_manifold_precursor>&& manifoldPrecursors)
     {
-        // TO DO
-        // NOT CLEAR DATA BY CALLING SETCELLSIZE
-        // AND MAKE SURE THE PHYSICS DOES NOT BREAK
-        //setCellSize(m_cellSize);
         log::debug("Uniform grid!");
         log::debug("cell size {}", m_cellSize);
         OPTICK_EVENT();
@@ -78,6 +75,10 @@ namespace legion::physics
                             if (cellIndices.count(currentCellIndex))
                             {
                                 m_groupings.at(cellIndices.at(currentCellIndex)).push_back(precursor);
+                                if (m_emptyCells.count(currentCellIndex))
+                                {
+                                    m_emptyCells.erase(currentCellIndex);
+                                }
                             }
                             else
                             {
@@ -98,12 +99,17 @@ namespace legion::physics
                 {
                     if (!visitedCells.count(cellIndex))
                     {
-                        m_groupings.at(cellIndices.at(cellIndex)).erase(
+                        int index = cellIndices.at(cellIndex);
+                        m_groupings.at(index).erase(
                             std::remove(
                                 m_groupings.at(cellIndices.at(cellIndex)).begin(),
                                 m_groupings.at(cellIndices.at(cellIndex)).end(),
                                 precursor), m_groupings.at(cellIndices.at(cellIndex)).end()
                         );
+                        if (m_groupings.at(index).size() == 0)
+                        {
+                            m_emptyCells.insert(cellIndex);
+                        }
                         toRemove.push_back(cellIndex);
                     }
                 }
@@ -114,6 +120,30 @@ namespace legion::physics
 
             }
         }
+
+        log::debug("emptycell count: {}", m_emptyCells.size());
+        if (m_emptyCellDestroyThreshold > 0 && m_emptyCells.size() > m_emptyCellDestroyThreshold)
+        {
+            //log::debug("Destroying empty cells");
+            //// There are too many empty cells
+            //// delete some cells
+            //std::vector<size_t> toRemove;
+            //for (auto cell : m_emptyCells)
+            //{
+            //    size_t index = cellIndices.at(cell);
+            //    cellIndices.erase(cell);
+            //    toRemove.push_back(index);
+            //    log::debug("Removing: {}", cell);
+            //}
+            //for (auto index : pair_range<std::set<size_t>::reverse_iterator>(toRemove.rbegin(), toRemove.rend()))
+            //{
+            //    m_groupings.erase(m_groupings.begin() + index);
+            //}
+            setCellSize(m_cellSize);
+            m_emptyCells.clear();
+
+        }
+
         return m_groupings;
     }
 

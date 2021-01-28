@@ -196,7 +196,7 @@ public:
     {
         if (action->value)
         {
-            physics::PhysicsSystem::setBroadPhaseCollisionDetection<physics::BroadphaseUniformGrid>(math::ivec3(2, 2, 2));
+            physics::PhysicsSystem::setBroadPhaseCollisionDetection<physics::BroadphaseUniformGrid>(math::ivec3(2, 2, 2), 500);
             log::debug("Set broad phase 2x2x2");
         }
     }
@@ -205,7 +205,7 @@ public:
     {
         if (action->value)
         {
-            physics::PhysicsSystem::setBroadPhaseCollisionDetection<physics::BroadphaseUniformGrid>(math::ivec3(3, 3, 3));
+            physics::PhysicsSystem::setBroadPhaseCollisionDetection<physics::BroadphaseUniformGrid>(math::ivec3(3, 3, 3), 500);
             log::debug("Set broad phase 3x3x3");
         }
     }
