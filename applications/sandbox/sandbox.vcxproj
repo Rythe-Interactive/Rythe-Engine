@@ -108,6 +108,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="data\animation.cpp" />
+    <ClCompile Include="data\crosshair.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="systems\animation_editor.cpp" />
     <ClCompile Include="systems\animator.cpp" />
@@ -115,6 +116,7 @@
   <ItemGroup>
     <ClInclude Include="data\animation.hpp" />
     <ClInclude Include="data\animation_events.hpp" />
+    <ClInclude Include="data\crosshair.hpp" />
     <ClInclude Include="data\pp_bloom.hpp" />
     <ClInclude Include="data\pp_edgedetect.hpp" />
     <ClInclude Include="module\testmodule.hpp" />

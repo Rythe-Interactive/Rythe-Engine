@@ -36,14 +36,14 @@ public:
         );
 
         reportComponentType<sah>();
-        reportSystem<TestSystem>();
+        //reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
         //reportSystem<pointcloudtestsystem2>();
         reportComponentType<ext::animation>();
         reportSystem<ext::Animator>();
         reportSystem<ext::AnimationEditor>();
         reportSystem<GuiTestSystem>();
-        reportSystem<physics::PhysicsFractureTestSystem>();
+        //reportSystem<physics::PhysicsFractureTestSystem>();
         reportSystem<TestSystemConvexHull>();
 
     }

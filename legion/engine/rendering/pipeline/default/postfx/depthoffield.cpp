@@ -9,8 +9,8 @@ namespace legion::rendering
     {
         using namespace fs::literals;
         // Create all the shaders needed.
-        m_depthThresholdShader = rendering::ShaderCache::create_shader("depth threshold", "engine://shaders/depththreshold.shs"_view);
-        m_bokehShader = rendering::ShaderCache::create_shader("dof bokeh", "engine://shaders/dofbokeh.shs"_view);
+        m_depthThresholdShader = ShaderCache::create_shader("depth threshold", "engine://shaders/depththreshold.shs"_view);
+        m_bokehShader = ShaderCache::create_shader("dof bokeh", "engine://shaders/dofbokeh.shs"_view);
         m_screenShader = ShaderCache::create_shader("screenshader", "engine://shaders/screenshader.shs"_view);
         m_combineShader = ShaderCache::create_shader("dofcombineshader", "engine://shaders/dofcombine.shs"_view);
         m_postFilterShader = ShaderCache::create_shader("postfiltershader", "engine://shaders/postfilter.shs"_view);
@@ -112,6 +112,7 @@ namespace legion::rendering
         m_depthThresholdShader.get_uniform_with_location<math::mat4>(SV_VIEW).set_value(camInput.view);
         m_depthThresholdShader.get_uniform_with_location<texture_handle>(SV_SCENEPOSITION).set_value(position_texture);
         m_depthThresholdShader.get_uniform<float>("sampleOffset").set_value(0.5f);
+        m_depthThresholdShader.get_uniform<float>("focalRange").set_value(10.f);
         m_depthThresholdShader.get_uniform<float>("focalOffset").set_value(5.f);
         m_depthThresholdShader.get_uniform<float>("bokehRadius").set_value(m_bokehSize);
 

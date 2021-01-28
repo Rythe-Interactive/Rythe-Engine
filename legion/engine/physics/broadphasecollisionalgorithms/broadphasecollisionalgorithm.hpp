@@ -16,7 +16,15 @@ namespace legion::physics
          * @param manifoldPrecursors all the physics components 
          * @param manifoldPrecursorGrouping a list-list of colliders that have a chance of colliding and should be checked
          */
-        virtual void collectPairs(std::vector<physics_manifold_precursor>&& manifoldPrecursors,
-            std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping) LEGION_PURE;
+        virtual const std::vector<std::vector<physics_manifold_precursor>>& collectPairs(
+            std::vector<physics_manifold_precursor>&& manifoldPrecursors) LEGION_PURE;
+
+        virtual void debugDraw()
+        {
+
+        }
+
+    protected:
+        std::vector<std::vector<physics_manifold_precursor>> m_groupings;
     };
 }
