@@ -7,8 +7,6 @@ namespace legion::physics
     const std::vector<std::vector<physics_manifold_precursor>>& BroadphaseUniformGrid::collectPairs(
         std::vector<physics_manifold_precursor>&& manifoldPrecursors)
     {
-        //log::debug("Uniform grid!");
-        //log::debug("cell size {}", m_cellSize);
         OPTICK_EVENT();
         for (auto& precursor : manifoldPrecursors)
         {
@@ -138,22 +136,6 @@ namespace legion::physics
         // Check if the amount of empty cells is higher than the threshhold. If it is, clear the cached data
         if (m_emptyCellDestroyThreshold > 0 && m_emptyCells.size() > m_emptyCellDestroyThreshold)
         {
-            //log::debug("Destroying empty cells");
-            //// There are too many empty cells
-            //// delete some cells
-            //std::vector<size_t> toRemove;
-            //for (auto cell : m_emptyCells)
-            //{
-            //    size_t index = cellIndices.at(cell);
-            //    cellIndices.erase(cell);
-            //    toRemove.push_back(index);
-            //    log::debug("Removing: {}", cell);
-            //}
-            //for (auto index : pair_range<std::set<size_t>::reverse_iterator>(toRemove.rbegin(), toRemove.rend()))
-            //{
-            //    m_groupings.erase(m_groupings.begin() + index);
-            //}
-
             // This function is called since it clears all data. A few cpu cycles are lost to settings the m_cellsize to itself.
             setCellSize(m_cellSize);
         }
@@ -165,8 +147,6 @@ namespace legion::physics
         std::vector<physics_manifold_precursor>&& manifoldPrecursors)
     {
         std::vector<std::vector<physics_manifold_precursor>> groupings;
-        log::debug("Uniform grid!");
-        log::debug("cell size {}", m_cellSize);
         OPTICK_EVENT();
         std::unordered_map<math::ivec3, int> cellIndices;
         for (auto& precursor : manifoldPrecursors)

@@ -24,8 +24,8 @@ namespace legion::physics
             return;
         }
 
-        auto compIDA = manifold.entityA.get_component_handle<identifier>();
-        auto compIDB = manifold.entityB.get_component_handle<identifier>();
+        //auto compIDA = manifold.entityA.get_component_handle<identifier>();
+        //auto compIDB = manifold.entityB.get_component_handle<identifier>();
 
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA

@@ -150,7 +150,6 @@ namespace legion::physics
     private:
 
         static std::unique_ptr<BroadPhaseCollisionAlgorithm> m_broadPhase;
-        //legion::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> m_optimizeBroadPhase;
         const float m_timeStep = 0.02f;
 
 
@@ -229,8 +228,8 @@ namespace legion::physics
                         }
                     }
                 }
-                //log::debug("groupings {}", manifoldPrecursorGrouping.size());
-                //log::debug("total checks {}", totalChecks);
+                log::debug("groupings {}", manifoldPrecursorGrouping.size());
+                log::debug("total checks {}", totalChecks);
             }
 
             //------------------------------------------------ Pre Collision Solve Events --------------------------------------------//

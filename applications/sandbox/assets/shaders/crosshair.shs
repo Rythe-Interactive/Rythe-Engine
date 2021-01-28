@@ -1,0 +1,37 @@
+#version 450
+#state CULL OFF
+#state DEPTH OFF
+
+generate(vertex, fragment)
+
+#include<stdio.shinc>
+#include<math_ext.shinc>
+
+shader(vertex)
+{
+    void main(void)
+    {
+        gl_Position = vec4(stdin(position), 1.0);
+        PropagateStdIO();
+    }
+}
+
+shader(fragment)
+{
+    uniform vec2 crosshairScale;
+    uniform sampler2D crosshairTex;
+
+    void main(void)
+    {
+        const vec2 texelSize = 1.0 / textureSize(lgn_sceneColor, 0);
+        const vec2 crosshairSize = textureSize(crosshairTex, 0) * crosshairScale;
+        const vec2 uvPerSide = crosshairSize * texelSize * 0.5;
+        const vec2 centeredUV = stdin(uv) - vec2(0.5);
+        if(centeredUV.x > uvPerSide.x || centeredUV.x < -uvPerSide.x ||
+         centeredUV.y > uvPerSide.y || centeredUV.y < -uvPerSide.y)
+            discard;
+
+        const vec2 texUv = smoothstep(-uvPerSide, uvPerSide, centeredUV);
+        fragment_color = texture(crosshairTex, texUv);
+    }
+}

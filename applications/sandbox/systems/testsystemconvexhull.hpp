@@ -39,7 +39,7 @@ public:
 
     virtual void setup()
     {
-        physics::constants::gravity = math::vec3::zero;
+        //physics::constants::gravity = math::vec3::zero;
 
         app::InputSystem::createBinding<physics_step>(app::inputmap::method::ENTER);
         app::InputSystem::createBinding<collider_move>(app::inputmap::method::LEFT, -1);
@@ -101,6 +101,19 @@ public:
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 physH.write(p);
                 colliderEnt.add_component<physics::rigidbody>();
+            }
+
+            {
+                auto ent = createEntity();
+                ent.add_components<transform>(position(0.f, -0.4f, 0.f), rotation(), scale());
+                auto physH = ent.add_component<physics::physicsComponent>();
+                auto p = physH.read();
+                p.AddBox(physics::cube_collider_params(250.f, 250.f, 1.f));
+                physH.write(p);
+
+                //ent = createEntity();
+                //ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
+                //ent.add_components<transform>(position(0.f, -0.4f, 0.f), rotation(), scale(250.f, 1.f, 250.f));
             }
 
             {
