@@ -494,6 +494,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
+    <ClInclude Include="serialization\use_embedded_material.hpp" />
     <ClInclude Include="time\clock.hpp" />
     <ClInclude Include="time\defaults.hpp" />
     <ClInclude Include="time\time.hpp" />

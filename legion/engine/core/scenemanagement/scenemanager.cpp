@@ -12,6 +12,7 @@ namespace legion::core::scenemanagement
     std::string SceneManager::currentScene = "Main";
     std::unordered_map < id_type, std::string> SceneManager::sceneNames;
     std::unordered_map<id_type, ecs::component_handle<scene>> SceneManager::sceneList;
+    std::unordered_map<id_type,SceneManager::additional_loader_fn> SceneManager::m_additionalLoaders;
 
     ecs::entity_handle SceneManager::create_scene_entity()
     {
@@ -26,6 +27,8 @@ namespace legion::core::scenemanagement
             sceneEntity.add_component<scene>();
             std::vector<ecs::entity_handle> children;
             auto hry = world.read_component<hierarchy>();
+
+            hry.children.erase(sceneEntity);
 
             for (auto& child : hry.children)
             {
@@ -43,6 +46,9 @@ namespace legion::core::scenemanagement
                     child.write_component(h);
                 }
             }
+
+                    
+
             hry.children.clear();
             hry.children.insert(sceneEntity);
             world.write_component(hry);
@@ -105,6 +111,20 @@ namespace legion::core::scenemanagement
 
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
         currentScene = name;
+
+        
+        for (auto& [id,fn] : m_additionalLoaders)
+        {
+            hashed_sparse_set<id_type> types;
+            types.insert(id);
+            auto query = m_ecs->createQuery(types);
+            query.queryEntities();
+            for (const auto & child : query)
+            {
+                fn(child);
+            }
+        }
+
 
         //SceneManager::saveScene(name, sceneEntity);
         //log::debug("........Done saving scene");

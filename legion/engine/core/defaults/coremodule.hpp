@@ -9,6 +9,7 @@
 #include <core/compute/context.hpp>
 #include <core/scenemanagement/components/scene.hpp>
 #include <core/serialization/serializationUtil.hpp>
+#include <core/serialization/use_embedded_material.hpp>
 
 namespace legion::core
 {
@@ -37,6 +38,7 @@ namespace legion::core
             reportComponentType<scale>();
             reportComponentType<velocity>();
             reportComponentType<mesh_filter>();
+            reportComponentType<use_embedded_material>();
             reportComponentType<scenemanagement::scene>();
             reportSystem<HierarchySystem>();
             reportSystem<scenemanagement::SceneManager>();

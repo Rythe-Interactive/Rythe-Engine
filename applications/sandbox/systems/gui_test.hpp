@@ -58,7 +58,7 @@ class GuiTestSystem : public System<GuiTestSystem>
 
         entityQuery.queryEntities();
         //gui code goes here
-        ImGuiStage::addGuiRender<GuiTestSystem,&GuiTestSystem::onGUI>(this);
+        ImGuiStage::addGuiRender<GuiTestSystem, &GuiTestSystem::onGUI>(this);
         createProcess<&GuiTestSystem::update>("Update");
     }
 
@@ -73,15 +73,61 @@ class GuiTestSystem : public System<GuiTestSystem>
     // In how the Scene is currently structured, it will also try to show the names of the components of the
     // entities, which makes identifiying them easier
     //
+
+    id_type selected = invalid_id;
+
     void BuildTree(ecs::entity_handle handle)
     {
         if (ImGui::TreeNode(reinterpret_cast<void*>(handle.get_id()), "%llu", handle.get_id())) {
             if (handle.has_component<hierarchy>())
             {
                 auto hry = handle.read_component<hierarchy>();
-                for (auto child : hry.children)
+
+                if (hry.name.empty())
+                    hry.name = "Entity " + std::to_string(handle.get_id());
+
+                static char buffer[512];
+
+
+                if (selected != handle.get_id())
                 {
-                    BuildTree(child);
+                    ImGui::Text("%s", hry.name.c_str());
+                }
+                else
+                {
+
+                    if (ImGui::InputText("Change Name", buffer, 512, ImGuiInputTextFlags_EnterReturnsTrue))
+                    {
+                        hry.name = buffer;
+                        handle.write_component(hry);
+                        selected = invalid_id;
+                    }
+
+                }
+
+                ImGui::SameLine();
+                if (ImGui::Button("Change Name##2"))
+                {
+                    if (selected != invalid_id)
+                    {
+                        hry.name = buffer;
+                        handle.write_component(hry);
+                        selected = invalid_id;
+
+                    }
+                    else {
+                        selected = handle.get_id();
+                        strcpy(buffer, hry.name.data());
+                    }
+                }
+                ImGui::Separator();
+
+                if (ImGui::TreeNode("Children")) {
+                    for (auto child : hry.children)
+                    {
+                        BuildTree(child);
+                    }
+                    ImGui::TreePop();
                 }
             }
 

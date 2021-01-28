@@ -111,6 +111,8 @@
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
     <ClInclude Include="data\particle_system_base.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
+    <ClInclude Include="systems\serilization_rendering_extra.hpp" />
+    <ClInclude Include="util\additional_material_loader.hpp" />
     <ClInclude Include="util\bindings.hpp" />
     <ClInclude Include="util\gui.hpp" />
     <ClInclude Include="util\matini.hpp" />

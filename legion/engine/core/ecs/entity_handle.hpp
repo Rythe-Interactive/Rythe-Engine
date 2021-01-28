@@ -58,6 +58,9 @@ namespace legion::core::ecs
          */
         entity_handle& operator=(const entity_handle& other) noexcept;
 
+        L_NODISCARD std::string get_name() const noexcept;
+        void set_name(const std::string& name);
+
         /**
          * @brief Clones an entity.
          * @param keep_parent If true sets the parent of the cloned entity to the same parent as the source [default: true]
@@ -424,6 +427,8 @@ namespace legion::core::ecs
         template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
         void remove_components();
 
+        template <class component_type, class Func,typename = doesnt_inherit_from<component_type,archetype_base>>
+        void modify_component(Func&& f);
 
         /**@brief Destroy this entity. Destroys entity and invalidates handle. (also destroys all of it's components)
          * @param recurse Destroy all children and children of children as well? Default value is true.

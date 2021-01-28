@@ -72,7 +72,7 @@ namespace legion::core::ecs
         component_type m_nullComp;
     public:
         component_pool() = default;
-        component_pool(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
+        component_pool(EcsRegistry* registry, events::EventBus* eventBus) : m_eventBus(eventBus), m_registry(registry) {}
 
         void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) override
         {

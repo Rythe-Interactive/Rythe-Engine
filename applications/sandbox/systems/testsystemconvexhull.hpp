@@ -121,7 +121,7 @@ public:
                 ent.add_component<physics::rigidbody>();
             }
 
-            for (int i = 0; i < 1000; ++i)
+            for (int i = 0; i < 0; ++i)
             {
                 auto ent = createEntity();
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));

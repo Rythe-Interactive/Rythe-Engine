@@ -15,6 +15,8 @@
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
 #include <core/compute/high_level/function.hpp>
+#include <core/serialization/use_embedded_material.hpp>
+
 #include <rendering/debugrendering.hpp>
 
 #include <physics/physics_statics.hpp>
@@ -580,6 +582,7 @@ public:
             {
                 suzanneMaterials[0].set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(suzanneMaterials[0]));
+                ent.add_components<use_embedded_material>(use_embedded_material{"assets://models/suzanne-test.obj"});
             }
             else
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(gfx::invalid_material_handle));
@@ -764,17 +767,17 @@ public:
             ent2.get_component_handle<position>().write(pos);
         }
 
-#if defined(LEGION_DEBUG)
-        for (int i = 0; i < 2000; i++)
-#else
-        for (int i = 0; i < 20000; i++)
-#endif
-        {
-            auto ent = createEntity();
-            ent.add_components<rendering::mesh_renderable>(mesh_filter(billboardH.get_mesh()), rendering::mesh_renderer(textureBillboardH));
-            ent.add_component<sah>({});
-            ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale(0.1f));
-        }
+    #if defined(LEGION_DEBUG)
+            for (int i = 0; i < 1; i++)
+    #else
+            for (int i = 0; i < 1; i++)
+    #endif
+            {
+                auto ent = createEntity(false);
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(billboardH.get_mesh()), rendering::mesh_renderer(textureBillboardH));
+                ent.add_component<sah>({});
+                ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale(0.1f));
+            }
 
         //audioSphereLeft setup
         //{
@@ -2319,7 +2322,7 @@ public:
         //auto& scales = sahQuery.get<scale>();
 
         float dt = deltaTime;
-
+        /*
         m_scheduler->queueJobs(sahQuery.size(), [&]()
             {
                 id_type idx = async::this_job::get_id();
@@ -2331,6 +2334,8 @@ public:
                 //rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
             }).wait();
             sahQuery.submit<position>();
+            */
+            
             //sahQuery.submit<rotation>();
 
             //if (rotate && !physics::PhysicsSystem::IsPaused)
