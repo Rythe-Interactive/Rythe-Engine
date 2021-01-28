@@ -60,7 +60,7 @@ public:
             floor_material = materials[0];
             floor_material.set_param("skycolor", math::color(0.1f, 0.3f, 1.f));
 
-            house = rendering::ModelCache::create_model("house_final", "assets://models/final_presentation/house_1.glb"_view, materials);
+            house = rendering::ModelCache::create_model("house_final", "assets://models/final_presentation/2story_1.glb"_view, materials);
             house_material = materials[1];
             house_material.set_param("skycolor", math::color(0.1f, 0.3f, 1.f));
 
@@ -97,24 +97,11 @@ public:
             {
                 auto ent = createEntity();
                 ent.add_component(gfx::mesh_renderer(house_material, house));
-                ent.add_components<transform>(position(0, 0.2f, 0), rotation(), scale());
+                ent.add_components<transform>(position(0, 0.1f, 0), rotation(), scale());
                 auto physH = ent.add_component<physics::physicsComponent>();
                 auto p = physH.read();
-                p.ConstructConvexHull(house.get_mesh());
-                physH.write(p);
-                ent.add_component<physics::rigidbody>();
-               // ent.add_component<physics::Fracturer>();
-            }
-
-            //cube
-            {
-                auto ent = createEntity();
-                ent.add_component(gfx::mesh_renderer(cube_material, cube));
-                ent.add_components<transform>(position(0, 100.0f, 0), rotation(), scale());
-                auto physH = ent.add_component<physics::physicsComponent>();
-                auto p = physH.read();
-                p.AddBox(physics::cube_collider_params(1.f,1.f,1.f));
                 //p.ConstructConvexHull(house.get_mesh());
+                p.AddBox(physics::cube_collider_params(10.f, 10.f, 20.f));
 
                 auto splitterH = ent.add_component<physics::MeshSplitter>();
                 auto splitter = splitterH.read();
@@ -122,8 +109,25 @@ public:
                 splitterH.write(splitter);
 
                 physH.write(p);
-                ent.add_component<physics::rigidbody>();
+                //ent.add_component<physics::rigidbody>();
                 ent.add_component<physics::Fracturer>();
+            }
+
+            //cube
+            {
+                auto ent = createEntity();
+                ent.add_component(gfx::mesh_renderer(cube_material, cube));
+                ent.add_components<transform>(position(0, 1000.0f, 0), rotation(), scale());
+                auto physH = ent.add_component<physics::physicsComponent>();
+                auto p = physH.read();
+                p.AddBox(physics::cube_collider_params(1.f,1.f,1.f));
+                //p.ConstructConvexHull(house.get_mesh());
+
+                
+
+                physH.write(p);
+                ent.add_component<physics::rigidbody>();
+                //ent.add_component<physics::Fracturer>();
             }
 
 
