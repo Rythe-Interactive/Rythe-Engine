@@ -281,7 +281,7 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
                             math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
 
-                            debug::user_projectDrawLine(worldStart + worldNormal * offset, worldEnd + worldNormal * offset, usedColor, 3.0f, 0.0f, useDepth);
+                            debug::user_projectDrawLine(worldStart + worldNormal * offset, worldEnd + worldNormal * offset, usedColor, 2.0f, 0.0f, useDepth);
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }

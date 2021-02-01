@@ -11,7 +11,7 @@ namespace legion::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
-        bool shouldDebug = manifold.DEBUG_checkID("problem","floor");
+        bool shouldDebug = manifold.DEBUG_checkID("cube","floor");
         OPTICK_EVENT();
         // Middle-phase collision detection
         // Do AABB collision to check whether collision is possible
@@ -24,6 +24,7 @@ namespace legion::physics
             manifold.isColliding = false;
             return;
         }
+
 
         auto compIDA = manifold.entityA.get_component_handle<identifier>();
         auto compIDB = manifold.entityB.get_component_handle<identifier>();
@@ -45,9 +46,6 @@ namespace legion::physics
             return;
         }
 
-  
-      
-     
         PointerEncapsulator < HalfEdgeFace> BRefFace;
         //log::debug("Face Check B");
         float BRefSeperation;
@@ -58,9 +56,6 @@ namespace legion::physics
             manifold.isColliding = false;
             return;
         }
-
-
-   
 
         PointerEncapsulator< HalfEdgeEdge> edgeRef;
         PointerEncapsulator< HalfEdgeEdge> edgeInc;
@@ -73,15 +68,21 @@ namespace legion::physics
         {
             //
             manifold.isColliding = false;
+
+            if (shouldDebug)
+            {
+                edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::blue, 10.0f);
+                edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::red, 10.0f);
+            }
             return;
         }
 
-        //if (shouldDebug)
-        //{
-        //    log::debug("-> collision detected for debug ");
-        //    ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::blue, 5.0f);
-        //    BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 5.0f);
-        //}
+        if (shouldDebug)
+        {
+            log::debug("-> collision detected for debug ");
+            ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::blue, 5.0f);
+            BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 5.0f);
+        }
 
       
        /* ConvexConvexCollisionInfo convexCollisionInfo;
@@ -268,7 +269,7 @@ namespace legion::physics
     void ConvexCollider::ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount,bool shouldDebug)
     {
         OPTICK_EVENT();
-        //log::debug("-------------------------------- ConstructConvexHullWithMesh ----------------------------------");
+       // log::debug("-------------------------------- ConstructConvexHullWithMesh ----------------------------------");
         // Step 0 - Create inital hull
         /*if (step == 0)
         {*/
@@ -683,6 +684,7 @@ namespace legion::physics
         //}
         ////convexHullMergeFaces(halfEdgeFaces,true);
         AssertEdgeValidity();
+        //log::debug("-> Finish ConstructConvexHullWithMesh ----------------------------------");
     }
     
 

@@ -516,18 +516,31 @@ namespace legion::physics
         static bool attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::mat4& transformA,
             const math::mat4& transformB)
         {
-            const math::vec3 transformedA1 = transformA * math::vec4(edgeA->getLocalNormal(), 0);
-            const math::vec3 transformedA2 = transformA * math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
-            const math::vec3 transformedEdgeDirectionA = transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
+            //TODO the commmented parts are technically more robust and should work but somehow dont, figure out why.
 
-            const math::vec3 transformedB1 = transformB * math::vec4(edgeB->getLocalNormal(), 0);
-            const math::vec3 transformedB2 = transformB * math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
-            const math::vec3 transformedEdgeDirectionB = transformB * math::vec4(edgeB->getLocalEdgeDirection(), 0);
+            const math::vec3 transformedA1 = transformA *
+                math::vec4(edgeA->getLocalNormal(), 0);
+
+            const math::vec3 transformedA2 = transformA *
+                math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
+
+            const math::vec3 transformedEdgeDirectionA = math::cross(transformedA1, transformedA2);
+            //transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
+           
+            const math::vec3 transformedB1 = transformB *
+                math::vec4(edgeB->getLocalNormal(), 0);
+
+            const math::vec3 transformedB2 = transformB *
+                math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
+
+            const math::vec3 transformedEdgeDirectionB = math::cross(-transformedB1, -transformedB2);
+            //transformB *math::vec4(edgeB->getLocalEdgeDirection(), 0);
+                
 
             math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
 
             return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2
-                , transformedEdgeDirectionA, -transformedEdgeDirectionB);
+                , transformedEdgeDirectionA, transformedEdgeDirectionB);
         }
 
         /** @brief Given 2 arcs, one that starts from transformedA1 and ends at transformedA2 and another arc

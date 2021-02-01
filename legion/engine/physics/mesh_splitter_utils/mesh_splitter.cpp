@@ -461,6 +461,15 @@ namespace legion::physics
         polygonOrganizer.SplitPolygon(splitPolygon, transform, cutPosition, cutNormal, requestedState, generatedIntersectionEdges,shouldDebug);
     }
 
+    void MeshSplitter::DEBUG_DrawPolygonData(const math::mat4& transform)
+    {
+        for (auto polygon : meshPolygons)
+        {
+            polygon->DEBUG_drawEdgeBoundaryInset(transform);
+        }
+
+    }
+
 }
 
 

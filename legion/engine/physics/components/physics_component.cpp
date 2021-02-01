@@ -26,7 +26,7 @@ namespace legion::physics
         colliders.push_back(collider);
 
         calculateNewLocalCenterOfMass();
-        //log::debug("collider returned");
+
         return collider;
     }
 

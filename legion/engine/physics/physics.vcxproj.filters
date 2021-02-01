@@ -194,5 +194,8 @@
     <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgrid.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data\fractureparams.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,7 +16,7 @@ namespace legion::physics
         float linearDrag;
 
         //angular motion component
-        math::mat3 localInverseInertiaTensor = math::mat3(3.0f);
+        math::mat3 localInverseInertiaTensor = math::mat3(6.0f);
         math::mat3 globalInverseInertiaTensor = localInverseInertiaTensor;
 
         math::vec3 angularAcc = math::vec3(0.0);

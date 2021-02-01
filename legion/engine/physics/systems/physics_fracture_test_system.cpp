@@ -5,6 +5,7 @@
 #include <physics/systems/physicssystem.hpp>
 #include <physics/components/fracturer.hpp>
 #include <rendering/debugrendering.hpp>
+#include <rendering/components/camera.hpp>
 
 namespace legion::physics
 {
@@ -24,7 +25,10 @@ namespace legion::physics
         textureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
 
         woodTextureH = rendering::MaterialCache::create_material("texture2", "assets://shaders/texture.shs"_view);
-        woodTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/test-albedo.png"_view));
+        woodTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/log.jpg"_view));
+
+        rockTextureH = rendering::MaterialCache::create_material("rock", "assets://shaders/texture.shs"_view);
+        rockTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/rock.png"_view));
         #pragma endregion
 
         #pragma region Model Setup
@@ -38,6 +42,12 @@ namespace legion::physics
         app::InputSystem::createBinding<physics_split_test>(app::inputmap::method::ENTER);
         app::InputSystem::createBinding<extendedPhysicsContinue>(app::inputmap::method::M);
         app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
+        app::InputSystem::createBinding<spawnEntity>(app::inputmap::method::MOUSE_LEFT);
+
+        app::InputSystem::createBinding<smallExplosion>(app::inputmap::method::NUM1);
+        app::InputSystem::createBinding<mediumExplosion>(app::inputmap::method::NUM2);
+        app::InputSystem::createBinding<largeExplosion>(app::inputmap::method::NUM3);
+      
         /*app::InputSystem::createBinding< activate_CRtest2>(app::inputmap::method::KP_2);
         app::InputSystem::createBinding< activate_CRtest3>(app::inputmap::method::KP_3);*/
         #pragma endregion
@@ -48,17 +58,24 @@ namespace legion::physics
         bindToEvent<physics_split_test,&PhysicsFractureTestSystem::OnSplit > ();
         bindToEvent<extendedPhysicsContinue, &PhysicsFractureTestSystem::extendedContinuePhysics>();
         bindToEvent<nextPhysicsTimeStepContinue, &PhysicsFractureTestSystem::OneTimeContinuePhysics>();
+        bindToEvent<spawnEntity, &PhysicsFractureTestSystem::spawnEntityOnCameraForward>();
+
+        bindToEvent<smallExplosion, &PhysicsFractureTestSystem::smallExplosionTest>();
+        bindToEvent<mediumExplosion, &PhysicsFractureTestSystem::mediumExplosionTest>();
+        bindToEvent<largeExplosion, &PhysicsFractureTestSystem::largeExplosionTest>();
 
         #pragma endregion
 
         //compositeColliderTest();
-        fractureTest();
+        //fractureTest();
         //numericalRobustnessTest();
-
+        //simpleMinecraftHouse();
+        explosionTest();
         /*meshSplittingTest(planeH, cubeH
             , cylinderH, complexH, textureH);*/
 
         createProcess<&PhysicsFractureTestSystem::colliderDraw>("Update");
+        createProcess<&PhysicsFractureTestSystem::explodeAThing>("Physics");
 
         Fracturer::registry = m_ecs;
     }
@@ -66,57 +83,57 @@ namespace legion::physics
     void PhysicsFractureTestSystem::colliderDraw(time::span dt)
     {
 
-        static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter,transform>();
-        halfEdgeQuery.queryEntities();
+        //static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter,transform>();
+        //halfEdgeQuery.queryEntities();
 
-        for (auto entity : halfEdgeQuery)
-        {
-            auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
-            auto edgeFinder = edgeFinderH.read();
+        //for (auto entity : halfEdgeQuery)
+        //{
+        //    auto edgeFinderH = entity.get_component_handle<physics::MeshSplitter>();
+        //    auto edgeFinder = edgeFinderH.read();
        
-            auto transH = entity.get_component_handles<transform>();
-            
-            auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
-            const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+        //    auto transH = entity.get_component_handles<transform>();
+        //    
+        //    auto [posH, rotH, scaleH] = entity.get_component_handles<transform>();
+        //    const math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
-            for (auto pol : edgeFinder.meshPolygons)
-            {
-                const math::vec3& worldCentroid = transform * math::vec4(pol->localCentroid, 1);
-                const math::vec3& worldNormal = transform * math::vec4(pol->localNormal, 0);
+        //    for (auto pol : edgeFinder.meshPolygons)
+        //    {
+        //        const math::vec3& worldCentroid = transform * math::vec4(pol->localCentroid, 1);
+        //        const math::vec3& worldNormal = transform * math::vec4(pol->localNormal, 0);
 
-                for (auto edge : pol->GetMeshEdges())
-                {
-                    if (edge->isBoundary)
-                    {
-                        auto [start, end] = edge->getEdgeWorldPositions(transform);
-                        auto startOffset = (worldCentroid - start) * 0.1f + worldNormal * 0.01f;
-                        auto endOffset = (worldCentroid - end) * 0.1f + worldNormal * 0.01f;
-                        
-                        debug::user_projectDrawLine(start + startOffset, end + endOffset, pol->debugColor, 5.0f);
-                    }
-                    
-                }
-            }
+        //        for (auto edge : pol->GetMeshEdges())
+        //        {
+        //            if (edge->isBoundary)
+        //            {
+        //                auto [start, end] = edge->getEdgeWorldPositions(transform);
+        //                auto startOffset = (worldCentroid - start) * 0.1f + worldNormal * 0.01f;
+        //                auto endOffset = (worldCentroid - end) * 0.1f + worldNormal * 0.01f;
+        //                
+        //                debug::user_projectDrawLine(start + startOffset, end + endOffset, pol->debugColor, 5.0f);
+        //            }
+        //            
+        //        }
+        //    }
 
-           
+        //   
 
-            for (auto pol : edgeFinder.meshPolygons)
-            {
-                int boundaryCount = pol->CountBoundary();
+        //    for (auto pol : edgeFinder.meshPolygons)
+        //    {
+        //        int boundaryCount = pol->CountBoundary();
 
 
-                if (boundaryCount == 16)
-                {
-                    math::vec3 worldCentroid = transform * math::vec4(pol->localCentroid, 1);
+        //        if (boundaryCount == 16)
+        //        {
+        //            math::vec3 worldCentroid = transform * math::vec4(pol->localCentroid, 1);
 
-                    //
-                    debug::user_projectDrawLine(worldCentroid, worldCentroid  + math::vec3(0, 0.1, 0), math::colors::red, 5.0f, 30.0f);
-                }
+        //            //
+        //            debug::user_projectDrawLine(worldCentroid, worldCentroid  + math::vec3(0, 0.1, 0), math::colors::red, 5.0f, 30.0f);
+        //        }
 
-                //log::debug(" polygon had {} boundary edges ", boundaryCount);
-            }
+        //        //log::debug(" polygon had {} boundary edges ", boundaryCount);
+        //    }
 
-        }
+        //}
 
 
     }
@@ -134,6 +151,7 @@ namespace legion::physics
         //-------------------------------------------------------------------------------------------------------------------------------//
                                                      //CUBE TEST 
         //-------------------------------------------------------------------------------------------------------------------------------//
+
         ecs::entity_handle cubeSplit2;
         {
             auto splitter = m_ecs->createEntity();
@@ -234,7 +252,6 @@ namespace legion::physics
         {
             cylinderSplit = m_ecs->createEntity();
            
-
             cylinderSplit.add_components<rendering::mesh_renderable>(mesh_filter(planeH.get_mesh()), rendering::mesh_renderer(TextureH));
 
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(cylinderSplit);
@@ -735,6 +752,126 @@ namespace legion::physics
 
     }
 
+    void PhysicsFractureTestSystem::explosionTest()
+    {
+        CreateElongatedFloor(math::vec3(20.0, 1.0f, 9.8f), math::quat(), math::vec3(20, 1, 20));
+
+        smallExplosionEnt = CreateSplitTestBox(physics::cube_collider_params(1.0f,1.0f,1.0f), math::vec3(12.0, 2.0f, 9.8f),
+            math::quat(), textureH, true, false, math::vec3());
+
+        mediumExplosionEnt = CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(20.0, 2.0f, 9.8f),
+            math::quat(), textureH, true, false, math::vec3());
+
+        largeExplosionEnt = CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(28.0, 2.0f, 9.8f),
+            math::quat(), textureH, true, false, math::vec3());
+
+    }
+
+    void PhysicsFractureTestSystem::spawnEntityOnCameraForward(spawnEntity* action)
+    {
+        if (!action->value)
+        {
+            auto cameraQuery = createQuery<rendering::camera>();
+            cameraQuery.queryEntities();
+
+            for (auto ent : cameraQuery)
+            {
+                auto [position, rotation, scale] = ent.get_component_handles<transform>();
+                math::mat4 trans = math::compose(scale.read(), rotation.read(), position.read());
+                math::vec3 dir = math::normalize(trans * math::vec4(0, 0, 1, 0));
+
+                dir *= 10;
+
+                CreateSplitTestBox(physics::cube_collider_params(1, 1, 1), trans[3],
+                    math::quat(), textureH, false, true, dir);
+
+            }
+
+        }
+       
+
+    }
+
+    void PhysicsFractureTestSystem::simpleMinecraftHouse()
+    {
+        //Floor
+
+        std::vector<rendering::material_handle> woodInitialThenStone{ woodTextureH,  rockTextureH,  rockTextureH ,  rockTextureH ,woodTextureH };
+        std::vector<rendering::material_handle>Stone{ rockTextureH };
+        std::vector<rendering::material_handle>Wood{ woodTextureH };
+
+        std::vector<int> initialOnly{ 1,2,3 };
+        std::vector<int> window{ 2 };
+        std::vector<int> ignoreEmpty;
+
+        float level = 2.0f;
+        createFloor(1, 5, math::vec3(0.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty);
+        createFloor(1, 5, math::vec3(1.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, ignoreEmpty);
+        createFloor(1, 5, math::vec3(2.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, ignoreEmpty);
+        createFloor(1, 5, math::vec3(3.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, ignoreEmpty);
+        createFloor(1, 5, math::vec3(4.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty);
+       
+        level += 1.0f;
+        //first stack
+        createFloor(1, 5, math::vec3(0.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty);
+        createFloor(1, 5, math::vec3(1.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, initialOnly);
+        createFloor(1, 1, math::vec3(2.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, ignoreEmpty);
+        createFloor(1, 5, math::vec3(3.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, initialOnly);
+        createFloor(1, 5, math::vec3(4.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty);
+
+        //window stack
+        level += 1.0f;
+        createFloor(1, 5, math::vec3(0.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, woodInitialThenStone, window);
+        createFloor(1, 5, math::vec3(1.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, initialOnly);
+        createFloor(1, 1, math::vec3(2.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, ignoreEmpty);
+        createFloor(1, 5, math::vec3(3.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, initialOnly);
+        createFloor(1, 5, math::vec3(4.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, woodInitialThenStone, window);
+
+        level += 1.0f;
+        //third stack
+        createFloor(1, 5, math::vec3(0.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty);
+        createFloor(1, 5, math::vec3(1.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, initialOnly);
+        createFloor(1, 5, math::vec3(2.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, initialOnly);
+        createFloor(1, 5, math::vec3(3.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Stone, initialOnly);
+        createFloor(1, 5, math::vec3(4.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, woodInitialThenStone, ignoreEmpty);
+
+        level += 1.0f;
+        createFloor(1, 5, math::vec3(0.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Wood, ignoreEmpty);
+        createFloor(1, 5, math::vec3(1.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Wood, ignoreEmpty);
+        createFloor(1, 5, math::vec3(2.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Wood, ignoreEmpty);
+        createFloor(1, 5, math::vec3(3.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Wood, ignoreEmpty);
+        createFloor(1, 5, math::vec3(4.0f, level, 10.0f),
+            math::vec3(1.0f), cubeH, Wood, ignoreEmpty);
+
+        PhysicsSystem::IsPaused = false;
+        CreateElongatedFloor(math::vec3(5.0, 1.0f, 9.8f), math::quat(), math::vec3(20, 1, 20));
+
+    }
+
     void PhysicsFractureTestSystem::numericalRobustnessTest()
     {
         physics::cube_collider_params cubeParams;
@@ -876,13 +1013,13 @@ namespace legion::physics
         CreateElongatedFloor(math::vec3(-50.0f, 0.0f, -50.0f), math::quat(), math::vec3(90.0f, 5.0f, 90.0f));
 
         CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(-50.0f, 15.0f, -50.0f),
-            math::quat(), false);
+            math::quat(),textureH, false);
 
         CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(-35.0f, 15.0f, -35.0f),
-            math::quat(), false);
+            math::quat(), textureH, false);
 
         CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), math::vec3(-15.0f, 15.0f, -15.0f),
-            math::quat(), false);
+            math::quat(), textureH, false);
     }
 
     void PhysicsFractureTestSystem::fractureTest()
@@ -898,8 +1035,13 @@ namespace legion::physics
                                                        //WALL
         //-------------------------------------------------------------------------------------------------------------------------------//
 
-        CreateSplitTestBox(cubeParams, math::vec3(0.0f, 2.0f, 9.8f),
+        /*CreateSplitTestBox(cubeParams, math::vec3(0.0f, 2.0f, 9.8f),
             math::quat(), true);
+
+        CreateSplitTestBox(cubeParams, math::vec3(0.0f, 3.0f, 9.8f),
+            math::quat(), true);*/
+
+ 
 
         //-------------------------------------------------------------------------------------------------------------------------------//
                                                      //THROWN OBJECT TEST 
@@ -913,7 +1055,7 @@ namespace legion::physics
             auto rbH = block.add_component<physics::rigidbody>();
 
             auto rb = rbH.read();
-            rb.velocity = math::vec3(8, 0, 0);
+            rb.velocity = math::vec3(6, 0, 0);
             rb.setMass(3.0f);
             rbH.write(rb);
 
@@ -944,7 +1086,6 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::CreateElongatedFloor(math::vec3 position, math::quat rot, math::vec3 scale)
     {
-
         cube_collider_params scaledCubeParams(scale.x,scale.z,scale.y);
         ecs::entity_handle floor5;
         {
@@ -987,7 +1128,6 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::OnSplit(physics_split_test* action)
     {
- 
         static ecs::EntityQuery halfEdgeQuery = createQuery<physics::MeshSplitter>();
 
         if (action->value)
@@ -1006,21 +1146,25 @@ namespace legion::physics
         }
     }
 
-    void PhysicsFractureTestSystem::CreateSplitTestBox(physics::cube_collider_params cubeParams,math::vec3 position,
-        math::quat rotation,bool isFracturable)
+    ecs::entity_handle PhysicsFractureTestSystem::CreateSplitTestBox(physics::cube_collider_params cubeParams,math::vec3 position,
+        math::quat rotation, rendering::material_handle mat, bool isFracturable,bool hasRigidbody ,math::vec3 velocity)
     {
         auto wall = m_ecs->createEntity();
         auto entPhyHande = wall.add_component<physics::physicsComponent>();
- 
+
+        if (hasRigidbody)
+        {
+           auto rbH = wall.add_component<rigidbody>();
+           auto rb = rbH.read();
+           rb.velocity = velocity;
+           rbH.write(rb);
+        }
 
         if (isFracturable)
         {
             wall.add_component<physics::Fracturer>();
         }
-        if (!isFracturable)
-        {
-            wall.add_component<rigidbody>();
-        }
+
 
         physics::physicsComponent physicsComponent2;
 
@@ -1029,7 +1173,7 @@ namespace legion::physics
 
         entPhyHande.write(physicsComponent2);
 
-        wall.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+        wall.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(mat));
 
         auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(wall);
         positionH.write(position);
@@ -1043,7 +1187,100 @@ namespace legion::physics
             splitter.InitializePolygons(wall);
             splitterH.write(splitter);
         }
+
+        return  wall;
     }
+
+    void PhysicsFractureTestSystem::createFloor(int xCount, int yCount, math::vec3 start,
+        math::vec3 offset, rendering::model_handle cubeH,std::vector< rendering::material_handle> materials,std::vector<int> ignoreJ)
+    {
+        for (size_t i = 0; i < xCount; i++)
+        {
+            for (size_t j = 0; j < yCount; j++)
+            {
+                bool shouldSkip = false;
+                for (auto ignoreCount : ignoreJ)
+                {
+                    if (j == ignoreCount)
+                    {
+                        shouldSkip = true;
+                    }
+                }
+
+                if (shouldSkip) { continue; }
+
+                auto material_handle = materials.at(  j%materials.size());
+                CreateSplitTestBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f), start
+                    + math::vec3(offset.x * i, 0, offset.z * j),
+                    math::quat(), material_handle, true);
+            }
+        }
+    }
+
+    void PhysicsFractureTestSystem::smallExplosionTest(smallExplosion* action)
+    {
+        if (!action->value)
+        {
+            *reinterpret_cast<int*>(&m_boom) |= SMALL_BOOM;
+        }
+
+    }
+
+    void PhysicsFractureTestSystem::mediumExplosionTest(mediumExplosion* action)
+    {
+        if (!action->value)
+        {
+            *reinterpret_cast<int*>(&m_boom) |= MEDIUM_BOOM;
+        }
+       
+    }
+
+    void PhysicsFractureTestSystem::largeExplosionTest(largeExplosion* action)
+    {
+        if (!action->value)
+        {
+            *reinterpret_cast<int*>(&m_boom) |= BIG_BOOM;
+        }
+    
+    }
+
+    void PhysicsFractureTestSystem::explodeAThing(time::span)
+    {
+        if (m_boom & SMALL_BOOM)
+        {
+            log::debug("smallExplosionTest");
+            auto PosH = smallExplosionEnt.get_component_handle<position>();
+            auto fracturerH = smallExplosionEnt.get_component_handle<Fracturer>();
+            auto fracturer = fracturerH.read();
+            FractureParams param(PosH.read(), 100.0f);
+            fracturer.ExplodeEntity(smallExplosionEnt, param);
+            fracturerH.write(fracturer);
+
+        }
+
+        if (m_boom & MEDIUM_BOOM)
+        {
+            auto PosH = mediumExplosionEnt.get_component_handle<position>();
+            auto fracturerH = mediumExplosionEnt.get_component_handle<Fracturer>();
+            auto fracturer = fracturerH.read();
+            FractureParams param(PosH.read(), 300.0f);
+            fracturer.ExplodeEntity(mediumExplosionEnt, param);
+            fracturerH.write(fracturer);
+        }
+
+        if (m_boom & BIG_BOOM)
+        {
+            auto PosH = largeExplosionEnt.get_component_handle<position>();
+            auto fracturerH = largeExplosionEnt.get_component_handle<Fracturer>();
+            auto fracturer = fracturerH.read();
+            FractureParams param(PosH.read(), 1000.0f);
+            fracturer.ExplodeEntity(largeExplosionEnt, param);
+            fracturerH.write(fracturer);
+        }
+
+        m_boom = NO_BOOM;
+    }
+    
 
 }
 

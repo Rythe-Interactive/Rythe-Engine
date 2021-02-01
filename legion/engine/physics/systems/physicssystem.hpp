@@ -101,6 +101,28 @@ namespace legion::physics
                     manifoldPrecursorQuery.submit<position>();
                     manifoldPrecursorQuery.submit<rotation>();
             }
+
+           /* auto splitterDrawQuery = createQuery<MeshSplitter>();
+            splitterDrawQuery.queryEntities();
+
+            for (auto ent : splitterDrawQuery)
+            {
+                auto splitterHandle = ent.get_component_handle<MeshSplitter>();
+   
+                if (splitterHandle )
+                {
+                    auto [posH,rotH,scaleH] = ent.get_component_handles<transform>();
+                    debug::drawLine
+                    (posH.read(), posH.read() + math::vec3(0, 5, 0), math::colors::red, 20.0f, 0.0f, true);
+
+                    auto splitter = splitterHandle.read();
+                    math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+
+                    splitter.DEBUG_DrawPolygonData(transform);
+                }
+            }*/
+
+
         }
 
         void bulkRetrievePreManifoldData(

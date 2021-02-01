@@ -23,6 +23,7 @@ public:
 
     virtual void setup()
     {
+        
         //Set the amount of gravity.
         physics::constants::gravity = math::vec3(0.0f,-9.8f,0.0f);
 
@@ -39,6 +40,8 @@ public:
         //rendering::model_handle terminal;
         rendering::model_handle house;
         rendering::model_handle cube;
+        rendering::model_handle realCube;
+        rendering::material_handle textureH;
 
         std::vector<gfx::material_handle> materials;
         gfx::material_handle floor_material;
@@ -68,7 +71,10 @@ public:
             cube_material = materials[2];
             cube_material.set_param("skycolor", math::color(0.1f, 0.3f, 1.f));
 
+            textureH = rendering::MaterialCache::create_material("texturee", "assets://shaders/texture.shs"_view);
+            textureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
 
+            realCube = rendering::ModelCache::create_model("cubee", "assets://models/cube.obj"_view);
 
             /*plane = rendering::ModelCache::create_model("plane_final", "assets://models/final_presentation/plane.glb"_view, materials);
             plane_material = materials[1];
@@ -97,11 +103,11 @@ public:
             {
                 auto ent = createEntity();
                 ent.add_component(gfx::mesh_renderer(house_material, house));
-                ent.add_components<transform>(position(0, 0.1f, 0), rotation(), scale());
+                ent.add_components<transform>(position(0, 0.1f, 0), rotation(), scale(0.1f,0.1f,0.1f));
                 auto physH = ent.add_component<physics::physicsComponent>();
                 auto p = physH.read();
                 //p.ConstructConvexHull(house.get_mesh());
-                p.AddBox(physics::cube_collider_params(10.f, 10.f, 20.f));
+                p.AddBox(physics::cube_collider_params(20.f, 20.f, 40.f,math::vec3(0.0f,20.0f,0.0f)));
 
                 auto splitterH = ent.add_component<physics::MeshSplitter>();
                 auto splitter = splitterH.read();
@@ -116,8 +122,8 @@ public:
             //cube
             {
                 auto ent = createEntity();
-                ent.add_component(gfx::mesh_renderer(cube_material, cube));
-                ent.add_components<transform>(position(0, 1000.0f, 0), rotation(), scale());
+                ent.add_component(gfx::mesh_renderer(textureH, realCube));
+                ent.add_components<transform>(position(0, 10.0f, 0), rotation(), scale());
                 auto physH = ent.add_component<physics::physicsComponent>();
                 auto p = physH.read();
                 p.AddBox(physics::cube_collider_params(1.f,1.f,1.f));
@@ -128,17 +134,39 @@ public:
                 physH.write(p);
                 ent.add_component<physics::rigidbody>();
                 //ent.add_component<physics::Fracturer>();
+
+                auto idH = ent.add_component<physics::identifier>();
+                auto id = idH.read();
+                id.id = "cube";
+                idH.write(id);
+
             }
 
 
             //floor
             {
                 auto ent = createEntity();
-                ent.add_component(gfx::mesh_renderer(floor_material, floor));
+                //ent.add_component(gfx::mesh_renderer(floor_material, floor));
                 ent.add_components<transform>(position(0, 0.1f, 0), rotation(), scale());
                 physics::physicsComponent p;
-                p.AddBox(physics::cube_collider_params(640.0f, 640.0f, -1.f));
+                p.AddBox(physics::cube_collider_params(50.0f, 50.0f, 1.0f));
                 ent.add_component(p);
+
+                auto idH = ent.add_component<physics::identifier>();
+                auto id = idH.read();
+                id.id = "floor";
+                idH.write(id);
+            }
+
+            {
+                auto ent = createEntity();
+                ent.add_component(gfx::mesh_renderer(textureH, realCube));
+                ent.add_components<transform>(position(0, 0.1f, 0), rotation(), scale(50,1,50));
+
+                auto idH = ent.add_component<physics::identifier>();
+                auto id = idH.read();
+                id.id = "floor";
+                idH.write(id);
             }
 
             //terminal
@@ -151,7 +179,7 @@ public:
                 ent.add_component(p);
             }*/
         }
-        physics::PhysicsSystem::IsPaused = !physics::PhysicsSystem::IsPaused;
+        //physics::PhysicsSystem::IsPaused = !physics::PhysicsSystem::IsPaused;
     }
 
     void update(time::span deltaTime)
@@ -191,7 +219,6 @@ public:
                     usedColor = rbColor;
                     //useDepth = true;
                 }
-
 
                 //assemble the local transform matrix of the entity
                 math::mat4 localTransform;

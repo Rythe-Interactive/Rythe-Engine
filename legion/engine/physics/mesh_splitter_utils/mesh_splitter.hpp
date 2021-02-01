@@ -354,6 +354,11 @@ namespace legion::physics
                 log::error("Split tester not set");
             }
         }
+
+        void DEBUG_DrawPolygonData(const math::mat4& transform);
+
+
+
     };
 }
 

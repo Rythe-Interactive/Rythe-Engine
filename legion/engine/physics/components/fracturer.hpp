@@ -2,6 +2,7 @@
 #include <core/core.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/mesh_splitter_utils/mesh_splitter.hpp>
+#include <physics/data/fractureparams.hpp>
 namespace legion::physics
 {
     struct physics_manifold;
@@ -31,7 +32,10 @@ namespace legion::physics
 
 		void HandleFracture(physics_manifold& manifold,bool& manifoldValid, bool isfracturingA);
 
-        bool IsFractureConditionMet();
+        void ExplodeEntity(ecs::entity_handle ownerEntity,
+            const FractureParams& fractureParams, PhysicsCollider* entityCollider = nullptr);;
+
+        bool IsFractureConditionMet(physics_manifold& manifold, bool isfracturingA);
 
         void InitializeVoronoi(ecs::component_handle<physicsComponent> physicsComponent);
 
@@ -51,6 +55,10 @@ namespace legion::physics
             , std::vector< FracturerColliderToMeshPairing>& colliderToMeshPairings
             , std::vector< std::shared_ptr<ConvexCollider>>& voronoiColliders
             , ecs::entity_handle fracturedEnt);
+
+        void QuadrantVoronoi(math::vec3& min, math::vec3& max, std::vector<math::vec3>& voronoiPoints);
+
+        void BalancedVoronoi(math::vec3& min, math::vec3& max, std::vector<math::vec3>& voronoiPoints);
 
         math::vec3 GetImpactPointFromManifold(physics_manifold& manifold);
 
