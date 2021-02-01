@@ -36,7 +36,7 @@ public:
         );
 
         reportComponentType<sah>();
-        //reportSystem<TestSystem>();
+        reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
         //reportSystem<pointcloudtestsystem2>();
         reportComponentType<ext::animation>();
