@@ -259,6 +259,7 @@ namespace legion::physics
 
         //------------------------------------------------------------ helper functions -----------------------------------------------------------------------//
 
+
         /**@brief Given a set of points that represent 2 line segments, find a line segment that
         * reperesents the closest points between the 2 lines
         * @param p1 The start of the first line

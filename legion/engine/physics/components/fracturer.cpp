@@ -110,23 +110,43 @@ namespace legion::physics
         for (auto ent : entitiesGenerated)
         {
             auto [posH, rotH, scaleH] = ent.get_component_handles<transform>();
-            
+            math::mat4 trans = math::compose(scaleH.read(), rotH.read(), posH.read());
             //generate hull
             auto physicsCompHandle = ent.add_component<physicsComponent>();
             auto physicsComp = physicsCompHandle.read();
             auto meshFilter = ent.read_component<mesh_filter>();
-            physicsComp.ConstructConvexHull(meshFilter);
+            auto convexCollider = physicsComp.ConstructConvexHull(meshFilter);
             physicsCompHandle.write(physicsComp);
 
-            //add rigidbody and force
+            //add rigidbody 
             auto posHandle = ent.get_component_handle<position>();
             auto rbH = ent.add_component<rigidbody>();
             auto fragmentRB = rbH.read();
+            fragmentRB.globalCentreOfMass = posH.read();
 
-            math::vec3 distanceFromCentroid = fractureParams.explosionCentroid - posH.read();
+            //add force based on distance from explosion point
+            math::vec3 distanceFromCentroid = posH.read() - fractureParams.explosionCentroid ;
             math::vec3 forceDir = math::normalize(distanceFromCentroid);
             float forceAmount = (1.0f / (math::length(distanceFromCentroid))) * fractureParams.strength;
-            fragmentRB.addForce(forceDir * forceAmount);
+
+            //crude estimation of explosion point
+            float smallestDot = std::numeric_limits<float>::max();
+            HalfEdgeFace* chosenFace = nullptr;
+
+            for (auto face : convexCollider->GetHalfEdgeFaces())
+            {
+                float currentDot = math::dot(forceDir, face->normal);
+
+                if (currentDot < smallestDot)
+                {
+                    smallestDot = currentDot;
+                    chosenFace = face;
+                }
+            }
+
+            math::vec3 explosionPoint = trans * math::vec4(chosenFace->centroid, 1);
+
+            fragmentRB.addForceAt(explosionPoint,forceDir * forceAmount);
             rbH.write(fragmentRB);
            
             colliderIter++;
@@ -308,6 +328,9 @@ namespace legion::physics
 
         math::vec3 fifth = third + math::vec3(0, -0.1f, 0);
         voronoiPoints.push_back(fifth);
+
+        math::vec3 sixth = min + differenceQuadrant + math::vec3(0.1, 0.25f, 0.1);
+        voronoiPoints.push_back(sixth);
 
         math::vec3 centroid = (min + max) / 2.0f;
         int rand = math::linearRand(0, 5);

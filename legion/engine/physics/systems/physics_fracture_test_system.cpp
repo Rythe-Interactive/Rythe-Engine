@@ -1252,7 +1252,7 @@ namespace legion::physics
             auto PosH = smallExplosionEnt.get_component_handle<position>();
             auto fracturerH = smallExplosionEnt.get_component_handle<Fracturer>();
             auto fracturer = fracturerH.read();
-            FractureParams param(PosH.read(), 100.0f);
+            FractureParams param(PosH.read(), 10.0f);
             fracturer.ExplodeEntity(smallExplosionEnt, param);
             fracturerH.write(fracturer);
 
@@ -1263,7 +1263,7 @@ namespace legion::physics
             auto PosH = mediumExplosionEnt.get_component_handle<position>();
             auto fracturerH = mediumExplosionEnt.get_component_handle<Fracturer>();
             auto fracturer = fracturerH.read();
-            FractureParams param(PosH.read(), 300.0f);
+            FractureParams param(PosH.read(), 50.0f);
             fracturer.ExplodeEntity(mediumExplosionEnt, param);
             fracturerH.write(fracturer);
         }
@@ -1273,7 +1273,7 @@ namespace legion::physics
             auto PosH = largeExplosionEnt.get_component_handle<position>();
             auto fracturerH = largeExplosionEnt.get_component_handle<Fracturer>();
             auto fracturer = fracturerH.read();
-            FractureParams param(PosH.read(), 1000.0f);
+            FractureParams param(PosH.read(), 200.0f);
             fracturer.ExplodeEntity(largeExplosionEnt, param);
             fracturerH.write(fracturer);
         }

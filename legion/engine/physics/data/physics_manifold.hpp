@@ -37,7 +37,7 @@ namespace legion::physics
 
         bool isColliding;
 
-        void DEBUG_checkIDAndBreak(std::string firstID,std::string secondID) const
+        /*void DEBUG_checkIDAndBreak(std::string firstID,std::string secondID) const
         {
             auto idHA = entityA.get_component_handle<identifier>();
             auto idHB = entityB.get_component_handle<identifier>();
@@ -53,7 +53,7 @@ namespace legion::physics
                     DebugBreak();
                 }
             }
-        }
+        }*/
 
         bool DEBUG_checkID(std::string firstID, std::string secondID) const
         {

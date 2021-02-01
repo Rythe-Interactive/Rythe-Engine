@@ -69,8 +69,8 @@ namespace legion::physics
         void addForceAt(math::vec3 worldForcePosition, math::vec3 force)
         {
             forceAccumulator += force;
-            math::vec3 a = worldForcePosition - globalCentreOfMass;
-            torqueAccumulator += math::cross(worldForcePosition - globalCentreOfMass, force);
+            math::vec3 axis = worldForcePosition - globalCentreOfMass;
+            torqueAccumulator += math::cross(axis, force);
         }
 
         void setMass(float mass)
