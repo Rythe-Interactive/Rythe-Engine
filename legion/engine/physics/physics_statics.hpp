@@ -20,6 +20,9 @@ namespace legion::physics
 
         //---------------------------------------------------------------- Collision Detection ----------------------------------------------------------------------------//
 
+        /** @brief Given 2 ConvexCollider and their respective transforms, checks if 
+        * the colliders are colliding. The result is recorded in the physics_manifold
+        */
         static void DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB
             , const math::mat4& transformA, const math::mat4& transformB,
             ConvexConvexCollisionInfo& outCollisionInfo,  physics_manifold& manifold);
@@ -49,11 +52,43 @@ namespace legion::physics
                     worldSupportPoint = transformedVert;
                 }
             }
-
-
-
         }
 
+        /** @brief Given a ConvexCollider and a direction, Gets the vertex furthest in the given direction.
+        * The function does this with as little transformation as necessary.
+        * @param planePosition The position of the support plane in world space
+        * @param direction The direction we would like to know the support point of
+        * @param collider The ConvexCollider in question
+        * @param colliderTransform A mat4 describing the transform of the collider
+        * @param worldSupportPoint [out] the resulting support point
+        * @return returns true if a seperating axis was found
+        */
+        static void GetSupportPointNoTransform( math::vec3 planePosition,  math::vec3 direction, ConvexCollider* collider, const math::mat4& colliderTransform
+            , math::vec3& worldSupportPoint)
+        {
+            float largestDistanceInDirection = std::numeric_limits<float>::lowest();
+            planePosition = math::inverse(colliderTransform) * math::vec4(planePosition, 1);
+            direction = math::inverse(colliderTransform) * math::vec4(direction, 0);
+
+            for (const auto& vert : collider->GetVertices())
+            {
+                math::vec3 transformedVert = math::vec4(vert, 1);
+
+                float dotResult = math::dot(transformedVert - planePosition, direction);
+
+                if (dotResult > largestDistanceInDirection)
+                {
+                    largestDistanceInDirection = dotResult;
+                    worldSupportPoint = transformedVert;
+                }
+            }
+
+            worldSupportPoint = colliderTransform * math::vec4(worldSupportPoint, 1);
+        }
+
+
+        /** @brief Given a std::vector of vertices, gets the support point in the given direction
+        */
         static float GetSupportPoint(const std::vector<math::vec3>& vertices, const math::vec3& direction, math::vec3& outVec);
         
         /** @brief Given 2 ConvexColliders, convexA and convexB, checks if one of the faces of convexB creates a seperating axis
@@ -67,8 +102,10 @@ namespace legion::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation)
+            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation,bool shouldDebug = false)
         {
+            //shouldDebug = false;
+
             float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
             for (auto face : convexB->GetHalfEdgeFaces())
@@ -76,7 +113,7 @@ namespace legion::physics
 
                 //log::debug("face->normal {} ", math::to_string( face->normal));
                 //get inverse normal
-                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4(math::normalize(face->normal), 0));
+                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4((face->normal), 0));
 
                 math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
 
@@ -120,104 +157,12 @@ namespace legion::physics
          */
         static bool FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB,
             const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
-            math::vec3& seperatingAxisFound, float& maximumSeperation)
-        {
-            float currentMinimumSeperation = std::numeric_limits<float>::max();
-
-            math::vec3 centroidDir = transformA * math::vec4(convexA->GetLocalCentroid(), 0);
-            math::vec3 positionA = math::vec3(transformA[3]) + centroidDir;
-
-            for (const auto faceA : convexA->GetHalfEdgeFaces())
-            {
-                //----------------- Get all edges of faceA ------------//
-                std::vector<HalfEdgeEdge*> convexAHalfEdges;
-
-                auto lambda = [&convexAHalfEdges](HalfEdgeEdge* edge)
-                {
-                    convexAHalfEdges.push_back(edge);
-                };
-
-                faceA->forEachEdge(lambda);
-
-                for (const auto faceB : convexB->GetHalfEdgeFaces())
-                {
-                    //----------------- Get all edges of faceB ------------//
-                    std::vector<HalfEdgeEdge*> convexBHalfEdges;
-
-                    auto lambda = [&convexBHalfEdges](HalfEdgeEdge* edge)
-                    {
-                        convexBHalfEdges.push_back(edge);
-                    };
-
-                    faceB->forEachEdge(lambda);
+            math::vec3& seperatingAxisFound, float& maximumSeperation, bool shouldDebug = false);
       
-                    for (HalfEdgeEdge* edgeA : convexAHalfEdges)
-                    {
-                        for (HalfEdgeEdge* edgeB : convexBHalfEdges)
-                        {
-                            //if the given edges creates a minkowski face
-                            if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
-                            {
-                                //get world edge direction
-                                math::vec3 edgeADirection = transformA * math::vec4(edgeA->nextEdge->edgePosition, 1) - 
-                                    transformA * math::vec4(edgeA->edgePosition, 1);
-
-
-                                math::vec3 edgeBDirection = transformB * math::vec4(edgeB->nextEdge->edgePosition, 1) -
-                                    transformB * math::vec4(edgeB->edgePosition, 1);
-
-                                edgeADirection = math::normalize(edgeADirection);
-                                edgeBDirection = math::normalize(edgeBDirection);
-
-                                //get the seperating axis
-                                math::vec3 seperatingAxis = math::cross(edgeADirection, edgeBDirection);
-
-                                if (math::epsilonEqual(math::length(seperatingAxis), 0.0f, math::epsilon<float>()))
-                                {
-                                    continue;
-                                }
-
-                                seperatingAxis = math::normalize(seperatingAxis);
-
-                                //get world edge position
-                                math::vec3 edgeAtransformedPosition = transformA * math::vec4(edgeA->edgePosition, 1);
-                                math::vec3 edgeBtransformedPosition = transformB * math::vec4(edgeB->edgePosition, 1);
-
-                                //check if its pointing in the right direction 
-                                if (math::dot(seperatingAxis, edgeAtransformedPosition - positionA) < 0)
-                                {
-                                    seperatingAxis = -seperatingAxis;
-                                }
-
-                                //check if given edges create a seperating axis
-                                float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
-                                //log::debug("distance {} , currentMinimumSeperation {}", distance, currentMinimumSeperation);
-                                if (distance < currentMinimumSeperation)
-                                {                                 
-                                    refEdge.ptr = edgeA;
-                                    incEdge.ptr = edgeB;
-
-                                    seperatingAxisFound = seperatingAxis;
-                                    currentMinimumSeperation = distance;
-                                }
-                                //log::debug("BUILT MINKOWSKI");
-                            }
-                            else
-                            {
-                                //log::debug("NOT BUILT");
-                            }
-                        }
-                    }
-                }
-            }
-            /*assert(refEdge.ptr);
-            assert(incEdge.ptr);*/
-            //log::debug("a id  {}  b id {} combination {} ", std::get<0>(ids), std::get<1>(ids), std::get<2>(ids));
-            //refEdge.ptr->DEBUG_drawEdge(transformA, math::colors::red);
-            //incEdge.ptr->DEBUG_drawEdge(transformB, math::colors::red);
-            maximumSeperation = currentMinimumSeperation;
-            return currentMinimumSeperation > 0.0f;
-        }
+        /** @brief Given a ConvexCollider and sphere with a position and a readius, checks if these 2 shapes are colliding
+        */
+        static bool DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,
+             float& maximumSeperation);
 
 
         static std::pair< math::vec3,math::vec3> ConstructAABBFromPhysicsComponentWithTransform
@@ -313,6 +258,7 @@ namespace legion::physics
         }
 
         //------------------------------------------------------------ helper functions -----------------------------------------------------------------------//
+
 
         /**@brief Given a set of points that represent 2 line segments, find a line segment that
         * reperesents the closest points between the 2 lines
@@ -577,13 +523,26 @@ namespace legion::physics
         static bool attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::mat4& transformA,
             const math::mat4& transformB)
         {
-            const math::vec3 transformedA1 = transformA * math::vec4(edgeA->getLocalNormal(), 0);
-            const math::vec3 transformedA2 = transformA * math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
-            const math::vec3 transformedEdgeDirectionA = transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
+            //TODO the commmented parts are technically more robust and should work but somehow dont, figure out why.
 
-            const math::vec3 transformedB1 = transformB * math::vec4(edgeB->getLocalNormal(), 0);
-            const math::vec3 transformedB2 = transformB * math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
-            const math::vec3 transformedEdgeDirectionB = transformB * math::vec4(edgeB->getLocalEdgeDirection(), 0);
+            const math::vec3 transformedA1 = transformA *
+                math::vec4(edgeA->getLocalNormal(), 0);
+
+            const math::vec3 transformedA2 = transformA *
+                math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
+
+            const math::vec3 transformedEdgeDirectionA = math::cross(transformedA1, transformedA2);
+            //transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
+           
+            const math::vec3 transformedB1 = transformB *
+                math::vec4(edgeB->getLocalNormal(), 0);
+
+            const math::vec3 transformedB2 = transformB *
+                math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
+
+            const math::vec3 transformedEdgeDirectionB = math::cross(-transformedB1, -transformedB2);
+            //transformB *math::vec4(edgeB->getLocalEdgeDirection(), 0);
+                
 
             math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
 

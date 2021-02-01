@@ -11,6 +11,7 @@ namespace legion::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
+        bool shouldDebug = manifold.DEBUG_checkID("cube","floor");
         OPTICK_EVENT();
         // Middle-phase collision detection
         // Do AABB collision to check whether collision is possible
@@ -43,12 +44,12 @@ namespace legion::physics
             manifold.isColliding = false;
             return;
         }
-     
+
         PointerEncapsulator < HalfEdgeFace> BRefFace;
         //log::debug("Face Check B");
         float BRefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
-            this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
+            this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation, shouldDebug) || !BRefFace.ptr)
         {
             //log::debug("Not Found on B ");
             manifold.isColliding = false;
@@ -62,14 +63,27 @@ namespace legion::physics
         float aToBEdgeSeperation;
         //log::debug("Edge Check");
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformB, manifold.transformA,
-            edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation) || !edgeRef.ptr)
+            edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation, shouldDebug) || !edgeRef.ptr)
         {
-            //log::debug("aToBEdgeSeperation {} " , aToBEdgeSeperation);
+            //
             manifold.isColliding = false;
+
+            if (shouldDebug)
+            {
+                edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::blue, 10.0f);
+                edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::red, 10.0f);
+            }
             return;
         }
 
+        if (shouldDebug)
+        {
+            log::debug("-> collision detected for debug ");
+            ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::blue, 5.0f);
+            BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 5.0f);
+        }
 
+      
        /* ConvexConvexCollisionInfo convexCollisionInfo;
        
         PhysicsStatics::DetectConvexConvexCollision(this,convexCollider, 
@@ -79,7 +93,7 @@ namespace legion::physics
         {
             return;
         }*/
-
+  
     
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
 
@@ -126,6 +140,10 @@ namespace legion::physics
             manifold.penetrationInformation = std::move(abEdgePenetrationQuery);
         }
 
+        if (shouldDebug)
+        {
+            //log::debug("manifold.penetrationInformation chosen {} ", manifold.penetrationInformation->debugID);
+        }
         manifold.isColliding = true;
 
         //keeping this here so i can copy pasta when i need it again
@@ -250,7 +268,7 @@ namespace legion::physics
     void ConvexCollider::ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount,bool shouldDebug)
     {
         OPTICK_EVENT();
-        //log::debug("-------------------------------- ConstructConvexHullWithMesh ----------------------------------");
+       // log::debug("-------------------------------- ConstructConvexHullWithMesh ----------------------------------");
         // Step 0 - Create inital hull
         /*if (step == 0)
         {*/
@@ -665,6 +683,7 @@ namespace legion::physics
         //}
         ////convexHullMergeFaces(halfEdgeFaces,true);
         AssertEdgeValidity();
+        //log::debug("-> Finish ConstructConvexHullWithMesh ----------------------------------");
     }
     
 
@@ -775,7 +794,7 @@ namespace legion::physics
         }
         else
         {
-            log::error("Horizon Edge NOT FOUND!");
+            //log::error("Horizon Edge NOT FOUND!");
             return;
         }
 
@@ -797,7 +816,12 @@ namespace legion::physics
 
                 j++;
 
-                if (j > 999) { return; }
+                if (j > 999)
+                {
+                    edges.clear();
+                    log::error("Quickhull: Stuck in while loop at horizon jumping");
+                    return;
+                }
             }
             j = 0;
 
