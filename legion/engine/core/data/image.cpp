@@ -123,6 +123,9 @@ namespace legion::core
                         color.a = 1.f;
                         break;
                     }
+                    default:
+                        log::error("invalid channel format");
+                        abort();
                     }
                     break;
                 }
@@ -160,6 +163,9 @@ namespace legion::core
                         color.a = *reinterpret_cast<float*>(aPtr);
                         break;
                     }
+                    default:
+                        log::error("invalid channel format");
+                        abort();
                     }
                     break;
                 }
@@ -195,6 +201,9 @@ namespace legion::core
                         color.a = 1.f;
                         break;
                     }
+                    default:
+                        log::error("invalid channel format");
+                        abort();
                     }
                     break;
                 }
@@ -231,9 +240,15 @@ namespace legion::core
                         color.a = *reinterpret_cast<float*>(aPtr);
                         break;
                     }
+                    default:
+                        log::error("invalid channel format");
+                        abort();
                     }
                     break;
                 }
+                default:
+                    log::error("invalid channel format");
+                    abort();
                 }
 
                 output.push_back(color);
@@ -287,7 +302,7 @@ namespace legion::core
         {
             async::readwrite_guard guard(m_imagesLock);
             auto* pair_ptr = new std::pair<async::rw_spinlock, image>();
-            pair_ptr->second = std::move(result.decay());
+            pair_ptr->second = result.decay();
             pair_ptr->second.name = name;
             pair_ptr->second.m_id = id;
             m_images.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, image>>(pair_ptr)));

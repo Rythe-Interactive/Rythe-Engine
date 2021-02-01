@@ -74,7 +74,7 @@ namespace legion::physics
             for (auto face : convexB->GetHalfEdgeFaces())
             {
 
-                //og::debug("face->normal {} ", math::to_string( face->normal));
+                //log::debug("face->normal {} ", math::to_string( face->normal));
                 //get inverse normal
                 math::vec3 seperatingAxis = math::normalize(transformB * math::vec4(math::normalize(face->normal), 0));
 
@@ -220,21 +220,21 @@ namespace legion::physics
         }
 
 
-        static std::tuple< math::vec3,math::vec3> ConstructAABBFromPhysicsComponentWithTransform
+        static std::pair< math::vec3,math::vec3> ConstructAABBFromPhysicsComponentWithTransform
         (ecs::component_handle<physicsComponent> physicsComponentToUse, const math::mat4& transform);
 
         static float GetPhysicsComponentSupportPointAtDirection(math::vec3 direction,physicsComponent& physicsComponentToUse);
 
-        static std::tuple< math::vec3, math::vec3> ConstructAABBFromVertices(const std::vector<math::vec3>& vertices);
+        static std::pair< math::vec3, math::vec3> ConstructAABBFromVertices(const std::vector<math::vec3>& vertices);
 
-        static std::tuple< math::vec3, math::vec3> ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices,const math::mat4& transform);
+        static std::pair< math::vec3, math::vec3> ConstructAABBFromTransformedVertices(const std::vector<math::vec3>& vertices,const math::mat4& transform);
 
         /**@brief Creates one big AABB from two AABBs
          * The first element in the tuple will be the lower bounds
          * The second element in the tuple will be the higher bounds
          * The AABB will be between the two vec3's in the tuple 
          */
-        static std::tuple<math::vec3, math::vec3> CombineAABB(const std::tuple<math::vec3, math::vec3>& first, const std::tuple<math::vec3, math::vec3>& second);
+        static std::pair<math::vec3, math::vec3> CombineAABB(const std::pair<math::vec3, math::vec3>& first, const std::pair<math::vec3, math::vec3>& second);
 
         //---------------------------------------------------------- Polyhedron Clipping ----------------------------------------------------------------------------//
 
@@ -541,6 +541,32 @@ namespace legion::physics
             con.draw_cells_json("assets/voronoi/output/cells.json");
             std::ifstream f("assets/voronoi/output/cells.json");
             return serialization::SerializationUtil::JSONDeserialize< std::vector<std::vector<math::vec4>>>(f);
+        }
+
+        /**@brief Checks collision between two AABB colliders and returns whether there is collision
+         * @param low0 the lower bounds of the first collider
+         * @param high0 the higher bounds of the first collider
+         * @param low1 the lower bounds of the second collider
+         * @param high1 the higher bounds of the second collider
+         * @return Whether there is collision
+         */
+        static bool CollideAABB(const math::vec3 low0, const math::vec3 high0, const math::vec3 low1, const math::vec3 high1)
+        {
+            return low0.x <= high1.x && high0.x >= low1.x &&
+                low0.y <= high1.y && high0.y >= low1.y
+                && low0.z <= high1.z && high0.z >= low1.z;
+        }
+
+        /**@brief Checks collision between two AABB colliders and returns whether there is collision
+         * @param col0 the lower and higher bounds of the first collider
+         * @param col1 the lower and higher bounds of the second collider
+         * @return Whether there is collision
+         */
+        static bool CollideAABB(const std::pair<math::vec3, math::vec3> col0, const std::pair<math::vec3, math::vec3> col1)
+        {
+            auto& [low0, high0] = col0;
+            auto& [low1, high1] = col1;
+            return CollideAABB(low0, high0, low1, high1);
         }
 
     private:

@@ -69,6 +69,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -90,6 +91,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,6 +108,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="data\animation.cpp" />
+    <ClCompile Include="data\crosshair.cpp" />
     <ClCompile Include="data\events_statics.cpp" />
     <ClCompile Include="data\explode_event.hpp" />
     <ClCompile Include="source.cpp" />
@@ -115,6 +118,7 @@
   <ItemGroup>
     <ClInclude Include="data\animation.hpp" />
     <ClInclude Include="data\animation_events.hpp" />
+    <ClInclude Include="data\crosshair.hpp" />
     <ClInclude Include="data\decal_event.hpp" />
     <ClInclude Include="data\particle_event.hpp" />
     <ClInclude Include="data\pp_bloom.hpp" />

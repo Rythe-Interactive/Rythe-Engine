@@ -4,22 +4,28 @@
 
 namespace legion::physics
 {
-	/** @struct physics_manifold_precursor
-	* @brief contains the necessary data to create a physics_manifold
-	*/
-	struct physics_manifold_precursor
-	{
-		math::mat4 worldTransform;
-		ecs::component_handle<physicsComponent> physicsComponentHandle;
-		int id;
+    /** @struct physics_manifold_precursor
+    * @brief contains the necessary data to create a physics_manifold
+    */
+    struct physics_manifold_precursor
+    {
+        math::mat4 worldTransform;
+        physicsComponent* physicsComp;
+        id_type id;
+        ecs::entity_handle entity;
 
+        physics_manifold_precursor() = default;
 
+        physics_manifold_precursor(math::mat4 pWorldTransform, physicsComponent* pPhysicsComp, id_type precursorID, ecs::entity_handle entity) :
+            worldTransform(pWorldTransform), physicsComp(pPhysicsComp), id(precursorID), entity(entity)
+        {
 
-		physics_manifold_precursor(math::mat4 pWorldTransform,ecs::component_handle<physicsComponent>& pPhysicsCompHandle,int precursorID) :
-			worldTransform(pWorldTransform), physicsComponentHandle(pPhysicsCompHandle),id(precursorID)
-		{
+        }
 
-		}
-	};
+        bool operator==(const physics_manifold_precursor& rhs)
+        {
+            return entity == rhs.entity;
+        }
+    };
 
 }

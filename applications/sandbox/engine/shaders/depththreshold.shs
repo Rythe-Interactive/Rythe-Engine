@@ -22,6 +22,7 @@ shader(fragment)
 {
     uniform float sampleOffset;
     uniform float focalOffset;
+    uniform float focalRange;
     uniform float bokehRadius;
 
     void main(void)
@@ -41,7 +42,7 @@ shader(fragment)
         vec2(centerTexture.x+centerOffset.x,centerTexture.y),
         vec2(centerTexture.x,-centerOffset.y+centerTexture.y));
         //Calculates the average depth of all of those.
-        const float averageDepth = 
+        const float averageDepth =
         (WorldToViewSpacePostion(ScenePosition(centerTexture)).z +
          WorldToViewSpacePostion(ScenePosition(offsetTexels[0])).z +
           WorldToViewSpacePostion(ScenePosition(offsetTexels[1])).z +
@@ -49,9 +50,12 @@ shader(fragment)
             WorldToViewSpacePostion(ScenePosition(offsetTexels[3])).z)*0.2;
 
         //Calculates the actual depth.
-        float actualOffset = mix(focalOffset,FarZ,clamp01(averageDepth/FarZ));
+        //float actualOffset = mix(focalOffset, FarZ*0.5, clamp01(averageDepth/FarZ));
+        float actualRange = mix(focalRange, FarZ, clamp01(averageDepth/FarZ));
         //Now calculates the value of the area of focus at that texel position.
-        float areaOfFocus = (depthColor - averageDepth)/actualOffset;
+        float diff = (depthColor - averageDepth);
+        diff = diff >= 0.0 ? max(0.0, diff - (focalOffset*0.5)) : min(0.0, diff + (focalOffset*0.5));
+        float areaOfFocus = diff / actualRange;
         areaOfFocus = clamp(areaOfFocus, -1, 1) * bokehRadius;
         //Assigns the output color.
         fragment_color = vec4(vec3(areaOfFocus), 1.0);

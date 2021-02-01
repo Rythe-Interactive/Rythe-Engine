@@ -11,10 +11,13 @@ namespace legion::physics
          * @param manifoldPrecursors all the physics components
          * @param manifoldPrecursorGrouping a list-list of colliders that have a chance of colliding and should be checked
          */
-        void collectPairs(std::vector<physics_manifold_precursor>& manifoldPrecursors,
-            std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping) override
+        const std::vector<std::vector<physics_manifold_precursor>>& collectPairs(
+            std::vector<physics_manifold_precursor>&& manifoldPrecursors) override
         {
-            manifoldPrecursorGrouping.push_back(std::move(manifoldPrecursors));
+            log::debug("Brute force!");
+            m_groupings.clear();
+            m_groupings.emplace_back(std::move(manifoldPrecursors));
+            return m_groupings;
         }
     };
 }

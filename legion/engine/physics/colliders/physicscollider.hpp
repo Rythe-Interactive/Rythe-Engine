@@ -49,7 +49,7 @@ namespace legion::physics
         * @param [in/out] manifold A physics_manifold that holds information about the collision
         */
         virtual void CheckCollision(
-            std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) {};
+            PhysicsCollider* physicsCollider, physics_manifold& manifold) {};
 
         /** @brief given a convexCollider checks if this collider collides the convexCollider. The information
         * the information is then passed to the manifold.
@@ -67,7 +67,7 @@ namespace legion::physics
         * to the corrent FillManifoldWith function with double dispatch.
         */
         virtual void PopulateContactPoints(
-            std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) {};
+            PhysicsCollider* physicsCollider, physics_manifold& manifold) {};
 
         /** @brief Creates the contact points between this physics collider and the given ConvexCollider and
         * stores them in the manifold
@@ -97,12 +97,12 @@ namespace legion::physics
         }
 
         //
-        std::tuple<math::vec3, math::vec3> GetMinMaxLocalAABB() const
+        std::pair<math::vec3, math::vec3> GetMinMaxLocalAABB() const
         {
             return minMaxLocalAABB;
         }
 
-        std::tuple<math::vec3, math::vec3> GetMinMaxWorldAABB() const
+        std::pair<math::vec3, math::vec3> GetMinMaxWorldAABB() const
         {
             return minMaxWorldAABB;
         }
@@ -110,8 +110,8 @@ namespace legion::physics
     protected:
 
         math::vec3 localColliderCentroid = math::vec3(0, 0, 0);
-        std::tuple<math::vec3, math::vec3> minMaxLocalAABB;
-        std::tuple<math::vec3, math::vec3> minMaxWorldAABB;
+        std::pair<math::vec3, math::vec3> minMaxLocalAABB;
+        std::pair<math::vec3, math::vec3> minMaxWorldAABB;
     private:
 
         int id = -1;
