@@ -134,17 +134,6 @@ namespace legion::physics
 
         registry->destroyEntity(ownerEntity );
 
-        //log::debug("all fragments have convex hulls");
-        //for each pair list
-
-
-             //invalidate original colliders
-
-
-        //for each generated collider paired with a newly generated mesh
-            //if the collider is in the impact sphere, create a new entity
-
-            //else,add it back in the original collider
 
         fractureCount++;
     }

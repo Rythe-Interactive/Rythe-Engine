@@ -20,6 +20,9 @@ namespace legion::physics
 
         //---------------------------------------------------------------- Collision Detection ----------------------------------------------------------------------------//
 
+        /** @brief Given 2 ConvexCollider and their respective transforms, checks if 
+        * the colliders are colliding. The result is recorded in the physics_manifold
+        */
         static void DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB
             , const math::mat4& transformA, const math::mat4& transformB,
             ConvexConvexCollisionInfo& outCollisionInfo,  physics_manifold& manifold);
@@ -51,7 +54,8 @@ namespace legion::physics
             }
         }
 
-        /** @brief Given a transformed ConvexCollider and a direction, Gets the vertex furthest in the given direction
+        /** @brief Given a ConvexCollider and a direction, Gets the vertex furthest in the given direction.
+        * The function does this with as little transformation as necessary.
         * @param planePosition The position of the support plane in world space
         * @param direction The direction we would like to know the support point of
         * @param collider The ConvexCollider in question
@@ -83,7 +87,8 @@ namespace legion::physics
         }
 
 
-
+        /** @brief Given a std::vector of vertices, gets the support point in the given direction
+        */
         static float GetSupportPoint(const std::vector<math::vec3>& vertices, const math::vec3& direction, math::vec3& outVec);
         
         /** @brief Given 2 ConvexColliders, convexA and convexB, checks if one of the faces of convexB creates a seperating axis
@@ -154,7 +159,8 @@ namespace legion::physics
             const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
             math::vec3& seperatingAxisFound, float& maximumSeperation, bool shouldDebug = false);
       
-
+        /** @brief Given a ConvexCollider and sphere with a position and a readius, checks if these 2 shapes are colliding
+        */
         static bool DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,
              float& maximumSeperation);
 

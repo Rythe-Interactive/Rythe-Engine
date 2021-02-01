@@ -3,9 +3,12 @@
 
 namespace legion::physics
 {
+    /** @struct FractureParams
+    * @brief contains the parameters that will be used for a given fracture event.
+    */
     struct FractureParams
     {
-        
+
         math::vec3 explosionCentroid;
         float strength;
 
