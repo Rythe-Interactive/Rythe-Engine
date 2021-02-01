@@ -27,6 +27,9 @@
     <ClCompile Include="systems\animator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="data\crosshair.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systems\testsystem.hpp">
@@ -80,7 +83,7 @@
     <ClInclude Include="module\testmodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\final_presentation_system.hpp">
+    <ClInclude Include="data\crosshair.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

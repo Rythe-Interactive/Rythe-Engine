@@ -111,7 +111,7 @@ namespace legion::physics
             for (auto face : convexB->GetHalfEdgeFaces())
             {
 
-                //og::debug("face->normal {} ", math::to_string( face->normal));
+                //log::debug("face->normal {} ", math::to_string( face->normal));
                 //get inverse normal
                 math::vec3 seperatingAxis = math::normalize(transformB * math::vec4((face->normal), 0));
 

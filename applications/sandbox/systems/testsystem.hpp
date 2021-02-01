@@ -1050,7 +1050,7 @@ public:
         //Complex Mesh
 
         createProcess<&TestSystem::update>("Update");
-        ext::AnimationEditor::onRenderCustomEventGUI(ext::void_animation_event::id, [this](id_type id, ext::animation_event_base* ebase)
+        ext::AnimationEditor::onRenderCustomEventGUI(ext::void_animation_event::id, [](id_type id, ext::animation_event_base* ebase)
             {
                 imgui::base::Text("Void Animations Custom Edit Frontend!");
 

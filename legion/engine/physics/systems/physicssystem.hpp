@@ -42,6 +42,9 @@ namespace legion::physics
             //log::debug("{}ms", physicsTimer.restart().milliseconds());
             OPTICK_EVENT();
 
+            //static time::timer pt;
+            //log::debug("frametime: {}ms", pt.restart().milliseconds());
+
             ecs::component_container<rigidbody> rigidbodies;
             std::vector<byte> hasRigidBodies;
 
@@ -157,11 +160,14 @@ namespace legion::physics
             m_broadPhase = std::make_unique<BroadPhaseType>(std::forward<Args>(args)...);
         }
 
+        static void drawBroadPhase()
+        {
+            m_broadPhase->debugDraw();
+        }
 
     private:
 
         static std::unique_ptr<BroadPhaseCollisionAlgorithm> m_broadPhase;
-        //legion::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> m_optimizeBroadPhase;
         const float m_timeStep = 0.02f;
 
 
@@ -189,7 +195,7 @@ namespace legion::physics
 
             std::vector<std::vector<physics_manifold_precursor>> manifoldPrecursorGrouping;
             //m_optimizeBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
-            m_broadPhase->collectPairs(std::move(manifoldPrecursors), manifoldPrecursorGrouping);
+            manifoldPrecursorGrouping = m_broadPhase->collectPairs(std::move(manifoldPrecursors));
 
             //------------------------------------------------------ Narrowphase -----------------------------------------------------//
             std::vector<physics_manifold> manifoldsToSolve;
@@ -199,6 +205,7 @@ namespace legion::physics
                 size_type totalChecks = 0;
                 for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
                 {
+                    if (manifoldPrecursor.size() == 0) continue;
                     for (int i = 0; i < manifoldPrecursor.size() - 1; i++)
                     {
                         for (int j = i + 1; j < manifoldPrecursor.size(); j++)
@@ -359,6 +366,7 @@ namespace legion::physics
             std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved)
         {
             OPTICK_EVENT();
+            if (!precursorA.physicsComp || !precursorB.physicsComp) return;
             auto& physicsComponentA = *precursorA.physicsComp;
             auto& physicsComponentB = *precursorB.physicsComp;
 
