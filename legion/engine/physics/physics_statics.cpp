@@ -99,18 +99,8 @@ namespace legion::physics
 
                 for (HalfEdgeEdge* edgeA : convexAHalfEdges)
                 {
-
-
                     for (HalfEdgeEdge* edgeB : convexBHalfEdges)
                     {
-                        bool atDebugFace = facei == 0 && facej == 1;
-
-                        if (atDebugFace && shouldDebug)
-                        {
-                            /*edgeA->face->DEBUG_DrawFace(transformA, math::colors::green, 5.0f);
-                            edgeB->face->DEBUG_DrawFace(transformB, math::colors::cyan, 5.0f);*/
-                        }
-
                         //if the given edges creates a minkowski face
                         if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
                         {
@@ -153,27 +143,14 @@ namespace legion::physics
                                 seperatingAxisFound = seperatingAxis;
                                 currentMinimumSeperation = distance;
                             }
-                            //log::debug("BUILT MINKOWSKI");
                         }
-                        else
-                        {
-                            //log::debug("NOT BUILT");
-                        }
-
-                       
                     }
-
-                    
                 }
                 facej++;
             }
             facei++;
         }
-        /*assert(refEdge.ptr);
-        assert(incEdge.ptr);*/
-        //log::debug("a id  {}  b id {} combination {} ", std::get<0>(ids), std::get<1>(ids), std::get<2>(ids));
-        //refEdge.ptr->DEBUG_drawEdge(transformA, math::colors::red);
-        //incEdge.ptr->DEBUG_drawEdge(transformB, math::colors::red);
+
         maximumSeperation = currentMinimumSeperation;
         return currentMinimumSeperation > 0.0f;
     }

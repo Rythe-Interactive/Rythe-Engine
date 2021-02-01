@@ -14,8 +14,6 @@ namespace legion::physics
         createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
 
         manifoldPrecursorQuery = createQuery<position, rotation, scale, physicsComponent>();
-        //BroadphaseBruteforce
-        //BroadphaseUniformGrid
 
         //std::make_unique<BroadphaseUniformGrid>(math::vec3(2,2,2));
         //std::make_unique<BroadphaseBruteforce>();

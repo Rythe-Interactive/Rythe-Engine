@@ -373,7 +373,6 @@ namespace legion::physics
             isAtMomentumThreshold = math::length(rbH.read().velocity * mass) > 5.0f;
         }
 
-        //log::debug("fractureCount {} ", fractureCount);
         return fractureCount == 0 && isAtMomentumThreshold;
     }
 
@@ -427,13 +426,10 @@ namespace legion::physics
             impactPoint += contact.RefWorldContact;
             impactPoint += contact.IncWorldContact;
         }
-        //log::debug("impactPoint {} ", math::to_string(impactPoint));
 
         float numberOfContacts = manifold.contacts.size() * 2;
-        //log::debug("numberOfContacts {} ", numberOfContacts);
         float mult = (1.0f / numberOfContacts);
 
-        //TODO doing this the normal way triggers an illegal operation somehow, find out why
         impactPoint *= mult;
         return impactPoint;
     }

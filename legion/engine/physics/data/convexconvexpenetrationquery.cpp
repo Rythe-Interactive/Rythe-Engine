@@ -75,11 +75,6 @@ namespace legion::physics
 
             if (distanceToCollisionPlane < constants::contactOffset)
             {
-                /*if (shouldDebug)
-                {
-                    log::debug("=pushed contact");
-                }*/
-
                 math::vec3 referenceContact = incidentContact.position - normal * distanceToCollisionPlane;
 
                 physics_contact contact;
@@ -93,10 +88,7 @@ namespace legion::physics
                 manifold.contacts.push_back(contact);
              
             }
-
-
         }
-        //log::debug("//////ConvexConvexPenetrationQuery::populateContactList");
     }
 
 
