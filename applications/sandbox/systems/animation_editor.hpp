@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #include <variant>
 #include <core/core.hpp>
 #include <rendering/util/gui.hpp>
@@ -9,7 +9,12 @@
 #include "../data/animation.hpp"
 #include <application/input/inputsystem.hpp>
 
-struct copy_key_frame : application::input_action<copy_key_frame>{};
+
+#include "../data/decal_event.hpp"
+#include "../data/explode_event.hpp"
+#include "../data/particle_event.hpp"
+
+ struct copy_key_frame : application::input_action<copy_key_frame>{};
 
 namespace ext
 {
@@ -174,6 +179,34 @@ namespace ext
 
             application::InputSystem::createBinding<copy_key_frame>(application::inputmap::method::P);
             bindToEvent<copy_key_frame,&AnimationEditor::onCopyKeyFrame>();
+
+            ext::registerAnimationEvent<evt::explosion_event>("ExplosionEvent");
+            AnimationEditor::onRenderCustomEventGUI(evt::explosion_event::id,
+                                                    custom_render_layer::create<&evt::explosion_event::onGUI>()
+            );
+
+            ext::registerAnimationEvent<evt::particle_event>("ParticleEvent");
+            AnimationEditor::onRenderCustomEventGUI(evt::particle_event::id,
+                                                    custom_render_layer::create<&evt::particle_event::onGUI>()
+            );
+
+
+            ext::registerAnimationEvent<evt::decal_event>("DecalEvent");
+            AnimationEditor::onRenderCustomEventGUI(evt::decal_event::id,
+                                                    custom_render_layer::create<&evt::decal_event::onGUI>()
+            );
+
+            AnimationEditor::onRenderCustomEventGUI(void_animation_event::id, [this](id_type id, animation_event_base* ebase)
+            {
+                imgui::base::Text("Void Animations Custom Edit Frontend!");
+
+                static bool showBaseRenderLayer = false;
+                if (imgui::base::Button(fmt::format("Show Base Renderer [{}]", showBaseRenderLayer).c_str()))
+                {
+                    showBaseRenderLayer = !showBaseRenderLayer;
+                }
+                return showBaseRenderLayer;
+            });
 
         }
 

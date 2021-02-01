@@ -13,7 +13,7 @@
 #include "../data/animation.hpp"
 #include "../systems/animation_editor.hpp"
 #include "../systems/animator.hpp"
-
+#include "../systems/testsystemconvexhull.hpp"
 
 
 using namespace legion;
@@ -40,6 +40,9 @@ public:
         reportSystem<SimpleCameraController>();
         //reportSystem<pointcloudtestsystem2>();
         reportComponentType<ext::animation>();
+        reportComponentType<ext::evt::particle_receiver>();
+        reportComponentType<ext::evt::explosion_receiver>();
+        reportComponentType<ext::evt::decal_receiver>();
         reportSystem<ext::Animator>();
         reportSystem<ext::AnimationEditor>();
         reportSystem<GuiTestSystem>();

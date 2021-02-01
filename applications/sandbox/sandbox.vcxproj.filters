@@ -27,6 +27,12 @@
     <ClCompile Include="systems\animator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="data\explode_event.hpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="data\events_statics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systems\testsystem.hpp">
@@ -78,6 +84,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="module\testmodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\particle_event.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\decal_event.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
