@@ -2,6 +2,7 @@
 #include <core/core.hpp>
 #include <physics/mesh_splitter_utils/splittable_polygon.hpp>
 #include <physics/physics_statics.hpp>
+#include <rendering/debugrendering.hpp>
 
 namespace legion::physics
 {
@@ -251,6 +252,18 @@ namespace legion::physics
             float dotResult = math::dot(otherNormal, comparisonNormal);
 
             return dotResult > toleranceDot;
+        }
+
+        void DEBUG_drawInsetEdge(const math::mat4& transform,
+            math::vec3& worldCentroid,float insetInterpolant)
+        {
+            auto [start, end] = getEdgeWorldPositions(transform);
+            math::vec3 toCentroidStart = worldCentroid - start;
+            math::vec3 toCentroidEnd = worldCentroid - end;
+
+            debug::drawLine(start + toCentroidStart * insetInterpolant
+                , end + toCentroidEnd * insetInterpolant, owner.lock()->debugColor, 8.0f, 0.0f);
+
         }
 
     };

@@ -16,7 +16,7 @@ namespace legion::physics
         float linearDrag;
 
         //angular motion component
-        math::mat3 localInverseInertiaTensor = math::mat3(3.0f);
+        math::mat3 localInverseInertiaTensor = math::mat3(6.0f);
         math::mat3 globalInverseInertiaTensor = localInverseInertiaTensor;
 
         math::vec3 angularAcc = math::vec3(0.0);
@@ -69,8 +69,8 @@ namespace legion::physics
         void addForceAt(math::vec3 worldForcePosition, math::vec3 force)
         {
             forceAccumulator += force;
-            math::vec3 a = worldForcePosition - globalCentreOfMass;
-            torqueAccumulator += math::cross(worldForcePosition - globalCentreOfMass, force);
+            math::vec3 axis = worldForcePosition - globalCentreOfMass;
+            torqueAccumulator += math::cross(axis, force);
         }
 
         void setMass(float mass)

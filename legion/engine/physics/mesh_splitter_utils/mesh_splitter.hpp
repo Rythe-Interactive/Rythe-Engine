@@ -246,10 +246,10 @@ namespace legion::physics
             for (IntersectionEdgeInfo& info : generatedIntersectionEdges)
             {
                 //instantiate edge and set its pairing
-                meshHalfEdgePtr firstEdge = std::make_shared<MeshHalfEdge>(info.first);
-                meshHalfEdgePtr secondEdge = std::make_shared<MeshHalfEdge>(info.second);
+                meshHalfEdgePtr firstEdge = std::make_shared<MeshHalfEdge>(info.first,math::vec2(0.0f));
+                meshHalfEdgePtr secondEdge = std::make_shared<MeshHalfEdge>(info.second, math::vec2(0.0f));
                 //temporarily second edge to info.second
-                meshHalfEdgePtr thirdEdge = std::make_shared<MeshHalfEdge>(info.second);
+                meshHalfEdgePtr thirdEdge = std::make_shared<MeshHalfEdge>(info.second, math::vec2(0.0f));
 
                 info.centroidEdge = thirdEdge;
                 info.instantiatedEdge  = firstEdge;
@@ -354,6 +354,11 @@ namespace legion::physics
                 log::error("Split tester not set");
             }
         }
+
+        void DEBUG_DrawPolygonData(const math::mat4& transform);
+
+
+
     };
 }
 

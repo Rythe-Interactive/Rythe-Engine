@@ -33,17 +33,13 @@ namespace legion::physics
 
         //TODO move implementation to a seperate cpp file
 
-        virtual void setup()
-        {
-            createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
-
-            manifoldPrecursorQuery = createQuery<position, rotation, scale, physicsComponent>();
-
-            m_broadPhase = std::make_unique<BroadphaseBruteforce>();
-        }
+        virtual void setup();
+     
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
+            static time::timer physicsTimer;
+            //log::debug("{}ms", physicsTimer.restart().milliseconds());
             OPTICK_EVENT();
 
             //static time::timer pt;
@@ -108,6 +104,28 @@ namespace legion::physics
                     manifoldPrecursorQuery.submit<position>();
                     manifoldPrecursorQuery.submit<rotation>();
             }
+
+           /* auto splitterDrawQuery = createQuery<MeshSplitter>();
+            splitterDrawQuery.queryEntities();
+
+            for (auto ent : splitterDrawQuery)
+            {
+                auto splitterHandle = ent.get_component_handle<MeshSplitter>();
+   
+                if (splitterHandle )
+                {
+                    auto [posH,rotH,scaleH] = ent.get_component_handles<transform>();
+                    debug::drawLine
+                    (posH.read(), posH.read() + math::vec3(0, 5, 0), math::colors::red, 20.0f, 0.0f, true);
+
+                    auto splitter = splitterHandle.read();
+                    math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+
+                    splitter.DEBUG_DrawPolygonData(transform);
+                }
+            }*/
+
+
         }
 
         void bulkRetrievePreManifoldData(
@@ -228,8 +246,8 @@ namespace legion::physics
                         }
                     }
                 }
-                log::debug("groupings {}", manifoldPrecursorGrouping.size());
-                log::debug("total checks {}", totalChecks);
+                //log::debug("groupings {}", manifoldPrecursorGrouping.size());
+                //log::debug("total checks {}", totalChecks);
             }
 
             //------------------------------------------------ Pre Collision Solve Events --------------------------------------------//
@@ -412,6 +430,8 @@ namespace legion::physics
 
             manifold.transformA = precursorA.worldTransform;
             manifold.transformB = precursorB.worldTransform;
+
+            //manifold.DEBUG_checkID("floor", "problem");
 
             // log::debug("colliderA->CheckCollision(colliderB, manifold)");
             colliderA->CheckCollision(colliderB, manifold);

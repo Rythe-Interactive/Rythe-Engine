@@ -36,6 +36,8 @@ namespace legion::physics
 
 		SplitState GetPolygonSplitState() const;
 
+        void DEBUG_drawEdgeBoundaryInset(const math::mat4& transform);
+
 		//mostly used for debugging
 		math::vec3 localCentroid{ 0,0,0 };
 		math::color debugColor;

@@ -14,6 +14,7 @@
 #include "../systems/animation_editor.hpp"
 #include "../systems/animator.hpp"
 #include "../systems/testsystemconvexhull.hpp"
+#include "../systems/final_presentation_system.hpp"
 
 
 using namespace legion;
@@ -46,7 +47,8 @@ public:
         reportSystem<ext::Animator>();
         reportSystem<ext::AnimationEditor>();
         reportSystem<GuiTestSystem>();
-        //reportSystem<physics::PhysicsFractureTestSystem>();
+        //reportSystem<final_presentation_system>();
+        reportSystem<physics::PhysicsFractureTestSystem>();
         reportSystem<TestSystemConvexHull>();
 
     }
