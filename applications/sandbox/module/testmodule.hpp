@@ -15,6 +15,7 @@
 #include "../systems/animator.hpp"
 #include "../systems/event_based_decal_spawner.hpp"
 #include "../systems/event_based_explosion_system.hpp"
+#include "../systems/event_based_particle_spawner.hpp"
 #include "../systems/testsystemconvexhull.hpp"
 #include "../systems/final_presentation_system.hpp"
 
@@ -54,6 +55,7 @@ public:
         reportSystem<TestSystemConvexHull>();
         reportSystem<ext::BigBoom>();
         reportSystem<ext::DecalSpawner>();
+        //reportSystem<ext::ParticleSpawner>();
 
     }
 

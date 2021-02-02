@@ -28,6 +28,7 @@
 
 #include "animation_editor.hpp"
 #include "animator.hpp"
+#include "event_based_explosion_system.hpp"
 #include "../data/animation.hpp"
 #include "../data/explode_event.hpp"
 
@@ -725,6 +726,8 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(copperH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -3.6f), rotation(), scale());
+
+            //ext::BigBoom::createExplosiveEntity({1.0f,1.0f,1.0f},aluminumH,ent);
             ent.add_component<ext::evt::explosion_receiver>(ext::evt::explosion_receiver{"A Random Entity I found"});
         }
 

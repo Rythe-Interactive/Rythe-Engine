@@ -42,7 +42,7 @@ namespace legion::physics
         app::InputSystem::createBinding<physics_split_test>(app::inputmap::method::ENTER);
         app::InputSystem::createBinding<extendedPhysicsContinue>(app::inputmap::method::M);
         app::InputSystem::createBinding<nextPhysicsTimeStepContinue>(app::inputmap::method::N);
-        app::InputSystem::createBinding<spawnEntity>(app::inputmap::method::MOUSE_LEFT);
+        app::InputSystem::createBinding<spawnEntity>(app::inputmap::method::SCROLL_LOCK);
 
         app::InputSystem::createBinding<smallExplosion>(app::inputmap::method::NUM1);
         app::InputSystem::createBinding<mediumExplosion>(app::inputmap::method::NUM2);

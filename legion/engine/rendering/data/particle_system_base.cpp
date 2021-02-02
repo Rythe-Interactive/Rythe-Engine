@@ -31,16 +31,16 @@ namespace legion::rendering
         }
     }
 
-    ecs::component_handle<particle> ParticleSystemBase::checkToRecycle(rendering::particle_emitter& emitter) const
+    ecs::component_handle<particle> ParticleSystemBase::checkToRecycle(rendering::particle_emitter& emitterHandle) const
     {
         ecs::entity_handle particularParticle;
 
-        if (!emitter.deadParticles.empty())
+        if (!emitterHandle.deadParticles.empty())
         {
             //Get particle from dead particle list.
-            particularParticle = emitter.deadParticles.back();
+            particularParticle = emitterHandle.deadParticles.back();
             //remove last item
-            emitter.deadParticles.pop_back();
+            emitterHandle.deadParticles.pop_back();
         }
         else
         {
@@ -51,7 +51,7 @@ namespace legion::rendering
             particularParticle.add_component<particle>();
         }
         //Add particle to living particle list.
-        emitter.livingParticles.push_back(particularParticle);
+        emitterHandle.livingParticles.push_back(particularParticle);
 
         return particularParticle.get_component_handle<particle>();
     }

@@ -1,4 +1,5 @@
 #pragma once
+#include <rendering/components/renderable.hpp>
 #include <rendering/data/particle_system_base.hpp>
 
 #include <rendering/systems/renderer.hpp>
@@ -61,6 +62,8 @@ public:
      */
     void setup(ecs::component_handle<rendering::particle_emitter> emitter_handle) const override
     {
+        log::debug("Particle Setup");
+
         auto vertPositions = m_explosionModel.get_mesh().get().second.vertices;
 
         //emitter positions/origin
@@ -74,7 +77,7 @@ public:
         {
             #pragma region Create particle
             //Checks the emitter if it has a recycled particle to use, if not it creates a new one.
-            ecs::component_handle<particle> particleComponent = checkToRecycle(emitter);
+            ecs::component_handle<rendering::particle> particleComponent = checkToRecycle(emitter);
 
             auto ent = particleComponent.entity;
             //Checks if the entity has a transform, if not it adds one.
@@ -108,6 +111,7 @@ public:
             particleComponent.write(particularParticle);
             #pragma endregion
         }
+        emitter_handle.write(emitter);
     }
 
     /**
@@ -115,10 +119,12 @@ public:
      */
     void update(
         std::vector<ecs::entity_handle>& particle_list,
-        ecs::component_handle<particle_emitter> particle_emitter,
+        ecs::component_handle<rendering::particle_emitter> particle_emitter,
         ecs::EntityQuery&,
         time::span delta_time) const override
     {
+        log::debug("updaing Explosion Particles");
+
         //Read the scale of the emitter.
         auto scaleOfEmitter = particle_emitter.entity.get_component_handle<scale>().read();
         //Read the emitter component.

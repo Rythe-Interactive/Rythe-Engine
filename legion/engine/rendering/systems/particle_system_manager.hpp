@@ -53,38 +53,6 @@ namespace legion::rendering
                     particleSystem->update(emit.livingParticles, emitterHandle, emitters, deltaTime);
                 }
             }
-
-
-
-            //update point cloud buffer data
-            static auto pointCloudQuery = createQuery<particle_emitter, rendering::point_emitter_data>();
-            pointCloudQuery.queryEntities();
-            std::vector<math::vec4> colorData;
-            int index = 0;
-            for (auto pointEntities : pointCloudQuery)
-            {
-                auto emitterHandle = pointEntities.get_component_handle<particle_emitter>();
-                auto emitter = emitterHandle.read();
-                const ParticleSystemBase* particleSystem = emitter.particleSystemHandle.get();
-
-                auto dataHandle = pointEntities.get_component_handle<rendering::point_emitter_data>();
-                auto data = dataHandle.read();
-
-                index++;
-                if (index == pointCloudQuery.size())
-                {
-                    auto window = ecs::EcsRegistry::world.read_component<app::window>();
-                    app::context_guard guard(window);
-                    if (guard.contextIsValid())
-                    {
-                        ////create buffer
-                        rendering::buffer colorBuffer = rendering::buffer(GL_ARRAY_BUFFER, emitter.container->colorBufferData, GL_STREAM_DRAW);
-                        particleSystem->m_particleModel.overwrite_buffer(colorBuffer, SV_COLOR, true);
-                        log::debug(std::to_string(emitter.container->colorBufferData.size()));
-
-                    }
-                }
-            }
         }
     };
 }

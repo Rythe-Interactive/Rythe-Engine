@@ -2,9 +2,16 @@
     "animation": {
         "events": [
             {
-                "id": "VoidAnimationEvent",
-                "trigger": 5.0,
-                "type": "explosion"
+                "_affectedEntity": "A Random Entity I found",
+                "_explosionStrength": "MEDIUM",
+                "id": "ExplosionEvent",
+                "trigger": 5.0
+            },
+            {
+                "_affectedEntity": "Some other Entity I found",
+                "_explosionStrength": "SMALL",
+                "id": "ExplosionEvent",
+                "trigger": 7.0
             }
         ],
         "looping": true,

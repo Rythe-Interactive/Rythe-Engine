@@ -162,6 +162,22 @@ namespace ext
             //create new running & looping animation
             animation anim{ true };
 
+            ext::registerAnimationEvent<evt::explosion_event>("ExplosionEvent");
+            AnimationEditor::onRenderCustomEventGUI(evt::explosion_event::id,
+                                                    custom_render_layer::create<&evt::explosion_event::onGUI>()
+            );
+
+            ext::registerAnimationEvent<evt::particle_event>("ParticleEvent");
+            AnimationEditor::onRenderCustomEventGUI(evt::particle_event::id,
+                                                    custom_render_layer::create<&evt::particle_event::onGUI>()
+            );
+
+
+            ext::registerAnimationEvent<evt::decal_event>("DecalEvent");
+            AnimationEditor::onRenderCustomEventGUI(evt::decal_event::id,
+                                                    custom_render_layer::create<&evt::decal_event::onGUI>()
+            );
+
             //load animation data from disk
             filesystem::basic_resource res = fs::view("assets://test.anim").get().except([](auto err)
                 {
@@ -180,21 +196,7 @@ namespace ext
             application::InputSystem::createBinding<copy_key_frame>(application::inputmap::method::P);
             bindToEvent<copy_key_frame,&AnimationEditor::onCopyKeyFrame>();
 
-            ext::registerAnimationEvent<evt::explosion_event>("ExplosionEvent");
-            AnimationEditor::onRenderCustomEventGUI(evt::explosion_event::id,
-                                                    custom_render_layer::create<&evt::explosion_event::onGUI>()
-            );
 
-            ext::registerAnimationEvent<evt::particle_event>("ParticleEvent");
-            AnimationEditor::onRenderCustomEventGUI(evt::particle_event::id,
-                                                    custom_render_layer::create<&evt::particle_event::onGUI>()
-            );
-
-
-            ext::registerAnimationEvent<evt::decal_event>("DecalEvent");
-            AnimationEditor::onRenderCustomEventGUI(evt::decal_event::id,
-                                                    custom_render_layer::create<&evt::decal_event::onGUI>()
-            );
 
             AnimationEditor::onRenderCustomEventGUI(void_animation_event::id, [this](id_type id, animation_event_base* ebase)
             {
