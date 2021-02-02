@@ -13,6 +13,7 @@
 #include "../data/animation.hpp"
 #include "../systems/animation_editor.hpp"
 #include "../systems/animator.hpp"
+#include "../systems/event_based_explosion_system.hpp"
 #include "../systems/testsystemconvexhull.hpp"
 #include "../systems/final_presentation_system.hpp"
 
@@ -50,6 +51,7 @@ public:
         //reportSystem<final_presentation_system>();
         reportSystem<physics::PhysicsFractureTestSystem>();
         reportSystem<TestSystemConvexHull>();
+        reportSystem<ext::BigBoom>();
 
     }
 

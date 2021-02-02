@@ -59,8 +59,8 @@ namespace ext
      */
     template <class T>
     struct animation_event :
-        legion::events::event<T>,
-        animation_event_base{};
+        public legion::events::event<T>,
+        public animation_event_base{};
 
     /**@struct void_animation_event 
      * @brief default event that is emitted, when the type is not further specialized

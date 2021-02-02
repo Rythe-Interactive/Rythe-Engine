@@ -1147,14 +1147,13 @@ namespace legion::physics
     }
 
     ecs::entity_handle PhysicsFractureTestSystem::CreateSplitTestBox(physics::cube_collider_params cubeParams,math::vec3 position,
-        math::quat rotation, rendering::material_handle mat, bool isFracturable,bool hasRigidbody ,math::vec3 velocity)
+        math::quat rotation, rendering::material_handle mat, bool isFracturable,bool hasRigidbody ,math::vec3 velocity,ecs::entity_handle ent)
     {
-        auto wall = m_ecs->createEntity();
-        auto entPhyHande = wall.add_component<physics::physicsComponent>();
+        auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
         if (hasRigidbody)
         {
-           auto rbH = wall.add_component<rigidbody>();
+           auto rbH = ent.add_component<rigidbody>();
            auto rb = rbH.read();
            rb.velocity = velocity;
            rbH.write(rb);
@@ -1162,7 +1161,7 @@ namespace legion::physics
 
         if (isFracturable)
         {
-            wall.add_component<physics::Fracturer>();
+            ent.add_component<physics::Fracturer>();
         }
 
 
@@ -1173,22 +1172,22 @@ namespace legion::physics
 
         entPhyHande.write(physicsComponent2);
 
-        wall.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(mat));
+        ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(mat));
 
-        auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(wall);
+        auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
         positionH.write(position);
         scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
         rotationH.write(rotation);
 
         if (isFracturable)
         {
-            auto splitterH = wall.add_component<physics::MeshSplitter>();
+            auto splitterH = ent.add_component<physics::MeshSplitter>();
             auto splitter = splitterH.read();
-            splitter.InitializePolygons(wall);
+            splitter.InitializePolygons(ent);
             splitterH.write(splitter);
         }
 
-        return  wall;
+        return  ent;
     }
 
     void PhysicsFractureTestSystem::createFloor(int xCount, int yCount, math::vec3 start,

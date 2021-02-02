@@ -7,7 +7,7 @@ namespace ext::evt
     struct explosion_receiver { std::string name; };
     extern std::vector<legion::ecs::entity_handle> g_er_entities;
 
-    struct explosion_event : animation_event<explosion_event>
+    struct explosion_event : public animation_event<explosion_event>
     {
         static bool onGUI(legion::id_type id, animation_event_base* ev) {
             using namespace imgui;
@@ -50,6 +50,10 @@ namespace ext::evt
                 {
                     explosionStr = "BIG";
                 }
+                if (ImGui::Selectable("TZAR BOMBA", explosionStr == "AN602"))
+                {
+                    explosionStr = "AN602";
+                }
                 base::EndCombo();
             }
 
@@ -57,6 +61,15 @@ namespace ext::evt
             ev->receive_param("_explosionStrength", explosionStr);
 
             return false;
+        }
+
+        std::string getAffectedName() const
+        {
+            return get_param("_affectedEntity");
+        }
+        std::string getExplosionStrength() const
+        {
+            return get_param("_explosionStrength");
         }
     };
 }
