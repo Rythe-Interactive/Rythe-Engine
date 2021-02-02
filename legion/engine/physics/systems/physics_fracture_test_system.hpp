@@ -30,7 +30,7 @@ namespace legion::physics
 
         ecs::entity_handle CreateSplitTestBox(physics::cube_collider_params cubeParams, math::vec3 position,
             math::quat rotation, rendering::material_handle mat, bool isFracturable, bool hasRigidbody = false
-            , math::vec3 velocity = math::vec3());
+            , math::vec3 velocity = math::vec3(),ecs::entity_handle ent = m_ecs->createEntity());
 
         void OnSplit(physics_split_test* action);
 
@@ -93,7 +93,4 @@ namespace legion::physics
         ecs::entity_handle staticToAABBEntLinear, staticToAABBEntRotation, staticToOBBEnt, staticToEdgeEnt;
 
     };
-
-  
-
 }

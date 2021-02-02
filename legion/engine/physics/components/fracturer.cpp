@@ -329,8 +329,8 @@ namespace legion::physics
         math::vec3 fifth = third + math::vec3(0, -0.1f, 0);
         voronoiPoints.push_back(fifth);
 
-        math::vec3 sixth = min + differenceQuadrant + math::vec3(0.1, 0.25f, 0.1);
-        voronoiPoints.push_back(sixth);
+        //math::vec3 sixth = min + differenceQuadrant + math::vec3(0.1, 0.25f, 0.1);
+        //voronoiPoints.push_back(sixth);
 
         math::vec3 centroid = (min + max) / 2.0f;
         int rand = math::linearRand(0, 5);

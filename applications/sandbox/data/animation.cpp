@@ -48,8 +48,6 @@ namespace ext
         const auto loopingptr = jptr("/animation/looping");
 
 
-
-
         //read the looping value from the json
         anim->looping = j.value(loopingptr, false);
 

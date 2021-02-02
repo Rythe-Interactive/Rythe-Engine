@@ -13,6 +13,7 @@
 #include "../data/animation.hpp"
 #include "../systems/animation_editor.hpp"
 #include "../systems/animator.hpp"
+#include "../systems/event_based_explosion_system.hpp"
 #include "../systems/testsystemconvexhull.hpp"
 #include "../systems/final_presentation_system.hpp"
 
@@ -37,16 +38,20 @@ public:
         );
 
         reportComponentType<sah>();
-        //reportSystem<TestSystem>();
+        reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
         //reportSystem<pointcloudtestsystem2>();
         reportComponentType<ext::animation>();
+        reportComponentType<ext::evt::particle_receiver>();
+        reportComponentType<ext::evt::explosion_receiver>();
+        reportComponentType<ext::evt::decal_receiver>();
         reportSystem<ext::Animator>();
         reportSystem<ext::AnimationEditor>();
         reportSystem<GuiTestSystem>();
         //reportSystem<final_presentation_system>();
         reportSystem<physics::PhysicsFractureTestSystem>();
         reportSystem<TestSystemConvexHull>();
+        reportSystem<ext::BigBoom>();
 
     }
 
