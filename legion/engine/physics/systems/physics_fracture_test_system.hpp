@@ -13,6 +13,8 @@ struct smallExplosion : public app::input_action<smallExplosion> {};
 struct mediumExplosion : public app::input_action<mediumExplosion> {};
 struct largeExplosion : public app::input_action<largeExplosion> {};
 
+struct explosion : public app::input_action<explosion> {};
+
 
 namespace legion::physics
 {
@@ -26,11 +28,12 @@ namespace legion::physics
 
     private:
 
-        void CreateElongatedFloor(math::vec3 position,math::quat rot, math::vec3 scale);
+        void CreateElongatedFloor(math::vec3 position,math::quat rot, math::vec3 scale, rendering::material_handle mat, bool hasCollider =true);
 
         ecs::entity_handle CreateSplitTestBox(physics::cube_collider_params cubeParams, math::vec3 position,
             math::quat rotation, rendering::material_handle mat, bool isFracturable, bool hasRigidbody = false
-            , math::vec3 velocity = math::vec3());
+            , math::vec3 velocity = math::vec3(), float explosionStrength = 0.0f, float explosionTime = FLT_MAX,
+            math::vec3 impactPoint = math::vec3(-69.0f,0.0f,0.0f), bool hasCollider = true);
 
         void OnSplit(physics_split_test* action);
 
@@ -40,11 +43,17 @@ namespace legion::physics
         void collisionResolutionTest(rendering::model_handle cubeH,
             rendering::material_handle wireframeH);
 
+        void fractureVideoScene();
+
+        void prematureExplosion(explosion* action);
+
         void numericalRobustnessTest();
 
         void extendedContinuePhysics(extendedPhysicsContinue * action);
 
         void OneTimeContinuePhysics(nextPhysicsTimeStepContinue * action);
+
+        void spawnCubeStack(math::vec3 start);
 
         void compositeColliderTest();
 
@@ -52,11 +61,12 @@ namespace legion::physics
 
         void spawnEntityOnCameraForward(spawnEntity * action);
 
-        void simpleMinecraftHouse();
+        void simpleMinecraftHouse(math::vec3 start);
 
         void createFloor(int xCount, int yCount, math::vec3 start,
             math::vec3 offset, rendering::model_handle cubeH, std::vector< rendering::material_handle> materials
-            , std::vector<int> ignoreJ);
+            , std::vector<int> ignoreJ, std::vector<bool> shouldFracture , float fractureTime = FLT_MAX,
+            math::vec3 impactPoint = math::vec3(), bool hasRigidbodies = false,float strength =0.0f,bool hasCollider = true);
 
         void smallExplosionTest(smallExplosion*action);
         void mediumExplosionTest(mediumExplosion*action);
@@ -78,13 +88,17 @@ namespace legion::physics
         rendering::material_handle textureH;
         rendering::material_handle woodTextureH;
         rendering::material_handle rockTextureH;
-
+        rendering::material_handle concreteH;
+        rendering::material_handle tileH;
+        rendering::material_handle directionalLightMH;
+        rendering::material_handle brickH;
 
         rendering::model_handle cubeH;
         rendering::model_handle concaveTestObject;
         rendering::model_handle planeH;
         rendering::model_handle cylinderH;
         rendering::model_handle complexH;
+        rendering::model_handle directionalLightH;
 
         ecs::entity_handle smallExplosionEnt;
         ecs::entity_handle mediumExplosionEnt;

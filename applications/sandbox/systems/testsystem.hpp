@@ -350,7 +350,7 @@ public:
             slateH.set_param(SV_NORMALHEIGHT, rendering::TextureCache::create_texture("assets://textures/slate/slate-normalHeight-512.png"_view));
             slateH.set_param(SV_MRDAO, rendering::TextureCache::create_texture("assets://textures/slate/slate-MRDAo-512.png"_view));
             slateH.set_param(SV_EMISSIVE, rendering::TextureCache::create_texture("assets://textures/slate/slate-emissive-512.png"_view));
-            slateH.set_param(SV_HEIGHTSCALE, 1.f);
+            slateH.set_param(SV_HEIGHTSCALE, 0.f);
             slateH.set_param("discardExcess", true);
             slateH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
