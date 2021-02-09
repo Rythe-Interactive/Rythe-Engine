@@ -1382,7 +1382,7 @@ namespace legion::physics
         math::quat rotation, rendering::material_handle mat, bool isFracturable,bool hasRigidbody
         ,math::vec3 velocity,float explosionStrength,float explosionTime, math::vec3 impactPoint, bool hasCollider)
     {
-        auto wall = m_ecs->createEntity();
+        auto ent = m_ecs->createEntity();
   
 
         if (hasRigidbody)
@@ -1395,8 +1395,8 @@ namespace legion::physics
 
         if (isFracturable)
         {
-            wall.add_component<physics::Fracturer>();
-            auto FractureCountdownH = wall.add_component<physics::FractureCountdown>();
+            ent.add_component<physics::Fracturer>();
+            auto FractureCountdownH = ent.add_component<physics::FractureCountdown>();
             auto fractureCountdown = FractureCountdownH.read();
             fractureCountdown.explosionPoint = static_cast<int>(impactPoint.x) == -69 ?  position : impactPoint;
             fractureCountdown.fractureStrength = explosionStrength;
@@ -1410,7 +1410,7 @@ namespace legion::physics
 
         if (hasCollider)
         {
-            auto entPhyHande = wall.add_component<physics::physicsComponent>();
+            auto entPhyHande = ent.add_component<physics::physicsComponent>();
             physicsComponent2.AddBox(cubeParams);
             entPhyHande.write(physicsComponent2);
         }
