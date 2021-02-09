@@ -27,7 +27,9 @@
 
 
 #include "animation_editor.hpp"
+#include "animator.hpp"
 #include "../data/animation.hpp"
+#include "../data/explode_event.hpp"
 
 using namespace legion;
 
@@ -723,6 +725,7 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(copperH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -3.6f), rotation(), scale());
+            ent.add_component<ext::evt::explosion_receiver>(ext::evt::explosion_receiver{"A Random Entity I found"});
         }
 
         {
@@ -730,6 +733,8 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -6.5f), rotation(), scale());
+            ent.add_component<ext::evt::explosion_receiver>(ext::evt::explosion_receiver{"Some other Entity I found"});
+
         }
 
         {
@@ -1047,12 +1052,11 @@ public:
             finderH.write(finder);*/
         }
 
-        //Complex Mesh
-
         createProcess<&TestSystem::update>("Update");
         ext::AnimationEditor::onRenderCustomEventGUI(ext::void_animation_event::id, [](id_type id, ext::animation_event_base* ebase)
             {
                 imgui::base::Text("Void Animations Custom Edit Frontend!");
+
 
                 static bool showBaseRenderLayer = false;
                 if (imgui::base::Button(fmt::format("Show Base Renderer [{}]", showBaseRenderLayer).c_str()))

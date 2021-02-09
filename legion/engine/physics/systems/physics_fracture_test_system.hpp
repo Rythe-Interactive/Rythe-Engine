@@ -107,7 +107,4 @@ namespace legion::physics
         ecs::entity_handle staticToAABBEntLinear, staticToAABBEntRotation, staticToOBBEnt, staticToEdgeEnt;
 
     };
-
-  
-
 }

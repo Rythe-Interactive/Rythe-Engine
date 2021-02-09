@@ -1387,7 +1387,7 @@ namespace legion::physics
 
         if (hasRigidbody)
         {
-           auto rbH = wall.add_component<rigidbody>();
+           auto rbH = ent.add_component<rigidbody>();
            auto rb = rbH.read();
            rb.velocity = velocity;
            rbH.write(rb);
@@ -1418,22 +1418,22 @@ namespace legion::physics
 
    
 
-        wall.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(mat));
+        ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(mat));
 
-        auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(wall);
+        auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
         positionH.write(position);
         scaleH.write(math::vec3(1.0f, 1.0f, 1.0f));
         rotationH.write(rotation);
 
         if (isFracturable)
         {
-            auto splitterH = wall.add_component<physics::MeshSplitter>();
+            auto splitterH = ent.add_component<physics::MeshSplitter>();
             auto splitter = splitterH.read();
-            splitter.InitializePolygons(wall);
+            splitter.InitializePolygons(ent);
             splitterH.write(splitter);
         }
 
-        return  wall;
+        return  ent;
     }
 
     void PhysicsFractureTestSystem::createFloor(int xCount, int yCount, math::vec3 start,
