@@ -34,7 +34,7 @@ public:
     virtual void setup()
     {
         Crosshair::setScale(math::vec2(1.5f));
-        gfx::PostProcessingStage::addEffect<Crosshair>(-100);
+        //gfx::PostProcessingStage::addEffect<Crosshair>(-100);
 #pragma region Input binding
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
         app::InputSystem::createBinding<player_move>(app::inputmap::method::S, -1.f);
@@ -139,7 +139,7 @@ public:
 
         //convert to animation
         anim = res.to< ext::animation>();
-        //anim.running = true;
+        anim.running = true;
         //add animation to entity
         camera.add_component< ext::animation>(anim);
     }

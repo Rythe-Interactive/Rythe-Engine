@@ -22,27 +22,32 @@ namespace legion::physics
         app::context_guard guard(win);
 
         #pragma region Material Setup
+   
         auto litShader = rendering::ShaderCache::create_shader("lit", fs::view("engine://shaders/default_lit.shs"));
 
         textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
         textureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
+        ///////////textureH
+        //textureH = rendering::MaterialCache::create_material("texture", litShader);
+        ////textureH.set_variant("double_sided");
+        //textureH.set_param("alphaCutoff", 0.0f);
+        //textureH.set_param("useAlbedoTex", true);
+        //textureH.set_param("useRoughnessTex", true);
+        //textureH.set_param("useNormal", true);
 
-       /* textureH = rendering::MaterialCache::create_material("texture", litShader);
-        textureH.set_param("useAlbedoTex", true);
-        textureH.set_param("alphaCutoff", 0.5f);
+        //textureH.set_param("useEmissiveTex", false);
+        //textureH.set_param("useAmbientOcclusion", false);
+        //textureH.set_param("useHeight", false);
+        //textureH.set_param("useMetallicTex", false);
+        //textureH.set_param("useMetallicRoughness", false);
 
-        textureH.set_param("useMetallicTex", false);
-        textureH.set_param("metallicValue", 0.0f);
-        textureH.set_param("useRoughnessTex", true);
-        textureH.set_param("useEmissiveTex", false);
-        textureH.set_param("emissiveColor", math::colors::black);
-        textureH.set_param("useNormal", true);
-        textureH.set_param("useAmbientOcclusion", false);
-        textureH.set_param("useHeight", false);
+        //textureH.set_param("metallicValue", 0.0f);
+        //textureH.set_param("emissiveColor", math::colors::black);
 
-        textureH.set_param("albedoTex", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
-        textureH.set_param("normalTex", rendering::TextureCache::create_texture("assets://textures/marble/marbleNormal.png"_view));
-        textureH.set_param("roughnessTex", rendering::TextureCache::create_texture("assets://textures/marble/marbleRoughness.png"_view));*/
+        //textureH.set_param("albedoTex", rendering::TextureCache::create_texture("assets://textures/tile/tileColor.png"_view));
+        //textureH.set_param("normalTex", rendering::TextureCache::create_texture("assets://textures/tile/tileNormal.png"_view));
+        //textureH.set_param("roughnessTex", rendering::TextureCache::create_texture("assets://textures/tile/tileRoughness.png"_view));
+        //textureH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
         /////////////////
         woodTextureH = rendering::MaterialCache::create_material("texture2", "assets://shaders/texture.shs"_view);
@@ -56,28 +61,31 @@ namespace legion::physics
 
         brickH = rendering::MaterialCache::create_material("brick", "assets://shaders/texture.shs"_view);
         brickH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/plaster/plasterColor.png"_view));
-        
-        
-        tileH = rendering::MaterialCache::create_material("tiled", litShader);
-        tileH.set_param("useAlbedoTex", true);
+
+        //auto litShader = rendering::ShaderCache::create_shader("lit", fs::view("engine://shaders/default_lit.shs"));
+       /* tileH = rendering::MaterialCache::create_material("tile", "assets://shaders/texture.shs"_view);
+        tileH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/tile/tileColor.png"_view)); */
+
+        //log::debug("------------------------------ TILE -------------");
+ 
+        tileH = rendering::MaterialCache::create_material("tile", litShader);
         tileH.set_param("alphaCutoff", 0.5f);
-       
-        tileH.set_param("useMetallicTex", false);
-        tileH.set_param("metallicValue", 0.0f);
+        tileH.set_param("useAlbedoTex", true);
         tileH.set_param("useRoughnessTex", true);
-        tileH.set_param("useEmissiveTex", false);
-        tileH.set_param("emissiveColor", math::colors::black);
         tileH.set_param("useNormal", true);
+
+        tileH.set_param("useEmissiveTex", false);
         tileH.set_param("useAmbientOcclusion", false);
         tileH.set_param("useHeight", false);
+        tileH.set_param("useMetallicTex", false);
+        tileH.set_param("useMetallicRoughness", false);
+
+        tileH.set_param("metallicValue", 0.0f);
+        tileH.set_param("emissiveColor", math::colors::black);
 
         tileH.set_param("albedoTex", rendering::TextureCache::create_texture("assets://textures/tile/tileColor.png"_view));
         tileH.set_param("normalTex", rendering::TextureCache::create_texture("assets://textures/tile/tileNormal.png"_view));
         tileH.set_param("roughnessTex", rendering::TextureCache::create_texture("assets://textures/tile/tileRoughness.png"_view));
-        //tileH.set_param("heightTex", rendering::TextureCache::create_texture("assets://textures/tile/tileDisplacement.png"_view));
-        //"assets://textures/tile/tileDisplacement.png"_view
-        //tileH.set_param(SV_HEIGHTSCALE, 0.f);
-        //tileH.set_param("discardExcess", true);
         tileH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
 
@@ -140,7 +148,7 @@ namespace legion::physics
             auto sun = createEntity();
             sun.add_components<rendering::mesh_renderable>(mesh_filter(directionalLightH.get_mesh()), rendering::mesh_renderer(directionalLightMH));
             sun.add_component<rendering::light>(rendering::light::directional(math::color(1, 1, 0.8f), 10.f));
-            sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, 1), math::vec3::zero), scale());
+            sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, -1), math::vec3::zero), scale());
         }
 
         fractureVideoScene();
