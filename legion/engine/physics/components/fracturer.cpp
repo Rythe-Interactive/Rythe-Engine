@@ -11,7 +11,7 @@ namespace legion::physics
 
     void Fracturer::HandleFracture(physics_manifold& manifold, bool& manifoldValid,bool isfracturingA)
     {
-  
+        return;
         OPTICK_EVENT();
         if (!IsFractureConditionMet(manifold,isfracturingA) || manifold.contacts.empty()) { return; }
         
@@ -335,7 +335,7 @@ namespace legion::physics
         math::vec3 centroid = (min + max) / 2.0f;
         int rand = math::linearRand(0, 5);
         //log::debug("rand {} ",rand );
-        /*for (math::vec3& point : voronoiPoints)
+        for (math::vec3& point : voronoiPoints)
         {
             math::vec3 vecFromCentroid = point - centroid;
 
@@ -343,7 +343,7 @@ namespace legion::physics
 
             point = centroid + vecFromCentroid;
 
-        }*/
+        }
 
     }
 

@@ -6,11 +6,13 @@
 #include <physics/components/rigidbody.hpp>
 #include <physics/mesh_splitter_utils/mesh_splitter.hpp>
 #include <physics/components/fracturer.hpp>
+#include <physics/components/fracturecountdown.hpp>
 
 namespace legion::physics
 {
     class PhysicsModule : public Module
     {
+
     public:
 
         virtual void setup() override
@@ -22,6 +24,7 @@ namespace legion::physics
             reportComponentType<identifier>();
             reportComponentType<MeshSplitter>();
             reportComponentType<Fracturer>();
+            reportComponentType<FractureCountdown>();
             //reportComponentType <addRB>();
         }
 

@@ -47,7 +47,7 @@ public:
         reportComponentType<ext::evt::decal_receiver>();
         reportSystem<ext::Animator>();
         reportSystem<ext::AnimationEditor>();
-        reportSystem<GuiTestSystem>();
+        //reportSystem<GuiTestSystem>();
         //reportSystem<final_presentation_system>();
         reportSystem<physics::PhysicsFractureTestSystem>();
         reportSystem<TestSystemConvexHull>();

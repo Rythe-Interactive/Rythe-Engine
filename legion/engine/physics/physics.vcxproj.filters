@@ -197,5 +197,8 @@
     <ClInclude Include="data\fractureparams.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="components\fracturecountdown.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -13,6 +13,7 @@
 #include <memory>
 #include <rendering/debugrendering.hpp>
 #include <physics/components/fracturer.hpp>
+#include <physics/components/fracturecountdown.hpp>
 
 namespace legion::physics
 {
@@ -296,6 +297,37 @@ namespace legion::physics
                     manifoldValidity.at(i) = currentManifoldValidity;
                 }
             }
+
+            //explosion event
+            auto countdownQuery = createQuery<FractureCountdown>();
+            countdownQuery.queryEntities();
+
+            for (auto ent : countdownQuery)
+            {
+                auto fractureCountdown = ent.read_component<FractureCountdown>();
+                fractureCountdown.fractureTime -= 0.02f;
+                //log::debug(" fractureCountdown.fractureTime {}", fractureCountdown.fractureTime);
+
+                if (fractureCountdown.explodeNow || fractureCountdown.fractureTime < 0.0f)
+                {
+                    log::debug("Entity is exploding");
+
+                    auto fracturerH = ent.get_component_handle<Fracturer>();
+                    auto fracturer = fracturerH.read();
+                    log::debug("fractureCountdown.explosionPoint {} ", fractureCountdown.explosionPoint);
+                    log::debug("fractureCountdown.fractureStrength {} ", fractureCountdown.fractureStrength);
+                    FractureParams params(fractureCountdown.explosionPoint, fractureCountdown.fractureStrength);
+
+                    fracturer.ExplodeEntity(ent, params);
+
+                    fracturerH.write(fracturer);
+
+                }
+
+                ent.write_component(fractureCountdown);
+            }
+
+
             //-------------------------------------------------- Collision Solver ---------------------------------------------------//
             //for both contact and friction resolution, an iterative algorithm is used.
             //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
