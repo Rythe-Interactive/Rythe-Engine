@@ -63,6 +63,9 @@
     <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -195,6 +198,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\fractureparams.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

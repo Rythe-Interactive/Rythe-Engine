@@ -189,7 +189,7 @@ namespace legion::physics
 
             //-------------------------------------------------Broadphase Optimization-----------------------------------------------//
 
-            //recursively get all physics components from the world
+            //get all physics components from the world
             std::vector<physics_manifold_precursor> manifoldPrecursors;
             bulkRetrievePreManifoldData(physComps, positions, rotations, scales, manifoldPrecursors);
 
@@ -370,9 +370,11 @@ namespace legion::physics
             auto& physicsComponentA = *precursorA.physicsComp;
             auto& physicsComponentB = *precursorB.physicsComp;
 
-            for (auto& colliderA : physicsComponentA.colliders)
+            //if (physicsComponentA.colliders.empty() || physicsComponentB.colliders.empty()) return;
+
+            for (auto colliderA : physicsComponentA.colliders)
             {
-                for (auto& colliderB : physicsComponentB.colliders)
+                for (auto colliderB : physicsComponentB.colliders)
                 {
                     physics::physics_manifold m;
                     constructManifoldWithCollider(rigidbodies, hasRigidBodies, colliderA.get(), colliderB.get(), precursorA, precursorB, m);
