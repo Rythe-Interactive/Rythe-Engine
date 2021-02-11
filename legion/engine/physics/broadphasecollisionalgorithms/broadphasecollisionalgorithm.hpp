@@ -12,7 +12,6 @@ namespace legion::physics
     class BroadPhaseCollisionAlgorithm
     {
     public:
-
         /**@brief Collects collider pairs that have a chance of colliding and should be checked in narrow-phase collision detection
          * @param manifoldPrecursors all the physics components 
          * @param manifoldPrecursorGrouping a list-list of colliders that have a chance of colliding and should be checked

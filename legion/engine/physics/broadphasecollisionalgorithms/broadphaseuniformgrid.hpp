@@ -52,7 +52,7 @@ namespace legion::physics
             m_cellSize = cellSize;
         }
 
-        void debugDraw() ;
+        void debugDraw() override;
 
     private:
         math::ivec3 m_cellSize;

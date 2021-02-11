@@ -185,7 +185,6 @@ namespace legion::physics
             ecs::component_container<scale>& scales,
             float deltaTime);
        
-
         /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA
         * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list
         * @param manifoldsToSolve [out] a std::vector of physics_manifold that will store the manifolds created
@@ -193,47 +192,8 @@ namespace legion::physics
         * @param isTriggerInvolved A bool that indicates whether a physicsComponent with a physicsComponent::isTrigger set to true is involved in this manifold
         */
         void constructManifoldsWithPrecursors(ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies, physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
-            std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved)
-        {
-            OPTICK_EVENT();
-            if (!precursorA.physicsComp || !precursorB.physicsComp) return;
-            auto& physicsComponentA = *precursorA.physicsComp;
-            auto& physicsComponentB = *precursorB.physicsComp;
-
-            //if (physicsComponentA.colliders.empty() || physicsComponentB.colliders.empty()) return;
-
-            for (auto colliderA : physicsComponentA.colliders)
-            {
-                for (auto colliderB : physicsComponentB.colliders)
-                {
-                    physics::physics_manifold m;
-                    constructManifoldWithCollider(rigidbodies, hasRigidBodies, colliderA.get(), colliderB.get(), precursorA, precursorB, m);
-
-                    if (!m.isColliding)
-                    {
-                        continue;
-                    }
-
-                    colliderA->PopulateContactPoints(colliderB.get(), m);
-
-                    if (isTriggerInvolved)
-                    {
-                        //notify the event-bus
-                        raiseEvent<trigger_event>(&m, m_timeStep);
-                        //notify both the trigger and triggerer
-                        //TODO:(Developer-The-Great): the triggerer and trigger should probably received this event
-                        //TODO:(cont.) through the event bus, we should probably create a filterable system here to
-                        //TODO:(cont.) uniquely identify involved objects and then redirect only required messages
-                    }
-
-                    if (isRigidbodyInvolved && !isTriggerInvolved)
-                    {
-                        raiseEvent<collision_event>(&m, m_timeStep);
-                        manifoldsToSolve.emplace_back(std::move(m));
-                    }
-                }
-            }
-        }
+            std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved);
+       
 
         void constructManifoldWithCollider(
             ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies,
