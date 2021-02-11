@@ -13,6 +13,7 @@
 #include <memory>
 #include <rendering/debugrendering.hpp>
 #include <physics/components/fracturer.hpp>
+#include <physics/components/fracturecountdown.hpp>
 
 namespace legion::physics
 {

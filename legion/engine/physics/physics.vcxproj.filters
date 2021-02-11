@@ -200,7 +200,7 @@
     <ClInclude Include="data\fractureparams.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp">
+    <ClInclude Include="components\fracturecountdown.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -37,6 +37,7 @@
     <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgrid.hpp" />
     <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp" />
     <ClInclude Include="colliders\convexcollider.hpp" />
+    <ClInclude Include="components\fracturecountdown.hpp" />
     <ClInclude Include="components\fracturer.hpp" />
     <ClInclude Include="data\contact_vertex.hpp" />
     <ClInclude Include="data\convergance_identifier.hpp" />
