@@ -117,6 +117,37 @@ namespace legion::physics
 
         //------------------------------------------------ Pre Collision Solve Events --------------------------------------------//
 
+
+            //explosion event
+        auto countdownQuery = createQuery<FractureCountdown>();
+        countdownQuery.queryEntities();
+
+        for (auto ent : countdownQuery)
+        {
+            auto fractureCountdown = ent.read_component<FractureCountdown>();
+            fractureCountdown.fractureTime -= 0.02f;
+            //log::debug(" fractureCountdown.fractureTime {}", fractureCountdown.fractureTime);
+
+            if (fractureCountdown.explodeNow || fractureCountdown.fractureTime < 0.0f)
+            {
+                log::debug("Entity is exploding");
+
+                auto fracturerH = ent.get_component_handle<Fracturer>();
+                auto fracturer = fracturerH.read();
+                log::debug("fractureCountdown.explosionPoint {} ", fractureCountdown.explosionPoint);
+                log::debug("fractureCountdown.fractureStrength {} ", fractureCountdown.fractureStrength);
+                FractureParams params(fractureCountdown.explosionPoint, fractureCountdown.fractureStrength);
+
+                fracturer.ExplodeEntity(ent, params);
+
+                fracturerH.write(fracturer);
+
+            }
+
+            ent.write_component(fractureCountdown);
+        }
+
+
         // all manifolds are initially valid
 
         std::vector<byte> manifoldValidity(manifoldsToSolve.size(), true);

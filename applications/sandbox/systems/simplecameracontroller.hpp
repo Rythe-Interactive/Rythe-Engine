@@ -139,7 +139,7 @@ public:
 
         //convert to animation
         anim = res.to< ext::animation>();
-        anim.running = true;
+        //anim.running = true;
         //add animation to entity
         camera.add_component< ext::animation>(anim);
     }
