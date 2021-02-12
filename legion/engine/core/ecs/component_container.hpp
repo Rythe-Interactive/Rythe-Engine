@@ -1,6 +1,7 @@
 #pragma once
 #include <core/types/types.hpp>
 #include <vector>
+#include <functional>
 
 namespace legion::core::ecs
 {
@@ -31,10 +32,11 @@ namespace legion::core::ecs
      * @brief This is just a vector with a common base class.
      */
     template<typename component_type>
-    struct component_container : public component_container_base, public std::vector<component_type>
+    struct component_container : public component_container_base, public std::vector<std::reference_wrapper<component_type>>
     {
-        using underlying_type = std::vector<component_type>;
+        using underlying_type = std::vector<std::reference_wrapper<component_type>>;
         using allocator_type = typename underlying_type::allocator_type;
+        using value_type = typename underlying_type::value_type;
 
         component_container() noexcept : component_container_base(typeHash<component_type>()), underlying_type() {}
 
@@ -42,7 +44,7 @@ namespace legion::core::ecs
             : component_container_base(typeHash<component_type>()), underlying_type(alloc) {}
 
         component_container(size_type count,
-            const component_type& value,
+            const value_type& value,
             const allocator_type& alloc = allocator_type())
             : component_container_base(typeHash<component_type>()), underlying_type(count, value, alloc) {}
 
@@ -73,7 +75,7 @@ namespace legion::core::ecs
         component_container(component_container&& other, const allocator_type& alloc)
             : component_container_base(typeHash<component_type>()), underlying_type(static_cast<underlying_type&&>(other), alloc) {}
 
-        component_container(std::initializer_list<component_type> init,
+        component_container(std::initializer_list<value_type> init,
             const allocator_type& alloc = allocator_type())
             : component_container_base(typeHash<component_type>()), underlying_type(init, alloc) {}
 
