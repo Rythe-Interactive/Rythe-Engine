@@ -57,7 +57,7 @@ namespace legion::rendering
     {
         scheduling::ProcessChain::subscribeToChainStart<&DebugRenderStage::startDebugDomain>();
         scheduling::ProcessChain::subscribeToChainEnd<&DebugRenderStage::endDebugDomain>();
-        m_eventBus->bindToEventUnsafe(nameHash("debug_line"), delegate<void(events::event_base*)>::template create<DebugRenderStage, &DebugRenderStage::drawDebugLine>(this));
+        m_eventBus->bindToEvent(nameHash("debug_line"), delegate<void(events::event_base*)>::template create<DebugRenderStage, &DebugRenderStage::drawDebugLine>(this));
     }
 
     void DebugRenderStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
