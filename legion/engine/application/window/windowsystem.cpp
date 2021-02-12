@@ -276,18 +276,15 @@ namespace legion::application
         if (m_creationRequests.empty() || (std::find_if(m_creationRequests.begin(), m_creationRequests.end(), [](window_request& r) { return r.entityId == world_entity_id; }) == m_creationRequests.end()))
             requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", invalid_image_handle, nullptr, nullptr, 1); // Create the request for the main window.
 
-        m_scheduler->sendCommand(m_scheduler->getChainThreadId("Input"), [&]() // We send a command to the input thread before the input process chain starts.
-            {                                                                  // This way we can create the main window before the rest of the engine get initialised.
-                if (!ContextHelper::initialized()) // Initialize context.
-                    if (!ContextHelper::init())
-                    {
-                        exit();
-                        return; // If we can't initialize we can't create any windows, not creating the main window means the engine should shut down.
-                    }
-                log::trace("Creating main window.");
-                createWindows();
-                showMainWindow();
-            });
+        if (!ContextHelper::initialized()) // Initialize context.
+            if (!ContextHelper::init())
+            {
+                exit();
+                return; // If we can't initialize we can't create any windows, not creating the main window means the engine should shut down.
+            }
+        log::trace("Creating main window.");
+        createWindows();
+        showMainWindow();
 
         createProcess<&WindowSystem::refreshWindows>("Rendering");
         createProcess<&WindowSystem::handleWindowEvents>("Input");

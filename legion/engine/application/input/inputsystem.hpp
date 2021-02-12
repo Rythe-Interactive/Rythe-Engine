@@ -54,7 +54,7 @@ namespace legion::application
             bindToEvent<mouse_scrolled, &InputSystem::onMouseScrolled>();
 
             //create Update Process
-            createProcess<&InputSystem::onUpdate>("Input", 1.f/300.f);
+            createProcess<&InputSystem::onUpdate>("Input");
 
             //make sure we get the joystick-callback on initialization of GLFW
             ContextHelper::addOnInitCallback(delegate<void()>::create([]

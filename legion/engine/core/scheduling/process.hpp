@@ -96,7 +96,7 @@ namespace legion::core::scheduling
                 OPTICK_EVENT("Execute process");
                 OPTICK_TAG("Process", m_name.c_str());
                 m_timeBuffer -= m_interval;
-                m_operation.invoke(m_interval);
+                m_operation.invoke(deltaTime);
             }
 
             return true;

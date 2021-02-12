@@ -238,33 +238,6 @@ namespace legion::core::scheduling
 
             id_type id = nameHash<charc>(name);
 
-            std::thread::id chainThreadId;
-            if (!m_unreservedThreads.empty())
-            {
-                chainThreadId = m_unreservedThreads.front();
-                m_unreservedThreads.pop();
-            }
-
-            m_chainThreads[id] = chainThreadId;
-
-            log::impl::thread_names[chainThreadId] = std::string(name);
-#if USE_OPTICK
-            sendCommand(chainThreadId, [&name = name, &m_threadScopesLock = m_threadScopesLock, &m_threadScopes = m_threadScopes]()
-                {
-                    log::info("Thread {} assigned.", std::this_thread::get_id());
-                    async::set_thread_name(name);
-
-                    std::lock_guard guard(m_threadScopesLock);
-                    m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-                    OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
-                });
-#else
-            sendCommand(chainThreadId, [&name = name]()
-                {
-                    log::info("Thread {} assigned.", std::this_thread::get_id());
-                    async::set_thread_name(name);
-                });
-#endif
             async::readwrite_guard guard(m_processChainsLock);
             return &m_processChains.emplace(id, name, this).first.value();
         }

@@ -317,35 +317,34 @@ namespace legion::rendering
 
         createProcess<&Renderer::render>("Rendering");
 
-        m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [&]()
+        {
+            OPTICK_EVENT("Initialization");
+            log::trace("Waiting on main window.");
+
+            while (!world.has_component<app::window>())
+                std::this_thread::yield();
+
+            app::window window = world.get_component_handle<app::window>().read();
+
+            log::trace("Initializing context.");
+
+            bool result = false;
+
             {
-                OPTICK_EVENT("Initialization");
-                log::trace("Waiting on main window.");
-
-                while (!world.has_component<app::window>())
-                    std::this_thread::yield();
-
-                app::window window = world.get_component_handle<app::window>().read();
-
-                log::trace("Initializing context.");
-
-                bool result = false;
-
+                app::context_guard guard(window);
+                if (!guard.contextIsValid())
                 {
-                    app::context_guard guard(window);
-                    if (!guard.contextIsValid())
-                    {
-                        log::error("Failed to initialize context.");
-                        return;
-                    }
-                    result = initContext(window);
-                }
-
-                if (!result)
                     log::error("Failed to initialize context.");
-                else
-                    setThreadPriority();
-            }).wait();
+                    return;
+                }
+                result = initContext(window);
+            }
+
+            if (!result)
+                log::error("Failed to initialize context.");
+            else
+                setThreadPriority();
+        }
     }
 
     void Renderer::onExit(events::exit* event)

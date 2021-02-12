@@ -1,6 +1,7 @@
 #include <core/scheduling/scheduler.hpp>
 #include <core/logging/logging.hpp>
 #include <core/time/clock.hpp>
+#include <Optick/optick.h>
 
 namespace legion::core::scheduling
 {
@@ -168,7 +169,7 @@ namespace legion::core::scheduling
                         async::set_thread_name(log::impl::thread_names[std::this_thread::get_id()].c_str());
                         std::lock_guard guard(m_threadScopesLock);
                         m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-            });
+                    });
 #else
                 sendCommand(id, [&]()
                     {
@@ -176,13 +177,7 @@ namespace legion::core::scheduling
                         async::set_thread_name(log::impl::thread_names[std::this_thread::get_id()].c_str());
                     });
 #endif
-        }
-    }
-
-        { // Start threads of all the other chains.
-            async::readonly_guard guard(m_processChainsLock);
-            for (auto [_, chain] : m_processChains)
-                chain.run(m_lowPower);
+            }
         }
 
         log::impl::thread_names[std::this_thread::get_id()] = "Update";
@@ -191,12 +186,13 @@ namespace legion::core::scheduling
         {
             std::lock_guard guard(m_threadScopesLock);
             m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-}
+        }
 #endif
 
         while (!m_eventBus->checkEvent<events::exit>()) // Check for engine exit flag.
         {
-            OPTICK_EVENT("Mainthread frame");
+            OPTICK_FRAME("Main loop");
+
             {
                 OPTICK_EVENT("Destroy exited threads");
 
@@ -230,65 +226,18 @@ namespace legion::core::scheduling
                 }
             }
 
-            {
-                OPTICK_EVENT("Erase destroyed process chains");
-                std::vector<id_type> toRemove; // Check for all the chains that have exited their threads and remove them from the chain list.
-
-                {
-                    async::readonly_multiguard rmguard(m_processChainsLock, m_threadsLock);
-                    for (auto [id, chain] : m_processChains)
-                        if (chain.threadId() != std::thread::id() && !m_threads.contains(chain.threadId()))
-                            toRemove.push_back(id);
-                }
-
-                async::readwrite_guard wguard(m_processChainsLock);
-                for (id_type& id : toRemove)
-                    m_processChains.erase(id);
-            }
-
             if (m_localChain.id()) // If the local chain is valid run an iteration.
                 m_localChain.runInCurrentThread();
+
+            for (auto [_, chain] : m_processChains)
+                chain.runInCurrentThread();
 
             if (syncRequested()) // If a major engine sync was requested halt thread until all threads have reached a sync point and let them all continue.
                 waitForProcessSync();
         }
 
-        for (auto [_, processChain] : m_processChains)
-            processChain.exit();
-
         m_threadsShouldTerminate = true;
         m_syncLock.force_release();
-
-        size_type exits;
-        size_type chains;
-
-        {
-            async::readonly_multiguard rmguard(m_exitsLock, m_processChainsLock);
-            exits = m_exits.size();
-            chains = m_processChains.size();
-        }
-
-        size_type prevExits = 0;
-        size_type prevChains = 0;
-
-        {
-            OPTICK_EVENT("Waiting for exits");
-            while (exits < chains)
-            {
-                std::this_thread::yield();
-                async::readonly_multiguard rmguard(m_exitsLock, m_processChainsLock);
-
-                if (prevExits != exits || prevChains != chains)
-                {
-                    prevExits = exits;
-                    prevChains = chains;
-                    log::info("waiting for threads to end. {} threads left", chains - exits);
-                }
-
-                exits = m_exits.size();
-                chains = m_processChains.size();
-            }
-        }
 
         for (auto& id : m_exits)
         {
@@ -304,7 +253,7 @@ namespace legion::core::scheduling
         async::spinlock::force_release(true);
 
         m_exits.clear();
-                }
+    }
 
     void Scheduler::destroyThread(std::thread::id id)
     {
@@ -386,7 +335,7 @@ namespace legion::core::scheduling
     void Scheduler::waitForProcessSync()
     {
         OPTICK_EVENT();
-        //log::debug("synchronizing thread: {}", log::impl::thread_names[std::this_thread::get_id()]);
+
         if (std::this_thread::get_id() != m_syncLock.ownerThread()) // Check if this is the main thread or not.
         {
             m_requestSync.store(true, std::memory_order_relaxed); // Request a synchronization.
@@ -443,4 +392,4 @@ namespace legion::core::scheduling
         return false;
     }
 
-            }
+}
