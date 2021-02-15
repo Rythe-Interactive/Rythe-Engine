@@ -15,7 +15,7 @@ namespace legion::physics
 
         manifoldPrecursorQuery = createQuery<position, rotation, scale, physicsComponent>();
 
-        //std::make_unique<BroadphaseUniformGrid>(math::vec3(2,2,2));
+        //std::make_unique<BroadphaseUniformGrid>(math::vec3(2,2,2),1);
         //std::make_unique<BroadphaseBruteforce>();
         //std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(2, 2, 2));
 
