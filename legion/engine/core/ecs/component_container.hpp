@@ -8,6 +8,9 @@ namespace legion::core::ecs
     template<typename component_type>
     struct component_container;
 
+    /**@class component_container_base
+     * @brief Base class of legion::core::ecs::component_container<T>
+     */
     struct component_container_base
     {
     public:
