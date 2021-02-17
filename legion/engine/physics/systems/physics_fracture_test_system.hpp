@@ -47,6 +47,11 @@ namespace legion::physics
 
         void prematureExplosion(explosion* action);
 
+        void quickhullTestScene();
+
+        void createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH);
+
+
         void numericalRobustnessTest();
 
         void extendedContinuePhysics(extendedPhysicsContinue * action);
@@ -91,7 +96,10 @@ namespace legion::physics
         rendering::material_handle concreteH;
         rendering::material_handle tileH;
         rendering::material_handle directionalLightMH;
+        rendering::material_handle vertexColor;
         rendering::material_handle brickH;
+        rendering::material_handle wireFrameH;
+   
 
         rendering::model_handle cubeH;
         rendering::model_handle concaveTestObject;
@@ -99,6 +107,12 @@ namespace legion::physics
         rendering::model_handle cylinderH;
         rendering::model_handle complexH;
         rendering::model_handle directionalLightH;
+   
+
+        //convex hull tests
+        rendering::model_handle colaH;
+        rendering::model_handle hammerH;
+        rendering::model_handle suzzaneH;
 
         ecs::entity_handle smallExplosionEnt;
         ecs::entity_handle mediumExplosionEnt;

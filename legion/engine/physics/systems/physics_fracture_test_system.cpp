@@ -24,7 +24,7 @@ namespace legion::physics
         #pragma region Material Setup
    
         auto litShader = rendering::ShaderCache::create_shader("lit", fs::view("engine://shaders/default_lit.shs"));
-
+        vertexColor = rendering::MaterialCache::create_material("vertexColor", "assets://shaders/vertexcolor.shs"_view);
         textureH = rendering::MaterialCache::create_material("texture", "assets://shaders/texture.shs"_view);
         textureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/split-test.png"_view));
         ///////////textureH
@@ -88,7 +88,7 @@ namespace legion::physics
         tileH.set_param("roughnessTex", rendering::TextureCache::create_texture("assets://textures/tile/tileRoughness.png"_view));
         tileH.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
-
+        wireFrameH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.shs"_view);
         #pragma endregion
 
         #pragma region Model Setup
@@ -97,6 +97,11 @@ namespace legion::physics
         planeH = rendering::ModelCache::create_model("plane", "assets://models/plane.obj"_view);
         cylinderH = rendering::ModelCache::create_model("cylinder", "assets://models/cylinder.obj"_view);
         concaveTestObject = rendering::ModelCache::create_model("concaveTestObject", "assets://models/polygonTest.obj"_view);
+        colaH = rendering::ModelCache::create_model("cola", "assets://models/cola.glb"_view);
+        hammerH = rendering::ModelCache::create_model("hammer", "assets://models/hammer.obj"_view);
+        suzzaneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.glb"_view);
+
+
         #pragma endregion
 
         #pragma region Input binding
@@ -136,6 +141,7 @@ namespace legion::physics
         //numericalRobustnessTest();
         //simpleMinecraftHouse();
         //explosionTest();
+        quickhullTestScene();
         /*meshSplittingTest(planeH, cubeH
             , cylinderH, complexH, textureH);*/
 
@@ -151,7 +157,7 @@ namespace legion::physics
             sun.add_components<transform>(position(10, 10, 10), rotation::lookat(math::vec3(1, 1, -1), math::vec3::zero), scale());
         }
 
-        fractureVideoScene();
+        //fractureVideoScene();
 
         createProcess<&PhysicsFractureTestSystem::colliderDraw>("Update");
         createProcess<&PhysicsFractureTestSystem::explodeAThing>("Physics");
@@ -806,6 +812,52 @@ namespace legion::physics
             }
         }
        
+    }
+
+    void PhysicsFractureTestSystem::quickhullTestScene()
+    {
+        //cube
+        createQuickhullTestObject
+        (math::vec3(0,5.0f,0),cubeH, wireFrameH);
+
+        //cup
+        createQuickhullTestObject
+        (math::vec3(5.0f, 5.0f, 0), colaH, wireFrameH);
+
+        //hammer
+        createQuickhullTestObject
+        (math::vec3(10.0f, 5.0f, 0), hammerH, wireFrameH);
+
+        //suzanne
+        createQuickhullTestObject
+        (math::vec3(15.0f, 5.0f, 0), suzzaneH, wireFrameH);
+
+        //ohio teapot
+        createQuickhullTestObject
+        (math::vec3(20.0f, 5.0f, 0), cubeH, wireFrameH);
+        //
+
+
+
+
+
+
+
+
+
+    }
+
+    void PhysicsFractureTestSystem::createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH)
+    {
+        auto ent = m_ecs->createEntity();
+
+        ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
+
+        auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+        positionH.write(position);
+
+            
+
     }
 
     void PhysicsFractureTestSystem::extendedContinuePhysics(extendedPhysicsContinue * action)

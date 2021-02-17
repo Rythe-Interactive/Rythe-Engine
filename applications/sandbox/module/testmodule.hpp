@@ -38,7 +38,7 @@ public:
         );
 
         reportComponentType<sah>();
-        reportSystem<TestSystem>();
+        //reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
         //reportSystem<pointcloudtestsystem2>();
         reportComponentType<ext::animation>();
@@ -50,7 +50,7 @@ public:
         //reportSystem<GuiTestSystem>();
         //reportSystem<final_presentation_system>();
         reportSystem<physics::PhysicsFractureTestSystem>();
-        reportSystem<TestSystemConvexHull>();
+        //reportSystem<TestSystemConvexHull>();
         reportSystem<ext::BigBoom>();
 
     }

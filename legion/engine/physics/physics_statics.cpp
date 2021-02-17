@@ -341,5 +341,15 @@ namespace legion::physics
         return std::make_pair(lowBounds, highBounds);
     }
 
+    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices)
+    {
+        //Build Initial Hull
+
+        //For each vertex
+            //merge vertex into hull
+
+        return std::shared_ptr<ConvexCollider>();
+    }
+
 };
 

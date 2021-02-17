@@ -409,7 +409,6 @@ namespace legion::physics
         }
 
 
-
         /** Given a line going from a startPoint to and endPoint, finds the interpolant required to intersect a given 3D plane
         */
         static float FindLineToPointInterpolant(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
@@ -514,6 +513,10 @@ namespace legion::physics
             auto& [low1, high1] = col1;
             return CollideAABB(low0, high0, low1, high1);
         }
+
+        //------------------------------------------------------------ Quickhull -----------------------------------------------------------------------//
+
+        static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices);
 
     private:
 

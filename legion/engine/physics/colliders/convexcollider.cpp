@@ -11,7 +11,6 @@ namespace legion::physics
 {
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
-        bool shouldDebug = manifold.DEBUG_checkID("cube","floor");
         OPTICK_EVENT();
         // Middle-phase collision detection
         // Do AABB collision to check whether collision is possible
@@ -49,7 +48,7 @@ namespace legion::physics
         //log::debug("Face Check B");
         float BRefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
-            this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation, shouldDebug) || !BRefFace.ptr)
+            this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
             //log::debug("Not Found on B ");
             manifold.isColliding = false;
@@ -63,26 +62,11 @@ namespace legion::physics
         float aToBEdgeSeperation;
         //log::debug("Edge Check");
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(this, convexCollider, manifold.transformB, manifold.transformA,
-            edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation, shouldDebug) || !edgeRef.ptr)
+            edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation) || !edgeRef.ptr)
         {
-            //
             manifold.isColliding = false;
-
-            if (shouldDebug)
-            {
-                edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::blue, 10.0f);
-                edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::red, 10.0f);
-            }
             return;
         }
-
-        if (shouldDebug)
-        {
-            log::debug("-> collision detected for debug ");
-            ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::blue, 5.0f);
-            BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, 5.0f);
-        }
-
       
        /* ConvexConvexCollisionInfo convexCollisionInfo;
        
@@ -140,10 +124,6 @@ namespace legion::physics
             manifold.penetrationInformation = std::move(abEdgePenetrationQuery);
         }
 
-        if (shouldDebug)
-        {
-            //log::debug("manifold.penetrationInformation chosen {} ", manifold.penetrationInformation->debugID);
-        }
         manifold.isColliding = true;
 
         //keeping this here so i can copy pasta when i need it again
