@@ -7,9 +7,32 @@
 #define PROJECT_NAME user_project
 #endif
 
+#define NARGS_(_1, _2, _3, _4, _5 , _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, N, ...) N
+#define NARGS(args...) NARGS_(args..., 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+
 #define CONCAT(A, B) A ## B
 
 #define CONCAT_DEFINE(A, B) CONCAT(A, B)
+
+                                                               
+#define L_NAME_1 (x)                                                                    #x
+#define L_NAME_2 (x, x2)                                                                #x , #x2
+#define L_NAME_3 (x, x2, x3)                                                            #x , #x2, #x3
+#define L_NAME_4 (x, x2, x3, x4)                                                        #x , #x2, #x3, #x4
+#define L_NAME_5 (x, x2, x3, x4, x5)                                                    #x , #x2, #x3, #x4, #x5
+#define L_NAME_6 (x, x2, x3, x4, x5, x6)                                                #x , #x2, #x3, #x4, #x5, #x6
+#define L_NAME_7 (x, x2, x3, x4, x5, x6, x7)                                            #x , #x2, #x3, #x4, #x5, #x6, #x7
+#define L_NAME_8 (x, x2, x3, x4, x5, x6, x7, x8)                                        #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8
+#define L_NAME_9 (x, x2, x3, x4, x5, x6, x7, x8, x9)                                    #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9
+#define L_NAME_10(x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10
+#define L_NAME_11(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11
+#define L_NAME_12(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12
+#define L_NAME_13(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13
+#define L_NAME_14(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14
+#define L_NAME_15(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14, #x15
+#define L_NAME_16(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14, #x15, #x16
+
+#define STRINGIFY_SEPERATE(args...) CONCAT_DEFINE(L_NAME_, NARGS(args))(args)
 
 /**@def LEGION_CPP17V
  * @brief the version number of c++17 as long

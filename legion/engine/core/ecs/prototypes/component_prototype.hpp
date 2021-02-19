@@ -2,7 +2,7 @@
 #include <unordered_set>
 
 #include <core/serialization/prototype.hpp>
-#include <core/serialization/reflector.hpp>
+#include <core/types/reflector.hpp>
 
 #include <core/ecs/handles/component.hpp>
 

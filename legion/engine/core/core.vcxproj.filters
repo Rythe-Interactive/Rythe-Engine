@@ -412,7 +412,7 @@
     <ClInclude Include="ecs\data\hierarchy.hpp" />
     <ClInclude Include="ecs\handles\component.hpp" />
     <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
-    <ClInclude Include="serialization\reflector.hpp" />
+    <ClInclude Include="types\reflector.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
