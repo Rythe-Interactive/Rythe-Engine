@@ -2,7 +2,7 @@
 #include <application/application.hpp>
 #include <rendering/data/texture.hpp>
 #include <rendering/data/renderbuffer.hpp>
-#include <any>
+#include <variant>
 #include <unordered_map>
 
 /**

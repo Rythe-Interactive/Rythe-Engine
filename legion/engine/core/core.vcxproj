@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -160,20 +160,15 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="data\mesh.hpp" />
-    <ClInclude Include="defaults\coremodule.hpp" />
-    <ClInclude Include="defaults\defaultcomponents.hpp" />
-    <ClInclude Include="defaults\hierarchysystem.hpp" />
     <ClInclude Include="detail\internals.hpp" />
-    <ClInclude Include="ecs\archetype.hpp" />
-    <ClInclude Include="ecs\component_container.hpp" />
-    <ClInclude Include="ecs\component_meta.hpp" />
-    <ClInclude Include="ecs\component_handle.hpp" />
-    <ClInclude Include="ecs\component_pool.hpp" />
-    <ClInclude Include="ecs\ecs.hpp" />
-    <ClInclude Include="ecs\ecsregistry.hpp" />
-    <ClInclude Include="ecs\entity_handle.hpp" />
-    <ClInclude Include="ecs\entityquery.hpp" />
-    <ClInclude Include="ecs\queryregistry.hpp" />
+    <ClInclude Include="ecs\containers\component_pool.hpp" />
+    <ClInclude Include="ecs\data\hierarchy.hpp" />
+    <ClInclude Include="ecs\handles\component.hpp" />
+    <ClInclude Include="ecs\handles\entity.hpp" />
+    <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
+    <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
+    <ClInclude Include="serialization\prototype.hpp" />
+    <ClInclude Include="ecs\registry.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
     <ClInclude Include="engine\system.hpp" />
@@ -491,12 +486,11 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="platform\shellinvoke.hpp" />
+    <ClInclude Include="scenemanagement\components\scene.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
-    <ClInclude Include="scheduling\process.hpp" />
-    <ClInclude Include="scheduling\processchain.hpp" />
-    <ClInclude Include="scheduling\scheduler.hpp" />
-    <ClInclude Include="scheduling\scheduling.hpp" />
+    <ClInclude Include="serialization\reflector.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\clock.hpp" />
@@ -522,13 +516,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
-    <ClCompile Include="defaults\defaultcomponents.cpp" />
-    <ClCompile Include="defaults\hierarchysystem.cpp" />
-    <ClCompile Include="ecs\component_handle.cpp" />
-    <ClCompile Include="ecs\ecsregistry.cpp" />
-    <ClCompile Include="ecs\entity_handle.cpp" />
-    <ClCompile Include="ecs\entityquery.cpp" />
-    <ClCompile Include="ecs\queryregistry.cpp" />
+    <ClCompile Include="ecs\registry.cpp" />
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="engine\system.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
@@ -545,15 +533,12 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
-    <ClCompile Include="scheduling\processchain.cpp" />
-    <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.clang-tidy" />
     <None Include="..\..\.editorconfig" />
-    <None Include="ecs\archetype.inl" />
-    <None Include="ecs\entity_handle.inl" />
+    <None Include="ecs\registry.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />
     <None Include="math\glm\detail\func_exponential.inl" />

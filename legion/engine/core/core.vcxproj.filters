@@ -1,20 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="ecs\ecsregistry.cpp" />
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />
     <ClCompile Include="filesystem\filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\mem_filesystem_resolver.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
     <ClCompile Include="filesystem\navigator.cpp" />
-    <ClCompile Include="ecs\entity_handle.cpp" />
-    <ClCompile Include="ecs\entityquery.cpp" />
-    <ClCompile Include="ecs\queryregistry.cpp" />
     <ClCompile Include="types\type_util.cpp" />
     <ClCompile Include="filesystem\provider_registry.cpp" />
     <ClCompile Include="filesystem\view.cpp" />
-    <ClCompile Include="scheduling\processchain.cpp" />
-    <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
     <ClCompile Include="filesystem\filemanip.cpp" />
     <ClCompile Include="filesystem\assetimporter.cpp" />
@@ -31,14 +25,12 @@
     <ClCompile Include="engine\system.cpp" />
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
-    <ClCompile Include="ecs\component_handle.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
     <ClCompile Include="async\spinlock.cpp" />
     <ClCompile Include="async\async_operation.cpp" />
     <ClCompile Include="async\job_pool.cpp" />
-    <ClCompile Include="defaults\hierarchysystem.cpp" />
-    <ClCompile Include="defaults\defaultcomponents.cpp" />
+    <ClCompile Include="ecs\registry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -57,12 +49,6 @@
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
-    <ClInclude Include="ecs\component_handle.hpp" />
-    <ClInclude Include="ecs\ecs.hpp" />
-    <ClInclude Include="ecs\ecsregistry.hpp" />
-    <ClInclude Include="ecs\entity_handle.hpp" />
-    <ClInclude Include="ecs\entityquery.hpp" />
-    <ClInclude Include="ecs\queryregistry.hpp" />
     <ClInclude Include="engine\engine.hpp" />
     <ClInclude Include="engine\module.hpp" />
     <ClInclude Include="entry\entry_point.hpp" />
@@ -101,10 +87,6 @@
     <ClInclude Include="math\constants.hpp" />
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
-    <ClInclude Include="scheduling\process.hpp" />
-    <ClInclude Include="scheduling\processchain.hpp" />
-    <ClInclude Include="scheduling\scheduler.hpp" />
-    <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="math\math.hpp" />
     <ClInclude Include="math\glm\detail\_features.hpp" />
     <ClInclude Include="math\glm\detail\_fixes.hpp" />
@@ -389,16 +371,12 @@
     <ClInclude Include="math\glm\vec4.hpp" />
     <ClInclude Include="math\glm\vector_relational.hpp" />
     <ClInclude Include="filesystem\assetimporter.hpp" />
-    <ClInclude Include="defaults\coremodule.hpp" />
-    <ClInclude Include="defaults\defaultcomponents.hpp" />
-    <ClInclude Include="ecs\archetype.hpp" />
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="data\data.hpp" />
     <ClInclude Include="logging\logging.hpp" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
     <ClInclude Include="compute\buffer.hpp" />
-    <ClInclude Include="ecs\component_meta.hpp" />
     <ClInclude Include="math\color.hpp" />
     <ClInclude Include="math\glm\glm_include.hpp" />
     <ClInclude Include="compute\context.hpp" />
@@ -422,16 +400,19 @@
     <ClInclude Include="containers\runnable.hpp" />
     <ClInclude Include="async\wait_priority.hpp" />
     <ClInclude Include="async\async_runnable.hpp" />
-    <ClInclude Include="ecs\component_pool.hpp" />
-    <ClInclude Include="ecs\component_container.hpp" />
-    <ClInclude Include="defaults\hierarchysystem.hpp" />
     <ClInclude Include="time\defaults.hpp" />
     <ClInclude Include="async\thread_util.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ecs\ecsregistry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="platform\shellinvoke.hpp" />
+    <ClInclude Include="scenemanagement\components\scene.hpp" />
+    <ClInclude Include="ecs\registry.hpp" />
+    <ClInclude Include="serialization\prototype.hpp" />
+    <ClInclude Include="ecs\handles\entity.hpp" />
+    <ClInclude Include="ecs\containers\component_pool.hpp" />
+    <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
+    <ClInclude Include="ecs\data\hierarchy.hpp" />
+    <ClInclude Include="ecs\handles\component.hpp" />
+    <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
+    <ClInclude Include="serialization\reflector.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -571,9 +552,8 @@
     <None Include="math\glm\gtx\vector_angle.inl" />
     <None Include="math\glm\gtx\vector_query.inl" />
     <None Include="math\glm\gtx\wrap.inl" />
-    <None Include="ecs\archetype.inl" />
     <None Include="..\..\.editorconfig" />
     <None Include="..\..\.clang-tidy" />
-    <None Include="ecs\entity_handle.inl" />
+    <None Include="ecs\registry.inl" />
   </ItemGroup>
 </Project>

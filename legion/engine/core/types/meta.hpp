@@ -52,6 +52,22 @@ namespace legion::core
     {
     };
 
+    template<class T, typename... Args>
+    decltype(void(T{ std::declval<Args>()... }), std::true_type())
+        brace_construct_test(int);
+
+    template<class T, typename... Args>
+    std::false_type
+        brace_construct_test(...);
+
+    template<class T, typename... Args>
+    struct is_brace_constructible : decltype(brace_construct_test<T, Args...>(0))
+    {
+    };
+
+    template<class T, typename... Args>
+    inline constexpr bool is_brace_constructible_v = is_brace_constructible<T, Args...>::value;
+
 
     template <class T>
     struct is_container
