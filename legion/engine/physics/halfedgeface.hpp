@@ -39,7 +39,8 @@ namespace legion::physics
 		/** @brief given a function that takes in a HalfEdgeEdge*, 
 		* executes the function on each edge connected to 'startEdge'
 		*/
-		void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
+		void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute,
+            legion::core::delegate <HalfEdgeEdge* (HalfEdgeEdge*)> getNextEdge = [](HalfEdgeEdge* current) { return current->nextEdge; });
 
         /**@brief Inverses the face
          * The edges will be stored in reverse and therefore the normal will point in the other direction

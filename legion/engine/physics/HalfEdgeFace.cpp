@@ -68,7 +68,9 @@ namespace legion::physics
     }
 
 
-    void HalfEdgeFace::forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute)
+    void HalfEdgeFace::forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute,
+        legion::core::delegate <HalfEdgeEdge* (HalfEdgeEdge*)> getNextEdge 
+    )
     {
         HalfEdgeEdge* initialEdge = startEdge;
         HalfEdgeEdge* currentEdge = startEdge;
@@ -80,7 +82,7 @@ namespace legion::physics
         do
         {
             HalfEdgeEdge* edgeToExecuteOn = currentEdge;
-            currentEdge = currentEdge->nextEdge;
+            currentEdge = getNextEdge(currentEdge);
             functionToExecute(edgeToExecuteOn);
 
         } while (initialEdge != currentEdge && currentEdge->nextEdge != nullptr);
@@ -90,6 +92,27 @@ namespace legion::physics
     void HalfEdgeFace::inverse()
     {
         normal = -normal; // Inverse the normal
+
+        //collect edges into std::vector
+        std::vector<HalfEdgeEdge*> edges;
+
+        auto collectEdges = [&edges](HalfEdgeEdge* edge)
+        {
+            edges.push_back(edge);
+        };
+
+        for (auto iter = edges.rbegin(); iter != edges.rend(); ++iter)
+        {
+            if (iter == edges.rbegin())
+            {
+
+            }
+        
+           
+
+        }
+
+
     }
 
     bool HalfEdgeFace::testConvexity(const HalfEdgeFace& other) const

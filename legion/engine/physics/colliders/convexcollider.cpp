@@ -245,6 +245,12 @@ namespace legion::physics
 
     }
 
+  /*  void ConvexCollider::ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle, math::mat4 DEBUG_transform)
+    {
+        meshHandle.
+        return PhysicsStatics::GenerateConvexHull()
+    }*/
+
     void ConvexCollider::ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount,bool shouldDebug)
     {
         OPTICK_EVENT();

@@ -341,14 +341,196 @@ namespace legion::physics
         return std::make_pair(lowBounds, highBounds);
     }
 
-    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices)
+    float PhysicsStatics::FindClosestPointToLineInterpolant(const math::vec3& startPoint, const math::vec3& lineDirection, const math::vec3& pointPosition)
     {
+        return ( math::dot(lineDirection,pointPosition) - math::dot(lineDirection,startPoint) ) / math::dot(lineDirection,lineDirection);
+    }
+
+    math::vec3 PhysicsStatics::FindClosestPointToLineSegment(const math::vec3& start, const math::vec3& end, const math::vec3& pointPosition)
+    {
+        float interpolant = FindClosestPointToLineInterpolant(start, end - start, pointPosition);
+        interpolant = math::clamp(interpolant, 0.0f, 1.0f);
+
+        return start + (end - start) * interpolant;
+    }
+
+    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices, int maxDraw, math::mat4 DEBUG_transform )
+    {
+        auto convexCollider = std::make_shared<ConvexCollider>();
         //Build Initial Hull
+        if (!qHBuildInitialHull(vertices, convexCollider,DEBUG_transform))
+        {
+            return nullptr;
+        }
 
         //For each vertex
             //merge vertex into hull
 
-        return std::shared_ptr<ConvexCollider>();
+        return convexCollider;
+    }
+
+    bool PhysicsStatics::qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::shared_ptr<ConvexCollider> collider, math::mat4 DEBUG_transform )
+    {
+        //TODO handle degenerate cases
+
+        //[1] Find the 2 most distant vertices in 'vertices'
+
+        std::vector<math::vec3> supportVertices(6);
+
+        //(1.1) Get support points in -x and x
+        GetSupportPoint(vertices, math::vec3(1, 0, 0), supportVertices.at(0));
+        GetSupportPoint(vertices, math::vec3(-1, 0, 0), supportVertices.at(1));
+                  
+        //(1.2) Get support points in -y and y
+        GetSupportPoint(vertices, math::vec3(0, 1, 0), supportVertices.at(2));
+        GetSupportPoint(vertices, math::vec3(0, -1, 0), supportVertices.at(3));
+
+        //(1.3) Get support points in -z and z
+        GetSupportPoint(vertices, math::vec3(0, 0, 1), supportVertices.at(4));
+        GetSupportPoint(vertices, math::vec3(0, 0, -1), supportVertices.at(5));
+
+        //(1.4) Find most distant combination
+        float mostDistant = std::numeric_limits<float>::lowest();
+
+        math::vec3& firstDistant = supportVertices.at(0);
+        math::vec3& secondDistant = supportVertices.at(1);
+
+        //(1.5) Iterate through support vertices to find the combination of vertices that represent the 2 most distant points
+        for (int i = 0; i < supportVertices.size(); i++)
+        {
+            math::vec3& first = supportVertices.at(i);
+
+            for (int j = i+1; j < supportVertices.size()-1; j++)
+            {
+                math::vec3& second = supportVertices.at(j);
+
+                float currentDistance2 = math::distance2(first, second);
+
+                if (currentDistance2 > mostDistant)
+                {
+                    mostDistant = currentDistance2;
+                    firstDistant = first;
+                    secondDistant = second;
+                }
+            }
+        }
+
+        //DEBUG draw most distant
+      /*  {
+            math::vec3 transformFirst = DEBUG_transform * math::vec4(firstDistant, 1);
+            math::vec3 transformSecond = DEBUG_transform * math::vec4(secondDistant, 1);
+
+            debug::drawLine(transformFirst, transformSecond,math::colors::red,5.0f,FLT_MAX,true);
+        }*/
+
+        //[2] Find the vertex most distant from the line created by the 2 most distance vertices
+
+        math::vec3 firstToSecond = math::normalize(secondDistant - firstDistant);
+
+        const math::vec3* thirdDistant = nullptr;
+        mostDistant = std::numeric_limits<float>::lowest();
+
+        //(2.1) Iterate through 'vertices' to find the vertex most distant from line 
+        for (auto& vertex : vertices)
+        {
+            //(2.1.1) Check if vertex and firstDistant create a line segment parralel to the line segment created by 'firstToSecond'
+            float dotResult = math::dot(math::normalize(vertex - firstDistant), firstToSecond);
+
+            if (math::close_enough(dotResult, 1.0f))
+            {
+                continue;
+            }
+
+            //(2.1.2) Find closest point between vertex and line segment
+            math::vec3 closestPoint = PhysicsStatics::FindClosestPointToLineSegment(firstDistant, secondDistant, vertex);
+
+            float currentDistance = math::distance2(closestPoint, vertex);
+
+            //(2.1.3) Store vertex if it is further than the current known most distant
+            if (currentDistance > mostDistant)
+            {
+                mostDistant = currentDistance;
+                thirdDistant = &vertex;
+            }
+        }
+
+        if (!thirdDistant)
+        {
+            return false;
+        }
+
+        //DEBUG draw most distant
+      /*  {
+            math::vec3 transformFirst = DEBUG_transform * math::vec4(*thirdDistant, 1);
+
+            debug::drawLine(transformFirst, transformFirst + math::vec3(0,0.1f,0), math::colors::blue, 5.0f, FLT_MAX, true);
+        }*/
+
+        //[3] Create first collider face using that line and the vertex most distant to it
+
+        //(3.1) Initialize Half Edges
+        HalfEdgeEdge* firstEdge = new HalfEdgeEdge(firstDistant);
+        HalfEdgeEdge* secondEdge = new HalfEdgeEdge(secondDistant);
+        HalfEdgeEdge* thirdEdge = new HalfEdgeEdge(*thirdDistant);
+
+        //(3.2) Connect them to each other
+        firstEdge->setNextAndPrevEdge(thirdEdge, secondEdge);
+        secondEdge->setNextAndPrevEdge(firstEdge, thirdEdge);
+        thirdEdge->setNextAndPrevEdge(secondEdge, firstEdge);
+
+        //(3.3) Initialize Half Edge Faces
+        HalfEdgeFace* initialFace = new HalfEdgeFace(firstEdge,
+            math::normalize(math::cross(secondDistant - firstDistant, *thirdDistant - secondDistant)));
+
+        //(3.4) Add to collider
+        collider->GetHalfEdgeFaces().push_back(initialFace);
+
+        //[4] Find the most distant vertex from the plane where the first collider face lies
+
+        //(4.1) Iterate through vertices to the a point to plane check
+        mostDistant = std::numeric_limits<float>::lowest();
+        const math::vec3* firstEyePoint = nullptr;
+
+        math::vec3 planePosition = initialFace->centroid;
+        math::vec3 planeNormal = initialFace->normal;
+
+        for (auto& vertex : vertices)
+        {
+            float currentDistance =
+                math::abs(PhysicsStatics::PointDistanceToPlane(planeNormal, planePosition, vertex));
+
+            if (currentDistance > mostDistant)
+            {
+                mostDistant = currentDistance;
+                firstEyePoint = &vertex;
+            }
+        }
+
+        if (math::close_enough(mostDistant,0.0f))
+        {
+            return false;
+        }
+
+        //DEBUG draw most distant
+        {
+          math::vec3 transformFirst = DEBUG_transform * math::vec4(*firstEyePoint, 1);
+
+          debug::drawLine(transformFirst, transformFirst + math::vec3(0,0.1f,0), math::colors::blue, 5.0f, FLT_MAX, true);
+
+        }
+
+        //[5] invert face if distant vertex is in front of face
+        float eyePointDistance =
+            PhysicsStatics::PointDistanceToPlane(planeNormal, planePosition, *firstEyePoint);
+
+        if (eyePointDistance > 0.0f)
+        {
+            initialFace->inverse();
+        }
+
+        //[5] Create a set of faces connecting the first collider face to the most distant vertex
+
+        return true;
     }
 
 };

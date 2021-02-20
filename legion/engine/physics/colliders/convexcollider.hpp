@@ -89,6 +89,7 @@ namespace legion::physics
             ConstructConvexHullWithMesh(mesh,spacingAmount);
         }
 
+        //void ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle, math::mat4 DEBUG_transform );
         
 
         //TODO(algorythmix,jelled1st) This desperately needs cleanup
@@ -108,6 +109,8 @@ namespace legion::physics
 
             ConstructConvexHullWithMesh(mesh,math::vec3(),shouldDebug);
         }
+
+
 
         void  ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount = math::vec3(), bool shouldDebug = false);
        

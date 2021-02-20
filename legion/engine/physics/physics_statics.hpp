@@ -267,7 +267,7 @@ namespace legion::physics
         * @param p3 The start of the third line
         * @param p4 The end of the fourth line
         */
-        static void FindClosestPointsToLineSegment(math::vec3 p1, math::vec3 p2,
+        static void FindClosestPointsBetweenLineSegments(math::vec3 p1, math::vec3 p2,
             math::vec3 p3, math::vec3 p4,math::vec3& outp1p2, math::vec3& outp3p4)
         {
             //------------------find the interpolants of both lines that represent the closest points of the line segments-----------//
@@ -379,7 +379,7 @@ namespace legion::physics
                 return false;
             }
 
-            float t = FindLineToPointInterpolant(startPoint, endPoint, planePosition, planeNormal);
+            float t = FindLineToPlaneInterpolant(startPoint, endPoint, planePosition, planeNormal);
 
             intersectionPoint = startPoint + direction * t;
 
@@ -400,7 +400,7 @@ namespace legion::physics
                 return false;
             }
 
-            interpolant = FindLineToPointInterpolant(startPoint, endPoint, planePosition, planeNormal);
+            interpolant = FindLineToPlaneInterpolant(startPoint, endPoint, planePosition, planeNormal);
             
 
             intersectionPoint = startPoint + direction * interpolant;
@@ -411,14 +411,22 @@ namespace legion::physics
 
         /** Given a line going from a startPoint to and endPoint, finds the interpolant required to intersect a given 3D plane
         */
-        static float FindLineToPointInterpolant(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
+        static float FindLineToPlaneInterpolant(const math::vec3& startPoint, const math::vec3& endPoint, const math::vec3& planePosition,
             const math::vec3& planeNormal)
         {
             return math::dot(planePosition - startPoint, planeNormal) / math::dot(endPoint - startPoint, planeNormal);
         }
 
+        /** Given a line going from 'startPoint' with a direction of 'lineDirection'
+        * endPoint and a point at 'pointPosition', finds the interpolant that represents the point in the line closest to 'pointPosition'
+        */
+        static float FindClosestPointToLineInterpolant(const math::vec3& startPoint, const math::vec3& lineDirection, const math::vec3& pointPosition);
+
+        static math::vec3 FindClosestPointToLineSegment(const math::vec3& start, const math::vec3& end, const math::vec3& pointPosition);
 
 
+
+        //------------------------------------------------------------ Voronoi Diagrams -----------------------------------------------------------------------//
 
         /**Creates a Voronoi diagram based on the given parameters.
         * @param points A list of points these will serve as the points of the voronoi diagram.
@@ -516,7 +524,7 @@ namespace legion::physics
 
         //------------------------------------------------------------ Quickhull -----------------------------------------------------------------------//
 
-        static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices);
+        static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices,int maxDraw = INT_MAX,math::mat4 DEBUG_transform = math::mat4(1.0f));
 
     private:
 
@@ -606,6 +614,14 @@ namespace legion::physics
 
             return true;
         }
+
+        //------------------------------------------------------------ Quickhull Helpers-----------------------------------------------------------------------//
+
+        static bool qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::shared_ptr<ConvexCollider> collider,
+            math::mat4 DEBUG_transform = math::mat4(1.0f));
+        
+
+
     };
 }
 
