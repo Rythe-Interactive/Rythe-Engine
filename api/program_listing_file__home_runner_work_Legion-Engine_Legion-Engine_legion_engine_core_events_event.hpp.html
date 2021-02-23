@@ -63,7 +63,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
         <span class="n">id_type</span> <span class="n">reportEventType</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="n">eventNames</span><span class="p">[</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()]</span> <span class="o">=</span> <span class="n">typeName</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">eventNames</span><span class="p">[</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()]</span> <span class="o">=</span> <span class="n">nameOfType</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="k">return</span> <span class="n">typeHash</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="p">}</span>
     <span class="p">}</span>

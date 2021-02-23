@@ -46,10 +46,454 @@
   <div class="section" id="program-listing-for-file-fracturer-cpp">
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-components-fracturer-cpp"></span><h1>Program Listing for File fracturer.cpp<a class="headerlink" href="#program-listing-for-file-fracturer-cpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturer.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-components-fracturer-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/components/fracturer.cpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;fracturer.h&quot;</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/components/fracturer.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/data/physics_manifold.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/physics_statics.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/colliders/convexcollider.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/data/identifier.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/physics_statics.hpp&gt;</span><span class="cp"></span>
 
-<span class="kt">void</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span><span class="o">::</span><span class="n">Fracturer</span><span class="o">::</span><span class="n">Fracture</span><span class="p">()</span>
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
+    <span class="n">ecs</span><span class="o">::</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">registry</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">HandleFracture</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">manifoldValid</span><span class="p">,</span><span class="kt">bool</span> <span class="n">isfracturingA</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">IsFractureConditionMet</span><span class="p">(</span><span class="n">manifold</span><span class="p">,</span><span class="n">isfracturingA</span><span class="p">)</span> <span class="o">||</span> <span class="n">manifold</span><span class="p">.</span><span class="n">contacts</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="c1">//log::debug(&quot;manifold invalidated&quot;);</span>
+        <span class="n">manifoldValid</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">impactPoint</span> <span class="o">=</span> <span class="n">GetImpactPointFromManifold</span><span class="p">(</span><span class="n">manifold</span><span class="p">);</span>
+        <span class="kt">float</span> <span class="n">impactRadius</span> <span class="o">=</span> <span class="mf">0.2f</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">fracturedEnt</span> <span class="o">=</span> <span class="n">isfracturingA</span> <span class="o">?</span> <span class="n">manifold</span><span class="p">.</span><span class="nl">entityA</span> <span class="p">:</span> <span class="n">manifold</span><span class="p">.</span><span class="n">entityB</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">collider</span> <span class="o">=</span> <span class="n">isfracturingA</span> <span class="o">?</span> <span class="n">manifold</span><span class="p">.</span><span class="nl">colliderA</span> <span class="p">:</span> <span class="n">manifold</span><span class="p">.</span><span class="n">colliderB</span><span class="p">;</span>
+
+        <span class="n">FractureParams</span> <span class="nf">params</span><span class="p">(</span><span class="n">impactPoint</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">);</span>
+        <span class="n">ExplodeEntity</span><span class="p">(</span><span class="n">fracturedEnt</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">collider</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">ExplodeEntity</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">ownerEntity</span><span class="p">,</span> <span class="k">const</span> <span class="n">FractureParams</span><span class="o">&amp;</span> <span class="n">fractureParams</span><span class="p">,</span> <span class="n">PhysicsCollider</span><span class="o">*</span> <span class="n">entityCollider</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;------------------------------------- ExplodeEntity ---------------------------------------&quot;</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">entityCollider</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;colliders size {} &quot;</span>
+                <span class="p">,</span> <span class="n">ownerEntity</span><span class="p">.</span><span class="n">read_component</span><span class="o">&lt;</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">().</span><span class="n">colliders</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+            <span class="k">auto</span> <span class="n">physicsComp</span> <span class="o">=</span> <span class="n">ownerEntity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">entityCollider</span> <span class="o">=</span> <span class="n">physicsComp</span><span class="p">.</span><span class="n">colliders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">get</span><span class="p">();</span>
+
+        <span class="p">}</span>
+
+        <span class="c1">//ownerEntity.read_component&lt;physicsComponent&gt;().colliders.at(0)</span>
+        <span class="k">auto</span> <span class="p">[</span><span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">]</span> <span class="o">=</span> <span class="n">entityCollider</span><span class="o">-&gt;</span><span class="n">GetMinMaxWorldAABB</span><span class="p">();</span>
+
+        <span class="c1">//-----------------------------------------------------------------------------------------------------------------------------//</span>
+                                <span class="c1">//Generate a Voronoi Diagram, for now, the points are manually generated //</span>
+        <span class="c1">//-----------------------------------------------------------------------------------------------------------------------------//</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">voronoiPoints</span><span class="p">;</span>
+
+        <span class="n">QuadrantVoronoi</span><span class="p">(</span><span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">,</span> <span class="n">voronoiPoints</span><span class="p">);</span>
+
+        <span class="c1">//math::vec3 six = third + math::vec3(-0.2f, 0.0f, -0.0f);</span>
+        <span class="c1">//voronoiPoints.push_back(six);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">point</span> <span class="p">:</span> <span class="n">voronoiPoints</span><span class="p">)</span>
+        <span class="p">{</span><span class="cm">/*</span>
+<span class="cm">            debug::drawLine(point,</span>
+<span class="cm">                point + math::vec3(0, 0.1f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);*/</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&gt;</span> <span class="n">groupedPoints</span><span class="p">(</span><span class="n">voronoiPoints</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+        <span class="n">GetVoronoiPoints</span><span class="p">(</span><span class="n">groupedPoints</span><span class="p">,</span>
+            <span class="n">voronoiPoints</span><span class="p">,</span> <span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">);</span>
+
+        <span class="c1">//-----------------------------------------------------------------------------------------------------------------------------//</span>
+                                <span class="c1">//Using the voronoi points, generate a set of colliders  //</span>
+        <span class="c1">//-----------------------------------------------------------------------------------------------------------------------------//</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;&gt;</span> <span class="n">voronoiColliders</span><span class="p">;</span>
+
+        <span class="n">InstantiateVoronoiColliders</span><span class="p">(</span><span class="n">voronoiColliders</span><span class="p">,</span> <span class="n">groupedPoints</span><span class="p">);</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span> <span class="n">FracturerColliderToMeshPairing</span><span class="o">&gt;</span> <span class="n">colliderToMeshPairings</span><span class="p">;</span>
+
+        <span class="c1">//-----------------------------------------------------------------------------------------------------------------------------//</span>
+                                <span class="c1">//From the mesh about to be fractured, get the pairs of colliders to Mesh  //</span>
+        <span class="c1">//-----------------------------------------------------------------------------------------------------------------------------//</span>
+
+        <span class="n">InstantiateColliderMeshPairingWithEntity</span><span class="p">(</span><span class="n">ownerEntity</span><span class="p">,</span>
+            <span class="n">colliderToMeshPairings</span><span class="p">);</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ownerEntity</span><span class="p">.</span><span class="n">child_count</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">child</span> <span class="o">=</span> <span class="n">ownerEntity</span><span class="p">.</span><span class="n">get_child</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+            <span class="n">InstantiateColliderMeshPairingWithEntity</span><span class="p">(</span><span class="n">child</span><span class="p">,</span>
+                <span class="n">colliderToMeshPairings</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span><span class="o">&gt;</span> <span class="n">entitiesGenerated</span><span class="p">;</span>
+
+        <span class="c1">//-----------------------------------------------------------------------------------------------------------------------------//</span>
+                                <span class="c1">//From the mesh about to be fractured, get the pairs of colliders to Mesh  //</span>
+        <span class="c1">//-----------------------------------------------------------------------------------------------------------------------------//</span>
+
+        <span class="n">GenerateFractureFragments</span><span class="p">(</span><span class="n">entitiesGenerated</span><span class="p">,</span> <span class="n">colliderToMeshPairings</span><span class="p">,</span>
+            <span class="n">voronoiColliders</span><span class="p">,</span> <span class="n">ownerEntity</span><span class="p">);</span>
+
+
+        <span class="k">auto</span> <span class="n">originalRB</span> <span class="o">=</span> <span class="n">ownerEntity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">();</span>
+        <span class="kt">float</span> <span class="n">fragmentMass</span> <span class="o">=</span> <span class="mf">1.0f</span> <span class="o">/</span> <span class="n">originalRB</span><span class="p">.</span><span class="n">inverseMass</span><span class="p">;</span>
+        <span class="n">fragmentMass</span> <span class="o">/=</span> <span class="n">entitiesGenerated</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+        <span class="kt">int</span> <span class="n">colliderIter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">ent</span> <span class="p">:</span> <span class="n">entitiesGenerated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">posH</span><span class="p">,</span> <span class="n">rotH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">trans</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">posH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+            <span class="c1">//generate hull</span>
+            <span class="k">auto</span> <span class="n">physicsCompHandle</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">physicsComp</span> <span class="o">=</span> <span class="n">physicsCompHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">meshFilter</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">read_component</span><span class="o">&lt;</span><span class="n">mesh_filter</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">convexCollider</span> <span class="o">=</span> <span class="n">physicsComp</span><span class="p">.</span><span class="n">ConstructConvexHull</span><span class="p">(</span><span class="n">meshFilter</span><span class="p">);</span>
+            <span class="n">physicsCompHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">physicsComp</span><span class="p">);</span>
+
+            <span class="c1">//add rigidbody</span>
+            <span class="k">auto</span> <span class="n">posHandle</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">position</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">rbH</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">fragmentRB</span> <span class="o">=</span> <span class="n">rbH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">fragmentRB</span><span class="p">.</span><span class="n">globalCentreOfMass</span> <span class="o">=</span> <span class="n">posH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+            <span class="c1">//add force based on distance from explosion point</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">distanceFromCentroid</span> <span class="o">=</span> <span class="n">posH</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">-</span> <span class="n">fractureParams</span><span class="p">.</span><span class="n">explosionCentroid</span> <span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">forceDir</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">distanceFromCentroid</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">forceAmount</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0f</span> <span class="o">/</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">length</span><span class="p">(</span><span class="n">distanceFromCentroid</span><span class="p">)))</span> <span class="o">*</span> <span class="n">fractureParams</span><span class="p">.</span><span class="n">strength</span><span class="p">;</span>
+
+            <span class="c1">//crude estimation of explosion point</span>
+            <span class="kt">float</span> <span class="n">smallestDot</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
+            <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">chosenFace</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">face</span> <span class="p">:</span> <span class="n">convexCollider</span><span class="o">-&gt;</span><span class="n">GetHalfEdgeFaces</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="kt">float</span> <span class="n">currentDot</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">forceDir</span><span class="p">,</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">currentDot</span> <span class="o">&lt;</span> <span class="n">smallestDot</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">smallestDot</span> <span class="o">=</span> <span class="n">currentDot</span><span class="p">;</span>
+                    <span class="n">chosenFace</span> <span class="o">=</span> <span class="n">face</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">explosionPoint</span> <span class="o">=</span> <span class="n">trans</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">chosenFace</span><span class="o">-&gt;</span><span class="n">centroid</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="n">fragmentRB</span><span class="p">.</span><span class="n">addForceAt</span><span class="p">(</span><span class="n">explosionPoint</span><span class="p">,</span><span class="n">forceDir</span> <span class="o">*</span> <span class="n">forceAmount</span><span class="p">);</span>
+            <span class="n">rbH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">fragmentRB</span><span class="p">);</span>
+
+            <span class="n">colliderIter</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">registry</span><span class="o">-&gt;</span><span class="n">destroyEntity</span><span class="p">(</span><span class="n">ownerEntity</span> <span class="p">);</span>
+
+
+        <span class="n">fractureCount</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">GetVoronoiPoints</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&gt;&amp;</span> <span class="n">groupedPoints</span><span class="p">,</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">voronoiPoints</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">min</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">max</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">time</span><span class="o">::</span><span class="n">timer</span> <span class="n">tick</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">vectorList</span> <span class="o">=</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">GenerateVoronoi</span><span class="p">(</span><span class="n">voronoiPoints</span><span class="p">,</span> <span class="n">min</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">max</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">min</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">max</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">min</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="n">max</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+        <span class="n">vectorList</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+        <span class="c1">//groupedPoints.reserve( voronoiPoints.size() );</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;&amp;</span> <span class="nl">vector</span> <span class="p">:</span> <span class="n">vectorList</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&amp;</span> <span class="nl">position</span> <span class="p">:</span> <span class="n">vector</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="n">position</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+
+                <span class="c1">//log::debug(&quot;position {} id {} &quot;,math::to_string(math::vec3(position)), id);</span>
+                <span class="n">groupedPoints</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">id</span><span class="p">).</span><span class="n">push_back</span><span class="p">(</span><span class="n">position</span><span class="p">);</span>
+
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">InstantiateVoronoiColliders</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;&gt;&amp;</span> <span class="n">voronoiColliders</span>
+        <span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&gt;&amp;</span> <span class="n">groupedPoints</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">time</span><span class="o">::</span><span class="n">timer</span> <span class="n">tick</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="nl">vector</span> <span class="p">:</span> <span class="n">groupedPoints</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//math::color debugColor =</span>
+            <span class="c1">//    math::color(math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f));</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">debugOffset</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">();</span>
+            <span class="c1">//math::mat4 transform =</span>
+            <span class="c1">//    math::compose(math::vec3(1.0f), math::identity&lt;math::quat&gt;(), debugOffset);</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">vector</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">vertPos</span> <span class="o">=</span> <span class="n">vertex</span> <span class="o">+</span> <span class="n">debugOffset</span><span class="p">;</span>
+                <span class="c1">//debug::user_projectDrawLine(vertPos, vertPos + math::vec3(0,0.5,0), debugColor,10.0f,FLT_MAX);</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span> <span class="n">newCollider</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">debugVectorcolliders</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">newCollider</span><span class="p">);</span>
+            <span class="n">voronoiColliders</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">newCollider</span><span class="p">);</span>
+
+            <span class="n">verticesList</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">vector</span><span class="p">);</span>
+
+            <span class="n">newCollider</span><span class="o">-&gt;</span><span class="n">ConstructConvexHullWithVertices</span><span class="p">(</span><span class="n">vector</span><span class="p">);</span>
+
+
+            <span class="c1">//transforms.push_back(transform);</span>
+            <span class="c1">//newCollider-&gt;DrawColliderRepresentation(transform,math::colors::green,6.0f,FLT_MAX);</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">GenerateFractureFragments</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span><span class="o">&gt;&amp;</span> <span class="n">entitiesGenerated</span>
+        <span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span> <span class="n">FracturerColliderToMeshPairing</span><span class="o">&gt;&amp;</span> <span class="n">colliderToMeshPairings</span>
+        <span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;&gt;&amp;</span> <span class="n">voronoiColliders</span>
+        <span class="p">,</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">fracturedEnt</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="n">fast_time</span> <span class="n">totalMeshSplitting</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="n">fast_time</span> <span class="n">totalCollisionDetection</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">fractureID</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="c1">//for each instantiated convex collider</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;</span> <span class="nl">instantiatedVoronoiCollider</span> <span class="p">:</span> <span class="n">voronoiColliders</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">meshToColliderPairing</span> <span class="p">:</span> <span class="n">colliderToMeshPairings</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//check if it collides with one of the colliders in the original physics component</span>
+                <span class="n">physics_manifold</span> <span class="n">manifold</span><span class="p">;</span>
+                <span class="n">ConvexConvexCollisionInfo</span> <span class="n">collisionInfo</span><span class="p">;</span>
+
+
+                <span class="k">auto</span> <span class="n">ownerEntity</span> <span class="o">=</span> <span class="n">meshToColliderPairing</span><span class="p">.</span><span class="n">meshSplitterPairing</span><span class="p">.</span>
+                    <span class="n">entity</span><span class="p">;</span>
+                <span class="k">auto</span> <span class="p">[</span><span class="n">posH</span><span class="p">,</span> <span class="n">rotH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">ownerEntity</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+
+                <span class="k">auto</span> <span class="n">transformB</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">posH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+
+                <span class="n">time</span><span class="o">::</span><span class="n">timer</span> <span class="n">convexConvexCollision</span><span class="p">;</span>
+ <span class="cm">/*               PhysicsStatics::DetectConvexConvexCollision(instantiatedVoronoiCollider.get()</span>
+<span class="cm">                    , meshToColliderPairing.colliderPair.get(), math::mat4(1.0f), transformB, collisionInfo, manifold);*/</span>
+                <span class="n">manifold</span><span class="p">.</span><span class="n">isColliding</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="n">totalCollisionDetection</span> <span class="o">+=</span> <span class="n">convexConvexCollision</span><span class="p">.</span><span class="n">elapsedTime</span><span class="p">().</span><span class="n">milliseconds</span><span class="p">();</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">manifold</span><span class="p">.</span><span class="n">isColliding</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">fractureID</span> <span class="o">&lt;</span> <span class="mi">999</span><span class="p">)</span> <span class="c1">//2</span>
+                    <span class="p">{</span>
+                        <span class="c1">//log::debug(&quot;-&gt; Collision Found&quot;);</span>
+
+                        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MeshSplitParams</span><span class="o">&gt;</span> <span class="n">splittingParams</span><span class="p">;</span>
+                        <span class="n">meshToColliderPairing</span><span class="p">.</span><span class="n">GenerateSplittingParamsFromCollider</span><span class="p">(</span><span class="n">instantiatedVoronoiCollider</span><span class="p">,</span> <span class="n">splittingParams</span><span class="p">);</span>
+                        <span class="c1">//log::debug(&quot;splittingParams {} &quot;, splittingParams.size());</span>
+
+                        <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">splittingParams</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="kt">float</span> <span class="n">interpolant</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span> <span class="o">/</span> <span class="n">splittingParams</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+                            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">color</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">interpolant</span><span class="p">;</span>
+
+                            <span class="cm">/*debug::user_projectDrawLine(splittingParams.at(i).planePostion</span>
+<span class="cm">                                , splittingParams.at(i).planePostion + splittingParams.at(i).planeNormal,</span>
+<span class="cm">                                math::color(color.x, color.y, color.z, 1), 15.0f, FLT_MAX, true);*/</span>
+                        <span class="p">}</span>
+
+                        <span class="k">auto</span> <span class="n">splitter</span> <span class="o">=</span> <span class="n">meshToColliderPairing</span><span class="p">.</span><span class="n">meshSplitterPairing</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+                        <span class="n">time</span><span class="o">::</span><span class="n">timer</span> <span class="n">meshSplitting</span><span class="p">;</span>
+                        <span class="n">splitter</span><span class="p">.</span><span class="n">MultipleSplitMesh</span><span class="p">(</span><span class="n">splittingParams</span><span class="p">,</span> <span class="n">entitiesGenerated</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+                        <span class="n">totalMeshSplitting</span> <span class="o">+=</span> <span class="n">meshSplitting</span><span class="p">.</span><span class="n">elapsedTime</span><span class="p">().</span><span class="n">milliseconds</span><span class="p">();</span>
+
+
+                        <span class="n">meshToColliderPairing</span><span class="p">.</span><span class="n">meshSplitterPairing</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">splitter</span><span class="p">);</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">fractureID</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">entitiesGenerated</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
+                            <span class="k">auto</span> <span class="n">idH</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
+                            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+                            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;problem&quot;</span><span class="p">;</span>
+                            <span class="n">idH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+
+                        <span class="p">}</span>
+
+
+                    <span class="p">}</span>
+
+                <span class="p">}</span>
+                <span class="n">fractureID</span><span class="o">++</span><span class="p">;</span>
+
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">registry</span><span class="o">-&gt;</span><span class="n">destroyEntity</span><span class="p">(</span><span class="n">fracturedEnt</span><span class="p">);</span>
+
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">QuadrantVoronoi</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">min</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">max</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">voronoiPoints</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">difference</span> <span class="o">=</span> <span class="n">max</span> <span class="o">-</span> <span class="n">min</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">differenceQuadrant</span> <span class="o">=</span> <span class="n">difference</span> <span class="o">/</span> <span class="mf">4.0f</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">first</span> <span class="o">=</span> <span class="n">min</span> <span class="o">+</span> <span class="n">differenceQuadrant</span><span class="p">;</span>
+        <span class="n">voronoiPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">first</span><span class="p">);</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">second</span> <span class="o">=</span> <span class="n">max</span> <span class="o">-</span> <span class="n">differenceQuadrant</span><span class="p">;</span>
+        <span class="n">voronoiPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">second</span><span class="p">);</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">third</span> <span class="o">=</span> <span class="n">max</span> <span class="o">-</span> <span class="p">(</span><span class="n">differenceQuadrant</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="n">voronoiPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">third</span><span class="p">);</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">fourth</span> <span class="o">=</span> <span class="n">third</span> <span class="o">+</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.2f</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">voronoiPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">fourth</span><span class="p">);</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">fifth</span> <span class="o">=</span> <span class="n">third</span> <span class="o">+</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1f</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">voronoiPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">fifth</span><span class="p">);</span>
+
+        <span class="c1">//math::vec3 sixth = min + differenceQuadrant + math::vec3(0.1, 0.25f, 0.1);</span>
+        <span class="c1">//voronoiPoints.push_back(sixth);</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">centroid</span> <span class="o">=</span> <span class="p">(</span><span class="n">min</span> <span class="o">+</span> <span class="n">max</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0f</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">rand</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">linearRand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+        <span class="c1">//log::debug(&quot;rand {} &quot;,rand );</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="nl">point</span> <span class="p">:</span> <span class="n">voronoiPoints</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">vecFromCentroid</span> <span class="o">=</span> <span class="n">point</span> <span class="o">-</span> <span class="n">centroid</span><span class="p">;</span>
+
+            <span class="n">vecFromCentroid</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">rotateY</span><span class="p">(</span><span class="n">vecFromCentroid</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">deg2rad</span><span class="p">(</span><span class="mf">90.0f</span> <span class="o">*</span> <span class="n">rand</span><span class="p">));</span>
+
+            <span class="n">point</span> <span class="o">=</span> <span class="n">centroid</span> <span class="o">+</span> <span class="n">vecFromCentroid</span><span class="p">;</span>
+
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">BalancedVoronoi</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">min</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">max</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">voronoiPoints</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">difference</span> <span class="o">=</span> <span class="n">max</span> <span class="o">-</span> <span class="n">min</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">first</span> <span class="o">=</span> <span class="n">min</span> <span class="o">+</span> <span class="n">difference</span> <span class="o">*</span> <span class="mf">0.1f</span><span class="p">;</span>
+        <span class="n">voronoiPoints</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">first</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">IsFractureConditionMet</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">isfracturingA</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//TODO the user should be able to create their own fracture condition, but for now</span>
+        <span class="c1">//, limit it so something can only be fractured once</span>
+
+        <span class="k">auto</span> <span class="n">fractureInstigator</span> <span class="o">=</span> <span class="n">isfracturingA</span> <span class="o">?</span> <span class="n">manifold</span><span class="p">.</span><span class="nl">entityB</span> <span class="p">:</span> <span class="n">manifold</span><span class="p">.</span><span class="n">entityA</span><span class="p">;</span>
+
+        <span class="kt">bool</span> <span class="n">isAtMomentumThreshold</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="n">rbH</span> <span class="o">=</span><span class="n">fractureInstigator</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">rbH</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">rb</span> <span class="o">=</span> <span class="n">rbH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">mass</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0f</span> <span class="o">/</span> <span class="n">rb</span><span class="p">.</span><span class="n">inverseMass</span><span class="p">);</span>
+            <span class="n">isAtMomentumThreshold</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">length</span><span class="p">(</span><span class="n">rbH</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">mass</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">5.0f</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">fractureCount</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">isAtMomentumThreshold</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">InitializeVoronoi</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">physicsComponent</span><span class="o">&gt;</span> <span class="n">physicsComponent</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//using all colliders inside the physicsComponent, create a bounding box</span>
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">InvestigateColliderToMeshPairing</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">ent</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">FracturerColliderToMeshPairing</span><span class="o">&gt;</span> <span class="n">colliderToMeshPairings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">mesh_filter</span><span class="o">&gt;</span> <span class="n">meshFilterHandle</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">mesh_filter</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">physicsComponent</span><span class="o">&gt;</span> <span class="n">physicsComponentHandle</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">meshFilterHandle</span> <span class="o">||</span> <span class="o">!</span><span class="n">physicsComponentHandle</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">InstantiateColliderMeshPairingWithEntity</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">ent</span><span class="p">,</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">FracturerColliderToMeshPairing</span><span class="o">&gt;&amp;</span> <span class="n">colliderToMeshPairings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//the fracturer is setup in a way that fragments are all stored in a different entity</span>
+        <span class="k">auto</span> <span class="n">physicsCompHandle</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;</span> <span class="n">convexCollider</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="n">assert</span><span class="p">(</span><span class="n">physicsCompHandle</span><span class="p">);</span>
+
+        <span class="k">auto</span> <span class="n">physicsCollider</span> <span class="o">=</span> <span class="n">physicsCompHandle</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">colliders</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">physicsCompHandle</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">convexCollider</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">dynamic_pointer_cast</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;</span><span class="p">(</span><span class="n">physicsCollider</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">meshSplitterHandle</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">MeshSplitter</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="c1">//assert(meshSplitterHandle);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">meshSplitterHandle</span> <span class="o">&amp;&amp;</span> <span class="n">convexCollider</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">FracturerColliderToMeshPairing</span> <span class="n">colliderToMeshPairing</span><span class="p">(</span><span class="n">convexCollider</span><span class="p">,</span> <span class="n">meshSplitterHandle</span><span class="p">);</span>
+            <span class="n">colliderToMeshPairings</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">colliderToMeshPairing</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
+    <span class="p">}</span>
+
+    <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Fracturer</span><span class="o">::</span><span class="n">GetImpactPointFromManifold</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">impactPoint</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">();</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">contact</span> <span class="p">:</span> <span class="n">manifold</span><span class="p">.</span><span class="n">contacts</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">impactPoint</span> <span class="o">+=</span> <span class="n">contact</span><span class="p">.</span><span class="n">RefWorldContact</span><span class="p">;</span>
+            <span class="n">impactPoint</span> <span class="o">+=</span> <span class="n">contact</span><span class="p">.</span><span class="n">IncWorldContact</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">float</span> <span class="n">numberOfContacts</span> <span class="o">=</span> <span class="n">manifold</span><span class="p">.</span><span class="n">contacts</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">mult</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0f</span> <span class="o">/</span> <span class="n">numberOfContacts</span><span class="p">);</span>
+
+        <span class="n">impactPoint</span> <span class="o">*=</span> <span class="n">mult</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">impactPoint</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">FracturerColliderToMeshPairing</span><span class="o">::</span><span class="n">GenerateSplittingParamsFromCollider</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;</span> <span class="n">instantiatedCollider</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">MeshSplitParams</span><span class="o">&gt;&amp;</span> <span class="n">meshSplitParams</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">until</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span><span class="c1">//convex bug at 3</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">face</span> <span class="p">:</span> <span class="n">instantiatedCollider</span><span class="o">-&gt;</span><span class="n">GetHalfEdgeFaces</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="c1">//if (count &gt; until) { continue; }</span>
+            <span class="n">MeshSplitParams</span> <span class="n">splitParam</span><span class="p">(</span><span class="n">face</span><span class="o">-&gt;</span><span class="n">centroid</span><span class="p">,</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">);</span>
+            <span class="n">meshSplitParams</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">splitParam</span><span class="p">);</span>
+            <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+
 <span class="p">}</span>
 </pre></div>
 </div>

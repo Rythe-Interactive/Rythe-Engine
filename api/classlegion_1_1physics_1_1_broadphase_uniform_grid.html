@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class BroadphaseUniformGrid &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class collision_event" href="class_structlegion_1_1physics_1_1collision__event.html" />
+    <link rel="prev" title="Class BroadPhaseCollisionAlgorithm" href="classlegion_1_1physics_1_1_broad_phase_collision_algorithm.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1physics_1_1collision__event.html" title="Class collision_event"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1physics_1_1_broad_phase_collision_algorithm.html" title="Class BroadPhaseCollisionAlgorithm"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class BroadphaseUniformGrid</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-broadphaseuniformgrid">
+<span id="exhale-class-classlegion-1-1physics-1-1-broadphase-uniform-grid"></span><h1>Class BroadphaseUniformGrid<a class="headerlink" href="#class-broadphaseuniformgrid" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphaseuniformgrid.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-broadphasecollisionalgorithms-broadphaseuniformgrid-hpp"><span class="std std-ref">File broadphaseuniformgrid.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">legion::physics::BroadPhaseCollisionAlgorithm</span></code> (<a class="reference internal" href="classlegion_1_1physics_1_1_broad_phase_collision_algorithm.html#exhale-class-classlegion-1-1physics-1-1-broad-phase-collision-algorithm"><span class="std std-ref">Class BroadPhaseCollisionAlgorithm</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion7physics21BroadphaseUniformGridE">
+<span id="_CPPv3N6legion7physics21BroadphaseUniformGridE"></span><span id="_CPPv2N6legion7physics21BroadphaseUniformGridE"></span><span id="legion::physics::BroadphaseUniformGrid"></span><span class="target" id="classlegion_1_1physics_1_1_broadphase_uniform_grid"></span><em class="property">class </em><code class="sig-prename descclassname">legion::physics<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">BroadphaseUniformGrid</code> : <em class="property">public</em> legion::physics::<a class="reference internal" href="classlegion_1_1physics_1_1_broad_phase_collision_algorithm.html#_CPPv4N6legion7physics28BroadPhaseCollisionAlgorithmE" title="legion::physics::BroadPhaseCollisionAlgorithm">BroadPhaseCollisionAlgorithm</a><a class="headerlink" href="#_CPPv4N6legion7physics21BroadphaseUniformGridE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Implementation of broad-phase collision detection Creates a virtual axis-aligned grid in which it sorts all physics components with colliders. All colliders in 1 cell have a possibility of colliding, and will be checked in narrow-phase. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics21BroadphaseUniformGrid21BroadphaseUniformGridEN4math5ivec3E9size_type">
+<span id="_CPPv3N6legion7physics21BroadphaseUniformGrid21BroadphaseUniformGridEN4math5ivec3E9size_type"></span><span id="_CPPv2N6legion7physics21BroadphaseUniformGrid21BroadphaseUniformGridEN4math5ivec3E9size_type"></span><span id="legion::physics::BroadphaseUniformGrid::BroadphaseUniformGrid__math::ivec3.size_type"></span><span class="target" id="classlegion_1_1physics_1_1_broadphase_uniform_grid_1adcfa0df1c60de0aace7a10e71a8ff60f"></span><em class="property">inline</em> <code class="sig-name descname">BroadphaseUniformGrid</code><span class="sig-paren">(</span>math::ivec3 <em>cellSize</em>, size_type <em>emptyCellDestroyThreshold</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics21BroadphaseUniformGrid21BroadphaseUniformGridEN4math5ivec3E9size_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructor of BroadPhaseUniformGrid. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cellSize</span></code>: The size of the cells for the grid </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">emptyCellDestroyThreshold</span></code>: the empty cell count at which the entire uniform grid is reset and rebuild. This can be usefull since every empty cell still takes up space in lists. when a new object is added to the list the list may have to be moved in memory, which takes time. By keeping the lists small and removing empty cells lists require less moving. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics21BroadphaseUniformGrid12collectPairsERRNSt6vectorI26physics_manifold_precursorEE">
+<span id="_CPPv3N6legion7physics21BroadphaseUniformGrid12collectPairsERRNSt6vectorI26physics_manifold_precursorEE"></span><span id="_CPPv2N6legion7physics21BroadphaseUniformGrid12collectPairsERRNSt6vectorI26physics_manifold_precursorEE"></span><span id="legion::physics::BroadphaseUniformGrid::collectPairs__std::vector:physics_manifold_precursor:RR"></span><span class="target" id="classlegion_1_1physics_1_1_broadphase_uniform_grid_1afd0ca6a899f84abae449a795252d4595"></span><em class="property">virtual</em> <em class="property">const</em> std::vector&lt;std::vector&lt;<a class="reference internal" href="structlegion_1_1physics_1_1physics__manifold__precursor.html#_CPPv4N6legion7physics26physics_manifold_precursorE" title="legion::physics::physics_manifold_precursor">physics_manifold_precursor</a>&gt;&gt; &amp;<code class="sig-name descname">collectPairs</code><span class="sig-paren">(</span>std::vector&lt;<a class="reference internal" href="structlegion_1_1physics_1_1physics__manifold__precursor.html#_CPPv4N6legion7physics26physics_manifold_precursorE" title="legion::physics::physics_manifold_precursor">physics_manifold_precursor</a>&gt; &amp;&amp;<em>manifoldPrecursors</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion7physics21BroadphaseUniformGrid12collectPairsERRNSt6vectorI26physics_manifold_precursorEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Collects collider pairs that have a chance of colliding and should be checked in narrow-phase collision detection. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a list-list of colliders that have a chance of colliding and should be checked </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">manifoldPrecursors</span></code>: all the physics components </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics21BroadphaseUniformGrid11reConstructERRNSt6vectorI26physics_manifold_precursorEE">
+<span id="_CPPv3N6legion7physics21BroadphaseUniformGrid11reConstructERRNSt6vectorI26physics_manifold_precursorEE"></span><span id="_CPPv2N6legion7physics21BroadphaseUniformGrid11reConstructERRNSt6vectorI26physics_manifold_precursorEE"></span><span id="legion::physics::BroadphaseUniformGrid::reConstruct__std::vector:physics_manifold_precursor:RR"></span><span class="target" id="classlegion_1_1physics_1_1_broadphase_uniform_grid_1aeb8305189d5631b4587fa70cd618afa5"></span><em class="property">const</em> std::vector&lt;std::vector&lt;<a class="reference internal" href="structlegion_1_1physics_1_1physics__manifold__precursor.html#_CPPv4N6legion7physics26physics_manifold_precursorE" title="legion::physics::physics_manifold_precursor">physics_manifold_precursor</a>&gt;&gt; &amp;<code class="sig-name descname">reConstruct</code><span class="sig-paren">(</span>std::vector&lt;<a class="reference internal" href="structlegion_1_1physics_1_1physics__manifold__precursor.html#_CPPv4N6legion7physics26physics_manifold_precursorE" title="legion::physics::physics_manifold_precursor">physics_manifold_precursor</a>&gt; &amp;&amp;<em>manifoldPrecursors</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics21BroadphaseUniformGrid11reConstructERRNSt6vectorI26physics_manifold_precursorEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Collects collider pairs that have a chance of colliding and should be checked in narrow-phase collision detection. Unlike collectPairs this function ignores all the cached data and reconstructs the grid every time. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>a list-list of colliders that have a chance of colliding and should be checked </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">manifoldPrecursors</span></code>: all the physics components </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics21BroadphaseUniformGrid11setCellSizeEN4math5ivec3E">
+<span id="_CPPv3N6legion7physics21BroadphaseUniformGrid11setCellSizeEN4math5ivec3E"></span><span id="_CPPv2N6legion7physics21BroadphaseUniformGrid11setCellSizeEN4math5ivec3E"></span><span id="legion::physics::BroadphaseUniformGrid::setCellSize__math::ivec3"></span><span class="target" id="classlegion_1_1physics_1_1_broadphase_uniform_grid_1af7953c4db051a88f2c1d4bfccd9b8ab1"></span><em class="property">inline</em> void <code class="sig-name descname">setCellSize</code><span class="sig-paren">(</span>math::ivec3 <em>cellSize</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics21BroadphaseUniformGrid11setCellSizeEN4math5ivec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the cell size which will be used for the virtual grid. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics21BroadphaseUniformGrid9debugDrawEv">
+<span id="_CPPv3N6legion7physics21BroadphaseUniformGrid9debugDrawEv"></span><span id="_CPPv2N6legion7physics21BroadphaseUniformGrid9debugDrawEv"></span><span id="legion::physics::BroadphaseUniformGrid::debugDraw"></span><span class="target" id="classlegion_1_1physics_1_1_broadphase_uniform_grid_1af1cae15122515545e72167880411f889"></span><em class="property">virtual</em> void <code class="sig-name descname">debugDraw</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion7physics21BroadphaseUniformGrid9debugDrawEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class BroadphaseUniformGrid</a><ul>
+<li><a class="reference internal" href="#inheritance-relationships">Inheritance Relationships</a><ul>
+<li><a class="reference internal" href="#base-type">Base Type</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1physics_1_1_broad_phase_collision_algorithm.html" title="previous chapter">Class BroadPhaseCollisionAlgorithm</a></li>
+      <li>Next: <a href="class_structlegion_1_1physics_1_1collision__event.html" title="next chapter">Class collision_event</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1physics_1_1_broadphase_uniform_grid.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

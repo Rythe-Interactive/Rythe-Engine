@@ -49,6 +49,9 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;provider_registry.hpp&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/containers/iterator_tricks.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/platform/platform.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/basic_resolver.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span>
 <span class="p">{</span>
@@ -58,6 +61,33 @@
         <span class="p">{</span>
             <span class="c1">//pointer to pointer to implementation ?</span>
             <span class="n">m_domain_resolver_map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_multimap</span><span class="o">&lt;</span><span class="n">domain</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">resolver</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+<span class="cp">#if defined(LEGION_WINDOWS)</span>
+            <span class="n">LPSTR</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+            <span class="k">auto</span> <span class="n">charCount</span> <span class="o">=</span> <span class="n">GetLogicalDriveStringsA</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span><span class="n">buffer</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">charCount</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="n">GetLastError</span><span class="p">());</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">driveName</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">charCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">driveName</span> <span class="o">+=</span> <span class="sc">&#39;\\&#39;</span><span class="p">;</span>
+                        <span class="n">m_domain_resolver_map</span><span class="o">-&gt;</span><span class="n">emplace</span><span class="p">(</span><span class="n">driveName</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">basic_resolver</span><span class="o">&gt;</span><span class="p">(</span><span class="n">driveName</span><span class="p">));</span>
+                        <span class="n">driveName</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span>
+                    <span class="p">{</span>
+                        <span class="n">driveName</span> <span class="o">+=</span> <span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">buffer</span><span class="p">;</span>
+<span class="cp">#elif defined(LEGION_LINUX)</span>
+<span class="cp">#endif</span>
         <span class="p">}</span>
 
         <span class="o">~</span><span class="n">driver</span><span class="p">()</span>

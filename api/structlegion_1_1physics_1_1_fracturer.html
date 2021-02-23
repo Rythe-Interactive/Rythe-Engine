@@ -18,8 +18,8 @@
     <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Struct HalfEdgeEdge" href="structlegion_1_1physics_1_1_half_edge_edge.html" />
-    <link rel="prev" title="Struct EdgeLabel" href="structlegion_1_1physics_1_1_edge_label.html" />
+    <link rel="next" title="Struct FracturerColliderToMeshPairing" href="structlegion_1_1physics_1_1_fracturer_collider_to_mesh_pairing.html" />
+    <link rel="prev" title="Struct FractureParams" href="structlegion_1_1physics_1_1_fracture_params.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
@@ -36,10 +36,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="structlegion_1_1physics_1_1_half_edge_edge.html" title="Struct HalfEdgeEdge"
+          <a href="structlegion_1_1physics_1_1_fracturer_collider_to_mesh_pairing.html" title="Struct FracturerColliderToMeshPairing"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="structlegion_1_1physics_1_1_edge_label.html" title="Struct EdgeLabel"
+          <a href="structlegion_1_1physics_1_1_fracture_params.html" title="Struct FractureParams"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
@@ -55,7 +55,7 @@
   <div class="section" id="struct-fracturer">
 <span id="exhale-struct-structlegion-1-1physics-1-1-fracturer"></span><h1>Struct Fracturer<a class="headerlink" href="#struct-fracturer" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturer.h.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-components-fracturer-h"><span class="std std-ref">File fracturer.h</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturer.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-components-fracturer-hpp"><span class="std std-ref">File fracturer.hpp</span></a></p></li>
 </ul>
 <div class="section" id="struct-documentation">
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
@@ -65,8 +65,94 @@
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N6legion7physics9Fracturer8FractureEv">
-<span id="_CPPv3N6legion7physics9Fracturer8FractureEv"></span><span id="_CPPv2N6legion7physics9Fracturer8FractureEv"></span><span id="legion::physics::Fracturer::Fracture"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a385713d9e91f1bfe852844d96687dd19"></span>void <code class="sig-name descname">Fracture</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer8FractureEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion7physics9Fracturer14HandleFractureER16physics_manifoldRbb">
+<span id="_CPPv3N6legion7physics9Fracturer14HandleFractureER16physics_manifoldRbb"></span><span id="_CPPv2N6legion7physics9Fracturer14HandleFractureER16physics_manifoldRbb"></span><span id="legion::physics::Fracturer::HandleFracture__physics_manifoldR.bR.b"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a854849c403c002d76045689eb4d3af56"></span>void <code class="sig-name descname">HandleFracture</code><span class="sig-paren">(</span><a class="reference internal" href="structlegion_1_1physics_1_1physics__manifold.html#_CPPv4N6legion7physics16physics_manifoldE" title="legion::physics::physics_manifold">physics_manifold</a> &amp;<em>manifold</em>, bool &amp;<em>manifoldValid</em>, bool <em>isfracturingA</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer14HandleFractureER16physics_manifoldRbb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer13ExplodeEntityEN3ecs13entity_handleERK14FractureParamsP15PhysicsCollider">
+<span id="_CPPv3N6legion7physics9Fracturer13ExplodeEntityEN3ecs13entity_handleERK14FractureParamsP15PhysicsCollider"></span><span id="_CPPv2N6legion7physics9Fracturer13ExplodeEntityEN3ecs13entity_handleERK14FractureParamsP15PhysicsCollider"></span><span id="legion::physics::Fracturer::ExplodeEntity__ecs::entity_handle.FractureParamsCR.PhysicsColliderP"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a91d477aba0477efbf3d08d9b45ecd608"></span>void <code class="sig-name descname">ExplodeEntity</code><span class="sig-paren">(</span>ecs::entity_handle <em>ownerEntity</em>, <em class="property">const</em> <a class="reference internal" href="structlegion_1_1physics_1_1_fracture_params.html#_CPPv4N6legion7physics14FractureParamsE" title="legion::physics::FractureParams">FractureParams</a> &amp;<em>fractureParams</em>, <a class="reference internal" href="classlegion_1_1physics_1_1_physics_collider.html#_CPPv4N6legion7physics15PhysicsColliderE" title="legion::physics::PhysicsCollider">PhysicsCollider</a> *<em>entityCollider</em> = nullptr<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer13ExplodeEntityEN3ecs13entity_handleERK14FractureParamsP15PhysicsCollider" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer22IsFractureConditionMetER16physics_manifoldb">
+<span id="_CPPv3N6legion7physics9Fracturer22IsFractureConditionMetER16physics_manifoldb"></span><span id="_CPPv2N6legion7physics9Fracturer22IsFractureConditionMetER16physics_manifoldb"></span><span id="legion::physics::Fracturer::IsFractureConditionMet__physics_manifoldR.b"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a9ba4b03ea73808924a897c9a0b19e714"></span>bool <code class="sig-name descname">IsFractureConditionMet</code><span class="sig-paren">(</span><a class="reference internal" href="structlegion_1_1physics_1_1physics__manifold.html#_CPPv4N6legion7physics16physics_manifoldE" title="legion::physics::physics_manifold">physics_manifold</a> &amp;<em>manifold</em>, bool <em>isfracturingA</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer22IsFractureConditionMetER16physics_manifoldb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer17InitializeVoronoiEN3ecs16component_handleI16physicsComponentEE">
+<span id="_CPPv3N6legion7physics9Fracturer17InitializeVoronoiEN3ecs16component_handleI16physicsComponentEE"></span><span id="_CPPv2N6legion7physics9Fracturer17InitializeVoronoiEN3ecs16component_handleI16physicsComponentEE"></span><span id="legion::physics::Fracturer::InitializeVoronoi__ecs::component_handle:physicsComponent:"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1ae8ecb4077e1dccb8396326544970febe"></span>void <code class="sig-name descname">InitializeVoronoi</code><span class="sig-paren">(</span>ecs::component_handle&lt;<a class="reference internal" href="#_CPPv4N6legion7physics9Fracturer17InitializeVoronoiEN3ecs16component_handleI16physicsComponentEE" title="legion::physics::Fracturer::InitializeVoronoi::physicsComponent">physicsComponent</a>&gt; <em>physicsComponent</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer17InitializeVoronoiEN3ecs16component_handleI16physicsComponentEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer32InvestigateColliderToMeshPairingEN3ecs13entity_handleENSt6vectorI30FracturerColliderToMeshPairingEE">
+<span id="_CPPv3N6legion7physics9Fracturer32InvestigateColliderToMeshPairingEN3ecs13entity_handleENSt6vectorI30FracturerColliderToMeshPairingEE"></span><span id="_CPPv2N6legion7physics9Fracturer32InvestigateColliderToMeshPairingEN3ecs13entity_handleENSt6vectorI30FracturerColliderToMeshPairingEE"></span><span id="legion::physics::Fracturer::InvestigateColliderToMeshPairing__ecs::entity_handle.std::vector:FracturerColliderToMeshPairing:"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a1cab079f3c9153918ba45e240768f866"></span>void <code class="sig-name descname">InvestigateColliderToMeshPairing</code><span class="sig-paren">(</span>ecs::entity_handle <em>ent</em>, std::vector&lt;<a class="reference internal" href="structlegion_1_1physics_1_1_fracturer_collider_to_mesh_pairing.html#_CPPv4N6legion7physics30FracturerColliderToMeshPairingE" title="legion::physics::FracturerColliderToMeshPairing">FracturerColliderToMeshPairing</a>&gt; <em>colliderToMeshPairings</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer32InvestigateColliderToMeshPairingEN3ecs13entity_handleENSt6vectorI30FracturerColliderToMeshPairingEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer40InstantiateColliderMeshPairingWithEntityEN3ecs13entity_handleERNSt6vectorI30FracturerColliderToMeshPairingEE">
+<span id="_CPPv3N6legion7physics9Fracturer40InstantiateColliderMeshPairingWithEntityEN3ecs13entity_handleERNSt6vectorI30FracturerColliderToMeshPairingEE"></span><span id="_CPPv2N6legion7physics9Fracturer40InstantiateColliderMeshPairingWithEntityEN3ecs13entity_handleERNSt6vectorI30FracturerColliderToMeshPairingEE"></span><span id="legion::physics::Fracturer::InstantiateColliderMeshPairingWithEntity__ecs::entity_handle.std::vector:FracturerColliderToMeshPairing:R"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1aa7f762e5e670198e14ae2c4c2bf98ca3"></span>void <code class="sig-name descname">InstantiateColliderMeshPairingWithEntity</code><span class="sig-paren">(</span>ecs::entity_handle <em>ent</em>, std::vector&lt;<a class="reference internal" href="structlegion_1_1physics_1_1_fracturer_collider_to_mesh_pairing.html#_CPPv4N6legion7physics30FracturerColliderToMeshPairingE" title="legion::physics::FracturerColliderToMeshPairing">FracturerColliderToMeshPairing</a>&gt; &amp;<em>colliderToMeshPairings</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer40InstantiateColliderMeshPairingWithEntityEN3ecs13entity_handleERNSt6vectorI30FracturerColliderToMeshPairingEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer16GetVoronoiPointsERNSt6vectorINSt6vectorIN4math4vec3EEEEERNSt6vectorIN4math4vec3EEEN4math4vec3EN4math4vec3E">
+<span id="_CPPv3N6legion7physics9Fracturer16GetVoronoiPointsERNSt6vectorINSt6vectorIN4math4vec3EEEEERNSt6vectorIN4math4vec3EEEN4math4vec3EN4math4vec3E"></span><span id="_CPPv2N6legion7physics9Fracturer16GetVoronoiPointsERNSt6vectorINSt6vectorIN4math4vec3EEEEERNSt6vectorIN4math4vec3EEEN4math4vec3EN4math4vec3E"></span><span id="legion::physics::Fracturer::GetVoronoiPoints__std::vector:std::vector:math::vec3::R.std::vector:math::vec3:R.math::vec3.math::vec3"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a4238000149fec4376149184725e99025"></span>void <code class="sig-name descname">GetVoronoiPoints</code><span class="sig-paren">(</span>std::vector&lt;std::vector&lt;math::vec3&gt;&gt; &amp;<em>groupedPoints</em>, std::vector&lt;math::vec3&gt; &amp;<em>voronoiPoints</em>, math::vec3 <em>min</em>, math::vec3 <em>max</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer16GetVoronoiPointsERNSt6vectorINSt6vectorIN4math4vec3EEEEERNSt6vectorIN4math4vec3EEEN4math4vec3EN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer27InstantiateVoronoiCollidersERNSt6vectorINSt10shared_ptrI14ConvexColliderEEEERNSt6vectorINSt6vectorIN4math4vec3EEEEE">
+<span id="_CPPv3N6legion7physics9Fracturer27InstantiateVoronoiCollidersERNSt6vectorINSt10shared_ptrI14ConvexColliderEEEERNSt6vectorINSt6vectorIN4math4vec3EEEEE"></span><span id="_CPPv2N6legion7physics9Fracturer27InstantiateVoronoiCollidersERNSt6vectorINSt10shared_ptrI14ConvexColliderEEEERNSt6vectorINSt6vectorIN4math4vec3EEEEE"></span><span id="legion::physics::Fracturer::InstantiateVoronoiColliders__std::vector:std::shared_ptr:ConvexCollider::R.std::vector:std::vector:math::vec3::R"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1aeb1e5fe7abe6a21324e966f562e5e390"></span>void <code class="sig-name descname">InstantiateVoronoiColliders</code><span class="sig-paren">(</span>std::vector&lt;std::shared_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#_CPPv4N6legion7physics14ConvexColliderE" title="legion::physics::ConvexCollider">ConvexCollider</a>&gt;&gt; &amp;<em>voronoiColliders</em>, std::vector&lt;std::vector&lt;math::vec3&gt;&gt; &amp;<em>groupedPoints</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer27InstantiateVoronoiCollidersERNSt6vectorINSt10shared_ptrI14ConvexColliderEEEERNSt6vectorINSt6vectorIN4math4vec3EEEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer25GenerateFractureFragmentsERNSt6vectorIN3ecs13entity_handleEEERNSt6vectorI30FracturerColliderToMeshPairingEERNSt6vectorINSt10shared_ptrI14ConvexColliderEEEEN3ecs13entity_handleE">
+<span id="_CPPv3N6legion7physics9Fracturer25GenerateFractureFragmentsERNSt6vectorIN3ecs13entity_handleEEERNSt6vectorI30FracturerColliderToMeshPairingEERNSt6vectorINSt10shared_ptrI14ConvexColliderEEEEN3ecs13entity_handleE"></span><span id="_CPPv2N6legion7physics9Fracturer25GenerateFractureFragmentsERNSt6vectorIN3ecs13entity_handleEEERNSt6vectorI30FracturerColliderToMeshPairingEERNSt6vectorINSt10shared_ptrI14ConvexColliderEEEEN3ecs13entity_handleE"></span><span id="legion::physics::Fracturer::GenerateFractureFragments__std::vector:ecs::entity_handle:R.std::vector:FracturerColliderToMeshPairing:R.std::vector:std::shared_ptr:ConvexCollider::R.ecs::entity_handle"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a7a9d78ec94745df2651ae7144fcb68b5"></span>void <code class="sig-name descname">GenerateFractureFragments</code><span class="sig-paren">(</span>std::vector&lt;ecs::entity_handle&gt; &amp;<em>entitiesGenerated</em>, std::vector&lt;<a class="reference internal" href="structlegion_1_1physics_1_1_fracturer_collider_to_mesh_pairing.html#_CPPv4N6legion7physics30FracturerColliderToMeshPairingE" title="legion::physics::FracturerColliderToMeshPairing">FracturerColliderToMeshPairing</a>&gt; &amp;<em>colliderToMeshPairings</em>, std::vector&lt;std::shared_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#_CPPv4N6legion7physics14ConvexColliderE" title="legion::physics::ConvexCollider">ConvexCollider</a>&gt;&gt; &amp;<em>voronoiColliders</em>, ecs::entity_handle <em>fracturedEnt</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer25GenerateFractureFragmentsERNSt6vectorIN3ecs13entity_handleEEERNSt6vectorI30FracturerColliderToMeshPairingEERNSt6vectorINSt10shared_ptrI14ConvexColliderEEEEN3ecs13entity_handleE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer15QuadrantVoronoiERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEE">
+<span id="_CPPv3N6legion7physics9Fracturer15QuadrantVoronoiERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEE"></span><span id="_CPPv2N6legion7physics9Fracturer15QuadrantVoronoiERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEE"></span><span id="legion::physics::Fracturer::QuadrantVoronoi__math::vec3R.math::vec3R.std::vector:math::vec3:R"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a0740f0021ba7c2f4d0bf6fc79aaab47a"></span>void <code class="sig-name descname">QuadrantVoronoi</code><span class="sig-paren">(</span>math::vec3 &amp;<em>min</em>, math::vec3 &amp;<em>max</em>, std::vector&lt;math::vec3&gt; &amp;<em>voronoiPoints</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer15QuadrantVoronoiERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer15BalancedVoronoiERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEE">
+<span id="_CPPv3N6legion7physics9Fracturer15BalancedVoronoiERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEE"></span><span id="_CPPv2N6legion7physics9Fracturer15BalancedVoronoiERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEE"></span><span id="legion::physics::Fracturer::BalancedVoronoi__math::vec3R.math::vec3R.std::vector:math::vec3:R"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1aa84e3cbc78d9212105d635206da731f9"></span>void <code class="sig-name descname">BalancedVoronoi</code><span class="sig-paren">(</span>math::vec3 &amp;<em>min</em>, math::vec3 &amp;<em>max</em>, std::vector&lt;math::vec3&gt; &amp;<em>voronoiPoints</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer15BalancedVoronoiERN4math4vec3ERN4math4vec3ERNSt6vectorIN4math4vec3EEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion7physics9Fracturer26GetImpactPointFromManifoldER16physics_manifold">
+<span id="_CPPv3N6legion7physics9Fracturer26GetImpactPointFromManifoldER16physics_manifold"></span><span id="_CPPv2N6legion7physics9Fracturer26GetImpactPointFromManifoldER16physics_manifold"></span><span id="legion::physics::Fracturer::GetImpactPointFromManifold__physics_manifoldR"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a61b7ded6834b427c9f15e4fa4c8fe101"></span>math::vec3 <code class="sig-name descname">GetImpactPointFromManifold</code><span class="sig-paren">(</span><a class="reference internal" href="structlegion_1_1physics_1_1physics__manifold.html#_CPPv4N6legion7physics16physics_manifoldE" title="legion::physics::physics_manifold">physics_manifold</a> &amp;<em>manifold</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer26GetImpactPointFromManifoldER16physics_manifold" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics9Fracturer13fractureCountE">
+<span id="_CPPv3N6legion7physics9Fracturer13fractureCountE"></span><span id="_CPPv2N6legion7physics9Fracturer13fractureCountE"></span><span id="legion::physics::Fracturer::fractureCount__i"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a696c2a76217b11835f57d0bab1a1195c"></span>int <code class="sig-name descname">fractureCount</code> = 0<a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer13fractureCountE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics9Fracturer12verticesListE">
+<span id="_CPPv3N6legion7physics9Fracturer12verticesListE"></span><span id="_CPPv2N6legion7physics9Fracturer12verticesListE"></span><span id="legion::physics::Fracturer::verticesList__std::vector:std::vector:math::vec3::"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a97c7d6e8040284f76cddcc806f494b37"></span>std::vector&lt;std::vector&lt;math::vec3&gt;&gt; <code class="sig-name descname">verticesList</code><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer12verticesListE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics9Fracturer20debugVectorcollidersE">
+<span id="_CPPv3N6legion7physics9Fracturer20debugVectorcollidersE"></span><span id="_CPPv2N6legion7physics9Fracturer20debugVectorcollidersE"></span><span id="legion::physics::Fracturer::debugVectorcolliders__std::vector:std::shared_ptr:ConvexCollider::"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1ae6f77347efde40653d01b2194d809521"></span>std::vector&lt;std::shared_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_convex_collider.html#_CPPv4N6legion7physics14ConvexColliderE" title="legion::physics::ConvexCollider">ConvexCollider</a>&gt;&gt; <code class="sig-name descname">debugVectorcolliders</code><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer20debugVectorcollidersE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics9Fracturer10transformsE">
+<span id="_CPPv3N6legion7physics9Fracturer10transformsE"></span><span id="_CPPv2N6legion7physics9Fracturer10transformsE"></span><span id="legion::physics::Fracturer::transforms__std::vector:math::mat4:"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1a062a363182d22004153f58e4b0814595"></span>std::vector&lt;math::mat4&gt; <code class="sig-name descname">transforms</code><a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer10transformsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics9Fracturer8registryE">
+<span id="_CPPv3N6legion7physics9Fracturer8registryE"></span><span id="_CPPv2N6legion7physics9Fracturer8registryE"></span><span id="legion::physics::Fracturer::registry__ecs::EcsRegistryP"></span><span class="target" id="structlegion_1_1physics_1_1_fracturer_1af57c01d96709b59eb7855da2d1e80a6f"></span><em class="property">static</em> ecs::EcsRegistry *<code class="sig-name descname">registry</code> = nullptr<a class="headerlink" href="#_CPPv4N6legion7physics9Fracturer8registryE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
@@ -93,8 +179,8 @@
 <ul>
   <li><a href="../index.html">Documentation index</a><ul>
   <li><a href="library_root.html">Legion API</a><ul>
-      <li>Previous: <a href="structlegion_1_1physics_1_1_edge_label.html" title="previous chapter">Struct EdgeLabel</a></li>
-      <li>Next: <a href="structlegion_1_1physics_1_1_half_edge_edge.html" title="next chapter">Struct HalfEdgeEdge</a></li>
+      <li>Previous: <a href="structlegion_1_1physics_1_1_fracture_params.html" title="previous chapter">Struct FractureParams</a></li>
+      <li>Next: <a href="structlegion_1_1physics_1_1_fracturer_collider_to_mesh_pairing.html" title="next chapter">Struct FracturerColliderToMeshPairing</a></li>
   </ul></li>
   </ul></li>
 </ul>

@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class IniBuilder &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class framebuffer" href="class_structlegion_1_1rendering_1_1framebuffer.html" />
+    <link rel="prev" title="Class handler_to_cpp" href="classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="class_structlegion_1_1rendering_1_1framebuffer.html" title="Class framebuffer"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.html" title="Class handler_to_cpp"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="library_root.html" accesskey="U">Legion API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Class IniBuilder</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="class-inibuilder">
+<span id="exhale-class-classlegion-1-1rendering-1-1detail-1-1-ini-builder"></span><h1>Class IniBuilder<a class="headerlink" href="#class-inibuilder" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_matini.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-util-matini-hpp"><span class="std std-ref">File matini.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="cpp class">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilderE">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilderE"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilderE"></span><span id="legion::rendering::detail::IniBuilder"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder"></span><em class="property">class </em><code class="sig-prename descclassname"><a class="reference internal" href="enum_tonemapping_8hpp_1a30cba100fcdc643b13e0a16cbda3fe28.html#_CPPv4N6legion9rendering16tonemapping_type6legionE" title="legion::rendering::legion">legion</a>::rendering::detail<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">IniBuilder</code><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Bob the <a class="reference internal" href="#classlegion_1_1rendering_1_1detail_1_1_ini_builder"><span class="std std-ref">IniBuilder</span></a>, a builder class to generate ini files. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>does not validate entries, thus invalid combinations like glyph(“Something”).value(“v”) is not caught as an error at runtime instead of glyph(“Something”).eq().value(“v”) </p>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder5glyphERKNSt6stringE">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder5glyphERKNSt6stringE"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder5glyphERKNSt6stringE"></span><span id="legion::rendering::detail::IniBuilder::glyph__ssCR"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1ae5a9647cca3d36de5931166cb9796175"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">glyph</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>glyph</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder5glyphERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder7sectionERKNSt6stringE">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder7sectionERKNSt6stringE"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder7sectionERKNSt6stringE"></span><span id="legion::rendering::detail::IniBuilder::section__ssCR"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1a02d836453ca4a4e3b67eb735f0f274dd"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">section</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder7sectionERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder2eqEv">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder2eqEv"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder2eqEv"></span><span id="legion::rendering::detail::IniBuilder::eq"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1a22d8e1c99549b218ff8996850770626e"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">eq</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder2eqEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder7commentERKNSt6stringE">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder7commentERKNSt6stringE"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder7commentERKNSt6stringE"></span><span id="legion::rendering::detail::IniBuilder::comment__ssCR"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1a0e4955a426602ac7d85e03cedfd725dc"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">comment</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder7commentERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder5valueEf">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder5valueEf"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder5valueEf"></span><span id="legion::rendering::detail::IniBuilder::value__float"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1ad8e2364bdab7b3ba420cd9d986e91ccb"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span>float <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder5valueEf" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder5valueEi">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder5valueEi"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder5valueEi"></span><span id="legion::rendering::detail::IniBuilder::value__i"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1a3364ad0c94a5186d3594a77743fe9e80"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span>int <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder5valueEi" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder5valueEN4math4vec3E">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder5valueEN4math4vec3E"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder5valueEN4math4vec3E"></span><span id="legion::rendering::detail::IniBuilder::value__math::vec3"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1abf5d805556cd62757e59a431bc2955c9"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span>math::vec3 <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder5valueEN4math4vec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder5valueEN4math5ivec3E">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder5valueEN4math5ivec3E"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder5valueEN4math5ivec3E"></span><span id="legion::rendering::detail::IniBuilder::value__math::ivec3"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1a83d049848018249dbe2a213aa31724bc"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span>math::ivec3 <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder5valueEN4math5ivec3E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder5valueEN4math4vec4E">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder5valueEN4math4vec4E"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder5valueEN4math4vec4E"></span><span id="legion::rendering::detail::IniBuilder::value__math::vec4"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1af4b68853de08e5035fdaf50fab291069"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span>math::vec4 <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder5valueEN4math4vec4E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder5valueEN4math5ivec4E">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder5valueEN4math5ivec4E"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder5valueEN4math5ivec4E"></span><span id="legion::rendering::detail::IniBuilder::value__math::ivec4"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1adda281f9eefdccb0f7c5d6edcd4464c0"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span>math::ivec4 <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder5valueEN4math5ivec4E" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder5valueEb">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder5valueEb"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder5valueEb"></span><span id="legion::rendering::detail::IniBuilder::value__b"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1a34c193d9af1b2ccde82cc86de0999331"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span>bool <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder5valueEb" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder5valueERKNSt6stringE">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder5valueERKNSt6stringE"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder5valueERKNSt6stringE"></span><span id="legion::rendering::detail::IniBuilder::value__ssCR"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1aa0e012e47d5632dcec7d11864f5a8eca"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">value</code><span class="sig-paren">(</span><em class="property">const</em> std::string &amp;<em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder5valueERKNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering6detail10IniBuilder12finish_entryEv">
+<span id="_CPPv3N6legion9rendering6detail10IniBuilder12finish_entryEv"></span><span id="_CPPv2N6legion9rendering6detail10IniBuilder12finish_entryEv"></span><span id="legion::rendering::detail::IniBuilder::finish_entry"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1a9fb6b77048b05ac5ca93973ab1ddc236"></span><em class="property">inline</em> <a class="reference internal" href="#_CPPv4N6legion9rendering6detail10IniBuilderE" title="legion::rendering::detail::IniBuilder">IniBuilder</a> &amp;<code class="sig-name descname">finish_entry</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering6detail10IniBuilder12finish_entryEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion9rendering6detail10IniBuilder3getEv">
+<span id="_CPPv3NK6legion9rendering6detail10IniBuilder3getEv"></span><span id="_CPPv2NK6legion9rendering6detail10IniBuilder3getEv"></span><span id="legion::rendering::detail::IniBuilder::getC"></span><span class="target" id="classlegion_1_1rendering_1_1detail_1_1_ini_builder_1a26a91f3c8246a57cf8b11bc7b08b346f"></span><em class="property">inline</em> std::string <code class="sig-name descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em> <em class="property">noexcept</em><a class="headerlink" href="#_CPPv4NK6legion9rendering6detail10IniBuilder3getEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Class IniBuilder</a><ul>
+<li><a class="reference internal" href="#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  <li><a href="library_root.html">Legion API</a><ul>
+      <li>Previous: <a href="classlegion_1_1rendering_1_1detail_1_1handler__to__cpp.html" title="previous chapter">Class handler_to_cpp</a></li>
+      <li>Next: <a href="class_structlegion_1_1rendering_1_1framebuffer.html" title="next chapter">Class framebuffer</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/classlegion_1_1rendering_1_1detail_1_1_ini_builder.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

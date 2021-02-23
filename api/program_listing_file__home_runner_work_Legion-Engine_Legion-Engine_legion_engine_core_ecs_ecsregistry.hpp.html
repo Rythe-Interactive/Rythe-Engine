@@ -82,6 +82,7 @@
 
         <span class="k">mutable</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_familyLock</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">component_pool_base</span><span class="o">&gt;&gt;</span> <span class="n">m_families</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">m_prettyNames</span><span class="p">;</span>
 
         <span class="k">mutable</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_entityDataLock</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">entity_data</span><span class="o">&gt;</span> <span class="n">m_entityData</span><span class="p">;</span>
@@ -104,14 +105,30 @@
         <span class="p">{</span>
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_familyLock</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_families</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_families</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()))</span> <span class="p">{</span>
                 <span class="n">m_families</span><span class="p">[</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">component_pool</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">m_eventBus</span><span class="p">);</span>
+                <span class="n">m_prettyNames</span><span class="p">[</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">nameOfType</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">component_type</span><span class="o">&gt;</span>
         <span class="n">L_NODISCARD</span> <span class="n">component_pool</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;*</span> <span class="n">getFamily</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">component_pool</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">getFamily</span><span class="p">(</span><span class="n">typeHash</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">()));</span>
+        <span class="p">}</span>
+
+        <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&amp;</span> <span class="n">getEntityLock</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">m_entityLock</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">getFamilyName</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">m_prettyNames</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">);</span> <span class="n">itr</span> <span class="o">!=</span> <span class="n">m_prettyNames</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">itr</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">component_pool_base</span><span class="o">*</span> <span class="n">getFamily</span><span class="p">(</span><span class="n">id_type</span> <span class="n">componentTypeId</span><span class="p">);</span>
@@ -229,7 +246,9 @@
 
         <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">validateEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">);</span>
 
-        <span class="n">L_NODISCARD</span> <span class="n">entity_handle</span> <span class="nf">createEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">);</span>
+        <span class="n">L_NODISCARD</span> <span class="n">entity_handle</span> <span class="nf">createEntity</span><span class="p">(</span><span class="kt">bool</span> <span class="n">worldChild</span> <span class="o">=</span> <span class="nb">true</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">);</span>
+
+        <span class="n">L_NODISCARD</span> <span class="n">entity_handle</span> <span class="nf">createEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span><span class="kt">bool</span> <span class="n">worldChild</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span>
 
         <span class="kt">void</span> <span class="nf">destroyEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">recurse</span> <span class="o">=</span> <span class="nb">true</span><span class="p">);</span>
 

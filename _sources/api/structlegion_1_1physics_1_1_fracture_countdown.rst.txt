@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1physics_1_1_fracture_countdown:
+
+Struct FractureCountdown
+========================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturecountdown.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::physics::FractureCountdown
+   :members:
+   :protected-members:
+   :undoc-members:

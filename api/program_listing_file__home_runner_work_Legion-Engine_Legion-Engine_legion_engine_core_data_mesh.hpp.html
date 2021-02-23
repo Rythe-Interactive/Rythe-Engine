@@ -52,6 +52,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/resource.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/view.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/async/rw_spinlock.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/data/image.hpp&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
@@ -70,7 +71,7 @@
 
     <span class="k">struct</span> <span class="n">mesh</span>
     <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">fileName</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">filePath</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">vertices</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;</span> <span class="n">colors</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">normals</span><span class="p">;</span>
@@ -99,14 +100,40 @@
 
     <span class="k">constexpr</span> <span class="n">mesh_handle</span> <span class="n">invalid_mesh_handle</span><span class="p">{</span> <span class="n">invalid_id</span> <span class="p">};</span>
 
-    <span class="k">struct</span> <span class="n">mesh_import_settings</span>
+    <span class="k">struct</span> <span class="n">material_data</span>
     <span class="p">{</span>
-        <span class="kt">bool</span> <span class="n">triangulate</span><span class="p">;</span>
-        <span class="kt">bool</span> <span class="n">vertex_color</span><span class="p">;</span>
-        <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span> <span class="n">contextFolder</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+
+        <span class="kt">bool</span> <span class="n">opaque</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">alphaCutoff</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">doubleSided</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">color</span> <span class="n">albedoValue</span><span class="p">;</span>
+        <span class="n">image_handle</span> <span class="n">albedoMap</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">metallicValue</span><span class="p">;</span>
+        <span class="n">image_handle</span> <span class="n">metallicMap</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">roughnessValue</span><span class="p">;</span>
+        <span class="n">image_handle</span> <span class="n">roughnessMap</span><span class="p">;</span>
+        <span class="n">image_handle</span> <span class="n">metallicRoughnessMap</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">color</span> <span class="n">emissiveValue</span><span class="p">;</span>
+        <span class="n">image_handle</span> <span class="n">emissiveMap</span><span class="p">;</span>
+
+        <span class="n">image_handle</span> <span class="n">normalMap</span><span class="p">;</span>
+        <span class="n">image_handle</span> <span class="n">aoMap</span><span class="p">;</span>
+        <span class="n">image_handle</span> <span class="n">heightMap</span><span class="p">;</span>
     <span class="p">};</span>
 
-    <span class="k">const</span> <span class="n">mesh_import_settings</span> <span class="n">default_mesh_settings</span><span class="p">{</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span> <span class="p">};</span>
+    <span class="k">using</span> <span class="n">material_list</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">material_data</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="k">struct</span> <span class="n">mesh_import_settings</span>
+    <span class="p">{</span>
+        <span class="n">material_list</span><span class="o">*</span> <span class="n">materials</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">triangulate</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">vertex_color</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span> <span class="n">contextFolder</span> <span class="o">=</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">));</span>
+    <span class="p">};</span>
+
+    <span class="k">const</span> <span class="n">mesh_import_settings</span> <span class="n">default_mesh_settings</span><span class="p">{</span> <span class="k">nullptr</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">))</span> <span class="p">};</span>
 
     <span class="k">class</span> <span class="nc">MeshCache</span>
     <span class="p">{</span>
@@ -115,8 +142,11 @@
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_meshes</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_meshesLock</span><span class="p">;</span>
 
+
     <span class="k">public</span><span class="o">:</span>
-        <span class="k">static</span> <span class="n">mesh_handle</span> <span class="n">create_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">mesh_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_mesh_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">id_type</span> <span class="n">debugId</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="n">mesh_handle</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">mesh_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_mesh_settings</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="n">mesh_handle</span> <span class="nf">create_mesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">mesh</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">);</span>
 

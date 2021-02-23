@@ -105,11 +105,11 @@
         <span class="p">}</span>
 
         <span class="n">image</span><span class="p">.</span><span class="n">format</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">fileFormat</span><span class="p">;</span>
-        <span class="n">image</span><span class="p">.</span><span class="n">m_pixels</span> <span class="o">=</span> <span class="k">new</span> <span class="n">byte</span><span class="p">[</span><span class="n">dataSize</span><span class="p">];</span>
-        <span class="n">image</span><span class="p">.</span><span class="n">m_dataSize</span> <span class="o">=</span> <span class="n">dataSize</span><span class="p">;</span>
+        <span class="n">image</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">byte</span><span class="p">[</span><span class="n">dataSize</span><span class="p">];</span>
+        <span class="n">image</span><span class="p">.</span><span class="n">dataSize</span> <span class="o">=</span> <span class="n">dataSize</span><span class="p">;</span>
         <span class="n">image</span><span class="p">.</span><span class="n">components</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">components</span><span class="p">;</span>
 
-        <span class="n">memmove</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">,</span> <span class="n">imageData</span><span class="p">,</span> <span class="n">dataSize</span><span class="p">);</span>
+        <span class="n">memmove</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">imageData</span><span class="p">,</span> <span class="n">dataSize</span><span class="p">);</span>
         <span class="n">stbi_image_free</span><span class="p">(</span><span class="n">imageData</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="nf">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">image</span><span class="p">));</span>

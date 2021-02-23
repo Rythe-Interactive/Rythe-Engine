@@ -29,12 +29,14 @@ Classes
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1detail_1_1handler__to__cpp`
 
+- :ref:`exhale_class_classlegion_1_1rendering_1_1detail_1_1_ini_builder`
+
 
 Functions
 ---------
 
 
-- :ref:`exhale_function_matini_8hpp_1a6deb3ff404b98096a0ba2fb35fe248fd`
+- :ref:`exhale_function_matini_8hpp_1a9f97ebea5d20f57d45cf97aa293c1a8c`
 
 - :ref:`exhale_function_matini_8hpp_1a596cd4a757e072e93d1464952d64b5cd`
 

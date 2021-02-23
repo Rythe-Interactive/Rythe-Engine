@@ -225,7 +225,7 @@
         <span class="k">return</span> <span class="n">m_entities</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
     <span class="p">}</span>
 
-    <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">createEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
+    <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">createEntity</span><span class="p">(</span><span class="kt">bool</span> <span class="n">worldChild</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
@@ -238,7 +238,7 @@
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">validateEntity</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
-            <span class="k">return</span> <span class="n">createEntity</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">createEntity</span><span class="p">(</span><span class="n">worldChild</span><span class="p">);</span>
 
         <span class="n">entity_data</span> <span class="n">data</span><span class="p">{};</span>
 
@@ -247,10 +247,13 @@
             <span class="n">m_entityData</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>
         <span class="p">}</span>
 
-        <span class="n">component_pool</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;*</span> <span class="n">family</span> <span class="o">=</span> <span class="n">getFamily</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">worldChild</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">rguard</span><span class="p">(</span><span class="n">family</span><span class="o">-&gt;</span><span class="n">get_lock</span><span class="p">());</span>
-            <span class="n">family</span><span class="o">-&gt;</span><span class="n">get_component</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">).</span><span class="n">children</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+            <span class="n">component_pool</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;*</span> <span class="n">family</span> <span class="o">=</span> <span class="n">getFamily</span><span class="o">&lt;</span><span class="n">hierarchy</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">rguard</span><span class="p">(</span><span class="n">family</span><span class="o">-&gt;</span><span class="n">get_lock</span><span class="p">());</span>
+                <span class="n">family</span><span class="o">-&gt;</span><span class="n">get_component</span><span class="p">(</span><span class="n">world_entity_id</span><span class="p">).</span><span class="n">children</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_entityLock</span><span class="p">);</span> <span class="c1">// No scope needed because we also need read permission in the return line.</span>
@@ -258,6 +261,13 @@
 
         <span class="k">return</span> <span class="nf">entity_handle</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
     <span class="p">}</span>
+
+    <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">createEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">worldChild</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">createEntity</span><span class="p">(</span><span class="n">worldChild</span><span class="p">,</span><span class="n">entityId</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
 
     <span class="kt">void</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">destroyEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">recurse</span><span class="p">)</span>
     <span class="p">{</span>
@@ -277,6 +287,13 @@
             <span class="n">m_entities</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">entity</span><span class="p">);</span> <span class="c1">// Erase the entity from the entity list first, invalidating the entity and stopping any other function from being called on this entity.</span>
         <span class="p">}</span>
 
+        <span class="k">auto</span> <span class="n">children</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">children</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">entity_handle</span><span class="o">&amp;</span> <span class="nl">child</span> <span class="p">:</span> <span class="n">children</span><span class="p">.</span><span class="n">reverse_range</span><span class="p">())</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">recurse</span><span class="p">)</span>
+                <span class="n">recursiveDestroyEntityInternal</span><span class="p">(</span><span class="n">child</span><span class="p">);</span> <span class="c1">// Recursively destroy all children</span>
+            <span class="k">else</span>
+                <span class="n">child</span><span class="p">.</span><span class="n">set_parent</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span> <span class="c1">// Remove parent from children.</span>
+
         <span class="n">entity_data</span> <span class="n">data</span> <span class="o">=</span> <span class="p">{};</span>
 
         <span class="p">{</span>
@@ -292,13 +309,6 @@
                 <span class="n">m_families</span><span class="p">[</span><span class="n">componentTypeId</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">destroy_component</span><span class="p">(</span><span class="n">entityId</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
-
-        <span class="k">auto</span> <span class="n">children</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">children</span><span class="p">();</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">entity_handle</span><span class="o">&amp;</span> <span class="nl">child</span> <span class="p">:</span> <span class="n">children</span><span class="p">.</span><span class="n">reverse_range</span><span class="p">())</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">recurse</span><span class="p">)</span>
-                <span class="n">recursiveDestroyEntityInternal</span><span class="p">(</span><span class="n">child</span><span class="p">);</span> <span class="c1">// Recursively destroy all children</span>
-            <span class="k">else</span>
-                <span class="n">child</span><span class="p">.</span><span class="n">set_parent</span><span class="p">(</span><span class="n">invalid_id</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span> <span class="c1">// Remove parent from children.</span>
     <span class="p">}</span>
 
     <span class="n">L_NODISCARD</span> <span class="n">entity_handle</span> <span class="n">EcsRegistry</span><span class="o">::</span><span class="n">getEntity</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span>

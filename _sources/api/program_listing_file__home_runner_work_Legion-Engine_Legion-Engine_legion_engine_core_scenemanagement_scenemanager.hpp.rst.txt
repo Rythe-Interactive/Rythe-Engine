@@ -13,6 +13,9 @@ Program Listing for File scenemanager.hpp
    #pragma once
    #include <core/engine/system.hpp>
    #include <core/ecs/component_handle.hpp>
+   #include <core/filesystem/filesystem.hpp>
+   #include <core/filesystem/view.hpp>
+   #include <tinygltf/json.hpp>
    
    namespace legion::core::scenemanagement
    {
@@ -21,7 +24,8 @@ Program Listing for File scenemanager.hpp
        class SceneManager final : public core::System<SceneManager>
        {
        public:
-           int sceneCount;
+           static int sceneCount;
+           static std::string currentScene;
            static std::unordered_map < id_type, std::string> sceneNames;
            static std::unordered_map < id_type, ecs::component_handle <scene > > sceneList;
    
@@ -29,30 +33,39 @@ Program Listing for File scenemanager.hpp
    
            virtual void setup()
            {
-   
+               fs::view fileView = fs::view("assets://scenes/");
+               auto files = fileView.ls();
+               if (files == common::valid)
+               {
+                   for (auto file : files.decay())
+                   {
+                       if (file.get_extension() == common::valid)
+                       {
+                           if (file.get_extension().decay() == ".cornflake")
+                           {
+                               auto fileName = file.get_filename().decay();
+                               log::debug("Added {}",fileName);
+                               sceneNames.emplace(nameHash(fileName), fileName);
+                           }
+                       }
+                   }
+               }
            }
    
-           void update()
-           {
+           static ecs::entity_handle create_scene_entity();
    
-           }
+           static bool create_scene(const std::string& name);
    
-           static bool createScene(const std::string& name);
+           static bool create_scene(const std::string& name, ecs::entity_handle& ent);
    
-           static bool createScene(const std::string& name, ecs::entity_handle& ent);
+           static bool load_scene(const std::string& name);
    
-           static bool loadScene(const std::string& name);
+           static bool save_scene(const std::string& name, ecs::entity_handle& ent);
    
+           static ecs::component_handle<scene> get_scene(std::string name);
    
-           static ecs::component_handle<scene> getScene(std::string name);
+           static ecs::entity_handle get_scene_entity(std::string name);
    
-           static ecs::entity_handle getSceneEntity(std::string name);
-   
-   
-   
-           void saveScene()
-           {
-   
-           }
+          
        };
    }

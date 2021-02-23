@@ -1,0 +1,13 @@
+.. _exhale_enum_splittable__polygon_8hpp_1a055b4a8ae65fc48792424145dbede841:
+
+Enum SplitState
+===============
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: legion::physics::SplitState

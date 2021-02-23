@@ -92,7 +92,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_archetype_8hpp_1a259309ff52dd5e0a470382efb0592dd2`
-
 - :ref:`exhale_function_archetype_8hpp_1a9fa919b127dd81db4650bb126ebd1e03`
+
+- :ref:`exhale_function_archetype_8hpp_1a259309ff52dd5e0a470382efb0592dd2`
 

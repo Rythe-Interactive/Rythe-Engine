@@ -51,21 +51,23 @@
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">PenetrationQuery</span><span class="o">&gt;&gt;</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">penetrationQueries</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">aPoint</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">bPoint</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MeshLine</span><span class="o">&gt;</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">meshLines</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">BroadPhaseCollisionAlgorithm</span><span class="o">&gt;</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">m_broadPhase</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
 
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">physics_contact</span><span class="o">&gt;</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">contactPoints</span><span class="p">;</span>
-
-    <span class="kt">bool</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">IsPaused</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">IsPaused</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
     <span class="kt">bool</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">oneTimeRunActive</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 
 
-    <span class="kt">void</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">bruteForceBroadPhase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">physics_manifold_precursor</span><span class="o">&gt;&amp;</span> <span class="n">manifoldPrecursors</span><span class="p">,</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">physics_manifold_precursor</span><span class="o">&gt;&gt;&amp;</span> <span class="n">manifoldPrecursorGrouping</span><span class="p">)</span>
+    <span class="kt">void</span> <span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">setup</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="n">manifoldPrecursorGrouping</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">manifoldPrecursors</span><span class="p">));</span>
+        <span class="n">createProcess</span><span class="o">&lt;&amp;</span><span class="n">PhysicsSystem</span><span class="o">::</span><span class="n">fixedUpdate</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;Physics&quot;</span><span class="p">,</span> <span class="n">m_timeStep</span><span class="p">);</span>
+
+        <span class="n">manifoldPrecursorQuery</span> <span class="o">=</span> <span class="n">createQuery</span><span class="o">&lt;</span><span class="n">position</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">physicsComponent</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="c1">//std::make_unique&lt;BroadphaseUniformGrid&gt;(math::vec3(2,2,2));</span>
+        <span class="c1">//std::make_unique&lt;BroadphaseBruteforce&gt;();</span>
+
+        <span class="n">m_broadPhase</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">BroadphaseBruteforce</span><span class="o">&gt;</span><span class="p">();</span>
+
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

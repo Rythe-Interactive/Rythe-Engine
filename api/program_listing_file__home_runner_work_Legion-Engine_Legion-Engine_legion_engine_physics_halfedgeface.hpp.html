@@ -81,11 +81,15 @@
 
         <span class="kt">bool</span> <span class="nf">makeNormalsConvexWithFace</span><span class="p">(</span><span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">);</span>
 
+        <span class="kt">bool</span> <span class="nf">makeNormalsConvexWithNeighbors</span><span class="p">(</span><span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">);</span>
+
         <span class="n">face_angle_relation</span> <span class="nf">getAngleRelation</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="kt">bool</span> <span class="nf">testConvexity</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="kt">bool</span> <span class="nf">makeNormalsConvexWithFace</span><span class="p">(</span><span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">);</span>
+
+        <span class="kt">void</span> <span class="nf">mergeCoplanarNeighbors</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&amp;</span> <span class="n">removed</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="nf">findMiddleEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">);</span>
 

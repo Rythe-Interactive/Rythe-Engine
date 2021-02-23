@@ -31,8 +31,6 @@ Includes
 
 - ``inih/ini.h``
 
-- ``rendering/data/material.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp`)
-
 - ``sstream``
 
 - ``tuple``
@@ -40,6 +38,14 @@ Includes
 - ``vector`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_vector_view.hpp`)
 
 
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_material.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_matini.cpp`
 
 
 
@@ -67,14 +73,16 @@ Classes
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1detail_1_1handler__to__cpp`
 
+- :ref:`exhale_class_classlegion_1_1rendering_1_1detail_1_1_ini_builder`
+
 
 Functions
 ---------
 
 
-- :ref:`exhale_function_matini_8hpp_1a53f773c025b6345f339c6830644cc4cd`
-
-- :ref:`exhale_function_matini_8hpp_1a6deb3ff404b98096a0ba2fb35fe248fd`
+- :ref:`exhale_function_matini_8hpp_1a9f97ebea5d20f57d45cf97aa293c1a8c`
 
 - :ref:`exhale_function_matini_8hpp_1a596cd4a757e072e93d1464952d64b5cd`
+
+- :ref:`exhale_function_matini_8hpp_1aafef2e4096b35678638c99957654756d`
 

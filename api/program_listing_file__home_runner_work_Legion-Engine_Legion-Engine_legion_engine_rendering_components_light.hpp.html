@@ -94,6 +94,25 @@
         <span class="n">L_NODISCARD</span> <span class="k">static</span> <span class="n">light</span> <span class="nf">spot</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">color</span> <span class="n">color</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">colors</span><span class="o">::</span><span class="n">white</span><span class="p">,</span> <span class="kt">float</span> <span class="n">angle</span> <span class="o">=</span> <span class="mf">0.785398f</span><span class="p">,</span> <span class="kt">float</span> <span class="n">intensity</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="kt">float</span> <span class="n">attenuation</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="kt">float</span> <span class="n">falloff</span> <span class="o">=</span> <span class="mf">3.141592f</span><span class="p">);</span>
         <span class="n">L_NODISCARD</span> <span class="k">static</span> <span class="n">light</span> <span class="nf">point</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">color</span> <span class="n">color</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">colors</span><span class="o">::</span><span class="n">white</span><span class="p">,</span> <span class="kt">float</span> <span class="n">intensity</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="kt">float</span> <span class="n">attenuation</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="kt">float</span> <span class="n">falloff</span> <span class="o">=</span> <span class="mf">3.141592f</span><span class="p">);</span>
 
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">using</span> <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">;</span>
+
+            <span class="n">archive</span><span class="p">(</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;LightType&quot;</span><span class="p">,</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_type</span><span class="p">)),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Attenuation&quot;</span><span class="p">,</span><span class="n">m_attenuation</span><span class="p">),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Intensity&quot;</span><span class="p">,</span><span class="n">m_intensity</span><span class="p">),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Index&quot;</span><span class="p">,</span><span class="n">m_index</span><span class="p">),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Direction&quot;</span><span class="p">,</span><span class="n">m_direction</span><span class="p">),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Falloff&quot;</span><span class="p">,</span><span class="n">m_falloff</span><span class="p">),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Position&quot;</span><span class="p">,</span><span class="n">m_position</span><span class="p">),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Angle&quot;</span><span class="p">,</span><span class="n">m_angle</span><span class="p">),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Color&quot;</span><span class="p">,</span><span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m_color</span><span class="p">))</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+
     <span class="k">protected</span><span class="o">:</span>
         <span class="k">union</span>
         <span class="p">{</span>

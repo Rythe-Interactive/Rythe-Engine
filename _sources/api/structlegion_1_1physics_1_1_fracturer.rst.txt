@@ -3,7 +3,7 @@
 Struct Fracturer
 ================
 
-- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturer.h`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturer.hpp`
 
 
 Struct Documentation

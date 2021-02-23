@@ -62,6 +62,8 @@ Functions
 ---------
 
 
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a023c159658378df2e1e368f4e94f93ac`
+
 - :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ab99d1ae877ad73aaf43334d28856a0bd`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a29b6979c0eacd1bc3a381ad7d8a82c2a`
@@ -108,7 +110,7 @@ Functions
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ace96b6b04d3fdba65afe2db3aea2ae82`
 
-- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1a7fa0e58ae5dbc293be0d99290edc0be6`
+- :ref:`exhale_function_namespacelegion_1_1core_1_1math_1aef2d3bd535d5b844d203e3aeecbf8b15`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1math_1ad442880c50c4ee9180cffff65748fe57`
 

@@ -1,0 +1,31 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphasebruteforce.hpp:
+
+Program Listing for File broadphasebruteforce.hpp
+=================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphasebruteforce.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/broadphasecollisionalgorithms/broadphasebruteforce.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <physics/broadphasecollisionalgorithms/broadphasecollisionalgorithm.hpp>
+   
+   namespace legion::physics
+   {
+       class BroadphaseBruteforce : public BroadPhaseCollisionAlgorithm
+       {
+       public:
+   
+           const std::vector<std::vector<physics_manifold_precursor>>& collectPairs(
+               std::vector<physics_manifold_precursor>&& manifoldPrecursors) override
+           {
+               //log::debug("Brute force!");
+               m_groupings.clear();
+               m_groupings.emplace_back(std::move(manifoldPrecursors));
+               return m_groupings;
+           }
+       };
+   }

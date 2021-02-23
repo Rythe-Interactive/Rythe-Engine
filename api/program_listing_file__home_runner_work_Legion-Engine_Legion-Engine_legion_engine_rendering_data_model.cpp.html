@@ -47,7 +47,7 @@
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-model-cpp"></span><h1>Program Listing for File model.cpp<a class="headerlink" href="#program-listing-for-file-model-cpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_model.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-data-model-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/data/model.cpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;rendering/data/model.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/material.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp"></span>
@@ -97,6 +97,7 @@
 
     <span class="kt">void</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">overwrite_buffer</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="n">buffer</span><span class="o">&amp;</span> <span class="n">newBuffer</span><span class="p">,</span> <span class="n">uint</span> <span class="n">bufferID</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">perInstance</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="c1">//OPTICK_EVENT();</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">id</span> <span class="o">==</span> <span class="n">invalid_id</span><span class="p">)</span>
             <span class="k">return</span><span class="p">;</span>
         <span class="c1">//get mesh handle</span>
@@ -106,42 +107,11 @@
         <span class="c1">//get mesh and lock</span>
         <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">mesh</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh_handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">,</span> <span class="n">lock</span><span class="p">);</span>
-        <span class="n">model</span><span class="o">&amp;</span> <span class="n">model</span> <span class="o">=</span> <span class="n">m_models</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
-        <span class="c1">//set new buffer based on ID</span>
-        <span class="k">switch</span> <span class="p">(</span><span class="n">bufferID</span><span class="p">)</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">model</span> <span class="o">=</span> <span class="n">m_models</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">bufferID</span> <span class="o">==</span> <span class="n">SV_COLOR</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="c1">//COLOR</span>
-        <span class="k">case</span> <span class="nl">SV_COLOR</span><span class="p">:</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_COLOR</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">newBuffer</span><span class="p">,</span> <span class="n">SV_COLOR</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
             <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_COLOR</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
-            <span class="k">break</span><span class="p">;</span>
-            <span class="c1">//POSITIONS</span>
-        <span class="k">case</span> <span class="nl">SV_POSITION</span><span class="p">:</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_POSITION</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_POSITION</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
-            <span class="k">break</span><span class="p">;</span>
-            <span class="c1">//NORMALS</span>
-        <span class="k">case</span> <span class="nl">SV_NORMAL</span><span class="p">:</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_NORMAL</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_NORMAL</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
-            <span class="k">break</span><span class="p">;</span>
-            <span class="c1">//TANGENT</span>
-        <span class="k">case</span> <span class="nl">SV_TANGENT</span><span class="p">:</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_TANGENT</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_TANGENT</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
-            <span class="k">break</span><span class="p">;</span>
-            <span class="c1">//UVS</span>
-        <span class="k">case</span> <span class="nl">SV_TEXCOORD0</span><span class="p">:</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">newBuffer</span><span class="p">;</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribPointer</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_TEXCOORD0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-            <span class="n">model</span><span class="p">.</span><span class="n">vertexArray</span><span class="p">.</span><span class="n">setAttribDivisor</span><span class="p">(</span><span class="n">SV_TEXCOORD0</span><span class="p">,</span> <span class="n">perInstance</span><span class="p">);</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="k">default</span><span class="o">:</span>
-            <span class="k">break</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -202,31 +172,198 @@
         <span class="c1">// Check if the file is valid to load.</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+        <span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
 
         <span class="n">model</span> <span class="n">model</span><span class="p">{};</span>
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">meshName</span><span class="p">;</span>
 
-        <span class="p">{</span><span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">contextFolder</span><span class="p">.</span><span class="n">get_virtual_path</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">settings</span><span class="p">.</span><span class="n">contextFolder</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">parent</span><span class="p">();</span>
-            <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">contextFolder</span><span class="p">.</span><span class="n">get_virtual_path</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">settings</span><span class="p">.</span><span class="n">contextFolder</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">parent</span><span class="p">();</span>
+        <span class="p">}</span>
 
-            <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">create_mesh</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
+        <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">create_mesh</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to load model {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Copy the sub-mesh data.</span>
+        <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+        <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">filePath</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
+
+        <span class="c1">// The model still needs to be buffered on the rendering thread.</span>
+        <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="p">{</span> <span class="c1">// Insert the model into the model list.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="n">m_models</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelNameLock</span><span class="p">);</span>
+            <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Created model {} with mesh: {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">meshName</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+    <span class="p">}</span>
+
+    <span class="n">model_handle</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">material_handle</span><span class="o">&gt;&amp;</span> <span class="n">materials</span><span class="p">,</span> <span class="n">mesh_import_settings</span> <span class="n">settings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+
+        <span class="p">{</span><span class="c1">// Check if the model already exists.</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelLock</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_models</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Check if the file is valid to load.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">file_info</span><span class="p">().</span><span class="n">is_file</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+        <span class="c1">// Load the mesh if it wasn&#39;t already. (It&#39;s called MeshCache for a reason.)</span>
+
+        <span class="n">model</span> <span class="n">model</span><span class="p">{};</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">meshName</span><span class="p">;</span>
+
+        <span class="n">material_list</span> <span class="n">matList</span><span class="p">;</span>
+        <span class="n">material_list</span><span class="o">*</span> <span class="n">loadedMaterials</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">materials</span><span class="p">)</span>
+            <span class="n">loadedMaterials</span> <span class="o">=</span> <span class="n">settings</span><span class="p">.</span><span class="n">materials</span><span class="p">;</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">loadedMaterials</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">matList</span><span class="p">;</span>
+            <span class="n">settings</span><span class="p">.</span><span class="n">materials</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">matList</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">contextFolder</span><span class="p">.</span><span class="n">get_virtual_path</span><span class="p">()</span> <span class="o">==</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">settings</span><span class="p">.</span><span class="n">contextFolder</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">parent</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">auto</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">create_mesh</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">handle</span> <span class="o">==</span> <span class="n">invalid_mesh_handle</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to load model {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">loadedMaterials</span> <span class="o">&amp;&amp;</span> <span class="n">loadedMaterials</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">mat</span> <span class="p">:</span> <span class="o">*</span><span class="n">loadedMaterials</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Failed to load model {}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
-                <span class="k">return</span> <span class="n">invalid_model_handle</span><span class="p">;</span>
+                <span class="k">static</span> <span class="k">auto</span> <span class="n">defaultLitShader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;default lit&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="s">&quot;engine://shaders/default_lit.shs&quot;</span><span class="p">));</span>
+
+                <span class="k">auto</span> <span class="n">material</span> <span class="o">=</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">create_material</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">mat</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">defaultLitShader</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">doubleSided</span><span class="p">)</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_variant</span><span class="p">(</span><span class="s">&quot;double_sided&quot;</span><span class="p">);</span>
+
+                <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;alphaCutoff&quot;</span><span class="p">,</span> <span class="n">mat</span><span class="p">.</span><span class="n">alphaCutoff</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">albedoMap</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useAlbedoTex&quot;</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;albedoTex&quot;</span><span class="p">,</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture_from_image</span><span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">albedoMap</span><span class="p">));</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useAlbedoTex&quot;</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;albedoColor&quot;</span><span class="p">,</span> <span class="n">mat</span><span class="p">.</span><span class="n">albedoValue</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">metallicRoughnessMap</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useMetallicRoughness&quot;</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;metallicRoughness&quot;</span><span class="p">,</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture_from_image</span><span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">metallicRoughnessMap</span><span class="p">));</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useMetallicRoughness&quot;</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">metallicMap</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useMetallicTex&quot;</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                        <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;metallicTex&quot;</span><span class="p">,</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture_from_image</span><span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">metallicMap</span><span class="p">));</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span>
+                    <span class="p">{</span>
+                        <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useMetallicTex&quot;</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+                        <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;metallicValue&quot;</span><span class="p">,</span> <span class="n">mat</span><span class="p">.</span><span class="n">metallicValue</span><span class="p">);</span>
+                    <span class="p">}</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">roughnessMap</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useRoughnessTex&quot;</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                        <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;roughnessTex&quot;</span><span class="p">,</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture_from_image</span><span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">roughnessMap</span><span class="p">));</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span>
+                    <span class="p">{</span>
+                        <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useRoughnessTex&quot;</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+                        <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;roughnessValue&quot;</span><span class="p">,</span> <span class="n">mat</span><span class="p">.</span><span class="n">roughnessValue</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">emissiveMap</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useEmissiveTex&quot;</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;emissiveTex&quot;</span><span class="p">,</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture_from_image</span><span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">emissiveMap</span><span class="p">));</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useEmissiveTex&quot;</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;emissiveColor&quot;</span><span class="p">,</span> <span class="n">mat</span><span class="p">.</span><span class="n">emissiveValue</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">normalMap</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useNormal&quot;</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;normalTex&quot;</span><span class="p">,</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture_from_image</span><span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">normalMap</span><span class="p">));</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useNormal&quot;</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">aoMap</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useAmbientOcclusion&quot;</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;ambientOcclusionTex&quot;</span><span class="p">,</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture_from_image</span><span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">aoMap</span><span class="p">));</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useAmbientOcclusion&quot;</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">heightMap</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useHeight&quot;</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;heightTex&quot;</span><span class="p">,</span> <span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture_from_image</span><span class="p">(</span><span class="n">mat</span><span class="p">.</span><span class="n">heightMap</span><span class="p">));</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="n">material</span><span class="p">.</span><span class="n">set_param</span><span class="p">(</span><span class="s">&quot;useHeight&quot;</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="n">materials</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">material</span><span class="p">);</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Loaded embedded material {}/{}&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mat</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
             <span class="p">}</span>
+        <span class="p">}</span>
 
             <span class="c1">// Copy the sub-mesh data.</span>
             <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
-            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">filePath</span><span class="p">;</span>
 
-            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
-                <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
+            <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
 
         <span class="c1">// The model still needs to be buffered on the rendering thread.</span>
         <span class="n">model</span><span class="p">.</span><span class="n">buffered</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
@@ -270,7 +407,7 @@
             <span class="c1">// Copy the sub-mesh data.</span>
             <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
-            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">filePath</span><span class="p">;</span>
 
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
                 <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
@@ -318,7 +455,7 @@
             <span class="c1">// Copy the sub-mesh data.</span>
             <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
-            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">filePath</span><span class="p">;</span>
 
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
                 <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
@@ -364,7 +501,7 @@
             <span class="c1">// Copy the sub-mesh data.</span>
             <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">handle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
-            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">filePath</span><span class="p">;</span>
 
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
                 <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
@@ -411,7 +548,7 @@
             <span class="c1">// Copy the sub-mesh data.</span>
             <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
-            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">filePath</span><span class="p">;</span>
 
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
                 <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
@@ -458,7 +595,7 @@
             <span class="c1">// Copy the sub-mesh data.</span>
             <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
-            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+            <span class="n">meshName</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">filePath</span><span class="p">;</span>
 
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">submeshData</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">submeshes</span><span class="p">)</span>
                 <span class="n">model</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">submeshData</span><span class="p">);</span>
@@ -475,7 +612,7 @@
         <span class="p">{</span>
             <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">rawmesh</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
             <span class="n">async</span><span class="o">::</span><span class="n">mixed_multiguard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_modelNameLock</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">lock_state_read</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">async</span><span class="o">::</span><span class="n">lock_state_write</span><span class="p">);</span>
-            <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rawmesh</span><span class="p">.</span><span class="n">fileName</span><span class="p">;</span>
+            <span class="n">m_modelNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rawmesh</span><span class="p">.</span><span class="n">filePath</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="n">log</span><span class="o">::</span><span class="n">trace</span><span class="p">(</span><span class="s">&quot;Created model {} with mesh: {}&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">meshName</span><span class="p">);</span>

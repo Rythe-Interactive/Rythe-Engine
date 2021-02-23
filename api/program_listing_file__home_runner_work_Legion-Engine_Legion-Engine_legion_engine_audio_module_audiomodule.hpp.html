@@ -60,8 +60,6 @@
     <span class="k">public</span><span class="o">:</span>
         <span class="k">virtual</span> <span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="k">override</span>
         <span class="p">{</span>
-            <span class="n">addProcessChain</span><span class="p">(</span><span class="s">&quot;Audio&quot;</span><span class="p">);</span>
-
             <span class="n">fs</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">reportConverter</span><span class="o">&lt;</span><span class="n">mp3_audio_loader</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;.mp3&quot;</span><span class="p">);</span>
             <span class="n">fs</span><span class="o">::</span><span class="n">AssetImporter</span><span class="o">::</span><span class="n">reportConverter</span><span class="o">&lt;</span><span class="n">wav_audio_loader</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;.wav&quot;</span><span class="p">);</span>
 

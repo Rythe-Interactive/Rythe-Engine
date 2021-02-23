@@ -96,6 +96,20 @@
             <span class="k">return</span> <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span> <span class="o">-</span> <span class="n">edgePosition</span><span class="p">;</span>
         <span class="p">}</span>
 
+        <span class="kt">bool</span> <span class="n">isVertexVisible</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">vert</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">float</span> <span class="n">distanceToPlane</span> <span class="o">=</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">pointToPlane</span><span class="p">(</span><span class="n">vert</span><span class="p">,</span> <span class="n">edgePosition</span><span class="p">,</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">distanceToPlane</span> <span class="o">&gt;</span> <span class="n">math</span><span class="o">::</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="n">isEdgeHorizonFromVertex</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">vert</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">isVertexVisible</span><span class="p">(</span><span class="n">vert</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">isVertexVisible</span><span class="p">(</span><span class="n">vert</span><span class="p">);</span>
+        <span class="p">}</span>
+
+
         <span class="kt">void</span> <span class="n">DEBUG_drawEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&amp;</span> <span class="n">debugColor</span><span class="p">,</span><span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">20.0f</span><span class="p">,</span> <span class="kt">float</span> <span class="n">width</span> <span class="o">=</span> <span class="mf">5.0f</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldStart</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
@@ -103,6 +117,21 @@
 
             <span class="n">debug</span><span class="o">::</span><span class="n">user_projectDrawLine</span><span class="p">(</span><span class="n">worldStart</span><span class="p">,</span> <span class="n">worldEnd</span><span class="p">,</span> <span class="n">debugColor</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
         <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">DEBUG_drawInsetEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">spacing</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&amp;</span> <span class="n">debugColor</span><span class="p">,</span> <span class="kt">float</span> <span class="n">time</span> <span class="o">=</span> <span class="mf">20.0f</span><span class="p">,</span> <span class="kt">float</span> <span class="n">width</span> <span class="o">=</span> <span class="mf">5.0f</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldCentroid</span> <span class="o">=</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">centroid</span> <span class="o">+</span> <span class="n">spacing</span><span class="p">;</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldStart</span> <span class="o">=</span> <span class="n">edgePosition</span> <span class="o">+</span> <span class="n">spacing</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">startDifference</span> <span class="o">=</span> <span class="p">(</span><span class="n">worldCentroid</span> <span class="o">-</span> <span class="n">worldStart</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1f</span><span class="p">;</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldEnd</span> <span class="o">=</span> <span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span> <span class="o">+</span> <span class="n">spacing</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">endDifference</span> <span class="o">=</span> <span class="p">(</span><span class="n">worldCentroid</span> <span class="o">-</span> <span class="n">worldEnd</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1f</span><span class="p">;</span>
+
+
+            <span class="n">debug</span><span class="o">::</span><span class="n">user_projectDrawLine</span><span class="p">(</span><span class="n">worldStart</span> <span class="o">+</span> <span class="n">startDifference</span><span class="p">,</span> <span class="n">worldEnd</span> <span class="o">+</span> <span class="n">endDifference</span><span class="p">,</span> <span class="n">debugColor</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+        <span class="p">}</span>
+
 
     <span class="p">};</span>
 <span class="p">}</span>

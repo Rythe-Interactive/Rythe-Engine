@@ -31,6 +31,8 @@ Includes
 
 - ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
 
+- ``rendering/components/point_emitter_data.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_point_emitter_data.hpp`)
+
 - ``rendering/data/particle_system_base.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_particle_system_base.hpp`)
 
 

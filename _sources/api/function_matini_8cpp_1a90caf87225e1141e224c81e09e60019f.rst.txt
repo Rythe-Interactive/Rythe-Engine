@@ -1,0 +1,13 @@
+.. _exhale_function_matini_8cpp_1a90caf87225e1141e224c81e09e60019f:
+
+Function legion::rendering::apply_material_conf
+===============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_matini.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::rendering::apply_material_conf(material_handle&, const std::string&, fs::view)

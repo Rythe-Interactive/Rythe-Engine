@@ -140,13 +140,12 @@
             <span class="p">}</span>
             <span class="k">return</span> <span class="n">depth</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="c1">//gets data of the tree starting at defined depth</span>
         <span class="kt">void</span> <span class="nf">GetData</span><span class="p">(</span><span class="kt">int</span> <span class="n">depth</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;*</span> <span class="n">Data</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="c1">//get data for current tree depth</span>
-            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">itemPos</span><span class="p">,</span> <span class="n">item</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_items</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">pos</span><span class="p">,</span><span class="n">item</span><span class="p">]</span> <span class="o">:</span> <span class="n">m_items</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="n">Data</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">itemPos</span><span class="p">);</span>
+                <span class="n">Data</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="c1">//check if this tree has children</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="p">)</span>
@@ -162,7 +161,65 @@
             <span class="p">}</span>
             <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
+        <span class="c1">//gets data of the tree starting at defined depth</span>
+        <span class="kt">void</span> <span class="nf">GetDataPair</span><span class="p">(</span><span class="kt">int</span> <span class="n">depth</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">ValueType</span><span class="o">&gt;&gt;*</span> <span class="n">Data</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//get data for current tree depth</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">item</span> <span class="p">:</span> <span class="n">m_items</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">Data</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="c1">//check if this tree has children</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//if depth 0 has not been reached go deeper and decrease depth</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">depth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">GetDataPair</span><span class="p">(</span><span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Data</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
         <span class="c1">//gets data from starting depth until end depth</span>
+        <span class="kt">void</span> <span class="nf">GetDataRangePair</span><span class="p">(</span><span class="kt">int</span> <span class="n">startingDepth</span><span class="p">,</span> <span class="kt">int</span> <span class="n">endDepth</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">ValueType</span><span class="o">&gt;&gt;*</span> <span class="n">Data</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//check if starting depth has been reached</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">startingDepth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//if there are children go deeper</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">GetDataRangePair</span><span class="p">(</span><span class="n">startingDepth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">endDepth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Data</span><span class="p">);</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="c1">//only continue if end depth has not been reached</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">endDepth</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="c1">//start depth has been reached, end depth has not yet been reached, start getting data and go deeper</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">item</span> <span class="p">:</span> <span class="n">m_items</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">Data</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="c1">//if there are children go deeper</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">m_children</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="n">m_children</span><span class="o">-&gt;</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">GetDataRangePair</span><span class="p">(</span><span class="n">startingDepth</span><span class="p">,</span> <span class="n">endDepth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Data</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
         <span class="kt">void</span> <span class="nf">GetDataRange</span><span class="p">(</span><span class="kt">int</span> <span class="n">startingDepth</span><span class="p">,</span> <span class="kt">int</span> <span class="n">endDepth</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;*</span> <span class="n">Data</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="c1">//check if starting depth has been reached</span>

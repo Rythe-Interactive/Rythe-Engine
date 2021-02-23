@@ -54,8 +54,12 @@
     <span class="k">struct</span> <span class="n">point_emitter_data</span>
     <span class="p">{</span>
         <span class="kt">int</span> <span class="n">CurrentLOD</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="n">rendering</span><span class="o">::</span><span class="n">Octree</span><span class="o">&lt;</span><span class="n">uint8</span><span class="o">&gt;*</span> <span class="n">Tree</span><span class="p">;</span>
+        <span class="n">rendering</span><span class="o">::</span><span class="n">Octree</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;*</span> <span class="n">Tree</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ElementsPerLOD</span><span class="p">;</span>
+        <span class="c1">//pos, size</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">posRangeMap</span><span class="p">;</span>
+        <span class="n">uint</span> <span class="n">bufferPosition</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">uint</span> <span class="n">emitterSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

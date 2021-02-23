@@ -39,6 +39,8 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders_convexcollider.cpp`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturer.cpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.hpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_systems_physicssystem.hpp`

@@ -68,7 +68,7 @@
 
         <span class="kt">void</span> <span class="nf">setup</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
 
-        <span class="kt">void</span> <span class="nf">renderPass</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">texture_handle</span> <span class="n">colortexture</span><span class="p">,</span> <span class="n">texture_handle</span> <span class="n">depthtexture</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">);</span>
+        <span class="kt">void</span> <span class="nf">renderPass</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">RenderPipelineBase</span><span class="o">*</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">camera</span><span class="o">&amp;</span> <span class="n">cam</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">);</span>
 
     <span class="p">};</span>
 

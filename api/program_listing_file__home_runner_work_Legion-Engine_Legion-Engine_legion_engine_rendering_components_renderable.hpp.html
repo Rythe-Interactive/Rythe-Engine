@@ -60,7 +60,6 @@
         <span class="n">mesh_renderer</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="k">explicit</span> <span class="nf">mesh_renderer</span><span class="p">(</span><span class="k">const</span> <span class="n">material_handle</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="p">{</span> <span class="n">material</span> <span class="o">=</span> <span class="n">src</span><span class="p">;</span> <span class="p">}</span>
         <span class="n">mesh_renderer</span><span class="p">(</span><span class="k">const</span> <span class="n">material_handle</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">,</span> <span class="k">const</span> <span class="n">model_handle</span><span class="o">&amp;</span> <span class="n">model</span><span class="p">)</span> <span class="p">{</span> <span class="n">material</span> <span class="o">=</span> <span class="n">src</span><span class="p">;</span> <span class="n">m_tempHandle</span> <span class="o">=</span> <span class="n">model</span><span class="p">;</span> <span class="p">}</span>
-
         <span class="k">static</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="n">mesh_renderer</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">owner</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
@@ -71,6 +70,17 @@
         <span class="p">}</span>
 
         <span class="n">material_handle</span> <span class="n">material</span> <span class="o">=</span> <span class="n">invalid_material_handle</span><span class="p">;</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">save</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">oa</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">oa</span><span class="p">(</span><span class="n">CEREAL_NVP</span><span class="p">(</span><span class="n">material</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">load</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">ia</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ia</span><span class="p">(</span><span class="n">CEREAL_NVP</span><span class="p">(</span><span class="n">material</span><span class="p">));</span>
+        <span class="p">}</span>
     <span class="p">};</span>
 
 
@@ -93,17 +103,7 @@
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">get</span><span class="o">&lt;</span><span class="n">mesh_renderer</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">().</span><span class="n">material</span><span class="p">;</span>
         <span class="p">}</span>
-
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
-        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">);</span>
     <span class="p">};</span>
-
-    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">mesh_renderable</span><span class="o">::</span><span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
-        <span class="n">archive</span><span class="p">(</span><span class="n">get_model</span><span class="p">(),</span> <span class="n">get_material</span><span class="p">());</span>
-    <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>

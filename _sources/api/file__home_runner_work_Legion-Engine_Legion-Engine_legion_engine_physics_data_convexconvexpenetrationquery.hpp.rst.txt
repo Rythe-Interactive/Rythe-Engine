@@ -29,7 +29,7 @@ Includes
 --------
 
 
-- ``physics/data/penetrationquery.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_penetrationquery.h`)
+- ``physics/data/penetrationquery.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_penetrationquery.hpp`)
 
 - ``physics/halfedgeedge.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeedge.hpp`)
 

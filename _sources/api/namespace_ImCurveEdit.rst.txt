@@ -23,9 +23,9 @@ Functions
 
 - :ref:`exhale_function__im_curve_edit_8cpp_1a02f0a5e50811e3ad649a543ef2ca7bde`
 
-- :ref:`exhale_function__im_curve_edit_8cpp_1a7cc8221ecd23d7e4ae71b1102d29a9f2`
-
 - :ref:`exhale_function__im_curve_edit_8cpp_1a7d55d3bb7de5cfaa2d8c6ae227e6bcdb`
+
+- :ref:`exhale_function__im_curve_edit_8cpp_1a7cc8221ecd23d7e4ae71b1102d29a9f2`
 
 - :ref:`exhale_function__im_curve_edit_8cpp_1a2c0f08f35924c108842b45f57fc8306c`
 

@@ -31,7 +31,7 @@ Includes
 
 - ``Optick/optick.h``
 
-- ``algorithm``
+- ``algorithm`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphasebruteforce.hpp`)
 
 - ``cctype``
 
@@ -64,6 +64,8 @@ Included By
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_navigator.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_platform_shellinvoke.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scenemanager.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`
 
@@ -135,6 +137,8 @@ Functions
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab454b41ced6bdf3688357bfd7de52dd5`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a7cebc6d90cecb0173c2d0e6c7885c5bf`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a0927aad87ccf1eebfda54c1249e18afa`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ad5008f9b0fc90f8431f9552cf619e28b`
 

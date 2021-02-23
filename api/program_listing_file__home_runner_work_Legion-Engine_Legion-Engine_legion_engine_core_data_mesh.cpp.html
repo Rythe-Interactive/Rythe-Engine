@@ -53,6 +53,7 @@
 <span class="p">{</span>
     <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;&gt;</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshes</span><span class="p">;</span>
     <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">;</span>
+    <span class="n">id_type</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">debugId</span><span class="p">;</span>
 
     <span class="kt">void</span> <span class="n">mesh</span><span class="o">::</span><span class="n">to_resource</span><span class="p">(</span><span class="n">filesystem</span><span class="o">::</span><span class="n">basic_resource</span><span class="o">*</span> <span class="n">resource</span><span class="p">,</span> <span class="k">const</span> <span class="n">mesh</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
@@ -62,7 +63,7 @@
 
         <span class="c1">// Write new data.</span>
         <span class="k">auto</span><span class="o">&amp;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">resource</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">();</span>
-        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">fileName</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">filePath</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">colors</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
         <span class="n">appendBinaryData</span><span class="p">(</span><span class="o">&amp;</span><span class="n">value</span><span class="p">.</span><span class="n">normals</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
@@ -91,7 +92,7 @@
         <span class="n">byte_vec</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">start</span> <span class="o">=</span> <span class="n">resource</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
 
         <span class="c1">// Read data</span>
-        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">fileName</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
+        <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">filePath</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">vertices</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">colors</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
         <span class="n">retrieveBinaryData</span><span class="p">(</span><span class="n">value</span><span class="o">-&gt;</span><span class="n">normals</span><span class="p">,</span> <span class="n">start</span><span class="p">);</span>
@@ -214,7 +215,7 @@
         <span class="p">}</span>
 
         <span class="n">mesh</span> <span class="n">data</span> <span class="o">=</span> <span class="n">result</span><span class="p">;</span>
-        <span class="n">data</span><span class="p">.</span><span class="n">fileName</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">get_filename</span><span class="p">();</span> <span class="c1">// Set the filename.</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">filePath</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">get_virtual_path</span><span class="p">();</span> <span class="c1">// Set the filename.</span>
 
         <span class="p">{</span> <span class="c1">// Insert the mesh into the mesh list.</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_meshesLock</span><span class="p">);</span>

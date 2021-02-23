@@ -61,12 +61,12 @@
 
     <span class="k">struct</span> <span class="n">physics_contact</span>
     <span class="p">{</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">refCollider</span><span class="p">;</span>
+        <span class="n">PhysicsCollider</span><span class="o">*</span> <span class="n">refCollider</span><span class="p">;</span>
 
         <span class="n">EdgeLabel</span> <span class="n">label</span><span class="p">;</span>
 
-        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span> <span class="n">rbRefHandle</span><span class="p">;</span>
-        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rigidbody</span><span class="o">&gt;</span> <span class="n">rbIncHandle</span><span class="p">;</span>
+        <span class="n">rigidbody</span><span class="o">*</span> <span class="n">rbRef</span><span class="p">;</span>
+        <span class="n">rigidbody</span><span class="o">*</span> <span class="n">rbInc</span><span class="p">;</span>
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">RefWorldContact</span><span class="p">;</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">IncWorldContact</span><span class="p">;</span>
@@ -94,6 +94,8 @@
 
         <span class="kt">void</span> <span class="nf">ApplyWarmStarting</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span> <span class="o">=</span> <span class="n">RefWorldContact</span> <span class="o">-</span> <span class="n">refRBCentroid</span><span class="p">;</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Rb</span> <span class="o">=</span> <span class="n">IncWorldContact</span> <span class="o">-</span> <span class="n">incRBCentroid</span><span class="p">;</span>
 
@@ -104,8 +106,10 @@
 
         <span class="cm">/* @brief Calculate a certain linear and angular impulse that will resolve the collision</span>
 <span class="cm">        */</span>
-        <span class="kt">void</span> <span class="nf">resolveContactConstraint</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">,</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="nf">resolveContactConstraint</span><span class="p">(</span><span class="kt">float</span> <span class="n">dt</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+
             <span class="c1">//the idea behind this collision resolution strategy (Sequential Impulses)</span>
             <span class="c1">//is we resolve the collision by giving an impulse towards both</span>
             <span class="c1">//rigidbodies so that the collision would resolve itself in the next time step.</span>
@@ -164,17 +168,14 @@
 
             <span class="c1">//calculate J.V + b</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">;</span>
-            <span class="n">calculateJacobianComponents</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span><span class="n">Ra</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">);</span>
-
-            <span class="k">auto</span> <span class="n">RefRB</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-            <span class="k">auto</span> <span class="n">IncRB</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">calculateJacobianComponents</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">);</span>
 
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">va</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">vb</span><span class="p">,</span> <span class="n">wb</span><span class="p">;</span>
 
-            <span class="n">va</span> <span class="o">=</span> <span class="n">RefRB</span><span class="p">.</span><span class="n">velocity</span><span class="p">;</span>
-            <span class="n">wa</span> <span class="o">=</span> <span class="n">RefRB</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">;</span>
-            <span class="n">vb</span> <span class="o">=</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">velocity</span><span class="p">;</span>
-            <span class="n">wb</span> <span class="o">=</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">;</span>
+            <span class="n">va</span> <span class="o">=</span> <span class="n">rbRef</span> <span class="o">?</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="nl">velocity</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">zero</span><span class="p">;</span>
+            <span class="n">wa</span> <span class="o">=</span> <span class="n">rbRef</span> <span class="o">?</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="nl">angularVelocity</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">zero</span><span class="p">;</span>
+            <span class="n">vb</span> <span class="o">=</span> <span class="n">rbInc</span> <span class="o">?</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="nl">velocity</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">zero</span><span class="p">;</span>
+            <span class="n">wb</span> <span class="o">=</span> <span class="n">rbInc</span> <span class="o">?</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="nl">angularVelocity</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">zero</span><span class="p">;</span>
 
             <span class="kt">float</span> <span class="n">JVx</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">va</span><span class="p">);</span>
             <span class="kt">float</span> <span class="n">JVy</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">wa</span><span class="p">);</span>
@@ -199,7 +200,7 @@
             <span class="c1">//-------------------------- Restitution Constraint ----------------------------------//</span>
 
             <span class="c1">//calculate restitution between the 2 bodies</span>
-            <span class="kt">float</span> <span class="n">restCoeff</span> <span class="o">=</span> <span class="n">rigidbody</span><span class="o">::</span><span class="n">calculateRestitution</span><span class="p">(</span><span class="n">RefRB</span><span class="p">.</span><span class="n">restitution</span><span class="p">,</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">restitution</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">restCoeff</span> <span class="o">=</span> <span class="n">rigidbody</span><span class="o">::</span><span class="n">calculateRestitution</span><span class="p">(</span><span class="n">rbRef</span><span class="o">?</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="nl">restitution</span> <span class="p">:</span> <span class="mf">0.3f</span><span class="p">,</span> <span class="n">rbInc</span><span class="o">?</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="nl">restitution</span> <span class="p">:</span> <span class="mf">0.3f</span><span class="p">);</span>
 
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">minWaCrossRa</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="o">-</span><span class="n">wa</span><span class="p">,</span> <span class="n">Ra</span><span class="p">);</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">WbCrossRb</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">wb</span><span class="p">,</span> <span class="n">Rb</span><span class="p">);</span>
@@ -233,10 +234,9 @@
 
         <span class="kt">void</span> <span class="nf">resolveFrictionConstraint</span><span class="p">()</span>
         <span class="p">{</span>
-            <span class="k">auto</span> <span class="n">RefRB</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-            <span class="k">auto</span> <span class="n">IncRB</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
 
-            <span class="kt">float</span> <span class="n">frictionCoeff</span> <span class="o">=</span> <span class="n">rigidbody</span><span class="o">::</span><span class="n">calculateFriction</span><span class="p">(</span><span class="n">RefRB</span><span class="p">.</span><span class="n">friction</span><span class="p">,</span><span class="n">IncRB</span><span class="p">.</span><span class="n">friction</span><span class="p">);</span>
+            <span class="kt">float</span> <span class="n">frictionCoeff</span> <span class="o">=</span> <span class="n">rigidbody</span><span class="o">::</span><span class="n">calculateFriction</span><span class="p">(</span><span class="n">rbRef</span> <span class="o">?</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="nl">friction</span> <span class="p">:</span> <span class="mf">0.3f</span><span class="p">,</span> <span class="n">rbInc</span> <span class="o">?</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="nl">friction</span> <span class="p">:</span> <span class="mf">0.3f</span><span class="p">);</span>
             <span class="kt">float</span> <span class="n">frictionConstraint</span> <span class="o">=</span> <span class="n">totalLambda</span> <span class="o">*</span> <span class="n">frictionCoeff</span><span class="p">;</span>
 
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span> <span class="o">=</span> <span class="n">RefWorldContact</span> <span class="o">-</span> <span class="n">refRBCentroid</span><span class="p">;</span>
@@ -283,13 +283,14 @@
 <span class="cm">        */</span>
         <span class="kt">void</span> <span class="nf">preCalculateEffectiveMass</span><span class="p">()</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="c1">//calculate tangent vectors</span>
 
             <span class="c1">//--------------------------- pre calculate contact constraint effective mass -----------------------------------//</span>
 
             <span class="n">tangentNormal1</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">epsilonEqual</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">length</span><span class="p">(</span><span class="n">tangentNormal1</span><span class="p">),</span><span class="mf">0.0f</span><span class="p">,</span><span class="mf">0.01f</span><span class="p">))</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">epsilonEqual</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">length</span><span class="p">(</span><span class="n">tangentNormal1</span><span class="p">),</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.01f</span><span class="p">))</span>
             <span class="p">{</span>
                 <span class="n">tangentNormal1</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
             <span class="p">}</span>
@@ -308,15 +309,12 @@
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">;</span>
             <span class="n">calculateJacobianComponents</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">);</span>
 
-            <span class="k">auto</span> <span class="n">RefRB</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-            <span class="k">auto</span> <span class="n">IncRB</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">va</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">vb</span><span class="p">,</span> <span class="n">wb</span><span class="p">;</span>
 
-            <span class="n">va</span> <span class="o">=</span> <span class="n">RefRB</span><span class="p">.</span><span class="n">velocity</span><span class="p">;</span>
-            <span class="n">wa</span> <span class="o">=</span> <span class="n">RefRB</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">;</span>
-            <span class="n">vb</span> <span class="o">=</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">velocity</span><span class="p">;</span>
-            <span class="n">wb</span> <span class="o">=</span> <span class="n">IncRB</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">;</span>
+            <span class="n">va</span> <span class="o">=</span> <span class="n">rbRef</span> <span class="o">?</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="nl">velocity</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">zero</span><span class="p">;</span>
+            <span class="n">wa</span> <span class="o">=</span> <span class="n">rbRef</span> <span class="o">?</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="nl">angularVelocity</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">zero</span><span class="p">;</span>
+            <span class="n">vb</span> <span class="o">=</span> <span class="n">rbInc</span> <span class="o">?</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="nl">velocity</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">zero</span><span class="p">;</span>
+            <span class="n">wb</span> <span class="o">=</span> <span class="n">rbInc</span> <span class="o">?</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="nl">angularVelocity</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">::</span><span class="n">zero</span><span class="p">;</span>
 
             <span class="kt">float</span> <span class="n">JVx</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">normal</span><span class="p">,</span> <span class="n">va</span><span class="p">);</span>
             <span class="kt">float</span> <span class="n">JVy</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">wa</span><span class="p">);</span>
@@ -331,17 +329,14 @@
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">;</span>
             <span class="n">calculateJacobianComponents</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">Ra</span><span class="p">,</span> <span class="n">minRaCrossN</span><span class="p">,</span> <span class="n">Rb</span><span class="p">,</span> <span class="n">RbCrossN</span><span class="p">);</span>
 
-            <span class="k">auto</span> <span class="n">rbRef</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-            <span class="k">auto</span> <span class="n">incRef</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
-            <span class="kt">float</span> <span class="n">maUnit</span> <span class="o">=</span> <span class="n">rbRefHandle</span> <span class="o">?</span> <span class="n">rbRef</span><span class="p">.</span><span class="nl">inverseMass</span> <span class="p">:</span> <span class="mf">0.0f</span><span class="p">;</span>
-            <span class="kt">float</span> <span class="n">mbUnit</span> <span class="o">=</span> <span class="n">rbIncHandle</span> <span class="o">?</span> <span class="n">incRef</span><span class="p">.</span><span class="nl">inverseMass</span> <span class="p">:</span> <span class="mf">0.0f</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">maUnit</span> <span class="o">=</span> <span class="n">rbRef</span> <span class="o">?</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="nl">inverseMass</span> <span class="p">:</span> <span class="mf">0.0f</span><span class="p">;</span>
+            <span class="kt">float</span> <span class="n">mbUnit</span> <span class="o">=</span> <span class="n">rbInc</span> <span class="o">?</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="nl">inverseMass</span> <span class="p">:</span> <span class="mf">0.0f</span><span class="p">;</span>
 
             <span class="c1">//calculate M-1</span>
             <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">ma</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="n">maUnit</span><span class="p">);</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">Ia</span> <span class="o">=</span> <span class="n">rbRefHandle</span> <span class="o">?</span> <span class="n">rbRef</span><span class="p">.</span><span class="nl">globalInverseInertiaTensor</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">Ia</span> <span class="o">=</span> <span class="n">rbRef</span> <span class="o">?</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="nl">globalInverseInertiaTensor</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
             <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">mb</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="n">mbUnit</span><span class="p">);</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">Ib</span> <span class="o">=</span> <span class="n">rbIncHandle</span> <span class="o">?</span> <span class="n">incRef</span><span class="p">.</span><span class="nl">globalInverseInertiaTensor</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">Ib</span> <span class="o">=</span> <span class="n">rbInc</span> <span class="o">?</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="nl">globalInverseInertiaTensor</span> <span class="p">:</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">0.0f</span><span class="p">);</span>
 
             <span class="c1">//calculate M^-1 J^T</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">jx</span> <span class="o">=</span> <span class="n">ma</span> <span class="o">*</span> <span class="o">-</span><span class="n">normal</span><span class="p">;</span>
@@ -374,26 +369,17 @@
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularImpulseA</span> <span class="o">=</span> <span class="n">torqueDirectionA</span> <span class="o">*</span> <span class="n">lambda</span><span class="p">;</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularImpulseB</span> <span class="o">=</span> <span class="n">torqueDirectionB</span> <span class="o">*</span> <span class="n">lambda</span><span class="p">;</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">rbRefHandle</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rbRef</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="k">auto</span> <span class="n">refRb</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
-                <span class="n">refRb</span><span class="p">.</span><span class="n">velocity</span> <span class="o">+=</span> <span class="o">-</span><span class="n">linearImpulse</span> <span class="o">*</span> <span class="n">refRb</span><span class="p">.</span><span class="n">inverseMass</span><span class="p">;</span>
-                <span class="n">refRb</span><span class="p">.</span><span class="n">angularVelocity</span> <span class="o">+=</span> <span class="n">refRb</span><span class="p">.</span><span class="n">globalInverseInertiaTensor</span> <span class="o">*</span> <span class="n">angularImpulseA</span><span class="p">;</span>
-
-                <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">refRb</span><span class="p">);</span>
-
+                <span class="n">rbRef</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">+=</span> <span class="o">-</span><span class="n">linearImpulse</span> <span class="o">*</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="n">inverseMass</span><span class="p">;</span>
+                <span class="n">rbRef</span><span class="o">-&gt;</span><span class="n">angularVelocity</span> <span class="o">+=</span> <span class="n">rbRef</span><span class="o">-&gt;</span><span class="n">globalInverseInertiaTensor</span> <span class="o">*</span> <span class="n">angularImpulseA</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">rbIncHandle</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rbInc</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="k">auto</span> <span class="n">incRb</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
-                <span class="n">incRb</span><span class="p">.</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">linearImpulse</span> <span class="o">*</span> <span class="n">incRb</span><span class="p">.</span><span class="n">inverseMass</span><span class="p">;</span>
-                <span class="k">auto</span> <span class="n">addedAngular</span> <span class="o">=</span> <span class="n">incRb</span><span class="p">.</span><span class="n">globalInverseInertiaTensor</span> <span class="o">*</span> <span class="n">angularImpulseB</span><span class="p">;</span>
-                <span class="n">incRb</span><span class="p">.</span><span class="n">angularVelocity</span> <span class="o">+=</span> <span class="n">addedAngular</span><span class="p">;</span>
-
-                <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">incRb</span><span class="p">);</span>
+                <span class="n">rbInc</span><span class="o">-&gt;</span><span class="n">velocity</span> <span class="o">+=</span> <span class="n">linearImpulse</span> <span class="o">*</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="n">inverseMass</span><span class="p">;</span>
+                <span class="k">auto</span> <span class="n">addedAngular</span> <span class="o">=</span> <span class="n">rbInc</span><span class="o">-&gt;</span><span class="n">globalInverseInertiaTensor</span> <span class="o">*</span> <span class="n">angularImpulseB</span><span class="p">;</span>
+                <span class="n">rbInc</span><span class="o">-&gt;</span><span class="n">angularVelocity</span> <span class="o">+=</span> <span class="n">addedAngular</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -412,10 +398,8 @@
         <span class="kt">void</span> <span class="nf">logRigidbodyState</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;//--------logRigidbodyState----------//&quot;</span><span class="p">);</span>
-            <span class="k">auto</span> <span class="n">incRb</span> <span class="o">=</span> <span class="n">rbIncHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-            <span class="k">auto</span> <span class="n">refRb</span> <span class="o">=</span> <span class="n">rbRefHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;incRb.velocity {} &quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">incRb</span><span class="p">.</span><span class="n">velocity</span><span class="p">));</span>
-            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;incRb.angularVelocity {} &quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">incRb</span><span class="p">.</span><span class="n">angularVelocity</span><span class="p">));</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;rbInc-&gt;velocity {} &quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">rbInc</span><span class="o">-&gt;</span><span class="n">velocity</span><span class="p">));</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;rbInc-&gt;angularVelocity {} &quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">rbInc</span><span class="o">-&gt;</span><span class="n">angularVelocity</span><span class="p">));</span>
 
             <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;collisionNormal {} &quot;</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">collisionNormal</span><span class="p">));</span>
             <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;lambda {} &quot;</span><span class="p">,</span> <span class="n">totalLambda</span><span class="p">);</span>

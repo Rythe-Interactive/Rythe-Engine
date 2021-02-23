@@ -3,7 +3,7 @@
 Struct MeshSplitterDebugHelper
 ==============================
 
-- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_debug_helpers.h`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_debug_helpers.hpp`
 
 
 Struct Documentation

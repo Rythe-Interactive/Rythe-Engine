@@ -31,23 +31,23 @@ Includes
 
 - ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
 
-- ``physics/mesh_splitter_utils/half_edge_finder.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_half_edge_finder.h`)
+- ``physics/mesh_splitter_utils/half_edge_finder.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_half_edge_finder.hpp`)
 
 - ``physics/mesh_splitter_utils/intersecting_polygon_organizer.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersecting_polygon_organizer.hpp`)
 
-- ``physics/mesh_splitter_utils/intersection_edge_info.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersection_edge_info.h`)
+- ``physics/mesh_splitter_utils/intersection_edge_info.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersection_edge_info.hpp`)
 
 - ``physics/mesh_splitter_utils/mesh_half_edge.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_half_edge.hpp`)
 
 - ``physics/mesh_splitter_utils/mesh_split_params.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_split_params.hpp`)
 
-- ``physics/mesh_splitter_utils/mesh_splitter_debug_helpers.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_debug_helpers.h`)
+- ``physics/mesh_splitter_utils/mesh_splitter_debug_helpers.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_debug_helpers.hpp`)
 
 - ``physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter_typedefs.hpp`)
 
-- ``physics/mesh_splitter_utils/primitive_mesh.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.h`)
+- ``physics/mesh_splitter_utils/primitive_mesh.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.hpp`)
 
-- ``physics/mesh_splitter_utils/splittable_polygon.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.h`)
+- ``physics/mesh_splitter_utils/splittable_polygon.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_splittable_polygon.hpp`)
 
 - ``rendering/components/renderable.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp`)
 
@@ -56,6 +56,10 @@ Includes
 Included By
 -----------
 
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components_fracturer.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter.cpp`
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsmodule.hpp`
 

@@ -40,6 +40,8 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1_particle_system_handle`
 
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1point__cloud__particle__container`
+
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1point__emitter__data`
 
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1screen__quad`
@@ -67,6 +69,8 @@ Classes
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_debug_render_stage`
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_default_pipeline`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_depth_of_field`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1framebuffer`
 
@@ -186,7 +190,9 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_matini_8hpp_1a53f773c025b6345f339c6830644cc4cd`
+- :ref:`exhale_function_matini_8cpp_1a90caf87225e1141e224c81e09e60019f`
+
+- :ref:`exhale_function_matini_8hpp_1aafef2e4096b35678638c99957654756d`
 
 - :ref:`exhale_function_material_8hpp_1ab73367179f1bd0ccade11f388b50b4b3`
 

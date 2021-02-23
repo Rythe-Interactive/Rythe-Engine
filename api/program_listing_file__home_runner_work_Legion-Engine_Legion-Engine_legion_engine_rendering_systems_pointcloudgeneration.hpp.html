@@ -83,8 +83,6 @@
         <span class="p">}</span>
 
     <span class="k">private</span><span class="o">:</span>
-        <span class="c1">//hard coded seed for now</span>
-        <span class="k">const</span> <span class="kt">int</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="c1">//index to index the particle system name</span>
         <span class="kt">int</span> <span class="n">cloudGenerationCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="c1">//query containing point clouds</span>
@@ -92,6 +90,8 @@
         <span class="c1">//compute shader</span>
         <span class="n">compute</span><span class="o">::</span><span class="n">function</span> <span class="n">pointCloudGeneratorCS</span><span class="p">;</span>
         <span class="n">compute</span><span class="o">::</span><span class="n">function</span> <span class="n">preProcessPointCloudCS</span><span class="p">;</span>
+
+        <span class="n">ParticleSystemHandle</span> <span class="n">particleSystem</span><span class="p">;</span>
         <span class="kt">void</span> <span class="nf">InitComputeShader</span><span class="p">()</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">pointCloudGeneratorCS</span><span class="p">.</span><span class="n">isValid</span><span class="p">())</span>
@@ -124,15 +124,16 @@
             <span class="k">auto</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">m</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">indices</span><span class="p">;</span>
             <span class="k">auto</span> <span class="n">uvs</span> <span class="o">=</span> <span class="n">m</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">uvs</span><span class="p">;</span>
             <span class="n">uint</span> <span class="n">triangle_count</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">/</span> <span class="mi">3</span><span class="p">;</span>
-
             <span class="c1">//compute process size</span>
             <span class="n">uint</span> <span class="n">process_Size</span> <span class="o">=</span> <span class="n">triangle_count</span><span class="p">;</span>
+
             <span class="c1">//generate initial buffers from triangle info</span>
             <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">&gt;</span> <span class="n">samplesPerTri</span><span class="p">(</span><span class="n">triangle_count</span><span class="p">);</span>
             <span class="k">auto</span> <span class="n">vertexBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;vertices&quot;</span><span class="p">);</span>
             <span class="k">auto</span> <span class="n">indexBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;indices&quot;</span><span class="p">);</span>
             <span class="n">uint</span> <span class="n">totalSampleCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
             <span class="n">uint</span> <span class="n">samplesPerTriangle</span> <span class="o">=</span> <span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_maxPoints</span> <span class="o">/</span> <span class="n">triangle_count</span><span class="p">;</span>
+
 
 
 
@@ -152,42 +153,55 @@
             <span class="p">{</span>
                 <span class="n">totalSampleCount</span> <span class="o">+=</span> <span class="n">output</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
             <span class="p">}</span>
-
             <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="n">totalSampleCount</span><span class="p">);</span>
+
+
+
+
             <span class="c1">//Generate points result vector</span>
             <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">(</span><span class="n">totalSampleCount</span><span class="p">);</span>
-
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span> <span class="n">resultColor</span><span class="p">(</span><span class="n">totalSampleCount</span><span class="p">);</span>
             <span class="c1">//Get normal map</span>
-            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">img</span><span class="p">]</span> <span class="o">=</span> <span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_heightMap</span><span class="p">.</span><span class="n">get_raw_image</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">lock</span><span class="p">,</span> <span class="n">normal</span><span class="p">]</span> <span class="o">=</span> <span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_heightMap</span><span class="p">.</span><span class="n">get_raw_image</span><span class="p">();</span>
             <span class="p">{</span>
-                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
-                <span class="c1">//Create buffers</span>
-                <span class="k">auto</span> <span class="n">normalMapBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createImage</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;normalMap&quot;</span><span class="p">);</span>
-                <span class="k">auto</span> <span class="n">vertexBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;vertices&quot;</span><span class="p">);</span>
-                <span class="k">auto</span> <span class="n">indexBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;indices&quot;</span><span class="p">);</span>
-                <span class="k">auto</span> <span class="n">sampleBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;samples&quot;</span><span class="p">);</span>
-                <span class="k">auto</span> <span class="n">uvBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">uvs</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;uvs&quot;</span><span class="p">);</span>
-                <span class="k">auto</span> <span class="n">outBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">,</span> <span class="s">&quot;points&quot;</span><span class="p">);</span>
-                <span class="n">uint</span> <span class="n">size</span> <span class="o">=</span> <span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_heightMap</span><span class="p">.</span><span class="n">size</span><span class="p">().</span><span class="n">x</span><span class="p">;</span>
-                <span class="k">auto</span> <span class="n">computeResult</span> <span class="o">=</span> <span class="n">pointCloudGeneratorCS</span>
-                <span class="p">(</span>
-                    <span class="n">process_Size</span><span class="p">,</span>
-                    <span class="n">vertexBuffer</span><span class="p">,</span>
-                    <span class="n">indexBuffer</span><span class="p">,</span>
-                    <span class="n">uvBuffer</span><span class="p">,</span>
-                    <span class="n">sampleBuffer</span><span class="p">,</span>
-                    <span class="n">normalMapBuffer</span><span class="p">,</span>
-                    <span class="c1">// karg(realPointCloud.m_sampleDepth, &quot;sampleWidth&quot;),</span>
-                    <span class="n">karg</span><span class="p">(</span><span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_heightStrength</span><span class="p">,</span> <span class="s">&quot;normalStrength&quot;</span><span class="p">),</span>
-                    <span class="n">karg</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="s">&quot;textureSize&quot;</span><span class="p">),</span>
-                    <span class="n">outBuffer</span>
-                <span class="p">);</span>
+                <span class="k">auto</span> <span class="p">[</span><span class="n">lock2</span><span class="p">,</span> <span class="n">albedo</span><span class="p">]</span> <span class="o">=</span> <span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_AlbedoMap</span><span class="p">.</span><span class="n">get_raw_image</span><span class="p">();</span>
+                <span class="p">{</span>
+                    <span class="n">async</span><span class="o">::</span><span class="n">readonly_multiguard</span> <span class="n">guard</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span> <span class="n">lock2</span><span class="p">);</span>
+
+                    <span class="k">auto</span> <span class="n">normalMapBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createImage</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;normalMap&quot;</span><span class="p">);</span>
+
+
+
+                    <span class="c1">//Create buffers</span>
+                    <span class="k">auto</span> <span class="n">albedoMapBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createImage</span><span class="p">(</span><span class="n">albedo</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;albedoMap&quot;</span><span class="p">);</span>
+                    <span class="k">auto</span> <span class="n">sampleBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;samples&quot;</span><span class="p">);</span>
+                    <span class="k">auto</span> <span class="n">uvBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">uvs</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">READ_BUFFER</span><span class="p">,</span> <span class="s">&quot;uvs&quot;</span><span class="p">);</span>
+
+                    <span class="k">auto</span> <span class="n">outBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">,</span> <span class="s">&quot;points&quot;</span><span class="p">);</span>
+                    <span class="k">auto</span> <span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">compute</span><span class="o">::</span><span class="n">Context</span><span class="o">::</span><span class="n">createBuffer</span><span class="p">(</span><span class="n">resultColor</span><span class="p">,</span> <span class="n">compute</span><span class="o">::</span><span class="n">buffer_type</span><span class="o">::</span><span class="n">WRITE_BUFFER</span><span class="p">,</span> <span class="s">&quot;colors&quot;</span><span class="p">);</span>
+
+                    <span class="n">uint</span> <span class="n">size</span> <span class="o">=</span> <span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_AlbedoMap</span><span class="p">.</span><span class="n">size</span><span class="p">().</span><span class="n">x</span><span class="p">;</span>
+                    <span class="k">auto</span> <span class="n">computeResult</span> <span class="o">=</span> <span class="n">pointCloudGeneratorCS</span>
+                    <span class="p">(</span>
+                        <span class="n">process_Size</span><span class="p">,</span>
+                        <span class="n">vertexBuffer</span><span class="p">,</span>
+                        <span class="n">indexBuffer</span><span class="p">,</span>
+                        <span class="n">uvBuffer</span><span class="p">,</span>
+                        <span class="n">sampleBuffer</span><span class="p">,</span>
+                        <span class="n">albedoMapBuffer</span><span class="p">,</span>
+                        <span class="n">normalMapBuffer</span><span class="p">,</span>
+                        <span class="n">karg</span><span class="p">(</span><span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_heightStrength</span><span class="p">,</span> <span class="s">&quot;normalStrength&quot;</span><span class="p">),</span>
+                        <span class="n">karg</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="s">&quot;textureSize&quot;</span><span class="p">),</span>
+                        <span class="n">outBuffer</span><span class="p">,</span>
+                        <span class="n">colorBuffer</span>
+                    <span class="p">);</span>
+                <span class="p">}</span>
             <span class="p">}</span>
             <span class="c1">//translate vec4 into vec3</span>
             <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">particleInput</span><span class="p">(</span><span class="n">totalSampleCount</span><span class="p">);</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">totalSampleCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">totalSampleCount</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="n">particleInput</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">result</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">xyz</span> <span class="o">+</span> <span class="n">posiitonOffset</span><span class="p">;</span>
+                <span class="n">particleInput</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">result</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">xyz</span><span class="p">()</span> <span class="o">+</span> <span class="n">posiitonOffset</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="c1">//generate particle params</span>
             <span class="n">pointCloudParameters</span> <span class="n">params</span>
@@ -196,7 +210,7 @@
                <span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_Material</span><span class="p">,</span>
                <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_handle</span><span class="p">(</span><span class="s">&quot;billboard&quot;</span><span class="p">)</span>
             <span class="p">};</span>
-            <span class="n">GenerateParticles</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">particleInput</span><span class="p">,</span> <span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_trans</span><span class="p">);</span>
+            <span class="n">GenerateParticles</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">particleInput</span><span class="p">,</span> <span class="n">resultColor</span><span class="p">,</span> <span class="n">realPointCloud</span><span class="p">.</span><span class="n">m_trans</span><span class="p">);</span>
 
 
             <span class="c1">//write that pc has been generated</span>
@@ -204,22 +218,27 @@
             <span class="n">pointCloud</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">realPointCloud</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">GenerateParticles</span><span class="p">(</span><span class="n">pointCloudParameters</span> <span class="n">params</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">input</span><span class="p">,</span> <span class="n">transform</span> <span class="n">trans</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="nf">GenerateParticles</span><span class="p">(</span><span class="n">pointCloudParameters</span> <span class="n">params</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">input</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span> <span class="n">inputColor</span><span class="p">,</span> <span class="n">transform</span> <span class="n">trans</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="c1">//generate particle system</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;GeneratedPointCloud &quot;</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">cloudGenerationCount</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="n">nameOfType</span><span class="o">&lt;</span><span class="n">PointCloudParticleSystem</span><span class="o">&gt;</span><span class="p">();</span>
 
-            <span class="k">auto</span> <span class="n">newPointCloud</span> <span class="o">=</span> <span class="n">ParticleSystemCache</span><span class="o">::</span><span class="n">createParticleSystem</span><span class="o">&lt;</span><span class="n">PointCloudParticleSystem</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">input</span><span class="p">);</span>
 
+
+            <span class="k">auto</span> <span class="n">newPointCloud</span> <span class="o">=</span> <span class="n">ParticleSystemCache</span><span class="o">::</span><span class="n">createParticleSystem</span><span class="o">&lt;</span><span class="n">PointCloudParticleSystem</span><span class="o">&gt;</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">);</span>
             <span class="c1">//create entity to store particle system</span>
             <span class="k">auto</span> <span class="n">newEnt</span> <span class="o">=</span> <span class="n">createEntity</span><span class="p">();</span>
 
             <span class="c1">//  newEnt.add_component &lt;rendering::lod&gt;();</span>
             <span class="n">newEnt</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">trans</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">position</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">(),</span> <span class="n">trans</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">rotation</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">(),</span> <span class="n">trans</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">scale</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">());</span>
 
-            <span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span> <span class="n">emitter</span> <span class="o">=</span> <span class="n">newEnt</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">emitterHandle</span> <span class="o">=</span> <span class="n">newEnt</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">emitter</span> <span class="o">=</span> <span class="n">emitterHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
             <span class="n">emitter</span><span class="p">.</span><span class="n">particleSystemHandle</span> <span class="o">=</span> <span class="n">newPointCloud</span><span class="p">;</span>
+            <span class="n">emitter</span><span class="p">.</span><span class="n">pointInput</span> <span class="o">=</span> <span class="n">input</span><span class="p">;</span>
+            <span class="n">emitter</span><span class="p">.</span><span class="n">colorInput</span> <span class="o">=</span> <span class="n">inputColor</span><span class="p">;</span>
             <span class="n">newEnt</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&gt;</span><span class="p">().</span><span class="n">write</span><span class="p">(</span><span class="n">emitter</span><span class="p">);</span>
+            <span class="c1">//newPointCloud.get()-&gt;setup(emitterHandle, input, inputColor);</span>
 
             <span class="c1">//increment index</span>
             <span class="n">cloudGenerationCount</span><span class="o">++</span><span class="p">;</span>

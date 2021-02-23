@@ -54,18 +54,18 @@
     <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">ParticleSystemBase</span><span class="o">&gt;&gt;</span> <span class="n">ParticleSystemCache</span><span class="o">::</span><span class="n">m_cache</span><span class="p">;</span>
     <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">ParticleSystemCache</span><span class="o">::</span><span class="n">m_particleSystemLock</span><span class="p">;</span>
 
-    <span class="n">ParticleSystemHandle</span> <span class="n">ParticleSystemCache</span><span class="o">::</span><span class="n">createParticleSystemImpl</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">ParticleSystemBase</span><span class="o">*</span> <span class="n">ptr</span><span class="p">)</span>
+    <span class="n">ParticleSystemHandle</span> <span class="n">ParticleSystemCache</span><span class="o">::</span><span class="n">createParticleSystemImpl</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">ParticleSystemBase</span><span class="o">*</span> <span class="n">system</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
 
         <span class="k">auto</span> <span class="n">got</span> <span class="o">=</span> <span class="n">m_cache</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">got</span> <span class="o">==</span> <span class="n">m_cache</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">got</span> <span class="o">==</span> <span class="n">m_cache</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
         <span class="p">{</span>
             <span class="c1">//acquire lock</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_particleSystemLock</span><span class="p">);</span>
 
             <span class="c1">//emplace kv-pair</span>
-            <span class="k">auto</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">m_cache</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">ptr</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">m_cache</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">system</span><span class="p">);</span>
 
             <span class="c1">//check for success</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">iterator</span><span class="p">.</span><span class="n">second</span><span class="p">)</span>

@@ -14,6 +14,7 @@ Directory physics
 Subdirectories
 --------------
 
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_colliders`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_components`
 - :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data`
@@ -31,6 +32,7 @@ Files
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_halfedgeface.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_contact.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.cpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsconstants.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physicsmodule.hpp`

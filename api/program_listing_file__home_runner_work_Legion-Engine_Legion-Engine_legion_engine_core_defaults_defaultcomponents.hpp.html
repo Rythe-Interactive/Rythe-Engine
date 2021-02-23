@@ -58,6 +58,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/portable_binary.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/ecs/component_handle.hpp&gt;</span><span class="cp"></span>
 
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/assetimporter.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span>
 <span class="p">{</span>
@@ -148,7 +149,7 @@
 
     <span class="k">struct</span> <span class="n">hierarchy</span>
     <span class="p">{</span>
-        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">parent</span><span class="p">;</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">parent</span> <span class="o">=</span> <span class="n">world_entity_id</span><span class="p">;</span>
         <span class="n">ecs</span><span class="o">::</span><span class="n">entity_set</span> <span class="n">children</span><span class="p">;</span>
     <span class="p">};</span>
 
@@ -234,9 +235,33 @@
     <span class="k">struct</span> <span class="nl">mesh_filter</span> <span class="p">:</span> <span class="k">public</span> <span class="n">mesh_handle</span>
     <span class="p">{</span>
         <span class="n">mesh_filter</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="k">explicit</span> <span class="nf">mesh_filter</span><span class="p">(</span><span class="k">const</span> <span class="n">mesh_handle</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="p">{</span> <span class="n">id</span> <span class="o">=</span> <span class="n">src</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">};</span>
+        <span class="k">explicit</span> <span class="nf">mesh_filter</span><span class="p">(</span><span class="k">const</span> <span class="n">mesh_handle</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">)</span> <span class="o">:</span> <span class="n">mesh_handle</span><span class="p">(</span><span class="n">src</span><span class="p">)</span> <span class="p">{}</span>
 
         <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">mesh_filter</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">save</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">oa</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">bool</span> <span class="n">debug</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">id</span> <span class="o">!=</span> <span class="n">invalid_id</span><span class="p">)</span>
+                <span class="n">oa</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Filepath&quot;</span><span class="p">,</span> <span class="n">get</span><span class="p">().</span><span class="n">second</span><span class="p">.</span><span class="n">filePath</span><span class="p">));</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Deserialized Mesh was missing!&quot;</span><span class="p">);</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">missing</span> <span class="o">=</span> <span class="s">&quot;engine://resources/invalid/missing_mesh.obj&quot;</span><span class="p">;</span>
+                <span class="n">oa</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Filepath&quot;</span><span class="p">,</span> <span class="n">missing</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">load</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">oa</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">filepath</span><span class="p">;</span>
+            <span class="n">oa</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Filepath&quot;</span><span class="p">,</span> <span class="n">filepath</span><span class="p">));</span>
+            <span class="k">auto</span> <span class="n">copy</span> <span class="o">=</span> <span class="n">default_mesh_settings</span><span class="p">;</span>
+            <span class="n">copy</span><span class="p">.</span><span class="n">contextFolder</span> <span class="o">=</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="n">filepath</span><span class="p">).</span><span class="n">parent</span><span class="p">();</span>
+            <span class="n">id</span> <span class="o">=</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">create_mesh</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="n">filepath</span><span class="p">),</span> <span class="n">copy</span><span class="p">).</span><span class="n">id</span><span class="p">;</span>
+        <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span>
 

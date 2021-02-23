@@ -1,0 +1,560 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File mesh_splitter.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File mesh_splitter.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-mesh-splitter-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-mesh-splitter-cpp"></span><h1>Program Listing for File mesh_splitter.cpp<a class="headerlink" href="#program-listing-for-file-mesh-splitter-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-mesh-splitter-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/mesh_splitter.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/mesh_splitter.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
+<span class="p">{</span>
+    <span class="kt">void</span> <span class="n">MeshSplitter</span><span class="o">::</span><span class="n">InitializePolygons</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">entity</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">owner</span> <span class="o">=</span> <span class="n">entity</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="p">[</span><span class="n">meshFilter</span><span class="p">,</span> <span class="n">meshRenderer</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="n">ownerMaterialH</span> <span class="o">=</span> <span class="n">meshRenderer</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">material</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="p">[</span><span class="n">posH</span><span class="p">,</span> <span class="n">rotH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">meshFilter</span> <span class="o">&amp;&amp;</span> <span class="n">posH</span> <span class="o">&amp;&amp;</span> <span class="n">rotH</span> <span class="o">&amp;&amp;</span> <span class="n">scaleH</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Mesh and Transform found&quot;</span><span class="p">);</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">meshHalfEdges</span><span class="p">;</span>
+
+            <span class="c1">//auto renderable = renderable.read();</span>
+            <span class="n">mesh</span><span class="o">&amp;</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">meshFilter</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">get</span><span class="p">().</span><span class="n">second</span><span class="p">;</span>
+
+            <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">posH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+            <span class="c1">//debugHelper.DEBUG_transform = transform;</span>
+
+            <span class="n">HalfEdgeFinder</span> <span class="n">edgeFinder</span><span class="p">;</span>
+            <span class="n">edgeFinder</span><span class="p">.</span><span class="n">FindHalfEdge</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">meshHalfEdges</span><span class="p">);</span>
+
+            <span class="n">BFSPolygonize</span><span class="p">(</span><span class="n">meshHalfEdges</span><span class="p">,</span> <span class="n">transform</span><span class="p">);</span>
+
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Mesh vertices {}, Mesh indices {}&quot;</span><span class="p">,</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;The given entity does not have a meshHandle!&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">face</span> <span class="p">:</span> <span class="n">meshPolygons</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">assert</span><span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">owner</span><span class="p">.</span><span class="n">lock</span><span class="p">());</span>
+                <span class="n">assert</span><span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">owner</span><span class="p">.</span><span class="n">lock</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+
+
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">MeshSplitter</span><span class="o">::</span><span class="n">MultipleSplitMesh</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">MeshSplitParams</span><span class="o">&gt;&amp;</span> <span class="n">splittingPlanes</span><span class="p">,</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span><span class="o">&gt;&amp;</span> <span class="n">entitiesGenerated</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">keepBelow</span><span class="p">,</span> <span class="kt">int</span> <span class="n">debugAt</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">currentDebug</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">auto</span> <span class="p">[</span><span class="n">posH</span><span class="p">,</span> <span class="n">rotH</span><span class="p">,</span> <span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">owner</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">scaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">rotH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">posH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+
+        <span class="c1">//-------------------------------- copy polygons of original mesh and add it to the output list -----------------------------------------//</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&gt;</span> <span class="n">outputPolygonIslandsGenerated</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;</span> <span class="n">copiedPolygons</span><span class="p">;</span>
+        <span class="n">CopyPolygons</span><span class="p">(</span><span class="n">meshPolygons</span><span class="p">,</span> <span class="n">copiedPolygons</span><span class="p">);</span>
+
+        <span class="n">outputPolygonIslandsGenerated</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">copiedPolygons</span><span class="p">));</span>
+
+        <span class="c1">//-------------------------------- spllit mesh based on list of splitting planes -----------------------------------------//</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="n">MeshSplitParams</span><span class="o">&amp;</span> <span class="nl">splitParam</span> <span class="p">:</span> <span class="n">splittingPlanes</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&gt;</span> <span class="n">inputList</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">outputPolygonIslandsGenerated</span><span class="p">);</span>
+            <span class="n">outputPolygonIslandsGenerated</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&amp;</span> <span class="nl">polygonIsland</span> <span class="p">:</span> <span class="n">inputList</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">SplittablePolygonPtr</span> <span class="nl">polygon</span> <span class="p">:</span> <span class="n">polygonIsland</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">polygon</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="n">SplitPolygons</span>
+                <span class="p">(</span><span class="n">polygonIsland</span><span class="p">,</span>
+                    <span class="n">splitParam</span><span class="p">.</span><span class="n">planeNormal</span><span class="p">,</span>
+                    <span class="n">splitParam</span><span class="p">.</span><span class="n">planePostion</span><span class="p">,</span>
+                    <span class="n">transform</span><span class="p">,</span>
+                    <span class="n">outputPolygonIslandsGenerated</span><span class="p">,</span> <span class="n">keepBelow</span><span class="p">,</span><span class="n">currentDebug</span> <span class="o">==</span> <span class="n">debugAt</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">currentDebug</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//-------------------------------- use each polygon list to create a new object -----------------------------------------//</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">polygonIsland</span> <span class="p">:</span> <span class="n">outputPolygonIslandsGenerated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">PrimitiveMesh</span> <span class="n">newMesh</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">polygonIsland</span><span class="p">,</span> <span class="n">ownerMaterialH</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">newEnt</span> <span class="o">=</span> <span class="n">newMesh</span><span class="p">.</span><span class="n">InstantiateNewGameObject</span><span class="p">();</span>
+
+            <span class="n">entitiesGenerated</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">newEnt</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">MeshSplitter</span><span class="o">::</span><span class="n">SplitPolygons</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&amp;</span> <span class="n">polygonsToSplit</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span><span class="p">,</span>
+        <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&gt;&amp;</span> <span class="n">resultingIslands</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">keepBelow</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">shouldDebug</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="c1">//log::debug(&quot;SplitPolygons&quot;);</span>
+
+        <span class="c1">//----------------------- Find out which polygons are below,above, or intersecting the splitting plane -----------------------------------//</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">polygon</span> <span class="p">:</span> <span class="n">polygonsToSplit</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//log::debug(&quot;Polygon has {} edges  &quot;, polygon-&gt;GetMeshEdges().size());</span>
+            <span class="n">polygon</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">polygon</span><span class="o">-&gt;</span><span class="n">CalculatePolygonSplit</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">,</span> <span class="n">keepBelow</span><span class="p">);</span>
+
+           <span class="cm">/* switch (polygon-&gt;GetPolygonSplitState())</span>
+<span class="cm">            {</span>
+<span class="cm">            case SplitState::Above:</span>
+<span class="cm">                log::debug(&quot;Above &quot;);</span>
+<span class="cm">                break;</span>
+<span class="cm">            case SplitState::Below:</span>
+<span class="cm">                log::debug(&quot;Below &quot;);</span>
+<span class="cm">                break;</span>
+<span class="cm">            case SplitState::Split:</span>
+<span class="cm">                log::debug(&quot;Split &quot;);</span>
+<span class="cm">                break;</span>
+<span class="cm">            case SplitState::Unknown:</span>
+<span class="cm">                log::debug(&quot;Unknown &quot;);</span>
+<span class="cm">                break;</span>
+
+<span class="cm">            default:</span>
+<span class="cm">                break;</span>
+<span class="cm">            }*/</span>
+
+        <span class="p">}</span>
+
+        <span class="n">SplitState</span> <span class="n">requestedState</span> <span class="o">=</span> <span class="n">keepBelow</span> <span class="o">?</span> <span class="n">SplitState</span><span class="o">::</span><span class="nl">Below</span> <span class="p">:</span> <span class="n">SplitState</span><span class="o">::</span><span class="n">Above</span><span class="p">;</span>
+
+        <span class="n">SplittablePolygonPtr</span> <span class="n">initialFound</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+        <span class="kt">bool</span> <span class="n">foundUnvisited</span> <span class="o">=</span>
+            <span class="n">FindFirstIntersectingOrRequestedState</span>
+            <span class="p">(</span><span class="n">initialFound</span><span class="p">,</span> <span class="n">requestedState</span><span class="p">,</span> <span class="n">polygonsToSplit</span><span class="p">);</span>
+
+        <span class="cm">/*if (math::distance(planeNormal, math::vec3(-1, 0, 0)) &lt; 0.01f)</span>
+<span class="cm">        {</span>
+<span class="cm">            DebugBreak();</span>
+<span class="cm">        }*/</span>
+        <span class="c1">//while there is an unvisited polygon that is on the requestedState or is intersecting the splitting plane</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">foundUnvisited</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;</span> <span class="n">splitMesh</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;</span> <span class="n">nonSplitMesh</span><span class="p">;</span>
+
+            <span class="c1">//------------------------ BFS search polygons that are in the same island -------------------------------------------//</span>
+            <span class="c1">//------------------------ and  divide them into a list of split and nonsplit polygons--------------------------//</span>
+            <span class="n">initialFound</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">BFSFindRequestedAndIntersecting</span><span class="p">(</span>
+                <span class="n">initialFound</span><span class="p">,</span>
+                <span class="n">splitMesh</span><span class="p">,</span>
+                <span class="n">nonSplitMesh</span><span class="p">,</span> <span class="n">requestedState</span><span class="p">);</span>
+
+
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="o">&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span> <span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&gt;</span> <span class="n">holeIslands</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&gt;</span> <span class="n">intersectionIslands</span><span class="p">;</span>
+
+            <span class="c1">//----------------------------------- Detect multiple holes in mesh  --------------------------------------------------//</span>
+
+            <span class="n">DetectIntersectionIsland</span><span class="p">(</span><span class="n">splitMesh</span><span class="p">,</span> <span class="n">intersectionIslands</span><span class="p">);</span>
+
+            <span class="c1">//----------------------------------- Filter Edges in polygon in order to fit sliced mesh --------------------------------------------------//</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">IntersectionEdgeInfo</span><span class="o">&gt;</span> <span class="n">generatedIntersectionEdges</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">indexCurrent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">indexToSee</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="cm">/*if (shouldDebug)</span>
+<span class="cm">            {</span>
+<span class="cm">                DebugBreak();</span>
+<span class="cm">            }*/</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&amp;</span> <span class="nl">intersectionIsland</span> <span class="p">:</span> <span class="n">intersectionIslands</span><span class="p">)</span>
+            <span class="p">{</span>
+
+                <span class="k">for</span> <span class="p">(</span><span class="n">SplittablePolygonPtr</span> <span class="nl">islandPolygon</span> <span class="p">:</span> <span class="n">intersectionIsland</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">SplitPolygon</span><span class="p">(</span><span class="n">islandPolygon</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">,</span> <span class="n">requestedState</span><span class="p">,</span> <span class="n">generatedIntersectionEdges</span><span class="p">,</span> <span class="n">indexCurrent</span> <span class="o">==</span> <span class="n">indexToSee</span> <span class="o">&amp;&amp;</span> <span class="n">shouldDebug</span><span class="p">);</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">indexCurrent</span> <span class="o">==</span> <span class="n">indexToSee</span> <span class="o">&amp;&amp;</span> <span class="n">shouldDebug</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;indexCurrent {} &quot;</span><span class="p">,</span> <span class="n">indexCurrent</span><span class="p">);</span>
+                        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;generatedIntersectionEdges {} &quot;</span><span class="p">,</span> <span class="n">generatedIntersectionEdges</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+                    <span class="p">}</span>
+
+
+                    <span class="n">indexCurrent</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localNormal</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">planeNormal</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">SplittablePolygonPtr</span> <span class="n">intersectionPolygon</span> <span class="o">=</span> <span class="n">CreateIntersectionPolygon</span><span class="p">(</span><span class="n">generatedIntersectionEdges</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">localNormal</span><span class="p">));</span>
+            <span class="n">intersectionPolygon</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">intersectionPolygon</span><span class="o">-&gt;</span><span class="n">ResetEdgeVisited</span><span class="p">();</span>
+
+            <span class="kt">float</span> <span class="n">max</span> <span class="o">=</span> <span class="n">generatedIntersectionEdges</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">intersectionInfo</span> <span class="p">:</span> <span class="n">generatedIntersectionEdges</span><span class="p">)</span>
+            <span class="p">{</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">shouldDebug</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="kt">float</span> <span class="n">interpolant</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="n">i</span> <span class="o">/</span> <span class="n">max</span><span class="p">;</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">color</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">interpolant</span><span class="p">;</span>
+                    <span class="c1">//log::debug(&quot;generatedIntersectionEdges {} &quot;, generatedIntersectionEdges.size());</span>
+                   <span class="cm">/* math::vec3 first = debugHelper.DEBUG_transform * math::vec4(intersectionInfo.first, 1);</span>
+<span class="cm">                    math::vec3 second = debugHelper.DEBUG_transform * math::vec4(intersectionInfo.second, 1);*/</span>
+
+                    <span class="cm">/*debug::user_projectDrawLine(first + (second-first) * 0.05f, second + (first - second) * 0.05f, math::color(color.x,color.y,color.z,1.0f),</span>
+<span class="cm">                        math::linearRand(8.0f,12.0f), FLT_MAX, true);*/</span>
+                <span class="p">}</span>
+
+                <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">//---------------------------------- Add intersecting and nonsplit to primitive mesh ---------------------------------//</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span> <span class="n">SplittablePolygonPtr</span><span class="o">&gt;</span> <span class="n">resultPolygons</span><span class="p">;</span>
+
+            <span class="n">resultPolygons</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">resultPolygons</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+                <span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">splitMesh</span><span class="p">.</span><span class="n">begin</span><span class="p">()),</span> <span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">splitMesh</span><span class="p">.</span><span class="n">end</span><span class="p">()));</span>
+
+            <span class="n">resultPolygons</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">resultPolygons</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+                <span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">nonSplitMesh</span><span class="p">.</span><span class="n">begin</span><span class="p">()),</span> <span class="n">std</span><span class="o">::</span><span class="n">make_move_iterator</span><span class="p">(</span><span class="n">nonSplitMesh</span><span class="p">.</span><span class="n">end</span><span class="p">()));</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">generatedIntersectionEdges</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">resultPolygons</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">intersectionPolygon</span><span class="p">));</span>
+            <span class="p">}</span>
+
+
+            <span class="n">foundUnvisited</span> <span class="o">=</span>
+                <span class="n">FindFirstIntersectingOrRequestedState</span>
+                <span class="p">(</span><span class="n">initialFound</span><span class="p">,</span> <span class="n">requestedState</span><span class="p">,</span> <span class="n">polygonsToSplit</span><span class="p">);</span>
+
+            <span class="n">resultingIslands</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">resultPolygons</span><span class="p">));</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">MeshSplitter</span><span class="o">::</span><span class="n">CopyPolygons</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&amp;</span> <span class="n">originalSplitMesh</span><span class="p">,</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&amp;</span> <span class="n">copySplitMesh</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        <span class="c1">//----copy all edges of all polygons and connect them to each edge that is within the same polygon--//</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">SplittablePolygonPtr</span> <span class="nl">originalPolygon</span> <span class="p">:</span> <span class="n">originalSplitMesh</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">originalPolygon</span><span class="o">-&gt;</span><span class="n">ResetEdgeVisited</span><span class="p">();</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">copyPolygonEdges</span><span class="p">;</span>
+            <span class="n">CopyEdgeVector</span><span class="p">(</span><span class="n">originalPolygon</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">(),</span> <span class="n">copyPolygonEdges</span><span class="p">);</span>
+
+            <span class="k">auto</span> <span class="n">copyPolygon</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">SplittablePolygon</span><span class="o">&gt;</span><span class="p">(</span><span class="n">copyPolygonEdges</span><span class="p">,</span> <span class="n">originalPolygon</span><span class="o">-&gt;</span><span class="n">localNormal</span><span class="p">);</span>
+            <span class="n">copyPolygon</span><span class="o">-&gt;</span><span class="n">AssignEdgeOwnership</span><span class="p">();</span>
+            <span class="n">copySplitMesh</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">copyPolygon</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//----use shadow edge to connect boundary edges between copied polygons--//</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">SplittablePolygonPtr</span> <span class="nl">originalPolygon</span> <span class="p">:</span> <span class="n">originalSplitMesh</span><span class="p">)</span>
+        <span class="p">{</span>
+
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">originalEdge</span> <span class="p">:</span> <span class="n">originalPolygon</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">&amp;&amp;</span> <span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">auto</span> <span class="n">shadowEdge</span> <span class="o">=</span> <span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">shadowEdge</span><span class="p">;</span>
+                    <span class="k">auto</span> <span class="n">shadowEdgePairing</span> <span class="o">=</span> <span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">shadowEdge</span><span class="p">;</span>
+
+                    <span class="n">shadowEdge</span><span class="o">-&gt;</span><span class="n">setPairing</span><span class="p">(</span><span class="n">shadowEdgePairing</span><span class="p">);</span>
+                <span class="p">}</span>
+
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">//----nullify shadow edge for each edge in the original polygon list--//</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">SplittablePolygonPtr</span> <span class="nl">originalPolygon</span> <span class="p">:</span> <span class="n">originalSplitMesh</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">originalPolygon</span><span class="o">-&gt;</span><span class="n">ResetEdgeVisited</span><span class="p">();</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">originalEdge</span> <span class="p">:</span> <span class="n">originalPolygon</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">shadowEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">MeshSplitter</span><span class="o">::</span><span class="n">CopyEdgeVector</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">originalHalfEdgeList</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">resultCopyList</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">meshHalfEdgePtr</span> <span class="nl">originalEdge</span> <span class="p">:</span> <span class="n">originalHalfEdgeList</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//copy polygon and place on shadow edge</span>
+            <span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">cloneOnShadowEdge</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="c1">//BFS connect with clone edge</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">unvisitedOriginalHalfEdgeList</span><span class="p">;</span>
+        <span class="n">unvisitedOriginalHalfEdgeList</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">originalHalfEdgeList</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">unvisitedOriginalHalfEdgeList</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">originalEdge</span> <span class="o">=</span> <span class="n">unvisitedOriginalHalfEdgeList</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+            <span class="n">unvisitedOriginalHalfEdgeList</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">isVisited</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+                <span class="k">auto</span> <span class="p">[</span><span class="n">original1</span><span class="p">,</span> <span class="n">original2</span><span class="p">,</span> <span class="n">original3</span><span class="p">]</span> <span class="o">=</span> <span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">getTriangle</span><span class="p">();</span>
+                <span class="k">auto</span> <span class="p">[</span><span class="n">shadow1</span><span class="p">,</span> <span class="n">shadow2</span><span class="p">,</span> <span class="n">shadow3</span><span class="p">]</span> <span class="o">=</span> <span class="n">originalEdge</span><span class="o">-&gt;</span><span class="n">getShadowTriangle</span><span class="p">();</span>
+
+                <span class="n">MeshHalfEdge</span><span class="o">::</span><span class="n">connectIntoTriangle</span><span class="p">(</span><span class="n">shadow1</span><span class="p">,</span> <span class="n">shadow2</span><span class="p">,</span> <span class="n">shadow3</span><span class="p">);</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">original1</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">shadow1</span><span class="o">-&gt;</span><span class="n">setPairing</span><span class="p">(</span><span class="n">original1</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">shadowEdge</span><span class="p">);</span>
+                    <span class="n">unvisitedOriginalHalfEdgeList</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">original1</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">original2</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">shadow2</span><span class="o">-&gt;</span><span class="n">setPairing</span><span class="p">(</span><span class="n">original2</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">shadowEdge</span><span class="p">);</span>
+                    <span class="n">unvisitedOriginalHalfEdgeList</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">original2</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">original3</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">shadow3</span><span class="o">-&gt;</span><span class="n">setPairing</span><span class="p">(</span><span class="n">original3</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">shadowEdge</span><span class="p">);</span>
+                    <span class="n">unvisitedOriginalHalfEdgeList</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">original3</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="n">shadow1</span><span class="o">-&gt;</span><span class="n">populateVectorWithTriangle</span><span class="p">(</span><span class="n">resultCopyList</span><span class="p">);</span>
+
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">MeshSplitter</span><span class="o">::</span><span class="n">BFSFindRequestedAndIntersecting</span><span class="p">(</span><span class="n">SplittablePolygonPtr</span><span class="o">&amp;</span> <span class="n">intialPolygon</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&amp;</span> <span class="n">originalSplitMesh</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&amp;</span> <span class="n">originalNonSplitMesh</span><span class="p">,</span> <span class="n">SplitState</span> <span class="n">requestedState</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;</span> <span class="n">unvisitedPolygonQueue</span><span class="p">;</span>
+        <span class="n">unvisitedPolygonQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">intialPolygon</span><span class="p">);</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">unvisitedPolygonQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">polygonPtr</span> <span class="o">=</span> <span class="n">unvisitedPolygonQueue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+            <span class="n">unvisitedPolygonQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+
+            <span class="c1">//assert(polygonPtr);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">polygonPtr</span><span class="o">-&gt;</span><span class="n">isVisited</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">polygonPtr</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+                <span class="k">auto</span> <span class="n">polygonSplitState</span> <span class="o">=</span> <span class="n">polygonPtr</span><span class="o">-&gt;</span><span class="n">GetPolygonSplitState</span><span class="p">();</span>
+
+                <span class="kt">bool</span> <span class="n">polygonAtRequestedState</span> <span class="o">=</span> <span class="n">polygonSplitState</span> <span class="o">==</span> <span class="n">requestedState</span><span class="p">;</span>
+                <span class="kt">bool</span> <span class="n">polygonAtIntersection</span> <span class="o">=</span> <span class="n">polygonSplitState</span> <span class="o">==</span> <span class="n">SplitState</span><span class="o">::</span><span class="n">Split</span><span class="p">;</span>
+
+                <span class="c1">//place polygon in correct list</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">polygonAtRequestedState</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">originalNonSplitMesh</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">polygonPtr</span><span class="p">);</span>
+                    <span class="c1">//debugHelper.nonIntersectionPolygons.push_back(polygonPtr-&gt;localCentroid);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">polygonAtIntersection</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">originalSplitMesh</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">polygonPtr</span><span class="p">);</span>
+                    <span class="c1">//debugHelper.intersectionsPolygons.push_back(polygonPtr-&gt;localCentroid);</span>
+                <span class="p">}</span>
+
+                <span class="c1">//only put it on the unvisited list if polygon is at requested state or is intersecting the splitting plane</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">polygonAtIntersection</span> <span class="o">||</span> <span class="n">polygonAtRequestedState</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">polygonPtr</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">())</span>
+                    <span class="p">{</span>
+                        <span class="kt">bool</span> <span class="n">isBoundary</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">;</span>
+                        <span class="kt">bool</span> <span class="n">hasPairing</span> <span class="o">=</span> <span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">)</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">isBoundary</span> <span class="o">&amp;&amp;</span> <span class="n">hasPairing</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="k">auto</span> <span class="n">newPolygon</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">owner</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+                            <span class="c1">//assert(newPolygon);</span>
+                            <span class="n">unvisitedPolygonQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">newPolygon</span><span class="p">);</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">MeshSplitter</span><span class="o">::</span><span class="n">DetectIntersectionIsland</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&amp;</span> <span class="n">splitPolygons</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SplittablePolygonPtr</span><span class="o">&gt;&gt;&amp;</span> <span class="n">intersectionIslands</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">pol</span> <span class="p">:</span> <span class="n">splitPolygons</span><span class="p">)</span> <span class="p">{</span> <span class="n">pol</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="c1">//find first intersection polygon</span>
+        <span class="n">SplittablePolygonPtr</span> <span class="n">initialPolygon</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">foundUnvisited</span> <span class="o">=</span> <span class="n">FindFirstUnivistedIntersectionPolygon</span><span class="p">(</span><span class="n">splitPolygons</span><span class="p">,</span> <span class="n">initialPolygon</span><span class="p">);</span>
+
+        <span class="c1">//while can find intersection polygon</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">foundUnvisited</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">DEBUG_ONLY_polygonPositions</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span> <span class="n">SplittablePolygonPtr</span><span class="o">&gt;</span> <span class="n">intersectionIsland</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span> <span class="n">SplittablePolygonPtr</span><span class="o">&gt;</span> <span class="n">unvisitedPolygons</span><span class="p">;</span>
+            <span class="n">unvisitedPolygons</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">initialPolygon</span><span class="p">);</span>
+
+            <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">unvisitedPolygons</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">polygon</span> <span class="o">=</span> <span class="n">unvisitedPolygons</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+                <span class="n">unvisitedPolygons</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">polygon</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">&amp;&amp;</span> <span class="n">polygon</span><span class="o">-&gt;</span><span class="n">GetPolygonSplitState</span><span class="p">()</span> <span class="o">==</span> <span class="n">SplitState</span><span class="o">::</span><span class="n">Split</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">polygon</span><span class="o">-&gt;</span><span class="n">isVisited</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">intersectionIsland</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">polygon</span><span class="p">);</span>
+                    <span class="n">DEBUG_ONLY_polygonPositions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">polygon</span><span class="o">-&gt;</span><span class="n">localCentroid</span><span class="p">);</span>
+
+                    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">edge</span> <span class="p">:</span> <span class="n">polygon</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">())</span>
+                    <span class="p">{</span>
+                        <span class="k">auto</span> <span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">;</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">&amp;&amp;</span> <span class="n">pairingEdge</span><span class="p">)</span>
+                        <span class="p">{</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="k">auto</span> <span class="n">pairingPolygon</span> <span class="o">=</span> <span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">owner</span><span class="p">.</span><span class="n">lock</span><span class="p">())</span>
+                            <span class="p">{</span>
+                                <span class="n">unvisitedPolygons</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">pairingPolygon</span><span class="p">);</span>
+                            <span class="p">}</span>
+
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">intersectionIslands</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">intersectionIsland</span><span class="p">);</span>
+            <span class="c1">//debugHelper.intersectionIslands.push_back(DEBUG_ONLY_polygonPositions);</span>
+
+            <span class="n">foundUnvisited</span> <span class="o">=</span> <span class="n">FindFirstUnivistedIntersectionPolygon</span><span class="p">(</span><span class="n">splitPolygons</span><span class="p">,</span> <span class="n">initialPolygon</span><span class="p">);</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">MeshSplitter</span><span class="o">::</span><span class="n">SplitPolygon</span><span class="p">(</span><span class="n">SplittablePolygonPtr</span> <span class="n">splitPolygon</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">cutPosition</span><span class="p">,</span>
+        <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="n">SplitState</span> <span class="n">requestedState</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">IntersectionEdgeInfo</span><span class="o">&gt;&amp;</span> <span class="n">generatedIntersectionEdges</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">shouldDebug</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">IntersectingPolygonOrganizer</span> <span class="n">polygonOrganizer</span><span class="p">;</span>
+        <span class="n">polygonOrganizer</span><span class="p">.</span><span class="n">SplitPolygon</span><span class="p">(</span><span class="n">splitPolygon</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">cutPosition</span><span class="p">,</span> <span class="n">cutNormal</span><span class="p">,</span> <span class="n">requestedState</span><span class="p">,</span> <span class="n">generatedIntersectionEdges</span><span class="p">,</span><span class="n">shouldDebug</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">MeshSplitter</span><span class="o">::</span><span class="n">DEBUG_DrawPolygonData</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">polygon</span> <span class="p">:</span> <span class="n">meshPolygons</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">polygon</span><span class="o">-&gt;</span><span class="n">DEBUG_drawEdgeBoundaryInset</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_splitter.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

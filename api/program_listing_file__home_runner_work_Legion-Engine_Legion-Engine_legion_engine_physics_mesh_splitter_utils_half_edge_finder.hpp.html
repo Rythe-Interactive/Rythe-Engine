@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File half_edge_finder.hpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File half_edge_finder.hpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-half-edge-finder-hpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-half-edge-finder-hpp"></span><h1>Program Listing for File half_edge_finder.hpp<a class="headerlink" href="#program-listing-for-file-half-edge-finder-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_half_edge_finder.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-half-edge-finder-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/half_edge_finder.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/mesh_splitter_typedefs.hpp&gt;</span><span class="cp"></span>
+
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">HalfEdgeFinder</span>
+    <span class="p">{</span>
+        <span class="n">meshHalfEdgePtr</span> <span class="n">currentPtr</span><span class="p">;</span>
+
+        <span class="kt">void</span> <span class="nf">FindHalfEdge</span>
+        <span class="p">(</span><span class="n">mesh</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">meshHalfEdges</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">VertexIndexToHalfEdgePtr</span> <span class="n">indexToEdgeMap</span><span class="p">;</span>
+
+            <span class="c1">//[1] find the unique vertices of a mesh. We are currently keeping a list of found</span>
+            <span class="c1">//vertices and comparing them to our current vertices</span>
+
+            <span class="c1">// holds the &quot;pointer&quot; to the unique indices inside mesh-&gt;Indices</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">uniqueIndex</span><span class="p">;</span>
+
+            <span class="c1">// stores the unique vertices of the mesh</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">uniquePositions</span><span class="p">;</span>
+
+            <span class="kt">int</span> <span class="n">uniqueIndexCount</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="n">vertices</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">;</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">indices</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">position</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+
+                <span class="kt">bool</span> <span class="n">isVectorSeen</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+                <span class="c1">//have we found this vector before?</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">uniquePositions</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">transformedPos</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                    <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">uniqueTransformedPos</span> <span class="o">=</span> <span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">uniquePositions</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="mi">1</span><span class="p">);</span>
+
+                    <span class="kt">float</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">distance</span><span class="p">(</span><span class="n">uniqueTransformedPos</span><span class="p">,</span> <span class="n">transformedPos</span><span class="p">);</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">epsilonEqual</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()))</span>
+                    <span class="p">{</span>
+                        <span class="c1">//we have seen this vector before</span>
+                        <span class="n">uniqueIndex</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
+                        <span class="n">isVectorSeen</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isVectorSeen</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="c1">//we have not seen this position before,add it</span>
+                    <span class="n">uniqueIndexCount</span><span class="o">++</span><span class="p">;</span>
+                    <span class="n">uniqueIndex</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">uniqueIndexCount</span><span class="p">);</span>
+
+                    <span class="n">uniquePositions</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">position</span><span class="p">);</span>
+
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+
+            <span class="c1">//[2] use the unique vertices of a mesh to generate half-edge data structure</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">indices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">firstVertIndex</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+                <span class="kt">int</span> <span class="n">secondVertIndex</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="kt">int</span> <span class="n">thirdVertIndex</span> <span class="o">=</span> <span class="n">indices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+
+                <span class="kt">int</span> <span class="n">uniqueFirstIndex</span> <span class="o">=</span> <span class="n">uniqueIndex</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">firstVertIndex</span><span class="p">);</span>
+                <span class="kt">int</span> <span class="n">uniqueSecondIndex</span> <span class="o">=</span> <span class="n">uniqueIndex</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">secondVertIndex</span><span class="p">);</span>
+                <span class="kt">int</span> <span class="n">uniqueThirdIndex</span> <span class="o">=</span> <span class="n">uniqueIndex</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">thirdVertIndex</span><span class="p">);</span>
+
+                <span class="c1">//-----------------instantiate first half edge---------------------//</span>
+                <span class="c1">//MeshHalfEdge firstEdge = std::make</span>
+                <span class="k">auto</span> <span class="n">firstEdge</span> <span class="o">=</span> <span class="n">InstantiateEdge</span><span class="p">(</span><span class="n">firstVertIndex</span>
+                    <span class="p">,</span> <span class="n">edgeVertexIndexPair</span><span class="p">(</span><span class="n">uniqueFirstIndex</span><span class="p">,</span> <span class="n">uniqueSecondIndex</span><span class="p">),</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">meshHalfEdges</span><span class="p">,</span> <span class="n">indexToEdgeMap</span><span class="p">);</span>
+
+                <span class="c1">//-----------------instantiate second half edge---------------------//</span>
+                <span class="k">auto</span> <span class="n">secondEdge</span> <span class="o">=</span> <span class="n">InstantiateEdge</span><span class="p">(</span><span class="n">secondVertIndex</span>
+                    <span class="p">,</span> <span class="n">edgeVertexIndexPair</span><span class="p">(</span><span class="n">uniqueSecondIndex</span><span class="p">,</span> <span class="n">uniqueThirdIndex</span><span class="p">),</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">meshHalfEdges</span><span class="p">,</span> <span class="n">indexToEdgeMap</span><span class="p">);</span>
+
+                <span class="c1">//-----------------instantiate third half edge---------------------//</span>
+                <span class="k">auto</span> <span class="n">thirdEdge</span> <span class="o">=</span> <span class="n">InstantiateEdge</span><span class="p">(</span><span class="n">thirdVertIndex</span>
+                    <span class="p">,</span> <span class="n">edgeVertexIndexPair</span><span class="p">(</span><span class="n">uniqueThirdIndex</span><span class="p">,</span> <span class="n">uniqueFirstIndex</span><span class="p">),</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">meshHalfEdges</span><span class="p">,</span> <span class="n">indexToEdgeMap</span><span class="p">);</span>
+
+
+                <span class="n">firstEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span> <span class="o">=</span> <span class="n">secondEdge</span><span class="p">;</span>
+                <span class="n">secondEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span> <span class="o">=</span> <span class="n">thirdEdge</span><span class="p">;</span>
+                <span class="n">thirdEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span> <span class="o">=</span> <span class="n">firstEdge</span><span class="p">;</span>
+
+
+            <span class="p">}</span>
+
+            <span class="c1">//[3] connect each edge with its pair based on index</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Created {} edges &quot;</span><span class="p">,</span> <span class="n">meshHalfEdges</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">indexEdgePair</span> <span class="p">:</span> <span class="n">indexToEdgeMap</span><span class="p">)</span>
+            <span class="p">{</span>
+
+                <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="n">indexEdgePair</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+                <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">indexEdgePair</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+
+                <span class="c1">//for a Halfedge paired with vertices with an index of (u,v),</span>
+                <span class="c1">//its pair would be a HalfEdge paired with vertices with an index of (v,u)</span>
+                <span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">indexToEdgeMap</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">edgeVertexIndexPair</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">));</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">indexToEdgeMap</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+                <span class="p">{</span>
+
+                    <span class="k">auto</span>  <span class="n">edgePair</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+                    <span class="k">auto</span>  <span class="n">otherEdge</span> <span class="o">=</span> <span class="n">indexEdgePair</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+
+                    <span class="n">edgePair</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">otherEdge</span><span class="p">;</span>
+                    <span class="n">otherEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">edgePair</span><span class="p">;</span>
+
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">currentPtr</span> <span class="o">=</span> <span class="n">meshHalfEdges</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+
+        <span class="p">}</span>
+
+        <span class="n">meshHalfEdgePtr</span> <span class="nf">InstantiateEdge</span><span class="p">(</span><span class="kt">int</span> <span class="n">vertexIndex</span>
+            <span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">uniqueIndexPair</span>
+            <span class="p">,</span> <span class="k">const</span> <span class="n">mesh</span><span class="o">&amp;</span> <span class="n">mesh</span>
+            <span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;&amp;</span> <span class="n">edgePtrs</span>
+            <span class="p">,</span> <span class="n">VertexIndexToHalfEdgePtr</span><span class="o">&amp;</span> <span class="n">indexToEdgeMap</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">firstEdge</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MeshHalfEdge</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">vertexIndex</span><span class="p">],</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uvs</span><span class="p">[</span><span class="n">vertexIndex</span><span class="p">]);</span>
+
+            <span class="k">auto</span> <span class="n">edgeToAdd</span> <span class="o">=</span> <span class="n">UniqueAdd</span><span class="p">(</span><span class="n">firstEdge</span><span class="p">,</span> <span class="n">indexToEdgeMap</span><span class="p">,</span> <span class="n">uniqueIndexPair</span><span class="p">);</span>
+
+            <span class="n">edgePtrs</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">edgeToAdd</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">edgeToAdd</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">meshHalfEdgePtr</span> <span class="nf">UniqueAdd</span><span class="p">(</span><span class="n">meshHalfEdgePtr</span> <span class="n">newEdge</span><span class="p">,</span> <span class="n">VertexIndexToHalfEdgePtr</span><span class="o">&amp;</span> <span class="n">indexToEdgeMap</span><span class="p">,</span> <span class="n">edgeVertexIndexPair</span> <span class="n">uniqueIndexPair</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">iter</span> <span class="o">=</span> <span class="n">indexToEdgeMap</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">uniqueIndexPair</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">iter</span> <span class="o">!=</span> <span class="n">indexToEdgeMap</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span> <span class="n">pair</span> <span class="o">=</span> <span class="n">uniqueIndexPair</span><span class="p">;</span>
+            <span class="n">indexToEdgeMap</span><span class="p">.</span><span class="n">insert</span><span class="p">({</span> <span class="n">pair</span> <span class="p">,</span><span class="n">newEdge</span> <span class="p">});</span>
+
+            <span class="c1">//vertexIndexToHalfEdge.Add(key, value);</span>
+            <span class="k">return</span> <span class="n">newEdge</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_half_edge_finder.hpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1material__data:
+
+Struct material_data
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::material_data
+   :members:
+   :protected-members:
+   :undoc-members:

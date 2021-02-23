@@ -64,6 +64,19 @@
 <span id="_CPPv3N6legion7physics16physics_manifoldE"></span><span id="_CPPv2N6legion7physics16physics_manifoldE"></span><span id="legion::physics::physics_manifold"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold"></span><em class="property">struct </em><code class="sig-prename descclassname">legion::physics<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">physics_manifold</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifoldE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>contains the necessary information to detect and resolve a collision </p>
 <div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion7physics16physics_manifold13DEBUG_checkIDENSt6stringENSt6stringE">
+<span id="_CPPv3NK6legion7physics16physics_manifold13DEBUG_checkIDENSt6stringENSt6stringE"></span><span id="_CPPv2NK6legion7physics16physics_manifold13DEBUG_checkIDENSt6stringENSt6stringE"></span><span id="legion::physics::physics_manifold::DEBUG_checkID__ss.ssC"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a53811e03c3ce2849bbaa714b8139bce8"></span><em class="property">inline</em> bool <code class="sig-name descname">DEBUG_checkID</code><span class="sig-paren">(</span>std::string <em>firstID</em>, std::string <em>secondID</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion7physics16physics_manifold13DEBUG_checkIDENSt6stringENSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4NK6legion7physics16physics_manifold9GetPairIDERNSt6stringERNSt6stringE">
+<span id="_CPPv3NK6legion7physics16physics_manifold9GetPairIDERNSt6stringERNSt6stringE"></span><span id="_CPPv2NK6legion7physics16physics_manifold9GetPairIDERNSt6stringERNSt6stringE"></span><span id="legion::physics::physics_manifold::GetPairID__ssR.ssRC"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1aa1579994ecf98f5f9687ee7e8b6051be"></span><em class="property">inline</em> void <code class="sig-name descname">GetPairID</code><span class="sig-paren">(</span>std::string &amp;<em>str1</em>, std::string &amp;<em>str2</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK6legion7physics16physics_manifold9GetPairIDERNSt6stringERNSt6stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="cpp var">
 <dt id="_CPPv4N6legion7physics16physics_manifold8contactsE">
@@ -82,27 +95,47 @@
 
 <dl class="cpp var">
 <dt id="_CPPv4N6legion7physics16physics_manifold9colliderAE">
-<span id="_CPPv3N6legion7physics16physics_manifold9colliderAE"></span><span id="_CPPv2N6legion7physics16physics_manifold9colliderAE"></span><span id="legion::physics::physics_manifold::colliderA__std::shared_ptr:PhysicsCollider:"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a4bdb546a64b421b26f7b2885106e9d77"></span>std::shared_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_physics_collider.html#_CPPv4N6legion7physics15PhysicsColliderE" title="legion::physics::PhysicsCollider">PhysicsCollider</a>&gt; <code class="sig-name descname">colliderA</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold9colliderAE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion7physics16physics_manifold9colliderAE"></span><span id="_CPPv2N6legion7physics16physics_manifold9colliderAE"></span><span id="legion::physics::physics_manifold::colliderA__PhysicsColliderP"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a97e5e13e040ee7ab9e1838c19d6cae5a"></span><a class="reference internal" href="classlegion_1_1physics_1_1_physics_collider.html#_CPPv4N6legion7physics15PhysicsColliderE" title="legion::physics::PhysicsCollider">PhysicsCollider</a> *<code class="sig-name descname">colliderA</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold9colliderAE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
 <dt id="_CPPv4N6legion7physics16physics_manifold9colliderBE">
-<span id="_CPPv3N6legion7physics16physics_manifold9colliderBE"></span><span id="_CPPv2N6legion7physics16physics_manifold9colliderBE"></span><span id="legion::physics::physics_manifold::colliderB__std::shared_ptr:PhysicsCollider:"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1ac7604bd559ce3e2e0031369dd6582a6b"></span>std::shared_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_physics_collider.html#_CPPv4N6legion7physics15PhysicsColliderE" title="legion::physics::PhysicsCollider">PhysicsCollider</a>&gt; <code class="sig-name descname">colliderB</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold9colliderBE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion7physics16physics_manifold9colliderBE"></span><span id="_CPPv2N6legion7physics16physics_manifold9colliderBE"></span><span id="legion::physics::physics_manifold::colliderB__PhysicsColliderP"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a52b2fbb58ad513ed2f75969279de9f22"></span><a class="reference internal" href="classlegion_1_1physics_1_1_physics_collider.html#_CPPv4N6legion7physics15PhysicsColliderE" title="legion::physics::PhysicsCollider">PhysicsCollider</a> *<code class="sig-name descname">colliderB</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold9colliderBE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics16physics_manifold7entityAE">
+<span id="_CPPv3N6legion7physics16physics_manifold7entityAE"></span><span id="_CPPv2N6legion7physics16physics_manifold7entityAE"></span><span id="legion::physics::physics_manifold::entityA__ecs::entity_handle"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a22f46abaee6414f14ec3ff4348819a4a"></span>ecs::entity_handle <code class="sig-name descname">entityA</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold7entityAE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics16physics_manifold7entityBE">
+<span id="_CPPv3N6legion7physics16physics_manifold7entityBE"></span><span id="_CPPv2N6legion7physics16physics_manifold7entityBE"></span><span id="legion::physics::physics_manifold::entityB__ecs::entity_handle"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1aedc50839b41ae6d1e521c9115b06da63"></span>ecs::entity_handle <code class="sig-name descname">entityB</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold7entityBE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
 <dt id="_CPPv4N6legion7physics16physics_manifold12physicsCompAE">
-<span id="_CPPv3N6legion7physics16physics_manifold12physicsCompAE"></span><span id="_CPPv2N6legion7physics16physics_manifold12physicsCompAE"></span><span id="legion::physics::physics_manifold::physicsCompA__ecs::component_handle:physics::physicsComponent:"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1ac42078275edbe862d8f2a0f8f5a02c31"></span>ecs::component_handle&lt;physics::<a class="reference internal" href="structlegion_1_1physics_1_1physics_component.html#_CPPv4N6legion7physics16physicsComponentE" title="legion::physics::physicsComponent">physicsComponent</a>&gt; <code class="sig-name descname">physicsCompA</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold12physicsCompAE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion7physics16physics_manifold12physicsCompAE"></span><span id="_CPPv2N6legion7physics16physics_manifold12physicsCompAE"></span><span id="legion::physics::physics_manifold::physicsCompA__physics::physicsComponentP"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a07778de517c0f6a94c1d1ce42bc4c60c"></span>physics::<a class="reference internal" href="structlegion_1_1physics_1_1physics_component.html#_CPPv4N6legion7physics16physicsComponentE" title="legion::physics::physicsComponent">physicsComponent</a> *<code class="sig-name descname">physicsCompA</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold12physicsCompAE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
 <dt id="_CPPv4N6legion7physics16physics_manifold12physicsCompBE">
-<span id="_CPPv3N6legion7physics16physics_manifold12physicsCompBE"></span><span id="_CPPv2N6legion7physics16physics_manifold12physicsCompBE"></span><span id="legion::physics::physics_manifold::physicsCompB__ecs::component_handle:physics::physicsComponent:"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a0fec6275fc57d2bc6af3937991fdcf52"></span>ecs::component_handle&lt;physics::<a class="reference internal" href="structlegion_1_1physics_1_1physics_component.html#_CPPv4N6legion7physics16physicsComponentE" title="legion::physics::physicsComponent">physicsComponent</a>&gt; <code class="sig-name descname">physicsCompB</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold12physicsCompBE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion7physics16physics_manifold12physicsCompBE"></span><span id="_CPPv2N6legion7physics16physics_manifold12physicsCompBE"></span><span id="legion::physics::physics_manifold::physicsCompB__physics::physicsComponentP"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1ab8c04de7c4357124e5eaf11ee5bd0d4a"></span>physics::<a class="reference internal" href="structlegion_1_1physics_1_1physics_component.html#_CPPv4N6legion7physics16physicsComponentE" title="legion::physics::physicsComponent">physicsComponent</a> *<code class="sig-name descname">physicsCompB</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold12physicsCompBE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics16physics_manifold10rigidbodyAE">
+<span id="_CPPv3N6legion7physics16physics_manifold10rigidbodyAE"></span><span id="_CPPv2N6legion7physics16physics_manifold10rigidbodyAE"></span><span id="legion::physics::physics_manifold::rigidbodyA__physics::rigidbodyP"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a1f069075cf99153ec5cb3464eeb9b7c7"></span>physics::<a class="reference internal" href="structlegion_1_1physics_1_1rigidbody.html#_CPPv4N6legion7physics9rigidbodyE" title="legion::physics::rigidbody">rigidbody</a> *<code class="sig-name descname">rigidbodyA</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold10rigidbodyAE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt id="_CPPv4N6legion7physics16physics_manifold10rigidbodyBE">
+<span id="_CPPv3N6legion7physics16physics_manifold10rigidbodyBE"></span><span id="_CPPv2N6legion7physics16physics_manifold10rigidbodyBE"></span><span id="legion::physics::physics_manifold::rigidbodyB__physics::rigidbodyP"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a3cb42ceb5b1bf3a0a89eea42e8a68356"></span>physics::<a class="reference internal" href="structlegion_1_1physics_1_1rigidbody.html#_CPPv4N6legion7physics9rigidbodyE" title="legion::physics::rigidbody">rigidbody</a> *<code class="sig-name descname">rigidbodyB</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold10rigidbodyBE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">
 <dt id="_CPPv4N6legion7physics16physics_manifold22penetrationInformationE">
-<span id="_CPPv3N6legion7physics16physics_manifold22penetrationInformationE"></span><span id="_CPPv2N6legion7physics16physics_manifold22penetrationInformationE"></span><span id="legion::physics::physics_manifold::penetrationInformation__std::shared_ptr:PenetrationQuery:"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a40005d90ef9e22fbb0638cb56565114a"></span>std::shared_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_penetration_query.html#_CPPv4N6legion7physics16PenetrationQueryE" title="legion::physics::PenetrationQuery">PenetrationQuery</a>&gt; <code class="sig-name descname">penetrationInformation</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold22penetrationInformationE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion7physics16physics_manifold22penetrationInformationE"></span><span id="_CPPv2N6legion7physics16physics_manifold22penetrationInformationE"></span><span id="legion::physics::physics_manifold::penetrationInformation__std::unique_ptr:PenetrationQuery:"></span><span class="target" id="structlegion_1_1physics_1_1physics__manifold_1a180dfb3a45aa4614a6a9e51470ea98ad"></span>std::unique_ptr&lt;<a class="reference internal" href="classlegion_1_1physics_1_1_penetration_query.html#_CPPv4N6legion7physics16PenetrationQueryE" title="legion::physics::PenetrationQuery">PenetrationQuery</a>&gt; <code class="sig-name descname">penetrationInformation</code><a class="headerlink" href="#_CPPv4N6legion7physics16physics_manifold22penetrationInformationE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp var">

@@ -113,14 +113,9 @@
             <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="n">texture_handle</span> <span class="n">textures</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">colorAttachment</span><span class="p">),</span> <span class="n">m_swapTexture</span> <span class="p">};</span>
+        <span class="n">texture_handle</span> <span class="n">texture</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">colorAttachment</span><span class="p">);</span>
 
-        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">attachmentSize</span> <span class="o">=</span> <span class="n">textures</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">get_texture</span><span class="p">().</span><span class="n">size</span><span class="p">();</span>
-        <span class="k">auto</span> <span class="n">tex</span> <span class="o">=</span> <span class="n">m_swapTexture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">();</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">attachmentSize</span> <span class="o">!=</span> <span class="n">tex</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
-            <span class="n">tex</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">attachmentSize</span><span class="p">);</span>
-
-        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">attachmentSize</span> <span class="o">=</span> <span class="n">texture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">size</span><span class="p">();</span>
 
         <span class="kt">bool</span> <span class="n">stencil</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
         <span class="k">auto</span> <span class="n">depthAttachment</span> <span class="o">=</span> <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">GL_DEPTH</span><span class="p">);</span>
@@ -149,22 +144,8 @@
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">pass</span> <span class="p">:</span> <span class="n">effect</span><span class="o">-&gt;</span><span class="n">renderPasses</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Effect pass&quot;</span><span class="p">);</span>
-                <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">attach</span><span class="p">(</span><span class="n">textures</span><span class="p">[</span><span class="o">!</span><span class="n">index</span><span class="p">],</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
-
-                <span class="n">pass</span><span class="p">.</span><span class="n">invoke</span><span class="p">(</span><span class="o">*</span><span class="n">fbo</span><span class="p">,</span> <span class="n">textures</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">depthTexture</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
-
-                <span class="n">index</span> <span class="o">=</span> <span class="o">!</span><span class="n">index</span><span class="p">;</span>
+                <span class="n">pass</span><span class="p">.</span><span class="n">invoke</span><span class="p">(</span><span class="o">*</span><span class="n">fbo</span><span class="p">,</span> <span class="n">m_pipeline</span><span class="p">,</span> <span class="n">cam</span><span class="p">,</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
             <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">index</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">attach</span><span class="p">(</span><span class="n">textures</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
-            <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">bind</span><span class="p">();</span>
-            <span class="n">m_screenShader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
-            <span class="n">m_screenShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">textures</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-            <span class="n">m_screenQuad</span><span class="p">.</span><span class="n">render</span><span class="p">();</span>
-            <span class="n">fbo</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="n">rendering</span><span class="o">::</span><span class="n">shader</span><span class="o">::</span><span class="n">release</span><span class="p">();</span>

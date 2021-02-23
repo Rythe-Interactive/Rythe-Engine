@@ -48,7 +48,7 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_edgepenetrationquery.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-data-edgepenetrationquery-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/data/edgepenetrationquery.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;physics/data/penetrationquery.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/data/penetrationquery.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/halfedgeedge.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
@@ -63,7 +63,7 @@
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">pFaceCentroid</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">pNormal</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">pPenetration</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">pIsARef</span><span class="p">);</span>
 
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">populateContactList</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">,</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">refTransform</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">incTransform</span><span class="p">,</span>  <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">refCollider</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">refTransform</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">incTransform</span><span class="p">,</span>  <span class="n">PhysicsCollider</span><span class="o">*</span> <span class="n">refCollider</span><span class="p">);</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

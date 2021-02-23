@@ -108,9 +108,9 @@ Functions
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a6637167f612315189c6b67f1220ec1e0`
 
-- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a5e685911322a09b0c414f7c6602799e6`
-
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a78d8db2b93f850e7fe7ee31f1218a062`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a5e685911322a09b0c414f7c6602799e6`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a77d6d0f2ad23fb32ffde0e7044ad5d1e`
 
@@ -140,6 +140,8 @@ Functions
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a7cebc6d90cecb0173c2d0e6c7885c5bf`
 
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a0927aad87ccf1eebfda54c1249e18afa`
+
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ad5008f9b0fc90f8431f9552cf619e28b`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1adcbd10d6d406bbcc73e43ed867dc97d6`
@@ -148,9 +150,9 @@ Functions
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a34257a94dbd637054a6634249b072bae`
 
-- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a8d3d7865efc31c33b26e2060d3cc1def`
-
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a56aed0be8cecb875c4927db1e0dcaf93`
+
+- :ref:`exhale_function_namespacelegion_1_1core_1_1common_1a8d3d7865efc31c33b26e2060d3cc1def`
 
 - :ref:`exhale_function_namespacelegion_1_1core_1_1common_1ab888b105b685388605c20798aee44d9b`
 

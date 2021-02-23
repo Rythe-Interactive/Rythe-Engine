@@ -53,12 +53,11 @@
 <span class="cp">#include</span> <span class="cpf">&lt;physics/physics_contact.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/components/physics_component.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;physics/data/penetrationquery.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
     <span class="k">class</span> <span class="nc">PhysicsCollider</span><span class="p">;</span>
-    <span class="k">class</span> <span class="nc">PenetrationQuery</span><span class="p">;</span>
 
     <span class="k">struct</span> <span class="n">physics_manifold</span>
     <span class="p">{</span>
@@ -67,16 +66,78 @@
         <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">transformA</span><span class="p">;</span>
         <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">transformB</span><span class="p">;</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">colliderA</span><span class="p">;</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">colliderB</span><span class="p">;</span>
+        <span class="n">PhysicsCollider</span><span class="o">*</span> <span class="n">colliderA</span><span class="p">;</span>
+        <span class="n">PhysicsCollider</span><span class="o">*</span> <span class="n">colliderB</span><span class="p">;</span>
 
-        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span> <span class="n">physicsCompA</span><span class="p">;</span>
-        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">&gt;</span> <span class="n">physicsCompB</span><span class="p">;</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">entityA</span><span class="p">;</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">entityB</span><span class="p">;</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PenetrationQuery</span><span class="o">&gt;</span> <span class="n">penetrationInformation</span><span class="p">;</span>
+        <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">*</span> <span class="n">physicsCompA</span><span class="p">;</span>
+        <span class="n">physics</span><span class="o">::</span><span class="n">physicsComponent</span><span class="o">*</span> <span class="n">physicsCompB</span><span class="p">;</span>
+
+        <span class="n">physics</span><span class="o">::</span><span class="n">rigidbody</span><span class="o">*</span> <span class="n">rigidbodyA</span><span class="p">;</span>
+        <span class="n">physics</span><span class="o">::</span><span class="n">rigidbody</span><span class="o">*</span> <span class="n">rigidbodyB</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">PenetrationQuery</span><span class="o">&gt;</span> <span class="n">penetrationInformation</span><span class="p">;</span>
 
         <span class="kt">bool</span> <span class="n">isColliding</span><span class="p">;</span>
 
+        <span class="cm">/*void DEBUG_checkIDAndBreak(std::string firstID,std::string secondID) const</span>
+<span class="cm">        {</span>
+<span class="cm">            auto idHA = entityA.get_component_handle&lt;identifier&gt;();</span>
+<span class="cm">            auto idHB = entityB.get_component_handle&lt;identifier&gt;();</span>
+
+<span class="cm">            if (idHA &amp;&amp; idHB)</span>
+<span class="cm">            {</span>
+<span class="cm">                auto str1 = idHA.read().id;</span>
+<span class="cm">                auto str2 = idHB.read().id;</span>
+
+<span class="cm">                if ((str1 == firstID &amp;&amp; str2 == secondID)</span>
+<span class="cm">                    || (str2 == firstID &amp;&amp; str1 == secondID))</span>
+<span class="cm">                {</span>
+<span class="cm">                    DebugBreak();</span>
+<span class="cm">                }</span>
+<span class="cm">            }</span>
+<span class="cm">        }*/</span>
+
+        <span class="kt">bool</span> <span class="nf">DEBUG_checkID</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">firstID</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">secondID</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">str1</span><span class="p">,</span> <span class="n">str2</span><span class="p">;</span>
+            <span class="n">GetPairID</span><span class="p">(</span><span class="n">str1</span><span class="p">,</span> <span class="n">str2</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">((</span><span class="n">str1</span> <span class="o">==</span> <span class="n">firstID</span> <span class="o">&amp;&amp;</span> <span class="n">str2</span> <span class="o">==</span> <span class="n">secondID</span><span class="p">)</span>
+                <span class="o">||</span> <span class="p">(</span><span class="n">str2</span> <span class="o">==</span> <span class="n">firstID</span> <span class="o">&amp;&amp;</span> <span class="n">str1</span> <span class="o">==</span> <span class="n">secondID</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">GetPairID</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str1</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">str2</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">idHA</span> <span class="o">=</span> <span class="n">entityA</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">auto</span> <span class="n">idHB</span> <span class="o">=</span> <span class="n">entityB</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
+
+            <span class="n">str1</span> <span class="o">=</span> <span class="s">&quot;&quot;</span> <span class="p">;</span>
+            <span class="n">str2</span> <span class="o">=</span> <span class="s">&quot;&quot;</span> <span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">idHA</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">str1</span> <span class="o">=</span> <span class="n">idHA</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">id</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">idHB</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">str2</span> <span class="o">=</span> <span class="n">idHB</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">id</span><span class="p">;</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
 
     <span class="p">};</span>
 <span class="p">}</span>

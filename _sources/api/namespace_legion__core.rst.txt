@@ -78,6 +78,8 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1is__vector_3_01std_1_1vector_3_01_t_01_4_01_4`
 
+- :ref:`exhale_struct_structlegion_1_1core_1_1material__data`
+
 - :ref:`exhale_struct_structlegion_1_1core_1_1mesh__filter`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1pair__range`
@@ -216,11 +218,13 @@ Functions
 
 - :ref:`exhale_function_type__util_8hpp_1a8c8931efdcf4979248e6399e921a6c4a`
 
-- :ref:`exhale_function_type__util_8hpp_1a54818fa8a09ae30b90ba23483650f9cf`
-
 - :ref:`exhale_function_type__util_8hpp_1aa7ca1e269830267ecfe55b69f9631829`
 
+- :ref:`exhale_function_type__util_8hpp_1a54818fa8a09ae30b90ba23483650f9cf`
+
 - :ref:`exhale_function_type__util_8hpp_1a1fe20cafef19940da5c6e26622c46581`
+
+- :ref:`exhale_function_type__util_8hpp_1a1cc303312a3637d55d74df9f3d72d3ff`
 
 - :ref:`exhale_function_type__util_8cpp_1a492f8a72e0cd77b3868d5e4b0a2b9b5f`
 
@@ -228,7 +232,9 @@ Functions
 
 - :ref:`exhale_function_type__util_8cpp_1a4e1c17350cceba4c3b7b06fa70498c6e`
 
-- :ref:`exhale_function_type__util_8hpp_1a1cc303312a3637d55d74df9f3d72d3ff`
+- :ref:`exhale_function_type__util_8hpp_1a6e1bb96028c55350a8b55389d952f25a`
+
+- :ref:`exhale_function_type__util_8hpp_1a1c7a87428054b31d4b17dccc396ea1e1`
 
 - :ref:`exhale_function_type__util_8hpp_1a4b5630f47491ff5cef8787bff3baf775`
 
@@ -239,10 +245,6 @@ Functions
 - :ref:`exhale_function_type__util_8hpp_1a6b068e73b1f05b276d9296752b46130c`
 
 - :ref:`exhale_function_type__util_8hpp_1aef961c58b02712822d0ffc58d7a9cd34`
-
-- :ref:`exhale_function_type__util_8hpp_1a8137a94e71130c2464cf1a3a04164ddc`
-
-- :ref:`exhale_function_type__util_8hpp_1a03330ac971e875875af4215d3255d9af`
 
 
 Typedefs
@@ -302,6 +304,8 @@ Typedefs
 - :ref:`exhale_typedef_primitives_8hpp_1a6d2a8d4d87316f5bb708444fba64965a`
 
 - :ref:`exhale_typedef_primitives_8hpp_1a92c2cf9661453af5907807000cc530a5`
+
+- :ref:`exhale_typedef_mesh_8hpp_1a203e886996a6772dc1c9c77bcdf27f23`
 
 - :ref:`exhale_typedef_primitives_8hpp_1a163be3e1d67eec2f025c74ad2107b60f`
 

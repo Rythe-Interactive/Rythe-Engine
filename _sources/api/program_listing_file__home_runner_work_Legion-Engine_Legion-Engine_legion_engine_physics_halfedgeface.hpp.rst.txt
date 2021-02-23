@@ -45,11 +45,15 @@ Program Listing for File halfedgeface.hpp
    
            bool makeNormalsConvexWithFace(HalfEdgeFace& other);
    
+           bool makeNormalsConvexWithNeighbors(HalfEdgeFace& other);
+   
            face_angle_relation getAngleRelation(const HalfEdgeFace& other);
    
            static bool testConvexity(const HalfEdgeFace& first, const HalfEdgeFace& second);
    
            static bool makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second);
+   
+           void mergeCoplanarNeighbors(std::vector<HalfEdgeFace*>& removed);
    
            static HalfEdgeEdge* findMiddleEdge(const HalfEdgeFace& first, const HalfEdgeFace& second);
    

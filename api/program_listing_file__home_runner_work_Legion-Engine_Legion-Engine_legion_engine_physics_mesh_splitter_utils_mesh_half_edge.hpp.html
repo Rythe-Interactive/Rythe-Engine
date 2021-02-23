@@ -48,8 +48,9 @@
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_mesh_half_edge.hpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-mesh-half-edge-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/mesh_half_edge.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/splittable_polygon.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/splittable_polygon.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/physics_statics.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/debugrendering.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
@@ -124,25 +125,27 @@
 
             <span class="k">auto</span> <span class="p">[</span><span class="n">currentDistFromPlane</span><span class="p">,</span> <span class="n">nextDistFromPlane</span><span class="p">]</span> <span class="o">=</span> <span class="n">getEdgeDistancesFromPlane</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">planePosition</span><span class="p">,</span> <span class="n">planeNormal</span><span class="p">);</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">currentDistFromPlane</span> <span class="o">&gt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">)</span>
+            <span class="k">static</span> <span class="kt">float</span> <span class="n">splitEpsilon</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">());</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">currentDistFromPlane</span> <span class="o">&gt;</span> <span class="n">splitEpsilon</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">currentDistFromPlane</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">)</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">currentDistFromPlane</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">splitEpsilon</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
 
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">nextDistFromPlane</span> <span class="o">&gt;</span> <span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nextDistFromPlane</span> <span class="o">&gt;</span> <span class="n">splitEpsilon</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">nextDistFromPlane</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">constants</span><span class="o">::</span><span class="n">polygonSplitterEpsilon</span><span class="p">)</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">nextDistFromPlane</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">splitEpsilon</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
             <span class="p">}</span>
-
+            <span class="c1">//log::debug(&quot;x {} y {}&quot;, x, y);</span>
             <span class="kt">int</span> <span class="n">edgeSplitState</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">;</span>
 
 
@@ -279,6 +282,18 @@
             <span class="kt">float</span> <span class="n">dotResult</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">otherNormal</span><span class="p">,</span> <span class="n">comparisonNormal</span><span class="p">);</span>
 
             <span class="k">return</span> <span class="n">dotResult</span> <span class="o">&gt;</span> <span class="n">toleranceDot</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">DEBUG_drawInsetEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">worldCentroid</span><span class="p">,</span><span class="kt">float</span> <span class="n">insetInterpolant</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="p">[</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">getEdgeWorldPositions</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">toCentroidStart</span> <span class="o">=</span> <span class="n">worldCentroid</span> <span class="o">-</span> <span class="n">start</span><span class="p">;</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">toCentroidEnd</span> <span class="o">=</span> <span class="n">worldCentroid</span> <span class="o">-</span> <span class="n">end</span><span class="p">;</span>
+
+            <span class="n">debug</span><span class="o">::</span><span class="n">drawLine</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">toCentroidStart</span> <span class="o">*</span> <span class="n">insetInterpolant</span>
+                <span class="p">,</span> <span class="n">end</span> <span class="o">+</span> <span class="n">toCentroidEnd</span> <span class="o">*</span> <span class="n">insetInterpolant</span><span class="p">,</span> <span class="n">owner</span><span class="p">.</span><span class="n">lock</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">debugColor</span><span class="p">,</span> <span class="mf">8.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">);</span>
+
         <span class="p">}</span>
 
     <span class="p">};</span>

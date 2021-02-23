@@ -64,7 +64,7 @@
         <span class="kt">float</span> <span class="n">linearDrag</span><span class="p">;</span>
 
         <span class="c1">//angular motion component</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">localInverseInertiaTensor</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">3.0f</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">localInverseInertiaTensor</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">mat3</span><span class="p">(</span><span class="mf">6.0f</span><span class="p">);</span>
         <span class="n">math</span><span class="o">::</span><span class="n">mat3</span> <span class="n">globalInverseInertiaTensor</span> <span class="o">=</span> <span class="n">localInverseInertiaTensor</span><span class="p">;</span>
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">angularAcc</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">);</span>
@@ -111,8 +111,8 @@
         <span class="kt">void</span> <span class="n">addForceAt</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldForcePosition</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">force</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">forceAccumulator</span> <span class="o">+=</span> <span class="n">force</span><span class="p">;</span>
-            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">a</span> <span class="o">=</span> <span class="n">worldForcePosition</span> <span class="o">-</span> <span class="n">globalCentreOfMass</span><span class="p">;</span>
-            <span class="n">torqueAccumulator</span> <span class="o">+=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">worldForcePosition</span> <span class="o">-</span> <span class="n">globalCentreOfMass</span><span class="p">,</span> <span class="n">force</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">worldForcePosition</span> <span class="o">-</span> <span class="n">globalCentreOfMass</span><span class="p">;</span>
+            <span class="n">torqueAccumulator</span> <span class="o">+=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">force</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="kt">void</span> <span class="n">setMass</span><span class="p">(</span><span class="kt">float</span> <span class="n">mass</span><span class="p">)</span>

@@ -16,6 +16,7 @@ Program Listing for File mesh.hpp
    #include <core/filesystem/resource.hpp>
    #include <core/filesystem/view.hpp>
    #include <core/async/rw_spinlock.hpp>
+   #include <core/data/image.hpp>
    
    #include <utility>
    #include <vector>
@@ -34,7 +35,7 @@ Program Listing for File mesh.hpp
    
        struct mesh
        {
-           std::string fileName;
+           std::string filePath;
            std::vector<math::vec3> vertices;
            std::vector<math::color> colors;
            std::vector<math::vec3> normals;
@@ -63,14 +64,40 @@ Program Listing for File mesh.hpp
    
        constexpr mesh_handle invalid_mesh_handle{ invalid_id };
    
-       struct mesh_import_settings
+       struct material_data
        {
-           bool triangulate;
-           bool vertex_color;
-           filesystem::view contextFolder;
+           std::string name;
+   
+           bool opaque;            
+           float alphaCutoff;                
+           bool doubleSided;                 
+   
+           math::color albedoValue;
+           image_handle albedoMap;
+           float metallicValue;
+           image_handle metallicMap;
+           float roughnessValue;
+           image_handle roughnessMap;
+           image_handle metallicRoughnessMap;
+           math::color emissiveValue;
+           image_handle emissiveMap;
+   
+           image_handle normalMap;
+           image_handle aoMap;
+           image_handle heightMap;
        };
    
-       const mesh_import_settings default_mesh_settings{ true, false, filesystem::view("") };
+       using material_list = std::vector<material_data>;
+   
+       struct mesh_import_settings
+       {
+           material_list* materials = nullptr;
+           bool triangulate = true;
+           bool vertex_color = false;
+           filesystem::view contextFolder = filesystem::view(std::string_view(""));
+       };
+   
+       const mesh_import_settings default_mesh_settings{ nullptr, true, false, filesystem::view(std::string_view("")) };
    
        class MeshCache
        {
@@ -79,7 +106,10 @@ Program Listing for File mesh.hpp
            static std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>> m_meshes;
            static async::rw_spinlock m_meshesLock;
    
+   
        public:
+           static id_type debugId;
+   
            static mesh_handle create_mesh(const std::string& name, const filesystem::view& file, mesh_import_settings settings = default_mesh_settings);
    
            static mesh_handle create_mesh(const std::string& name, const mesh& mesh);

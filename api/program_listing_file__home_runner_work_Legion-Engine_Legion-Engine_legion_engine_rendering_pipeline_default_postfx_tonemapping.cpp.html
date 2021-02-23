@@ -97,8 +97,15 @@
         <span class="n">exposure</span> <span class="o">=</span> <span class="mf">0.5f</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="kt">void</span> <span class="n">Tonemapping</span><span class="o">::</span><span class="n">renderPass</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">texture_handle</span> <span class="n">colortexture</span><span class="p">,</span> <span class="n">texture_handle</span> <span class="n">depthtexture</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
+    <span class="kt">void</span> <span class="n">Tonemapping</span><span class="o">::</span><span class="n">renderPass</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">RenderPipelineBase</span><span class="o">*</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">camera</span><span class="o">&amp;</span> <span class="n">cam</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="c1">//Try to get color attachment.</span>
+        <span class="k">auto</span> <span class="n">color_attachment</span> <span class="o">=</span> <span class="n">fbo</span><span class="p">.</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">color_attachment</span><span class="p">))</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="c1">//Get color texture.</span>
+        <span class="k">auto</span> <span class="n">color_texture</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">color_attachment</span><span class="p">);</span>
+
         <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">static</span> <span class="n">id_type</span> <span class="n">exposureId</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="s">&quot;exposure&quot;</span><span class="p">);</span>
         <span class="c1">//static bool firstFrame = true;</span>
@@ -137,7 +144,7 @@
 
         <span class="n">shader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">exposureId</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">exposure</span><span class="p">);</span>
 
-        <span class="n">shader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">colortexture</span><span class="p">);</span>
+        <span class="n">shader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">color_texture</span><span class="p">);</span>
         <span class="n">renderQuad</span><span class="p">();</span>
         <span class="n">shader</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
         <span class="n">fbo</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
@@ -147,7 +154,6 @@
         <span class="c1">//    glGenerateTextureMipmap(tex.textureId);</span>
         <span class="c1">//}</span>
     <span class="p">}</span>
-
 <span class="p">}</span>
 </pre></div>
 </div>

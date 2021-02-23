@@ -111,43 +111,111 @@
         <span class="n">component_pool</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">component_pool</span><span class="p">(</span><span class="n">EcsRegistry</span><span class="o">*</span> <span class="n">registry</span><span class="p">,</span> <span class="n">events</span><span class="o">::</span><span class="n">EventBus</span><span class="o">*</span> <span class="n">eventBus</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_registry</span><span class="p">(</span><span class="n">registry</span><span class="p">),</span> <span class="n">m_eventBus</span><span class="p">(</span><span class="n">eventBus</span><span class="p">)</span> <span class="p">{}</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
+            <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">&amp;&amp;</span>
+                            <span class="n">serialization</span><span class="o">::</span><span class="n">has_load</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONInputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">),</span>
+                            <span class="s">&quot;Serialized Objects should not have load&amp;save pairs and a serialization function simultaneously&quot;</span><span class="p">);</span>
+
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">componentType</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">nameOfType</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
+
             <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
-                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
+                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
                 <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">serialize</span><span class="p">(</span><span class="n">oarchive</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_save</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
+                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
+                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">save</span><span class="p">(</span><span class="n">oarchive</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span>
             <span class="p">{</span>
-                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
+                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
+            <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">&amp;&amp;</span>
+                            <span class="n">serialization</span><span class="o">::</span><span class="n">has_load</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">),</span>
+                            <span class="s">&quot;Serialized Objects should not have load&amp;save pairs and a serialization function simultaneously&quot;</span><span class="p">);</span>
+
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
-            <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">componentType</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">nameOfType</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
+
+            <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
+                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
+                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">serialize</span><span class="p">(</span><span class="n">oarchive</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_save</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
+                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
+                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">save</span><span class="p">(</span><span class="n">oarchive</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
+            <span class="p">}</span>
         <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONInputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
+
+        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONInputArchive</span><span class="o">&amp;</span> <span class="n">iarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
+            <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">&amp;&amp;</span>
+                            <span class="n">serialization</span><span class="o">::</span><span class="n">has_load</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONInputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">),</span>
+                            <span class="s">&quot;Serialized Objects should not have load&amp;save pairs and a serialization function simultaneously&quot;</span><span class="p">);</span>
+
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">componentType</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">nameOfType</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
             <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
-                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
-                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">serialize</span><span class="p">(</span><span class="n">oarchive</span><span class="p">);</span>
+                <span class="n">iarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
+                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">serialize</span><span class="p">(</span><span class="n">iarchive</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_load</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">JSONInputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
+                <span class="n">iarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
+                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">load</span><span class="p">(</span><span class="n">iarchive</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span>
             <span class="p">{</span>
-                <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
+                <span class="n">iarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span><span class="o">&amp;</span> <span class="n">oarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
+
+        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span><span class="o">&amp;</span> <span class="n">iarchive</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
+            <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">&amp;&amp;</span>
+                            <span class="n">serialization</span><span class="o">::</span><span class="n">has_load</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">),</span>
+                            <span class="s">&quot;Serialized Objects should not have load&amp;save pairs and a serialization function simultaneously&quot;</span><span class="p">);</span>
+
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
-            <span class="n">oarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">typeName</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">())));</span>
+
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">componentType</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">nameOfType</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">());</span>
+            <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_serialize</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
+                <span class="n">iarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
+                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">serialize</span><span class="p">(</span><span class="n">iarchive</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">serialization</span><span class="o">::</span><span class="n">has_load</span><span class="o">&lt;</span><span class="n">component_type</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">BinaryInputArchive</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
+                <span class="n">iarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
+                <span class="n">m_components</span><span class="p">[</span><span class="n">entityId</span><span class="p">].</span><span class="n">load</span><span class="p">(</span><span class="n">iarchive</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">iarchive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Component Name&quot;</span><span class="p">,</span> <span class="n">componentType</span><span class="p">));</span>
+            <span class="p">}</span>
         <span class="p">}</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&amp;</span> <span class="n">get_lock</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
@@ -155,7 +223,7 @@
             <span class="k">return</span> <span class="n">m_lock</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">virtual</span> <span class="n">component_container_base</span><span class="o">*</span> <span class="n">get_components</span><span class="p">(</span><span class="k">const</span> <span class="n">entity_container</span><span class="o">&amp;</span> <span class="n">entities</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
+        <span class="n">component_container_base</span><span class="o">*</span> <span class="n">get_components</span><span class="p">(</span><span class="k">const</span> <span class="n">entity_container</span><span class="o">&amp;</span> <span class="n">entities</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">auto</span><span class="o">*</span> <span class="n">container</span> <span class="o">=</span> <span class="k">new</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">();</span>
@@ -177,7 +245,7 @@
         <span class="p">}</span>
 
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">get_components</span><span class="p">(</span><span class="k">const</span> <span class="n">entity_container</span><span class="o">&amp;</span> <span class="n">entities</span><span class="p">,</span> <span class="n">component_container_base</span><span class="o">&amp;</span> <span class="n">comps</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="n">get_components</span><span class="p">(</span><span class="k">const</span> <span class="n">entity_container</span><span class="o">&amp;</span> <span class="n">entities</span><span class="p">,</span> <span class="n">component_container_base</span><span class="o">&amp;</span> <span class="n">comps</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">container</span> <span class="o">=</span> <span class="n">comps</span><span class="p">.</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">();</span>
@@ -201,7 +269,7 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">set_components</span><span class="p">(</span><span class="k">const</span> <span class="n">entity_container</span><span class="o">&amp;</span> <span class="n">entities</span><span class="p">,</span> <span class="k">const</span> <span class="n">component_container_base</span><span class="o">&amp;</span> <span class="n">comps</span><span class="p">)</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="n">set_components</span><span class="p">(</span><span class="k">const</span> <span class="n">entity_container</span><span class="o">&amp;</span> <span class="n">entities</span><span class="p">,</span> <span class="k">const</span> <span class="n">component_container_base</span><span class="o">&amp;</span> <span class="n">comps</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">const</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&amp;</span> <span class="n">container</span> <span class="o">=</span> <span class="n">comps</span><span class="p">.</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span><span class="p">();</span>
@@ -211,7 +279,7 @@
                 <span class="k">return</span><span class="p">;</span>
 <span class="cp">#endif</span>
 
-            <span class="k">static</span> <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">modifications</span><span class="p">;</span>
+            <span class="n">component_container</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;</span> <span class="n">modifications</span><span class="p">;</span>
             <span class="n">modifications</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">entities</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 
             <span class="p">{</span>
@@ -231,7 +299,7 @@
             <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">bulk_component_modification</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="n">modifications</span><span class="p">,</span> <span class="n">container</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="n">L_NODISCARD</span> <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">has_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
+        <span class="n">L_NODISCARD</span> <span class="kt">bool</span> <span class="n">has_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">m_lock</span><span class="p">);</span>
@@ -254,7 +322,7 @@
             <span class="k">return</span> <span class="n">m_nullComp</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">create_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="n">create_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="p">{</span>
@@ -276,7 +344,7 @@
             <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">component_creation</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">));</span>
         <span class="p">}</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">create_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">)</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="n">create_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">value</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="p">{</span>
@@ -299,7 +367,7 @@
         <span class="p">}</span>
 
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">destroy_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="n">destroy_component</span><span class="p">(</span><span class="n">id_type</span> <span class="n">entityId</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="n">m_eventBus</span><span class="o">-&gt;</span><span class="n">raiseEvent</span><span class="o">&lt;</span><span class="n">events</span><span class="o">::</span><span class="n">component_destruction</span><span class="o">&lt;</span><span class="n">component_type</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">entity_handle</span><span class="p">(</span><span class="n">entityId</span><span class="p">));</span>

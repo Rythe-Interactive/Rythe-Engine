@@ -91,10 +91,8 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-
-
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">CheckCollision</span><span class="p">(</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="p">{};</span>
+            <span class="n">PhysicsCollider</span><span class="o">*</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="p">{};</span>
 
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">CheckCollisionWith</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="p">{};</span>
 
@@ -104,16 +102,17 @@
         <span class="p">}</span>
 
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">PopulateContactPoints</span><span class="p">(</span>
-            <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="p">{};</span>
+            <span class="n">PhysicsCollider</span><span class="o">*</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="p">{};</span>
 
         <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">PopulateContactPointsWith</span><span class="p">(</span>
             <span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="p">{};</span>
 
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">DrawColliderRepresentation</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">transform</span><span class="p">)</span> <span class="p">{};</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">DrawColliderRepresentation</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span> <span class="n">usedColor</span><span class="p">,</span> <span class="kt">float</span> <span class="n">width</span><span class="p">,</span> <span class="kt">float</span> <span class="n">time</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">ignoreDepth</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{};</span>
 
-        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">UpdateTightBoundingVolume</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span> <span class="p">{};</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">UpdateTransformedTightBoundingVolume</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span> <span class="p">{};</span>
 
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">UpdateLocalAABB</span><span class="p">()</span> <span class="p">{};</span>
 
         <span class="kr">inline</span> <span class="k">virtual</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&amp;</span> <span class="n">GetHalfEdgeFaces</span><span class="p">()</span>
         <span class="p">{</span>
@@ -125,10 +124,22 @@
             <span class="k">return</span> <span class="n">localColliderCentroid</span><span class="p">;</span>
         <span class="p">}</span>
 
+        <span class="c1">//</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">GetMinMaxLocalAABB</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">minMaxLocalAABB</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">GetMinMaxWorldAABB</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">minMaxWorldAABB</span><span class="p">;</span>
+        <span class="p">}</span>
+
     <span class="k">protected</span><span class="o">:</span>
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localColliderCentroid</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
+        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">minMaxLocalAABB</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">minMaxWorldAABB</span><span class="p">;</span>
     <span class="k">private</span><span class="o">:</span>
 
         <span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>

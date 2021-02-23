@@ -31,7 +31,7 @@ Includes
 
 - ``Optick/optick.h``
 
-- ``algorithm``
+- ``algorithm`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphasebruteforce.hpp`)
 
 - ``core/containers/iterator_tricks.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_containers_iterator_tricks.hpp`)
 

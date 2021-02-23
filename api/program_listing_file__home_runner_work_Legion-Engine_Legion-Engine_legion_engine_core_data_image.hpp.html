@@ -77,12 +77,14 @@
 
     <span class="k">struct</span> <span class="n">image</span> <span class="k">final</span>
     <span class="p">{</span>
-        <span class="k">friend</span> <span class="k">struct</span> <span class="n">stb_image_loader</span><span class="p">;</span>
         <span class="k">friend</span> <span class="k">class</span> <span class="nc">ImageCache</span><span class="p">;</span>
 
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
         <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">size</span><span class="p">;</span>
         <span class="n">channel_format</span> <span class="n">format</span><span class="p">;</span>
         <span class="n">image_components</span> <span class="n">components</span><span class="p">;</span>
+        <span class="n">size_type</span> <span class="n">dataSize</span><span class="p">;</span>
+        <span class="n">byte</span><span class="o">*</span> <span class="n">data</span><span class="p">;</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
         <span class="n">T</span><span class="o">*</span> <span class="n">get_raw_data</span><span class="p">();</span>
@@ -100,7 +102,7 @@
 
         <span class="n">image</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
-        <span class="n">image</span><span class="p">(</span><span class="k">const</span> <span class="n">image</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span> <span class="n">size</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">),</span> <span class="n">format</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">),</span> <span class="n">components</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">),</span> <span class="n">m_id</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">),</span> <span class="n">m_dataSize</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_dataSize</span><span class="p">),</span> <span class="n">m_pixels</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">)</span>
+        <span class="n">image</span><span class="p">(</span><span class="k">const</span> <span class="n">image</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span> <span class="n">name</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">name</span><span class="p">),</span> <span class="n">size</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">),</span> <span class="n">format</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">),</span> <span class="n">components</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">),</span> <span class="n">m_id</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">),</span> <span class="n">dataSize</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">dataSize</span><span class="p">),</span> <span class="n">data</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">data</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
             <span class="p">{</span>
@@ -109,7 +111,14 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-        <span class="n">image</span><span class="p">(</span><span class="n">image</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span> <span class="n">size</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">),</span> <span class="n">format</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">),</span> <span class="n">components</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">),</span> <span class="n">m_id</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">),</span> <span class="n">m_dataSize</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_dataSize</span><span class="p">),</span> <span class="n">m_pixels</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">)</span>
+        <span class="n">image</span><span class="p">(</span><span class="n">image</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">name</span><span class="p">)),</span>
+            <span class="n">size</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">)),</span>
+            <span class="n">format</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">)),</span>
+            <span class="n">components</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">)),</span>
+            <span class="n">m_id</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">m_id</span><span class="p">)),</span>
+            <span class="n">dataSize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">dataSize</span><span class="p">)),</span>
+            <span class="n">data</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">data</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">m_id</span><span class="p">)</span>
             <span class="p">{</span>
@@ -129,8 +138,8 @@
                     <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
                     <span class="k">if</span> <span class="p">(</span><span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
                     <span class="p">{</span>
-                        <span class="k">delete</span><span class="p">[]</span> <span class="n">m_pixels</span><span class="p">;</span>
-                        <span class="n">m_pixels</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                        <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
                         <span class="n">m_refs</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
@@ -140,11 +149,12 @@
                 <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
             <span class="p">}</span>
 
+            <span class="n">name</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
             <span class="n">size</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
             <span class="n">format</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">;</span>
             <span class="n">components</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">;</span>
-            <span class="n">m_dataSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_dataSize</span><span class="p">;</span>
-            <span class="n">m_pixels</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">;</span>
+            <span class="n">dataSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">dataSize</span><span class="p">;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
             <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -158,8 +168,8 @@
                     <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
                     <span class="k">if</span> <span class="p">(</span><span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
                     <span class="p">{</span>
-                        <span class="k">delete</span><span class="p">[]</span> <span class="n">m_pixels</span><span class="p">;</span>
-                        <span class="n">m_pixels</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                        <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
                         <span class="n">m_refs</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
@@ -169,11 +179,12 @@
                 <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="n">size</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
-            <span class="n">format</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">;</span>
-            <span class="n">components</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">;</span>
-            <span class="n">m_dataSize</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_dataSize</span><span class="p">;</span>
-            <span class="n">m_pixels</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">m_pixels</span><span class="p">;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">size</span><span class="p">);</span>
+            <span class="n">format</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">format</span><span class="p">);</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">components</span><span class="p">);</span>
+            <span class="n">dataSize</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">dataSize</span><span class="p">);</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
             <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -186,8 +197,8 @@
                 <span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">m_refs</span><span class="p">[</span><span class="n">m_id</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="p">{</span>
-                    <span class="k">delete</span><span class="p">[]</span> <span class="n">m_pixels</span><span class="p">;</span>
-                    <span class="n">m_pixels</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                    <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
                     <span class="n">m_refs</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">m_id</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">}</span>
@@ -199,8 +210,6 @@
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">m_refsLock</span><span class="p">;</span>
 
         <span class="n">id_type</span> <span class="n">m_id</span><span class="p">;</span>
-        <span class="n">size_type</span> <span class="n">m_dataSize</span><span class="p">;</span>
-        <span class="n">byte</span><span class="o">*</span> <span class="n">m_pixels</span><span class="p">;</span>
     <span class="p">};</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
@@ -212,14 +221,14 @@
     <span class="k">template</span><span class="o">&lt;&gt;</span>
     <span class="kr">inline</span> <span class="kt">void</span><span class="o">*</span> <span class="n">image</span><span class="o">::</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="p">()</span>
     <span class="p">{</span>
-        <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">m_pixels</span><span class="p">);</span>
+        <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;&gt;</span>
     <span class="kr">inline</span> <span class="n">byte</span><span class="o">*</span> <span class="n">image</span><span class="o">::</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">format</span> <span class="o">==</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">eight_bit</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">m_pixels</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">data</span><span class="p">;</span>
         <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -227,7 +236,7 @@
     <span class="kr">inline</span> <span class="n">uint16</span><span class="o">*</span> <span class="n">image</span><span class="o">::</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">&gt;</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">format</span> <span class="o">==</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">sixteen_bit</span><span class="p">)</span>
-            <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">m_pixels</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">uint16</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
         <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -235,7 +244,7 @@
     <span class="kr">inline</span> <span class="kt">float</span><span class="o">*</span> <span class="n">image</span><span class="o">::</span><span class="n">get_raw_data</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">format</span> <span class="o">==</span> <span class="n">channel_format</span><span class="o">::</span><span class="n">float_hdr</span><span class="p">)</span>
-            <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">m_pixels</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
         <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -287,6 +296,8 @@
 
     <span class="k">public</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">image_handle</span> <span class="n">create_image</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">image_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_image_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">image_handle</span> <span class="nf">create_image</span><span class="p">(</span><span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">image_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_image_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">image_handle</span> <span class="nf">insert_image</span><span class="p">(</span><span class="n">image</span><span class="o">&amp;&amp;</span> <span class="n">img</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="n">image_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 

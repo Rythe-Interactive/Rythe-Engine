@@ -13,8 +13,7 @@ Derived Types
 *************
 
 - ``public legion::core::ecs::component_handle< legion::application::window >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`)
-- ``public legion::core::ecs::component_handle< legion::physics::physicsComponent >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`)
-- ``public legion::core::ecs::component_handle< legion::physics::rigidbody >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`)
+- ``public legion::core::ecs::component_handle< legion::physics::MeshSplitter >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`)
 - ``public legion::core::ecs::component_handle< component_type >`` (:ref:`exhale_class_classlegion_1_1core_1_1ecs_1_1component__handle`)
 
 

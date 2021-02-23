@@ -62,11 +62,12 @@
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
 
-        <span class="n">point_cloud</span><span class="p">(</span><span class="n">mesh_handle</span> <span class="n">newMesh</span><span class="p">,</span> <span class="n">transform</span> <span class="n">newTrans</span><span class="p">,</span> <span class="n">material_handle</span> <span class="n">mat</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">heightMap</span><span class="p">,</span> <span class="n">uint</span> <span class="n">maxPoints</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="kt">float</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">0.2f</span><span class="p">)</span>
+        <span class="n">point_cloud</span><span class="p">(</span><span class="n">mesh_handle</span> <span class="n">newMesh</span><span class="p">,</span> <span class="n">transform</span> <span class="n">newTrans</span><span class="p">,</span> <span class="n">material_handle</span> <span class="n">mat</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">albedoMap</span><span class="p">,</span> <span class="n">image_handle</span> <span class="n">heightMap</span><span class="p">,</span> <span class="n">uint</span> <span class="n">maxPoints</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="kt">float</span> <span class="n">radius</span> <span class="o">=</span> <span class="mf">0.2f</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">m_mesh</span> <span class="o">=</span> <span class="n">newMesh</span><span class="p">;</span>
             <span class="n">m_trans</span> <span class="o">=</span> <span class="n">newTrans</span><span class="p">;</span>
             <span class="n">m_heightMap</span> <span class="o">=</span> <span class="n">heightMap</span><span class="p">;</span>
+            <span class="n">m_AlbedoMap</span> <span class="o">=</span> <span class="n">albedoMap</span><span class="p">;</span>
             <span class="c1">//m_samplesPerTriangle = calculateSamplesPerTriangle(maxPoints);</span>
             <span class="n">m_pointRadius</span> <span class="o">=</span> <span class="n">radius</span><span class="p">;</span>
             <span class="n">m_Material</span> <span class="o">=</span> <span class="n">mat</span><span class="p">;</span>
@@ -89,6 +90,7 @@
         <span class="n">uint</span> <span class="n">m_maxPoints</span><span class="p">;</span>
         <span class="n">material_handle</span> <span class="n">m_Material</span><span class="p">;</span>
         <span class="n">image_handle</span> <span class="n">m_heightMap</span><span class="p">;</span>
+        <span class="n">image_handle</span>  <span class="n">m_AlbedoMap</span><span class="p">;</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

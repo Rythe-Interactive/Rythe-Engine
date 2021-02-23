@@ -17,6 +17,14 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structlegion_1_1core_1_1serialization_1_1has__load`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1serialization_1_1has__load_3_01_c_00_01_ret_07_args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1serialization_1_1has__save`
+
+- :ref:`exhale_struct_structlegion_1_1core_1_1serialization_1_1has__save_3_01_c_00_01_ret_07_args_8_8_8_08_4`
+
 - :ref:`exhale_struct_structlegion_1_1core_1_1serialization_1_1has__serialize`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1serialization_1_1has__serialize_3_01_c_00_01_ret_07_args_8_8_8_08_4`

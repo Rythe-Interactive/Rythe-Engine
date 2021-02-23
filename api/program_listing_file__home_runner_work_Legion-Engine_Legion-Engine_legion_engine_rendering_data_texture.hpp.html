@@ -119,8 +119,10 @@
 
     <span class="k">struct</span> <span class="n">texture</span>
     <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
         <span class="n">app</span><span class="o">::</span><span class="n">gl_id</span> <span class="n">textureId</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
 
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">path</span><span class="p">;</span>
         <span class="n">texture_components</span> <span class="n">channels</span><span class="p">;</span>
         <span class="n">texture_type</span> <span class="n">type</span><span class="p">;</span>
         <span class="n">texture_format</span> <span class="n">format</span><span class="p">;</span>

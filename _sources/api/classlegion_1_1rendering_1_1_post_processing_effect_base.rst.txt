@@ -14,6 +14,7 @@ Derived Types
 
 - ``public legion::rendering::PostProcessingEffect< Self >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_post_processing_effect`)
 - ``public legion::rendering::PostProcessingEffect< Bloom >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_post_processing_effect`)
+- ``public legion::rendering::PostProcessingEffect< DepthOfField >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_post_processing_effect`)
 - ``public legion::rendering::PostProcessingEffect< FXAA >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_post_processing_effect`)
 - ``public legion::rendering::PostProcessingEffect< Tonemapping >`` (:ref:`exhale_class_classlegion_1_1rendering_1_1_post_processing_effect`)
 

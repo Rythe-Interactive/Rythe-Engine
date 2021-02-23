@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1physics_1_1_fracture_params:
+
+Struct FractureParams
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_fractureparams.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::physics::FractureParams
+   :members:
+   :protected-members:
+   :undoc-members:

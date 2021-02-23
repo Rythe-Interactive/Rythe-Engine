@@ -31,6 +31,8 @@ Includes
 
 - ``core/async/rw_spinlock.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_async_rw_spinlock.hpp`)
 
+- ``core/data/image.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_image.hpp`)
+
 - ``core/filesystem/resource.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_resource.hpp`)
 
 - ``core/filesystem/view.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_filesystem_view.hpp`)
@@ -77,6 +79,8 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structlegion_1_1core_1_1material__data`
+
 - :ref:`exhale_class_structlegion_1_1core_1_1mesh`
 
 - :ref:`exhale_class_structlegion_1_1core_1_1mesh__handle`
@@ -86,6 +90,13 @@ Classes
 - :ref:`exhale_class_classlegion_1_1core_1_1_mesh_cache`
 
 - :ref:`exhale_class_structlegion_1_1core_1_1sub__mesh`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_mesh_8hpp_1a203e886996a6772dc1c9c77bcdf27f23`
 
 
 Variables

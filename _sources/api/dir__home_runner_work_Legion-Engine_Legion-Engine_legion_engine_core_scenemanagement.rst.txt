@@ -11,11 +11,15 @@ Directory scenemanagement
 
 *Directory path:* ``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/core/scenemanagement``
 
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_components`
+
 
 Files
 -----
 
-- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scene.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scenemanager.cpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scenemanager.hpp`
 

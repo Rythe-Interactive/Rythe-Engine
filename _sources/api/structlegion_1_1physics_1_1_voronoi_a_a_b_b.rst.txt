@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1physics_1_1_voronoi_a_a_b_b:
+
+Struct VoronoiAABB
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_data_VoronoiAABB.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::physics::VoronoiAABB
+   :members:
+   :protected-members:
+   :undoc-members:

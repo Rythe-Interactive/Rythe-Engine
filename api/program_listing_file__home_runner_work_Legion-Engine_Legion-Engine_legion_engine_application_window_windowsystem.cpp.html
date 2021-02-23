@@ -580,10 +580,10 @@
         <span class="p">{</span>
             <span class="n">window</span> <span class="n">win</span> <span class="o">=</span> <span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">window</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">();</span>
             <span class="p">{</span>
-                <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span> <span class="n">guard</span><span class="p">(</span><span class="o">*</span><span class="n">win</span><span class="p">.</span><span class="n">lock</span><span class="p">);</span>
-                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+                <span class="n">context_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">guard</span><span class="p">.</span><span class="n">contextIsValid</span><span class="p">())</span>
+                    <span class="k">continue</span><span class="p">;</span>
                 <span class="n">ContextHelper</span><span class="o">::</span><span class="n">swapBuffers</span><span class="p">(</span><span class="n">win</span><span class="p">);</span>
-                <span class="n">ContextHelper</span><span class="o">::</span><span class="n">makeContextCurrent</span><span class="p">(</span><span class="k">nullptr</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>

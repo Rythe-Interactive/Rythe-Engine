@@ -1,0 +1,13 @@
+.. _exhale_function_type__util_8hpp_1a6e1bb96028c55350a8b55389d952f25a:
+
+Template Function legion::core::nameOfType(T)
+=============================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_types_type_util.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: legion::core::nameOfType(T)

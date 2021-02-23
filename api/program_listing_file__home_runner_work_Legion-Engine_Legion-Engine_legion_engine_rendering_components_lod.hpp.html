@@ -53,10 +53,8 @@
 <span class="p">{</span>
     <span class="k">struct</span> <span class="n">lod</span>
     <span class="p">{</span>
-        <span class="c1">// lod() = default;</span>
-        <span class="n">lod</span><span class="p">(</span><span class="kt">int</span> <span class="n">maxLevel</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="kt">float</span> <span class="n">maxDistance</span> <span class="o">=</span> <span class="mf">50.0f</span><span class="p">)</span> <span class="o">:</span> <span class="n">MaxLod</span><span class="p">(</span><span class="n">maxLevel</span><span class="p">),</span> <span class="n">m_maxDistance</span><span class="p">(</span><span class="n">maxDistance</span><span class="p">)</span>
+        <span class="n">lod</span><span class="p">(</span><span class="kt">int</span> <span class="n">maxLevel</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="kt">float</span> <span class="n">maxDistance</span> <span class="o">=</span> <span class="mf">35.0f</span><span class="p">)</span> <span class="o">:</span> <span class="n">MaxLod</span><span class="p">(</span><span class="n">maxLevel</span><span class="p">),</span> <span class="n">m_maxDistance</span><span class="p">(</span><span class="n">maxDistance</span><span class="p">)</span>
         <span class="p">{</span>
-        <span class="c1">//    UpdateThresholdLinear();</span>
         <span class="p">}</span>
         <span class="kt">int</span> <span class="n">MaxLod</span><span class="p">;</span>
         <span class="kt">int</span> <span class="n">Level</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>

@@ -30,11 +30,19 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_contact_vertex`
 
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_convex_convex_collision_info`
+
 - :ref:`exhale_struct_structlegion_1_1physics_1_1cube__collider__params`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_edge_label`
 
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_fracture_countdown`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_fracture_params`
+
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_fracturer`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_fracturer_collider_to_mesh_pairing`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_half_edge_edge`
 
@@ -69,6 +77,14 @@ Classes
 - :ref:`exhale_struct_structlegion_1_1physics_1_1rigidbody`
 
 - :ref:`exhale_struct_structlegion_1_1physics_1_1_splitter_intersection_info`
+
+- :ref:`exhale_struct_structlegion_1_1physics_1_1_voronoi_a_a_b_b`
+
+- :ref:`exhale_class_classlegion_1_1physics_1_1_broadphase_bruteforce`
+
+- :ref:`exhale_class_classlegion_1_1physics_1_1_broad_phase_collision_algorithm`
+
+- :ref:`exhale_class_classlegion_1_1physics_1_1_broadphase_uniform_grid`
 
 - :ref:`exhale_class_structlegion_1_1physics_1_1collision__event`
 
@@ -107,7 +123,7 @@ Enums
 -----
 
 
-- :ref:`exhale_enum_splittable__polygon_8h_1a055b4a8ae65fc48792424145dbede841`
+- :ref:`exhale_enum_splittable__polygon_8hpp_1a055b4a8ae65fc48792424145dbede841`
 
 
 Typedefs
@@ -118,7 +134,7 @@ Typedefs
 
 - :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1ac22df5277e2553777688a72132d2b403`
 
-- :ref:`exhale_typedef_physicssystem_8hpp_1a185b74ed9c5197beba4040cf4f42ce02`
+- :ref:`exhale_typedef_physics__statics_8hpp_1a185b74ed9c5197beba4040cf4f42ce02`
 
 - :ref:`exhale_typedef_mesh__splitter__typedefs_8hpp_1a3041e1e9a86e0706c4c1a68f6d29918f`
 

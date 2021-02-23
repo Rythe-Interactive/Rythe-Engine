@@ -125,6 +125,7 @@
         <span class="k">if</span> <span class="p">(</span><span class="n">m_materials</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
             <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
 
+
         <span class="k">if</span> <span class="p">(</span><span class="n">shader</span> <span class="o">==</span> <span class="n">invalid_shader_handle</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Tried to create a material named {} with an invalid shader.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
@@ -222,10 +223,17 @@
         <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">bind</span><span class="p">();</span>
     <span class="p">}</span>
 
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">get_name</span><span class="p">()</span>
+    <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">get_name</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">m_name</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get_name</span><span class="p">();</span>
+    <span class="p">}</span>
+
+
+    <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">material_parameter_base</span><span class="o">&gt;&gt;&amp;</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">get_params</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">get_params</span><span class="p">();</span>
     <span class="p">}</span>
 
     <span class="n">attribute</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">get_attribute</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span>

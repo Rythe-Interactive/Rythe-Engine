@@ -49,6 +49,7 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/data/particle_system_cache.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="cpf">&lt;rendering/components/point_cloud_particle_container.hpp&gt;</span><span class="cp"></span>
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
 <span class="p">{</span>
     <span class="k">struct</span> <span class="n">particle_emitter</span>
@@ -58,7 +59,13 @@
         <span class="kt">bool</span> <span class="n">playAnimation</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
         <span class="n">ParticleSystemHandle</span> <span class="n">particleSystemHandle</span><span class="p">;</span>
         <span class="kt">bool</span> <span class="n">setupCompleted</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">pointInput</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span> <span class="n">colorInput</span><span class="p">;</span>
+        <span class="n">point_cloud_particle_container</span><span class="o">*</span> <span class="n">container</span><span class="p">;</span>
     <span class="p">};</span>
+
+
 <span class="p">}</span>
 </pre></div>
 </div>

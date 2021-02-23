@@ -166,15 +166,97 @@
             <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Make normals for face convex with itself: returning false&quot;</span><span class="p">);</span>
             <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">difference</span> <span class="o">=</span> <span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span> <span class="o">-</span> <span class="n">other</span><span class="p">.</span><span class="n">centroid</span><span class="p">;</span>
-        <span class="kt">float</span> <span class="n">scaledAngle</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">difference</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
 
-        <span class="c1">// if the scaledAngle is smaller or equal to 0, it is not convex</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">scaledAngle</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">face_angle_relation</span> <span class="n">relation</span><span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">getAngleRelation</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">relation</span> <span class="o">==</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">concave</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">inverse</span><span class="p">();</span>
             <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
         <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">relation</span> <span class="o">==</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">coplanar</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;COPLANAR&quot;</span><span class="p">);</span>
+            <span class="k">this</span><span class="o">-&gt;</span><span class="n">normal</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">normal</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+
+        <span class="p">}</span>
+
+        <span class="c1">//math::vec3 difference = startEdge-&gt;edgePosition - other.centroid;</span>
+        <span class="c1">//float scaledAngle = math::dot(difference, normal);</span>
+
+        <span class="c1">//if (scaledAngle &lt; -math::epsilon&lt;float&gt;())</span>
+        <span class="c1">//{</span>
+        <span class="c1">//    inverse();</span>
+        <span class="c1">//    return true;</span>
+        <span class="c1">//}</span>
+        <span class="c1">//else if (scaledAngle &lt; math::epsilon&lt;float&gt;())</span>
+        <span class="c1">//{</span>
+        <span class="c1">//    this-&gt;normal = other.normal;</span>
+        <span class="c1">//    log::warn(&quot;COPLANAR&quot;);</span>
+        <span class="c1">//    return true;</span>
+        <span class="c1">//}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithNeighbors</span><span class="p">(</span><span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">start</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">startEdge</span><span class="p">;</span>
+        <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">end</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+
+       <span class="c1">//do</span>
+       <span class="c1">// {</span>
+       <span class="c1">//     log::debug(&quot;:makeNormalsConvexWithNeighbors 1 &quot;);</span>
+       <span class="c1">//     if (start == other.startEdge-&gt;pairingEdge)</span>
+       <span class="c1">//     {</span>
+       <span class="c1">//         end = start;</span>
+       <span class="c1">//         break;</span>
+       <span class="c1">//     }</span>
+
+       <span class="c1">//     start = start-&gt;nextEdge;</span>
+       <span class="c1">// }</span>
+       <span class="c1">// while (start != this-&gt;startEdge);</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">findMiddleEdge</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">,</span> <span class="n">other</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">end</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//log::debug(&quot;end == nullptr &quot;);</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">start</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
+       <span class="c1">// end = this-&gt;startEdge;</span>
+
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="c1">//log::debug(&quot;:makeNormalsConvexWithNeighbors 2 &quot;);</span>
+
+            <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">start</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">face</span><span class="p">;</span>
+            <span class="n">face_angle_relation</span> <span class="n">relation</span> <span class="o">=</span> <span class="n">face</span><span class="o">-&gt;</span><span class="n">getAngleRelation</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">relation</span> <span class="o">==</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">concave</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">inverse</span><span class="p">();</span>
+                <span class="c1">//log::debug(&quot;inversing normals&quot;);</span>
+                <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">relation</span> <span class="o">==</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">convex</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">//if (relation == face_angle_relation::coplanar)</span>
+            <span class="c1">//{</span>
+            <span class="c1">//   // log::debug(&quot;COPLANAR&quot;);</span>
+            <span class="c1">//    this-&gt;normal = other.normal;</span>
+            <span class="c1">//    return true;</span>
+
+            <span class="c1">//}</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">start</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">start</span> <span class="o">!=</span> <span class="n">end</span><span class="p">);</span>
+
+        <span class="c1">//log::debug(&quot;mission failed&quot;);</span>
         <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
     <span class="p">}</span>
 
@@ -185,14 +267,26 @@
             <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Calculating face angle relation between the same face, returning coplanar&quot;</span><span class="p">);</span>
             <span class="k">return</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">coplanar</span><span class="p">;</span>
         <span class="p">}</span>
+
+        <span class="c1">//log::debug(&quot;IN FUNCTION face i {} face j {}&quot;, math::to_string(normal), math::to_string(other.normal));</span>
         <span class="kt">float</span> <span class="n">distToPlane</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">pointToPlane</span><span class="p">(</span><span class="n">centroid</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">centroid</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">normal</span><span class="p">);</span>
+        <span class="c1">//float distToPlane2 = math::pointToPlane(other.centroid, centroid, normal);</span>
+        <span class="cm">/*log::debug(&quot;centroid {} other.centroid {} &quot;, centroid, other.centroid);</span>
+<span class="cm">        log::debug(&quot;distToPlane {} &quot;, distToPlane);</span>
+<span class="cm">        log::debug(&quot;distToPlane2 {} &quot;, distToPlane2);</span>
+<span class="cm">        log::debug(&quot;angle {} &quot;, math::angleToPlane(centroid, other.centroid, other.normal));</span>
+<span class="cm">        log::debug(&quot;angle2 {} &quot;, math::angleToPlane(other.centroid, centroid, normal));*/</span>
+        <span class="c1">//distToPlane2 = distToPlane;</span>
+        <span class="c1">//log::debug(&quot;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\&quot;);</span>
+
+        <span class="k">static</span> <span class="kt">float</span> <span class="n">error</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">())</span> <span class="p">;</span>
 
         <span class="c1">// if the distance to the face is negative, is it under the other face, therefore convex</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">distToPlane</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">())</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">distToPlane</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="n">error</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">convex</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">distToPlane</span> <span class="o">&gt;=</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">())</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">distToPlane</span> <span class="o">&gt;=</span> <span class="n">error</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">concave</span><span class="p">;</span>
         <span class="p">}</span>
@@ -220,6 +314,50 @@
         <span class="n">inversedNormal</span> <span class="o">|=</span> <span class="n">second</span><span class="p">.</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="n">first</span><span class="p">);</span>
         <span class="k">return</span> <span class="n">inversedNormal</span><span class="p">;</span>
     <span class="p">}</span>
+
+     <span class="kt">void</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">mergeCoplanarNeighbors</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;</span> <span class="o">&amp;</span> <span class="n">removed</span><span class="p">)</span>
+     <span class="p">{</span>
+
+        <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">current</span> <span class="o">=</span> <span class="n">startEdge</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">normal</span> <span class="o">!=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">neigbor</span> <span class="o">=</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">face</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">neigbor</span><span class="o">-&gt;</span><span class="n">normal</span> <span class="o">!=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">face_angle_relation</span> <span class="n">relation</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">getAngleRelation</span><span class="p">(</span><span class="o">*</span><span class="n">neigbor</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">relation</span> <span class="o">==</span> <span class="n">face_angle_relation</span><span class="o">::</span><span class="n">coplanar</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//log::debug(&quot;relation == face_angle_relation::coplanar in :mergeCoplanarNeighbors &quot;);</span>
+                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">middle</span> <span class="o">=</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">findMiddleEdge</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">,</span> <span class="o">*</span><span class="n">neigbor</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">middle</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">this</span><span class="o">-&gt;</span><span class="n">mergeFaces</span><span class="p">(</span><span class="o">*</span><span class="n">middle</span><span class="p">);</span>
+
+                    <span class="n">removed</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">neigbor</span><span class="p">);</span>
+                    <span class="n">neigbor</span><span class="o">-&gt;</span><span class="n">normal</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">();</span>
+                <span class="p">}</span>
+
+            <span class="p">}</span>
+
+           <span class="c1">// this-&gt;mergeFaces</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">current</span> <span class="o">!=</span> <span class="n">startEdge</span><span class="p">);</span>
+
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
 
     <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">findMiddleEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="k">const</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">second</span><span class="p">)</span>
     <span class="p">{</span>

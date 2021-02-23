@@ -58,6 +58,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/default/postfx/tonemapping.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/default/postfx/fxaa.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/default/postfx/bloom.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/default/postfx/depthoffield.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/data/buffer.hpp&gt;</span><span class="cp"></span>
 
 
@@ -75,9 +76,11 @@
         <span class="n">attachStage</span><span class="o">&lt;</span><span class="n">PostProcessingStage</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="n">attachStage</span><span class="o">&lt;</span><span class="n">SubmitStage</span><span class="o">&gt;</span><span class="p">();</span>
 
-        <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">addEffect</span><span class="o">&lt;</span><span class="n">Bloom</span><span class="o">&gt;</span><span class="p">();</span>
-        <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">addEffect</span><span class="o">&lt;</span><span class="n">Tonemapping</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">64</span><span class="p">);</span>
-        <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">addEffect</span><span class="o">&lt;</span><span class="n">FXAA</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">);</span>
+        <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">addEffect</span><span class="o">&lt;</span><span class="n">Tonemapping</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">addEffect</span><span class="o">&lt;</span><span class="n">Bloom</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">64</span><span class="p">);</span>
+        <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">addEffect</span><span class="o">&lt;</span><span class="n">DepthOfField</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">80</span><span class="p">);</span>
+        <span class="n">PostProcessingStage</span><span class="o">::</span><span class="n">addEffect</span><span class="o">&lt;</span><span class="n">FXAA</span><span class="o">&gt;</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">);</span>
+
 
         <span class="n">buffer</span> <span class="n">modelMatrixBuffer</span><span class="p">;</span>
 

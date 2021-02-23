@@ -63,7 +63,7 @@
     <span class="kt">void</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">endDebugDomain</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">localLines</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-
+            <span class="c1">//localLines = new std::unordered_set&lt;debug::debug_line_event&gt;();*/</span>
         <span class="n">size_type</span> <span class="n">size</span> <span class="o">=</span> <span class="n">localLines</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
@@ -110,7 +110,6 @@
 
     <span class="kt">void</span> <span class="n">DebugRenderStage</span><span class="o">::</span><span class="n">render</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">,</span> <span class="n">camera</span><span class="o">&amp;</span> <span class="n">cam</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">using</span> <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">fs</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
 
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">debug</span><span class="o">::</span><span class="n">debug_line_event</span><span class="o">&gt;</span> <span class="n">lines</span><span class="p">;</span>

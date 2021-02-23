@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1serialization_1_1has__load_3_01_c_00_01_ret_07_args_8_8_8_08_4:
+
+Template Struct has_load< C, Ret(Args...)>
+==========================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationmeta.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::serialization::has_load< C, Ret(Args...)>
+   :members:
+   :protected-members:
+   :undoc-members:

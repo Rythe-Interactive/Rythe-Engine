@@ -20,19 +20,9 @@ Program Listing for File physics_component.hpp
    {
        struct physicsComponent
        {
-           static void init(physicsComponent& comp)
-           {
-               comp.colliders = new std::vector<std::shared_ptr<PhysicsCollider>>();
-           }
-   
-           static void destroy(physicsComponent& comp)
-           {
-               delete comp.colliders;
-           }
-   
            //physics material
    
-           std::vector<std::shared_ptr<PhysicsCollider>>* colliders;
+           std::vector<std::shared_ptr<PhysicsCollider>> colliders;
    
            bool isTrigger =false;
    
@@ -42,8 +32,9 @@ Program Listing for File physics_component.hpp
    
            void calculateNewLocalCenterOfMass();
    
-           std::shared_ptr<ConvexCollider> ConstructConvexHull(legion::core::mesh_handle& meshHandle);
-           void ConstructConvexHull(legion::core::mesh_handle& meshHandle, ConvexCollider& col);
+           std::shared_ptr<ConvexCollider> ConstructConvexHull(legion::core::mesh_handle meshHandle,bool shouldDebug = false);
+   
+           void ConstructConvexHull(legion::core::mesh_handle meshHandle, ConvexCollider& col);
    
            void ConstructBox(/*mesh*/);
    

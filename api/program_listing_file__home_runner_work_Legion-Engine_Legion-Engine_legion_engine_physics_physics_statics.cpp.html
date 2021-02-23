@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File physics_statics.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File physics_statics.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-physics-statics-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-physics-statics-cpp"></span><h1>Program Listing for File physics_statics.cpp<a class="headerlink" href="#program-listing-for-file-physics-statics-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-physics-statics-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/physics_statics.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;physics/physics_statics.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/debugrendering.hpp&gt;</span><span class="cp"></span>
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
+<span class="p">{</span>
+    <span class="kt">void</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">DetectConvexConvexCollision</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexA</span><span class="p">,</span> <span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexB</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformA</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformB</span>
+        <span class="p">,</span> <span class="n">ConvexConvexCollisionInfo</span><span class="o">&amp;</span> <span class="n">outCollisionInfo</span><span class="p">,</span><span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//&#39;this&#39; is colliderB and &#39;convexCollider&#39; is colliderA</span>
+
+        <span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">ARefSeperation</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindSeperatingAxisByExtremePointProjection</span><span class="p">(</span>
+            <span class="n">convexB</span><span class="p">,</span> <span class="n">convexA</span><span class="p">,</span> <span class="n">transformB</span><span class="p">,</span> <span class="n">transformA</span><span class="p">,</span> <span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">ARefFace</span><span class="p">,</span> <span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">ARefSeperation</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">ARefFace</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//log::debug(&quot;Not Found on A &quot;);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+        <span class="c1">//log::debug(&quot;Face Check B&quot;);</span>
+        <span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">BRefSeperation</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindSeperatingAxisByExtremePointProjection</span><span class="p">(</span><span class="n">convexA</span><span class="p">,</span>
+            <span class="n">convexB</span><span class="p">,</span> <span class="n">transformA</span><span class="p">,</span><span class="n">transformB</span><span class="p">,</span> <span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">BRefFace</span><span class="p">,</span> <span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">BRefSeperation</span><span class="p">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">BRefFace</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">//log::debug(&quot;Not Found on B &quot;);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">PointerEncapsulator</span><span class="o">&lt;</span> <span class="n">HalfEdgeEdge</span><span class="o">&gt;</span> <span class="n">edgeRef</span><span class="p">;</span>
+        <span class="n">PointerEncapsulator</span><span class="o">&lt;</span> <span class="n">HalfEdgeEdge</span><span class="o">&gt;</span> <span class="n">edgeInc</span><span class="p">;</span>
+
+
+        <span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">aToBEdgeSeperation</span> <span class="o">=</span><span class="mf">0.0f</span><span class="p">;</span>
+        <span class="c1">//log::debug(&quot;Edge Check&quot;);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindSeperatingAxisByGaussMapEdgeCheck</span><span class="p">(</span><span class="n">convexB</span><span class="p">,</span> <span class="n">convexA</span><span class="p">,</span> <span class="n">transformB</span><span class="p">,</span><span class="n">transformA</span><span class="p">,</span>
+            <span class="n">edgeRef</span><span class="p">,</span> <span class="n">edgeInc</span><span class="p">,</span> <span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">edgeNormal</span><span class="p">,</span> <span class="n">outCollisionInfo</span><span class="p">.</span><span class="n">aToBEdgeSeperation</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="c1">//log::debug(&quot;aToBEdgeSeperation {} &quot; );</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">manifold</span><span class="p">.</span><span class="n">isColliding</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">float</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">GetSupportPoint</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">vertices</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">direction</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">outVec</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">float</span> <span class="n">currentMaximumSupportPoint</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">lowest</span><span class="p">();</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">vert</span> <span class="p">:</span> <span class="n">vertices</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">float</span> <span class="n">dotResult</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">direction</span><span class="p">,</span> <span class="n">vert</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">dotResult</span> <span class="o">&gt;</span> <span class="n">currentMaximumSupportPoint</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">currentMaximumSupportPoint</span> <span class="o">=</span> <span class="n">dotResult</span><span class="p">;</span>
+                <span class="n">outVec</span> <span class="o">=</span> <span class="n">vert</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">currentMaximumSupportPoint</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">FindSeperatingAxisByGaussMapEdgeCheck</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexA</span><span class="p">,</span> <span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexB</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformA</span><span class="p">,</span>
+        <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformB</span><span class="p">,</span> <span class="n">PointerEncapsulator</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">&gt;&amp;</span> <span class="n">refEdge</span><span class="p">,</span> <span class="n">PointerEncapsulator</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">&gt;&amp;</span> <span class="n">incEdge</span><span class="p">,</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">seperatingAxisFound</span><span class="p">,</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">maximumSeperation</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">shouldDebug</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">float</span> <span class="n">currentMinimumSeperation</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">centroidDir</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">convexA</span><span class="o">-&gt;</span><span class="n">GetLocalCentroid</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">positionA</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">transformA</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">+</span> <span class="n">centroidDir</span><span class="p">;</span>
+
+        <span class="kt">int</span> <span class="n">facei</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">facej</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="nl">faceA</span> <span class="p">:</span> <span class="n">convexA</span><span class="o">-&gt;</span><span class="n">GetHalfEdgeFaces</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="c1">//----------------- Get all edges of faceA ------------//</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">*&gt;</span> <span class="n">convexAHalfEdges</span><span class="p">;</span>
+
+            <span class="k">auto</span> <span class="n">lambda</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">convexAHalfEdges</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">convexAHalfEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">edge</span><span class="p">);</span>
+            <span class="p">};</span>
+
+            <span class="n">faceA</span><span class="o">-&gt;</span><span class="n">forEachEdge</span><span class="p">(</span><span class="n">lambda</span><span class="p">);</span>
+            <span class="n">facej</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="nl">faceB</span> <span class="p">:</span> <span class="n">convexB</span><span class="o">-&gt;</span><span class="n">GetHalfEdgeFaces</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="c1">//----------------- Get all edges of faceB ------------//</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">*&gt;</span> <span class="n">convexBHalfEdges</span><span class="p">;</span>
+
+                <span class="k">auto</span> <span class="n">lambda</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">convexBHalfEdges</span><span class="p">](</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">convexBHalfEdges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">edge</span><span class="p">);</span>
+                <span class="p">};</span>
+
+                <span class="n">faceB</span><span class="o">-&gt;</span><span class="n">forEachEdge</span><span class="p">(</span><span class="n">lambda</span><span class="p">);</span>
+
+                <span class="k">for</span> <span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="nl">edgeA</span> <span class="p">:</span> <span class="n">convexAHalfEdges</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">for</span> <span class="p">(</span><span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="nl">edgeB</span> <span class="p">:</span> <span class="n">convexBHalfEdges</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="c1">//if the given edges creates a minkowski face</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">attemptBuildMinkowskiFace</span><span class="p">(</span><span class="n">edgeA</span><span class="p">,</span> <span class="n">edgeB</span><span class="p">,</span> <span class="n">transformA</span><span class="p">,</span> <span class="n">transformB</span><span class="p">))</span>
+                        <span class="p">{</span>
+                            <span class="c1">//get world edge direction</span>
+                            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeADirection</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">getLocalEdgeDirection</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+
+                            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeBDirection</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">getLocalEdgeDirection</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+
+                            <span class="n">edgeADirection</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">edgeADirection</span><span class="p">);</span>
+                            <span class="n">edgeBDirection</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">edgeBDirection</span><span class="p">);</span>
+
+                            <span class="c1">//get the seperating axis</span>
+                            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">seperatingAxis</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">edgeADirection</span><span class="p">,</span> <span class="n">edgeBDirection</span><span class="p">);</span>
+
+                            <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">epsilonEqual</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">length</span><span class="p">(</span><span class="n">seperatingAxis</span><span class="p">),</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">()))</span>
+                            <span class="p">{</span>
+                                <span class="k">continue</span><span class="p">;</span>
+                            <span class="p">}</span>
+
+                            <span class="n">seperatingAxis</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">seperatingAxis</span><span class="p">);</span>
+
+                            <span class="c1">//get world edge position</span>
+                            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeAtransformedPosition</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeA</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">edgeBtransformedPosition</span> <span class="o">=</span> <span class="n">transformB</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">edgeB</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+                            <span class="c1">//check if its pointing in the right direction</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">seperatingAxis</span><span class="p">,</span> <span class="n">edgeAtransformedPosition</span> <span class="o">-</span> <span class="n">positionA</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+                            <span class="p">{</span>
+                                <span class="n">seperatingAxis</span> <span class="o">=</span> <span class="o">-</span><span class="n">seperatingAxis</span><span class="p">;</span>
+                            <span class="p">}</span>
+
+                            <span class="c1">//check if given edges create a seperating axis</span>
+                            <span class="kt">float</span> <span class="n">distance</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">seperatingAxis</span><span class="p">,</span> <span class="n">edgeBtransformedPosition</span> <span class="o">-</span> <span class="n">edgeAtransformedPosition</span><span class="p">);</span>
+                            <span class="c1">//log::debug(&quot;distance {} , currentMinimumSeperation {}&quot;, distance, currentMinimumSeperation);</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">distance</span> <span class="o">&lt;</span> <span class="n">currentMinimumSeperation</span><span class="p">)</span>
+                            <span class="p">{</span>
+                                <span class="n">refEdge</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">edgeA</span><span class="p">;</span>
+                                <span class="n">incEdge</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">edgeB</span><span class="p">;</span>
+
+                                <span class="n">seperatingAxisFound</span> <span class="o">=</span> <span class="n">seperatingAxis</span><span class="p">;</span>
+                                <span class="n">currentMinimumSeperation</span> <span class="o">=</span> <span class="n">distance</span><span class="p">;</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="n">facej</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">facei</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">maximumSeperation</span> <span class="o">=</span> <span class="n">currentMinimumSeperation</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">currentMinimumSeperation</span> <span class="o">&gt;</span> <span class="mf">0.0f</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">bool</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">DetectConvexSphereCollision</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexA</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transformA</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">sphereWorldPosition</span><span class="p">,</span> <span class="kt">float</span> <span class="n">sphereRadius</span><span class="p">,</span>
+        <span class="kt">float</span><span class="o">&amp;</span> <span class="n">maximumSeperation</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//-----------------  check if the seperating axis is the line generated between the centroid of the hull and sphereWorldPosition ------------------//</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldHullCentroid</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">convexA</span><span class="o">-&gt;</span><span class="n">GetLocalCentroid</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">centroidSeperatingAxis</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">worldHullCentroid</span> <span class="o">-</span> <span class="n">sphereWorldPosition</span><span class="p">);</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">seperatingPlanePosition</span> <span class="o">=</span> <span class="n">sphereWorldPosition</span> <span class="o">+</span> <span class="n">centroidSeperatingAxis</span> <span class="o">*</span> <span class="n">sphereRadius</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldSupportPoint</span><span class="p">;</span>
+        <span class="n">GetSupportPoint</span><span class="p">(</span><span class="n">seperatingPlanePosition</span><span class="p">,</span> <span class="o">-</span><span class="n">centroidSeperatingAxis</span><span class="p">,</span> <span class="n">convexA</span><span class="p">,</span> <span class="n">transformA</span><span class="p">,</span> <span class="n">worldSupportPoint</span><span class="p">);</span>
+
+        <span class="kt">float</span> <span class="n">seperation</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">dot</span><span class="p">(</span><span class="n">worldSupportPoint</span> <span class="o">-</span> <span class="n">seperatingPlanePosition</span><span class="p">,</span> <span class="n">centroidSeperatingAxis</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">seperation</span> <span class="o">&gt;</span> <span class="mf">0.0f</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">maximumSeperation</span> <span class="o">=</span> <span class="n">seperation</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">maximumSeperation</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">lowest</span><span class="p">();</span>
+
+        <span class="c1">//--------------------------------- check if the seperating axis one of the faces of the convex hull ----------------------------------------------//</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">faceA</span> <span class="p">:</span> <span class="n">convexA</span><span class="o">-&gt;</span><span class="n">GetHalfEdgeFaces</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldFaceCentroid</span> <span class="o">=</span> <span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">faceA</span><span class="o">-&gt;</span><span class="n">centroid</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldFaceNormal</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">transformA</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">faceA</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+
+            <span class="kt">float</span> <span class="n">seperation</span> <span class="o">=</span> <span class="n">PointDistanceToPlane</span><span class="p">(</span><span class="n">worldFaceNormal</span><span class="p">,</span> <span class="n">worldFaceCentroid</span><span class="p">,</span> <span class="n">seperatingPlanePosition</span> <span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">seperation</span> <span class="o">&gt;</span> <span class="n">maximumSeperation</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">maximumSeperation</span> <span class="o">=</span> <span class="n">seperation</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">seperation</span> <span class="o">&gt;</span> <span class="n">sphereRadius</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+
+        <span class="p">}</span>
+
+
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">ConstructAABBFromPhysicsComponentWithTransform</span>
+    <span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">physicsComponent</span><span class="o">&gt;</span> <span class="n">physicsComponentToUse</span><span class="p">,</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>
+
+        <span class="c1">//auto physicsComponent = physicsComponentToUse.read();</span>
+
+        <span class="c1">//math::vec3 invTransUp = math::normalize( math::inverse(transform) * math::vec4(math::vec3(0, 1, 0), 0) );</span>
+        <span class="c1">//max.y = GetPhysicsComponentSupportPointAtDirection(invTransUp, physicsComponent);</span>
+        <span class="c1">//</span>
+        <span class="c1">//math::vec3 invTransDown = math::normalize(math::inverse(transform) * math::vec4(math::vec3(0, -1, 0), 0));</span>
+        <span class="c1">//min.y = GetPhysicsComponentSupportPointAtDirection(invTransUp, physicsComponent);</span>
+
+
+
+
+
+
+
+
+
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">min</span><span class="p">,</span><span class="n">max</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">float</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">GetPhysicsComponentSupportPointAtDirection</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">direction</span><span class="p">,</span> <span class="n">physicsComponent</span><span class="o">&amp;</span> <span class="n">physicsComponentToUse</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">float</span> <span class="n">currentMaximumSupportPoint</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;::</span><span class="n">lowest</span><span class="p">();</span>
+
+        <span class="c1">//std::vector&lt;math::vec3&gt; vertices;</span>
+        <span class="c1">//for (auto collider : *physicsComponentToUse.colliders)</span>
+        <span class="c1">//{</span>
+        <span class="c1">//    auto [first,second] = collider-&gt;GetminMaxLocalAABB();</span>
+        <span class="c1">//    vertices.push_back(first);</span>
+        <span class="c1">//    vertices.push_back(second);</span>
+        <span class="c1">//}</span>
+
+        <span class="c1">//for (const auto&amp; vert : vertices)</span>
+        <span class="c1">//{</span>
+        <span class="c1">//    float dotResult = math::dot(direction, vert);</span>
+
+        <span class="c1">//    if (dotResult &gt; currentMaximumSupportPoint)</span>
+        <span class="c1">//    {</span>
+        <span class="c1">//        currentMaximumSupportPoint = dotResult;</span>
+        <span class="c1">//    }</span>
+        <span class="c1">//}</span>
+
+        <span class="k">return</span> <span class="n">currentMaximumSupportPoint</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">ConstructAABBFromVertices</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">vertices</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>
+
+        <span class="c1">//max.y = GetSupportPoint(vertices, math::vec3(0, 1, 0));</span>
+        <span class="c1">//min.y = GetSupportPoint(vertices, math::vec3(0, -1, 0));</span>
+
+        <span class="c1">//max.x = GetSupportPoint(vertices, math::vec3(1, 0, 0));</span>
+        <span class="c1">//min.x = GetSupportPoint(vertices, math::vec3(-1, 0, 0));</span>
+
+
+        <span class="c1">//max.z = GetSupportPoint(vertices, math::vec3(0, 0, 1));</span>
+        <span class="c1">//min.z = GetSupportPoint(vertices, math::vec3(0, 0, -1));</span>
+
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">min</span><span class="p">,</span><span class="n">max</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">ConstructAABBFromTransformedVertices</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">vertices</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldPos</span> <span class="o">=</span> <span class="n">transform</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">outVec</span><span class="p">;</span>
+        <span class="c1">//up</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">invTransUp</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="n">GetSupportPoint</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">invTransUp</span><span class="p">,</span> <span class="n">outVec</span><span class="p">);</span>
+        <span class="n">max</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span> <span class="n">outVec</span><span class="p">,</span><span class="mi">1</span><span class="p">)).</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="c1">//down</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">invTransDown</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="n">GetSupportPoint</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">invTransDown</span><span class="p">,</span> <span class="n">outVec</span><span class="p">);</span>
+        <span class="n">min</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">outVec</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="c1">//right</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">invTransRight</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="n">GetSupportPoint</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">invTransRight</span><span class="p">,</span> <span class="n">outVec</span><span class="p">);</span>
+        <span class="n">max</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">outVec</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="n">x</span><span class="p">;</span>
+
+        <span class="c1">//left</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">invTransLeft</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="n">GetSupportPoint</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">invTransLeft</span><span class="p">,</span> <span class="n">outVec</span><span class="p">);</span>
+        <span class="n">min</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">outVec</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="n">x</span><span class="p">;</span>
+
+        <span class="c1">//forward</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">invTransForward</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="n">GetSupportPoint</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">invTransForward</span><span class="p">,</span> <span class="n">outVec</span><span class="p">);</span>
+        <span class="n">max</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">outVec</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="n">z</span><span class="p">;</span>
+
+        <span class="c1">//backward</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">invTransBackward</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="n">GetSupportPoint</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">invTransBackward</span><span class="p">,</span> <span class="n">outVec</span><span class="p">);</span>
+        <span class="n">min</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">transform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">outVec</span><span class="p">,</span> <span class="mi">1</span><span class="p">)).</span><span class="n">z</span><span class="p">;</span>
+
+
+
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">PhysicsStatics</span><span class="o">::</span><span class="n">CombineAABB</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">first</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">second</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">firstLow</span> <span class="o">=</span> <span class="n">first</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">firstHigh</span> <span class="o">=</span> <span class="n">first</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">secondLow</span> <span class="o">=</span> <span class="n">second</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">secondHigh</span> <span class="o">=</span> <span class="n">second</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">lowBounds</span> <span class="o">=</span> <span class="n">secondLow</span><span class="p">;</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">highBounds</span> <span class="o">=</span> <span class="n">secondHigh</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">firstLow</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">secondLow</span><span class="p">.</span><span class="n">x</span><span class="p">)</span>   <span class="n">lowBounds</span><span class="p">.</span><span class="n">x</span>    <span class="o">=</span> <span class="n">firstLow</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">firstLow</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">secondLow</span><span class="p">.</span><span class="n">y</span><span class="p">)</span>   <span class="n">lowBounds</span><span class="p">.</span><span class="n">y</span>    <span class="o">=</span> <span class="n">firstLow</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">firstLow</span><span class="p">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">secondLow</span><span class="p">.</span><span class="n">z</span><span class="p">)</span>   <span class="n">lowBounds</span><span class="p">.</span><span class="n">z</span>    <span class="o">=</span> <span class="n">firstLow</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">firstHigh</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">secondHigh</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="n">highBounds</span><span class="p">.</span><span class="n">x</span>   <span class="o">=</span> <span class="n">firstHigh</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">firstHigh</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">secondHigh</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="n">highBounds</span><span class="p">.</span><span class="n">y</span>   <span class="o">=</span> <span class="n">firstHigh</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">firstHigh</span><span class="p">.</span><span class="n">z</span> <span class="o">&gt;</span> <span class="n">secondHigh</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="n">highBounds</span><span class="p">.</span><span class="n">z</span>   <span class="o">=</span> <span class="n">firstHigh</span><span class="p">.</span><span class="n">z</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">lowBounds</span><span class="p">,</span> <span class="n">highBounds</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_physics_statics.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

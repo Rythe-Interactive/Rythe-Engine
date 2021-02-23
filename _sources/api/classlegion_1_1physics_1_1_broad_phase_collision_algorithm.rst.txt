@@ -1,0 +1,26 @@
+.. _exhale_class_classlegion_1_1physics_1_1_broad_phase_collision_algorithm:
+
+Class BroadPhaseCollisionAlgorithm
+==================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphasecollisionalgorithm.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public legion::physics::BroadphaseBruteforce`` (:ref:`exhale_class_classlegion_1_1physics_1_1_broadphase_bruteforce`)
+- ``public legion::physics::BroadphaseUniformGrid`` (:ref:`exhale_class_classlegion_1_1physics_1_1_broadphase_uniform_grid`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::physics::BroadPhaseCollisionAlgorithm
+   :members:
+   :protected-members:
+   :undoc-members:

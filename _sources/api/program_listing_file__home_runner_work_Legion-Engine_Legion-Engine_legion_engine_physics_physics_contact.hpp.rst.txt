@@ -25,12 +25,12 @@ Program Listing for File physics_contact.hpp
    
        struct physics_contact
        {
-           std::shared_ptr<PhysicsCollider> refCollider;
+           PhysicsCollider* refCollider;
    
            EdgeLabel label;
    
-           ecs::component_handle<rigidbody> rbRefHandle;
-           ecs::component_handle<rigidbody> rbIncHandle;
+           rigidbody* rbRef;
+           rigidbody* rbInc;
    
            math::vec3 RefWorldContact;
            math::vec3 IncWorldContact;
@@ -58,6 +58,8 @@ Program Listing for File physics_contact.hpp
    
            void ApplyWarmStarting()
            {
+               OPTICK_EVENT();
+   
                math::vec3 Ra = RefWorldContact - refRBCentroid;
                math::vec3 Rb = IncWorldContact - incRBCentroid;
    
@@ -68,8 +70,10 @@ Program Listing for File physics_contact.hpp
    
            /* @brief Calculate a certain linear and angular impulse that will resolve the collision
            */
-           void resolveContactConstraint(float dt,int i)
+           void resolveContactConstraint(float dt, int i)
            {
+               OPTICK_EVENT();
+   
                //the idea behind this collision resolution strategy (Sequential Impulses) 
                //is we resolve the collision by giving an impulse towards both 
                //rigidbodies so that the collision would resolve itself in the next time step.
@@ -128,17 +132,14 @@ Program Listing for File physics_contact.hpp
    
                //calculate J.V + b
                math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
-               calculateJacobianComponents(collisionNormal,Ra, minRaCrossN, Rb, RbCrossN);
-   
-               auto RefRB = rbRefHandle.read();
-               auto IncRB = rbIncHandle.read();
+               calculateJacobianComponents(collisionNormal, Ra, minRaCrossN, Rb, RbCrossN);
    
                math::vec3 va, wa, vb, wb;
    
-               va = RefRB.velocity;
-               wa = RefRB.angularVelocity;
-               vb = IncRB.velocity;
-               wb = IncRB.angularVelocity;
+               va = rbRef ? rbRef->velocity : math::vec3::zero;
+               wa = rbRef ? rbRef->angularVelocity : math::vec3::zero;
+               vb = rbInc ? rbInc->velocity : math::vec3::zero;
+               wb = rbInc ? rbInc->angularVelocity : math::vec3::zero;
    
                float JVx = math::dot(-collisionNormal, va);
                float JVy = math::dot(minRaCrossN, wa);
@@ -154,7 +155,7 @@ Program Listing for File physics_contact.hpp
    
                //resolve the position violation by adding it into the lambda
                float penetration = math::dot(RefWorldContact - IncWorldContact, -collisionNormal);
-               
+   
                //but allow some penetration for the sake of stability
                penetration = math::min(penetration + physics::constants::baumgarteSlop, 0.0f);
    
@@ -163,7 +164,7 @@ Program Listing for File physics_contact.hpp
                //-------------------------- Restitution Constraint ----------------------------------//
    
                //calculate restitution between the 2 bodies
-               float restCoeff = rigidbody::calculateRestitution(RefRB.restitution, IncRB.restitution);
+               float restCoeff = rigidbody::calculateRestitution(rbRef? rbRef->restitution : 0.3f, rbInc? rbInc->restitution : 0.3f);
    
                math::vec3 minWaCrossRa = math::cross(-wa, Ra);
                math::vec3 WbCrossRb = math::cross(wb, Rb);
@@ -180,7 +181,7 @@ Program Listing for File physics_contact.hpp
    
    
                float biasFactor = baumgarteConstraint + restitutionConstraint;
-               
+   
                float foundLambda = (minJV + biasFactor) / effectiveMass;
    
                float oldTotalLambda = totalLambda;
@@ -197,10 +198,9 @@ Program Listing for File physics_contact.hpp
    
            void resolveFrictionConstraint()
            {
-               auto RefRB = rbRefHandle.read();
-               auto IncRB = rbIncHandle.read();
+               OPTICK_EVENT();
    
-               float frictionCoeff = rigidbody::calculateFriction(RefRB.friction,IncRB.friction);
+               float frictionCoeff = rigidbody::calculateFriction(rbRef ? rbRef->friction : 0.3f, rbInc ? rbInc->friction : 0.3f);
                float frictionConstraint = totalLambda * frictionCoeff;
    
                math::vec3 Ra = RefWorldContact - refRBCentroid;
@@ -247,13 +247,14 @@ Program Listing for File physics_contact.hpp
            */
            void preCalculateEffectiveMass()
            {
+               OPTICK_EVENT();
                //calculate tangent vectors
    
                //--------------------------- pre calculate contact constraint effective mass -----------------------------------//
    
                tangentNormal1 = math::cross(collisionNormal, math::vec3(1, 0, 0));
    
-               if (math::epsilonEqual(math::length(tangentNormal1),0.0f,0.01f))
+               if (math::epsilonEqual(math::length(tangentNormal1), 0.0f, 0.01f))
                {
                    tangentNormal1 = math::cross(collisionNormal, math::vec3(0, 1, 0));
                }
@@ -272,15 +273,12 @@ Program Listing for File physics_contact.hpp
                math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
                calculateJacobianComponents(normal, Ra, minRaCrossN, Rb, RbCrossN);
    
-               auto RefRB = rbRefHandle.read();
-               auto IncRB = rbIncHandle.read();
-   
                math::vec3 va, wa, vb, wb;
    
-               va = RefRB.velocity;
-               wa = RefRB.angularVelocity;
-               vb = IncRB.velocity;
-               wb = IncRB.angularVelocity;
+               va = rbRef ? rbRef->velocity : math::vec3::zero;
+               wa = rbRef ? rbRef->angularVelocity : math::vec3::zero;
+               vb = rbInc ? rbInc->velocity : math::vec3::zero;
+               wb = rbInc ? rbInc->angularVelocity : math::vec3::zero;
    
                float JVx = math::dot(-normal, va);
                float JVy = math::dot(minRaCrossN, wa);
@@ -295,17 +293,14 @@ Program Listing for File physics_contact.hpp
                math::vec3 Ra, Rb, minRaCrossN, RbCrossN;
                calculateJacobianComponents(normal, Ra, minRaCrossN, Rb, RbCrossN);
    
-               auto rbRef = rbRefHandle.read();
-               auto incRef = rbIncHandle.read();
-   
-               float maUnit = rbRefHandle ? rbRef.inverseMass : 0.0f;
-               float mbUnit = rbIncHandle ? incRef.inverseMass : 0.0f;
+               float maUnit = rbRef ? rbRef->inverseMass : 0.0f;
+               float mbUnit = rbInc ? rbInc->inverseMass : 0.0f;
    
                //calculate M-1
                math::mat3 ma = math::mat3(maUnit);
-               math::mat3 Ia = rbRefHandle ? rbRef.globalInverseInertiaTensor : math::mat3(0.0f);
-               math::mat3 mb = math::mat3(mbUnit);
-               math::mat3 Ib = rbIncHandle ? incRef.globalInverseInertiaTensor : math::mat3(0.0f);
+               math::mat3 Ia = rbRef ? rbRef->globalInverseInertiaTensor : math::mat3(0.0f);
+               math::mat3 mb = math::mat3(mbUnit);                                
+               math::mat3 Ib = rbInc ? rbInc->globalInverseInertiaTensor : math::mat3(0.0f);
    
                //calculate M^-1 J^T
                math::vec3 jx = ma * -normal;
@@ -323,10 +318,10 @@ Program Listing for File physics_contact.hpp
    
            }
    
-           /* @brief Given a normal indicating the impulse direction, the vectors ra and rb that indicate the contact vectors, 
+           /* @brief Given a normal indicating the impulse direction, the vectors ra and rb that indicate the contact vectors,
            * and a lambda that indicates the scalar value of the impulse, applies impulses to the colliding rigidbodies
            */
-           void ApplyImpulse(const math::vec3& normal, const float lambda, 
+           void ApplyImpulse(const math::vec3& normal, const float lambda,
                const math::vec3& ra, const math::vec3& rb)
            {
    
@@ -335,32 +330,23 @@ Program Listing for File physics_contact.hpp
                math::vec3 torqueDirectionA = math::cross(-ra, normal);
                math::vec3 torqueDirectionB = math::cross(rb, normal);
    
-               math::vec3 angularImpulseA = torqueDirectionA * lambda;
+               math::vec3 angularImpulseA = torqueDirectionA * lambda;      
                math::vec3 angularImpulseB = torqueDirectionB * lambda;
    
-               if (rbRefHandle)
+               if (rbRef)
                {
-                   auto refRb = rbRefHandle.read();
-   
-                   refRb.velocity += -linearImpulse * refRb.inverseMass;
-                   refRb.angularVelocity += refRb.globalInverseInertiaTensor * angularImpulseA;
-   
-                   rbRefHandle.write(refRb);
-   
+                   rbRef->velocity += -linearImpulse * rbRef->inverseMass;
+                   rbRef->angularVelocity += rbRef->globalInverseInertiaTensor * angularImpulseA;
                }
    
-               if (rbIncHandle)
+               if (rbInc)
                {
-                   auto incRb = rbIncHandle.read();
-   
-                   incRb.velocity += linearImpulse * incRb.inverseMass;
-                   auto addedAngular = incRb.globalInverseInertiaTensor * angularImpulseB;
-                   incRb.angularVelocity += addedAngular;
-                   
-                   rbIncHandle.write(incRb);
+                   rbInc->velocity += linearImpulse * rbInc->inverseMass;
+                   auto addedAngular = rbInc->globalInverseInertiaTensor * angularImpulseB;
+                   rbInc->angularVelocity += addedAngular;
                }
            }
-           
+   
            void calculateJacobianComponents(const math::vec3 normal,
                math::vec3& Ra, math::vec3& minRaCrossN, math::vec3& Rb, math::vec3& RbCrossN)
            {
@@ -376,10 +362,8 @@ Program Listing for File physics_contact.hpp
            void logRigidbodyState()
            {
                log::debug("//--------logRigidbodyState----------//");
-               auto incRb = rbIncHandle.read();
-               auto refRb = rbRefHandle.read();
-               log::debug("incRb.velocity {} ", math::to_string(incRb.velocity));
-               log::debug("incRb.angularVelocity {} ", math::to_string(incRb.angularVelocity));
+               log::debug("rbInc->velocity {} ", math::to_string(rbInc->velocity));
+               log::debug("rbInc->angularVelocity {} ", math::to_string(rbInc->angularVelocity));
    
                log::debug("collisionNormal {} ", math::to_string(collisionNormal));
                log::debug("lambda {} ", totalLambda);
@@ -387,6 +371,6 @@ Program Listing for File physics_contact.hpp
            }
        };
    
-       
+   
    
    }

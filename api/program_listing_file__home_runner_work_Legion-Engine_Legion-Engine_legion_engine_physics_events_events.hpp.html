@@ -56,36 +56,36 @@
     <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
     <span class="k">struct</span> <span class="nl">collision_event_base</span> <span class="p">:</span> <span class="k">public</span> <span class="n">events</span><span class="o">::</span><span class="n">event</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
     <span class="p">{</span>
-        <span class="n">collision_event_base</span><span class="p">(</span><span class="n">physics_manifold</span> <span class="n">m</span><span class="p">,</span><span class="kt">float</span> <span class="n">d</span><span class="p">)</span> <span class="o">:</span> <span class="n">manifold</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">m</span><span class="p">))</span> <span class="p">,</span> <span class="n">physics_delta</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">collision_event_base</span><span class="p">(</span><span class="n">physics_manifold</span><span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="kt">float</span> <span class="n">d</span><span class="p">)</span> <span class="o">:</span> <span class="n">manifold</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="p">,</span> <span class="n">physics_delta</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="p">{}</span>
 
         <span class="n">collision_event_base</span><span class="p">(</span><span class="k">const</span> <span class="n">collision_event_base</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">collision_event_base</span><span class="p">(</span><span class="n">collision_event_base</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">collision_event_base</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">collision_event_base</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">collision_event_base</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">collision_event_base</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
-        <span class="n">physics_manifold</span> <span class="n">manifold</span><span class="p">;</span>
+        <span class="n">physics_manifold</span><span class="o">*</span> <span class="n">manifold</span><span class="p">;</span>
 
 
         <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span><span class="p">,</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span><span class="o">&gt;</span> <span class="n">participants</span><span class="p">()</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span>
-                <span class="n">manifold</span><span class="p">.</span><span class="n">physicsCompA</span><span class="p">.</span><span class="n">entity</span><span class="p">,</span>
-                <span class="n">manifold</span><span class="p">.</span><span class="n">physicsCompB</span><span class="p">.</span><span class="n">entity</span>
+                <span class="n">manifold</span><span class="o">-&gt;</span><span class="n">entityA</span><span class="p">,</span>
+                <span class="n">manifold</span><span class="o">-&gt;</span><span class="n">entityB</span>
             <span class="p">);</span>
         <span class="p">}</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">centers</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span>
-                <span class="n">manifold</span><span class="p">.</span><span class="n">colliderA</span><span class="o">-&gt;</span><span class="n">GetLocalCentroid</span><span class="p">(),</span>
-                <span class="n">manifold</span><span class="p">.</span><span class="n">colliderB</span><span class="o">-&gt;</span><span class="n">GetLocalCentroid</span><span class="p">()</span>
+                <span class="n">manifold</span><span class="o">-&gt;</span><span class="n">colliderA</span><span class="o">-&gt;</span><span class="n">GetLocalCentroid</span><span class="p">(),</span>
+                <span class="n">manifold</span><span class="o">-&gt;</span><span class="n">colliderB</span><span class="o">-&gt;</span><span class="n">GetLocalCentroid</span><span class="p">()</span>
             <span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span><span class="p">,</span>
-                              <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;&gt;</span> <span class="n">colliders</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
+        <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">*</span><span class="p">,</span>
+                             <span class="n">PhysicsCollider</span><span class="o">*&gt;</span> <span class="n">colliders</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span>
         <span class="p">{</span>
-            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">manifold</span><span class="p">.</span><span class="n">colliderA</span><span class="p">,</span><span class="n">manifold</span><span class="p">.</span><span class="n">colliderB</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="p">(</span><span class="n">manifold</span><span class="o">-&gt;</span><span class="n">colliderA</span><span class="p">,</span> <span class="n">manifold</span><span class="o">-&gt;</span><span class="n">colliderB</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">transform</span><span class="p">,</span><span class="n">transform</span><span class="o">&gt;</span> <span class="n">transforms</span><span class="p">()</span> <span class="k">const</span>

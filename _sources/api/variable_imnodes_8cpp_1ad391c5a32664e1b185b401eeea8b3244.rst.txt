@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1ad391c5a32664e1b185b401eeea8b3244:
+
+Variable color_style
+====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: color_style

@@ -3,7 +3,7 @@
 Struct scene
 ============
 
-- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_scene.hpp`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_components_scene.hpp`
 
 
 Struct Documentation

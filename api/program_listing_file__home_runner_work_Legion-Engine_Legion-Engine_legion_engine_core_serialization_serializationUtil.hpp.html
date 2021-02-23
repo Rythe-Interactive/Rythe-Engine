@@ -54,11 +54,13 @@
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/types/vector.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/json.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cereal/archives/portable_binary.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/filesystem.hpp&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;sstream&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;any&gt;</span><span class="cp"></span>
 
 
 <span class="c1">//Some testing objects for serialization</span>
@@ -100,9 +102,9 @@
 <span class="p">};</span>
 <span class="cp">#pragma endregion</span>
 
-
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">serialization</span>
 <span class="p">{</span>
+
     <span class="k">class</span> <span class="nc">SerializationUtil</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
@@ -141,8 +143,11 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="n">JSONSerialize</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="n">T</span> <span class="n">serializable</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span> <span class="n">archive</span><span class="p">(</span><span class="n">os</span><span class="p">);</span><span class="c1">// Create an output archive, Output as outputing to a string stream</span>
-            <span class="n">archive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="n">name</span><span class="p">(),</span><span class="n">serializable</span><span class="p">));</span> <span class="c1">// Read the data to the archive</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;[CEREAL] Started Serializing&quot;</span><span class="p">);</span>
+            <span class="n">time</span><span class="o">::</span><span class="n">timer</span> <span class="n">timer</span><span class="p">;</span>
+            <span class="n">cereal</span><span class="o">::</span><span class="n">JSONOutputArchive</span> <span class="n">archive</span><span class="p">(</span><span class="n">os</span><span class="p">);</span><span class="c1">// Create an output archive, Output as outputing to a filestream</span>
+            <span class="n">archive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="k">typeid</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="n">name</span><span class="p">(),</span> <span class="n">serializable</span><span class="p">));</span> <span class="c1">// Read the data to the archive</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;[CEREAL] Finished Serializing in : {}s&quot;</span><span class="p">,</span> <span class="n">timer</span><span class="p">.</span><span class="n">end</span><span class="p">().</span><span class="n">seconds</span><span class="p">());</span>
         <span class="p">}</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>

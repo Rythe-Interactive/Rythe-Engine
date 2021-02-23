@@ -1,0 +1,13 @@
+.. _exhale_typedef_mesh_8hpp_1a203e886996a6772dc1c9c77bcdf27f23:
+
+Typedef legion::core::material_list
+===================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_data_mesh.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: legion::core::material_list

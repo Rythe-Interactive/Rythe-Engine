@@ -33,6 +33,8 @@ Includes
 
 - ``rendering/data/buffer.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_buffer.hpp`)
 
+- ``rendering/data/model.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_data_model.hpp`)
+
 - ``rendering/pipeline/default/stages/meshrenderstage.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_stages_meshrenderstage.hpp`)
 
 

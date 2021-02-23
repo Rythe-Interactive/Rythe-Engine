@@ -56,14 +56,15 @@
 <span class="cp">#include</span> <span class="cpf">&lt;physics/halfedgeface.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/data/convex_convergance_identifier.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;physics/data/physics_manifold.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/debugrendering.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
 <span class="p">{</span>
     <span class="k">class</span> <span class="nc">ConvexCollider</span> <span class="o">:</span> <span class="k">public</span> <span class="n">PhysicsCollider</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
-
-
+        <span class="kt">bool</span> <span class="n">debug</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="n">ConvexCollider</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
         <span class="o">~</span><span class="n">ConvexCollider</span><span class="p">()</span>
@@ -81,363 +82,83 @@
                     <span class="n">contact</span><span class="p">.</span><span class="n">tangent1Lambda</span><span class="p">,</span> <span class="n">contact</span><span class="p">.</span><span class="n">tangent2Lambda</span><span class="p">,</span> <span class="n">GetColliderID</span><span class="p">()));</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="n">CheckCollision</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="n">CheckCollision</span><span class="p">(</span><span class="n">PhysicsCollider</span><span class="o">*</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">physicsCollider</span><span class="o">-&gt;</span><span class="n">CheckCollisionWith</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">manifold</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="kt">void</span> <span class="n">CheckCollisionWith</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
 
-        <span class="kt">void</span> <span class="nf">PopulateContactPoints</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="nf">PopulateContactPoints</span><span class="p">(</span><span class="n">PhysicsCollider</span><span class="o">*</span> <span class="n">physicsCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">physicsCollider</span><span class="o">-&gt;</span><span class="n">PopulateContactPointsWith</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">manifold</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="kt">void</span> <span class="nf">PopulateContactPointsWith</span><span class="p">(</span><span class="n">ConvexCollider</span><span class="o">*</span> <span class="n">convexCollider</span><span class="p">,</span> <span class="n">physics_manifold</span><span class="o">&amp;</span> <span class="n">manifold</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
 
-        <span class="kt">void</span> <span class="nf">UpdateTightBoundingVolume</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span> <span class="k">override</span>
+        <span class="kt">void</span> <span class="nf">UpdateTransformedTightBoundingVolume</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span> <span class="k">override</span>
         <span class="p">{</span>
             <span class="n">UpdateTightAABB</span><span class="p">(</span><span class="n">transform</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="nf">UpdateTightAABB</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">)</span>
-        <span class="p">{</span>
+        <span class="kt">void</span> <span class="nf">UpdateTightAABB</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">);</span>
 
-        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">UpdateLocalAABB</span><span class="p">()</span> <span class="k">override</span><span class="p">;</span>
+
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">DrawColliderRepresentation</span><span class="p">(</span><span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">transform</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span> <span class="n">usedColor</span><span class="p">,</span> <span class="kt">float</span> <span class="n">width</span><span class="p">,</span><span class="kt">float</span> <span class="n">time</span><span class="p">,</span><span class="kt">bool</span> <span class="n">ignoreDepth</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
 
 
         <span class="kt">void</span> <span class="nf">doStep</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">mesh_handle</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">)</span>
         <span class="p">{</span>
+
             <span class="n">ConstructConvexHullWithMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">);</span>
             <span class="o">++</span><span class="n">step</span><span class="p">;</span>
         <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">ConstructConvexHullWithVertices</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">vertices</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">spacingAmount</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="c1">//many of the functions for convex hull are coupled to mesh,</span>
+            <span class="c1">//for now we create a mesh so that we can pass it into the function</span>
+            <span class="n">core</span><span class="o">::</span><span class="n">mesh</span> <span class="n">mesh</span><span class="p">;</span>
+            <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">vertices</span><span class="p">);</span>
+            <span class="n">ConstructConvexHullWithMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="n">spacingAmount</span><span class="p">);</span>
+        <span class="p">}</span>
+
 
 
         <span class="c1">//TODO(algorythmix,jelled1st) This desperately needs cleanup</span>
         <span class="c1">//TODO(cont.) investigate unused variables! (projected)</span>
         <span class="c1">//LIKE A LOT OF CLEANUP</span>
 
-        <span class="kt">void</span> <span class="nf">ConstructConvexHullWithMesh</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">mesh_handle</span><span class="o">&amp;</span> <span class="n">meshHandle</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="nf">ConstructConvexHullWithMesh</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">mesh_handle</span> <span class="n">meshHandle</span><span class="p">,</span><span class="kt">bool</span> <span class="n">shouldDebug</span> <span class="o">=</span> <span class="nb">true</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">meshLockPair</span> <span class="o">=</span> <span class="n">meshHandle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
 
-            <span class="c1">// Step 0 - Create inital hull</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="k">auto</span> <span class="n">meshLockPair</span> <span class="o">=</span> <span class="n">meshHandle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+            <span class="c1">//mesh lock stuff</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">meshLockPair</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">meshLockPair</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
 
-                <span class="c1">//mesh lock stuff</span>
-                <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">meshLockPair</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
-
-                <span class="k">auto</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">meshLockPair</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
-
-                <span class="c1">//Make sure our mesh has enough vertices for at least an initial hulls</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Hull generation skipped, because mesh had less than 4 verticess&quot;</span><span class="p">);</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span>
-
-                <span class="c1">//index 0 and 1 - a line</span>
-                <span class="k">auto</span> <span class="p">[</span><span class="n">index0</span><span class="p">,</span><span class="n">index1</span><span class="p">]</span> <span class="o">=</span> <span class="n">convexHullFindOuterIndices</span><span class="p">(</span><span class="n">mesh</span><span class="p">);</span>
-
-                <span class="c1">//index 2 - together with index0 and index1 creates a plane</span>
-                <span class="n">size_type</span> <span class="n">index2</span> <span class="o">=</span> <span class="n">convexHullFindIndexClosestToLine</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">index0</span><span class="p">,</span> <span class="n">index1</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">index2</span> <span class="o">==</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
-                <span class="p">{</span>
-                    <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Initial hull, index 2 cannot be found!&quot;</span><span class="p">);</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span>
-
-                <span class="c1">//normal for face constructed from index0, index1 and index2</span>
-                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal012</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">((</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index1</span><span class="p">)</span> <span class="o">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index0</span><span class="p">)),</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index2</span><span class="p">)</span> <span class="o">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index0</span><span class="p">))));</span>
-
-                <span class="c1">//index 3 - Together with previous indices creates initial hull</span>
-                <span class="n">size_type</span> <span class="n">index3</span> <span class="o">=</span> <span class="n">convexHullFindIndexClosestToTriangle</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">index0</span><span class="p">,</span> <span class="n">index1</span><span class="p">,</span> <span class="n">index2</span><span class="p">,</span> <span class="n">normal012</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">index3</span> <span class="o">==</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
-                <span class="p">{</span>
-                    <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Initial hull, index 3 cannot be found!&quot;</span><span class="p">);</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span>
-
-                <span class="c1">// Build the initial hull</span>
-                <span class="cp">#pragma region buildInitialHull</span>
-                <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index0</span><span class="p">));</span>
-                <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index1</span><span class="p">));</span>
-                <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index2</span><span class="p">));</span>
-                <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index3</span><span class="p">));</span>
-
-                <span class="c1">// Face 0 - edges: 0, 1, 2 - vertices: 0, 1, 2</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge0</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
-                <span class="n">edge0</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge2</span><span class="p">,</span> <span class="n">edge1</span><span class="p">);</span> <span class="c1">//goes from 0 to 1</span>
-                <span class="n">edge1</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge0</span><span class="p">,</span> <span class="n">edge2</span><span class="p">);</span> <span class="c1">//goes from 1 to 2</span>
-                <span class="n">edge2</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge1</span><span class="p">,</span> <span class="n">edge0</span><span class="p">);</span> <span class="c1">//goes from 2 to 0</span>
-                <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">face012</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">edge0</span><span class="p">,</span> <span class="n">normal012</span><span class="p">);</span>
-
-                <span class="c1">// Face 1 - edges: 3, 4, 5 - vertices: 3, 1, 0</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge3</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge4</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge5</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
-                <span class="n">edge3</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge5</span><span class="p">,</span> <span class="n">edge4</span><span class="p">);</span> <span class="c1">// goes from 3 to 1</span>
-                <span class="n">edge4</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge3</span><span class="p">,</span> <span class="n">edge5</span><span class="p">);</span> <span class="c1">// goes from 1 to 0</span>
-                <span class="n">edge5</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge4</span><span class="p">,</span> <span class="n">edge3</span><span class="p">);</span> <span class="c1">// goes from 0 to 3</span>
-                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal310</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">((</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index1</span><span class="p">)</span> <span class="o">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index3</span><span class="p">)),</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index0</span><span class="p">)</span> <span class="o">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index3</span><span class="p">))));</span>
-                <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">face310</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">edge3</span><span class="p">,</span> <span class="n">normal310</span><span class="p">);</span>
-
-
-                <span class="c1">// Face 2 - edges: 6, 7, 8 - vertices 2, 1, 3</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge6</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge7</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge8</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span>
-                <span class="n">edge6</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge8</span><span class="p">,</span> <span class="n">edge7</span><span class="p">);</span> <span class="c1">// goes from 2 to 1</span>
-                <span class="n">edge7</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge6</span><span class="p">,</span> <span class="n">edge8</span><span class="p">);</span> <span class="c1">// goes from 1 to 3</span>
-                <span class="n">edge8</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge7</span><span class="p">,</span> <span class="n">edge6</span><span class="p">);</span> <span class="c1">// goes from 3 to 2</span>
-                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal213</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">((</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index1</span><span class="p">)</span> <span class="o">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index2</span><span class="p">)),</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index3</span><span class="p">)</span> <span class="o">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index2</span><span class="p">))));</span>
-                <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">face213</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">edge6</span><span class="p">,</span> <span class="n">normal213</span><span class="p">);</span>
-
-
-                <span class="c1">// Face 3 - edges: 9, 10, 11 - vertices: 3, 0, 2</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge9</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge10</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge11</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
-                <span class="n">edge9</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge11</span><span class="p">,</span> <span class="n">edge10</span><span class="p">);</span> <span class="c1">// goes from 3 to 0</span>
-                <span class="n">edge10</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge9</span><span class="p">,</span> <span class="n">edge11</span><span class="p">);</span> <span class="c1">// goes from 0 to 2</span>
-                <span class="n">edge11</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge10</span><span class="p">,</span> <span class="n">edge9</span><span class="p">);</span> <span class="c1">// goes from 2 to 3</span>
-                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal302</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">((</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index0</span><span class="p">)</span> <span class="o">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index3</span><span class="p">)),</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index2</span><span class="p">)</span> <span class="o">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index3</span><span class="p">))));</span>
-                <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">face302</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">edge9</span><span class="p">,</span> <span class="n">normal302</span><span class="p">);</span>
-
-                <span class="c1">// Pair edges</span>
-                <span class="n">edge0</span><span class="o">-&gt;</span><span class="n">setPairingEdge</span><span class="p">(</span><span class="n">edge4</span><span class="p">);</span>
-                <span class="n">edge1</span><span class="o">-&gt;</span><span class="n">setPairingEdge</span><span class="p">(</span><span class="n">edge6</span><span class="p">);</span>
-                <span class="n">edge2</span><span class="o">-&gt;</span><span class="n">setPairingEdge</span><span class="p">(</span><span class="n">edge10</span><span class="p">);</span>
-                <span class="n">edge3</span><span class="o">-&gt;</span><span class="n">setPairingEdge</span><span class="p">(</span><span class="n">edge7</span><span class="p">);</span>
-                <span class="n">edge5</span><span class="o">-&gt;</span><span class="n">setPairingEdge</span><span class="p">(</span><span class="n">edge9</span><span class="p">);</span>
-                <span class="n">edge8</span><span class="o">-&gt;</span><span class="n">setPairingEdge</span><span class="p">(</span><span class="n">edge11</span><span class="p">);</span>
-
-                <span class="c1">// Make sure all the created faces are convex with each other</span>
-                <span class="c1">// Also invert normals when they are concave</span>
-
-                <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="o">*</span><span class="n">face012</span><span class="p">,</span> <span class="o">*</span><span class="n">face310</span><span class="p">);</span>
-                <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="o">*</span><span class="n">face012</span><span class="p">,</span> <span class="o">*</span><span class="n">face213</span><span class="p">);</span>
-                <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="o">*</span><span class="n">face012</span><span class="p">,</span> <span class="o">*</span><span class="n">face302</span><span class="p">);</span>
-                <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="o">*</span><span class="n">face310</span><span class="p">,</span> <span class="o">*</span><span class="n">face213</span><span class="p">);</span>
-                <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="o">*</span><span class="n">face310</span><span class="p">,</span> <span class="o">*</span><span class="n">face302</span><span class="p">);</span>
-                <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="o">*</span><span class="n">face213</span><span class="p">,</span> <span class="o">*</span><span class="n">face302</span><span class="p">);</span>
-
-                <span class="c1">// Add faces to the faces list</span>
-                <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">face012</span><span class="p">);</span>
-                <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">face310</span><span class="p">);</span>
-                <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">face213</span><span class="p">);</span>
-                <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">face302</span><span class="p">);</span>
-
-                <span class="c1">// Store face index in faceIndexMap</span>
-                <span class="n">faceIndexMap</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">halfEdgeFaces</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">);</span>
-                <span class="n">faceIndexMap</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">halfEdgeFaces</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">);</span>
-                <span class="n">faceIndexMap</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">halfEdgeFaces</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
-                <span class="n">faceIndexMap</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">halfEdgeFaces</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">3</span><span class="p">);</span>
-
-                <span class="cp">#pragma endregion buildInitalHull</span>
-                <span class="c1">// End of building the initial hull</span>
-
-                <span class="c1">//  Construct a toBeSorted list, conaining all the vertices that need to be added to the mesh</span>
-                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="kt">bool</span> <span class="n">skipVert</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-                    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">vertices</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="n">skipVert</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">skipVert</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-
-                    <span class="n">toBeSorted</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-            <span class="c1">// end of Step 0 - Create inital hull</span>
-
-            <span class="c1">// Step 1 and up, add a vert to the hull</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-            <span class="k">while</span> <span class="p">(</span><span class="n">looped</span> <span class="o">&lt;</span> <span class="n">step</span><span class="p">)</span>
-            <span class="c1">//while(true)</span>
-            <span class="p">{</span>
-                <span class="c1">// Section here is return condition</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">toBeSorted</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="c1">// We are done here</span>
-                    <span class="c1">// if toBesorted == 0 there are no vertices left in the original mesh that are not added to the hulls</span>
-
-                    <span class="n">AssertEdgeValidity</span><span class="p">();</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span>
-
-                <span class="n">faceVertMap</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-                <span class="n">faceVertMap</span> <span class="o">=</span> <span class="n">convexHullMatchVerticesToFace</span><span class="p">(</span><span class="n">toBeSorted</span><span class="p">);</span>
-
-                <span class="c1">// Check if there are any faces with matched unsorted vertices</span>
-                <span class="kt">bool</span> <span class="n">shouldEnd</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-                <span class="k">for</span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">faceVert</span> <span class="p">:</span> <span class="n">faceVertMap</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="k">if</span><span class="p">(</span><span class="n">faceVert</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="n">shouldEnd</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-                        <span class="k">break</span><span class="p">;</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-
-                <span class="k">if</span><span class="p">(</span><span class="n">shouldEnd</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="c1">//We are done yay!</span>
-                    <span class="c1">// If there aren&#39;t any unsorted vertices, we should exit</span>
-
-                    <span class="n">AssertEdgeValidity</span><span class="p">();</span>
-                    <span class="k">return</span><span class="p">;</span>
-                <span class="p">}</span>
-
-                <span class="c1">// Find the largest distance form vert to its face</span>
-                <span class="c1">// That vert will be added to the hull</span>
-                <span class="kt">float</span> <span class="n">largestDistance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="n">size_type</span> <span class="n">faceIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="n">size_type</span> <span class="n">vertIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-                <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">faceVertMap</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">faceVertMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="c1">// Technically we need the distance toward a face, not necessarily a triangle</span>
-                        <span class="c1">// Because the vert was macthed to this face, it probably does not matter</span>
-                        <span class="kt">float</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">pointToTriangle</span><span class="p">(</span><span class="n">faceVertMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">);</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="n">dist</span> <span class="o">&gt;</span> <span class="n">largestDistance</span><span class="p">)</span>
-                        <span class="p">{</span>
-                            <span class="n">largestDistance</span> <span class="o">=</span> <span class="n">dist</span><span class="p">;</span>
-                            <span class="n">faceIndex</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-                            <span class="n">vertIndex</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
-                        <span class="p">}</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-
-                <span class="c1">// list of horizon edges</span>
-                <span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">*&gt;</span> <span class="n">edges</span><span class="p">;</span>
-                <span class="c1">// The selected vert needs to be merged into the hull</span>
-                <span class="c1">// Find the horizon edges for the current vertex</span>
-                <span class="n">convexHullConstructHorizon</span><span class="p">(</span><span class="n">faceVertMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">faceIndex</span><span class="p">).</span><span class="n">at</span><span class="p">(</span><span class="n">vertIndex</span><span class="p">),</span> <span class="o">*</span><span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">faceIndex</span><span class="p">),</span> <span class="n">edges</span><span class="p">);</span>
-
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">firstEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-                <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">pairingEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-
-                <span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;</span> <span class="n">facesToBeDeleted</span><span class="p">;</span>
-                <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;</span> <span class="n">createdFaces</span><span class="p">;</span>
-
-                <span class="c1">// Create new faces for each edge</span>
-                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">edges</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="c1">// Do not yet delete the face which will be overlapped by the new face</span>
-                    <span class="c1">// We will store it, and delete it later</span>
-                    <span class="n">facesToBeDeleted</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">edges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">face</span><span class="p">);</span>
-
-                    <span class="c1">// Create the edges for the new face of the hull</span>
-                    <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge0</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">edges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">);</span>
-                    <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">edges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">);</span> <span class="c1">// Tail of edge</span>
-                    <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeEdge</span><span class="p">(</span><span class="n">faceVertMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">faceIndex</span><span class="p">).</span><span class="n">at</span><span class="p">(</span><span class="n">vertIndex</span><span class="p">));</span> <span class="c1">// Vertex positon</span>
-
-
-                    <span class="c1">// Setup next and previous edges of the edges we just created</span>
-                    <span class="n">edge0</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge2</span><span class="p">,</span> <span class="n">edge1</span><span class="p">);</span>
-                    <span class="n">edge1</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge0</span><span class="p">,</span> <span class="n">edge2</span><span class="p">);</span>
-                    <span class="n">edge2</span><span class="o">-&gt;</span><span class="n">setNextAndPrevEdge</span><span class="p">(</span><span class="n">edge1</span><span class="p">,</span> <span class="n">edge0</span><span class="p">);</span>
-
-                    <span class="c1">// We know the pairing edge of edge0, because edge0 is the same as the horizonEdge</span>
-                    <span class="c1">// Therefore the pairing edge of the horizon edge will be the pairing edge of egde0</span>
-                    <span class="n">edge0</span><span class="o">-&gt;</span><span class="n">setPairingEdge</span><span class="p">(</span><span class="n">edges</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
-
-
-                    <span class="c1">// If this is the first iteration, we need to remember this edge</span>
-                    <span class="c1">// This edge2 will be used later to as pairing edge</span>
-                    <span class="c1">// Otherwise edge2 can set its pairing to the previous edge1 (saved as pairingEdge)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="n">firstEdge</span> <span class="o">=</span> <span class="n">edge2</span><span class="p">;</span>
-                    <span class="p">}</span>
-                    <span class="k">else</span>
-                    <span class="p">{</span>
-                        <span class="n">edge2</span><span class="o">-&gt;</span><span class="n">setPairingEdge</span><span class="p">(</span><span class="n">pairingEdge</span><span class="p">);</span>
-                    <span class="p">}</span>
-
-                    <span class="c1">// On the last iteration, we can set the pairing Edge of edge1 to firstEdge</span>
-                    <span class="c1">// Which is the edge we stored at the beginning (edge2 of first iteration)</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">edges</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="n">edge1</span><span class="o">-&gt;</span><span class="n">setPairingEdge</span><span class="p">(</span><span class="n">firstEdge</span><span class="p">);</span>
-                    <span class="p">}</span>
-
-                    <span class="c1">// Save pairingEdge</span>
-                    <span class="n">pairingEdge</span> <span class="o">=</span> <span class="n">edge1</span><span class="p">;</span>
-
-                    <span class="c1">// Calculate normal</span>
-                    <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">normalize</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">edge1</span><span class="o">-&gt;</span><span class="n">edgePosition</span> <span class="o">-</span> <span class="n">edge0</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="n">edge2</span><span class="o">-&gt;</span><span class="n">edgePosition</span> <span class="o">-</span> <span class="n">edge0</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">));</span>
-
-                    <span class="c1">//Create Face</span>
-                    <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HalfEdgeFace</span><span class="p">(</span><span class="n">edge0</span><span class="p">,</span> <span class="n">normal</span><span class="p">);</span>
-                    <span class="n">face</span><span class="o">-&gt;</span><span class="n">setFaceForAllEdges</span><span class="p">();</span>
-
-                    <span class="c1">//Add Face to Faces</span>
-                    <span class="n">createdFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">face</span><span class="p">);</span>
-                <span class="p">}</span>
-
-                <span class="c1">// Add the vertex we added to the hull, to our vertices list</span>
-                <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">faceVertMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">faceIndex</span><span class="p">).</span><span class="n">at</span><span class="p">(</span><span class="n">vertIndex</span><span class="p">));</span>
-
-                <span class="c1">// Store our added vert</span>
-                <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">addedVert</span> <span class="o">=</span> <span class="n">faceVertMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">faceIndex</span><span class="p">).</span><span class="n">at</span><span class="p">(</span><span class="n">vertIndex</span><span class="p">);</span>
-
-                <span class="c1">// Clear the toBeSorted list, so we can fill it again with vertices that need to be sorted</span>
-                <span class="c1">// We can not just remove the added vertex since there may be vertices that share the same positions</span>
-                <span class="n">toBeSorted</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-                <span class="c1">// We add all the vertices to the toBeSorted list that are in the faceVertMap that are not equal to addedVert</span>
-                <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">faceVertMap</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="k">for</span> <span class="p">(</span><span class="n">size_type</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">faceVertMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
-                    <span class="p">{</span>
-                        <span class="c1">// Make sure we do not add the vert to the list that we just added to the hull</span>
-                        <span class="k">if</span> <span class="p">(</span><span class="n">faceVertMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">!=</span> <span class="n">addedVert</span><span class="p">)</span>
-                            <span class="n">toBeSorted</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">faceVertMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">));</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-
-                <span class="c1">// Now the old edges edges and faces that have been replaced with new faces will be deleted</span>
-                <span class="c1">// Edges will be deleted by the destructor of HalfEdgeFace</span>
-                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">face</span> <span class="p">:</span> <span class="n">facesToBeDeleted</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="c1">// Remove face from faces map</span>
-                    <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">remove</span><span class="p">(</span><span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">face</span><span class="p">),</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
-                    <span class="c1">// Remove face from our face to face index map</span>
-                    <span class="n">faceIndexMap</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">faceIndexMap</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">face</span><span class="p">));</span>
-                    <span class="n">face</span><span class="o">-&gt;</span><span class="n">startEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-                    <span class="c1">//delete face;</span>
-                <span class="p">}</span>
-
-                <span class="c1">// Some of the created faces may be coplanar to other faces, these faces will be merged</span>
-                <span class="n">convexHullMergeFaces</span><span class="p">(</span><span class="n">createdFaces</span><span class="p">);</span>
-
-                <span class="c1">// Make sure all the normals are correct</span>
-                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">createdFaces</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="c1">// Add new faces to faceIndexMap</span>
-                    <span class="n">faceIndexMap</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">createdFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
-                    <span class="c1">// Add new faces to halfEdgeFaces vector</span>
-                    <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">createdFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
-
-                    <span class="c1">// We only need to check convexity with the very next face</span>
-                    <span class="c1">// Therefore we cross over the startEdge to startEdge.pairingEdge and take that face</span>
-                    <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">pairing</span> <span class="o">=</span> <span class="n">createdFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">face</span><span class="p">;</span>
-                    <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">makeNormalsConvexWithFace</span><span class="p">(</span><span class="o">*</span><span class="n">createdFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="o">*</span><span class="n">pairing</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="c1">// We increase looped counter for debug tools</span>
-                <span class="o">++</span><span class="n">looped</span><span class="p">;</span>
-            <span class="p">}</span>
-
-            <span class="n">AssertEdgeValidity</span><span class="p">();</span>
+            <span class="n">ConstructConvexHullWithMesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(),</span><span class="n">shouldDebug</span><span class="p">);</span>
         <span class="p">}</span>
+
+        <span class="kt">void</span>  <span class="nf">ConstructConvexHullWithMesh</span><span class="p">(</span><span class="n">mesh</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">spacingAmount</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(),</span> <span class="kt">bool</span> <span class="n">shouldDebug</span> <span class="o">=</span> <span class="nb">false</span><span class="p">);</span>
 
         <span class="kt">void</span> <span class="nf">ConstructBoxWithMesh</span><span class="p">()</span>
         <span class="p">{</span>
 
+        <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="nf">CalculateLocalColliderCentroid</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">localColliderCentroid</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">();</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">vertices</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">localColliderCentroid</span> <span class="o">+=</span> <span class="n">vertex</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">localColliderCentroid</span> <span class="o">/=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="kt">void</span> <span class="nf">CreateBox</span><span class="p">(</span><span class="k">const</span> <span class="n">cube_collider_params</span><span class="o">&amp;</span> <span class="n">cubeParams</span><span class="p">)</span>
@@ -446,6 +167,8 @@
             <span class="kt">float</span> <span class="n">halfWidth</span> <span class="o">=</span> <span class="n">cubeParams</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
             <span class="kt">float</span> <span class="n">halfBreath</span> <span class="o">=</span> <span class="n">cubeParams</span><span class="p">.</span><span class="n">breadth</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
             <span class="kt">float</span> <span class="n">halfHeight</span> <span class="o">=</span> <span class="n">cubeParams</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+
+
 
             <span class="c1">// BOTTOM FACE          // TOP FACE</span>
 
@@ -476,6 +199,11 @@
             <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">maxVertexMinusWidthMinusBreadth</span><span class="p">);</span>
             <span class="n">vertices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">maxVertexMinusBreadth</span><span class="p">);</span>
 
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">vertices</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">vertex</span> <span class="o">+=</span> <span class="n">cubeParams</span><span class="p">.</span><span class="n">offset</span><span class="p">;</span>
+            <span class="p">}</span>
+
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">a</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">b</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">c</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
@@ -485,10 +213,7 @@
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">g</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
             <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">h</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
 
-            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">vertices</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="n">vertex</span> <span class="o">+=</span> <span class="n">cubeParams</span><span class="p">.</span><span class="n">offset</span><span class="p">;</span>
-            <span class="p">}</span>
+            <span class="n">CalculateLocalColliderCentroid</span><span class="p">();</span>
 
             <span class="c1">//note: each edge carries adjacency information. (for example, an edge &#39;eg&#39; must know its edge pair &#39;ge&#39;).</span>
             <span class="c1">//This is why each edge must be declared explicitly.</span>
@@ -636,7 +361,7 @@
 
             <span class="c1">//check if halfEdge data structure was initialized correctly. this will be commented when I know it always works</span>
             <span class="n">AssertEdgeValidity</span><span class="p">();</span>
-
+            <span class="n">CalculateLocalColliderCentroid</span><span class="p">();</span>
         <span class="p">}</span>
 
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&amp;</span> <span class="n">GetHalfEdgeFaces</span><span class="p">()</span> <span class="k">override</span>
@@ -784,7 +509,8 @@
             <span class="k">return</span> <span class="n">index</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="n">size_type</span> <span class="n">convexHullFindIndexClosestToTriangle</span><span class="p">(</span><span class="k">const</span> <span class="n">core</span><span class="o">::</span><span class="n">mesh</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="k">const</span> <span class="n">size_type</span> <span class="n">planeIndex0</span><span class="p">,</span> <span class="k">const</span> <span class="n">size_type</span> <span class="n">planeIndex1</span><span class="p">,</span> <span class="k">const</span> <span class="n">size_type</span> <span class="n">planeIndex2</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal</span><span class="p">)</span>
+        <span class="n">size_type</span> <span class="n">convexHullFindIndexClosestToTriangle</span><span class="p">(</span><span class="k">const</span> <span class="n">core</span><span class="o">::</span><span class="n">mesh</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="k">const</span> <span class="n">size_type</span> <span class="n">planeIndex0</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">size_type</span> <span class="n">planeIndex1</span><span class="p">,</span> <span class="k">const</span> <span class="n">size_type</span> <span class="n">planeIndex2</span><span class="p">,</span> <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal</span><span class="p">,</span><span class="kt">bool</span> <span class="n">debug</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="kt">float</span> <span class="n">largestDistance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
             <span class="c1">// Save the index which is furthest from the plane between the mesh vertices at the plane indices</span>
@@ -794,7 +520,13 @@
             <span class="p">{</span>
                 <span class="c1">// If the index is the same as one of the triangle indices, continue</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">planeIndex0</span> <span class="o">||</span> <span class="n">i</span> <span class="o">==</span> <span class="n">planeIndex1</span> <span class="o">||</span> <span class="n">i</span> <span class="o">==</span> <span class="n">planeIndex2</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-                <span class="kt">float</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">pointToTriangle</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">planeIndex0</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">planeIndex1</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">planeIndex2</span><span class="p">),</span> <span class="n">normal</span><span class="p">));</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">abs</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">pointToPlane</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">planeIndex0</span><span class="p">),</span> <span class="n">normal</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="kt">float</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">pointToTriangle</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">planeIndex0</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">planeIndex1</span><span class="p">),</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">planeIndex2</span><span class="p">),</span> <span class="n">normal</span><span class="p">,</span><span class="n">debug</span><span class="p">));</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">dist</span> <span class="o">&gt;</span> <span class="n">largestDistance</span> <span class="o">&amp;&amp;</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="p">{</span>
                     <span class="n">largestDistance</span> <span class="o">=</span> <span class="n">dist</span><span class="p">;</span>
@@ -824,6 +556,7 @@
                     <span class="c1">// Therefore the point should not be matched with this face, and can be skipped</span>
                     <span class="k">if</span> <span class="p">(</span><span class="n">distToPlane</span> <span class="o">&gt;</span> <span class="n">math</span><span class="o">::</span><span class="n">epsilon</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">())</span>
                     <span class="p">{</span>
+                        <span class="c1">//log::debug(&quot;vert distance {}&quot;, distToPlane);</span>
 
                         <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">startEdge</span> <span class="o">=</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">startEdge</span><span class="p">;</span>
 
@@ -855,69 +588,44 @@
             <span class="k">return</span> <span class="n">collection</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="kt">void</span> <span class="n">convexHullConstructHorizon</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">vert</span><span class="p">,</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">face</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">*&gt;&amp;</span> <span class="n">edges</span><span class="p">,</span> <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">originEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&gt;</span> <span class="n">visited</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">visited</span><span class="p">)</span> <span class="n">visited</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&gt;</span><span class="p">();</span>
-
-            <span class="c1">// Make sure we do not call recursively on faces we came from</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">visited</span><span class="o">-&gt;</span><span class="n">find</span><span class="p">(</span><span class="o">&amp;</span><span class="n">face</span><span class="p">)</span> <span class="o">!=</span> <span class="n">visited</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">())</span> <span class="k">return</span><span class="p">;</span>
-            <span class="c1">// Mark face as &quot;visited&quot;</span>
-            <span class="n">visited</span><span class="o">-&gt;</span><span class="n">emplace</span><span class="p">(</span><span class="o">&amp;</span><span class="n">face</span><span class="p">);</span>
-            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">start</span> <span class="o">=</span> <span class="n">face</span><span class="p">.</span><span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="p">;</span>
-            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">edge</span> <span class="o">=</span> <span class="n">face</span><span class="p">.</span><span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">prevEdge</span><span class="p">;</span>
-
-            <span class="c1">// Loop through all the edges of this face</span>
-            <span class="k">do</span>
-            <span class="p">{</span>
-                <span class="c1">// Makr sure we do not keep jumping between 2 faces (over 2 edges)</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">originEdge</span> <span class="o">==</span> <span class="n">edge</span> <span class="o">||</span> <span class="o">!</span><span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span> <span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">edge</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
-                    <span class="k">continue</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="c1">// Cross the edge -&gt; check next face</span>
+        <span class="kt">void</span> <span class="n">convexHullConstructHorizon</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">vert</span><span class="p">,</span> <span class="n">HalfEdgeFace</span><span class="o">&amp;</span> <span class="n">face</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">*&gt;&amp;</span> <span class="n">edges</span><span class="p">,</span>
+            <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">originEdge</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unordered_set</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&gt;</span> <span class="n">visited</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">);</span>
+        <span class="c1">//TODO add documentation</span>
+        <span class="kt">void</span> <span class="nf">ConstructHorizonByEdgeJumping</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">vert</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="n">HalfEdgeEdge</span><span class="o">*&gt;&amp;</span> <span class="n">edges</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&amp;</span> <span class="n">faces</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">spacing</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(),</span>  <span class="kt">bool</span> <span class="n">shouldDebug</span> <span class="o">=</span><span class="nb">false</span><span class="p">);</span>
 
 
-                <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">crossedFace</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="o">-&gt;</span><span class="n">face</span><span class="p">;</span>
-                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">crossedFace</span><span class="o">-&gt;</span><span class="n">startEdge</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
 
-                <span class="c1">// If the vertex is above the face (The face can see the vertex), the face is part of the horizon</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">pointToPlane</span><span class="p">(</span><span class="n">vert</span><span class="p">,</span> <span class="n">crossedFace</span><span class="o">-&gt;</span><span class="n">startEdge</span><span class="o">-&gt;</span><span class="n">edgePosition</span><span class="p">,</span> <span class="n">crossedFace</span><span class="o">-&gt;</span><span class="n">normal</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0f</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="c1">// Plane is part of horizon -&gt; find horizon edges recursively</span>
-                    <span class="n">convexHullConstructHorizon</span><span class="p">(</span><span class="n">vert</span><span class="p">,</span> <span class="o">*</span><span class="n">crossedFace</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">,</span> <span class="n">visited</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="k">else</span>
-                <span class="p">{</span>
-                    <span class="c1">// Plane is not part of horizon</span>
-                    <span class="c1">// Therefore the crossed edge was a horizon edge</span>
-                    <span class="n">edges</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">edge</span><span class="p">);</span>
-                <span class="p">}</span>
-
-                <span class="n">edge</span> <span class="o">=</span> <span class="n">edge</span><span class="o">-&gt;</span><span class="n">nextEdge</span><span class="p">;</span>
-            <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">edge</span> <span class="o">!=</span> <span class="n">start</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="kt">void</span> <span class="n">convexHullMergeFaces</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&amp;</span> <span class="n">faces</span><span class="p">)</span>
+        <span class="kt">void</span> <span class="nf">convexHullMergeFaces</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;&amp;</span> <span class="n">faces</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="c1">// Merge faces with coplanerity</span>
             <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">faces</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>
             <span class="p">{</span>
                 <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
                 <span class="p">{</span>
-                    <span class="c1">// Do not check if createdFace is halfEdgeFace, because the createdFaces are not yet added to the halfEdgeFaces list</span>
-                    <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">face_angle_relation</span> <span class="n">relation</span> <span class="o">=</span> <span class="n">faces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">getAngleRelation</span><span class="p">(</span><span class="o">*</span><span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">));</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">faces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">))</span> <span class="p">{</span> <span class="k">continue</span><span class="p">;</span> <span class="p">}</span>
+                     <span class="c1">//Do not check if createdFace is halfEdgeFace, because the createdFaces are not yet added to the halfEdgeFaces list</span>
+                    <span class="c1">//log::debug(&quot;face i {} face j {}&quot;, math::to_string(faces.at(i)-&gt;normal), math::to_string(halfEdgeFaces.at(j)-&gt;normal));</span>
+                    <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">face_angle_relation</span> <span class="n">relation</span> <span class="o">=</span> <span class="n">faces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">getAngleRelation</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">)));</span>
+                    <span class="c1">//log::debug(&quot;relation {}&quot;, HalfEdgeFace::to_string(relation));</span>
+
+
+
                     <span class="k">if</span> <span class="p">(</span><span class="n">relation</span> <span class="o">==</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">face_angle_relation</span><span class="o">::</span><span class="n">coplanar</span><span class="p">)</span>
                     <span class="p">{</span>
                         <span class="c1">// Try to find the edge between the faces that need to be merged</span>
                         <span class="n">HalfEdgeEdge</span><span class="o">*</span> <span class="n">centerEdge</span> <span class="o">=</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">findMiddleEdge</span><span class="p">(</span><span class="o">*</span><span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="o">*</span><span class="n">faces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
                         <span class="k">if</span> <span class="p">(</span><span class="n">centerEdge</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
                         <span class="p">{</span>
+                            <span class="c1">//log::debug(&quot;merge faces {}&quot;, halfEdgeFaces.at(j)-&gt;normal);</span>
+
+
                             <span class="c1">// Because we tried to get a center edge on the halfEdgeFaces.at(j) side</span>
                             <span class="c1">// That face should still exist and be correct</span>
                             <span class="c1">// We check if this is indeed the case: if the returned face is a different face</span>
                             <span class="c1">// we need to remove the old face and add the new face to the halfEdgeFaces vector</span>
                             <span class="n">HalfEdgeFace</span><span class="o">*</span> <span class="n">face</span> <span class="o">=</span> <span class="n">HalfEdgeFace</span><span class="o">::</span><span class="n">mergeFaces</span><span class="p">(</span><span class="o">*</span><span class="n">centerEdge</span><span class="p">);</span>
+
                             <span class="k">if</span> <span class="p">(</span><span class="n">face</span> <span class="o">!=</span> <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
                             <span class="p">{</span>
                                 <span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">halfEdgeFaces</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">j</span><span class="p">);</span>
@@ -937,7 +645,7 @@
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*&gt;</span> <span class="n">halfEdgeFaces</span><span class="p">;</span>
 
         <span class="c1">// Convex hull generation debug stuffs</span>
-        <span class="kt">int</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">toBeSorted</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&gt;</span> <span class="n">faceVertMap</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">HalfEdgeFace</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">faceIndexMap</span><span class="p">;</span>

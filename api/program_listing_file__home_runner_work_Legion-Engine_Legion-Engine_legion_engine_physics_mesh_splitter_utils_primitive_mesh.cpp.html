@@ -46,7 +46,7 @@
   <div class="section" id="program-listing-for-file-primitive-mesh-cpp">
 <span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-primitive-mesh-cpp"></span><h1>Program Listing for File primitive_mesh.cpp<a class="headerlink" href="#program-listing-for-file-primitive-mesh-cpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-physics-mesh-splitter-utils-primitive-mesh-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/mesh_splitter_utils/primitive_mesh.cpp</span></code>)</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/primitive_mesh.h&gt;</span><span class="cp"></span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;physics/mesh_splitter_utils/primitive_mesh.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/components/renderable.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">physics</span>
@@ -63,10 +63,16 @@
 
     <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">PrimitiveMesh</span><span class="o">::</span><span class="n">InstantiateNewGameObject</span><span class="p">()</span>
     <span class="p">{</span>
+        <span class="k">auto</span> <span class="p">[</span><span class="n">originalPosH</span><span class="p">,</span> <span class="n">originalRotH</span><span class="p">,</span> <span class="n">originalScaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">originalEntity</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">mat4</span> <span class="n">trans</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">compose</span><span class="p">(</span><span class="n">originalScaleH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">originalRotH</span><span class="p">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">originalPosH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+
         <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">offset</span><span class="p">;</span>
 
         <span class="n">mesh</span> <span class="n">newMesh</span><span class="p">;</span>
-        <span class="n">populateMesh</span><span class="p">(</span><span class="n">newMesh</span><span class="p">);</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">originalScaleH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+        <span class="n">populateMesh</span><span class="p">(</span><span class="n">newMesh</span><span class="p">,</span> <span class="n">trans</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">scale</span><span class="p">);</span>
 
         <span class="n">newMesh</span><span class="p">.</span><span class="n">calculate_tangents</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newMesh</span><span class="p">);</span>
 
@@ -87,15 +93,16 @@
         <span class="n">ent</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderable</span><span class="o">&gt;</span><span class="p">(</span><span class="n">meshFilter</span><span class="p">,</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="p">(</span> <span class="n">originalMaterial</span><span class="p">));</span>
 
         <span class="c1">//create transform</span>
-        <span class="k">auto</span> <span class="p">[</span><span class="n">originalPosH</span><span class="p">,</span> <span class="n">originalRotH</span><span class="p">,</span> <span class="n">originalScaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">originalEntity</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
-        <span class="k">auto</span> <span class="p">[</span><span class="n">posH</span><span class="p">,</span> <span class="n">rotH</span> <span class="p">,</span><span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
 
-        <span class="n">posH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">originalPosH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+        <span class="k">auto</span> <span class="p">[</span><span class="n">posH</span><span class="p">,</span> <span class="n">rotH</span> <span class="p">,</span><span class="n">scaleH</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_ecs</span><span class="o">-&gt;</span><span class="n">createComponents</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ent</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">newEntityPos</span> <span class="o">=</span> <span class="n">originalPosH</span><span class="p">.</span><span class="n">read</span><span class="p">()</span> <span class="o">+</span> <span class="n">offset</span><span class="p">;</span>
+        <span class="n">posH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">newEntityPos</span><span class="p">);</span>
         <span class="n">rotH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">originalRotH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
-        <span class="n">scaleH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">originalScaleH</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+        <span class="c1">//scaleH.write(originalScaleH.read());</span>
 
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">initialPos</span> <span class="o">=</span> <span class="n">originalPosH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-        <span class="n">originalPosH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">initialPos</span> <span class="o">+</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+        <span class="c1">//+ math::vec3(7, 0, 0)</span>
+        <span class="n">originalPosH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">initialPos</span> <span class="p">);</span>
         <span class="c1">//m_ecs-&gt;destroyEntity(originalEntity);</span>
 
         <span class="k">return</span> <span class="n">ent</span><span class="p">;</span>
@@ -106,7 +113,8 @@
         <span class="n">m_ecs</span> <span class="o">=</span> <span class="n">ecs</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="kt">void</span> <span class="n">PrimitiveMesh</span><span class="o">::</span><span class="n">populateMesh</span><span class="p">(</span><span class="n">mesh</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">)</span>
+    <span class="kt">void</span> <span class="n">PrimitiveMesh</span><span class="o">::</span><span class="n">populateMesh</span><span class="p">(</span><span class="n">mesh</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span>
+        <span class="k">const</span> <span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&amp;</span> <span class="n">originalTransform</span> <span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">outOffset</span><span class="p">,</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">scale</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">uint</span><span class="o">&gt;&amp;</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">indices</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">vertices</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">;</span>
@@ -117,6 +125,12 @@
 
         <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">polygon</span> <span class="p">:</span> <span class="n">polygons</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">polygon</span><span class="o">-&gt;</span><span class="n">GetMeshEdges</span><span class="p">().</span><span class="n">empty</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">log</span><span class="o">::</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Primitive Mesh has has an empty polygon&quot;</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+
             <span class="n">polygon</span><span class="o">-&gt;</span><span class="n">ResetEdgeVisited</span><span class="p">();</span>
 
             <span class="n">std</span><span class="o">::</span><span class="n">queue</span><span class="o">&lt;</span><span class="n">meshHalfEdgePtr</span><span class="o">&gt;</span> <span class="n">unvisitedEdgeQueue</span><span class="p">;</span>
@@ -141,17 +155,17 @@
                     <span class="n">uvs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">edge2</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">);</span>
                     <span class="n">uvs</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">edge3</span><span class="o">-&gt;</span><span class="n">uv</span><span class="p">);</span>
 
-                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">edge1</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">edge1</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">&amp;&amp;</span> <span class="n">edge1</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">)</span>
                     <span class="p">{</span>
                         <span class="n">unvisitedEdgeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">edge1</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
                     <span class="p">}</span>
 
-                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">edge2</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">edge2</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">&amp;&amp;</span> <span class="n">edge2</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">)</span>
                     <span class="p">{</span>
                         <span class="n">unvisitedEdgeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">edge2</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
                     <span class="p">}</span>
 
-                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">edge3</span><span class="o">-&gt;</span><span class="n">isBoundary</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">edge3</span><span class="o">-&gt;</span><span class="n">isBoundary</span> <span class="o">&amp;&amp;</span> <span class="n">edge3</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">)</span>
                     <span class="p">{</span>
                         <span class="n">unvisitedEdgeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">edge3</span><span class="o">-&gt;</span><span class="n">pairingEdge</span><span class="p">);</span>
                     <span class="p">}</span>
@@ -159,15 +173,45 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
+        <span class="c1">//get centroid of vertices</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">worldCentroid</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">();</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">vertices</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">worldCentroid</span> <span class="o">+=</span> <span class="n">vertex</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">worldCentroid</span> <span class="o">/=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+        <span class="n">worldCentroid</span> <span class="o">=</span> <span class="n">originalTransform</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">worldCentroid</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">originalPosition</span> <span class="o">=</span> <span class="n">originalTransform</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+
+        <span class="n">outOffset</span> <span class="o">=</span> <span class="n">worldCentroid</span> <span class="o">-</span> <span class="n">originalPosition</span><span class="p">;</span>
+
+        <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">localOffset</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">inverse</span><span class="p">(</span><span class="n">originalTransform</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="p">(</span><span class="n">outOffset</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+        <span class="c1">//shift vertices by offset</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">vertex</span> <span class="p">:</span> <span class="n">vertices</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">vertex</span> <span class="o">-=</span> <span class="n">localOffset</span><span class="p">;</span>
+            <span class="n">vertex</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
         <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">indices</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="c1">//TODO stop generating fake normals</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vertices</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">+=</span><span class="mi">3</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">normals</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">));</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&amp;</span> <span class="n">v3</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span>
+
+            <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">normal</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">cross</span><span class="p">(</span><span class="n">v2</span> <span class="o">-</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v3</span> <span class="o">-</span> <span class="n">v1</span><span class="p">);</span>
+
+            <span class="n">normals</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">normal</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>

@@ -3,7 +3,7 @@
 Struct IntersectionEdgeInfo
 ===========================
 
-- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersection_edge_info.h`
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_intersection_edge_info.hpp`
 
 
 Struct Documentation

@@ -56,19 +56,9 @@
 <span class="p">{</span>
     <span class="k">struct</span> <span class="n">physicsComponent</span>
     <span class="p">{</span>
-        <span class="k">static</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="n">physicsComponent</span><span class="o">&amp;</span> <span class="n">comp</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">comp</span><span class="p">.</span><span class="n">colliders</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;&gt;</span><span class="p">();</span>
-        <span class="p">}</span>
-
-        <span class="k">static</span> <span class="kt">void</span> <span class="n">destroy</span><span class="p">(</span><span class="n">physicsComponent</span><span class="o">&amp;</span> <span class="n">comp</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">delete</span> <span class="n">comp</span><span class="p">.</span><span class="n">colliders</span><span class="p">;</span>
-        <span class="p">}</span>
-
         <span class="c1">//physics material</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;&gt;*</span> <span class="n">colliders</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">PhysicsCollider</span><span class="o">&gt;&gt;</span> <span class="n">colliders</span><span class="p">;</span>
 
         <span class="kt">bool</span> <span class="n">isTrigger</span> <span class="o">=</span><span class="nb">false</span><span class="p">;</span>
 
@@ -78,8 +68,9 @@
 
         <span class="kt">void</span> <span class="nf">calculateNewLocalCenterOfMass</span><span class="p">();</span>
 
-        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;</span> <span class="n">ConstructConvexHull</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">mesh_handle</span><span class="o">&amp;</span> <span class="n">meshHandle</span><span class="p">);</span>
-        <span class="kt">void</span> <span class="nf">ConstructConvexHull</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">mesh_handle</span><span class="o">&amp;</span> <span class="n">meshHandle</span><span class="p">,</span> <span class="n">ConvexCollider</span><span class="o">&amp;</span> <span class="n">col</span><span class="p">);</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConvexCollider</span><span class="o">&gt;</span> <span class="n">ConstructConvexHull</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">mesh_handle</span> <span class="n">meshHandle</span><span class="p">,</span><span class="kt">bool</span> <span class="n">shouldDebug</span> <span class="o">=</span> <span class="nb">false</span><span class="p">);</span>
+
+        <span class="kt">void</span> <span class="nf">ConstructConvexHull</span><span class="p">(</span><span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">mesh_handle</span> <span class="n">meshHandle</span><span class="p">,</span> <span class="n">ConvexCollider</span><span class="o">&amp;</span> <span class="n">col</span><span class="p">);</span>
 
         <span class="kt">void</span> <span class="nf">ConstructBox</span><span class="p">(</span><span class="cm">/*mesh*/</span><span class="p">);</span>
 

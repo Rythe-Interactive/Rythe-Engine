@@ -35,6 +35,8 @@ Includes
 
 - ``rendering/pipeline/default/postfx/bloom.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_bloom.hpp`)
 
+- ``rendering/pipeline/default/postfx/depthoffield.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_depthoffield.hpp`)
+
 - ``rendering/pipeline/default/postfx/fxaa.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_fxaa.hpp`)
 
 - ``rendering/pipeline/default/postfx/tonemapping.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_tonemapping.hpp`)

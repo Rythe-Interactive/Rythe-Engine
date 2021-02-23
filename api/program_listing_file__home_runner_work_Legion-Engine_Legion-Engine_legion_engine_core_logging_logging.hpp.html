@@ -216,6 +216,26 @@ namespace fmt
     };
 
     template &lt;&gt;
+    struct fmt::formatter&lt;legion::core::math::ivec3&gt; {
+
+        constexpr auto parse(format_parse_context&amp; ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (it != end &amp;&amp; *it != &#39;}&#39;)
+                throw format_error(&quot;invalid format&quot;);
+            return it++;
+        }
+
+        template &lt;typename FormatContext&gt;
+        auto format(const legion::core::math::ivec3&amp; p, FormatContext&amp; ctx) {
+            return format_to(
+                ctx.out(),
+                &quot;({}, {}, {})&quot;,
+                p.x, p.y, p.z);
+        }
+    };
+
+    template &lt;&gt;
     struct fmt::formatter&lt;legion::core::math::vec4&gt; {
         char presentation = &#39;f&#39;;
 

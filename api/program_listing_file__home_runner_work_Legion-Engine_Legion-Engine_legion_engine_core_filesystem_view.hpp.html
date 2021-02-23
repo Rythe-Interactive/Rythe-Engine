@@ -112,6 +112,7 @@
             <span class="k">return</span> <span class="nf">get</span><span class="p">().</span><span class="n">decay</span><span class="p">().</span><span class="n">to</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
         <span class="p">}</span>
 
+        <span class="n">L_NODISCARD</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">view</span><span class="o">&gt;</span><span class="p">,</span><span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">ls</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
 <span class="cp">#if  !defined( LEGION_DISABLE_POTENTIALLY_WEIRD_SYNTAX )</span>
 

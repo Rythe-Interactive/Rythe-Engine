@@ -54,10 +54,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/components/lod.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;random&gt;</span><span class="cp"></span>
 <span class="cp">#include</span><span class="cpf">&lt;rendering/components/point_emitter_data.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;rendering/util/bindings.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;application/application.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span><span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/components/point_cloud_particle_container.hpp&gt;</span><span class="cp"></span>
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">legion</span><span class="p">;</span>
 <span class="k">struct</span> <span class="n">pointCloudParameters</span>
 <span class="p">{</span>
@@ -78,7 +75,7 @@
 <span class="k">class</span> <span class="nc">PointCloudParticleSystem</span> <span class="o">:</span> <span class="k">public</span> <span class="n">rendering</span><span class="o">::</span><span class="n">ParticleSystemBase</span>
 <span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
-    <span class="n">PointCloudParticleSystem</span><span class="p">(</span><span class="n">pointCloudParameters</span> <span class="n">params</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;&amp;</span> <span class="n">positions</span><span class="p">)</span>
+    <span class="n">PointCloudParticleSystem</span><span class="p">(</span><span class="n">pointCloudParameters</span> <span class="n">params</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">m_looping</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">looping</span><span class="p">;</span>
         <span class="n">m_maxLifeTime</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">maxLifeTime</span><span class="p">;</span>
@@ -91,10 +88,15 @@
         <span class="n">m_sizeOverLifetime</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">sizeOverLifeTime</span><span class="p">;</span>
         <span class="n">m_particleMaterial</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">particleMaterial</span><span class="p">;</span>
         <span class="n">m_particleModel</span> <span class="o">=</span> <span class="n">params</span><span class="p">.</span><span class="n">particleModel</span><span class="p">;</span>
-        <span class="n">m_positions</span> <span class="o">=</span> <span class="n">positions</span><span class="p">;</span>
+        <span class="n">container</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">point_cloud_particle_container</span><span class="p">();</span>
     <span class="p">}</span>
+
     <span class="kt">void</span> <span class="n">setup</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&gt;</span> <span class="n">emitter_handle</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
     <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">emitter</span> <span class="o">=</span> <span class="n">emitter_handle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+        <span class="n">m_positions</span> <span class="o">=</span> <span class="n">emitter</span><span class="p">.</span><span class="n">pointInput</span><span class="p">;</span>
+        <span class="n">m_colors</span> <span class="o">=</span> <span class="n">emitter</span><span class="p">.</span><span class="n">colorInput</span><span class="p">;</span>
+
         <span class="c1">//Create data component</span>
         <span class="k">auto</span> <span class="n">emitterDataHandle</span> <span class="o">=</span> <span class="n">emitter_handle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="k">auto</span> <span class="n">emitterData</span> <span class="o">=</span> <span class="n">emitterDataHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
@@ -126,68 +128,136 @@
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">min</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">universalMin</span><span class="p">);</span>
         <span class="n">math</span><span class="o">::</span><span class="n">vec3</span> <span class="n">max</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">universalMax</span><span class="p">);</span>
         <span class="c1">//Create Octree</span>
-        <span class="n">emitterData</span><span class="p">.</span><span class="n">Tree</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">Octree</span><span class="o">&lt;</span><span class="n">uint8</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">);</span>
+        <span class="n">emitterData</span><span class="p">.</span><span class="n">Tree</span> <span class="o">=</span> <span class="k">new</span> <span class="n">rendering</span><span class="o">::</span><span class="n">Octree</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">min</span><span class="p">,</span> <span class="n">max</span><span class="p">);</span>
         <span class="c1">//insert points into tree</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">position</span> <span class="p">:</span> <span class="n">m_positions</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">emitterData</span><span class="p">.</span><span class="n">Tree</span><span class="o">-&gt;</span><span class="n">insertNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">position</span><span class="p">);</span>
+            <span class="n">emitterData</span><span class="p">.</span><span class="n">Tree</span><span class="o">-&gt;</span><span class="n">insertNode</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="p">(</span><span class="n">m_colors</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">)),</span> <span class="n">position</span><span class="p">);</span>
+            <span class="n">index</span><span class="o">++</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="c1">//Write to handle</span>
+        <span class="n">emitter</span><span class="p">.</span><span class="n">container</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">container</span><span class="p">;</span>
+        <span class="n">emitter_handle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">emitter</span><span class="p">);</span>
         <span class="n">emitterDataHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">emitterData</span><span class="p">);</span>
         <span class="c1">//create the particles</span>
         <span class="n">populateEmitter</span><span class="p">(</span><span class="n">emitter_handle</span><span class="p">,</span> <span class="n">emitterDataHandle</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="c1">//iterates input posiitons and creates particles based on position</span>
-    <span class="kt">void</span> <span class="n">CreateParticles</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;*</span> <span class="n">inputData</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&amp;</span> <span class="n">emitter</span><span class="p">)</span> <span class="k">const</span>
+
+    <span class="kt">void</span> <span class="n">CreateParticles</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&gt;*</span> <span class="n">inputData</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&amp;</span> <span class="n">emitter</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">item</span> <span class="p">:</span> <span class="o">*</span><span class="n">inputData</span><span class="p">)</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">newPos</span><span class="p">,</span> <span class="n">newColor</span><span class="p">]</span> <span class="o">:</span> <span class="o">*</span><span class="n">inputData</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle</span><span class="o">&gt;</span> <span class="n">particleComponent</span> <span class="o">=</span> <span class="n">checkToRecycle</span><span class="p">(</span><span class="n">emitter</span><span class="p">);</span>
-            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">particleComponent</span><span class="p">.</span><span class="n">entity</span><span class="p">;</span>
+            <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span> <span class="n">trans</span> <span class="o">=</span> <span class="n">checkContainerToRecycle</span><span class="p">();</span>
+
+            <span class="c1">//auto ent = trans.entity;</span>
 
             <span class="c1">//Gets position, rotation and scale of entity.</span>
-            <span class="k">auto</span> <span class="n">trans</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
-            <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">pos</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">scale</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">newTrans</span> <span class="o">=</span> <span class="n">trans</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handles</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">pos</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">scale</span><span class="p">]</span> <span class="o">=</span> <span class="n">newTrans</span><span class="p">;</span>
 
             <span class="c1">//Sets the particle scale to the right scale.</span>
-            <span class="n">pos</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+        <span class="c1">//    transRead.position</span>
+            <span class="n">pos</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">newPos</span><span class="p">);</span>
             <span class="n">scale</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">(</span><span class="n">m_startingSize</span><span class="p">));</span>
 
+            <span class="c1">//auto it = container.colorBufferData.begin() + data.bufferPosition + data.emitterSize + index;</span>
+            <span class="n">container</span><span class="p">.</span><span class="n">colorBufferData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">newColor</span><span class="p">);</span>
             <span class="c1">//Populates the particle with the appropriate stuffs.</span>
-            <span class="n">createParticle</span><span class="p">(</span><span class="n">particleComponent</span><span class="p">,</span> <span class="n">trans</span><span class="p">);</span>
+            <span class="n">createParticle</span><span class="p">(</span><span class="n">trans</span><span class="p">.</span><span class="n">entity</span><span class="p">);</span>
+            <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+
         <span class="p">}</span>
+
+        <span class="n">data</span><span class="p">.</span><span class="n">emitterSize</span> <span class="o">+=</span> <span class="n">inputData</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
     <span class="p">}</span>
-    <span class="kt">void</span> <span class="n">decreaseDetail</span><span class="p">(</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&amp;</span> <span class="n">emitter</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetLod</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maxLod</span><span class="p">)</span> <span class="k">const</span>
+
+    <span class="kt">void</span> <span class="n">decreaseDetail</span><span class="p">(</span>
+        <span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&amp;</span> <span class="n">emitter</span><span class="p">,</span>
+        <span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">,</span>
+        <span class="kt">int</span> <span class="n">targetLod</span><span class="p">,</span>
+        <span class="kt">int</span> <span class="n">maxLod</span><span class="p">,</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&gt;&amp;</span> <span class="n">dataHandle</span><span class="p">,</span>
+        <span class="n">ecs</span><span class="o">::</span><span class="n">EntityQuery</span><span class="o">&amp;</span> <span class="n">enities</span>
+    <span class="p">)</span> <span class="k">const</span>
+
     <span class="p">{</span>
-        <span class="c1">//   log::debug(&quot;decreasing detail&quot;);</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
 
-           <span class="c1">//read emitter</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">emitter</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="c1">//get the amount of particles to remove</span>
-    <span class="c1">//    log::debug(&quot;particles: &quot; + std::to_string(emitter.livingParticles.size()));</span>
         <span class="kt">int</span> <span class="n">targetParticleCount</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">ElementsPerLOD</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">maxLod</span> <span class="o">-</span> <span class="n">targetLod</span><span class="p">);</span>
-
-        <span class="kt">int</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">emitter</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">targetParticleCount</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">delta</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">emitterSize</span> <span class="o">-</span> <span class="n">targetParticleCount</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">dataToRemove</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">posRangeMap</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">bufferPosition</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">bufferPosition</span> <span class="o">+</span> <span class="n">data</span><span class="p">.</span><span class="n">emitterSize</span><span class="p">;</span>
+        <span class="n">bufferPosition</span> <span class="o">=</span> <span class="n">dataToRemove</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
         <span class="c1">//remove particles from the end of the living particles</span>
         <span class="c1">//living particles should be stored in order of detail</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">delta</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">dataToRemove</span><span class="p">.</span><span class="n">second</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">cleanUpParticle</span><span class="p">(</span><span class="n">emitter</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">emitter</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">emitter</span><span class="p">);</span>
+            <span class="c1">//remove first object at position for the stored size</span>
+            <span class="n">container</span><span class="p">.</span><span class="n">colorBufferData</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">colorBufferData</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">dataToRemove</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">particle</span> <span class="o">=</span> <span class="n">container</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">dataToRemove</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
+            <span class="c1">//remove renderer and push to dead particles</span>
+            <span class="n">particle</span><span class="p">.</span><span class="n">remove_component</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">mesh_renderer</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">container</span><span class="p">.</span><span class="n">deadParticles</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">particle</span><span class="p">);</span>
+            <span class="c1">//erase particle</span>
+            <span class="n">container</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">dataToRemove</span><span class="p">.</span><span class="n">first</span><span class="p">);</span>
         <span class="p">}</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">emitterSize</span> <span class="o">-=</span> <span class="n">delta</span><span class="p">;</span>
         <span class="n">data</span><span class="p">.</span><span class="n">CurrentLOD</span> <span class="o">=</span> <span class="n">targetLod</span><span class="p">;</span>
+        <span class="c1">//pop back of point map</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">posRangeMap</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+        <span class="c1">//update other emitterbuffer positions</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span> <span class="n">colorData</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">pointEntities</span> <span class="p">:</span> <span class="n">enities</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">currentHandle</span> <span class="o">=</span> <span class="n">pointEntities</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="c1">//skip if entity is the same</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">dataHandle</span> <span class="o">==</span> <span class="n">currentHandle</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">otherData</span> <span class="o">=</span> <span class="n">currentHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+            <span class="kt">bool</span> <span class="n">changes</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">pair</span> <span class="p">:</span> <span class="n">otherData</span><span class="p">.</span><span class="n">posRangeMap</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//if there is data at a higher position than the data that is beeing removed it needs to be moved back by the amount of points removed</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pair</span><span class="p">.</span><span class="n">first</span> <span class="o">&gt;</span> <span class="n">dataToRemove</span><span class="p">.</span><span class="n">first</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;changed data!&quot;</span><span class="p">);</span>
+                    <span class="n">otherData</span><span class="p">.</span><span class="n">posRangeMap</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">).</span><span class="n">first</span> <span class="o">-=</span> <span class="n">dataToRemove</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+                    <span class="n">changes</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c1">//write data if there were changes</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">changes</span><span class="p">)</span><span class="n">currentHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">otherData</span><span class="p">);</span>
+        <span class="p">}</span>
     <span class="p">}</span>
-    <span class="kt">void</span> <span class="n">increaseDetail</span><span class="p">(</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&amp;</span> <span class="n">emitter</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetLod</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maxLod</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">lod</span><span class="o">&amp;</span> <span class="n">lod</span><span class="p">)</span> <span class="k">const</span>
+    <span class="kt">void</span> <span class="n">increaseDetail</span><span class="p">(</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&amp;</span> <span class="n">emitter</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">targetLod</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maxLod</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">lod</span><span class="o">&amp;</span> <span class="n">lod</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EntityQuery</span><span class="o">&amp;</span> <span class="n">enities</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+
+
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">data</span><span class="p">.</span><span class="n">Tree</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
 
         <span class="c1">//create data container</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;*</span> <span class="n">newData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&gt;*</span> <span class="n">newData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&gt;</span><span class="p">();</span>
         <span class="c1">//populate emitter progressively for each LOD</span>
-        <span class="n">data</span><span class="p">.</span><span class="n">Tree</span><span class="o">-&gt;</span><span class="n">GetDataRange</span><span class="p">(</span><span class="n">lod</span><span class="p">.</span><span class="n">MaxLod</span> <span class="o">-</span> <span class="n">data</span><span class="p">.</span><span class="n">CurrentLOD</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lod</span><span class="p">.</span><span class="n">MaxLod</span> <span class="o">-</span> <span class="n">targetLod</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">newData</span><span class="p">);</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">Tree</span><span class="o">-&gt;</span><span class="n">GetDataRangePair</span><span class="p">(</span><span class="n">lod</span><span class="p">.</span><span class="n">MaxLod</span> <span class="o">-</span> <span class="n">data</span><span class="p">.</span><span class="n">CurrentLOD</span><span class="p">,</span> <span class="n">lod</span><span class="p">.</span><span class="n">MaxLod</span> <span class="o">-</span> <span class="n">targetLod</span><span class="p">,</span> <span class="n">newData</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">newData</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
 
-        <span class="n">CreateParticles</span><span class="p">(</span><span class="n">newData</span><span class="p">,</span> <span class="n">emitter</span><span class="p">);</span>
-        <span class="n">newData</span><span class="o">-&gt;</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">CreateParticles</span><span class="p">(</span><span class="n">newData</span><span class="p">,</span> <span class="n">emitter</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
         <span class="n">data</span><span class="p">.</span><span class="n">CurrentLOD</span> <span class="o">=</span> <span class="n">targetLod</span><span class="p">;</span>
+
+        <span class="c1">//store position and amount of particles generated</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">posRangeMap</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">emitter</span><span class="p">.</span><span class="n">container</span><span class="o">-&gt;</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">newData</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">(),</span> <span class="n">newData</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()));</span>
+        <span class="c1">//push back position for higher position buffers</span>
+        <span class="n">newData</span><span class="o">-&gt;</span><span class="n">clear</span><span class="p">();</span>
     <span class="p">}</span>
     <span class="kt">void</span> <span class="n">populateEmitter</span><span class="p">(</span><span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&gt;</span> <span class="n">emitter_handle</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
@@ -196,89 +266,110 @@
         <span class="k">auto</span> <span class="n">emitterData</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">emitterData</span><span class="p">.</span><span class="n">Tree</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
         <span class="kt">int</span> <span class="n">maxTreeDepth</span> <span class="o">=</span> <span class="n">emitterData</span><span class="p">.</span><span class="n">Tree</span><span class="o">-&gt;</span><span class="n">GetTreeDepth</span><span class="p">();</span>
-
+        <span class="c1">//set buffer position to the size of all existing particles</span>
+        <span class="n">emitterData</span><span class="p">.</span><span class="n">bufferPosition</span> <span class="o">=</span> <span class="n">container</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 
         <span class="c1">//create data container</span>
-        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;*</span> <span class="n">newData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&gt;*</span> <span class="n">newData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;&gt;</span><span class="p">();</span>
         <span class="c1">//populate emitter progressively for each LOD</span>
         <span class="kt">int</span> <span class="n">particleCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="kt">int</span> <span class="n">LODcount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">maxTreeDepth</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="n">emitterData</span><span class="p">.</span><span class="n">Tree</span><span class="o">-&gt;</span><span class="n">GetDataRange</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">newData</span><span class="p">);</span>
+            <span class="n">emitterData</span><span class="p">.</span><span class="n">Tree</span><span class="o">-&gt;</span><span class="n">GetDataRangePair</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">newData</span><span class="p">);</span>
             <span class="n">particleCount</span> <span class="o">+=</span> <span class="n">newData</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
             <span class="c1">//exit loop if there is no new data to be found</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">newData</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
-            <span class="n">CreateParticles</span><span class="p">(</span><span class="n">newData</span><span class="p">,</span> <span class="n">emitter</span><span class="p">);</span>
-            <span class="n">newData</span><span class="o">-&gt;</span><span class="n">clear</span><span class="p">();</span>
+            <span class="n">CreateParticles</span><span class="p">(</span><span class="n">newData</span><span class="p">,</span> <span class="n">emitter</span><span class="p">,</span> <span class="n">emitterData</span><span class="p">);</span>
             <span class="n">LODcount</span><span class="o">++</span><span class="p">;</span>
             <span class="c1">//store the amount of particles for the lod so that we can later easily remove them again</span>
             <span class="n">emitterData</span><span class="p">.</span><span class="n">ElementsPerLOD</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">particleCount</span><span class="p">);</span>
+            <span class="c1">//store the position and amount of particles</span>
+            <span class="n">emitterData</span><span class="p">.</span><span class="n">posRangeMap</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">newData</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">(),</span> <span class="n">newData</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()));</span>
+
+            <span class="n">newData</span><span class="o">-&gt;</span><span class="n">clear</span><span class="p">();</span>
 
         <span class="p">}</span>
         <span class="n">rendering</span><span class="o">::</span><span class="n">lod</span> <span class="n">lodComponent</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">lod</span><span class="p">(</span><span class="n">LODcount</span><span class="p">);</span>
         <span class="n">emitter_handle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">lod</span><span class="o">&gt;</span><span class="p">(</span><span class="n">lodComponent</span><span class="p">);</span>
         <span class="n">emitterData</span><span class="p">.</span><span class="n">CurrentLOD</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="c1">//size is new size substracted by the original position</span>
+        <span class="c1">//emitterData.emitterSize = container.livingParticles.size() - emitterData.bufferPosition;</span>
+        <span class="c1">//decreaseDetail(emitter, emitterData, 5, maxTreeDepth);</span>
         <span class="n">data</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">emitterData</span><span class="p">);</span>
         <span class="n">emitter_handle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">emitter</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span><span class="o">&gt;&amp;</span> <span class="n">entities</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&gt;</span> <span class="n">emitterHandle</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
+    <span class="kt">void</span> <span class="n">animate</span><span class="p">(</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&amp;</span> <span class="n">emitter</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="c1">//check if buffer has been read and has not been overwritten yet</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_overwrittenColorBuffer</span> <span class="o">&amp;&amp;</span> <span class="n">m_particleModel</span><span class="p">.</span><span class="n">is_buffered</span><span class="p">())</span>
+
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">SetColor</span><span class="p">(</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&amp;</span> <span class="n">emitter</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="c1">//assign colors</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">item</span> <span class="p">:</span> <span class="n">data</span><span class="p">.</span><span class="n">posRangeMap</span><span class="p">)</span>
         <span class="p">{</span>
-            <span class="c1">//Get a window and lock</span>
-            <span class="k">auto</span> <span class="n">window</span> <span class="o">=</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EcsRegistry</span><span class="o">::</span><span class="n">world</span><span class="p">.</span><span class="n">read_component</span><span class="o">&lt;</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&gt;</span><span class="p">();</span>
-            <span class="n">app</span><span class="o">::</span><span class="n">context_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">guard</span><span class="p">.</span><span class="n">contextIsValid</span><span class="p">())</span>
-            <span class="p">{</span>
-                <span class="c1">//for now just create a random buffer</span>
-                <span class="n">std</span><span class="o">::</span><span class="n">random_device</span> <span class="n">rd</span><span class="p">;</span>
-
-                <span class="n">std</span><span class="o">::</span><span class="n">mt19937_64</span> <span class="n">rng</span><span class="p">(</span><span class="n">rd</span><span class="p">());</span>
-                <span class="n">std</span><span class="o">::</span><span class="n">uniform_real_distribution</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">unif</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-
-                <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="o">&gt;</span> <span class="n">randColors</span><span class="p">;</span>
-                <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">150000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="kt">double</span> <span class="n">rand1</span> <span class="o">=</span> <span class="n">unif</span><span class="p">(</span><span class="n">rng</span><span class="p">);</span>
-                    <span class="kt">double</span> <span class="n">rand2</span> <span class="o">=</span> <span class="n">unif</span><span class="p">(</span><span class="n">rng</span><span class="p">);</span>
-                    <span class="kt">double</span> <span class="n">rand3</span> <span class="o">=</span> <span class="n">unif</span><span class="p">(</span><span class="n">rng</span><span class="p">);</span>
-                    <span class="n">math</span><span class="o">::</span><span class="n">color</span> <span class="n">newColor</span> <span class="o">=</span> <span class="n">math</span><span class="o">::</span><span class="n">color</span><span class="p">(</span><span class="n">rand1</span><span class="p">,</span> <span class="n">rand2</span><span class="p">,</span> <span class="n">rand3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-                    <span class="n">randColors</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">newColor</span><span class="p">);</span>
-                <span class="p">}</span>
-                <span class="c1">//create buffer</span>
-                <span class="n">rendering</span><span class="o">::</span><span class="n">buffer</span> <span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">randColors</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
-                <span class="k">auto</span><span class="o">&amp;</span> <span class="n">model</span> <span class="o">=</span> <span class="n">m_particleModel</span><span class="p">.</span><span class="n">get_model</span><span class="p">();</span>
-                <span class="n">m_particleModel</span><span class="p">.</span><span class="n">overwrite_buffer</span><span class="p">(</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_COLOR</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
-                <span class="n">m_overwrittenColorBuffer</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-            <span class="p">}</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">fill</span><span class="p">(</span><span class="n">container</span><span class="p">.</span><span class="n">colorBufferData</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">item</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">container</span><span class="p">.</span><span class="n">colorBufferData</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">item</span><span class="p">.</span><span class="n">first</span> <span class="o">+</span> <span class="n">item</span><span class="p">.</span><span class="n">second</span><span class="p">,</span> <span class="n">math</span><span class="o">::</span><span class="n">colors</span><span class="o">::</span><span class="n">red</span><span class="p">);</span>
         <span class="p">}</span>
 
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span><span class="o">&gt;&amp;</span> <span class="n">entity</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span><span class="o">&gt;</span> <span class="n">emitterHandle</span><span class="p">,</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EntityQuery</span><span class="o">&amp;</span> <span class="n">entities</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
         <span class="k">auto</span> <span class="n">lodComponent</span> <span class="o">=</span> <span class="n">emitterHandle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">lod</span><span class="o">&gt;</span><span class="p">().</span><span class="n">read</span><span class="p">();</span>
         <span class="n">rendering</span><span class="o">::</span><span class="n">particle_emitter</span> <span class="n">emitter</span> <span class="o">=</span> <span class="n">emitterHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
         <span class="k">auto</span> <span class="n">emitterDataHandle</span> <span class="o">=</span> <span class="n">emitterHandle</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&gt;</span><span class="p">();</span>
         <span class="k">auto</span> <span class="n">emitterData</span> <span class="o">=</span> <span class="n">emitterDataHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-
         <span class="k">if</span> <span class="p">(</span><span class="n">emitterData</span><span class="p">.</span><span class="n">CurrentLOD</span> <span class="o">!=</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">Level</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">lodComponent</span><span class="p">.</span><span class="n">Level</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">SetColor</span><span class="p">(</span><span class="n">emitter</span><span class="p">,</span> <span class="n">emitterData</span><span class="p">);</span>
+            <span class="p">}</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">emitterData</span><span class="p">.</span><span class="n">CurrentLOD</span> <span class="o">&gt;</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">Level</span><span class="p">)</span>
             <span class="p">{</span>
-                <span class="n">increaseDetail</span><span class="p">(</span><span class="n">emitter</span><span class="p">,</span> <span class="n">emitterData</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">Level</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">MaxLod</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">);</span>
+                <span class="n">increaseDetail</span><span class="p">(</span><span class="n">emitter</span><span class="p">,</span> <span class="n">emitterData</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">Level</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">MaxLod</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">,</span> <span class="n">entities</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">else</span>
             <span class="p">{</span>
-                <span class="n">decreaseDetail</span><span class="p">(</span><span class="n">emitter</span><span class="p">,</span> <span class="n">emitterData</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">Level</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">MaxLod</span><span class="p">);</span>
+                <span class="n">decreaseDetail</span><span class="p">(</span><span class="n">emitter</span><span class="p">,</span> <span class="n">emitterData</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">Level</span><span class="p">,</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">MaxLod</span><span class="p">,</span> <span class="n">emitterDataHandle</span><span class="p">,</span> <span class="n">entities</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="n">emitterData</span><span class="p">.</span><span class="n">CurrentLOD</span> <span class="o">=</span> <span class="n">lodComponent</span><span class="p">.</span><span class="n">Level</span><span class="p">;</span>
             <span class="n">emitterHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">emitter</span><span class="p">);</span>
             <span class="n">emitterDataHandle</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">emitterData</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
+    <span class="k">mutable</span> <span class="n">rendering</span><span class="o">::</span><span class="n">point_cloud_particle_container</span> <span class="n">container</span><span class="p">;</span>
+
 
 <span class="k">private</span><span class="o">:</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">m_positions</span><span class="p">;</span>
-    <span class="k">mutable</span> <span class="kt">bool</span> <span class="n">m_overwrittenColorBuffer</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">ecs</span><span class="o">::</span><span class="n">component_handle</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span> <span class="n">checkContainerToRecycle</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">OPTICK_EVENT</span><span class="p">();</span>
+
+        <span class="n">ecs</span><span class="o">::</span><span class="n">entity_handle</span> <span class="n">particularParticle</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">container</span><span class="p">.</span><span class="n">deadParticles</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="c1">//Get particle from dead particle list.</span>
+            <span class="n">particularParticle</span> <span class="o">=</span> <span class="n">container</span><span class="p">.</span><span class="n">deadParticles</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
+            <span class="c1">//remove last item</span>
+            <span class="n">container</span><span class="p">.</span><span class="n">deadParticles</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="c1">//Create new particle entity.</span>
+            <span class="n">particularParticle</span> <span class="o">=</span> <span class="n">m_registry</span><span class="o">-&gt;</span><span class="n">createEntity</span><span class="p">();</span>
+            <span class="c1">//give newly created particle a transform</span>
+            <span class="n">particularParticle</span><span class="p">.</span><span class="n">add_components</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="c1">//  particularParticle.add_component&lt;rendering::particle&gt;();</span>
+        <span class="p">}</span>
+        <span class="c1">//Add particle to living particle list.</span>
+        <span class="n">container</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">particularParticle</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">particularParticle</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">transform</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">mutable</span>  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec3</span><span class="o">&gt;</span> <span class="n">m_positions</span><span class="p">;</span>
+    <span class="k">mutable</span>  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span> <span class="n">m_colors</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 </div>

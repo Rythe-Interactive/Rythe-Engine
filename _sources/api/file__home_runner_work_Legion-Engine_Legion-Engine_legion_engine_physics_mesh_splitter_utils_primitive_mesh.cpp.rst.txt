@@ -29,7 +29,7 @@ Includes
 --------
 
 
-- ``physics/mesh_splitter_utils/primitive_mesh.h`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.h`)
+- ``physics/mesh_splitter_utils/primitive_mesh.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_mesh_splitter_utils_primitive_mesh.hpp`)
 
 - ``rendering/components/renderable.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp`)
 

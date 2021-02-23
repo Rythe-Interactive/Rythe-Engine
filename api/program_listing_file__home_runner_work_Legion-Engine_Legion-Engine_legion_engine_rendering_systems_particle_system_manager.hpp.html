@@ -49,7 +49,7 @@
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
 <span class="cp">#include</span> <span class="cpf">&lt;core/core.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/data/particle_system_base.hpp&gt;</span><span class="cp"></span>
-
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/components/point_emitter_data.hpp&gt;</span><span class="cp"></span>
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
 <span class="p">{</span>
     <span class="k">class</span> <span class="nc">ParticleSystemManager</span> <span class="o">:</span> <span class="k">public</span> <span class="n">System</span><span class="o">&lt;</span><span class="n">ParticleSystemManager</span><span class="o">&gt;</span>
@@ -65,6 +65,7 @@
         <span class="p">}</span>
         <span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
         <span class="p">{</span>
+            <span class="n">OPTICK_EVENT</span><span class="p">();</span>
             <span class="k">static</span> <span class="k">auto</span> <span class="n">emitters</span> <span class="o">=</span> <span class="n">createQuery</span><span class="o">&lt;</span><span class="n">particle_emitter</span><span class="o">&gt;</span><span class="p">();</span>
             <span class="n">emitters</span><span class="p">.</span><span class="n">queryEntities</span><span class="p">();</span>
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">entity</span> <span class="p">:</span> <span class="n">emitters</span><span class="p">)</span>
@@ -86,7 +87,38 @@
                 <span class="p">{</span>
                     <span class="c1">//If it IS then it runs the emitter through the particle system update.</span>
                     <span class="k">const</span> <span class="n">ParticleSystemBase</span><span class="o">*</span> <span class="n">particleSystem</span> <span class="o">=</span> <span class="n">emit</span><span class="p">.</span><span class="n">particleSystemHandle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
-                    <span class="n">particleSystem</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">emit</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">,</span> <span class="n">emitterHandle</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
+                    <span class="n">particleSystem</span><span class="o">-&gt;</span><span class="n">update</span><span class="p">(</span><span class="n">emit</span><span class="p">.</span><span class="n">livingParticles</span><span class="p">,</span> <span class="n">emitterHandle</span><span class="p">,</span> <span class="n">emitters</span><span class="p">,</span> <span class="n">deltaTime</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+
+
+            <span class="c1">//update point cloud buffer data</span>
+            <span class="k">static</span> <span class="k">auto</span> <span class="n">pointCloudQuery</span> <span class="o">=</span> <span class="n">createQuery</span><span class="o">&lt;</span><span class="n">particle_emitter</span><span class="p">,</span> <span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">pointCloudQuery</span><span class="p">.</span><span class="n">queryEntities</span><span class="p">();</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span> <span class="n">colorData</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">pointEntities</span> <span class="p">:</span> <span class="n">pointCloudQuery</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">emitterHandle</span> <span class="o">=</span> <span class="n">pointEntities</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">particle_emitter</span><span class="o">&gt;</span><span class="p">();</span>
+                <span class="k">auto</span> <span class="n">emitter</span> <span class="o">=</span> <span class="n">emitterHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+                <span class="k">const</span> <span class="n">ParticleSystemBase</span><span class="o">*</span> <span class="n">particleSystem</span> <span class="o">=</span> <span class="n">emitter</span><span class="p">.</span><span class="n">particleSystemHandle</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+
+                <span class="k">auto</span> <span class="n">dataHandle</span> <span class="o">=</span> <span class="n">pointEntities</span><span class="p">.</span><span class="n">get_component_handle</span><span class="o">&lt;</span><span class="n">rendering</span><span class="o">::</span><span class="n">point_emitter_data</span><span class="o">&gt;</span><span class="p">();</span>
+                <span class="k">auto</span> <span class="n">data</span> <span class="o">=</span> <span class="n">dataHandle</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+                <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="n">pointCloudQuery</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="k">auto</span> <span class="n">window</span> <span class="o">=</span> <span class="n">ecs</span><span class="o">::</span><span class="n">EcsRegistry</span><span class="o">::</span><span class="n">world</span><span class="p">.</span><span class="n">read_component</span><span class="o">&lt;</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&gt;</span><span class="p">();</span>
+                    <span class="n">app</span><span class="o">::</span><span class="n">context_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">guard</span><span class="p">.</span><span class="n">contextIsValid</span><span class="p">())</span>
+                    <span class="p">{</span>
+                        <span class="n">rendering</span><span class="o">::</span><span class="n">buffer</span> <span class="n">colorBuffer</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">buffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">emitter</span><span class="p">.</span><span class="n">container</span><span class="o">-&gt;</span><span class="n">colorBufferData</span><span class="p">,</span> <span class="n">GL_STREAM_DRAW</span><span class="p">);</span>
+                        <span class="n">particleSystem</span><span class="o">-&gt;</span><span class="n">m_particleModel</span><span class="p">.</span><span class="n">overwrite_buffer</span><span class="p">(</span><span class="n">colorBuffer</span><span class="p">,</span> <span class="n">SV_COLOR</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+                        <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">emitter</span><span class="p">.</span><span class="n">container</span><span class="o">-&gt;</span><span class="n">colorBufferData</span><span class="p">.</span><span class="n">size</span><span class="p">()));</span>
+
+                    <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>

@@ -163,7 +163,7 @@
         <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">c</span><span class="p">));</span>
     <span class="p">}</span>
 
-    <span class="kr">inline</span> <span class="kt">float</span> <span class="nf">pointToTriangle</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint2</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triNormal</span><span class="p">)</span>
+    <span class="kr">inline</span> <span class="kt">float</span> <span class="nf">pointToTriangle</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint0</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triPoint2</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">triNormal</span><span class="p">,</span><span class="kt">bool</span> <span class="n">debug</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="n">triPoint0</span> <span class="o">||</span>
             <span class="n">p</span> <span class="o">==</span> <span class="n">triPoint1</span> <span class="o">||</span>
@@ -194,7 +194,6 @@
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">projectionLength</span><span class="p">;</span>
         <span class="p">}</span>
-
         <span class="c1">//Point q is not inside the triangle, check distance toward each edge of the triangle</span>
         <span class="c1">// therefore the smallest distance is distance toward a side or end point</span>
         <span class="kt">float</span> <span class="n">distance01</span> <span class="o">=</span> <span class="n">pointToLineSegment</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">triPoint1</span><span class="p">,</span> <span class="n">triPoint0</span><span class="p">);</span>
@@ -324,6 +323,11 @@
     <span class="kr">inline</span> <span class="kt">float</span> <span class="nf">pointToPlane</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">point</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">planeNormal</span><span class="p">),</span> <span class="n">point</span> <span class="o">-</span> <span class="n">planePosition</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">float</span> <span class="nf">angleToPlane</span><span class="p">(</span><span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">point</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planePosition</span><span class="p">,</span> <span class="k">const</span> <span class="n">vec3</span><span class="o">&amp;</span> <span class="n">planeNormal</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">normalizeDot</span><span class="p">(</span><span class="n">planeNormal</span><span class="p">,</span> <span class="n">point</span> <span class="o">-</span> <span class="n">planePosition</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">struct</span> <span class="n">plane</span>

@@ -31,6 +31,8 @@ Includes
 
 - ``core/core.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_editor_editor-core_core.hpp`)
 
+- ``physics/cube_collider_params.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_cube_collider_params.hpp`)
+
 - ``rendering/components/renderable.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp`)
 
 
@@ -55,11 +57,21 @@ Classes
 -------
 
 
+- :ref:`exhale_struct_structexplosion`
+
 - :ref:`exhale_struct_structextended_physics_continue`
+
+- :ref:`exhale_struct_structlarge_explosion`
+
+- :ref:`exhale_struct_structmedium_explosion`
 
 - :ref:`exhale_struct_structnext_physics_time_step_continue`
 
 - :ref:`exhale_struct_structphysics__split__test`
+
+- :ref:`exhale_struct_structsmall_explosion`
+
+- :ref:`exhale_struct_structspawn_entity`
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_physics_fracture_test_system`
 

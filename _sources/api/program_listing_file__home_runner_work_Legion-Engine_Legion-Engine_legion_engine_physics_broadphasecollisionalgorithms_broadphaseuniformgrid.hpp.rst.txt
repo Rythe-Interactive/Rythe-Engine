@@ -1,0 +1,66 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphaseuniformgrid.hpp:
+
+Program Listing for File broadphaseuniformgrid.hpp
+==================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphaseuniformgrid.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/broadphasecollisionalgorithms/broadphaseuniformgrid.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <physics/broadphasecollisionalgorithms/broadphasecollisionalgorithm.hpp>
+   #include <physics/physics_statics.hpp>
+   
+   namespace legion::physics
+   {
+       class BroadphaseUniformGrid : public BroadPhaseCollisionAlgorithm
+       {
+       public:
+           BroadphaseUniformGrid(math::ivec3 cellSize, size_type emptyCellDestroyThreshold = 0) : m_cellSize(cellSize), m_emptyCellDestroyThreshold(emptyCellDestroyThreshold)
+           {
+           }
+   
+           const std::vector<std::vector<physics_manifold_precursor>>& collectPairs(
+               std::vector<physics_manifold_precursor>&& manifoldPrecursors) override;
+   
+           const std::vector<std::vector<physics_manifold_precursor>>& reConstruct(
+               std::vector<physics_manifold_precursor>&& manifoldPrecursors);
+   
+           void setCellSize(math::ivec3 cellSize)
+           {
+               // Grid size changes, therefore our cached data is no longer valid
+               cellIndices.clear();
+               m_collectedEntities.clear();
+               m_oldPositions.clear();
+               m_groupings.clear();
+               m_entityOccupiedCells.clear();
+               m_emptyCells.clear();
+   
+               m_cellSize = cellSize;
+           }
+   
+           void debugDraw() override;
+   
+       private:
+           math::ivec3 m_cellSize;
+           size_type m_emptyCellDestroyThreshold;
+   
+           math::ivec3 calculateCellIndex(const math::vec3 point);
+   
+           // Stores the cell index (ivec3) to the index in the m_groupings list.
+           std::unordered_map<math::ivec3, int> cellIndices;
+   
+           // All the entites in the cells. Using this new entities can be detected.
+           std::unordered_set<id_type> m_collectedEntities;
+           // Stores the old positions of the collected entities. This way we can check if an object moved.
+           std::unordered_map<id_type, math::vec3> m_oldPositions;
+           // Stores all the cells that an entity occupies. An entity can be on the edge of mulitple cells and therefore be in multiple cells at once.
+           std::unordered_map<id_type, std::unordered_set<math::ivec3>> m_entityOccupiedCells;
+   
+           // All the empty cells. This list is used to check how many empty cells there are.
+           std::unordered_set<math::ivec3> m_emptyCells;
+       };
+   }

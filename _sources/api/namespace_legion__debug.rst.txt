@@ -17,6 +17,6 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_debugrendering_8hpp_1ac68069c24d039e529280c33fd8722602`
-
 - :ref:`exhale_function_debugrendering_8hpp_1ab935709c7b0cd5654e4418cf02d48d22`
+
+- :ref:`exhale_function_debugrendering_8hpp_1ac68069c24d039e529280c33fd8722602`

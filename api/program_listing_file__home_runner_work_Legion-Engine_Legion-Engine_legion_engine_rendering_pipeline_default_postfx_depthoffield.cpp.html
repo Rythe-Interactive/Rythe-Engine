@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Listing for File depthoffield.cpp &#8212; LegionEngine v 0.2 alpha documentation</title>
+    <link rel="stylesheet" href="../_static/nameko.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">LegionEngine v 0.2 alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File depthoffield.cpp</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-depthoffield-cpp">
+<span id="program-listing-file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-postfx-depthoffield-cpp"></span><h1>Program Listing for File depthoffield.cpp<a class="headerlink" href="#program-listing-for-file-depthoffield-cpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_depthoffield.cpp.html#file-home-runner-work-legion-engine-legion-engine-legion-engine-rendering-pipeline-default-postfx-depthoffield-cpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/pipeline/default/postfx/depthoffield.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;rendering/pipeline/default/postfx/depthoffield.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/systems/renderer.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/filesystem/filesystem.hpp&gt;</span><span class="cp"></span>
+
+
+<span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">rendering</span>
+<span class="p">{</span>
+    <span class="kt">void</span> <span class="n">DepthOfField</span><span class="o">::</span><span class="n">setup</span><span class="p">(</span><span class="n">app</span><span class="o">::</span><span class="n">window</span><span class="o">&amp;</span> <span class="n">context</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="k">namespace</span> <span class="n">fs</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
+        <span class="c1">// Create all the shaders needed.</span>
+        <span class="n">m_depthThresholdShader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;depth threshold&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/depththreshold.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">m_bokehShader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;dof bokeh&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/dofbokeh.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">m_screenShader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;screenshader&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/screenshader.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">m_combineShader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;dofcombineshader&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/dofcombine.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">m_postFilterShader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;postfiltershader&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/postfilter.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+        <span class="n">m_preFilterShader</span> <span class="o">=</span> <span class="n">ShaderCache</span><span class="o">::</span><span class="n">create_shader</span><span class="p">(</span><span class="s">&quot;prefiltershader&quot;</span><span class="p">,</span> <span class="s">&quot;engine://shaders/prefilter.shs&quot;</span><span class="n">_view</span><span class="p">);</span>
+
+        <span class="c1">// Create threshold fbo and texture.</span>
+        <span class="n">m_thresholdFbo</span> <span class="o">=</span> <span class="n">framebuffer</span><span class="p">(</span><span class="n">GL_FRAMEBUFFER</span><span class="p">);</span>
+        <span class="n">m_thresholdTexture</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture</span><span class="p">(</span><span class="s">&quot;dofthreshold&quot;</span><span class="p">,</span> <span class="n">context</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">settings</span><span class="p">);</span>
+        <span class="n">m_thresholdFbo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">m_thresholdTexture</span><span class="p">,</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+
+        <span class="c1">// Create bokeh textures and resolution.</span>
+        <span class="n">m_destinationTexture</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture</span><span class="p">(</span><span class="s">&quot;dofdestination&quot;</span><span class="p">,</span> <span class="n">context</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">settings</span><span class="p">);</span>
+        <span class="n">m_halfres</span> <span class="o">=</span> <span class="n">context</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+        <span class="n">m_halfres1</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture</span><span class="p">(</span><span class="s">&quot;bokehhalfres1&quot;</span><span class="p">,</span> <span class="n">m_halfres</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+        <span class="n">m_halfres2</span> <span class="o">=</span> <span class="n">rendering</span><span class="o">::</span><span class="n">TextureCache</span><span class="o">::</span><span class="n">create_texture</span><span class="p">(</span><span class="s">&quot;bokehhalfres2&quot;</span><span class="p">,</span> <span class="n">m_halfres</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
+
+        <span class="n">m_bokehSize</span> <span class="o">=</span> <span class="mf">4.0f</span><span class="p">;</span>
+
+        <span class="c1">// Adding itself to the post processing renderpass.</span>
+        <span class="n">addRenderPass</span><span class="o">&lt;&amp;</span><span class="n">DepthOfField</span><span class="o">::</span><span class="n">renderPass</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">DepthOfField</span><span class="o">::</span><span class="n">renderPass</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">RenderPipelineBase</span><span class="o">*</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">camera</span><span class="o">&amp;</span> <span class="n">cam</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//Gets textures from framebuffer.</span>
+        <span class="k">auto</span> <span class="p">[</span><span class="n">valid_textures</span><span class="p">,</span> <span class="n">position_texture</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">]</span> <span class="o">=</span> <span class="n">getTextures</span><span class="p">(</span><span class="n">fbo</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">valid_textures</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="c1">//Change sizes</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">textureSize</span> <span class="o">=</span> <span class="n">color_texture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">textureSize</span> <span class="o">!=</span> <span class="n">m_destinationTexture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">size</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">m_destinationTexture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">resize</span><span class="p">(</span><span class="n">textureSize</span><span class="p">);</span>
+            <span class="n">m_thresholdTexture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">resize</span><span class="p">(</span><span class="n">textureSize</span><span class="p">);</span>
+            <span class="n">m_halfres</span> <span class="o">=</span> <span class="n">textureSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="n">m_halfres1</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">resize</span><span class="p">(</span><span class="n">m_halfres</span><span class="p">);</span>
+            <span class="n">m_halfres2</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">resize</span><span class="p">(</span><span class="n">m_halfres</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">//Calculates the area of focus and outputs it onto a texture.</span>
+        <span class="n">areaOfFocus</span><span class="p">(</span><span class="n">color_texture</span><span class="p">,</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">position_texture</span><span class="p">);</span>
+        <span class="c1">//Downsizing areaOfFocus.</span>
+        <span class="n">preFilter</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">);</span>
+        <span class="c1">//Uses bokeh blurring to blur low res color_texture.</span>
+        <span class="n">bokeh</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">);</span>
+        <span class="c1">//Post blur filtering.</span>
+        <span class="n">postFilter</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">);</span>
+        <span class="c1">//Combine source texture and the dof texture.</span>
+        <span class="n">combine</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">);</span>
+
+        <span class="c1">//Renders the resulting texture onto the screen.</span>
+        <span class="n">renderResults</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span> <span class="n">texture_handle</span><span class="p">,</span> <span class="n">texture_handle</span><span class="o">&gt;</span> <span class="n">DepthOfField</span><span class="o">::</span><span class="n">getTextures</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//Try to get position attachment.</span>
+        <span class="k">auto</span> <span class="n">position_attachment</span> <span class="o">=</span> <span class="n">fbo</span><span class="p">.</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">POSITION_ATTACHMENT</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">position_attachment</span><span class="p">))</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span> <span class="n">invalid_texture_handle</span><span class="p">,</span> <span class="n">invalid_texture_handle</span><span class="p">);</span>
+
+        <span class="c1">//Try to get color attachment.</span>
+        <span class="k">auto</span> <span class="n">color_attachment</span> <span class="o">=</span> <span class="n">fbo</span><span class="p">.</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">color_attachment</span><span class="p">))</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span> <span class="n">invalid_texture_handle</span><span class="p">,</span> <span class="n">invalid_texture_handle</span><span class="p">);</span>
+
+        <span class="c1">//Get position texture.</span>
+        <span class="k">auto</span> <span class="n">position_texture</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">position_attachment</span><span class="p">);</span>
+
+        <span class="c1">//Get color texture.</span>
+        <span class="k">auto</span> <span class="n">color_texture</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">color_attachment</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">position_texture</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DepthOfField</span><span class="o">::</span><span class="n">renderResults</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span><span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">texture</span><span class="p">,</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">color_texture</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">color_texture</span><span class="p">,</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+        <span class="c1">//Binds and assigns.</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_screenShader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_screenShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">texture</span><span class="p">);</span>
+        <span class="c1">//Render it onto a quad.</span>
+        <span class="n">renderQuad</span><span class="p">();</span>
+        <span class="c1">//RELEASE THE KRAKEN.</span>
+        <span class="n">m_screenShader</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DepthOfField</span><span class="o">::</span><span class="n">areaOfFocus</span><span class="p">(</span><span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">color_texture</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">position_texture</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Brightness threshold stage.</span>
+        <span class="n">m_thresholdFbo</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="c1">// Add color attachment to fbo.</span>
+        <span class="n">uint</span> <span class="n">attachment</span> <span class="o">=</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">;</span>
+        <span class="n">glDrawBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attachment</span><span class="p">);</span>
+
+        <span class="c1">// Bind and assign the depth threshold shader.</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">color_texture</span><span class="p">);</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_VIEWDIR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">camInput</span><span class="p">.</span><span class="n">vdirfarz</span><span class="p">);</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">mat4</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_VIEW</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">camInput</span><span class="p">.</span><span class="n">view</span><span class="p">);</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENEPOSITION</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">position_texture</span><span class="p">);</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;sampleOffset&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="mf">0.5f</span><span class="p">);</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;focalRange&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="mf">20.f</span><span class="p">);</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;focalOffset&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="mf">15.f</span><span class="p">);</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;bokehRadius&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">m_bokehSize</span><span class="p">);</span>
+
+        <span class="c1">// Render onto the quad.</span>
+        <span class="n">renderQuad</span><span class="p">();</span>
+        <span class="c1">// Release the shader and threshold fbo.</span>
+        <span class="n">m_depthThresholdShader</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+        <span class="n">m_thresholdFbo</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DepthOfField</span><span class="o">::</span><span class="n">bokeh</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">color_texture</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//Bokeh blur</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">m_halfres2</span><span class="p">,</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_bokehShader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_bokehShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">m_halfres1</span><span class="p">);</span>
+        <span class="n">m_bokehShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;scale&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="p">(</span><span class="mf">0.5f</span><span class="p">));</span>
+        <span class="n">m_bokehShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;bokehRadius&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">m_bokehSize</span><span class="p">);</span>
+        <span class="n">renderQuad</span><span class="p">();</span>
+        <span class="n">m_bokehShader</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DepthOfField</span><span class="o">::</span><span class="n">postFilter</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">color_texture</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//Blurs the bokeh blur to make it look like actual blur.</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">m_destinationTexture</span><span class="p">,</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_postFilterShader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_postFilterShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">m_halfres2</span><span class="p">);</span>
+        <span class="n">renderQuad</span><span class="p">();</span>
+        <span class="n">m_postFilterShader</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DepthOfField</span><span class="o">::</span><span class="n">preFilter</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">color_texture</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//Resizes and prepares the scene color texture.</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">m_halfres1</span><span class="p">,</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_preFilterShader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_preFilterShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">color_texture</span><span class="p">);</span>
+        <span class="n">m_preFilterShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;scale&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">vec2</span><span class="p">(</span><span class="mf">0.5f</span><span class="p">));</span>
+        <span class="n">m_preFilterShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;aofTexture&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">m_thresholdTexture</span><span class="p">);</span>
+        <span class="n">renderQuad</span><span class="p">();</span>
+        <span class="n">m_preFilterShader</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">DepthOfField</span><span class="o">::</span><span class="n">combine</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">texture_handle</span><span class="o">&amp;</span> <span class="n">color_texture</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//The final pass used to combine all the gathered textures.</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">attach</span><span class="p">(</span><span class="n">color_texture</span><span class="p">,</span> <span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_combineShader</span><span class="p">.</span><span class="n">bind</span><span class="p">();</span>
+        <span class="n">m_combineShader</span><span class="p">.</span><span class="n">get_uniform_with_location</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SV_SCENECOLOR</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">color_texture</span><span class="p">);</span>
+        <span class="n">m_combineShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;dofTexture&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">m_destinationTexture</span><span class="p">);</span>
+        <span class="n">m_combineShader</span><span class="p">.</span><span class="n">get_uniform</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;cocTexture&quot;</span><span class="p">).</span><span class="n">set_value</span><span class="p">(</span><span class="n">m_thresholdTexture</span><span class="p">);</span>
+        <span class="n">renderQuad</span><span class="p">();</span>
+        <span class="n">m_combineShader</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+        <span class="n">fbo</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation index</a><ul>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_pipeline_default_postfx_depthoffield.cpp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+  </body>
+</html>

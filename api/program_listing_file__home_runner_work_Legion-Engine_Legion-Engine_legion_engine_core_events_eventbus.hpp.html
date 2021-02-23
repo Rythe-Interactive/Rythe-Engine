@@ -84,7 +84,7 @@
             <span class="k">if</span> <span class="p">(</span><span class="n">m_eventCallbacks</span><span class="p">.</span><span class="n">contains</span><span class="p">(</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">))</span>
             <span class="p">{</span>
                 <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Event callbacks&quot;</span><span class="p">);</span>
-                <span class="n">OPTICK_TAG</span><span class="p">(</span><span class="s">&quot;Event&quot;</span><span class="p">,</span> <span class="n">typeName</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">());</span>
+                <span class="n">OPTICK_TAG</span><span class="p">(</span><span class="s">&quot;Event&quot;</span><span class="p">,</span> <span class="n">nameOfType</span><span class="o">&lt;</span><span class="n">event_type</span><span class="o">&gt;</span><span class="p">());</span>
                 <span class="n">force_value_cast</span><span class="o">&lt;</span><span class="n">multicast_delegate</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">event_type</span><span class="o">*</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">m_eventCallbacks</span><span class="p">[</span><span class="n">event_type</span><span class="o">::</span><span class="n">id</span><span class="p">]).</span><span class="n">invoke</span><span class="p">(</span><span class="n">eventptr</span><span class="p">);</span> <span class="c1">// Notify.</span>
             <span class="p">}</span>
         <span class="p">}</span>

@@ -123,9 +123,9 @@ Functions
 
 - :ref:`exhale_function__im_guizmo_8cpp_1ad9aa53a3133fe94f62e04c44384b3527`
 
-- :ref:`exhale_function__im_guizmo_8cpp_1a5c69d2605af708c9f141cd3ae8d624e2`
-
 - :ref:`exhale_function__im_guizmo_8cpp_1aa7d33d0d3962c221968d6196172236c8`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a5c69d2605af708c9f141cd3ae8d624e2`
 
 - :ref:`exhale_function__im_guizmo_8cpp_1ab0fa8ef0f19309e05e2b14cec8bd6490`
 

@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1ac1cb31d8a79f92ab578d06c46895e9a6:
+
+Variable layout_style
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: layout_style

@@ -51,6 +51,7 @@
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/util/bindings.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/data/buffer.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;rendering/data/vertexarray.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;rendering/data/material.hpp&gt;</span><span class="cp"></span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;unordered_map&gt;</span><span class="cp"></span>
@@ -83,16 +84,7 @@
 
         <span class="n">mesh_handle</span> <span class="nf">get_mesh</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
         <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">get_model</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
-
-        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
-        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">);</span>
     <span class="p">};</span>
-
-    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
-    <span class="kt">void</span> <span class="n">model_handle</span><span class="o">::</span><span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">archive</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-    <span class="p">}</span>
 
     <span class="k">constexpr</span> <span class="n">model_handle</span> <span class="n">invalid_model_handle</span> <span class="p">{</span> <span class="n">invalid_id</span> <span class="p">};</span>
 
@@ -115,6 +107,7 @@
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">overwrite_buffer</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="n">buffer</span><span class="o">&amp;</span> <span class="n">newBuffer</span><span class="p">,</span> <span class="n">uint</span> <span class="n">bufferID</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">perInstance</span> <span class="o">=</span> <span class="nb">false</span><span class="p">);</span>
         <span class="k">static</span> <span class="kt">void</span> <span class="nf">buffer_model</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">buffer</span><span class="o">&amp;</span> <span class="n">matrixBuffer</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">model_handle</span> <span class="nf">create_model</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">mesh_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_mesh_settings</span><span class="p">);</span>
+        <span class="k">static</span> <span class="n">model_handle</span> <span class="nf">create_model</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">file</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">material_handle</span><span class="o">&gt;&amp;</span> <span class="n">materials</span><span class="p">,</span> <span class="n">mesh_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_mesh_settings</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">model_handle</span> <span class="nf">create_model</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">model_handle</span> <span class="nf">create_model</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="n">id_type</span> <span class="n">meshId</span><span class="p">);</span>
         <span class="k">static</span> <span class="n">model_handle</span> <span class="nf">create_model</span><span class="p">(</span><span class="n">id_type</span> <span class="n">meshId</span><span class="p">);</span>

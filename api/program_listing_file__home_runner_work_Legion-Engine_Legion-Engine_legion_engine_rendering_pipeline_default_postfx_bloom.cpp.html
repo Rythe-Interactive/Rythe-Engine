@@ -188,10 +188,17 @@
         <span class="n">fbo</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
     <span class="p">}</span>
 
-    <span class="kt">void</span> <span class="n">Bloom</span><span class="o">::</span><span class="n">renderPass</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">texture_handle</span> <span class="n">colortexture</span><span class="p">,</span> <span class="n">texture_handle</span> <span class="n">depthtexture</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
+    <span class="kt">void</span> <span class="n">Bloom</span><span class="o">::</span><span class="n">renderPass</span><span class="p">(</span><span class="n">framebuffer</span><span class="o">&amp;</span> <span class="n">fbo</span><span class="p">,</span> <span class="n">RenderPipelineBase</span><span class="o">*</span> <span class="n">pipeline</span><span class="p">,</span> <span class="n">camera</span><span class="o">&amp;</span> <span class="n">cam</span><span class="p">,</span> <span class="k">const</span> <span class="n">camera</span><span class="o">::</span><span class="n">camera_input</span><span class="o">&amp;</span> <span class="n">camInput</span><span class="p">,</span> <span class="n">time</span><span class="o">::</span><span class="n">span</span> <span class="n">deltaTime</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="c1">// If a brightness threshold texture had not been created yet, create one.</span>
         <span class="n">texture_handle</span> <span class="n">overdrawTexture</span><span class="p">;</span>
+
+        <span class="c1">//Try to get color attachment.</span>
+        <span class="k">auto</span> <span class="n">color_attachment</span> <span class="o">=</span> <span class="n">fbo</span><span class="p">.</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">FRAGMENT_ATTACHMENT</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">holds_alternative</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">color_attachment</span><span class="p">))</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="c1">//Get color texture.</span>
+        <span class="k">auto</span> <span class="n">color_texture</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;</span><span class="p">(</span><span class="n">color_attachment</span><span class="p">);</span>
 
         <span class="p">{</span>
             <span class="k">auto</span> <span class="n">attachment</span> <span class="o">=</span> <span class="n">fbo</span><span class="p">.</span><span class="n">getAttachment</span><span class="p">(</span><span class="n">OVERDRAW_ATTACHMENT</span><span class="p">);</span>
@@ -200,10 +207,10 @@
         <span class="p">}</span>
 
         <span class="c1">// Get brightest parts of the scene and append to overdraw buffer.</span>
-        <span class="n">seperateOverdraw</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">colortexture</span><span class="p">,</span> <span class="n">overdrawTexture</span><span class="p">);</span>
+        <span class="n">seperateOverdraw</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">,</span> <span class="n">overdrawTexture</span><span class="p">);</span>
 
         <span class="c1">// Gets the size of the lighting data texture.</span>
-        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">framebufferSize</span> <span class="o">=</span> <span class="n">colortexture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">size</span><span class="p">();</span>
+        <span class="n">math</span><span class="o">::</span><span class="n">ivec2</span> <span class="n">framebufferSize</span> <span class="o">=</span> <span class="n">color_texture</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">size</span><span class="p">();</span>
 
         <span class="c1">// Mix slight part of the previous frame overdraw into the current frame to reduce flickering and introduce slight trail when it&#39;s dark.</span>
         <span class="n">historyMixOverdraw</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">overdrawTexture</span><span class="p">);</span>
@@ -212,7 +219,7 @@
         <span class="n">texture_handle</span> <span class="n">blurredImage</span> <span class="o">=</span> <span class="n">blurOverdraw</span><span class="p">(</span><span class="n">framebufferSize</span><span class="p">,</span> <span class="n">overdrawTexture</span><span class="p">);</span>
 
         <span class="c1">// Recombine the overdraw texture with the scene color.</span>
-        <span class="n">combineImages</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">colortexture</span><span class="p">,</span> <span class="n">blurredImage</span><span class="p">);</span>
+        <span class="n">combineImages</span><span class="p">(</span><span class="n">fbo</span><span class="p">,</span> <span class="n">color_texture</span><span class="p">,</span> <span class="n">blurredImage</span><span class="p">);</span>
     <span class="p">}</span>
 
 <span class="p">}</span>

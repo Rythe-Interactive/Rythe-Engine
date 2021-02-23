@@ -127,6 +127,19 @@
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">math</span><span class="o">::</span><span class="n">perspective</span><span class="p">(</span><span class="n">math</span><span class="o">::</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">fov</span> <span class="o">*</span> <span class="n">ratio</span><span class="p">),</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">farz</span><span class="p">,</span> <span class="n">nearz</span><span class="p">);</span>
         <span class="p">}</span>
+
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">oa</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">using</span> <span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">;</span>
+
+            <span class="n">oa</span><span class="p">(</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;Fov&quot;</span><span class="p">,</span><span class="n">fov</span><span class="p">),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;NearZ&quot;</span><span class="p">,</span> <span class="n">nearz</span><span class="p">),</span>
+                <span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;FarZ&quot;</span><span class="p">,</span><span class="n">farz</span><span class="p">)</span>
+            <span class="p">);</span>
+        <span class="p">}</span>
+
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

@@ -53,6 +53,7 @@
 <span class="cp">#include</span> <span class="cpf">&quot;navigator.hpp&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;provider_registry.hpp&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;detail/strpath_manip.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;core/logging/logging.hpp&gt;</span><span class="cp"></span>
 
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">filesystem</span>
@@ -279,6 +280,35 @@
     <span class="n">view</span> <span class="n">view</span><span class="o">::</span><span class="k">operator</span><span class="p">[](</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">identifier</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">identifier</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">view</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span> <span class="n">view</span><span class="o">::</span><span class="n">ls</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">common</span><span class="o">::</span><span class="n">Err</span><span class="p">,</span> <span class="n">common</span><span class="o">::</span><span class="n">Ok</span><span class="p">;</span>
+
+        <span class="c1">//decay overloads the operator of ok_type and operator== for valid_t</span>
+        <span class="k">using</span> <span class="n">decay</span> <span class="o">=</span> <span class="n">common</span><span class="o">::</span><span class="n">result_decay_more</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">view</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">fs_error</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="c1">//get solution</span>
+        <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">make_solution</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">has_err</span><span class="p">())</span> <span class="n">Err</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">get_error</span><span class="p">());</span>
+
+        <span class="c1">//get resolver of solution</span>
+        <span class="k">auto</span> <span class="n">resolver</span> <span class="o">=</span> <span class="n">build</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">resolver</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;unable to get required filesystem to get resource!&quot;</span><span class="p">)));</span>
+
+        <span class="c1">//get &amp; check traits</span>
+        <span class="k">const</span> <span class="k">auto</span> <span class="n">traits</span> <span class="o">=</span> <span class="n">resolver</span><span class="o">-&gt;</span><span class="n">get_traits</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">traits</span><span class="p">.</span><span class="n">is_valid</span> <span class="o">&amp;&amp;</span> <span class="n">traits</span><span class="p">.</span><span class="n">exists</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">view</span><span class="o">&gt;</span> <span class="n">results</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">entry</span> <span class="p">:</span> <span class="n">resolver</span><span class="o">-&gt;</span><span class="n">ls</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">results</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">entry</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Ok</span><span class="p">(</span><span class="n">results</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">decay</span><span class="p">(</span><span class="n">Err</span><span class="p">(</span><span class="n">legion_fs_error</span><span class="p">(</span><span class="s">&quot;invalid file traits: (not valid) or (does not exist) or (cannot be read)&quot;</span><span class="p">)));</span>
     <span class="p">}</span>
 
     <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">view</span><span class="o">::</span><span class="n">create_identifier</span><span class="p">(</span><span class="k">const</span> <span class="n">navigator</span><span class="o">::</span><span class="n">solution</span><span class="o">::</span><span class="n">iterator</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span> <span class="k">const</span>

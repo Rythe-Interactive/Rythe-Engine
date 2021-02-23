@@ -60,21 +60,16 @@
 
 <span class="k">namespace</span> <span class="n">legion</span><span class="o">::</span><span class="n">core</span><span class="o">::</span><span class="n">common</span> <span class="p">{</span>
 
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">starts_with</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">,</span> <span class="n">cstring</span> <span class="n">value</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">src</span><span class="p">.</span><span class="n">rfind</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
     <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">ends_with</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">src</span><span class="p">,</span> <span class="n">cstring</span> <span class="n">value</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="k">auto</span> <span class="n">valueLength</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">src</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">valueLength</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-
-        <span class="n">std</span><span class="o">::</span><span class="n">string_view</span> <span class="n">srcEnd</span><span class="p">(</span><span class="n">src</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">src</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="n">valueLength</span><span class="p">),</span> <span class="n">valueLength</span><span class="p">);</span>
-
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">valueLength</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">srcEnd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">end</span> <span class="p">(</span><span class="n">value</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">end</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">src</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">equal</span><span class="p">(</span><span class="n">end</span><span class="p">.</span><span class="n">rbegin</span><span class="p">(),</span><span class="n">end</span><span class="p">.</span><span class="n">rend</span><span class="p">(),</span><span class="n">src</span><span class="p">.</span><span class="n">rbegin</span><span class="p">());</span>
     <span class="p">}</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">StringType</span><span class="o">&gt;</span>
