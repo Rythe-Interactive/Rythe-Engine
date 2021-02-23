@@ -22,7 +22,7 @@ namespace legion::rendering
         texture_handle m_halfres2;
         math::ivec2 m_halfres;
         //Spread of the bokeh effect.
-        float m_bokehSize;
+        float m_bokehSize = 4.f;
         //Standard settings for creating textures.
         texture_import_settings settings{
               texture_type::two_dimensional,

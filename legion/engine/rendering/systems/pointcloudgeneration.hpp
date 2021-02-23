@@ -162,7 +162,7 @@ namespace legion::rendering
             std::vector<math::vec3> particleInput(totalSampleCount);
             for (size_t i = 0; i < totalSampleCount; i++)
             {
-                particleInput.at(i) = result.at(i).xyz() + posiitonOffset;
+                particleInput.at(i) = result.at(i).xyz + posiitonOffset;
             }
             //generate particle params
             pointCloudParameters params

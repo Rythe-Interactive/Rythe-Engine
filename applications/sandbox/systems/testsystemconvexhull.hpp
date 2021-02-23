@@ -93,7 +93,7 @@ public:
                 rbH.write(rb);
             }*/
 
-           /* {
+            /*{
                 colliderEnt = createEntity();
                 colliderEnt.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
                 colliderEnt.add_components<transform>(position(0, 5.0f, 0), rotation(), scale(1));
@@ -102,7 +102,7 @@ public:
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 physH.write(p);
                 colliderEnt.add_component<physics::rigidbody>();
-            }
+            }*/
 
             {
                 auto ent = createEntity();
@@ -117,16 +117,16 @@ public:
                 //ent.add_components<transform>(position(0.f, -0.4f, 0.f), rotation(), scale(250.f, 1.f, 250.f));
             }
 
-            {
+            /*{
                 auto ent = createEntity();
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
-                ent.add_components<transform>(position(0, 7.0f, 0), rotation(), scale(1));
+                ent.add_components<transform>(position(0, 3.0f, 0), rotation(), scale(1));
                 auto physH = ent.add_component<physics::physicsComponent>();
                 auto p = physH.read();
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 physH.write(p);
                 ent.add_component<physics::rigidbody>();
-            }
+            }*/
 
             {
                 auto ent = createEntity();
@@ -136,21 +136,25 @@ public:
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 ent.add_component(p);
                 ent.add_component<physics::rigidbody>();
-            }*/
+            }
 
-
-#if 0
-            for (int i = 0; i < 1000; ++i)
+#if 1
+            auto defaultMat = gfx::MaterialCache::get_material("pbr");
+            for (int i = 0; i < 200; ++i)
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
-                ent.add_components<transform>(position(math::linearRand(math::vec3(-10, 0, -10), math::vec3(10, 20, 10))), rotation(math::angleAxis(math::linearRand(-math::pi<float>(), math::pi<float>()), math::normalize(math::linearRand(-math::vec3::one, math::vec3::one)))), scale(1.f));
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(defaultMat));
+                ent.add_components<transform>(position(math::linearRand(math::vec3(-20, 0, -20), math::vec3(20, 20, 20))), rotation(math::angleAxis(math::linearRand(-math::pi<float>(), math::pi<float>()), math::normalize(math::linearRand(-math::vec3::one, math::vec3::one)))), scale(1.f));
+
 
                 physics::physicsComponent p;
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 ent.add_component(p);
 
-                auto rbH = ent.add_component<physics::rigidbody>();
+                if (i < 100)
+                {
+                    auto rbH = ent.add_component<physics::rigidbody>();
+                }
             }
 #endif
         }
@@ -161,7 +165,8 @@ public:
     void update(time::span deltaTime)
     {
         //physics::PhysicsSystem::drawBroadPhase();
-        drawPhysicsColliders();
+        //drawPhysicsColliders();
+
         auto [posH, rotH, scaleH] = physicsEnt.get_component_handles<transform>();
 
         if (!isUpdating)
@@ -183,7 +188,6 @@ public:
     {
         if (action->value)
         {
-           
             physics::PhysicsSystem::IsPaused = !physics::PhysicsSystem::IsPaused;
         }
         /*else
