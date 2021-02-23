@@ -35,6 +35,10 @@ shader(fragment)
 
         vec4 col = textureLod(floorTile, grid, mip);
         col.a *= alpha;
+
+        if(col.a < epsilon)
+            discard;
+
         fragment_color = col;
         fragment_normal = vec4(stdin(wnormal), 1.0);
         fragment_position = vec4(stdin(wvertex), 1.0);

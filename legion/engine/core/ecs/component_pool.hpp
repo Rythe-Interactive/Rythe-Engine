@@ -74,43 +74,111 @@ namespace legion::core::ecs
         component_pool() = default;
         component_pool(EcsRegistry* registry, events::EventBus* eventBus) : m_registry(registry), m_eventBus(eventBus) {}
 
-        virtual void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) override
+        void serialize(cereal::JSONOutputArchive& oarchive, id_type entityId) override
         {
+            static_assert(!(serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value &&
+                            serialization::has_load<component_type, void(cereal::JSONInputArchive&)>::value),
+                            "Serialized Objects should not have load&save pairs and a serialization function simultaneously");
+
             OPTICK_EVENT();
+            std::string componentType = std::string(nameOfType<component_type>());
+
             if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
             {
                 async::readonly_guard guard(m_lock);
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                oarchive(cereal::make_nvp("Component Name", componentType));
                 m_components[entityId].serialize(oarchive);
+            }
+            else if constexpr (serialization::has_save<component_type, void(cereal::JSONOutputArchive&)>::value)
+            {
+                async::readonly_guard guard(m_lock);
+                oarchive(cereal::make_nvp("Component Name", componentType));
+                m_components[entityId].save(oarchive);
             }
             else
             {
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                oarchive(cereal::make_nvp("Component Name", componentType));
             }
         }
-        virtual void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) override
+        void serialize(cereal::BinaryOutputArchive& oarchive, id_type entityId) override
         {
+            static_assert(!(serialization::has_serialize<component_type, void(cereal::BinaryOutputArchive&)>::value &&
+                            serialization::has_load<component_type, void(cereal::BinaryOutputArchive&)>::value),
+                            "Serialized Objects should not have load&save pairs and a serialization function simultaneously");
+
             OPTICK_EVENT();
-            oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+            std::string componentType = std::string(nameOfType<component_type>());
+
+            if constexpr (serialization::has_serialize<component_type, void(cereal::BinaryOutputArchive&)>::value)
+            {
+                async::readonly_guard guard(m_lock);
+                oarchive(cereal::make_nvp("Component Name", componentType));
+                m_components[entityId].serialize(oarchive);
+            }
+            else if constexpr (serialization::has_save<component_type, void(cereal::BinaryOutputArchive&)>::value)
+            {
+                async::readonly_guard guard(m_lock);
+                oarchive(cereal::make_nvp("Component Name", componentType));
+                m_components[entityId].save(oarchive);
+            }
+            else
+            {
+                oarchive(cereal::make_nvp("Component Name", componentType));
+            }
         }
-        virtual void serialize(cereal::JSONInputArchive& oarchive, id_type entityId) override
+
+        void serialize(cereal::JSONInputArchive& iarchive, id_type entityId) override
         {
+            static_assert(!(serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value &&
+                            serialization::has_load<component_type, void(cereal::JSONInputArchive&)>::value),
+                            "Serialized Objects should not have load&save pairs and a serialization function simultaneously");
+
             OPTICK_EVENT();
+
+            std::string componentType = std::string(nameOfType<component_type>());
             if constexpr (serialization::has_serialize<component_type, void(cereal::JSONOutputArchive&)>::value)
             {
                 async::readonly_guard guard(m_lock);
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
-                m_components[entityId].serialize(oarchive);
+                iarchive(cereal::make_nvp("Component Name", componentType));
+                m_components[entityId].serialize(iarchive);
+            }
+            else if constexpr (serialization::has_load<component_type, void(cereal::JSONInputArchive&)>::value)
+            {
+                async::readonly_guard guard(m_lock);
+                iarchive(cereal::make_nvp("Component Name", componentType));
+                m_components[entityId].load(iarchive);
             }
             else
             {
-                oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+                iarchive(cereal::make_nvp("Component Name", componentType));
             }
         }
-        virtual void serialize(cereal::BinaryInputArchive& oarchive, id_type entityId) override
+
+        void serialize(cereal::BinaryInputArchive& iarchive, id_type entityId) override
         {
+            static_assert(!(serialization::has_serialize<component_type, void(cereal::BinaryInputArchive&)>::value &&
+                            serialization::has_load<component_type, void(cereal::BinaryInputArchive&)>::value),
+                            "Serialized Objects should not have load&save pairs and a serialization function simultaneously");
+
             OPTICK_EVENT();
-            oarchive(cereal::make_nvp("Component Name", std::string(typeName<component_type>())));
+
+            std::string componentType = std::string(nameOfType<component_type>());
+            if constexpr (serialization::has_serialize<component_type, void(cereal::BinaryInputArchive&)>::value)
+            {
+                async::readonly_guard guard(m_lock);
+                iarchive(cereal::make_nvp("Component Name", componentType));
+                m_components[entityId].serialize(iarchive);
+            }
+            else if constexpr (serialization::has_load<component_type, void(cereal::BinaryInputArchive&)>::value)
+            {
+                async::readonly_guard guard(m_lock);
+                iarchive(cereal::make_nvp("Component Name", componentType));
+                m_components[entityId].load(iarchive);
+            }
+            else
+            {
+                iarchive(cereal::make_nvp("Component Name", componentType));
+            }
         }
 
         /**@brief Get the rw_spinlock of this container.
@@ -120,7 +188,7 @@ namespace legion::core::ecs
             return m_lock;
         }
 
-        virtual component_container_base* get_components(const entity_container& entities) const override
+        component_container_base* get_components(const entity_container& entities) const override
         {
             OPTICK_EVENT();
             auto* container = new component_container<component_type>();
@@ -142,7 +210,7 @@ namespace legion::core::ecs
         }
 
 
-        virtual void get_components(const entity_container& entities, component_container_base& comps) const override
+        void get_components(const entity_container& entities, component_container_base& comps) const override
         {
             OPTICK_EVENT();
             component_container<component_type>& container = comps.cast<component_type>();
@@ -166,7 +234,7 @@ namespace legion::core::ecs
             }
         }
 
-        virtual void set_components(const entity_container& entities, const component_container_base& comps) override
+        void set_components(const entity_container& entities, const component_container_base& comps) override
         {
             OPTICK_EVENT();
             const component_container<component_type>& container = comps.cast<component_type>();
@@ -176,7 +244,7 @@ namespace legion::core::ecs
                 return;
 #endif
 
-            static component_container<component_type> modifications;
+            component_container<component_type> modifications;
             modifications.resize(entities.size());
 
             {
@@ -199,7 +267,7 @@ namespace legion::core::ecs
         /**@brief Thread-safe check for whether an entity has the component.
          * @param entityId ID of the entity you wish to check for.
          */
-        L_NODISCARD virtual bool has_component(id_type entityId) const override
+        L_NODISCARD bool has_component(id_type entityId) const override
         {
             OPTICK_EVENT();
             async::readonly_guard guard(m_lock);
@@ -237,7 +305,7 @@ namespace legion::core::ecs
          * @note Raises the events::component_creation<component_type>> event.
          * @param entityId ID of entity you wish to add the component to.
          */
-        virtual void create_component(id_type entityId) override
+        void create_component(id_type entityId) override
         {
             OPTICK_EVENT();
             {
@@ -265,7 +333,7 @@ namespace legion::core::ecs
          * @param entityId ID of entity you wish to add the component to.
          * @param value Pointer to component_type that has the starting value you require.
          */
-        virtual void create_component(id_type entityId, void* value) override
+        void create_component(id_type entityId, void* value) override
         {
             OPTICK_EVENT();
             {
@@ -293,7 +361,7 @@ namespace legion::core::ecs
          * @note Raises the events::component_destruction<component_type>> event.
          * @param entityId ID of entity you wish to remove the component from.
          */
-        virtual void destroy_component(id_type entityId) override
+        void destroy_component(id_type entityId) override
         {
             OPTICK_EVENT();
             m_eventBus->raiseEvent<events::component_destruction<component_type>>(entity_handle(entityId));

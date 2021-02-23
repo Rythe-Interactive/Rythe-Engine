@@ -10,10 +10,8 @@ shader(vertex)
 {
     void main(void)
     {
-        vec4 viewspace = ViewMatrix * vec4(position, 0.0);
-        viewspace.w = 1.0;
-        gl_Position = ProjectionMatrix * viewspace;
-        PropagateStdIO();
+        gl_Position = ModelToScreenSpacePosition(position);
+        stdout(position) = stdin(position);
     }
 }
 
@@ -28,7 +26,7 @@ shader(fragment)
         fragment_color = vec4(mix(vec3(average(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), 1.f);
         fragment_depth = 0.0000001;
         fragment_normal = vec4(0.0);
-        fragment_position = vec4(0.0);
+        fragment_position = vec4(unitDir*FarZ,1.0);
         fragment_overdraw = vec4(0.0);
     }
 }

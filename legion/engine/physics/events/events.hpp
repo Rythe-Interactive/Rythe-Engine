@@ -8,14 +8,14 @@ namespace legion::physics {
     template <class T>
     struct collision_event_base : public events::event<T>
     {
-        collision_event_base(physics_manifold m,float d) : manifold(std::move(m)) , physics_delta(d) {}
+        collision_event_base(physics_manifold* m, float d) : manifold(m) , physics_delta(d) {}
 
         collision_event_base(const collision_event_base& other) = default;
         collision_event_base(collision_event_base&& other) noexcept = default;
         collision_event_base& operator=(const collision_event_base& other) = default;
         collision_event_base& operator=(collision_event_base&& other) noexcept = default;
 
-        physics_manifold manifold;
+        physics_manifold* manifold;
 
 
         /** @brief utility function to quickly get the participating entities
@@ -25,8 +25,8 @@ namespace legion::physics {
         L_NODISCARD std::pair<ecs::entity_handle,ecs::entity_handle> participants() const
         {
             return std::make_pair(
-                manifold.physicsCompA.entity,
-                manifold.physicsCompB.entity
+                manifold->entityA,
+                manifold->entityB
             );
         }
 
@@ -35,17 +35,17 @@ namespace legion::physics {
         L_NODISCARD std::pair<math::vec3,math::vec3> centers() const noexcept
         {
             return std::make_pair(
-                manifold.colliderA->GetLocalCentroid(),
-                manifold.colliderB->GetLocalCentroid()
+                manifold->colliderA->GetLocalCentroid(),
+                manifold->colliderB->GetLocalCentroid()
             );
         }
 
         /** @brief gets the colliders themselves
          */
-        L_NODISCARD std::pair<std::shared_ptr<PhysicsCollider>,
-                              std::shared_ptr<PhysicsCollider>> colliders() const noexcept
+        L_NODISCARD std::pair<PhysicsCollider*,
+                             PhysicsCollider*> colliders() const noexcept
         {
-            return std::make_pair(manifold.colliderA,manifold.colliderB);
+            return std::make_pair(manifold->colliderA, manifold->colliderB);
         }
 
         /** @brief gets the transform of the colliding bodys themselves

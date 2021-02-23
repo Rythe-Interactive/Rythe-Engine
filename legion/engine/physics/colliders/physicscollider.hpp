@@ -43,15 +43,13 @@ namespace legion::physics
             }
         }
             
-      
-
         /** @brief given a PhysicsCollider, CheckCollision calls "CheckCollisionWith". Both colliders are then passed through
         * to the correct "CheckCollisionWith" function with double dispatch.
         * @param physicsCollider The collider we would like to check collision against
         * @param [in/out] manifold A physics_manifold that holds information about the collision
         */
         virtual void CheckCollision(
-            std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) {};
+            PhysicsCollider* physicsCollider, physics_manifold& manifold) {};
 
         /** @brief given a convexCollider checks if this collider collides the convexCollider. The information
         * the information is then passed to the manifold.
@@ -69,7 +67,7 @@ namespace legion::physics
         * to the corrent FillManifoldWith function with double dispatch.
         */
         virtual void PopulateContactPoints(
-            std::shared_ptr<PhysicsCollider> physicsCollider, physics_manifold& manifold) {};
+            PhysicsCollider* physicsCollider, physics_manifold& manifold) {};
 
         /** @brief Creates the contact points between this physics collider and the given ConvexCollider and
         * stores them in the manifold
@@ -82,10 +80,11 @@ namespace legion::physics
         * of the collider.
         * @note This is called internally by PhysicsSysten
         */
-        virtual void DrawColliderRepresentation(math::mat4 transform) {};
+        virtual void DrawColliderRepresentation(const math::mat4& transform, math::color usedColor, float width, float time, bool ignoreDepth = false) {};
 
-        virtual void UpdateTightBoundingVolume(const math::mat4& transform) {};
+        virtual void UpdateTransformedTightBoundingVolume(const math::mat4& transform) {};
 
+        virtual void UpdateLocalAABB() {};
 
         inline virtual std::vector<HalfEdgeFace*>& GetHalfEdgeFaces()
         {
@@ -97,10 +96,22 @@ namespace legion::physics
             return localColliderCentroid;
         }
 
+        //
+        std::pair<math::vec3, math::vec3> GetMinMaxLocalAABB() const
+        {
+            return minMaxLocalAABB;
+        }
+
+        std::pair<math::vec3, math::vec3> GetMinMaxWorldAABB() const
+        {
+            return minMaxWorldAABB;
+        }
+
     protected:
 
         math::vec3 localColliderCentroid = math::vec3(0, 0, 0);
-
+        std::pair<math::vec3, math::vec3> minMaxLocalAABB;
+        std::pair<math::vec3, math::vec3> minMaxWorldAABB;
     private:
 
         int id = -1;

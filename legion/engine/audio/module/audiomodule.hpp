@@ -12,8 +12,6 @@ namespace legion::audio
     public:
         virtual void setup() override
         {
-            addProcessChain("Audio");
-
             fs::AssetImporter::reportConverter<mp3_audio_loader>(".mp3");
             fs::AssetImporter::reportConverter<wav_audio_loader>(".wav");
 

@@ -3,20 +3,22 @@
 
 namespace legion::physics
 {
-    std::vector<std::shared_ptr<physics::PenetrationQuery>> PhysicsSystem::penetrationQueries;
-    std::vector<math::vec3> PhysicsSystem::aPoint;
-    std::vector<math::vec3> PhysicsSystem::bPoint;
-    std::vector<MeshLine> PhysicsSystem::meshLines;
+    std::unique_ptr<BroadPhaseCollisionAlgorithm> PhysicsSystem::m_broadPhase = nullptr;
 
-    std::vector<physics_contact> PhysicsSystem::contactPoints;
-
-    bool PhysicsSystem::IsPaused = true;
+    bool PhysicsSystem::IsPaused = false;
     bool PhysicsSystem::oneTimeRunActive = false;
 
 
-    void PhysicsSystem::bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
-        std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
+    void PhysicsSystem::setup()
     {
-        manifoldPrecursorGrouping.push_back(std::move(manifoldPrecursors));
+        createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
+
+        manifoldPrecursorQuery = createQuery<position, rotation, scale, physicsComponent>();
+
+        //std::make_unique<BroadphaseUniformGrid>(math::vec3(2,2,2));
+        //std::make_unique<BroadphaseBruteforce>();
+
+        m_broadPhase = std::make_unique<BroadphaseBruteforce>();
+
     }
 }

@@ -66,7 +66,7 @@ namespace ext
     }
 
     template <class T CNDOXY(inherits_from<T, animation_event_base> = 0, inherits_from<T, events::event_base> = 0)>
-    inline void registerAnimationEvent(std::string_view prettyName)
+    void registerAnimationEvent(std::string_view prettyName)
     {
         detail::g_AnimationEventDatabase[prettyName] = T::id;
         detail::g_ReverseAnimationEventDatabase[T::id] = prettyName;

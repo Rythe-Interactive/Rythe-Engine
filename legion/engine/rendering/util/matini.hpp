@@ -1,49 +1,87 @@
 #pragma once
 
 #include <inih/ini.h>
-#include <rendering/data/material.hpp>
 #include <tuple>
 #include <sstream>
 #include <vector>
 namespace legion::rendering {
 
+    struct material_handle;
+
     namespace detail
     {
+        /**@class IniBuilder
+         * @brief Bob the IniBuilder, a builder class to generate ini files
+         * @note does not validate entries, thus invalid combinations like
+         *       glyph("Something").value("v") is not caught as an error at runtime
+         *       instead of
+         *       glyph("Something").eq().value("v")
+         */
+        class IniBuilder
+        {
+        public:
+            IniBuilder& glyph(const std::string& glyph)
+            {
+                m_contents += glyph;
+                return *this;
+            }
+
+            IniBuilder& section(const std::string& v)   { return glyph("[" + v + "]\n"); }
+            IniBuilder& eq()                            { return glyph("= "); }
+            IniBuilder& comment(const std::string& v)   { return glyph("; " + v + "\n"); }
+
+            IniBuilder& value(float v)                  { return glyph(std::to_string(v) + " "); }
+            IniBuilder& value(int v)                    { return glyph(std::to_string(v) + " "); }
+            IniBuilder& value(math::vec3 v)             { return value(v.x).value(v.y).value(v.z); }
+            IniBuilder& value(math::ivec3 v)            { return value(v.x).value(v.y).value(v.z); }
+            IniBuilder& value(math::vec4 v)             { return value(v.x).value(v.y).value(v.z).value(v.w); }
+            IniBuilder& value(math::ivec4 v)            { return value(v.x).value(v.y).value(v.z).value(v.w); }
+            IniBuilder& value(bool b)                   { return glyph(b ? "true " : "false "); }
+            IniBuilder& value(const std::string& v)     { return glyph(v + " "); }
+
+            IniBuilder& finish_entry()                  { return glyph("\n"); }
+
+            L_NODISCARD std::string get() const noexcept { return m_contents; }
+
+        private:
+            std::string m_contents;
+        };
+
         class handler_to_cpp
         {
         public:
-            static int handle(void* user,const char * section,const char * name, const char * value)
+            //a place to store the data? maybe, not used
+            static int handle(void* user, const char* section, const char* name, const char* value)
             {
-
-                log::debug("got kv-pair: {}|{}",name,value);
                 auto& self = *static_cast<handler_to_cpp*>(user);
-                self.m_parsed.emplace(section,std::make_pair<std::string,std::string>(name,value));
+                self.m_parsed.emplace(section, std::make_pair<std::string, std::string>(name, value));
                 return 1;
             }
 
+            //function to go through each value in a section
             template <class Func>
-            void for_each_value_in_section(const std::string& section,Func&& f)
+            void for_each_value_in_section(const std::string& section, Func&& f)
             {
                 auto range = pair_range(m_parsed.equal_range(section));
 
-                for (auto& [key,value] : values_only(range))
+                for (auto& [key, value] : values_only(range))
                 {
-                    std::invoke(f,key,value);
+                    if (std::invoke(f, key, value)) return;
                 }
             }
 
         private:
-            std::unordered_multimap<std::string,std::pair<std::string,std::string>> m_parsed;
+            std::unordered_multimap<std::string, std::pair<std::string, std::string>> m_parsed;
 
         };
-
+#pragma region ConversionShit
         template <class T>
-        std::pair<bool,T> convert(const std::string& str)
+        std::pair<bool, T> convert(const std::string& str)
         {
             std::istringstream iss(str);
             T dummy;
             iss >> dummy;
-            return {iss && iss.eof(),dummy};
+            return { iss && iss.eof(),dummy };
         }
 
         template <class T>
@@ -55,125 +93,78 @@ namespace legion::rendering {
         }
 
 
-        template <class T,unsigned long N>
+        template <class T, unsigned long N>
         struct convert_tuple {};
-        
+
         template <class T>
-        struct convert_tuple<T,2>
+        struct convert_tuple<T, 2>
         {
 
-            static auto convert(const std::string&  str) ->decltype(auto)
+            static auto convert(const std::string& str) ->decltype(auto)
             {
                 std::istringstream iss(str);
-                std::tuple<T,T> results = { convert_stream<T>(&iss),convert_stream<T>(&iss) };
-                return std::tuple<bool,std::tuple<T,T>>{iss && iss.eof(),results};
+                std::tuple<T, T> results = { convert_stream<T>(&iss),convert_stream<T>(&iss) };
+                return std::tuple<bool, std::tuple<T, T>>{iss&& iss.eof(), results};
             }
         };
         template <class T>
-        struct convert_tuple<T,3>
+        struct convert_tuple<T, 3>
         {
 
-            static auto convert(const std::string&  str) ->decltype(auto)
+            static auto convert(const std::string& str) ->decltype(auto)
             {
                 std::istringstream iss(str);
-                std::tuple<T,T,T> results = { convert_stream<T>(&iss),convert_stream<T>(&iss),convert_stream<T>(&iss) };
-                return std::tuple<bool,std::tuple<T,T,T>>{iss && iss.eof(),results};
+                std::tuple<T, T, T> results = { convert_stream<T>(&iss),convert_stream<T>(&iss),convert_stream<T>(&iss) };
+                return std::tuple<bool, std::tuple<T, T, T>>{iss&& iss.eof(), results};
             }
         };
         template <class T>
-        struct convert_tuple<T,4>
+        struct convert_tuple<T, 4>
         {
 
-            static auto convert(const std::string&  str) ->decltype(auto)
+            static auto convert(const std::string& str) ->decltype(auto)
             {
                 std::istringstream iss(str);
-                std::tuple<T,T,T,T> results = { convert_stream<T>(&iss),convert_stream<T>(&iss),convert_stream<T>(&iss),convert_stream<T>(&iss) };
-                return std::tuple<bool,std::tuple<T,T,T,T>>{iss && iss.eof(),results};
+                std::tuple<T, T, T, T> results = { convert_stream<T>(&iss),convert_stream<T>(&iss),convert_stream<T>(&iss),convert_stream<T>(&iss) };
+                return std::tuple<bool, std::tuple<T, T, T, T>>{iss&& iss.eof(), results};
             }
         };
-
+#pragma endregion
 
     }
 
 
-
-    inline void apply_material_conf(material_handle material,std::string section, fs::view file)
+    inline std::string extract_string(const std::string& section, const std::string& key, fs::view file)
     {
         detail::handler_to_cpp handler;
 
-        auto str =file.get().decay().to_string();
-        const char * cstr = str.c_str();
-        ini_parse_string(cstr, &detail::handler_to_cpp::handle,&handler);
+        const auto str = file.get().except([](auto err)
+            {
+                log::warn("Unable to open {}, could not load ini settings!");
+                return fs::basic_resource("");
+            }).to_string();
 
-      //  ini_parse_stream(&detail::bytes_to_ini::reader,&reader,&detail::handler_to_cpp::handle,&handler);
+            const char* const cstr = str.c_str();
+            ini_parse_string(cstr, &detail::handler_to_cpp::handle, &handler);//parses the ini data into a usable form.
 
-        handler.for_each_value_in_section(std::move(section),[&material,&file](std::string key,std::string value)
-        {
-            if(value == "true")
-            {
-                material.set_param(key,true);
-                return;
-            }
-            else if(value == "false")
-            {
-                material.set_param(key,false);
-                return;
-            }
-            else if(value.find_first_of(".f") != std::string::npos)
-            {
-                if(auto [success,values] = detail::convert_tuple<float,4>::convert(value);success)
-                {
-                    auto& [v1,v2,v3,v4] = values;
-                    material.set_param(key,math::vec4(v1,v2,v3,v4));
-                    return;
-                }
-                if(auto [success,values] = detail::convert_tuple<float,3>::convert(value);success)
-                {
-                    auto& [v1,v2,v3] = values;
-                    material.set_param(key,math::vec3(v1,v2,v3));
-                    return;
-                }
-                if(auto [success,values] = detail::convert_tuple<float,2>::convert(value);success)
-                {
-                    auto& [v1,v2] = values;
-                    material.set_param(key,math::vec2(v1,v2));
-                    return;
-                }
-                if(auto [success,parsed] = detail::convert<float>(value);success)
-                {
-                    material.set_param(key,parsed);
-                    return;
-                }
-            }
-            else
-            {
-                if(auto [success,values] = detail::convert_tuple<int,4>::convert(value);success)
-                {
-                    auto& [v1,v2,v3,v4] = values;
-                    material.set_param(key,math::ivec4(v1,v2,v3,v4));
-                    return;
-                }
-                if(auto [success,values] = detail::convert_tuple<int,3>::convert(value);success)
-                {
-                    auto& [v1,v2,v3] = values;
-                    material.set_param(key,math::ivec3(v1,v2,v3));
-                    return;
-                }
-                if(auto [success,values] = detail::convert_tuple<int,2>::convert(value);success)
-                {
-                    auto& [v1,v2] = values;
-                    material.set_param(key,math::ivec2(v1,v2));
-                    return;
-                }
-                if(auto [success,parsed] = detail::convert<int>(value);success)
-                {
-                    material.set_param(key,parsed);
-                    return;
-                }
-            } 
-            material.set_param(key,rendering::TextureCache::create_texture(file.parent()/value));
-            
-        });
+            std::string v;
 
+            handler.for_each_value_in_section(section, [&](const std::string& k, const std::string& value)
+                {
+                    if (k == key)
+                    {
+                        v = value;
+                        return true;
+                    }
+                    return false;
+                });
+            return v;
     }
+
+
+    //material_handle | material: the material handle for the material that will have its paramters set.
+    //std::string | section: the section of the ini file that we are going to parse.
+    //fs::view | file: the path to the ini file we are parsing.
+    extern void apply_material_conf(material_handle& material, const std::string& section, fs::view file);
+
 }

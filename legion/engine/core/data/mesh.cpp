@@ -5,6 +5,7 @@ namespace legion::core
 {
     std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>> MeshCache::m_meshes;
     async::rw_spinlock MeshCache::m_meshesLock;
+    id_type MeshCache::debugId;
 
     void mesh::to_resource(filesystem::basic_resource* resource, const mesh& value)
     {
@@ -14,7 +15,7 @@ namespace legion::core
 
         // Write new data.
         auto& data = resource->get();
-        appendBinaryData(&value.fileName, data);
+        appendBinaryData(&value.filePath, data);
         appendBinaryData(&value.vertices, data);
         appendBinaryData(&value.colors, data);
         appendBinaryData(&value.normals, data);
@@ -43,7 +44,7 @@ namespace legion::core
         byte_vec::const_iterator start = resource.begin();
 
         // Read data
-        retrieveBinaryData(value->fileName, start);
+        retrieveBinaryData(value->filePath, start);
         retrieveBinaryData(value->vertices, start);
         retrieveBinaryData(value->colors, start);
         retrieveBinaryData(value->normals, start);
@@ -166,7 +167,7 @@ namespace legion::core
         }
 
         mesh data = result;
-        data.fileName = file.get_filename(); // Set the filename.
+        data.filePath = file.get_virtual_path(); // Set the filename.
 
         { // Insert the mesh into the mesh list.
             async::readwrite_guard guard(m_meshesLock);

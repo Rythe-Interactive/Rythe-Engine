@@ -317,9 +317,10 @@ namespace legion::core::ecs
          * @returns component_handle<component_type> Valid component handle for the newly created component.
          */
         template<typename component_type>
-        component_handle<std::remove_reference_t<component_type>> add_component(component_type& value)
+        component_handle<std::remove_reference_t<component_type>> add_component(const component_type& value)
         {
-            return add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&value)).template cast<std::remove_reference_t<component_type>>();
+            component_type temp = value;
+            return add_component(typeHash<std::remove_reference_t<component_type>>(), reinterpret_cast<void*>(&temp)).template cast<std::remove_reference_t<component_type>>();
         }
 
         /**@brief Add multiple components to the entity.
