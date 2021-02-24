@@ -10,6 +10,8 @@
 
 #include <core/ecs/containers/component_pool.hpp>
 #include <core/ecs/handles/entity.hpp>
+#include <core/ecs/data/hierarchy.hpp>
+#include <core/ecs/prototypes/entity_prototype.hpp>
 
 namespace legion::core::ecs
 {
@@ -33,7 +35,7 @@ namespace legion::core::ecs
 
         static entity createEntity();
         static entity createEntity(entity parent);
-        static entity createEntity(entity_prototype prototype);
+        static entity createEntity(serialization::entity_prototype prototype);
 
         static void destroyEntity(entity target);
         static void destroyEntity(id_type target);

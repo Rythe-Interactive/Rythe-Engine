@@ -1,6 +1,10 @@
-#include "registry.hpp"
+#include <core/ecs/registry.hpp>
 
-entity legion::core::ecs::Registry::createEntity()
+namespace legion::core::ecs
 {
-    return entity();
+    entity Registry::createEntity()
+    {
+        return entity();
+    }
+
 }
