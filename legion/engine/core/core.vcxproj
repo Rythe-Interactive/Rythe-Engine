@@ -540,6 +540,7 @@ del ".\xcopyexclude"</Command>
   <ItemGroup>
     <None Include="..\..\.clang-tidy" />
     <None Include="..\..\.editorconfig" />
+    <None Include="ecs\containers\component_pool.inl" />
     <None Include="ecs\registry.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />

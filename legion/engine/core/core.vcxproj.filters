@@ -555,5 +555,6 @@
     <None Include="..\..\.editorconfig" />
     <None Include="..\..\.clang-tidy" />
     <None Include="ecs\registry.inl" />
+    <None Include="ecs\containers\component_pool.inl" />
   </ItemGroup>
 </Project>

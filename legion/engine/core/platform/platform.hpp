@@ -16,21 +16,21 @@
 
                                                                
 #define L_NAME_1 (x)                                                                    #x
-#define L_NAME_2 (x, x2)                                                                #x , #x2
-#define L_NAME_3 (x, x2, x3)                                                            #x , #x2, #x3
-#define L_NAME_4 (x, x2, x3, x4)                                                        #x , #x2, #x3, #x4
-#define L_NAME_5 (x, x2, x3, x4, x5)                                                    #x , #x2, #x3, #x4, #x5
-#define L_NAME_6 (x, x2, x3, x4, x5, x6)                                                #x , #x2, #x3, #x4, #x5, #x6
-#define L_NAME_7 (x, x2, x3, x4, x5, x6, x7)                                            #x , #x2, #x3, #x4, #x5, #x6, #x7
-#define L_NAME_8 (x, x2, x3, x4, x5, x6, x7, x8)                                        #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8
-#define L_NAME_9 (x, x2, x3, x4, x5, x6, x7, x8, x9)                                    #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9
-#define L_NAME_10(x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10
-#define L_NAME_11(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11
-#define L_NAME_12(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12
-#define L_NAME_13(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13
-#define L_NAME_14(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14
-#define L_NAME_15(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14, #x15
-#define L_NAME_16(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14, #x15, #x16
+#define L_NAME_2 (x, x2)                                                                #x, #x2
+#define L_NAME_3 (x, x2, x3)                                                            #x, #x2, #x3
+#define L_NAME_4 (x, x2, x3, x4)                                                        #x, #x2, #x3, #x4
+#define L_NAME_5 (x, x2, x3, x4, x5)                                                    #x, #x2, #x3, #x4, #x5
+#define L_NAME_6 (x, x2, x3, x4, x5, x6)                                                #x, #x2, #x3, #x4, #x5, #x6
+#define L_NAME_7 (x, x2, x3, x4, x5, x6, x7)                                            #x, #x2, #x3, #x4, #x5, #x6, #x7
+#define L_NAME_8 (x, x2, x3, x4, x5, x6, x7, x8)                                        #x, #x2, #x3, #x4, #x5, #x6, #x7, #x8
+#define L_NAME_9 (x, x2, x3, x4, x5, x6, x7, x8, x9)                                    #x, #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9
+#define L_NAME_10(x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               #x, #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10
+#define L_NAME_11(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          #x, #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11
+#define L_NAME_12(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     #x, #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12
+#define L_NAME_13(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                #x, #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13
+#define L_NAME_14(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           #x, #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14
+#define L_NAME_15(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      #x, #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14, #x15
+#define L_NAME_16(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) #x, #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14, #x15, #x16
 
 #define STRINGIFY_SEPERATE(args...) CONCAT_DEFINE(L_NAME_, NARGS(args))(args)
 

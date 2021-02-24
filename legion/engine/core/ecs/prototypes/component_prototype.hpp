@@ -14,8 +14,13 @@ namespace legion::core::serialization
     };
 
     template<typename component_type>
-    struct prototype<ecs::component<component_type>> : public prototype<ecs::component_base>, public reflector<component_type>
-    {        
+    struct prototype<ecs::component<component_type>> : public prototype<ecs::component_base>, public decltype(make_reflector(std::declval<component_type>()))
+    {
+        using Reflector = decltype(make_reflector(std::declval<component_type>()));
+
+        prototype() = default;
+        prototype(const component_type& src) : Reflector(make_reflector(src);) {}
+        prototype(component_type&& src) : Reflector(make_reflector(src);) {}
     };
 
     using component_prototype_base = prototype<ecs::component_base>;

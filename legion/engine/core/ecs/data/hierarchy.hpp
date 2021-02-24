@@ -7,7 +7,7 @@ namespace legion::core::ecs
 {
     struct entity_hierarchy
     {
-        entity parent;
+        entity parent = { world_entity_id };
         hashed_sparse_set<entity> children;
     };
 }
