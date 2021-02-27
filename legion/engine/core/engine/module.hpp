@@ -3,8 +3,7 @@
 #include <core/platform/platform.hpp>
 #include <core/engine/system.hpp>
 #include <core/containers/sparse_map.hpp>
-#include <core/ecs/ecsregistry.hpp>
-#include <core/scheduling/scheduler.hpp>
+#include <core/ecs/registry.hpp>
 #include <core/events/eventbus.hpp>
 #include <memory>
 
@@ -31,14 +30,10 @@ namespace legion::core
         };
 
     protected:
-        static ecs::EcsRegistry* m_ecs;
-        static scheduling::Scheduler* m_scheduler;
-        static events::EventBus* m_eventBus;
-
         template<size_type charc>
         void addProcessChain(const char(&name)[charc])
         {
-            m_scheduler->addProcessChain<charc>(name);
+            //m_scheduler->addProcessChain<charc>(name);
         }
 
         template<typename SystemType, typename... Args CNDOXY(inherits_from<SystemType, System<SystemType>> = 0)>
@@ -51,7 +46,7 @@ namespace legion::core
         template<typename component_type>
         void reportComponentType()
         {
-            m_ecs->reportComponentType<component_type>();
+            //m_ecs->reportComponentType<component_type>();
         }
 
     public:

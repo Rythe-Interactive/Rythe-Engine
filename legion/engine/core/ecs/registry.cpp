@@ -19,16 +19,20 @@ namespace legion::core::ecs
             m_recyclableEntities.empty() ?
             nextEntityId++ :
             []()
-            {
-                id_type temp = m_recyclableEntities.front();
-                m_recyclableEntities.pop();
-                return temp;
-            }();
+        {
+            id_type temp = m_recyclableEntities.front();
+            m_recyclableEntities.pop();
+            return temp;
+        }();
 
-        m_entityHierarchy.emplace(currentEntityId);
-        m_entityComposition.emplace(currentEntityId);
+        auto& [_0, hierarchy] = *m_entityHierarchy.try_emplace(currentEntityId).first;
+        hierarchy.parent = { world_entity_id };
+        hierarchy.children.clear();
 
-        parent.add_child(currentEntityId);
+        m_entityHierarchy.at(world_entity_id).children.insert({ currentEntityId });
+
+        auto& [_1, composition] = *m_entityComposition.try_emplace(currentEntityId).first;
+        composition.clear();
 
         return { currentEntityId };
     }
@@ -36,11 +40,11 @@ namespace legion::core::ecs
     entity Registry::createEntity(entity parent, const serialization::entity_prototype& prototype)
     {
         const auto ent = createEntity(parent);
-        for (auto child : prototype.children)
-            createEntity(ent, child);
+        for (auto& childPrototype : prototype.children)
+            createEntity(ent, childPrototype);
 
-        for (auto& [type, compPtr] : prototype.composition)
-            createComponent(type, ent, *compPtr);
+        for (auto& [type, prototypePtr] : prototype.composition)
+            createComponent(type, ent, *prototypePtr);
 
         return ent;
     }
@@ -68,7 +72,7 @@ namespace legion::core::ecs
 
     void Registry::destroyEntity(id_type target, bool recurse)
     {
-        destroyEntity({ target }, recurse);
+        destroyEntity(entity{ target }, recurse);
     }
 
     L_NODISCARD std::unordered_set<id_type>& Registry::entityComposition(entity target)

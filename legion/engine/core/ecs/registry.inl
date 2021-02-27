@@ -4,13 +4,13 @@
 namespace legion::core::ecs
 {
     template<typename component_type, typename ...Args>
-    inline L_NODISCARD component_pool<component_type>* Registry::tryEmplaceFamily(Args && ...args)
+    inline component_pool<component_type>* Registry::tryEmplaceFamily(Args && ...args)
     {
         return m_componentFamilies.try_emplace(typeHash<component_type>(), std::forward<Args>(args)...).first->get();
     }
 
     template<typename component_type>
-    inline L_NODISCARD component_pool<component_type>* ecs::Registry::getFamily()
+    inline component_pool<component_type>* ecs::Registry::getFamily()
     {
         return tryEmplaceFamily<component_type>();
     }

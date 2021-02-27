@@ -29,15 +29,6 @@ namespace legion::core::events
      */
     struct event_base
     {
-        /**@brief Returns a value that decides whether the event should be kept in the bus or destroyed after all subscribers have been notified.
-         */
-        virtual bool persistent() LEGION_IMPURE_RETURN(false);
-
-        /**@brief Returns a value that decides whether more than one of this event type should be able to exist.
-         *		  If true and an event of this type already exists then the event-bus will only notify the subscribers and nothing else.
-         */
-        virtual bool unique() LEGION_IMPURE_RETURN(true);
-
         virtual ~event_base() = default;
 
         /**@brief Get's the type id of an event. (only available in event_base)

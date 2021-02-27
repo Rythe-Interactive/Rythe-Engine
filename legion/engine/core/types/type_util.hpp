@@ -196,7 +196,6 @@ namespace legion::core
     template<typename T>
     id_type typeHash()
     {
-        OPTICK_EVENT();
         static id_type hash = detail::typeHashImpl<T>();
         return hash;
     }
@@ -208,8 +207,7 @@ namespace legion::core
     template<typename T>
     id_type typeHash(T expr)
     {
-        OPTICK_EVENT();
-        return typeHash<std::decay_t<T>>();
+        return typeHash<std::remove_cv_t<std::remove_reference_t<T>>>();
     }
 
     template<typename Iterator>

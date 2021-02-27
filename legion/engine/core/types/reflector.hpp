@@ -75,7 +75,7 @@ namespace legion::core
     // Reflector return code
 #define RETURN_REFLECTOR(...)                                                       \
     auto&& [__VA_ARGS__] = std::forward<T>(object);                                 \
-    return reflector(std::forward<T>(object), {STRINGIFY_SEPERATE(__VA_ARGS__)}, __VA_ARGS__);
+    return reflector(std::forward<T>(object), { STRINGIFY_SEPERATE(__VA_ARGS__) }, __VA_ARGS__);
 
     /**@brief Create reflector of a certain value.
      * @param object Object to reflect.

@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_set>
+#include <memory>
 
 #include <core/serialization/prototype.hpp>
 
@@ -13,7 +14,16 @@ namespace legion::core::serialization
     {
         std::vector<prototype<ecs::entity>> children;
         std::unordered_map<id_type, std::unique_ptr<component_prototype_base>> composition;
+
+        prototype() = default;
+        prototype(const prototype&);
+        prototype(prototype&&) = default;
+
+        prototype& operator=(const prototype&);
+        prototype& operator=(prototype&&) = default;
     };
 
     using entity_prototype = prototype<ecs::entity>;
 }
+
+#include <core/ecs/prototypes/entity_prototype.inl>
