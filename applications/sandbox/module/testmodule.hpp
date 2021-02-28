@@ -45,13 +45,13 @@ public:
         reportComponentType<ext::evt::particle_receiver>();
         reportComponentType<ext::evt::explosion_receiver>();
         reportComponentType<ext::evt::decal_receiver>();
-        reportSystem<ext::Animator>();
-        reportSystem<ext::AnimationEditor>();
-        //reportSystem<GuiTestSystem>();
+        //reportSystem<ext::Animator>();
+        //reportSystem<ext::AnimationEditor>();
         //reportSystem<final_presentation_system>();
-        reportSystem<physics::PhysicsFractureTestSystem>();
+        reportSystem<GuiTestSystem>();
+        //reportSystem<physics::PhysicsFractureTestSystem>();
         reportSystem<TestSystemConvexHull>();
-        reportSystem<ext::BigBoom>();
+        //reportSystem<ext::BigBoom>();
 
     }
 
