@@ -1,11 +1,13 @@
 #pragma once
 #include <core/core.hpp>
 #include <physics/data/edge_label.hpp>
-#include <physics/halfedgeface.hpp>
+
 #include <rendering/debugrendering.hpp>
 
 namespace legion::physics
 {
+    struct HalfEdgeFace;
+
 	struct HalfEdgeEdge
 	{
 		HalfEdgeEdge* pairingEdge = nullptr;
@@ -28,69 +30,35 @@ namespace legion::physics
 
 		/**@brief sets 'nextEdge' and 'prevEdge' with the given HalfEdgeEdges
 		*/
-		void setNextAndPrevEdge(HalfEdgeEdge* newPrevEdge,HalfEdgeEdge* newNextEdge)
-		{
-			nextEdge = newNextEdge;
-			prevEdge = newPrevEdge;
-		}
+        void setNextAndPrevEdge(HalfEdgeEdge* newPrevEdge, HalfEdgeEdge* newNextEdge);
+		
 
         /**@brief Sets the pairingEdge to the passed in edge, and sets the edge.pairingEdge to this
          * if this edge or the passed edge already have pairing edge, the pairing edge of the pairing edge will be set to nullptr
          */
-        void setPairingEdge(HalfEdgeEdge* edge)
-        {
-            pairingEdge = edge;
-            edge->pairingEdge = this;
-        }
+        void setPairingEdge(HalfEdgeEdge* edge);
+       
 
-		math::vec3 getLocalNormal() const
-		{
-			return face->normal;
-		}
+        math::vec3 getLocalNormal() const;
+		
 
 		/**@brief Gets the direction of the edge by getting the
 		* vector starting from the current edge's position to the next edge
 		*/
-		math::vec3 getLocalEdgeDirection()  const
-		{
-			return nextEdge->edgePosition - edgePosition;
-		}
+        math::vec3 getLocalEdgeDirection()  const;
+		
 
-        bool isVertexVisible(const math::vec3& vert)
-        {
-            float distanceToPlane =
-                math::pointToPlane(vert, edgePosition, face->normal);
+        bool isVertexVisible(const math::vec3& vert);
+        
 
-            return distanceToPlane > math::sqrt(math::epsilon<float>());
-        }
+        bool isEdgeHorizonFromVertex(const math::vec3& vert);
+       
 
-        bool isEdgeHorizonFromVertex(const math::vec3& vert)
-        {
-            return isVertexVisible(vert) && !pairingEdge->isVertexVisible(vert);
-        }
+        void DEBUG_drawEdge(const math::mat4& transform, const math::color& debugColor, float time = 20.0f, float width = 5.0f);
+        
 
-
-        void DEBUG_drawEdge(const math::mat4& transform, const math::color& debugColor,float time = 20.0f, float width = 5.0f)
-        {
-            math::vec3 worldStart = transform * math::vec4(edgePosition, 1);
-            math::vec3 worldEnd = transform * math::vec4(nextEdge->edgePosition, 1);
-
-            debug::user_projectDrawLine(worldStart, worldEnd, debugColor, width, time, true);
-        }
-
-        void DEBUG_drawInsetEdge(const math::vec3 spacing, const math::color& debugColor, float time = 20.0f, float width = 5.0f)
-        {
-            math::vec3 worldCentroid = face->centroid + spacing;
-
-            math::vec3 worldStart = edgePosition + spacing;
-            math::vec3 startDifference = (worldCentroid - worldStart) * 0.1f;
-      
-            math::vec3 worldEnd = nextEdge->edgePosition + spacing;
-            math::vec3 endDifference = (worldCentroid - worldEnd) * 0.1f;
-
-
-            debug::user_projectDrawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);
-        }
+        void DEBUG_drawInsetEdge(const math::vec3 spacing, const math::color& debugColor, float time = 20.0f, float width = 5.0f);
+       
 
 
 	};

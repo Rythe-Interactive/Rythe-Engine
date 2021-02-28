@@ -1,5 +1,4 @@
 #include <physics/halfedgeface.hpp>
-#include <physics/halfedgeedge.hpp>
 #include <rendering/debugrendering.hpp>
 
 namespace legion::physics
@@ -85,8 +84,15 @@ namespace legion::physics
             currentEdge = getNextEdge(currentEdge);
             functionToExecute(edgeToExecuteOn);
 
-        } while (initialEdge != currentEdge && currentEdge->nextEdge != nullptr);
+        } while (initialEdge != currentEdge && getNextEdge(currentEdge) != nullptr);
 
+    }
+
+    void HalfEdgeFace::forEachEdgeReverse(legion::core::delegate<void(HalfEdgeEdge*)> functionToExecute)
+    {
+        auto getPrevEdges = [](HalfEdgeEdge* current) {return current->prevEdge; };
+
+        forEachEdge(functionToExecute, getPrevEdges);
     }
 
     void HalfEdgeFace::inverse()
@@ -101,18 +107,21 @@ namespace legion::physics
             edges.push_back(edge);
         };
 
-        for (auto iter = edges.rbegin(); iter != edges.rend(); ++iter)
-        {
-            if (iter == edges.rbegin())
-            {
+        forEachEdgeReverse(collectEdges);
 
-            }
-        
-           
+        for (size_t i = 0; i < edges.size(); i++)
+        {
+            int nextIndex =( i + 1) % edges.size();
+            int prevIndex = (i - 1) == -1 ? edges.size()-1 : (i - 1);
+
+            HalfEdgeEdge* newNext = edges.at(prevIndex);
+            HalfEdgeEdge* newPrev = edges.at(nextIndex);
+
+            edges.at(i)->setNextAndPrevEdge(newNext, newPrev);
 
         }
 
-
+        startEdge = edges.at(0);
     }
 
     bool HalfEdgeFace::testConvexity(const HalfEdgeFace& other) const

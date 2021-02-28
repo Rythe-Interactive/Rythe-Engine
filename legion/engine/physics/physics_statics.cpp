@@ -511,26 +511,62 @@ namespace legion::physics
             return false;
         }
 
-        //DEBUG draw most distant
-        {
-          math::vec3 transformFirst = DEBUG_transform * math::vec4(*firstEyePoint, 1);
-
-          debug::drawLine(transformFirst, transformFirst + math::vec3(0,0.1f,0), math::colors::blue, 5.0f, FLT_MAX, true);
-
-        }
+        math::color drawC = math::colors::blue;
+       
 
         //[5] invert face if distant vertex is in front of face
+
         float eyePointDistance =
             PhysicsStatics::PointDistanceToPlane(planeNormal, planePosition, *firstEyePoint);
+        bool needInverse = eyePointDistance > 0.0f;
 
-        if (eyePointDistance > 0.0f)
+
+        if (needInverse)
         {
             initialFace->inverse();
+            drawC = math::colors::red;
+        }
+
+        //DEBUG draw most distant
+        {
+            math::vec3 transformFirst = DEBUG_transform * math::vec4(*firstEyePoint, 1);
+
+            debug::drawLine(transformFirst, transformFirst + math::vec3(0, 0.1f, 0), drawC, 5.0f, FLT_MAX, true);
+
         }
 
         //[5] Create a set of faces connecting the first collider face to the most distant vertex
 
+        //(5.1) Reverse collect the edges of the initialFace
+
+        std::vector<HalfEdgeEdge*> reverseHalfEdgeList;
+
+        auto collectEdges = [&reverseHalfEdgeList](HalfEdgeEdge* current)
+        {
+            reverseHalfEdgeList.push_back(current);
+        };
+
+        initialFace->forEachEdgeReverse(collectEdges);
+
+        //(5.2) For each edge create a new face that connects the initial face with the eyePoint
+    
+            //initialize pairing its position is on next
+            //initialize next pairing its position is on current
+            //initialize prev pairing its position is on the eye point
+
+            //connect to each other
+
+            //initialize new face
+
+            //push new face into list 
+
+
+
         return true;
+    }
+
+    void PhysicsStatics::createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint, const std::vector<HalfEdgeEdge*>& edges, std::vector<HalfEdgeFace*>& createdFaces)
+    {
     }
 
 };

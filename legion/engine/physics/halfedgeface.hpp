@@ -1,9 +1,10 @@
 #pragma once
 #include <core/core.hpp>
+#include <physics/halfedgeedge.hpp>
 
 namespace legion::physics
 {
-	struct HalfEdgeEdge;
+
 
 	struct HalfEdgeFace
 	{
@@ -41,6 +42,8 @@ namespace legion::physics
 		*/
 		void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute,
             legion::core::delegate <HalfEdgeEdge* (HalfEdgeEdge*)> getNextEdge = [](HalfEdgeEdge* current) { return current->nextEdge; });
+
+        void forEachEdgeReverse(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
 
         /**@brief Inverses the face
          * The edges will be stored in reverse and therefore the normal will point in the other direction

@@ -619,6 +619,9 @@ namespace legion::physics
 
         static bool qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::shared_ptr<ConvexCollider> collider,
             math::mat4 DEBUG_transform = math::mat4(1.0f));
+
+        static void createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint,
+            const std::vector<HalfEdgeEdge*>& edges, std::vector<HalfEdgeFace*>& createdFaces);
         
 
 
