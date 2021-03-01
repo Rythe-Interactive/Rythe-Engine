@@ -4,12 +4,12 @@
 
 namespace legion::core::ecs
 {
-    entity::operator const id_type& () const
+    entity::operator const id_type& () const noexcept
     {
         return id;
     }
 
-    entity::operator id_type& ()
+    entity::operator id_type& () noexcept
     {
         return id;
     }

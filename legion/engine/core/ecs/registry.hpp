@@ -7,6 +7,7 @@
 #include <core/containers/hashed_sparse_set.hpp>
 #include <core/types/types.hpp>
 #include <core/platform/platform.hpp>
+#include <core/common/hash.hpp>
 
 #include <core/ecs/containers/component_pool.hpp>
 #include <core/ecs/handles/entity.hpp>
@@ -19,9 +20,9 @@ namespace legion::core::ecs
     {
     private:
         static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
-        static std::unordered_map<id_type, std::unordered_set<id_type>> m_entityComposition;
-        static std::unordered_map<id_type, entity_hierarchy> m_entityHierarchy;
-        static std::queue<id_type> m_recyclableEntities;
+        static std::unordered_map<entity, std::unordered_set<id_type>> m_entityComposition;
+        static std::unordered_map<entity, entity_hierarchy> m_entityHierarchy;
+        static std::queue<entity> m_recyclableEntities;
 
         template<typename component_type, typename... Args>
         L_NODISCARD static component_pool<component_type>* tryEmplaceFamily(Args&&... args);
@@ -40,6 +41,8 @@ namespace legion::core::ecs
 
         static void destroyEntity(entity target, bool recurse = true);
         static void destroyEntity(id_type target, bool recurse = true);
+
+        L_NODISCARD static std::unordered_map<entity, std::unordered_set<id_type>>& entityCompositions();
 
         L_NODISCARD static std::unordered_set<id_type>& entityComposition(entity target);
         L_NODISCARD static std::unordered_set<id_type>& entityComposition(id_type target);

@@ -47,6 +47,11 @@ namespace legion::core
         return detail::local_to_global.at(local);
     }
 
+    type_reference type_ref_cast(id_type hash)
+    {
+        return detail::hash_to_reference.at(hash);
+    }
+
     constexpr name_hash::name_hash() noexcept
         : hash(invalid_id) {}
 
@@ -85,7 +90,28 @@ namespace legion::core
         : value(nullptr) {}
 
     type_reference::type_reference(const type_hash_base& src)
-        : value(src.copy()) {}
+        : value(src.copy())
+    {
+        detail::hash_to_reference.emplace(value->value, *this);
+    }
+
+    type_reference::type_reference(const type_reference& src)
+        : value(src.value->copy()) {}
+
+    type_reference::type_reference(type_reference&& src)
+        : value(std::move(src.value)) {}
+
+    type_reference& type_reference::operator=(const type_reference& src)
+    {
+        value = std::unique_ptr<type_hash_base>(src.value->copy());
+        return *this;
+    }
+
+    type_reference& type_reference::operator=(type_reference&& src)
+    {
+        value = std::move(src.value);
+        return *this;
+    }
 
     id_type type_reference::local() const
     {
@@ -107,6 +133,10 @@ namespace legion::core
         return value->global_name();
     }
 
+    type_reference::operator id_type() const
+    {
+        return value->value;
+    }
 
     constexpr name_hash literals::operator""_hs(cstring src)
     {

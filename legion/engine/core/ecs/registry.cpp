@@ -3,9 +3,9 @@
 namespace legion::core::ecs
 {
     std::unordered_map<id_type, std::unique_ptr<component_pool_base>> Registry::m_componentFamilies;
-    std::unordered_map<id_type, std::unordered_set<id_type>> Registry::m_entityComposition;
-    std::unordered_map<id_type, entity_hierarchy> Registry::m_entityHierarchy;
-    std::queue<id_type> Registry::m_recyclableEntities;
+    std::unordered_map<entity, std::unordered_set<type_reference>> Registry::m_entityComposition;
+    std::unordered_map<entity, entity_hierarchy> Registry::m_entityHierarchy;
+    std::queue<entity> Registry::m_recyclableEntities;
 
     L_NODISCARD component_pool_base* Registry::getFamily(id_type typeId)
     {
@@ -25,13 +25,13 @@ namespace legion::core::ecs
             return temp;
         }();
 
-        auto& [_0, hierarchy] = *m_entityHierarchy.try_emplace(currentEntityId).first;
-        hierarchy.parent = { world_entity_id };
+        auto& [_0, hierarchy] = *m_entityHierarchy.try_emplace(entity{ currentEntityId }).first;
+        hierarchy.parent = entity{ world_entity_id };
         hierarchy.children.clear();
 
-        m_entityHierarchy.at(world_entity_id).children.insert({ currentEntityId });
+        m_entityHierarchy.at(world).children.insert({ currentEntityId });
 
-        auto& [_1, composition] = *m_entityComposition.try_emplace(currentEntityId).first;
+        auto& [_1, composition] = *m_entityComposition.try_emplace(entity{ currentEntityId }).first;
         composition.clear();
 
         return { currentEntityId };
@@ -75,6 +75,11 @@ namespace legion::core::ecs
         destroyEntity(entity{ target }, recurse);
     }
 
+    L_NODISCARD std::unordered_map<entity, std::unordered_set<id_type>>& Registry::entityCompositions()
+    {
+        return m_entityComposition;
+    }
+
     L_NODISCARD std::unordered_set<id_type>& Registry::entityComposition(entity target)
     {
         return m_entityComposition.at(target);
@@ -82,7 +87,7 @@ namespace legion::core::ecs
 
     L_NODISCARD std::unordered_set<id_type>& Registry::entityComposition(id_type target)
     {
-        return m_entityComposition.at(target);
+        return m_entityComposition.at(entity{ target });
     }
 
     L_NODISCARD entity_hierarchy& Registry::entityHierarchy(entity target)
@@ -92,7 +97,7 @@ namespace legion::core::ecs
 
     L_NODISCARD entity_hierarchy& Registry::entityHierarchy(id_type target)
     {
-        return m_entityHierarchy.at(target);
+        return m_entityHierarchy.at(entity{ target });
     }
 
     void* Registry::createComponent(id_type typeId, entity target)

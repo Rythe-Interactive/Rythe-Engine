@@ -31,8 +31,8 @@ namespace legion::core
         public:
             id_type id = invalid_id;
 
-            operator const id_type& () const;
-            operator id_type& ();
+            operator const id_type& () const noexcept;
+            operator id_type& () noexcept;
 
             void set_parent(id_type parent) const;
             void set_parent(entity parent) const;
@@ -65,7 +65,7 @@ namespace std
     {
         std::size_t operator()(legion::core::ecs::entity const& handle) const noexcept
         {
-            return std::hash<legion::core::id_type>{}(handle.id);
+            return handle.id;
         }
     };
 }

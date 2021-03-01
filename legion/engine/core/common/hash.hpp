@@ -135,11 +135,26 @@ namespace legion::core
         type_reference(std::nullptr_t);
         type_reference(const type_hash_base& src);
 
+        type_reference(const type_reference& src);
+        type_reference(type_reference&& src);
+
+        type_reference& operator=(const type_reference& src);
+        type_reference& operator=(type_reference&& src);
+
         id_type local() const;
         id_type global() const;
         std::string_view local_name() const;
         std::string_view global_name() const;
+
+        operator id_type() const;
     };
+
+    namespace detail
+    {
+        static std::unordered_map<id_type, type_reference> hash_to_reference;
+    }
+
+    type_reference type_ref_cast(id_type hash);
 
     template<typename T>
     constexpr type_hash<T> make_hash() noexcept

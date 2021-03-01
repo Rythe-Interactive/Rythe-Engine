@@ -168,7 +168,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="ecs\containers\component_pool.hpp" />
     <ClInclude Include="ecs\data\hierarchy.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
-    <ClInclude Include="ecs\filters\filter.hpp" />
+    <ClInclude Include="ecs\filters\filter_info.hpp" />
+    <ClInclude Include="ecs\handles\filter.hpp" />
     <ClInclude Include="ecs\filters\filterregistry.hpp" />
     <ClInclude Include="ecs\handles\component.hpp" />
     <ClInclude Include="ecs\handles\entity.hpp" />
@@ -515,6 +516,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="async\job_pool.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
     <ClCompile Include="async\spinlock.cpp" />
+    <ClCompile Include="common\hash.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\high_level\function.cpp" />
@@ -546,6 +548,7 @@ del ".\xcopyexclude"</Command>
   <ItemGroup>
     <None Include="..\..\.clang-tidy" />
     <None Include="..\..\.editorconfig" />
+    <None Include="common\hash.inl" />
     <None Include="ecs\containers\component_pool.inl" />
     <None Include="ecs\handles\component.inl" />
     <None Include="ecs\prototypes\entity_prototype.inl" />

@@ -32,6 +32,7 @@
     <ClCompile Include="async\job_pool.cpp" />
     <ClCompile Include="ecs\registry.cpp" />
     <ClCompile Include="ecs\handles\entity.cpp" />
+    <ClCompile Include="common\hash.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -415,10 +416,11 @@
     <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
     <ClInclude Include="types\reflector.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
-    <ClInclude Include="ecs\filters\filter.hpp" />
     <ClInclude Include="ecs\filters\filterregistry.hpp" />
     <ClInclude Include="common\hash.hpp" />
     <ClInclude Include="common\string_literal.hpp" />
+    <ClInclude Include="ecs\handles\filter.hpp" />
+    <ClInclude Include="ecs\filters\filter_info.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -564,5 +566,6 @@
     <None Include="ecs\containers\component_pool.inl" />
     <None Include="ecs\handles\component.inl" />
     <None Include="ecs\prototypes\entity_prototype.inl" />
+    <None Include="common\hash.inl" />
   </ItemGroup>
 </Project>

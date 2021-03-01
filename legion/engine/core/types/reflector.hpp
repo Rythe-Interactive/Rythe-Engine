@@ -17,7 +17,7 @@ namespace legion::core
          */
         struct any_type {
             template<class T>
-            constexpr operator T(); // non explicit
+            constexpr operator T(); // implicit conversion to any type.
         };
     }
 

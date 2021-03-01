@@ -2,32 +2,33 @@
 #include <core/platform/platform.hpp>
 #include <core/math/math.hpp>
 
+#include <core/common/hash.hpp>
 #include <core/ecs/handles/entity.hpp>
 
 namespace legion::core::ecs
 {
     struct component_base
     {
-        L_NODISCARD virtual id_type type_id() LEGION_PURE;
+        L_NODISCARD virtual type_reference type_id() const noexcept LEGION_PURE;
     };
 
     template<typename component_type>
     struct component : public component_base
     {
-        static inline const id_type typeId = typeHash<component_type>();
-        L_NODISCARD virtual id_type type_id() { return typeId; };
+        static constexpr type_hash<component_type> typeId = make_hash<component_type>();
+        L_NODISCARD virtual type_reference type_id() const noexcept { return typeId; };
 
         entity owner;
 
         L_NODISCARD operator component_type& ();
         L_NODISCARD operator const component_type& () const;
 
-        L_NODISCARD operator bool();
+        L_NODISCARD operator bool() const noexcept;
 
         L_NODISCARD component_type& operator->();
         L_NODISCARD const component_type& operator->() const;
 
-        bool operator==(const component& other);
+        bool operator==(const component& other) const noexcept;
 
         L_NODISCARD component_type& get();
         L_NODISCARD const component_type& get() const;
@@ -35,8 +36,6 @@ namespace legion::core::ecs
         void destroy();
     };
 }
-
-
 
 #if !defined(DOXY_EXCLUDE)
 namespace std
