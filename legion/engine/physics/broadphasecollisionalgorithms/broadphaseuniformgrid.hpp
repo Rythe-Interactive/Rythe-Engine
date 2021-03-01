@@ -56,7 +56,7 @@ namespace legion::physics
 
     private:
         math::ivec3 m_cellSize;
-        size_type m_emptyCellDestroyThreshold;
+        size_type m_emptyCellDestroyThreshold = 0;
 
         /**@brief Calculates a cell index from a point. i.e. calculates in which cell in the uniform grid a point will be. 
          */

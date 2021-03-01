@@ -63,6 +63,9 @@
     <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
