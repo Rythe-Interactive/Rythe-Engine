@@ -131,6 +131,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="async\ring_sync_lock.hpp" />
     <ClInclude Include="async\thread_util.hpp" />
     <ClInclude Include="async\wait_priority.hpp" />
+    <ClInclude Include="common\hash.hpp" />
+    <ClInclude Include="common\string_literal.hpp" />
     <ClInclude Include="containers\runnable.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />

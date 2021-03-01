@@ -15,6 +15,12 @@ namespace legion::core
     template<typename derived_type, typename base_type>
     using doesnt_inherit_from = typename std::enable_if<!std::is_base_of<base_type, derived_type>::value, int>::type;
 
+    template<typename T>
+    using remove_cvr = std::remove_cv<std::remove_reference_t<T>>;
+
+    template<typename T>
+    using remove_cvr_t = typename remove_cvr<T>::type;
+
     template<typename, typename T>
     struct has_resize
     {

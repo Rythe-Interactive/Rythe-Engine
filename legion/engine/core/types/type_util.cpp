@@ -3,14 +3,12 @@
 
 namespace legion::core
 {
-    id_type LEGION_FUNC nameHash(cstring name)
+    constexpr id_type nameHash(cstring name) noexcept
     {
-        OPTICK_EVENT();
-        const size_type length = std::strlen(name);
         id_type hash = 0xcbf29ce484222325;
-        uint64 prime = 0x00000100000001b3;        
-        
-        for (size_type i = 0; i < length; i++)
+        constexpr uint64 prime = 0x00000100000001b3;
+
+        for (size_type i = 0; i < common::constexpr_strlen(name); i++)
         {
             hash = hash ^ static_cast<const byte>(name[i]);
             hash *= prime;
@@ -19,20 +17,40 @@ namespace legion::core
         return hash;
     }
 
-    id_type LEGION_FUNC nameHash(const std::string& name)
+    id_type nameHash(const std::string& name)
     {
         OPTICK_EVENT();
+
+#if defined(LEGION_MSVC) || defined(LEGION_CLANG_MSVC)
         static std::hash<std::string> hasher{};
         if (!name.empty() && name[name.size() - 1] == '\0')
-        {
-            std::string temp = name;
-            temp.resize(name.size() - 1);
-            return hasher(temp);
-        }
+            return hasher(name.substr(0, name.size() - 2));
+
         return hasher(name);
+#else
+        // std::hash returns a different hash on GCC and Clang on Linux for certain CPU architectures.
+        // These certain different hashes are faster to compute but can create issues if they aren't the same.
+        return nameHash(std::string_view(name));
+#endif
     }
-    id_type LEGION_FUNC nameHash(const std::string_view& name)
+
+    constexpr id_type nameHash(const std::string_view& name) noexcept
     {
-        return nameHash(std::string(name));
+        id_type hash = 0xcbf29ce484222325;
+        constexpr uint64 prime = 0x00000100000001b3;
+
+        size_type size = name.size();
+
+        if (name[size - 1] == '\0')
+            size--;
+
+        for (size_type i = 0; i < size; i++)
+        {
+            hash = hash ^ static_cast<const byte>(name[i]);
+            hash *= prime;
+        }
+
+        return hash;
     }
+
 }

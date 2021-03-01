@@ -417,6 +417,8 @@
     <ClInclude Include="ecs\ecs.hpp" />
     <ClInclude Include="ecs\filters\filter.hpp" />
     <ClInclude Include="ecs\filters\filterregistry.hpp" />
+    <ClInclude Include="common\hash.hpp" />
+    <ClInclude Include="common\string_literal.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

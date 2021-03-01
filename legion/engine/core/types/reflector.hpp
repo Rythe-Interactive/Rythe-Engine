@@ -42,7 +42,7 @@ namespace legion::core
 #if !defined(DOXY_EXCLUDE)
     template<typename T, typename... MemberTypes>
     reflector(T&&, std::array<std::string, sizeof...(MemberTypes)>&&, MemberTypes&&...)
-        ->reflector<std::remove_cv_t<std::remove_reference_t<T>>, std::remove_cv_t<std::remove_reference_t<MemberTypes>>...>;
+        ->reflector<remove_cvr_t<T>, remove_cvr_t<MemberTypes>...>;
 #endif
 
     /**@brief Template specialization for empty classes and unreflectable types.
@@ -84,7 +84,7 @@ namespace legion::core
     template<typename T>
     auto make_reflector(T&& object)
     {
-        using type = std::remove_cv_t<std::remove_reference_t<T>>;
+        using type = remove_cvr_t<T>;
 
         // Check for a custom specialization.
         if constexpr (is_brace_constructible_v<reflector<type>, T>)
