@@ -1,4 +1,5 @@
 #include <core/ecs/registry.hpp>
+#include <core/ecs/filters/filterregistry.hpp>
 
 namespace legion::core::ecs
 {
@@ -68,6 +69,7 @@ namespace legion::core::ecs
 
         m_entityComposition.at(target).clear();
         m_recyclableEntities.push(target);
+        FilterRegistry::markEntityDestruction(target);
     }
 
     void Registry::destroyEntity(id_type target, bool recurse)

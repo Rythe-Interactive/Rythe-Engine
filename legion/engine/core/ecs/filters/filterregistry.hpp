@@ -11,6 +11,7 @@ namespace legion::core::ecs
 {
     class FilterRegistry
     {
+    public:
         template<typename... component_types>
         friend struct filter;
 

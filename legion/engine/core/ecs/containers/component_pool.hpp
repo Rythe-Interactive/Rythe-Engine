@@ -21,11 +21,14 @@ namespace legion::core::ecs
     template<typename component_type>
     struct component_pool : public component_pool_base
     {
+    private:
+        static void* this_ptr;
+    public:
         static sparse_map<id_type, component_type> m_components;
 
         virtual void* create_component(id_type target);
         virtual void* create_component(id_type target, const serialization::component_prototype_base& prototype);
-        
+
         virtual void destroy_component(id_type target);
 
         L_NODISCARD virtual void* get_component(id_type target) const;

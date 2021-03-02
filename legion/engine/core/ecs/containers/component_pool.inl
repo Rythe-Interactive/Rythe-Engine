@@ -4,6 +4,9 @@
 namespace legion::core::ecs
 {
     template<typename component_type>
+    void* component_pool<component_type>::this_ptr = Registry::tryEmplaceFamily<component_type>();
+    
+    template<typename component_type>
     sparse_map<id_type, component_type> component_pool<component_type>::m_components;
 
     template<typename component_type>

@@ -18,6 +18,9 @@ namespace legion::core::ecs
 {
     class Registry
     {
+        template<typename component_type>
+        friend struct component_pool;
+
     private:
         static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
         static std::unordered_map<entity, std::unordered_set<id_type>> m_entityComposition;

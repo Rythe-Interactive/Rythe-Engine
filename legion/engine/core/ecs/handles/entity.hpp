@@ -26,6 +26,9 @@ namespace legion::core
     {
         static constexpr id_type world_entity_id = 1;
 
+        /**@struct entity
+         * @brief Handle to an entity.
+         */
         struct entity
         {
         public:
