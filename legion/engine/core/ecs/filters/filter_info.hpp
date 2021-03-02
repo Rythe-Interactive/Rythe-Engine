@@ -29,6 +29,12 @@ namespace legion::core::ecs
 
         virtual bool contains(const std::unordered_set<id_type>& comp)
         {
+            if (!comp.size())
+                return false;
+
+            if (!composition.size())
+                return true;
+
             for (auto& typeId : composition)
                 if (!comp.count(typeId))
                     return false;

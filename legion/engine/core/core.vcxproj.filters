@@ -33,6 +33,7 @@
     <ClCompile Include="ecs\registry.cpp" />
     <ClCompile Include="ecs\handles\entity.cpp" />
     <ClCompile Include="common\hash.cpp" />
+    <ClCompile Include="ecs\filters\filterregistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -567,5 +568,6 @@
     <None Include="ecs\handles\component.inl" />
     <None Include="ecs\prototypes\entity_prototype.inl" />
     <None Include="common\hash.inl" />
+    <None Include="ecs\filters\filterregistry.inl" />
   </ItemGroup>
 </Project>

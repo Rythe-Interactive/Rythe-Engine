@@ -2,30 +2,6 @@
 
 namespace legion::core
 {
-    constexpr hash::hash() noexcept
-        : value(invalid_id) {}
-
-    constexpr hash::hash(id_type src) noexcept
-        : value(src) {}
-
-    hash::hash(const hash& src) noexcept
-        : value(src.value) {}
-
-    hash::hash(hash&& src) noexcept
-        : value(src.value) {}
-
-    hash& hash::operator=(const hash& src) noexcept
-    {
-        value = src.value;
-        return *this;
-    }
-
-    hash& hash::operator=(hash&& src) noexcept
-    {
-        value = src.value;
-        return *this;
-    }
-
     constexpr hash::operator id_type() const noexcept
     {
         return value;
@@ -52,17 +28,13 @@ namespace legion::core
         return detail::hash_to_reference.at(hash);
     }
 
-    constexpr name_hash::name_hash() noexcept
-        : hash(invalid_id) {}
+    constexpr name_hash::name_hash() noexcept {}
 
-    constexpr name_hash::name_hash(id_type value) noexcept
-        : hash(value) {}
+    constexpr name_hash::name_hash(id_type value) noexcept { this->value = value; }
 
-    name_hash::name_hash(const name_hash& src) noexcept
-        : hash(src.value) {}
+    name_hash::name_hash(const name_hash& src) noexcept { this->value = value; }
 
-    name_hash::name_hash(name_hash&& src) noexcept
-        : hash(src.value) {}
+    name_hash::name_hash(name_hash&& src) noexcept { this->value = value; }
 
     name_hash& name_hash::operator=(const name_hash& src) noexcept
     {

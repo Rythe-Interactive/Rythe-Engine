@@ -525,6 +525,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
+    <ClCompile Include="ecs\filters\filterregistry.cpp" />
     <ClCompile Include="ecs\handles\entity.cpp" />
     <ClCompile Include="ecs\registry.cpp" />
     <ClCompile Include="engine\module.cpp" />
@@ -550,6 +551,7 @@ del ".\xcopyexclude"</Command>
     <None Include="..\..\.editorconfig" />
     <None Include="common\hash.inl" />
     <None Include="ecs\containers\component_pool.inl" />
+    <None Include="ecs\filters\filterregistry.inl" />
     <None Include="ecs\handles\component.inl" />
     <None Include="ecs\prototypes\entity_prototype.inl" />
     <None Include="ecs\registry.inl" />

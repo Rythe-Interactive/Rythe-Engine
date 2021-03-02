@@ -282,7 +282,22 @@ namespace legion::core
     template<typename T>
     constexpr id_type localTypeHash() noexcept
     {
-        return nameHash(localNameOfType<T>());
+        std::string_view name = localNameOfType<T>();
+        id_type hash = 0xcbf29ce484222325;
+        constexpr uint64 prime = 0x00000100000001b3;
+
+        size_type size = name.size();
+
+        if (name[size - 1] == '\0')
+            size--;
+
+        for (size_type i = 0; i < size; i++)
+        {
+            hash = hash ^ static_cast<const byte>(name[i]);
+            hash *= prime;
+        }
+
+        return hash;
     }
 
     /**@brief Returns compiler agnostic hash of the type name.

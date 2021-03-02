@@ -3,7 +3,7 @@
 namespace legion::core::ecs
 {
     std::unordered_map<id_type, std::unique_ptr<component_pool_base>> Registry::m_componentFamilies;
-    std::unordered_map<entity, std::unordered_set<type_reference>> Registry::m_entityComposition;
+    std::unordered_map<entity, std::unordered_set<id_type>> Registry::m_entityComposition;
     std::unordered_map<entity, entity_hierarchy> Registry::m_entityHierarchy;
     std::queue<entity> Registry::m_recyclableEntities;
 
@@ -26,13 +26,12 @@ namespace legion::core::ecs
         }();
 
         auto& [_0, hierarchy] = *m_entityHierarchy.try_emplace(entity{ currentEntityId }).first;
-        hierarchy.parent = entity{ world_entity_id };
+        hierarchy.parent = parent;
         hierarchy.children.clear();
 
-        m_entityHierarchy.at(world).children.insert({ currentEntityId });
+        m_entityHierarchy.at(parent).children.insert(entity{ currentEntityId });
 
-        auto& [_1, composition] = *m_entityComposition.try_emplace(entity{ currentEntityId }).first;
-        composition.clear();
+        m_entityComposition.try_emplace(entity{ currentEntityId });
 
         return { currentEntityId };
     }
@@ -67,6 +66,7 @@ namespace legion::core::ecs
         for (auto& componentId : m_entityComposition.at(target))
             destroyComponent(componentId, target);
 
+        m_entityComposition.at(target).clear();
         m_recyclableEntities.push(target);
     }
 
@@ -102,16 +102,19 @@ namespace legion::core::ecs
 
     void* Registry::createComponent(id_type typeId, entity target)
     {
+        m_entityComposition.at(target).insert(typeId);
         return getFamily(typeId)->create_component(target);
     }
 
     void* Registry::createComponent(id_type typeId, entity target, const serialization::component_prototype_base& prototype)
     {
+        m_entityComposition.at(target).insert(typeId);
         return getFamily(typeId)->create_component(target, prototype);
     }
 
     void Registry::destroyComponent(id_type typeId, entity target)
     {
+        m_entityComposition.at(target).erase(typeId);
         getFamily(typeId)->destroy_component(target);
     }
 

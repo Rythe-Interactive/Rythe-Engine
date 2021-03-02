@@ -71,3 +71,5 @@ namespace legion::core::ecs
 }
 
 #include <core/ecs/registry.inl>
+#include <core/ecs/containers/component_pool.inl>
+#include <core/ecs/filters/filterregistry.inl>

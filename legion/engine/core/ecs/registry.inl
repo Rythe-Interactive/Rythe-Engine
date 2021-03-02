@@ -18,25 +18,25 @@ namespace legion::core::ecs
     template<typename component_type>
     inline component_type& Registry::createComponent(entity target)
     {
-        return *reinterpret_cast<component_type*>(getFamily(make_hash<component_type>())->create_component(target));
+        return component_pool<component_type>::create_component_direct(target);
     }
 
     template<typename component_type>
     inline component_type& Registry::createComponent(entity target, const serialization::component_prototype<component_type>& prototype)
     {
-        return *reinterpret_cast<component_type*>(getFamily(make_hash<component_type>())->create_component(target, prototype));
+        return component_pool<component_type>::create_component_direct(target, prototype);
     }
 
     template<typename component_type>
     inline void Registry::destroyComponent(entity target)
     {
-        getFamily(make_hash<component_type>())->destroy_component(target);
+        component_pool<component_type>::destroy_component_direct(target);
     }
 
     template<typename component_type>
     inline component_type& Registry::getComponent(entity target)
     {
-        return *reinterpret_cast<component_type*>(getFamily(typeId)->get_component(target));
+        return component_pool<component_type>::get_component_direct(target);
     }
 
 }

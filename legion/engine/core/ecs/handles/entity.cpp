@@ -18,22 +18,22 @@ namespace legion::core::ecs
     {
         auto& hierarchy = Registry::entityHierarchy(id);
         if (hierarchy.parent)
-            Registry::entityHierarchy(hierarchy.parent).children.erase({ id });
+            Registry::entityHierarchy(hierarchy.parent).children.erase(*this);
 
         if (parent)
-            Registry::entityHierarchy(parent).children.insert({ id });
+            Registry::entityHierarchy(parent).children.insert(*this);
 
-        hierarchy.parent = { parent };
+        hierarchy.parent = entity{ parent };
     }
 
     void entity::set_parent(entity parent) const
     {
         auto& hierarchy = Registry::entityHierarchy(id);
         if (hierarchy.parent)
-            Registry::entityHierarchy(hierarchy.parent).children.erase({ id });
+            Registry::entityHierarchy(hierarchy.parent).children.erase(*this);
 
         if (parent)
-            Registry::entityHierarchy(parent).children.insert({ id });
+            Registry::entityHierarchy(parent).children.insert(*this);
 
         hierarchy.parent = parent;
     }

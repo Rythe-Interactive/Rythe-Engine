@@ -10,16 +10,7 @@ namespace legion::core
 {
     struct hash
     {
-        id_type value;
-
-        constexpr hash() noexcept;
-        constexpr hash(id_type src) noexcept;
-
-        hash(const hash& src) noexcept;
-        hash(hash&& src) noexcept;
-
-        hash& operator=(const hash& src) noexcept;
-        hash& operator=(hash&& src) noexcept;
+        id_type value = invalid_id;
 
         constexpr operator id_type () const noexcept;
     };
@@ -66,15 +57,17 @@ namespace legion::core
         virtual std::string_view global_name() const noexcept LEGION_PURE;
     protected:
         virtual type_hash_base* copy() const LEGION_PURE;
+
+        constexpr type_hash_base(id_type value, std::string_view name) noexcept : name(name) { this->value = value; }
     };
 
     template<typename T>
     struct type_hash : public type_hash_base
     {
-        constexpr type_hash() noexcept : type_hash_base({ localTypeHash<T>(), localNameOfType<T>() }) {}
+        constexpr type_hash() noexcept : type_hash_base(localTypeHash<T>(), localNameOfType<T>()) {}
 
-        type_hash(const type_hash& src) noexcept : hash({ src.value, src.name }) {}
-        type_hash(type_hash&& src) noexcept : hash({ src.value, src.name }) {}
+        type_hash(const type_hash& src) noexcept : type_hash_base(src.value, src.name) {}
+        type_hash(type_hash&& src) noexcept : type_hash_base(src.value, src.name) {}
 
         type_hash& operator=(const type_hash& src) noexcept
         {
@@ -128,7 +121,7 @@ namespace legion::core
     struct type_reference
     {
     private:
-        const std::unique_ptr<type_hash_base> value;
+        std::unique_ptr<type_hash_base> value;
 
     public:
         type_reference() = default;

@@ -4,6 +4,7 @@
 #include <core/containers/sparse_map.hpp>
 
 #include <core/ecs/prototypes/component_prototype.hpp>
+#include <core/ecs/filters/filterregistry.hpp>
 
 namespace legion::core::ecs
 {
@@ -12,7 +13,7 @@ namespace legion::core::ecs
         virtual void* create_component(id_type target) LEGION_PURE;
         virtual void* create_component(id_type target, const serialization::component_prototype_base& prototype) LEGION_PURE;
 
-        virtual void* get_component(id_type target) LEGION_PURE;
+        L_NODISCARD virtual void* get_component(id_type target) const LEGION_PURE;
 
         virtual void destroy_component(id_type target) LEGION_PURE;
     };
@@ -20,15 +21,21 @@ namespace legion::core::ecs
     template<typename component_type>
     struct component_pool : public component_pool_base
     {
-        sparse_map<id_type, component_type> m_components;
+        static sparse_map<id_type, component_type> m_components;
 
         virtual void* create_component(id_type target);
         virtual void* create_component(id_type target, const serialization::component_prototype_base& prototype);
         
         virtual void destroy_component(id_type target);
 
-        virtual void* get_component(id_type target);
+        L_NODISCARD virtual void* get_component(id_type target) const;
+
+
+        static component_type& create_component_direct(id_type target);
+        static component_type& create_component_direct(id_type target, const serialization::component_prototype_base& prototype);
+
+        static void destroy_component_direct(id_type target);
+
+        L_NODISCARD static component_type& get_component_direct(id_type target);
     };
 }
-
-#include <core/ecs/containers/component_pool.inl>
