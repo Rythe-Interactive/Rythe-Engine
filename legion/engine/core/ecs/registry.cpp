@@ -28,7 +28,6 @@ namespace legion::core::ecs
 
         auto& [_0, hierarchy] = *m_entityHierarchy.try_emplace(entity{ currentEntityId }).first;
         hierarchy.parent = parent;
-        hierarchy.children.clear();
 
         m_entityHierarchy.at(parent).children.insert(entity{ currentEntityId });
 
@@ -58,16 +57,20 @@ namespace legion::core::ecs
     {
         target.set_parent(invalid_id);
 
-        for (auto& child : m_entityHierarchy.at(target).children)
+        auto& hierarchy = m_entityHierarchy.at(target);
+        auto& composition = m_entityComposition.at(target);
+
+        for (auto& child : hierarchy.children)
             if (recurse)
                 destroyEntity(child, recurse);
             else
                 child.set_parent(world);
+        hierarchy.children.clear();
 
-        for (auto& componentId : m_entityComposition.at(target))
+        for (auto& componentId : composition)
             destroyComponent(componentId, target);
+        composition.clear();
 
-        m_entityComposition.at(target).clear();
         m_recyclableEntities.push(target);
         FilterRegistry::markEntityDestruction(target);
     }
