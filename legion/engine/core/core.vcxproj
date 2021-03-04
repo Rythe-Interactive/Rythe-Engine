@@ -68,7 +68,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
-      <AdditionalOptions>-Werror=return-type  -fsanitize=undefined %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -528,6 +528,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="ecs\filters\filterregistry.cpp" />
     <ClCompile Include="ecs\handles\entity.cpp" />
     <ClCompile Include="ecs\registry.cpp" />
+    <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="engine\system.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
@@ -555,6 +556,7 @@ del ".\xcopyexclude"</Command>
     <None Include="ecs\handles\component.inl" />
     <None Include="ecs\prototypes\entity_prototype.inl" />
     <None Include="ecs\registry.inl" />
+    <None Include="engine\engine.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />
     <None Include="math\glm\detail\func_exponential.inl" />

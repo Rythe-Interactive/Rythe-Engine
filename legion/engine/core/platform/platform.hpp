@@ -3,6 +3,35 @@
  * @file platform.hpp
  */
 
+#if defined(_WIN64)
+ /**@def LEGION_WINDOWS
+  * @brief Defined when compiling for Windows.
+  */
+#define LEGION_WINDOWS
+
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+#define NOMINMAX
+#include <Windows.h>
+#include <shellapi.h>
+#include <shlobj.h>
+#include <shlwapi.h>
+#include <objbase.h>
+#elif defined(__linux__)
+ /**@def LEGION_LINUX
+  * @brief Defined when compiling for Linux.
+  */
+#define LEGION_LINUX
+
+#include <sys/prctl.h>
+#include <sys/resource.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <sched.h>
+#include <errno.h>
+#endif
+
 #if !defined(PROJECT_NAME)
 #define PROJECT_NAME user_project
 #endif
@@ -70,36 +99,6 @@
      * @note Define LEGION_LOW_POWER to run Legion with minimal resources instead.
      */
     #define LEGION_HIGH_PERFORMANCE
-#endif
-
-
-#if defined(_WIN64)
-    /**@def LEGION_WINDOWS
-     * @brief Defined when compiling for Windows.
-     */
-    #define LEGION_WINDOWS
-
-    #define WIN32_LEAN_AND_MEAN
-    #define VC_EXTRALEAN
-    #define NOMINMAX
-    #include <Windows.h>
-    #include <shellapi.h>
-    #include <shlobj.h>
-    #include <shlwapi.h>
-    #include <objbase.h>
-#elif defined(__linux__)
-    /**@def LEGION_LINUX
-     * @brief Defined when compiling for Linux.
-     */
-    #define LEGION_LINUX
-
-    #include <sys/prctl.h>
-    #include <sys/resource.h>
-    #include <sys/types.h>
-    #include <sys/wait.h>
-    #include <unistd.h>
-    #include <sched.h>
-    #include <errno.h>
 #endif
 
 #ifndef __FUNC__

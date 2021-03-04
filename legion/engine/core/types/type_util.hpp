@@ -254,7 +254,19 @@ namespace legion::core
     /**@brief Returns hash of a certain string
      * @param name Name you wish to hash
      */
-    constexpr id_type nameHash(cstring name) noexcept;
+    constexpr id_type nameHash(cstring name) noexcept
+    {
+        id_type hash = 0xcbf29ce484222325;
+        constexpr uint64 prime = 0x00000100000001b3;
+
+        for (size_type i = 0; i < common::constexpr_strlen(name); i++)
+        {
+            hash = hash ^ static_cast<const byte>(name[i]);
+            hash *= prime;
+        }
+
+        return hash;
+    }
 
     /**@brief Returns hash of a certain string
      * @param name Name you wish to hash
@@ -264,7 +276,24 @@ namespace legion::core
     /**@brief Returns hash of a certain string
      * @param name Name you wish to hash
      */
-    constexpr id_type nameHash(const std::string_view& name) noexcept;
+    constexpr id_type nameHash(const std::string_view& name) noexcept
+    {
+        id_type hash = 0xcbf29ce484222325;
+        constexpr uint64 prime = 0x00000100000001b3;
+
+        size_type size = name.size();
+
+        if (name[size - 1] == '\0')
+            size--;
+
+        for (size_type i = 0; i < size; i++)
+        {
+            hash = hash ^ static_cast<const byte>(name[i]);
+            hash *= prime;
+        }
+
+        return hash;
+    }
 
     namespace detail
     {
@@ -282,22 +311,7 @@ namespace legion::core
     template<typename T>
     constexpr id_type localTypeHash() noexcept
     {
-        std::string_view name = localNameOfType<T>();
-        id_type hash = 0xcbf29ce484222325;
-        constexpr uint64 prime = 0x00000100000001b3;
-
-        size_type size = name.size();
-
-        if (name[size - 1] == '\0')
-            size--;
-
-        for (size_type i = 0; i < size; i++)
-        {
-            hash = hash ^ static_cast<const byte>(name[i]);
-            hash *= prime;
-        }
-
-        return hash;
+        return nameHash(localNameOfType<T>());
     }
 
     /**@brief Returns compiler agnostic hash of the type name.

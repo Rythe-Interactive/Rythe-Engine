@@ -9,12 +9,12 @@ using namespace legion::rendering;
 
 class GuiTestSystem : public System<GuiTestSystem>
 {
-    ecs::EntityQuery cameraQuery = createQuery<camera, transform>();
-    ecs::EntityQuery entityQuery = createQuery<transform>();
+    ecs::filter cameraQuery = createQuery<camera, transform>();
+    ecs::filter entityQuery = createQuery<transform>();
 
     material_handle vertexColorMaterial;
     model_handle cubeModel;
-    ecs::entity_handle cubeEntity;
+    ecs::entity cubeEntity;
 
 
     char guiTextBuffer[512]{ 0 };
@@ -73,7 +73,7 @@ class GuiTestSystem : public System<GuiTestSystem>
     // In how the Scene is currently structured, it will also try to show the names of the components of the
     // entities, which makes identifiying them easier
     //
-    void BuildTree(ecs::entity_handle handle)
+    void BuildTree(ecs::entity handle)
     {
         if (ImGui::TreeNode(reinterpret_cast<void*>(handle.get_id()), "%llu", handle.get_id())) {
             if (handle.has_component<hierarchy>())

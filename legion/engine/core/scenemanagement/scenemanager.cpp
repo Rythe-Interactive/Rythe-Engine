@@ -16,7 +16,7 @@ namespace legion::core::scenemanagement
     ecs::entity SceneManager::create_scene_entity()
     {
         ecs::entity sceneEntity;
-        //static ecs::EntityQuery sceneEntities = m_ecs->createQuery<scenemanagement::scene>();
+        //static ecs::filter sceneEntities = m_ecs->createQuery<scenemanagement::scene>();
         //sceneEntities.queryEntities();
         //if (sceneEntities.size() == 0)
         //{
@@ -24,7 +24,7 @@ namespace legion::core::scenemanagement
         //    sceneEntity = m_ecs->createEntity();
         //    sceneEntity.add_component<hierarchy>();
         //    sceneEntity.add_component<scene>();
-        //    std::vector<ecs::entity_handle> children;
+        //    std::vector<ecs::entity> children;
         //    auto hry = world.read_component<hierarchy>();
 
         //    for (auto& child : hry.children)
@@ -34,7 +34,7 @@ namespace legion::core::scenemanagement
         //    int i = 0;
         //    sceneEntity.write_component(hry);
 
-        //    for (ecs::entity_handle child : children)
+        //    for (ecs::entity child : children)
         //    {
         //        if (child.has_component<hierarchy>())
         //        {
@@ -103,7 +103,7 @@ namespace legion::core::scenemanagement
         //world.write_component(hry);
         //log::debug("Child Count After: {}", world.child_count());
 
-        //auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
+        //auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity>(inFile);
         //currentScene = name;
 
         //SceneManager::saveScene(name, sceneEntity);
@@ -114,7 +114,7 @@ namespace legion::core::scenemanagement
     bool SceneManager::save_scene(const std::string& name, ecs::entity& ent)
     {
         //std::ofstream outFile("assets/scenes/" + name + ".cornflake");
-        //serialization::SerializationUtil::JSONSerialize<ecs::entity_handle>(outFile, ent);
+        //serialization::SerializationUtil::JSONSerialize<ecs::entity>(outFile, ent);
         return true;
     }
 

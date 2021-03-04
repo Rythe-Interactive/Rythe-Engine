@@ -1,11 +1,7 @@
 #define LEGION_ENTRY
 #define LEGION_KEEP_CONSOLE
-#define LEGION_LOW_POWER
-#define LEGION_ON_EXIT_QUIT
 
 #include <core/core.hpp>
-#include <application/application.hpp>
-#include <rendering/rendering.hpp>
 
 
 #define DOCTEST_CONFIG_IMPLEMENT
@@ -13,7 +9,7 @@
 
 
 #include "doctest.h"
-#include "test_filesystem.hpp"
+#include "tests/core/filesystem.hpp"
 
 using namespace legion;
 
@@ -31,13 +27,14 @@ public:
     public:
         void setup() override
         {
-            raiseEvent<events::exit>();
+            //raiseEvent<events::exit>();
         }
     };
 };
 
 TEST_CASE("[core:ut] sanity-check")
 {
+    std::cout << "[core:ut] sanity-check\n";
     CHECK_EQ(true,true);
 }
 

@@ -1,5 +1,5 @@
 #pragma once
-#include <core/filesystem/filesystem.hpp>
+#include <core/core.hpp>
 
 #include <iostream>
 
@@ -103,6 +103,8 @@ std::ostream& operator<<(std::ostream& lhs, filesystem::basic_resource rhs)
 
 TEST_CASE("[fs] testing the filesystem")
 {
+    std::cout << "[fs] testing the filesystem\n";
+
     //setup testing environment
     std::string x = "always has been!";
     namespace fs = ::legion::core::filesystem;

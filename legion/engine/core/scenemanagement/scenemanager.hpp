@@ -78,7 +78,7 @@ namespace legion::core::scenemanagement
 
         /**@brief Gets a scene from the scene list.
           * @param name The name of the scene that you wish to save.
-          * @returns component_handle<scene> The component handle for the scene component stored in the sceneList.
+          * @returns component<scene> The component handle for the scene component stored in the sceneList.
           */
         static ecs::component<scene> get_scene(std::string name);
 

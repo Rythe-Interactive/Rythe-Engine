@@ -18,10 +18,6 @@ namespace legion::core::events
 
         component_creation() = default;
         component_creation(ecs::entity entity) : entity(entity) {}
-
-        virtual bool persistent() override { return false; }
-        virtual bool unique() override { return false; }
-
     };
 
     template<typename component_type>
