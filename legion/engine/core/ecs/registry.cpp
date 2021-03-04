@@ -6,6 +6,7 @@ namespace legion::core::ecs
     std::unordered_map<id_type, std::unique_ptr<component_pool_base>> Registry::m_componentFamilies;
     std::unordered_map<entity, std::unordered_set<id_type>> Registry::m_entityComposition;
     std::unordered_map<entity, entity_hierarchy> Registry::m_entityHierarchy;
+    std::unordered_set<entity> Registry::m_entities;
     std::queue<entity> Registry::m_recyclableEntities;
 
     L_NODISCARD component_pool_base* Registry::getFamily(id_type typeId)
@@ -26,13 +27,13 @@ namespace legion::core::ecs
             return temp;
         }();
 
-        auto& [_0, hierarchy] = *m_entityHierarchy.try_emplace(entity{ currentEntityId }).first;
+        auto& [_, hierarchy] = *m_entityHierarchy.try_emplace(entity{ currentEntityId }).first;
         hierarchy.parent = parent;
 
         m_entityHierarchy.at(parent).children.insert(entity{ currentEntityId });
 
         m_entityComposition.try_emplace(entity{ currentEntityId });
-
+        m_entities.insert(entity{ currentEntityId });
         return { currentEntityId };
     }
 
@@ -71,6 +72,7 @@ namespace legion::core::ecs
             destroyComponent(componentId, target);
         composition.clear();
 
+        m_entities.erase(target);
         m_recyclableEntities.push(target);
         FilterRegistry::markEntityDestruction(target);
     }
@@ -78,6 +80,16 @@ namespace legion::core::ecs
     void Registry::destroyEntity(id_type target, bool recurse)
     {
         destroyEntity(entity{ target }, recurse);
+    }
+
+    bool Registry::checkEntity(entity target)
+    {
+        return m_entities.count(target);
+    }
+
+    bool Registry::checkEntity(id_type target)
+    {
+        return m_entities.count(entity{ target });
     }
 
     L_NODISCARD std::unordered_map<entity, std::unordered_set<id_type>>& Registry::entityCompositions()
@@ -117,10 +129,21 @@ namespace legion::core::ecs
         return getFamily(typeId)->create_component(target, prototype);
     }
 
+    void* Registry::createComponent(id_type typeId, entity target, serialization::component_prototype_base&& prototype)
+    {
+        m_entityComposition.at(target).insert(typeId);
+        return getFamily(typeId)->create_component(target, std::move(prototype));
+    }
+
     void Registry::destroyComponent(id_type typeId, entity target)
     {
         m_entityComposition.at(target).erase(typeId);
         getFamily(typeId)->destroy_component(target);
+    }
+
+    bool Registry::hasComponent(id_type typeId, entity target)
+    {
+        return getFamily(typeId)->contains(target);
     }
 
     void* Registry::getComponent(id_type typeId, entity target)

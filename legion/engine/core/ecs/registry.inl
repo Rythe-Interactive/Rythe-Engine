@@ -30,10 +30,23 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
+    inline component_type& Registry::createComponent(entity target, serialization::component_prototype<component_type>&& prototype)
+    {
+        m_entityComposition.at(target).insert(make_hash<component_type>());
+        return component_pool<component_type>::create_component_direct(target, std::move(prototype));
+    }
+
+    template<typename component_type>
     inline void Registry::destroyComponent(entity target)
     {
         m_entityComposition.at(target).erase(make_hash<component_type>());
         component_pool<component_type>::destroy_component_direct(target);
+    }
+
+    template<typename component_type>
+    inline bool Registry::hasComponent(entity target)
+    {
+        return component_pool<component_type>::contains_direct(target);
     }
 
     template<typename component_type>

@@ -63,6 +63,13 @@
 
 #define STRINGIFY_SEPERATE(args...) CONCAT_DEFINE(L_NAME_, NARGS(args))(args)
 
+#define RULE_OF_5(type)\
+type() = default;\
+type(const type&) = default;\
+type(type&&) = default;\
+type& operator=(const type&) = default;\
+type& operator=(type&&) = default;
+
 /**@def LEGION_CPP17V
  * @brief the version number of c++17 as long
  */

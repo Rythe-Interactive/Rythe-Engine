@@ -4,6 +4,16 @@
 
 namespace legion::core::ecs
 {
+    bool entity::operator ==(std::nullptr_t) const
+    {
+        return !Registry::checkEntity(*this);
+    }
+
+    bool entity::operator!=(std::nullptr_t) const
+    {
+        return Registry::checkEntity(*this);
+    }
+
     entity::operator const id_type& () const noexcept
     {
         return id;
@@ -14,7 +24,7 @@ namespace legion::core::ecs
         return id;
     }
 
-    void entity::set_parent(id_type parent) const
+    void entity::set_parent(id_type parent)
     {
         auto& hierarchy = Registry::entityHierarchy(id);
         if (hierarchy.parent)
@@ -26,7 +36,7 @@ namespace legion::core::ecs
         hierarchy.parent = entity{ parent };
     }
 
-    void entity::set_parent(entity parent) const
+    void entity::set_parent(entity parent)
     {
         auto& hierarchy = Registry::entityHierarchy(id);
         if (hierarchy.parent)
@@ -38,24 +48,34 @@ namespace legion::core::ecs
         hierarchy.parent = parent;
     }
 
-    void entity::add_child(id_type child) const
+    entity entity::get_parent() const
+    {
+        return Registry::entityHierarchy(id).parent;
+    }
+
+    void entity::add_child(id_type child)
     {
         add_child(entity{ child });
     }
 
-    void entity::add_child(entity child) const
+    void entity::add_child(entity child)
     {
         child.set_parent(id);
     }
 
-    void entity::remove_child(id_type child) const
+    void entity::remove_child(id_type child)
     {
         remove_child(entity{ child });
     }
 
-    void entity::remove_child(entity child) const
+    void entity::remove_child(entity child)
     {
         child.set_parent(world_entity_id);
+    }
+
+    void entity::destroy(bool recurse)
+    {
+        Registry::destroyEntity(id, recurse);
     }
 
 }

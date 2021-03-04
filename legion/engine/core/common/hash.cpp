@@ -2,17 +2,6 @@
 
 namespace legion::core
 {
-    constexpr hash::operator id_type() const noexcept
-    {
-        return value;
-    }
-
-    constexpr id_type combine_hash(id_type seed, id_type value)
-    {
-        value += 0x9e3779b9 + (seed << 6) + (seed >> 2);
-        return seed ^ value;
-    }
-
     id_type local_cast(id_type global)
     {
         return detail::global_to_local.at(global);
@@ -28,10 +17,6 @@ namespace legion::core
         return detail::hash_to_reference.at(hash);
     }
 
-    constexpr name_hash::name_hash() noexcept {}
-
-    constexpr name_hash::name_hash(id_type value) noexcept { this->value = value; }
-
     name_hash::name_hash(const name_hash& src) noexcept { this->value = value; }
 
     name_hash::name_hash(name_hash&& src) noexcept { this->value = value; }
@@ -46,16 +31,6 @@ namespace legion::core
     {
         value = src.value;
         return *this;
-    }
-
-    constexpr id_type type_hash_base::local() const noexcept
-    {
-        return value;
-    }
-
-    constexpr std::string_view type_hash_base::local_name() const noexcept
-    {
-        return name;
     }
 
     type_reference::type_reference(std::nullptr_t)
@@ -108,10 +83,5 @@ namespace legion::core
     type_reference::operator id_type() const
     {
         return value->value;
-    }
-
-    constexpr name_hash literals::operator""_hs(cstring src)
-    {
-        return name_hash{ nameHash(src) };
     }
 }

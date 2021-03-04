@@ -34,29 +34,45 @@ namespace legion::core
         public:
             id_type id = invalid_id;
 
+            bool operator ==(std::nullptr_t) const;
+            bool operator !=(std::nullptr_t) const;
+
             operator const id_type& () const noexcept;
             operator id_type& () noexcept;
 
-            void set_parent(id_type parent) const;
-            void set_parent(entity parent) const;
+            void set_parent(id_type parent);
+            void set_parent(entity parent);
 
-            void add_child(id_type child) const;
-            void add_child(entity child) const;
+            entity get_parent() const;
 
-            void remove_child(id_type child) const;
-            void remove_child(entity child) const;
+            void add_child(id_type child);
+            void add_child(entity child);
 
-            template<typename component_type>
-            bool add_component();
+            void remove_child(id_type child);
+            void remove_child(entity child);
 
-            template<typename component_type>
-            bool add_component(const serialization::component_prototype<component_type>& prot);
+            void destroy(bool recurse = true);
 
             template<typename component_type>
-            bool add_component(serialization::component_prototype<component_type>&& prot);
+            component<component_type> add_component();
 
             template<typename component_type>
-            bool has_component();
+            component<component_type> add_component(const serialization::component_prototype<component_type>& prot);
+
+            template<typename component_type>
+            component<component_type> add_component(serialization::component_prototype<component_type>&& prot);
+
+            template<typename component_type>
+            bool has_component() const;
+
+            template<typename component_type>
+            component<component_type> get_component();
+
+            template<typename component_type>
+            const component<component_type> get_component() const;
+
+            template<typename component_type>
+            void remove_component();
         };
     }
 }

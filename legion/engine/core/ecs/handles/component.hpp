@@ -20,13 +20,18 @@ namespace legion::core::ecs
 
         entity owner;
 
+        component(const entity& src) : owner(src){}
+        component(entity&& src) : owner(src){}
+
+        RULE_OF_5(component)
+
         L_NODISCARD operator component_type& ();
         L_NODISCARD operator const component_type& () const;
 
         L_NODISCARD operator bool() const noexcept;
 
-        L_NODISCARD component_type& operator->();
-        L_NODISCARD const component_type& operator->() const;
+        L_NODISCARD component_type* operator->();
+        L_NODISCARD const component_type* operator->() const;
 
         bool operator==(const component& other) const noexcept;
 

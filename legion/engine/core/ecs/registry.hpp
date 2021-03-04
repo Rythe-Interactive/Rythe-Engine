@@ -11,11 +11,14 @@
 
 #include <core/ecs/containers/component_pool.hpp>
 #include <core/ecs/handles/entity.hpp>
+#include <core/ecs/handles/component.hpp>
 #include <core/ecs/data/hierarchy.hpp>
 #include <core/ecs/prototypes/entity_prototype.hpp>
 
 namespace legion::core::ecs
 {
+    static constexpr entity world = { world_entity_id };
+
     class Registry
     {
         template<typename component_type>
@@ -25,6 +28,7 @@ namespace legion::core::ecs
         static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
         static std::unordered_map<entity, std::unordered_set<id_type>> m_entityComposition;
         static std::unordered_map<entity, entity_hierarchy> m_entityHierarchy;
+        static std::unordered_set<entity> m_entities;
         static std::queue<entity> m_recyclableEntities;
 
         template<typename component_type, typename... Args>
@@ -45,6 +49,9 @@ namespace legion::core::ecs
         static void destroyEntity(entity target, bool recurse = true);
         static void destroyEntity(id_type target, bool recurse = true);
 
+        static bool checkEntity(entity target);
+        static bool checkEntity(id_type target);
+
         L_NODISCARD static std::unordered_map<entity, std::unordered_set<id_type>>& entityCompositions();
 
         L_NODISCARD static std::unordered_set<id_type>& entityComposition(entity target);
@@ -57,14 +64,22 @@ namespace legion::core::ecs
         static component_type& createComponent(entity target);
         template<typename component_type>
         static component_type& createComponent(entity target, const serialization::component_prototype<component_type>& prototype);
+        template<typename component_type>
+        static component_type& createComponent(entity target, serialization::component_prototype<component_type>&& prototype);
 
         static void* createComponent(id_type typeId, entity target);
         static void* createComponent(id_type typeId, entity target, const serialization::component_prototype_base& prototype);
+        static void* createComponent(id_type typeId, entity target, serialization::component_prototype_base&& prototype);
 
         template<typename component_type>
         static void destroyComponent(entity target);
 
         static void destroyComponent(id_type typeId, entity target);
+
+        template<typename component_type>
+        static bool hasComponent(entity target);
+
+        static bool hasComponent(id_type typeId, entity target);
 
         template<typename component_type>
         static component_type& getComponent(entity target);
@@ -76,3 +91,5 @@ namespace legion::core::ecs
 #include <core/ecs/registry.inl>
 #include <core/ecs/containers/component_pool.inl>
 #include <core/ecs/filters/filterregistry.inl>
+#include <core/ecs/handles/entity.inl>
+#include <core/ecs/handles/component.inl>

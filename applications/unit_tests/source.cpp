@@ -10,6 +10,7 @@
 
 #include "doctest.h"
 #include "tests/core/filesystem.hpp"
+#include "tests/core/ecs.h"
 
 using namespace legion;
 
@@ -31,13 +32,6 @@ public:
         }
     };
 };
-
-TEST_CASE("[core:ut] sanity-check")
-{
-    std::cout << "[core:ut] sanity-check\n";
-    CHECK_EQ(true,true);
-}
-
 
 void LEGION_CCONV reportModules(Engine* engine)
 {

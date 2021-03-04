@@ -101,9 +101,9 @@ std::ostream& operator<<(std::ostream& lhs, filesystem::basic_resource rhs)
 }
 }
 
-TEST_CASE("[fs] testing the filesystem")
+TEST_CASE("[core:fs] testing the filesystem")
 {
-    std::cout << "[fs] testing the filesystem\n";
+    std::cout << "[core:fs] testing the filesystem\n";
 
     //setup testing environment
     std::string x = "always has been!";
