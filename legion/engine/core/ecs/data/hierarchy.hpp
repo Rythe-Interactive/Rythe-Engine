@@ -8,6 +8,6 @@ namespace legion::core::ecs
     struct entity_hierarchy
     {
         entity parent = { invalid_id };
-        hashed_sparse_set<entity> children;
+        entity_set children;
     };
 }

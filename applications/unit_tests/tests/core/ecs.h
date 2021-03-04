@@ -70,6 +70,18 @@ TEST_CASE("[core:ecs] testing the ECS")
     {
         auto parent = ecs::Registry::createEntity();
         CHECK(parent.get_parent() == ecs::world);
+        CHECK(parent.children().size() == 0);
+        for (auto& chld : parent)
+            CHECK(false);
+
+        auto child = ecs::Registry::createEntity(parent);
+        CHECK(child.get_parent() == parent);
+        CHECK(parent.children().size() == 1);
+        size_type chldCount = 0;
+        for (auto& chld : parent)
+            chldCount++;
+        CHECK(chldCount == 1);
+
     }
 #pragma endregion
 

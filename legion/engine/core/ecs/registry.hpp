@@ -17,8 +17,6 @@
 
 namespace legion::core::ecs
 {
-    static constexpr entity world = { world_entity_id };
-
     class Registry
     {
         template<typename component_type>

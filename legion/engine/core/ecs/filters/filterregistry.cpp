@@ -1,4 +1,5 @@
 #include <core/ecs/filters/filterregistry.hpp>
+#include <core/ecs/handles/entity.hpp>
 
 namespace legion::core::ecs
 {
