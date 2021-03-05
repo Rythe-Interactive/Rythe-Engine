@@ -8,21 +8,21 @@ namespace legion::core::ecs
     inline component<component_type> entity::add_component()
     {
         Registry::createComponent<component_type>(*this);
-        return component<component_type>{*this};
+        return { {}, entity{id} };
     }
 
     template<typename component_type>
     inline component<component_type> entity::add_component(const serialization::component_prototype<component_type>& prot)
     {
         Registry::createComponent<component_type>(*this, prot);
-        return component<component_type>{*this};
+        return { {}, entity{id} };
     }
 
     template<typename component_type>
     inline component<component_type> entity::add_component(serialization::component_prototype<component_type>&& prot)
     {
         Registry::createComponent<component_type>(*this, std::move(prot));
-        return component<component_type>{*this};
+        return { {}, entity{id} };
     }
 
     template<typename component_type>
@@ -34,13 +34,13 @@ namespace legion::core::ecs
     template<typename component_type>
     inline component<component_type> entity::get_component()
     {
-        return component<component_type>{*this};
+        return { {}, entity{id} };
     }
-    
+
     template<typename component_type>
     inline const component<component_type> entity::get_component() const
     {
-        return component<component_type>{*this};
+        return { {}, entity{id} };
     }
 
     template<typename component_type>

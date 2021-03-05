@@ -49,7 +49,7 @@ namespace legion::core::ecs
     struct entity
     {
     public:
-        id_type id = invalid_id;
+        id_type id;
 
         bool operator ==(std::nullptr_t) const;
         bool operator !=(std::nullptr_t) const;

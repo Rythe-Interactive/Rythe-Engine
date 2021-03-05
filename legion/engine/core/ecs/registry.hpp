@@ -25,8 +25,7 @@ namespace legion::core::ecs
     private:
         static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
         static std::unordered_map<entity, std::unordered_set<id_type>> m_entityComposition;
-        static std::unordered_map<entity, entity_hierarchy> m_entityHierarchy;
-        static std::unordered_set<entity> m_entities;
+        static std::unordered_map<entity, entity_data> m_entities;
         static std::queue<entity> m_recyclableEntities;
 
         template<typename component_type, typename... Args>

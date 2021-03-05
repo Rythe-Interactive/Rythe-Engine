@@ -10,4 +10,14 @@ namespace legion::core::ecs
         entity parent = { invalid_id };
         entity_set children;
     };
+
+    struct entity_data
+    {
+        // entity state bitfield.
+        bool alive : 1; // bool only needs 1 bit.
+        bool active : 1;
+
+        entity parent = { invalid_id };
+        entity_set children;
+    };
 }

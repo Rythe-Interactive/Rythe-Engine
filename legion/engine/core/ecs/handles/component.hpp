@@ -9,21 +9,14 @@ namespace legion::core::ecs
 {
     struct component_base
     {
-        L_NODISCARD virtual type_reference type_id() const noexcept LEGION_PURE;
     };
 
     template<typename component_type>
     struct component : public component_base
     {
         static constexpr type_hash<component_type> typeId = make_hash<component_type>();
-        L_NODISCARD virtual type_reference type_id() const noexcept { return typeId; };
 
         entity owner;
-
-        component(const entity& src) : owner(src){}
-        component(entity&& src) : owner(src){}
-
-        RULE_OF_5(component)
 
         L_NODISCARD operator component_type& ();
         L_NODISCARD operator const component_type& () const;
