@@ -519,7 +519,7 @@ namespace legion::physics
         float eyePointDistance =
             PhysicsStatics::PointDistanceToPlane(planeNormal, planePosition, *firstEyePoint);
         bool needInverse = eyePointDistance > 0.0f;
-
+        log::debug("planeNormal {0} ", math::to_string(planeNormal));
 
         if (needInverse)
         {
@@ -549,18 +549,33 @@ namespace legion::physics
         initialFace->forEachEdgeReverse(collectEdges);
 
         //(5.2) For each edge create a new face that connects the initial face with the eyePoint
-    
+        math::vec3 eyePoint = *firstEyePoint;
+
+        for (auto edge : reverseHalfEdgeList)
+        {
             //initialize pairing its position is on next
+            HalfEdgeEdge* pairing = new HalfEdgeEdge(edge->nextEdge->edgePosition);
+
             //initialize next pairing its position is on current
+            HalfEdgeEdge* nextPairing = new HalfEdgeEdge(edge->edgePosition);
+
             //initialize prev pairing its position is on the eye point
+            HalfEdgeEdge* prevPairing = new HalfEdgeEdge(eyePoint);
 
             //connect to each other
+            pairing->setNextAndPrevEdge(prevPairing, nextPairing);
+            nextPairing->setNextAndPrevEdge(pairing, prevPairing);
+            prevPairing->setNextAndPrevEdge(nextPairing, pairing);
 
             //initialize new face
+            math::vec3 faceNormal = math::normalize(math::cross(nextPairing->edgePosition - pairing->edgePosition,
+                prevPairing->edgePosition - pairing->edgePosition));
+
+            HalfEdgeFace* face = new HalfEdgeFace(pairing, faceNormal);
 
             //push new face into list 
-
-
+            collider->GetHalfEdgeFaces().push_back(face);
+        }
 
         return true;
     }
