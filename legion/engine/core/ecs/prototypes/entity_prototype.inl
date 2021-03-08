@@ -9,7 +9,7 @@ namespace legion::core::serialization
             composition.emplace(typeId, compPrototype->copy());
     }
 
-    inline entity_prototype& prototype<ecs::entity>::operator=(const entity_prototype& src)
+    inline prototype<ecs::entity>& prototype<ecs::entity>::operator=(const prototype& src)
     {
         children = src.children;
 

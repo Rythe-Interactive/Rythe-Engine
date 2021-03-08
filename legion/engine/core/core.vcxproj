@@ -166,7 +166,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\containers\component_pool.hpp" />
-    <ClInclude Include="ecs\data\hierarchy.hpp" />
+    <ClInclude Include="ecs\data\entity_data.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
     <ClInclude Include="ecs\filters\filter_info.hpp" />
     <ClInclude Include="ecs\handles\filter.hpp" />

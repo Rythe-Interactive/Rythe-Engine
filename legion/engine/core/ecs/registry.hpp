@@ -12,7 +12,7 @@
 #include <core/ecs/containers/component_pool.hpp>
 #include <core/ecs/handles/entity.hpp>
 #include <core/ecs/handles/component.hpp>
-#include <core/ecs/data/hierarchy.hpp>
+#include <core/ecs/data/entity_data.hpp>
 #include <core/ecs/prototypes/entity_prototype.hpp>
 
 namespace legion::core::ecs

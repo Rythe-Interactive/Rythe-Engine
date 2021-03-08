@@ -4,7 +4,7 @@
 
 #include <core/serialization/prototype.hpp>
 
-#include <core/ecs/data/hierarchy.hpp>
+#include <core/ecs/data/entity_data.hpp>
 #include <core/ecs/prototypes/component_prototype.hpp>
 
 namespace legion::core::serialization
