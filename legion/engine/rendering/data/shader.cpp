@@ -1,4 +1,4 @@
-﻿#include <rendering/data/shader.hpp>
+#include <rendering/data/shader.hpp>
 #include <rendering/util/bindings.hpp>
 #include <algorithm>
 #include <rendering/shadercompiler/shadercompiler.hpp>

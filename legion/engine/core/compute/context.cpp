@@ -1,4 +1,4 @@
-﻿#include <core/compute/context.hpp>
+#include <core/compute/context.hpp>
 #include <core/logging/logging.hpp>
 
 #include <string>
