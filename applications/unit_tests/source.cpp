@@ -10,7 +10,7 @@
 
 #include "doctest.h"
 #include "tests/core/filesystem.hpp"
-#include "tests/core/ecs.h"
+#include "tests/core/ecs.hpp"
 
 using namespace legion;
 
@@ -38,7 +38,7 @@ void LEGION_CCONV reportModules(Engine* engine)
     doctest::Context ctx;
     ctx.applyCommandLine(engine->getCliArgs().size(),engine->getCliArgs().data());
 
-    const int res = ctx.run();
+    [[maybe_unused]] const int res = ctx.run();
 
     if(ctx.shouldExit())
         engine->reportModule<Exitus>();

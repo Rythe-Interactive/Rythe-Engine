@@ -6,116 +6,128 @@ namespace legion::core::ecs
 {
     bool entity::operator ==(std::nullptr_t) const
     {
-        return !Registry::checkEntity(*this);
+        return !(data && data->alive);
     }
 
     bool entity::operator!=(std::nullptr_t) const
     {
-        return Registry::checkEntity(*this);
+        return data && data->alive;
     }
 
     entity::operator const id_type& () const noexcept
     {
-        return id;
+        return (data && data->alive) ? data->id : invalid_id;
     }
 
     entity::operator id_type& () noexcept
     {
-        return id;
+        return (data && data->alive) ? data->id : dummy_id;
+    }
+
+    entity_data* entity::operator->() noexcept
+    {
+        return data;
+    }
+
+    const entity_data* entity::operator->() const noexcept
+    {
+        return data;
     }
 
     void entity::set_parent(id_type parent)
     {
-        auto& hierarchy = Registry::entityHierarchy(id);
-        if (hierarchy.parent)
-            Registry::entityHierarchy(hierarchy.parent).children.erase(*this);
+        if (data->parent)
+            data->parent->children.erase(*this);
 
         if (parent)
-            Registry::entityHierarchy(parent).children.insert(*this);
+        {
+            Registry::entityData(parent).children.insert(*this);
 
-        hierarchy.parent = entity{ parent };
+            data->parent = entity{ &Registry::entityData(parent) };
+        }
+        else
+            data->parent = entity{ nullptr };
     }
 
     void entity::set_parent(entity parent)
     {
-        auto& hierarchy = Registry::entityHierarchy(id);
-        if (hierarchy.parent)
-            Registry::entityHierarchy(hierarchy.parent).children.erase(*this);
+        if (data->parent)
+            data->parent->children.erase(*this);
 
         if (parent)
-            Registry::entityHierarchy(parent).children.insert(*this);
+            parent->children.insert(*this);
 
-        hierarchy.parent = parent;
+        data->parent = parent;
     }
 
     entity entity::get_parent() const
     {
-        return Registry::entityHierarchy(id).parent;
+        return data->parent;
     }
 
     void entity::add_child(id_type child)
     {
-        add_child(entity{ child });
+        add_child(entity{ &Registry::entityData(child) });
     }
 
     void entity::add_child(entity child)
     {
-        child.set_parent(id);
+        child.set_parent(*this);
     }
 
     void entity::remove_child(id_type child)
     {
-        remove_child(entity{ child });
+        remove_child(entity{ &Registry::entityData(child) });
     }
 
     void entity::remove_child(entity child)
     {
-        child.set_parent(world_entity_id);
+        child.set_parent(world);
     }
 
     entity_set& entity::children()
     {
-        return Registry::entityHierarchy(id).children;
+        return data->children;
     }
 
     const entity_set& entity::children() const
     {
-        return Registry::entityHierarchy(id).children;
+        return data->children;
     }
 
     entity_set::iterator entity::begin()
     {
-        return Registry::entityHierarchy(id).children.begin();
+        return data->children.begin();
     }
 
     entity_set::const_iterator entity::begin() const
     {
-        return Registry::entityHierarchy(id).children.cbegin();
+        return data->children.cbegin();
     }
 
     entity_set::const_iterator entity::cbegin() const
     {
-        return Registry::entityHierarchy(id).children.cbegin();
+        return data->children.cbegin();
     }
 
     entity_set::iterator entity::end()
     {
-        return Registry::entityHierarchy(id).children.end();
+        return data->children.end();
     }
 
     entity_set::const_iterator entity::end() const
     {
-        return Registry::entityHierarchy(id).children.cend();
+        return data->children.cend();
     }
 
     entity_set::const_iterator entity::cend() const
     {
-        return Registry::entityHierarchy(id).children.cend();
+        return data->children.cend();
     }
 
     void entity::destroy(bool recurse)
     {
-        Registry::destroyEntity(id, recurse);
+        Registry::destroyEntity(*this, recurse);
     }
 
 }

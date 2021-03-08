@@ -24,22 +24,23 @@ namespace legion::core::ecs
 
     private:
         static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
-        static std::unordered_map<entity, std::unordered_set<id_type>> m_entityComposition;
-        static std::unordered_map<entity, entity_data> m_entities;
+        static std::unordered_map<id_type, std::unordered_set<id_type>> m_entityComposition;
+        static std::unordered_map<id_type, entity_data> m_entities;
         static std::queue<entity> m_recyclableEntities;
 
         template<typename component_type, typename... Args>
         L_NODISCARD static component_pool<component_type>* tryEmplaceFamily(Args&&... args);
 
     public:
-        static constexpr entity world = { world_entity_id };
+        L_NODISCARD static entity getWorld();
 
         template<typename component_type>
         L_NODISCARD static component_pool<component_type>* getFamily();
 
         L_NODISCARD static component_pool_base* getFamily(id_type typeId);
 
-        static entity createEntity(entity parent = world);
+        static entity createEntity();
+        static entity createEntity(entity parent);
         static entity createEntity(entity parent, const serialization::entity_prototype& prototype);
         static entity createEntity(const serialization::entity_prototype& prototype);
 
@@ -49,13 +50,12 @@ namespace legion::core::ecs
         static bool checkEntity(entity target);
         static bool checkEntity(id_type target);
 
-        L_NODISCARD static std::unordered_map<entity, std::unordered_set<id_type>>& entityCompositions();
+        L_NODISCARD static std::unordered_map<id_type, std::unordered_set<id_type>>& entityCompositions();
 
         L_NODISCARD static std::unordered_set<id_type>& entityComposition(entity target);
         L_NODISCARD static std::unordered_set<id_type>& entityComposition(id_type target);
 
-        L_NODISCARD static entity_hierarchy& entityHierarchy(entity target);
-        L_NODISCARD static entity_hierarchy& entityHierarchy(id_type target);
+        L_NODISCARD static entity_data& entityData(id_type target);
 
         template<typename component_type>
         static component_type& createComponent(entity target);
@@ -83,6 +83,8 @@ namespace legion::core::ecs
 
         static void* getComponent(id_type typeId, entity target);
     };
+
+    extern const entity world;
 }
 
 #include <core/ecs/registry.inl>

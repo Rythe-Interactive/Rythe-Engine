@@ -42,20 +42,26 @@ namespace legion::core::ecs
     using entity_set = hashed_sparse_set<entity>;
 
     static constexpr id_type world_entity_id = 1;
+    struct entity_data;
 
     /**@struct entity
      * @brief Handle to an entity.
      */
     struct entity
     {
+    private:
+        static inline id_type dummy_id = invalid_id;
     public:
-        id_type id;
+        entity_data* data;
 
         bool operator ==(std::nullptr_t) const;
         bool operator !=(std::nullptr_t) const;
 
         operator const id_type& () const noexcept;
         operator id_type& () noexcept;
+
+        entity_data* operator->() noexcept;
+        const entity_data* operator->() const noexcept;
 
         void set_parent(id_type parent);
         void set_parent(entity parent);
@@ -102,17 +108,4 @@ namespace legion::core::ecs
         template<typename component_type>
         void remove_component();
     };
-
-    static constexpr entity world = entity{ world_entity_id };
 }
-
-
-#if !defined(DOXY_EXCLUDE)
-namespace std
-{
-    constexpr size_t hash<legion::core::ecs::entity>::operator()(legion::core::ecs::entity const& handle) const noexcept
-    {
-        return handle.id;
-    }
-}
-#endif

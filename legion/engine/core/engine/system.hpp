@@ -11,9 +11,6 @@ namespace legion::core
     class SystemBase
     {
         friend class Engine;
-    protected:
-        static constexpr ecs::entity world{ ecs::world_entity_id };
-
     public:
         const id_type id;
         const std::string name;
