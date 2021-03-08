@@ -4,19 +4,9 @@
 
 namespace legion::core::ecs
 {
-    bool entity::operator ==(std::nullptr_t) const
-    {
-        return !(data && data->alive);
-    }
-
-    bool entity::operator!=(std::nullptr_t) const
-    {
-        return data && data->alive;
-    }
-
     entity::operator const id_type& () const noexcept
     {
-        return (data && data->alive) ? data->id : invalid_id;
+        return (data && data->alive) ? data->id : dummy_id;
     }
 
     entity::operator id_type& () noexcept

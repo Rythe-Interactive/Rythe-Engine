@@ -11,7 +11,6 @@ namespace legion::core::ecs
         for (auto& filter : m_filters)
             if (filter->contains(make_hash<component_type>()) && filter->contains(composition))
                 m_entityLists.at(filter->id).insert(target);
-
     }
 
     template<typename component_type>

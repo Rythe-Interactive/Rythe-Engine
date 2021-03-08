@@ -54,8 +54,10 @@ namespace legion::core::ecs
     public:
         entity_data* data;
 
-        bool operator ==(std::nullptr_t) const;
-        bool operator !=(std::nullptr_t) const;
+        template<typename T>
+        bool operator ==(T val) const;
+        template<typename T>
+        bool operator !=(T val) const;
 
         operator const id_type& () const noexcept;
         operator id_type& () noexcept;

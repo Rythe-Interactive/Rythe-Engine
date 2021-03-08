@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "doctest.h"
+#include "unit_test.hpp"
 
 inline namespace {
 
@@ -101,9 +101,9 @@ std::ostream& operator<<(std::ostream& lhs, filesystem::basic_resource rhs)
 }
 }
 
-TEST_CASE("[core:fs] testing the filesystem")
+void TestFS()
 {
-    std::cout << "[core:fs] testing the filesystem\n";
+    using namespace legion;
 
     //setup testing environment
     std::string x = "always has been!";
@@ -120,23 +120,27 @@ TEST_CASE("[core:fs] testing the filesystem")
     bool nested_contents_valid = nested_contents == common::valid;
 
     //perform tests with mock
-    CHECK(nested_contents_valid);
+    Check(nested_contents_valid);
 
     auto traits = fs::view("only_test_valid://test.txt").file_info();
 
-    CHECK_NE(traits, fs::invalid_file_t);
-   // CHECK(fs::view("only_test_valid://test.txt").get() == common::valid);
+    Check(traits != fs::invalid_file_t);
+    // Check(fs::view("only_test_valid://test.txt").get() == common::valid);
 
-    //perform tests with actual data
+     //perform tests with actual data
     auto contents = fs::view("basic://config/test.txt").get();
 
     bool contents_valid = contents == common::valid;
 
-    CHECK(contents_valid);
+    Check(contents_valid);
 
     auto result = fs::view("basic://config/test2.txt").set(contents);
 
-    CHECK(!result.has_err());
+    Check(!result.has_err());
+}
 
+LEGION_TEST("core::fs")
+{
+    Test(TestFS);
 }
 

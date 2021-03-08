@@ -15,6 +15,10 @@ namespace legion::core::ecs
         template<typename... component_types>
         friend struct filter;
 
+        static void markComponentAdd(id_type componentId, entity target);
+
+        static void markComponentErase(id_type componentId, entity target);
+
         template<typename component_type>
         static void markComponentAdd(entity target);
 
@@ -22,6 +26,8 @@ namespace legion::core::ecs
         static void markComponentErase(entity target);
 
         static void markEntityDestruction(entity target);
+
+        static void markEntityFullCreation(entity target);
 
     private:
         static std::unordered_map<id_type, hashed_sparse_set<entity>> m_entityLists;

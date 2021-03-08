@@ -1,5 +1,5 @@
 #pragma once
-#include "doctest.h"
+#include "unit_test.hpp"
 #include <core/core.hpp>
 
 using namespace legion;
@@ -9,82 +9,87 @@ struct test_comp
     int value;
 };
 
-TEST_CASE("[core:ecs] testing the ECS")
+void TestECS()
 {
-    std::cout << "[core:ecs] testing the ECS\n";
-
 #pragma region basic component and entity behaviour
-        {
-            auto ent = ecs::Registry::createEntity();
+    {
+        auto ent = ecs::Registry::createEntity();
 
-            CHECK(ent);
-            CHECK(ent != invalid_id);
-            CHECK(ent != nullptr);
-            CHECK(!(ent == nullptr));
+        Check(ent);
+        Check(ent != invalid_id);
+        Check(ent != nullptr);
+        Check(!(ent == nullptr));
 
-            CHECK(ent == ent->id);
-            CHECK(!ent.has_component<test_comp>());
+        Check(ent == ent->id);
+        Check(!ent.has_component<test_comp>());
 
-            auto comp = ent.add_component<test_comp>();
-            CHECK(comp);
-            CHECK(ent.has_component<test_comp>());
-            CHECK(comp->value == 0);
-            comp->value++;
-            CHECK(comp->value == 1);
+        auto comp = ent.add_component<test_comp>();
+        Check(comp);
+        Check(ent.has_component<test_comp>());
+        Check(comp->value == 0);
+        comp->value++;
+        Check(comp->value == 1);
 
-            auto comp2 = ent.get_component<test_comp>();
-            CHECK(comp2);
-            CHECK(comp2 == comp);
-            CHECK(comp2->value == 1);
-            comp2->value++;
-            CHECK(comp->value == 2);
+        auto comp2 = ent.get_component<test_comp>();
+        Check(comp2);
+        Check(comp2 == comp);
+        Check(comp2->value == 1);
+        comp2->value++;
+        Check(comp->value == 2);
 
-            ent.remove_component<test_comp>();
-            CHECK(!comp);
-            CHECK(!comp2);
-            CHECK(!ent.has_component<test_comp>());
+        ent.remove_component<test_comp>();
+        Check(!comp);
+        Check(!comp2);
+        Check(!ent.has_component<test_comp>());
 
-            ent.add_component<test_comp>();
-            CHECK(comp);
-            CHECK(comp2);
+        ent.add_component<test_comp>();
+        Check(comp);
+        Check(comp2);
 
-            auto& val = comp.get();
-            CHECK(val.value == 0);
-            val.value++;
-            CHECK(comp->value == 1);
+        auto& val = comp.get();
+        Check(val.value == 0);
+        val.value++;
+        Check(comp->value == 1);
 
-            comp.destroy();
-            CHECK(!comp);
-            CHECK(!ent.has_component<test_comp>());
+        comp.destroy();
+        Check(!comp);
+        Check(!ent.has_component<test_comp>());
 
-            ent.destroy();
-            CHECK(!ent);
-            CHECK(ent == invalid_id);
-            CHECK(ent == nullptr);
-            CHECK(!(ent != nullptr));
+        ent.destroy();
+        Check(!ent);
+        Check(ent == invalid_id);
+        Check(ent == nullptr);
+        Check(!(ent != nullptr));
 
-            auto ent2 = ecs::Registry::createEntity();
-            CHECK(ent2 == ent);
-            CHECK(!ent.has_component<test_comp>());
-        }
+        auto ent2 = ecs::Registry::createEntity();
+        Check(ent2 == ent);
+        Check(!ent.has_component<test_comp>());
+    }
 #pragma endregion
 
 #pragma region Hierarchy
-        {
-            auto parent = ecs::Registry::createEntity();
-            CHECK(parent.get_parent() == ecs::world);
-            CHECK(parent.children().size() == 0);
-            for ([[maybe_unused]] auto& chld : parent)
-                CHECK(false);
+    {
+        auto parent = ecs::Registry::createEntity();
+        Check(parent.get_parent() == ecs::world);
+        Check(parent.children().size() == 0);
+        for ([[maybe_unused]] auto& chld : parent)
+            Check(false);
 
-            auto child = ecs::Registry::createEntity(parent);
-            CHECK(child.get_parent() == parent);
-            CHECK(parent.children().size() == 1);
-            size_type chldCount = 0;
-            for ([[maybe_unused]] auto& chld : parent)
-                chldCount++;
-            CHECK(chldCount == 1);
-
-        }
+        auto child = ecs::Registry::createEntity(parent);
+        Check(child.get_parent() == parent);
+        Check(parent.children().size() == 1);
+        size_type chldCount = 0;
+        for ([[maybe_unused]] auto& chld : parent)
+            chldCount++;
+        Check(chldCount == 1);
+    }
 #pragma endregion
+}
+
+LEGION_TEST("core::ecs")
+{
+    Test(TestECS);
+
+    Benchmark_N(100000, TestECS);
+    Benchmark(TestECS);
 }

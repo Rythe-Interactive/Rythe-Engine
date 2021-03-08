@@ -19,6 +19,7 @@ namespace legion::core::ecs
     inline component_type& Registry::createComponent(entity target)
     {
         m_entityComposition.at(target).insert(make_hash<component_type>());
+        FilterRegistry::markComponentAdd<component_type>(target);
         return component_pool<component_type>::create_component_direct(target);
     }
 
@@ -26,6 +27,7 @@ namespace legion::core::ecs
     inline component_type& Registry::createComponent(entity target, const serialization::component_prototype<component_type>& prototype)
     {
         m_entityComposition.at(target).insert(make_hash<component_type>());
+        FilterRegistry::markComponentAdd<component_type>(target);
         return component_pool<component_type>::create_component_direct(target, prototype);
     }
 
@@ -33,6 +35,7 @@ namespace legion::core::ecs
     inline component_type& Registry::createComponent(entity target, serialization::component_prototype<component_type>&& prototype)
     {
         m_entityComposition.at(target).insert(make_hash<component_type>());
+        FilterRegistry::markComponentAdd<component_type>(target);
         return component_pool<component_type>::create_component_direct(target, std::move(prototype));
     }
 
@@ -40,6 +43,7 @@ namespace legion::core::ecs
     inline void Registry::destroyComponent(entity target)
     {
         m_entityComposition.at(target).erase(make_hash<component_type>());
+        FilterRegistry::markComponentErase<component_type>(entity{ &Registry::entityData(target) });
         component_pool<component_type>::destroy_component_direct(target);
     }
 

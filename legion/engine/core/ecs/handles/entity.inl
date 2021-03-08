@@ -5,6 +5,54 @@
 
 namespace legion::core::ecs
 {
+    template<>
+    inline bool entity::operator==<std::nullptr_t>(std::nullptr_t) const
+    {
+        return !(data && data->alive);
+    }
+
+    template<>
+    inline bool entity::operator!=<std::nullptr_t>(std::nullptr_t) const
+    {
+        return data && data->alive;
+    }
+
+    template<>
+    inline bool entity::operator==<id_type>(id_type id) const
+    {
+        return data && data->alive ? data->id == id : id == invalid_id;
+    }
+
+    template<>
+    inline bool entity::operator!=<id_type>(id_type id) const
+    {
+        return data && data->alive && (data->id != id || id == invalid_id);
+    }
+
+    template<>
+    inline bool entity::operator==<entity>(entity other) const
+    {
+        return data && data->alive && other.data && data->id == other->id;
+    }
+
+    template<>
+    inline bool entity::operator!=<entity>(entity other) const
+    {
+        return data && data->alive && other.data && data->id != other->id;
+    }
+
+    template<typename T>
+    inline bool entity::operator==(T val) const
+    {
+        return data && data->alive ? data->id == val : val == invalid_id;
+    }
+
+    template<typename T>
+    inline bool entity::operator!=(T val) const
+    {
+        return data && data->alive && (data->id != val || val == invalid_id);
+    }
+
     template<typename component_type>
     inline component<component_type> entity::add_component()
     {

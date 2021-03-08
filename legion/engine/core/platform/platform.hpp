@@ -112,16 +112,6 @@ type& operator=(type&&) = default;
     #define __FUNC__ __func__ 
 #endif
 
-#ifndef __FULL_FUNC__
-    #if defined(LEGION_WINDOWS)
-        #define __FULL_FUNC__ __FUNCSIG__
-    #elif defined(__linux__)
-        #define __FULL_FUNC__ __PRETTY_FUNCTION__
-    #else
-        #define __FULL_FUNC__ __func__
-    #endif
-#endif
-
 #if defined(__clang__)
     // clang
 #define LEGION_CLANG
@@ -143,6 +133,16 @@ type& operator=(type&&) = default;
 #define L_PAUSE_INSTRUCTION _mm_pause
 #endif
 
+#ifndef __FULL_FUNC__
+#if defined(LEGION_CLANG) || defined(LEGION_GCC)
+#define __FULL_FUNC__ __PRETTY_FUNCTION__
+#elif defined(LEGION_MSVC)
+#define __FULL_FUNC__ __FUNCSIG__
+#else
+#define __FULL_FUNC__ __func__
+#endif
+#endif
+
 #if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
     /**@def LEGION_CCONV
      * @brief the calling convention exported functions will use in the args engine
@@ -150,6 +150,12 @@ type& operator=(type&&) = default;
     #define LEGION_CCONV __fastcall
 #else
     #define LEGION_CCONV __cdecl
+#endif
+
+#if defined(LEGION_GCC) || defined(LEGION_CLANG)
+#define L_ALWAYS_INLINE __attribute__((always_inline))
+#else
+#define L_ALWAYS_INLINE __forceinline
 #endif
 
 /**@def NO_MANGLING

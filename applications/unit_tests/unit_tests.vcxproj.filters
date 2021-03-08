@@ -32,5 +32,8 @@
     <ClInclude Include="tests\core\ecs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="unit_test.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
