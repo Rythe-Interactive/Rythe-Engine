@@ -15,22 +15,22 @@
 #include "../detail/type_vec1.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_vector_float1_precision extension included")
+#   pragma message("GLM: GLM_EXT_vector_float1_precision extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_vector_float1_precision
-	/// @{
+    /// @addtogroup ext_vector_float1_precision
+    /// @{
 
-	/// 1 component vector of single-precision floating-point numbers using high precision arithmetic in term of ULPs.
-	typedef vec<1, float, highp>		highp_vec1;
+    /// 1 component vector of single-precision floating-point numbers using high precision arithmetic in term of ULPs.
+    typedef vec<1, float, highp>        highp_vec1;
 
-	/// 1 component vector of single-precision floating-point numbers using medium precision arithmetic in term of ULPs.
-	typedef vec<1, float, mediump>		mediump_vec1;
+    /// 1 component vector of single-precision floating-point numbers using medium precision arithmetic in term of ULPs.
+    typedef vec<1, float, mediump>      mediump_vec1;
 
-	/// 1 component vector of single-precision floating-point numbers using low precision arithmetic in term of ULPs.
-	typedef vec<1, float, lowp>			lowp_vec1;
+    /// 1 component vector of single-precision floating-point numbers using low precision arithmetic in term of ULPs.
+    typedef vec<1, float, lowp>         lowp_vec1;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

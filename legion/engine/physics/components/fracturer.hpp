@@ -25,11 +25,11 @@ namespace legion::physics
 
     };
 
-	struct Fracturer
-	{
+    struct Fracturer
+    {
 
 
-		void HandleFracture(physics_manifold& manifold,bool& manifoldValid, bool isfracturingA);
+        void HandleFracture(physics_manifold& manifold,bool& manifoldValid, bool isfracturingA);
 
         bool IsFractureConditionMet();
 
@@ -47,7 +47,7 @@ namespace legion::physics
         std::vector<std::shared_ptr<ConvexCollider>> debugVectorcolliders;
         std::vector<math::mat4> transforms;
         static ecs::EcsRegistry* registry;
-	};
+    };
 
    
 

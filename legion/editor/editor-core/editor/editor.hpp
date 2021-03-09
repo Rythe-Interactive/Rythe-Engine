@@ -8,24 +8,24 @@
 
 namespace legion::editor
 {
-	/**@class Editor
-	 * @brief The editors main object that handles editor modules.
-	 * @ref legion::editor::EditorModule
-	 */
-	class Editor
-	{
+    /**@class Editor
+     * @brief The editors main object that handles editor modules.
+     * @ref legion::editor::EditorModule
+     */
+    class Editor
+    {
     public:
-		/**@brief Reports an editor module
-		 * @tparam ModuleType the module you want to report
-		 * @param args the arguments you want to pass
-		 * @ref legion::editor::EditorModule
-		 */
+        /**@brief Reports an editor module
+         * @tparam ModuleType the module you want to report
+         * @param args the arguments you want to pass
+         * @ref legion::editor::EditorModule
+         */
         template <class ModuleType, class... Args CNDOXY(inherits_from<ModuleType, EditorModule> = 0)>
-		void reportModule(Args&&...args)
-		{
+        void reportModule(Args&&...args)
+        {
 
-		}
-	};
+        }
+    };
 
     namespace detail
     {

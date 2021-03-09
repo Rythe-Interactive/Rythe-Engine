@@ -7,9 +7,9 @@
 #endif
 namespace legion::audio
 {
-	struct audio_segment
-	{
-	public:
+    struct audio_segment
+    {
+    public:
         ALuint audioBufferId;
 
         /* Channels included, byte size = samples*sizeof(int16) */
@@ -67,7 +67,7 @@ namespace legion::audio
         byte* m_data;
 
         audio_segment* m_next = nullptr;
-	};
+    };
 
     /**
     * @brief Import settings for audio files

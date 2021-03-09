@@ -87,7 +87,7 @@ namespace legion::core
 
         /**@brief Returns the maximum number of items the hashed_sparse_set could at most store without crashing.
          * @note This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits<difference_type>::max().
-         *		 At runtime, the size of the container may be limited to a value smaller than max_size() by the amount of RAM available.
+         *       At runtime, the size of the container may be limited to a value smaller than max_size() by the amount of RAM available.
          * @returns size_type
          */
         L_NODISCARD size_type max_size() const noexcept { return m_dense.max_size(); }

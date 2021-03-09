@@ -90,8 +90,8 @@ namespace legion::physics
 
             //Cdot: J.V
 
-            //where J is a 1x12 matrix [ -n		(-Ra x n)	n	(Rb x n) ] 
-            //and V is a 12x1 matrix  ([ -Va	(-Wa)		Vb  (Wb)	 ])^T
+            //where J is a 1x12 matrix [ -n     (-Ra x n)   n   (Rb x n) ] 
+            //and V is a 12x1 matrix  ([ -Va    (-Wa)       Vb  (Wb)     ])^T
 
             //By changing the form of the constraint we now see that J dictates the rate of change of V 
             //(similar to how the function of a line is y = mx + b)
@@ -108,10 +108,10 @@ namespace legion::physics
             // delta-V :  M^-1 * (J^T) * lambda
 
             //where M is the 12x12 matrix
-            //[ ma	0	0	0]
-            //[ 0	Ia	0	0]
-            //[ 0	0	mb	0]
-            //[ 0	0	0  Ib]
+            //[ ma  0   0   0]
+            //[ 0   Ia  0   0]
+            //[ 0   0   mb  0]
+            //[ 0   0   0  Ib]
 
             //where ma is a 3x3 identity matrix scaled by the mass of the rigidbodyA,
             //mb is a 3x3 identity matrix scaled by the mass of the rigidbodyB,

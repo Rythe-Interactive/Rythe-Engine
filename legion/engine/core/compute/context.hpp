@@ -22,7 +22,7 @@ class Context
 {
 public:
 
-	/**
+    /**
      * @brief Initializes the OpenCL context.
      * @pre initialized
      */

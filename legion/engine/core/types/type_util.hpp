@@ -205,7 +205,7 @@ namespace legion::core
      * @tparam N Length of the string literal
      * @param name Name you wish to hash
      * @note Since this version takes a const char[] it can only really be used with data coming from a string literal.
-     *		 Because it takes in a const char[] this function is able to be constexpr and thus have minimal overhead.
+     *       Because it takes in a const char[] this function is able to be constexpr and thus have minimal overhead.
      */
     template<size_type N>
     constexpr id_type nameHash(const char(&name)[N]) noexcept
@@ -230,7 +230,7 @@ namespace legion::core
      * @tparam N Length of the string literal
      * @param name Name you wish to hash
      * @note Since this version takes a const char[] it can only really be used with data coming from a string literal.
-     *		 Because it takes in a const char[] this function is able to be constexpr and thus have minimal overhead.
+     *       Because it takes in a const char[] this function is able to be constexpr and thus have minimal overhead.
      */
     template<size_type N>
     constexpr id_type nameHash(const std::array<char, N>& name) noexcept

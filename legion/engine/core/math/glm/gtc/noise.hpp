@@ -28,34 +28,34 @@
 #include "../vec4.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_GTC_noise extension included")
+#   pragma message("GLM: GLM_GTC_noise extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup gtc_noise
-	/// @{
+    /// @addtogroup gtc_noise
+    /// @{
 
-	/// Classic perlin noise.
-	/// @see gtc_noise
-	template<length_t L, typename T, qualifier Q>
-	GLM_FUNC_DECL T perlin(
-		vec<L, T, Q> const& p);
+    /// Classic perlin noise.
+    /// @see gtc_noise
+    template<length_t L, typename T, qualifier Q>
+    GLM_FUNC_DECL T perlin(
+        vec<L, T, Q> const& p);
 
-	/// Periodic perlin noise.
-	/// @see gtc_noise
-	template<length_t L, typename T, qualifier Q>
-	GLM_FUNC_DECL T perlin(
-		vec<L, T, Q> const& p,
-		vec<L, T, Q> const& rep);
+    /// Periodic perlin noise.
+    /// @see gtc_noise
+    template<length_t L, typename T, qualifier Q>
+    GLM_FUNC_DECL T perlin(
+        vec<L, T, Q> const& p,
+        vec<L, T, Q> const& rep);
 
-	/// Simplex noise.
-	/// @see gtc_noise
-	template<length_t L, typename T, qualifier Q>
-	GLM_FUNC_DECL T simplex(
-		vec<L, T, Q> const& p);
+    /// Simplex noise.
+    /// @see gtc_noise
+    template<length_t L, typename T, qualifier Q>
+    GLM_FUNC_DECL T simplex(
+        vec<L, T, Q> const& p);
 
-	/// @}
+    /// @}
 }//namespace legion::core::math
 
 #include "noise.inl"

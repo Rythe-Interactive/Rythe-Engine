@@ -42,7 +42,7 @@ namespace legion::core::events
     template<typename Self>
     struct event : public event_base
     {
-        friend 	class EventBus;
+        friend  class EventBus;
 
         inline static const id_type id = detail::reportEventType<Self>();
 

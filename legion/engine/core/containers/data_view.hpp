@@ -125,7 +125,7 @@ namespace legion::core
         /** @brief gets the value at index idx
          *  @param idx the index to query
          *  @returns the value at idx
-         */	
+         */ 
         value_type& operator[](size_type idx)
         {
             if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");

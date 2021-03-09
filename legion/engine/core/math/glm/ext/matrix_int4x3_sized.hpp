@@ -17,33 +17,33 @@
 #include "../ext/scalar_int_sized.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_matrix_int4x3_sized extension included")
+#   pragma message("GLM: GLM_EXT_matrix_int4x3_sized extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_matrix_int4x3_sized
-	/// @{
+    /// @addtogroup ext_matrix_int4x3_sized
+    /// @{
 
-	/// 8 bit signed integer 4x3 matrix.
-	///
-	/// @see ext_matrix_int4x3_sized
-	typedef mat<4, 3, int8, defaultp>				i8mat4x3;
+    /// 8 bit signed integer 4x3 matrix.
+    ///
+    /// @see ext_matrix_int4x3_sized
+    typedef mat<4, 3, int8, defaultp>               i8mat4x3;
 
-	/// 16 bit signed integer 4x3 matrix.
-	///
-	/// @see ext_matrix_int4x3_sized
-	typedef mat<4, 3, int16, defaultp>				i16mat4x3;
+    /// 16 bit signed integer 4x3 matrix.
+    ///
+    /// @see ext_matrix_int4x3_sized
+    typedef mat<4, 3, int16, defaultp>              i16mat4x3;
 
-	/// 32 bit signed integer 4x3 matrix.
-	///
-	/// @see ext_matrix_int4x3_sized
-	typedef mat<4, 3, int32, defaultp>				i32mat4x3;
+    /// 32 bit signed integer 4x3 matrix.
+    ///
+    /// @see ext_matrix_int4x3_sized
+    typedef mat<4, 3, int32, defaultp>              i32mat4x3;
 
-	/// 64 bit signed integer 4x3 matrix.
-	///
-	/// @see ext_matrix_int4x3_sized
-	typedef mat<4, 3, int64, defaultp>				i64mat4x3;
+    /// 64 bit signed integer 4x3 matrix.
+    ///
+    /// @see ext_matrix_int4x3_sized
+    typedef mat<4, 3, int64, defaultp>              i64mat4x3;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

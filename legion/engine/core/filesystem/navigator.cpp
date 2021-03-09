@@ -28,9 +28,9 @@ namespace legion::core::filesystem {
             root_domain = m_path.substr(0,rdIndex);
 
             //find the rest of the path ... technically this will resolve //////////lol/test.bin to lol/test.bin just fine,
-			//but hopefully no one is actually insane enough to mess with such paths
-			//
-			//if he/she does, congrats you found a ... "feature"
+            //but hopefully no one is actually insane enough to mess with such paths
+            //
+            //if he/she does, congrats you found a ... "feature"
             const auto pIndex = m_path.find_first_not_of("/\\",rdIndex+1);
             if(pIndex == std::string::npos) return Err(legion_fs_error("invalid sytax for path string, last domain delimiter not found"));
             
@@ -54,7 +54,7 @@ namespace legion::core::filesystem {
         std::string path_for_resolver;
 
         //get first resolver
-		//TODO support multiple resolvers 
+        //TODO support multiple resolvers 
         resolver = *provider_registry::domain_get_first_resolver(domain);
 
         for (auto& token : tokens) {
@@ -83,7 +83,7 @@ namespace legion::core::filesystem {
 
                 //the file itself is still part of the old resolver
                 //i.e.: /sandbox/assets/archive.pp.xz -> directory_in_archive/file.png
-				//where the new domain is ".pp.xz"
+                //where the new domain is ".pp.xz"
                 path_for_resolver += token;
             }
             else 

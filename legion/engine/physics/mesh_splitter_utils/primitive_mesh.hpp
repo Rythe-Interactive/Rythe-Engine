@@ -8,33 +8,33 @@
 
 namespace legion::physics
 {
-	class PrimitiveMesh
-	{
-	public:
-		PrimitiveMesh(ecs::entity_handle pOriginalEntity, 
-			std::vector<std::shared_ptr<SplittablePolygon>>& pPolygons,
-			rendering::material_handle pOriginalMaterial);
-			
+    class PrimitiveMesh
+    {
+    public:
+        PrimitiveMesh(ecs::entity_handle pOriginalEntity, 
+            std::vector<std::shared_ptr<SplittablePolygon>>& pPolygons,
+            rendering::material_handle pOriginalMaterial);
+            
 
-		ecs::entity_handle InstantiateNewGameObject();
+        ecs::entity_handle InstantiateNewGameObject();
 
-		static void SetECSRegistry(ecs::EcsRegistry* ecs);
+        static void SetECSRegistry(ecs::EcsRegistry* ecs);
 
-	private:
+    private:
 
-		void populateMesh(mesh& mesh,const math::mat4& originalTransform,math::vec3& outOffset,math::vec3& scale);
+        void populateMesh(mesh& mesh,const math::mat4& originalTransform,math::vec3& outOffset,math::vec3& scale);
 
-		rendering::material_handle originalMaterial;
+        rendering::material_handle originalMaterial;
 
-		std::vector<std::shared_ptr<SplittablePolygon>> polygons;
+        std::vector<std::shared_ptr<SplittablePolygon>> polygons;
 
-		ecs::entity_handle originalEntity;
+        ecs::entity_handle originalEntity;
 
-		static ecs::EcsRegistry* m_ecs;
+        static ecs::EcsRegistry* m_ecs;
 
         static int count;
 
-	};
+    };
 }
 
 

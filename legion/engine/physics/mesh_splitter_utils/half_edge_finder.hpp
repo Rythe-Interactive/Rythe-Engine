@@ -7,8 +7,8 @@ namespace legion::physics
     /** @struct HalfEdgeFinder
     * @brief Responsible for creating a half-edge data structure for a mesh
     */
-	struct HalfEdgeFinder
-	{
+    struct HalfEdgeFinder
+    {
         meshHalfEdgePtr currentPtr;
 
         /** @brief Given a mesh and its associated transform,
@@ -168,5 +168,5 @@ namespace legion::physics
             return newEdge;
         }
 
-	};
+    };
 }

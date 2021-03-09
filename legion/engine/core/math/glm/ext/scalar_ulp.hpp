@@ -21,54 +21,54 @@
 #include "../detail/qualifier.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_scalar_ulp extension included")
+#   pragma message("GLM: GLM_EXT_scalar_ulp extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// Return the next ULP value(s) after the input value(s).
-	///
-	/// @tparam genType A floating-point scalar type.
-	///
-	/// @see ext_scalar_ulp
-	template<typename genType>
-	GLM_FUNC_DECL genType nextFloat(genType x);
+    /// Return the next ULP value(s) after the input value(s).
+    ///
+    /// @tparam genType A floating-point scalar type.
+    ///
+    /// @see ext_scalar_ulp
+    template<typename genType>
+    GLM_FUNC_DECL genType nextFloat(genType x);
 
-	/// Return the previous ULP value(s) before the input value(s).
-	///
-	/// @tparam genType A floating-point scalar type.
-	///
-	/// @see ext_scalar_ulp
-	template<typename genType>
-	GLM_FUNC_DECL genType prevFloat(genType x);
+    /// Return the previous ULP value(s) before the input value(s).
+    ///
+    /// @tparam genType A floating-point scalar type.
+    ///
+    /// @see ext_scalar_ulp
+    template<typename genType>
+    GLM_FUNC_DECL genType prevFloat(genType x);
 
-	/// Return the value(s) ULP distance after the input value(s).
-	///
-	/// @tparam genType A floating-point scalar type.
-	///
-	/// @see ext_scalar_ulp
-	template<typename genType>
-	GLM_FUNC_DECL genType nextFloat(genType x, int ULPs);
+    /// Return the value(s) ULP distance after the input value(s).
+    ///
+    /// @tparam genType A floating-point scalar type.
+    ///
+    /// @see ext_scalar_ulp
+    template<typename genType>
+    GLM_FUNC_DECL genType nextFloat(genType x, int ULPs);
 
-	/// Return the value(s) ULP distance before the input value(s).
-	///
-	/// @tparam genType A floating-point scalar type.
-	///
-	/// @see ext_scalar_ulp
-	template<typename genType>
-	GLM_FUNC_DECL genType prevFloat(genType x, int ULPs);
+    /// Return the value(s) ULP distance before the input value(s).
+    ///
+    /// @tparam genType A floating-point scalar type.
+    ///
+    /// @see ext_scalar_ulp
+    template<typename genType>
+    GLM_FUNC_DECL genType prevFloat(genType x, int ULPs);
 
-	/// Return the distance in the number of ULP between 2 single-precision floating-point scalars.
-	///
-	/// @see ext_scalar_ulp
-	GLM_FUNC_DECL int floatDistance(float x, float y);
+    /// Return the distance in the number of ULP between 2 single-precision floating-point scalars.
+    ///
+    /// @see ext_scalar_ulp
+    GLM_FUNC_DECL int floatDistance(float x, float y);
 
-	/// Return the distance in the number of ULP between 2 double-precision floating-point scalars.
-	///
-	/// @see ext_scalar_ulp
-	GLM_FUNC_DECL int64 floatDistance(double x, double y);
+    /// Return the distance in the number of ULP between 2 double-precision floating-point scalars.
+    ///
+    /// @see ext_scalar_ulp
+    GLM_FUNC_DECL int64 floatDistance(double x, double y);
 
-	/// @}
+    /// @}
 }//namespace legion::core::math
 
 #include "scalar_ulp.inl"

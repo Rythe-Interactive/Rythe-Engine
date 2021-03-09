@@ -70,11 +70,11 @@ namespace legion::rendering
         // Construct the texture using the loaded data.
         glTexImage2D(
             static_cast<GLenum>(settings.type),
-            0,							
+            0,                          
             static_cast<GLint>(settings.intendedFormat),
             texSize.x,
             texSize.y,
-            0,							
+            0,                          
             components_to_format[static_cast<int>(settings.components)],
             channels_to_glenum[static_cast<uint>(settings.fileFormat)],
             imageData);

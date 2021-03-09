@@ -25,39 +25,39 @@
 #include <limits>
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_quaternion_trigonometric extension included")
+#   pragma message("GLM: GLM_EXT_quaternion_trigonometric extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_quaternion_trigonometric
-	/// @{
+    /// @addtogroup ext_quaternion_trigonometric
+    /// @{
 
-	/// Returns the quaternion rotation angle.
-	///
-	/// @tparam T A floating-point scalar type
-	/// @tparam Q A value from qualifier enum
-	template<typename T, qualifier Q>
-	GLM_FUNC_DECL T angleOfQuat(qua<T, Q> const& x);
+    /// Returns the quaternion rotation angle.
+    ///
+    /// @tparam T A floating-point scalar type
+    /// @tparam Q A value from qualifier enum
+    template<typename T, qualifier Q>
+    GLM_FUNC_DECL T angleOfQuat(qua<T, Q> const& x);
 
-	/// Returns the q rotation axis.
-	///
-	/// @tparam T A floating-point scalar type
-	/// @tparam Q A value from qualifier enum
-	template<typename T, qualifier Q>
-	GLM_FUNC_DECL vec<3, T, Q> axisOfQuat(qua<T, Q> const& x);
+    /// Returns the q rotation axis.
+    ///
+    /// @tparam T A floating-point scalar type
+    /// @tparam Q A value from qualifier enum
+    template<typename T, qualifier Q>
+    GLM_FUNC_DECL vec<3, T, Q> axisOfQuat(qua<T, Q> const& x);
 
-	/// Build a quaternion from an angle and a normalized axis.
-	///
-	/// @param angle Angle expressed in radians.
-	/// @param axis Axis of the quaternion, must be normalized.
-	///
-	/// @tparam T A floating-point scalar type
-	/// @tparam Q A value from qualifier enum
-	template<typename T, qualifier Q>
-	GLM_FUNC_DECL qua<T, Q> angleAxis(T const& angle, vec<3, T, Q> const& axis);
+    /// Build a quaternion from an angle and a normalized axis.
+    ///
+    /// @param angle Angle expressed in radians.
+    /// @param axis Axis of the quaternion, must be normalized.
+    ///
+    /// @tparam T A floating-point scalar type
+    /// @tparam Q A value from qualifier enum
+    template<typename T, qualifier Q>
+    GLM_FUNC_DECL qua<T, Q> angleAxis(T const& angle, vec<3, T, Q> const& axis);
 
-	/// @}
+    /// @}
 } //namespace legion::core::math
 
 #include "quaternion_trigonometric.inl"
