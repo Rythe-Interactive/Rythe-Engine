@@ -112,6 +112,7 @@ namespace legion::physics
         //app::InputSystem::createBinding<spawnEntity>(app::inputmap::method::MOUSE_LEFT);
         app::InputSystem::createBinding<explosion>(app::inputmap::method::B);
         app::InputSystem::createBinding<QHULL>(app::inputmap::method::Q);
+        app::InputSystem::createBinding<AddRigidbody>(app::inputmap::method::R);
 
        /* app::InputSystem::createBinding<smallExplosion>(app::inputmap::method::NUM1);
         app::InputSystem::createBinding<mediumExplosion>(app::inputmap::method::NUM2);
@@ -135,6 +136,7 @@ namespace legion::physics
 
         bindToEvent<explosion, &PhysicsFractureTestSystem::prematureExplosion>();
         bindToEvent<QHULL, &PhysicsFractureTestSystem::quickHullStep>();
+        bindToEvent<AddRigidbody, &PhysicsFractureTestSystem::AddRigidbodyToQuickhulls>();
 
         #pragma endregion
 
@@ -797,14 +799,30 @@ namespace legion::physics
         (math::vec3(20.0f, 5.0f, 0), cubeH, wireFrameH);
         
 
+        addStaircase(math::vec3(8, 2, 0));
+        addStaircase(math::vec3(8, 1, -1));
+        addStaircase(math::vec3(8, 0, -2));
+        addStaircase(math::vec3(8, -1, -3));
+    }
 
+    void PhysicsFractureTestSystem::addStaircase(math::vec3 position)
+    {
+        physics::cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.width = 23.0f;
+        cubeParams.height = 1.0f;
 
+        auto ent = m_ecs->createEntity();
 
+        auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+        positionH.write(position);
 
+        //ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
-
-
-
+        auto entPhyHande = ent.add_component<physics::physicsComponent>();
+        physics::physicsComponent physicsComponent2;
+        physicsComponent2.AddBox(cubeParams);
+        entPhyHande.write(physicsComponent2);
     }
 
     void PhysicsFractureTestSystem::createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH)
@@ -929,6 +947,8 @@ namespace legion::physics
 
       
     }
+
+
 
     void PhysicsFractureTestSystem::drawPhysicsColliders()
     {
@@ -1062,6 +1082,20 @@ namespace legion::physics
 
     
       
+    }
+
+    void PhysicsFractureTestSystem::AddRigidbodyToQuickhulls(AddRigidbody* action)
+    {
+        if (!action->value)
+        {
+            log::debug("Add body");
+            for (auto ent : registeredColliderColorDraw)
+            {
+                ent.add_component<rigidbody>();
+            }
+        }
+
+
     }
 
     void PhysicsFractureTestSystem::extendedContinuePhysics(extendedPhysicsContinue * action)

@@ -16,6 +16,7 @@ struct largeExplosion : public app::input_action<largeExplosion> {};
 struct explosion : public app::input_action<explosion> {};
 
 struct QHULL : public app::input_action<QHULL>{};
+struct AddRigidbody : public app::input_action<AddRigidbody> {};
 
 namespace legion::physics
 {
@@ -54,7 +55,7 @@ namespace legion::physics
 
         void PopulateFollowerList(ecs::entity_handle physicsEnt);
        
-
+        void addStaircase(math::vec3 position);
         //FUNCTION BINDED ACTIONS
         void prematureExplosion(explosion* action);
 
@@ -66,13 +67,11 @@ namespace legion::physics
 
         void quickHullStep(QHULL * action);
 
+        void AddRigidbodyToQuickhulls(AddRigidbody * action);
+
         void drawPhysicsColliders();
 
-  
-
         void numericalRobustnessTest();
-
-   
 
         void spawnCubeStack(math::vec3 start);
 
