@@ -20,7 +20,7 @@ namespace legion::core::ecs
         return entity{ &data };
     }
 
-    const entity world = Registry::getWorld();
+    entity world = Registry::getWorld();
 
     L_NODISCARD component_pool_base* Registry::getFamily(id_type typeId)
     {
@@ -125,6 +125,11 @@ namespace legion::core::ecs
     L_NODISCARD std::unordered_map<id_type, std::unordered_set<id_type>>& Registry::entityCompositions()
     {
         return m_entityComposition;
+    }
+
+    L_NODISCARD std::unordered_map<id_type, entity_data>& Registry::entityData()
+    {
+        return m_entities;
     }
 
     L_NODISCARD std::unordered_set<id_type>& Registry::entityComposition(entity target)

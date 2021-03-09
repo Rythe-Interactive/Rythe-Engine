@@ -76,6 +76,9 @@ namespace legion::core::ecs
         void remove_child(id_type child);
         void remove_child(entity child);
 
+        void remove_children();
+        void destroy_children(bool recurse = true);
+
         entity_set& children();
         const entity_set& children() const;
 

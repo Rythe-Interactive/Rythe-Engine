@@ -18,8 +18,6 @@ namespace legion::core::ecs
 
     void FilterRegistry::markComponentErase(id_type componentId, entity target)
     {
-        auto& composition = Registry::entityComposition(target);
-
         for (auto& filter : m_filters)
             if (filter->contains(componentId))
                 m_entityLists.at(filter->id).erase(target); // Will not do anything if the target wasn't in the set.

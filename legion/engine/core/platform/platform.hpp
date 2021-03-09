@@ -202,8 +202,8 @@ type& operator=(type&&) = default;
 
 #if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(maybe_unused) || defined(DOXY_INCLUDE)
 
-/**@def L_NODISCARD
- * @brief Marks a function as "nodiscard" meaning that result must be captured and should not be discarded.
+/**@def L_MAYBEUNUSED
+ * @brief [[maybe_unused]]
  */
 #define L_MAYBEUNUSED [[maybe_unused]]
 #else

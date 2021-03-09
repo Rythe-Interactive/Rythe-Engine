@@ -75,6 +75,23 @@ namespace legion::core::ecs
         child.set_parent(world);
     }
 
+    void entity::remove_children()
+    {
+        for (auto& child : data->children)
+        {
+            world->children.insert(child);
+            child->parent = world;
+        }
+
+        data->children.clear();
+    }
+
+    void entity::destroy_children(bool recurse)
+    {
+        for (auto& child : data->children.reverse_range())
+            Registry::destroyEntity(child, recurse);
+    }
+
     entity_set& entity::children()
     {
         return data->children;

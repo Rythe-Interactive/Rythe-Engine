@@ -9,9 +9,10 @@ struct test_comp
     int value;
 };
 
+template<bool leak>
 void TestECS()
 {
-#pragma region basic component and entity behaviour
+    LEGION_SUBTEST("Basic component and entity behaviour")
     {
         auto ent = ecs::Registry::createEntity();
 
@@ -64,32 +65,81 @@ void TestECS()
         auto ent2 = ecs::Registry::createEntity();
         Check(ent2 == ent);
         Check(!ent.has_component<test_comp>());
+        if constexpr (leak)
+        {
+            ent2.destroy();
+        }
     }
-#pragma endregion
 
-#pragma region Hierarchy
+    LEGION_SUBTEST("Hierarchy")
     {
         auto parent = ecs::Registry::createEntity();
         Check(parent.get_parent() == ecs::world);
         Check(parent.children().size() == 0);
-        for ([[maybe_unused]] auto& chld : parent)
+        for (L_MAYBEUNUSED auto& chld : parent)
             Check(false);
 
         auto child = ecs::Registry::createEntity(parent);
         Check(child.get_parent() == parent);
         Check(parent.children().size() == 1);
         size_type chldCount = 0;
-        for ([[maybe_unused]] auto& chld : parent)
+        for (auto& chld : parent)
+        {
+            Check(chld == child);
             chldCount++;
+        }
         Check(chldCount == 1);
+
+        parent.remove_child(child);
+        Check(parent.children().size() == 0);
+        Check(child.get_parent() == ecs::world);
+
+        child.set_parent(parent);
+        Check(child.get_parent() == parent);
+        Check(parent.children().size() == 1);
+
+        parent.remove_children();
+        Check(parent.children().size() == 0);
+        Check(child.get_parent() == ecs::world);
+
+        parent.add_child(child);
+        Check(child.get_parent() == parent);
+        Check(parent.children().size() == 1);
+
+        parent.destroy_children();
+        Check(parent.children().size() == 0);
+        Check(!child);
+        Check(child == invalid_id);
+        Check(child == nullptr);
+        Check(!(child != nullptr));
+
+        child = ecs::Registry::createEntity(parent);
+        Check(child);
+
+        parent.destroy();
+        Check(!parent);
+        Check(parent == invalid_id);
+        Check(parent == nullptr);
+        Check(!(parent != nullptr));
+        Check(!child);
+        Check(child == invalid_id);
+        Check(child == nullptr);
+        Check(!(child != nullptr));
     }
-#pragma endregion
+
+    ecs::world.destroy_children();
+
+    LEGION_SUBTEST("Filters")
+    {
+        ecs::filter<test_comp> fltr;
+        for (auto& ent : fltr)
+            Check(false);
+    }
 }
 
 LEGION_TEST("core::ecs")
 {
-    Test(TestECS);
+    Test(TestECS<false>);
 
-    Benchmark_N(100000, TestECS);
-    Benchmark(TestECS);
+    Benchmark_N(1000000, TestECS<true>);
 }

@@ -51,6 +51,7 @@ namespace legion::core::ecs
         static bool checkEntity(id_type target);
 
         L_NODISCARD static std::unordered_map<id_type, std::unordered_set<id_type>>& entityCompositions();
+        L_NODISCARD static std::unordered_map<id_type, entity_data>& entityData();
 
         L_NODISCARD static std::unordered_set<id_type>& entityComposition(entity target);
         L_NODISCARD static std::unordered_set<id_type>& entityComposition(id_type target);
@@ -84,7 +85,7 @@ namespace legion::core::ecs
         static void* getComponent(id_type typeId, entity target);
     };
 
-    extern const entity world;
+    extern entity world;
 }
 
 #include <core/ecs/registry.inl>

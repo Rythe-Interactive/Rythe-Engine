@@ -94,11 +94,11 @@ inline namespace {
     };
 
 
-std::ostream& operator<<(std::ostream& lhs, filesystem::basic_resource rhs)
-{
-    lhs << rhs.to_string();
-    return lhs;
-}
+//std::ostream& operator<<(std::ostream& lhs, filesystem::basic_resource rhs)
+//{
+//    lhs << rhs.to_string();
+//    return lhs;
+//}
 }
 
 void TestFS()
