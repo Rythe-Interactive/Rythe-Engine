@@ -45,7 +45,7 @@ namespace legion::core
         using reverse_iterator = typename dense_container::reverse_iterator;
         using const_reverse_iterator = typename dense_container::const_reverse_iterator;
         using reverse_itr_range = pair_range<reverse_iterator>;
-        using const_reverse__itr_range = pair_range<const_reverse_iterator>;
+        using const_reverse_itr_range = pair_range<const_reverse_iterator>;
 
     private:
         dense_container m_dense;
@@ -74,8 +74,8 @@ namespace legion::core
         L_NODISCARD const_reverse_iterator rend() const noexcept { return m_dense.crend(); }
         L_NODISCARD const_reverse_iterator crend() const noexcept { return m_dense.crend(); }
 
-        L_NODISCARD reverse_itr_range reverse_range() noexcept { return reverse_range(rbegin(), rend()); }
-        L_NODISCARD const_reverse__itr_range reverse_range() const noexcept { return const_reverse_range(crbegin(), crend()); }
+        L_NODISCARD reverse_itr_range reverse_range() noexcept { return reverse_itr_range{ rbegin(), rend() }; }
+        L_NODISCARD const_reverse_itr_range reverse_range() const noexcept { return const_reverse_itr_range{ crbegin(), crend() }; }
 
         /**@brief Returns the amount of items in the sparse_map.
          * @returns size_type Current amount of items contained in sparse_map.

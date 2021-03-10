@@ -572,5 +572,7 @@
     <None Include="ecs\filters\filterregistry.inl" />
     <None Include="engine\engine.inl" />
     <None Include="ecs\handles\entity.inl" />
+    <None Include="ecs\handles\filter.inl" />
+    <None Include="ecs\filters\filter_info.inl" />
   </ItemGroup>
 </Project>

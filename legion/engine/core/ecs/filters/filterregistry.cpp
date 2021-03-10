@@ -12,7 +12,7 @@ namespace legion::core::ecs
 
         for (auto& filter : m_filters)
             if (filter->contains(componentId) && filter->contains(composition))
-                m_entityLists.at(filter->id).insert(target);
+                m_entityLists.at(filter->id()).insert(target);
 
     }
 
@@ -20,7 +20,7 @@ namespace legion::core::ecs
     {
         for (auto& filter : m_filters)
             if (filter->contains(componentId))
-                m_entityLists.at(filter->id).erase(target); // Will not do anything if the target wasn't in the set.
+                m_entityLists.at(filter->id()).erase(target); // Will not do anything if the target wasn't in the set.
 
     }
 
@@ -36,7 +36,12 @@ namespace legion::core::ecs
 
         for (auto& filter : m_filters)
             if (filter->contains(composition))
-                m_entityLists.at(filter->id).insert(target);
+                m_entityLists.at(filter->id()).insert(target);
+    }
+
+    entity_set& FilterRegistry::getList(id_type filterId)
+    {
+        return m_entityLists.at(filterId);
     }
 
 }

@@ -10,7 +10,7 @@ namespace legion::core::ecs
 
         for (auto& filter : m_filters)
             if (filter->contains(make_hash<component_type>()) && filter->contains(composition))
-                m_entityLists.at(filter->id).insert(target);
+                m_entityLists.at(filter->id()).insert(target);
     }
 
     template<typename component_type>
@@ -20,7 +20,7 @@ namespace legion::core::ecs
 
         for (auto& filter : m_filters)
             if (filter->contains(make_hash<component_type>()))
-                m_entityLists.at(filter->id).erase(target); // Will not do anything if the target wasn't in the set.
+                m_entityLists.at(filter->id()).erase(target); // Will not do anything if the target wasn't in the set.
     }
 
     template<typename component_type>
@@ -29,30 +29,30 @@ namespace legion::core::ecs
         return make_hash<component_type>();
     }
 
-    template<typename component_type, typename... component_types>
+    template<typename component_type0, typename component_type1, typename... component_types>
     inline constexpr id_type FilterRegistry::generateId() noexcept
     {
-        return combine_hash(make_hash<component_type>(), generateId<component_types...>());
+        return combine_hash(make_hash<component_type0>(), generateId<component_type1, component_types...>());
     }
 
     template<typename ...component_types>
-    inline id_type FilterRegistry::generateFilterImpl()
+    inline const id_type FilterRegistry::generateFilterImpl()
     {
         constexpr id_type id = generateId<component_types...>();
-        m_filters.emplace_back(new filter_info<component_types...>{ id });
+        m_filters.emplace_back(new filter_info<component_types...>());
         m_entityLists.emplace(id, hashed_sparse_set<entity>{});
 
-        for (auto& [ent, composition] : Registry::entityCompositions())
-            if (filter_info<component_types...>{ id }.contains(composition))
-                m_entityLists.at(id).insert(ent);
+        for (auto& [entId, composition] : Registry::entityCompositions())
+            if (filter_info<component_types...>{}.contains(composition))
+                m_entityLists.at(id).insert(entity{ &Registry::entityData(entId) });
 
         return id;
     }
 
     template<typename ...component_types>
-    inline id_type FilterRegistry::generateFilter()
+    inline const id_type FilterRegistry::generateFilter()
     {
-        static id_type id = generateFilterImpl<component_types...>();
+        static const id_type id = generateFilterImpl<component_types...>();
         return id;
     }
 

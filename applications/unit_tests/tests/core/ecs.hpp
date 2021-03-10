@@ -132,7 +132,7 @@ void TestECS()
     LEGION_SUBTEST("Filters")
     {
         ecs::filter<test_comp> fltr;
-        for (auto& ent : fltr)
+        for (L_MAYBEUNUSED auto& ent : fltr)
             Check(false);
     }
 }

@@ -8,7 +8,7 @@ namespace legion::core::ecs
 {
     struct filter_info_base
     {
-        id_type id;
+        virtual id_type id() LEGION_PURE;
 
         template<typename component>
         bool contains() { return contains(make_hash<T>()); }
@@ -20,34 +20,29 @@ namespace legion::core::ecs
     template<typename... component_types>
     struct filter_info : public filter_info_base
     {
+    private:
+        template<typename component_type>
+        constexpr static id_type generateId() noexcept
+        {
+            return make_hash<component_type>();
+        }
+
+        template<typename component_type0, typename component_type1, typename... component_types>
+        constexpr static id_type generateId() noexcept
+        {
+            return combine_hash(make_hash<component_type0>(), generateId<component_type1, component_types...>());
+        }
+
+    public:
+        static constexpr id_type filter_id = generateId<component_types...>();
         static constexpr std::array<id_type, sizeof...(component_types)> composition = { make_hash<component_types>()... };
 
-        virtual bool contains(id_type id)
-        {
-            return contains_impl(id);
-        }
+        virtual id_type id();
 
-        virtual bool contains(const std::unordered_set<id_type>& comp)
-        {
-            if (!comp.size())
-                return false;
+        virtual bool contains(id_type id) noexcept;
 
-            if (!composition.size())
-                return true;
+        virtual bool contains(const std::unordered_set<id_type>& comp);
 
-            for (auto& typeId : composition)
-                if (!comp.count(typeId))
-                    return false;
-            return true;
-        }
-
-    private:
-        constexpr bool contains_impl(id_type id)
-        {
-            for (int i = 0; i < composition.size(); i++)
-                if (composition[i] == id)
-                    return true;
-            return false;
-        }
+        constexpr static bool contains_direct(id_type id) noexcept;
     };
 }

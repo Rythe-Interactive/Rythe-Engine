@@ -1,12 +1,11 @@
 #pragma once
-#include <core/ecs/filters/filterregistry.hpp>
 
 namespace legion::core::ecs
 {
     template<typename... component_types>
     struct filter
     {
-        static const id_type id = FilterRegistry::generateFilter<component_types...>();
+        static const id_type id;
 
         L_NODISCARD static entity_set::iterator begin() noexcept;
         L_NODISCARD static entity_set::iterator end() noexcept;
@@ -26,4 +25,5 @@ namespace legion::core::ecs
         L_NODISCARD entity& operator[](size_type index);
 
     };
+
 }

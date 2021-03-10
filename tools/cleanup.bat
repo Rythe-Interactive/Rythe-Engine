@@ -24,6 +24,7 @@ Call :convertDir ../applications
 
 Echo Finished converting all files.
 :End
+pause
 Endlocal
 @Echo on
 @exit /b

@@ -553,8 +553,10 @@ del ".\xcopyexclude"</Command>
     <None Include="common\hash.inl" />
     <None Include="ecs\containers\component_pool.inl" />
     <None Include="ecs\filters\filterregistry.inl" />
+    <None Include="ecs\filters\filter_info.inl" />
     <None Include="ecs\handles\component.inl" />
     <None Include="ecs\handles\entity.inl" />
+    <None Include="ecs\handles\filter.inl" />
     <None Include="ecs\prototypes\entity_prototype.inl" />
     <None Include="ecs\registry.inl" />
     <None Include="engine\engine.inl" />
