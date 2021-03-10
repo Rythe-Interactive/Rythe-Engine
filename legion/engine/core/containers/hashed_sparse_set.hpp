@@ -44,6 +44,8 @@ namespace legion::core
 
         using reverse_iterator = typename dense_container::reverse_iterator;
         using const_reverse_iterator = typename dense_container::const_reverse_iterator;
+        using reverse_itr_range = pair_range<reverse_iterator>;
+        using const_reverse__itr_range = pair_range<const_reverse_iterator>;
 
     private:
         dense_container m_dense;
@@ -53,27 +55,27 @@ namespace legion::core
         size_type m_capacity = 0;
 
     public:
-        L_NODISCARD dense_container& dense() { return m_dense; }
-        L_NODISCARD const dense_container& dense() const { return m_dense; }
+        L_NODISCARD dense_container& dense() noexcept { return m_dense; }
+        L_NODISCARD const dense_container& dense() const noexcept { return m_dense; }
 
-        L_NODISCARD iterator begin() { return m_dense.begin(); }
-        L_NODISCARD const_iterator begin() const { return m_dense.cbegin(); }
-        L_NODISCARD const_iterator cbegin() const { return m_dense.cbegin(); }
+        L_NODISCARD iterator begin() noexcept { return m_dense.begin(); }
+        L_NODISCARD const_iterator begin() const noexcept { return m_dense.cbegin(); }
+        L_NODISCARD const_iterator cbegin() const noexcept { return m_dense.cbegin(); }
 
-        L_NODISCARD iterator end() { return m_dense.begin() + m_size; }
-        L_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
-        L_NODISCARD const_iterator cend() const { return m_dense.cbegin() + m_size; }
+        L_NODISCARD iterator end() noexcept { return m_dense.begin() + m_size; }
+        L_NODISCARD const_iterator end() const noexcept { return m_dense.cbegin() + m_size; }
+        L_NODISCARD const_iterator cend() const noexcept { return m_dense.cbegin() + m_size; }
 
-        L_NODISCARD reverse_iterator rbegin() { return m_dense.rbegin() - (m_dense.size() - m_size); }
-        L_NODISCARD const_reverse_iterator rbegin() const { return m_dense.crbegin() - (m_dense.size() - m_size); }
-        L_NODISCARD const_reverse_iterator crbegin() const { return m_dense.crbegin() - (m_dense.size() - m_size); }
+        L_NODISCARD reverse_iterator rbegin() noexcept { return m_dense.rbegin() - (m_dense.size() - m_size); }
+        L_NODISCARD const_reverse_iterator rbegin() const noexcept { return m_dense.crbegin() - (m_dense.size() - m_size); }
+        L_NODISCARD const_reverse_iterator crbegin() const noexcept { return m_dense.crbegin() - (m_dense.size() - m_size); }
 
-        L_NODISCARD reverse_iterator rend() { return m_dense.rend(); }
-        L_NODISCARD const_reverse_iterator rend() const { return m_dense.crend(); }
-        L_NODISCARD const_reverse_iterator crend() const { return m_dense.crend(); }
+        L_NODISCARD reverse_iterator rend() noexcept { return m_dense.rend(); }
+        L_NODISCARD const_reverse_iterator rend() const noexcept { return m_dense.crend(); }
+        L_NODISCARD const_reverse_iterator crend() const noexcept { return m_dense.crend(); }
 
-        L_NODISCARD pair_range<reverse_iterator> reverse_range() { return pair_range<reverse_iterator>(rbegin(), rend()); }
-        L_NODISCARD pair_range<const_reverse_iterator> reverse_range() const { return pair_range<const_reverse_iterator>(crbegin(), crend()); }
+        L_NODISCARD reverse_itr_range reverse_range() noexcept { return reverse_range(rbegin(), rend()); }
+        L_NODISCARD const_reverse__itr_range reverse_range() const noexcept { return const_reverse_range(crbegin(), crend()); }
 
         /**@brief Returns the amount of items in the sparse_map.
          * @returns size_type Current amount of items contained in sparse_map.

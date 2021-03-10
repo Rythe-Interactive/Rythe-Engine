@@ -30,7 +30,7 @@ namespace legion::core::ecs
         static void markEntityFullCreation(entity target);
 
     private:
-        static std::unordered_map<id_type, hashed_sparse_set<entity>> m_entityLists;
+        static std::unordered_map<id_type, entity_set> m_entityLists;
         static std::vector<std::unique_ptr<filter_info_base>> m_filters;
 
         template<typename component_type>
