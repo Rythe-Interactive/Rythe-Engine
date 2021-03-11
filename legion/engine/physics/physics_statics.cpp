@@ -551,6 +551,9 @@ namespace legion::physics
         //(5.2) For each edge create a new face that connects the initial face with the eyePoint
         math::vec3 eyePoint = *firstEyePoint;
 
+        HalfEdgeEdge* pairingToConnectTo = nullptr;
+        HalfEdgeEdge* initialPairing = nullptr;
+
         for (auto edge : reverseHalfEdgeList)
         {
             //initialize pairing its position is on next
@@ -567,6 +570,9 @@ namespace legion::physics
             nextPairing->setNextAndPrevEdge(pairing, prevPairing);
             prevPairing->setNextAndPrevEdge(nextPairing, pairing);
 
+            //
+            pairing->setPairingEdge(edge);
+
             //initialize new face
             math::vec3 faceNormal = math::normalize(math::cross(nextPairing->edgePosition - pairing->edgePosition,
                 prevPairing->edgePosition - pairing->edgePosition));
@@ -575,7 +581,21 @@ namespace legion::physics
 
             //push new face into list 
             collider->GetHalfEdgeFaces().push_back(face);
+
+            //connect to 
+            if (pairingToConnectTo)
+            {
+                prevPairing->setPairingEdge(pairingToConnectTo);
+            }
+            else
+            {
+                initialPairing = prevPairing;
+            }
+
+            pairingToConnectTo = nextPairing;
         }
+
+        initialPairing->setPairingEdge(pairingToConnectTo);
 
         return true;
     }
