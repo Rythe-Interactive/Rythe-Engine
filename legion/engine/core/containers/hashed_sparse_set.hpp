@@ -66,16 +66,16 @@ namespace legion::core
         L_NODISCARD const_iterator end() const noexcept { return m_dense.cbegin() + m_size; }
         L_NODISCARD const_iterator cend() const noexcept { return m_dense.cbegin() + m_size; }
 
-        L_NODISCARD reverse_iterator rbegin() noexcept { return m_dense.rbegin() - (m_dense.size() - m_size); }
-        L_NODISCARD const_reverse_iterator rbegin() const noexcept { return m_dense.crbegin() - (m_dense.size() - m_size); }
-        L_NODISCARD const_reverse_iterator crbegin() const noexcept { return m_dense.crbegin() - (m_dense.size() - m_size); }
+        L_NODISCARD reverse_iterator rbegin() noexcept { return m_dense.rbegin() + (m_dense.size() - m_size); }
+        L_NODISCARD const_reverse_iterator rbegin() const noexcept { return m_dense.crbegin() + (m_dense.size() - m_size); }
+        L_NODISCARD const_reverse_iterator crbegin() const noexcept { return m_dense.crbegin() + (m_dense.size() - m_size); }
 
         L_NODISCARD reverse_iterator rend() noexcept { return m_dense.rend(); }
         L_NODISCARD const_reverse_iterator rend() const noexcept { return m_dense.crend(); }
         L_NODISCARD const_reverse_iterator crend() const noexcept { return m_dense.crend(); }
 
-        L_NODISCARD reverse_itr_range reverse_range() noexcept { return reverse_itr_range{ rbegin(), rend() }; }
-        L_NODISCARD const_reverse_itr_range reverse_range() const noexcept { return const_reverse_itr_range{ crbegin(), crend() }; }
+        L_NODISCARD reverse_itr_range reverse_range() noexcept { return pair_range{ rbegin(), rend() }; }
+        L_NODISCARD const_reverse_itr_range reverse_range() const noexcept { return pair_range{ crbegin(), crend() }; }
 
         /**@brief Returns the amount of items in the sparse_map.
          * @returns size_type Current amount of items contained in sparse_map.

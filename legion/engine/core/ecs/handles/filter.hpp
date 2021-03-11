@@ -1,5 +1,8 @@
 #pragma once
 
+#include <core/platform/platform.hpp>
+#include <core/ecs/handles/entity.hpp>
+
 namespace legion::core::ecs
 {
     template<typename... component_types>

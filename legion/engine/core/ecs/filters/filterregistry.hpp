@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 
+#include <core/platform/platform.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 #include <core/types/primitives.hpp>
 
@@ -35,8 +36,9 @@ namespace legion::core::ecs
         static entity_set& getList(id_type filterId);
 
     private:
-        static std::unordered_map<id_type, entity_set> m_entityLists;
-        static std::vector<std::unique_ptr<filter_info_base>> m_filters;
+        L_NODISCARD static std::unordered_map<id_type, entity_set>& entityLists() noexcept;
+
+        L_NODISCARD static std::vector<std::unique_ptr<filter_info_base>>& filters() noexcept;
 
         template<typename component_type>
         constexpr static id_type generateId() noexcept;

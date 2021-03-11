@@ -3,30 +3,27 @@
 
 namespace legion::core::ecs
 {
-    std::unordered_map<id_type, hashed_sparse_set<entity>> FilterRegistry::m_entityLists;
-    std::vector<std::unique_ptr<filter_info_base>> FilterRegistry::m_filters;
-
     void FilterRegistry::markComponentAdd(id_type componentId, entity target)
     {
         auto& composition = Registry::entityComposition(target);
 
-        for (auto& filter : m_filters)
+        for (auto& filter : filters())
             if (filter->contains(componentId) && filter->contains(composition))
-                m_entityLists.at(filter->id()).insert(target);
+                entityLists().at(filter->id()).insert(target);
 
     }
 
     void FilterRegistry::markComponentErase(id_type componentId, entity target)
     {
-        for (auto& filter : m_filters)
+        for (auto& filter : filters())
             if (filter->contains(componentId))
-                m_entityLists.at(filter->id()).erase(target); // Will not do anything if the target wasn't in the set.
+                entityLists().at(filter->id()).erase(target); // Will not do anything if the target wasn't in the set.
 
     }
 
     void FilterRegistry::markEntityDestruction(entity target)
     {
-        for (auto& [_, entityList] : m_entityLists)
+        for (auto& [_, entityList] : entityLists())
             entityList.erase(target); // Will not do anything if the target wasn't in the set.
     }
 
@@ -34,14 +31,26 @@ namespace legion::core::ecs
     {
         auto& composition = Registry::entityComposition(target);
 
-        for (auto& filter : m_filters)
+        for (auto& filter : filters())
             if (filter->contains(composition))
-                m_entityLists.at(filter->id()).insert(target);
+                entityLists().at(filter->id()).insert(target);
     }
 
     entity_set& FilterRegistry::getList(id_type filterId)
     {
-        return m_entityLists.at(filterId);
+        return entityLists().at(filterId);
+    }
+
+    L_NODISCARD std::unordered_map<id_type, entity_set>& FilterRegistry::entityLists() noexcept
+    {
+        static std::unordered_map<id_type, entity_set> m_entityLists;
+        return m_entityLists;
+    }
+
+    L_NODISCARD std::vector<std::unique_ptr<filter_info_base>>& FilterRegistry::filters() noexcept
+    {
+        static std::vector<std::unique_ptr<filter_info_base>> m_filters;
+        return m_filters;
     }
 
 }

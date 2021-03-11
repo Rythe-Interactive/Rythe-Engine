@@ -9,12 +9,12 @@ struct test_comp
     int value;
 };
 
-template<bool leak>
 void TestECS()
 {
     LEGION_SUBTEST("Basic component and entity behaviour")
     {
         auto ent = ecs::Registry::createEntity();
+        id_type entId = ent;
 
         Check(ent);
         Check(ent != invalid_id);
@@ -30,6 +30,8 @@ void TestECS()
         Check(comp->value == 0);
         comp->value++;
         Check(comp->value == 1);
+        Check(ecs::component_pool<test_comp>::contains_direct(entId));
+        Check(ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
         auto comp2 = ent.get_component<test_comp>();
         Check(comp2);
@@ -42,6 +44,8 @@ void TestECS()
         Check(!comp);
         Check(!comp2);
         Check(!ent.has_component<test_comp>());
+        Check(!ecs::component_pool<test_comp>::contains_direct(entId));
+        Check(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
         ent.add_component<test_comp>();
         Check(comp);
@@ -55,20 +59,24 @@ void TestECS()
         comp.destroy();
         Check(!comp);
         Check(!ent.has_component<test_comp>());
+        Check(!ecs::component_pool<test_comp>::contains_direct(entId));
+        Check(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
+        ent.add_component<test_comp>();
+        Check(ecs::component_pool<test_comp>::contains_direct(entId));
+        Check(ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
         ent.destroy();
         Check(!ent);
         Check(ent == invalid_id);
         Check(ent == nullptr);
         Check(!(ent != nullptr));
+        Check(!ecs::component_pool<test_comp>::contains_direct(entId));
+        Check(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
         auto ent2 = ecs::Registry::createEntity();
         Check(ent2 == ent);
         Check(!ent.has_component<test_comp>());
-        if constexpr (leak)
-        {
-            ent2.destroy();
-        }
+        ent2.destroy();
     }
 
     LEGION_SUBTEST("Hierarchy")
@@ -129,17 +137,66 @@ void TestECS()
 
     ecs::world.destroy_children();
 
+    LEGION_SUBTEST("Create 1000 entities")
+    {
+        for (int i = 0; i < 1000; i++)
+            ecs::Registry::createEntity();
+    }
+
+    LEGION_SUBTEST("Destroy all entities")
+    {
+        ecs::world.destroy_children();
+        Check(ecs::world->children.size() == 0);
+    }
+
     LEGION_SUBTEST("Filters")
     {
         ecs::filter<test_comp> fltr;
         for (L_MAYBEUNUSED auto& ent : fltr)
             Check(false);
+
+
+        for (int i = 0; i < 100; i++)
+        {
+            auto ent = ecs::Registry::createEntity();
+            ent.add_component<test_comp>();
+        }
+
+        size_type count = 0;
+
+        for (auto& ent : fltr)
+        {
+            if (ent.has_component<test_comp>())
+            {
+                ent.get_component<test_comp>()->value = 1;
+                count++;
+            }
+            else
+                Check(false);
+        }
+
+        Check(count == 100 && count == fltr.size());
+        count = 0;
+        for (auto& ent : fltr.reverse_range())
+        {
+            count += ent.get_component<test_comp>()->value;
+            ent.destroy();
+        }
+
+        Check(count == 100);
+        Check(fltr.size() == 0);
     }
 }
 
 LEGION_TEST("core::ecs")
 {
-    Test(TestECS<false>);
+    Test(TestECS);
 
-    Benchmark_N(1000000, TestECS<true>);
+#if defined(LEGION_DEBUG)
+    Benchmark_N(10000, TestECS);
+#elif defined(LEGION_RELEASE)
+    Benchmark_N(100000, TestECS);
+#else
+    Benchmark_N(1, TestECS);
+#endif
 }

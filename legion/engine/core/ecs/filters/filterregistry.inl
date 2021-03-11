@@ -8,9 +8,9 @@ namespace legion::core::ecs
     {
         auto& composition = Registry::entityComposition(target);
 
-        for (auto& filter : m_filters)
+        for (auto& filter : filters())
             if (filter->contains(make_hash<component_type>()) && filter->contains(composition))
-                m_entityLists.at(filter->id()).insert(target);
+                entityLists().at(filter->id()).insert(target);
     }
 
     template<typename component_type>
@@ -18,9 +18,9 @@ namespace legion::core::ecs
     {
         auto& composition = Registry::entityComposition(target);
 
-        for (auto& filter : m_filters)
+        for (auto& filter : filters())
             if (filter->contains(make_hash<component_type>()))
-                m_entityLists.at(filter->id()).erase(target); // Will not do anything if the target wasn't in the set.
+                entityLists().at(filter->id()).erase(target); // Will not do anything if the target wasn't in the set.
     }
 
     template<typename component_type>
@@ -39,12 +39,12 @@ namespace legion::core::ecs
     inline const id_type FilterRegistry::generateFilterImpl()
     {
         constexpr id_type id = generateId<component_types...>();
-        m_filters.emplace_back(new filter_info<component_types...>());
-        m_entityLists.emplace(id, hashed_sparse_set<entity>{});
+        filters().emplace_back(new filter_info<component_types...>());
+        entityLists().emplace(id, hashed_sparse_set<entity>{});
 
         for (auto& [entId, composition] : Registry::entityCompositions())
             if (filter_info<component_types...>{}.contains(composition))
-                m_entityLists.at(id).insert(entity{ &Registry::entityData(entId) });
+                entityLists().at(id).insert(entity{ &Registry::entityData(entId) });
 
         return id;
     }

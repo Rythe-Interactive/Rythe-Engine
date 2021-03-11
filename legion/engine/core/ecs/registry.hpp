@@ -24,12 +24,11 @@ namespace legion::core::ecs
 
     private:
         static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
-        static std::unordered_map<id_type, std::unordered_set<id_type>> m_entityComposition;
         static std::unordered_map<id_type, entity_data> m_entities;
         static std::queue<id_type> m_recyclableEntities;
 
         template<typename component_type, typename... Args>
-        L_NODISCARD static component_pool<component_type>* tryEmplaceFamily(Args&&... args);
+        static component_pool<component_type>* tryEmplaceFamily(Args&&... args);
 
     public:
         L_NODISCARD static entity getWorld();
@@ -50,7 +49,7 @@ namespace legion::core::ecs
         static bool checkEntity(entity target);
         static bool checkEntity(id_type target);
 
-        L_NODISCARD static std::unordered_map<id_type, std::unordered_set<id_type>>& entityCompositions();
+        L_NODISCARD static std::unordered_map<id_type, std::unordered_set<id_type>>& entityCompositions() noexcept;
         L_NODISCARD static std::unordered_map<id_type, entity_data>& entityData();
 
         L_NODISCARD static std::unordered_set<id_type>& entityComposition(entity target);
