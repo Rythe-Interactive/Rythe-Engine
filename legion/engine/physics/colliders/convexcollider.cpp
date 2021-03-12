@@ -18,6 +18,9 @@ namespace legion::physics
         auto aabbOther = convexCollider->GetMinMaxWorldAABB();
         auto& [low0, high0] = aabbThis;
         auto& [low1, high1] = aabbOther;
+
+        //debug::drawLine(low0, high0, math::colors::blue, 3.0f, FLT_MAX);
+        //debug::drawLine(low1, high1, math::colors::red, 3.0f, FLT_MAX);
         if (!physics::PhysicsStatics::CollideAABB(low0, high0, low1, high1))
         {
             manifold.isColliding = false;

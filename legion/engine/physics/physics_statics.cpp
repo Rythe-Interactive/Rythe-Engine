@@ -366,6 +366,19 @@ namespace legion::physics
         //For each vertex
             //merge vertex into hull
 
+        auto& verticesVec = convexCollider->GetVertices();
+        
+        for (auto face : convexCollider->GetHalfEdgeFaces())
+        {
+            auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
+            {
+                verticesVec.push_back(edge->edgePosition);
+            };
+
+            face->forEachEdge(collectVertices);
+
+        }
+
         return convexCollider;
     }
 

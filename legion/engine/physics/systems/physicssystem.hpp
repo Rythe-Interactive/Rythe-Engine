@@ -236,7 +236,6 @@ namespace legion::physics
 
                             bool isBetween2Rigidbodies = (hasRigidBodies[precursorA.id] && hasRigidBodies[precursorB.id]);
 
-
                             if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
                             {
                                 constructManifoldsWithPrecursors(rigidbodies, hasRigidBodies, precursorA, precursorB,
@@ -254,7 +253,7 @@ namespace legion::physics
             //------------------------------------------------ Pre Collision Solve Events --------------------------------------------//
 
             // all manifolds are initially valid
-
+            log::debug("manifolds to solve {} ", manifoldsToSolve.size());
             std::vector<byte> manifoldValidity(manifoldsToSolve.size(), true);
 
             //TODO we are currently hard coding fracture, this should be an event at some point

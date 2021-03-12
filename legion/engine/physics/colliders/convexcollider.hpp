@@ -344,7 +344,7 @@ namespace legion::physics
             return halfEdgeFaces;
         }
 
-        const std::vector<math::vec3>& GetVertices() const
+        std::vector<math::vec3>& GetVertices() 
         {
             return vertices;
         }

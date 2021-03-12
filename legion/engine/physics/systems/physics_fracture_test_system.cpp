@@ -779,30 +779,30 @@ namespace legion::physics
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
         //cube
-        createQuickhullTestObject
-        (math::vec3(0,5.0f,0),cubeH, wireFrameH);
+       /* createQuickhullTestObject
+        (math::vec3(0,5.0f,0),cubeH, wireFrameH);*/
 
-        //cup
+        ////cup
         createQuickhullTestObject
         (math::vec3(5.0f, 5.0f, 0), colaH, wireFrameH);
 
-        //hammer
-        createQuickhullTestObject
-        (math::vec3(10.0f, 5.0f, 0), hammerH, wireFrameH);
+        ////hammer
+        //createQuickhullTestObject
+        //(math::vec3(10.0f, 5.0f, 0), hammerH, wireFrameH);
 
-        //suzanne
-        createQuickhullTestObject
-        (math::vec3(15.0f, 5.0f, 0), suzzaneH, wireFrameH);
+        ////suzanne
+        //createQuickhullTestObject
+        //(math::vec3(15.0f, 5.0f, 0), suzzaneH, wireFrameH);
 
-        //ohio teapot
-        createQuickhullTestObject
-        (math::vec3(20.0f, 5.0f, 0), cubeH, wireFrameH);
+        ////ohio teapot
+        //createQuickhullTestObject
+        //(math::vec3(20.0f, 5.0f, 0), cubeH, wireFrameH);
         
 
         addStaircase(math::vec3(8, 2, 0));
-        addStaircase(math::vec3(8, 1, -1));
+        /*addStaircase(math::vec3(8, 1, -1));
         addStaircase(math::vec3(8, 0, -2));
-        addStaircase(math::vec3(8, -1, -3));
+        addStaircase(math::vec3(8, -1, -3));*/
     }
 
     void PhysicsFractureTestSystem::addStaircase(math::vec3 position)
@@ -823,6 +823,15 @@ namespace legion::physics
         physics::physicsComponent physicsComponent2;
         physicsComponent2.AddBox(cubeParams);
         entPhyHande.write(physicsComponent2);
+
+
+
+        auto ent2 = m_ecs->createEntity();
+        ent2.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+
+        auto [position2H, rotation2H, scale2H] = m_ecs->createComponents<transform>(ent2);
+        position2H.write(position);
+        scale2H.write(math::vec3(23.0f, 1.0f, 1.0f));
     }
 
     void PhysicsFractureTestSystem::createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH)
@@ -1022,13 +1031,13 @@ namespace legion::physics
                             math::vec3 worldStart = (localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1)) ;
                             math::vec3 worldEnd = (localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1)) ;
 
-                            //debug::drawLine(worldStart + shift, worldEnd + shift, usedColor, 2.0f, 0.0f, useDepth);
+                            debug::drawLine(worldStart + shift, worldEnd + shift, usedColor, 2.0f, 0.0f, useDepth);
 
                             if (auto pairing = edgeToExecuteOn->pairingEdge)
                             {
                                 math::vec3 currentEdgeConnect = worldStart + shift + (worldEnd - worldStart + shift * 2.0f) * 0.25;
                                 math::vec3 currentMeet = worldStart + (worldEnd - worldStart) * 0.25;
-                                debug::drawLine(currentEdgeConnect, currentMeet, math::colors::red, 5.0f, 0.0f, useDepth);
+                                //debug::drawLine(currentEdgeConnect, currentMeet, math::colors::red, 5.0f, 0.0f, useDepth);
 
                                  math::vec3 pairingWorldStart = (localTransform * math::vec4(pairing->edgePosition, 1));
                                 math::vec3 pairinWorldEnd = (localTransform * math::vec4(pairing->nextEdge->edgePosition, 1));
@@ -1037,7 +1046,7 @@ namespace legion::physics
                                 math::vec3 pairingEdgeConnect = pairingWorldStart + shift +
                                     (pairinWorldEnd - pairingWorldStart + shift * 2.0f) * 0.25;
 
-                                debug::drawLine(pairingEdgeConnect, pairingMeet, math::colors::red, 5.0f, 0.0f, useDepth);
+                                //debug::drawLine(pairingEdgeConnect, pairingMeet, math::colors::red, 5.0f, 0.0f, useDepth);
                             }
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
