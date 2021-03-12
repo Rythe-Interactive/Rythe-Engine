@@ -30,9 +30,6 @@ namespace legion::core::ecs
         friend struct component_pool;
 
     private:
-        // Containers that store all the components.
-        static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
-
         // All miscellaneous data on entities, eg: hierarchy, active, alive.
         static std::unordered_map<id_type, entity_data> m_entities;
 
@@ -63,6 +60,15 @@ namespace legion::core::ecs
         template<typename component_type, typename... Args>
         L_NODISCARD static void registerComponentType(Args&&... args);
 
+        /**@brief Manually registers a component type. Allows use of non templated functions for this component type.
+         * @note This function generally not necessary to call manually. All templated functions will try to register
+         *       an unknown component type before they attempt their operation.
+         * @note For a struct to work as a component it needs to be default constructible.
+         * @tparam component_type Type of struct you with to register as a component.
+         */
+        template<typename component_type0, typename component_type1, typename... component_types, typename... Args>
+        L_NODISCARD static void registerComponentType(Args&&... args);
+
         /**@brief Get a pointer to the family of a certain component type.
          */
         template<typename component_type, typename... Args>
@@ -74,6 +80,10 @@ namespace legion::core::ecs
          * @param typeId Local type hash of the component type.
          */
         L_NODISCARD static component_pool_base* getFamily(id_type typeId);
+
+        /**@brief Gets the container with all the component storage families.
+         */
+        L_NODISCARD static std::unordered_map<id_type, std::unique_ptr<component_pool_base>>& getFamilies();
 
         /**@brief Creates empty entity with the world as its parent.
          */
@@ -217,3 +227,5 @@ namespace legion::core::ecs
 #include <core/ecs/filters/filterregistry.inl>
 #include <core/ecs/handles/entity.inl>
 #include <core/ecs/handles/component.inl>
+#include <core/ecs/prototypes/entity_prototype.inl>
+

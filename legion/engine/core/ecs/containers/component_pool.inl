@@ -1,5 +1,5 @@
 #include <core/ecs/registry.hpp>
-#include "component_pool.hpp"
+#include <core/ecs/containers/component_pool.hpp>
 #pragma once
 
 namespace legion::core::ecs
@@ -42,6 +42,14 @@ namespace legion::core::ecs
     inline void component_pool<component_type>::destroy_component(id_type target)
     {
         m_components.erase(target);
+    }
+
+    template<typename component_type>
+    inline std::unique_ptr<serialization::component_prototype_base> component_pool<component_type>::create_prototype(id_type target) const
+    {
+        return std::unique_ptr<serialization::component_prototype_base>(
+            new serialization::component_prototype<component_type>(m_components.at(target))
+            );
     }
 
     template<typename component_type>

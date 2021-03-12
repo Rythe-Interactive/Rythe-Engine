@@ -3,8 +3,15 @@
 
 #include <core/ecs/handles/entity.hpp>
 
+/**
+ * @file entity_data.hpp
+ */
+
 namespace legion::core::ecs
 {
+    /**@class entity_data
+     * @brief Entity specific data, eg: alive, active, children.
+     */
     struct entity_data
     {
         // entity state bitfield.

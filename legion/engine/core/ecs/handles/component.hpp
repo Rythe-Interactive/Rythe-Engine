@@ -1,16 +1,27 @@
 #pragma once
 #include <core/platform/platform.hpp>
 #include <core/math/math.hpp>
-
 #include <core/common/hash.hpp>
+
 #include <core/ecs/handles/entity.hpp>
+
+/**
+ * @file component.hpp
+ */
 
 namespace legion::core::ecs
 {
+    /**@class component_base
+     * @brief Shared bass class for component handles.
+     */
     struct component_base
     {
     };
 
+    /**@class component
+     * @brief Inter frame storable handle to a component. 
+     * @tparam component_type Type of component the handle references.
+     */
     template<typename component_type>
     struct component : public component_base
     {
@@ -28,9 +39,13 @@ namespace legion::core::ecs
 
         bool operator==(const component& other) const noexcept;
 
+        /**@brief Gets a reference to the component the handle references.
+         */
         L_NODISCARD component_type& get();
         L_NODISCARD const component_type& get() const;
 
+        /**@brief Destroys the component the handle references.
+         */
         void destroy();
     };
 }
