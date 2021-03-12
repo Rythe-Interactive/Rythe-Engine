@@ -4,14 +4,14 @@
 
 namespace legion::core::ecs
 {
-    entity::operator const id_type& () const noexcept
+    entity::operator id_type () const noexcept
     {
-        return (data && data->alive) ? data->id : dummy_id;
+        return (data && data->alive) ? data->id : invalid_id;
     }
 
-    entity::operator id_type& () noexcept
+    bool entity::valid() const noexcept
     {
-        return (data && data->alive) ? data->id : dummy_id;
+        return data && data->alive;
     }
 
     entity_data* entity::operator->() noexcept
@@ -102,6 +102,11 @@ namespace legion::core::ecs
         return data->children;
     }
 
+    entity entity::get_child(size_type index) const
+    {
+        return data->children.at(index);
+    }
+
     entity_set::iterator entity::begin()
     {
         return data->children.begin();
@@ -117,6 +122,21 @@ namespace legion::core::ecs
         return data->children.cbegin();
     }
 
+    entity_set::reverse_iterator entity::rbegin()
+    {
+        return data->children.rbegin();
+    }
+
+    entity_set::const_reverse_iterator entity::rbegin() const
+    {
+        return data->children.crbegin();
+    }
+
+    entity_set::const_reverse_iterator entity::crbegin() const
+    {
+        return data->children.crbegin();
+    }
+
     entity_set::iterator entity::end()
     {
         return data->children.end();
@@ -130,6 +150,21 @@ namespace legion::core::ecs
     entity_set::const_iterator entity::cend() const
     {
         return data->children.cend();
+    }
+
+    entity_set::reverse_iterator entity::rend()
+    {
+        return data->children.rend();
+    }
+
+    entity_set::const_reverse_iterator entity::rend() const
+    {
+        return data->children.crend();
+    }
+
+    entity_set::const_reverse_iterator entity::crend() const
+    {
+        return data->children.crend();
     }
 
     void entity::destroy(bool recurse)

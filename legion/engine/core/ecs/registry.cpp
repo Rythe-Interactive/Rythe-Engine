@@ -114,7 +114,7 @@ namespace legion::core::ecs
 
     bool Registry::checkEntity(entity target)
     {
-        return target != nullptr;
+        return target.data && target.data->alive;
     }
 
     bool Registry::checkEntity(id_type target)

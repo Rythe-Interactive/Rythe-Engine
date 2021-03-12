@@ -193,7 +193,7 @@ LEGION_TEST("core::ecs")
     Test(TestECS);
 
 #if defined(LEGION_DEBUG)
-    Benchmark_N(10000, TestECS);
+    Benchmark(TestECS);
 #elif defined(LEGION_RELEASE)
     Benchmark_N(100000, TestECS);
 #else

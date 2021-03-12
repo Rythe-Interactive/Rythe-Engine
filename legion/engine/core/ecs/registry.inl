@@ -6,15 +6,31 @@ namespace legion::core::ecs
     template<typename component_type, typename ...Args>
     inline component_pool<component_type>* Registry::tryEmplaceFamily(Args && ...args)
     {
-        if (m_componentFamilies.count(make_hash<component_type>()))
+        if (m_componentFamilies.count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
             return static_cast<component_pool<component_type>*>(m_componentFamilies.at(make_hash<component_type>()).get());
-        return static_cast<component_pool<component_type>*>(m_componentFamilies.try_emplace(make_hash<component_type>(), new component_pool<component_type>(std::forward<Args>(args)...)).first->second.get());
+
+        // Allocate and emplace if no item was found.
+        return static_cast<component_pool<component_type>*>(
+            m_componentFamilies.emplace(
+                make_hash<component_type>(),
+                std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
+            ).first->second.get() // std::pair<iterator, bool>.first --> iterator<std::pair<key, value>>->second --> std::unique_ptr.get() --> component_pool_base* 
+            );
     }
 
-    template<typename component_type>
-    inline component_pool<component_type>* ecs::Registry::getFamily()
+    template<typename component_type, typename... Args>
+    inline void ecs::Registry::registerComponentType(Args&&... args)
     {
-        return tryEmplaceFamily<component_type>();
+        m_componentFamilies.emplace(
+            make_hash<component_type>(),
+            std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
+        );
+    }
+
+    template<typename component_type, typename... Args>
+    inline component_pool<component_type>* ecs::Registry::getFamily(Args&&... args)
+    {
+        return tryEmplaceFamily<component_type>(std::forward<Args>(args)...);
     }
 
     template<typename component_type>
