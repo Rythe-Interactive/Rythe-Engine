@@ -139,5 +139,20 @@ namespace legion::physics
         return m_SplitState;
     }
 
+    void SplittablePolygon::DEBUG_drawEdgeBoundaryInset(const math::mat4& transform)
+    {
+        static float inset = 0.05f;
+
+        for (auto edge : edgesInPolygon)
+        {
+            math::vec3 worldCentroid = transform * math::vec4(localCentroid, 1);
+
+            if (edge->isBoundary)
+            {
+                edge->DEBUG_drawInsetEdge(transform, worldCentroid, inset);
+            }
+        }
+    }
+
 }
 

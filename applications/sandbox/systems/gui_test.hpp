@@ -202,11 +202,17 @@ class GuiTestSystem : public System<GuiTestSystem>
 
        // base::End();
 
+        static bool showGizmo = true;
+
         gizmo::BeginFrame();
-        gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
+        //gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::Begin("Edit Cube Transform");
+        if (base::RadioButton("Show Gizmo", showGizmo))
+            showGizmo = !showGizmo;
+
         //cannot render more than one gizmo at once (and animator also uses one)
-        gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
+        if (showGizmo)
+            gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
         base::End();
 
         base::Begin("Edit Camera Transform");

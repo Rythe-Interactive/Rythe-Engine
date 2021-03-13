@@ -63,6 +63,9 @@
     <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">
@@ -155,36 +158,6 @@
     <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="components\fracturer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\convex_convex_collision_info.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\physics_manifold_precursor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\penetrationquery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\half_edge_finder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\intersection_edge_info.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\primitive_mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mesh_splitter_utils\splittable_polygon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\physics_fracture_test_system.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="components\fracturer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -222,6 +195,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgrid.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="data\fractureparams.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\fracturecountdown.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

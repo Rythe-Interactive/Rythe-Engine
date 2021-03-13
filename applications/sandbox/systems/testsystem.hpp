@@ -29,7 +29,9 @@
 
 
 #include "animation_editor.hpp"
+#include "animator.hpp"
 #include "../data/animation.hpp"
+#include "../data/explode_event.hpp"
 
 using namespace legion;
 
@@ -726,6 +728,7 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(copperH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -3.6f), rotation(), scale());
+            //ent.add_component<ext::evt::explosion_receiver>(ext::evt::explosion_receiver{"A Random Entity I found"});
         }
 
         {
@@ -733,6 +736,7 @@ public:
             ent.add_components<rendering::mesh_renderable>(mesh_filter(uvsphereH.get_mesh()), rendering::mesh_renderer(aluminumH));
             ent.add_component<sah>({});
             ent.add_components<transform>(position(0, 3, -6.5f), rotation(), scale());
+            //ent.add_component<ext::evt::explosion_receiver>(ext::evt::explosion_receiver{"Some other Entity I found"});
         }
 
         {
@@ -767,17 +771,16 @@ public:
             ent2.get_component_handle<position>().write(pos);
         }
 
-    #if defined(LEGION_DEBUG)
-            for (int i = 0; i < 1; i++)
-    #else
-            for (int i = 0; i < 1; i++)
-    #endif
-            {
-                auto ent = createEntity(false);
-                ent.add_components<rendering::mesh_renderable>(mesh_filter(billboardH.get_mesh()), rendering::mesh_renderer(textureBillboardH));
-                ent.add_component<sah>({});
-                ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale(0.1f));
-            }
+#if defined(LEGION_DEBUG)
+        for (int i = 0; i < 200; i++)
+#else
+        for (int i = 0; i < 2000; i++)
+#endif
+        {
+            auto ent = createEntity();
+            ent.add_components<rendering::mesh_renderable>(mesh_filter(billboardH.get_mesh()), rendering::mesh_renderer(textureBillboardH));
+            ent.add_components<transform>(position(math::linearRand(math::vec3(40, -21, -10), math::vec3(60, -1, 10))), rotation(), scale(0.1f));
+        }
 
         //audioSphereLeft setup
         //{
@@ -902,7 +905,7 @@ public:
              auto entPhyHande = splitter.add_component<physics::physicsComponent>();
 
             physics::physicsComponent physicsComponent2;
-            
+
 
              physicsComponent2.AddBox(cubeParams);
 
@@ -1050,12 +1053,11 @@ public:
             finderH.write(finder);*/
         }
 
-        //Complex Mesh
-
         createProcess<&TestSystem::update>("Update");
         ext::AnimationEditor::onRenderCustomEventGUI(ext::void_animation_event::id, [](id_type id, ext::animation_event_base* ebase)
             {
                 imgui::base::Text("Void Animations Custom Edit Frontend!");
+
 
                 static bool showBaseRenderLayer = false;
                 if (imgui::base::Button(fmt::format("Show Base Renderer [{}]", showBaseRenderLayer).c_str()))
@@ -1528,7 +1530,7 @@ public:
 
             auto entPhyHande = ent.add_component<physics::physicsComponent>();
 
-            physics::physicsComponent physicsComponent2;   
+            physics::physicsComponent physicsComponent2;
 
 
             physicsComponent2.AddBox(staticBlockParams);
@@ -1553,7 +1555,7 @@ public:
 
             auto entPhyHande = staticToOBBEnt.add_component<physics::physicsComponent>();
 
-            physics::physicsComponent physicsComponent2;   
+            physics::physicsComponent physicsComponent2;
 
             physicsComponent2.AddBox(cubeParams);
             physicsComponent2.isTrigger = false;
@@ -2302,23 +2304,23 @@ public:
 
     void update(time::span deltaTime)
     {
-        static float timer = 0;
+        //static float timer = 0;
 
-        static float avgdt = deltaTime;
-        avgdt = (avgdt + deltaTime) / 2.f;
-        timer += deltaTime;
-        if (timer > 1.f)
-        {
-            timer -= 1.f;
-            log::debug("frametime {}ms, fps {}", avgdt, 1.f / avgdt);
-        }
+        //static float avgdt = deltaTime;
+        //avgdt = (avgdt + deltaTime) / 2.f;
+        //timer += deltaTime;
+        //if (timer > 1.f)
+        //{
+        //    timer -= 1.f;
+        //    log::debug("frametime {}ms, fps {}", avgdt, 1.f / avgdt);
+        //}
 
         //static auto sahQuery = createQuery<sah, rotation, position, scale>();
-        static auto sahQuery = createQuery<sah, position>();
+        static auto sahQuery = createQuery<sah, rotation>();
         sahQuery.queryEntities();
 
-        //auto& rotations = sahQuery.get<rotation>();
-        auto& positions = sahQuery.get<position>();
+        auto& rotations = sahQuery.get<rotation>();
+        //auto& positions = sahQuery.get<position>();
         //auto& scales = sahQuery.get<scale>();
 
         float dt = deltaTime;
@@ -2326,17 +2328,15 @@ public:
         m_scheduler->queueJobs(sahQuery.size(), [&]()
             {
                 id_type idx = async::this_job::get_id();
-                //auto& rot = rotations[idx];
-                auto& pos = positions[idx];
+                auto& rot = rotations[idx];
+                //auto& pos = positions[idx];
                 //auto& scale = scales[idx];
-                float t = time::mainClock.elapsedTime();
-                pos += math::vec3(math::sin(t) * 0.01f, math::sin(t + 1.f) * 0.01f, math::sin(t - 1.f) * 0.01f);
-                //rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
+                //float t = time::mainClock.elapsedTime();
+                //pos += math::vec3(math::sin(t) * 0.01f, math::sin(t + 1.f) * 0.01f, math::sin(t - 1.f) * 0.01f);
+                rot = math::angleAxis(math::deg2rad(45.f * dt), rot.up()) * rot;
             }).wait();
-            sahQuery.submit<position>();
-            */
-            
-            //sahQuery.submit<rotation>();
+            //sahQuery.submit<position>();
+            sahQuery.submit<rotation>();
 
             //if (rotate && !physics::PhysicsSystem::IsPaused)
             //{

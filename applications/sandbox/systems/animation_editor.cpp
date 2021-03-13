@@ -212,6 +212,26 @@ namespace ext
     void AnimationEditor::onGUI(application::window&, rendering::camera& cam,
         const rendering::camera::camera_input& cInput, time::span)
     {
+        static auto dr_query = createQuery<ext::evt::decal_receiver>();
+        static auto er_query = createQuery<ext::evt::explosion_receiver>();
+        static auto pr_query = createQuery<ext::evt::particle_receiver>();
+
+        dr_query.queryEntities();
+        er_query.queryEntities();
+        pr_query.queryEntities();
+        ext::evt::g_dr_entities.clear();
+        ext::evt::g_er_entities.clear();
+        ext::evt::g_pr_entities.clear();
+
+
+
+        std::copy(dr_query.begin(),dr_query.end(),std::back_inserter(ext::evt::g_dr_entities));
+        std::copy(er_query.begin(),er_query.end(),std::back_inserter(ext::evt::g_er_entities));
+        std::copy(pr_query.begin(),pr_query.end(),std::back_inserter(ext::evt::g_pr_entities));
+
+
+
+
         //TODO (algorythmix) anim here needs to come from the selected object, the problem of course 
         //TODO (cont.)       is that the concept of a "selected" object is not defined as such 
         auto anim = m_cubeEntity.read_component<animation>();

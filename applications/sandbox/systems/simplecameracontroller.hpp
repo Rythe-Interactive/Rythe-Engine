@@ -4,6 +4,7 @@
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
 #include "../data/crosshair.hpp"
+#include "../data/animation.hpp"
 
 using namespace legion;
 
@@ -32,7 +33,7 @@ public:
 
     virtual void setup()
     {
-        Crosshair::setScale(math::vec2(1.5f));
+        Crosshair::setScale(math::vec2(1.f));
         gfx::PostProcessingStage::addEffect<Crosshair>(-100);
 #pragma region Input binding
         app::InputSystem::createBinding<player_move>(app::inputmap::method::W, 1.f);
@@ -125,6 +126,20 @@ public:
         rendering::camera cam;
         cam.set_projection(22.5f, 0.001f, 1000.f);
         camera.add_component<rendering::camera>(cam);
+
+        //ext::animation anim{ true };
+
+        //load animation data from disk
+        //filesystem::basic_resource res = fs::view("assets://test.anim").get().except([](auto err)
+        //{
+        //    return filesystem::basic_resource("{}");
+        //});
+
+        //convert to animation
+        //anim = res.to< ext::animation>();
+        //anim.running = true;
+        //add animation to entity
+        //camera.add_component< ext::animation>(anim);
     }
 
 #pragma region input stuff

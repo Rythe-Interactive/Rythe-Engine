@@ -109,6 +109,8 @@
   <ItemGroup>
     <ClCompile Include="data\animation.cpp" />
     <ClCompile Include="data\crosshair.cpp" />
+    <ClCompile Include="data\events_statics.cpp" />
+    <ClCompile Include="data\explode_event.hpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="systems\animation_editor.cpp" />
     <ClCompile Include="systems\animator.cpp" />
@@ -117,12 +119,16 @@
     <ClInclude Include="data\animation.hpp" />
     <ClInclude Include="data\animation_events.hpp" />
     <ClInclude Include="data\crosshair.hpp" />
+    <ClInclude Include="data\decal_event.hpp" />
+    <ClInclude Include="data\particle_event.hpp" />
     <ClInclude Include="data\pp_bloom.hpp" />
     <ClInclude Include="data\pp_edgedetect.hpp" />
     <ClInclude Include="module\testmodule.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="systems\animation_editor.hpp" />
     <ClInclude Include="systems\animator.hpp" />
+    <ClInclude Include="systems\event_based_explosion_system.hpp" />
+    <ClInclude Include="systems\final_presentation_system.hpp" />
     <ClInclude Include="systems\gui_test.hpp" />
     <ClInclude Include="systems\pointcloudtestsystem2.hpp" />
     <ClInclude Include="systems\explosion_particlesystem.hpp" />

@@ -9,9 +9,10 @@
 #include <rendering/components/renderable.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/components/fracturer.hpp>
-
+#include <physics/systems/physicssystem.hpp>
 #include <rendering/components/particle_emitter.hpp>
 #include <physics/halfedgeedge.hpp>
+
 using namespace legion;
 
 struct physics_step : public app::input_action<physics_step> {};
@@ -92,7 +93,7 @@ public:
                 rbH.write(rb);
             }*/
 
-            {
+            /*{
                 colliderEnt = createEntity();
                 colliderEnt.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
                 colliderEnt.add_components<transform>(position(0, 5.0f, 0), rotation(), scale(1));
@@ -101,7 +102,7 @@ public:
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 physH.write(p);
                 colliderEnt.add_component<physics::rigidbody>();
-            }
+            }*/
 
             {
                 auto ent = createEntity();
@@ -116,16 +117,16 @@ public:
                 //ent.add_components<transform>(position(0.f, -0.4f, 0.f), rotation(), scale(250.f, 1.f, 250.f));
             }
 
-            {
+            /*{
                 auto ent = createEntity();
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
-                ent.add_components<transform>(position(0, 7.0f, 0), rotation(), scale(1));
+                ent.add_components<transform>(position(0, 3.0f, 0), rotation(), scale(1));
                 auto physH = ent.add_component<physics::physicsComponent>();
                 auto p = physH.read();
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 physH.write(p);
                 ent.add_component<physics::rigidbody>();
-            }
+            }*/
 
             {
                 auto ent = createEntity();
@@ -138,17 +139,22 @@ public:
             }
 
 #if 1
-            for (int i = 0; i < 1000; ++i)
+            auto defaultMat = gfx::MaterialCache::get_material("pbr");
+            for (int i = 0; i < 200; ++i)
             {
                 auto ent = createEntity();
-                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(solidLegion));
-                ent.add_components<transform>(position(math::linearRand(math::vec3(-10, 0, -10), math::vec3(10, 20, 10))), rotation(math::angleAxis(math::linearRand(-math::pi<float>(), math::pi<float>()), math::normalize(math::linearRand(-math::vec3::one, math::vec3::one)))), scale(1.f));
+                ent.add_components<rendering::mesh_renderable>(mesh_filter(cube.get_mesh()), rendering::mesh_renderer(defaultMat));
+                ent.add_components<transform>(position(math::linearRand(math::vec3(-20, 0, -20), math::vec3(20, 20, 20))), rotation(math::angleAxis(math::linearRand(-math::pi<float>(), math::pi<float>()), math::normalize(math::linearRand(-math::vec3::one, math::vec3::one)))), scale(1.f));
+
 
                 physics::physicsComponent p;
                 p.AddBox(physics::cube_collider_params(1.0f, 1.0f, 1.0f));
                 ent.add_component(p);
 
-                auto rbH = ent.add_component<physics::rigidbody>();
+                if (i < 100)
+                {
+                    auto rbH = ent.add_component<physics::rigidbody>();
+                }
             }
 #endif
         }
@@ -159,6 +165,7 @@ public:
     void update(time::span deltaTime)
     {
         //physics::PhysicsSystem::drawBroadPhase();
+        //drawPhysicsColliders();
 
         auto [posH, rotH, scaleH] = physicsEnt.get_component_handles<transform>();
 
@@ -225,6 +232,7 @@ public:
 
     void drawPhysicsColliders()
     {
+        static float offset = 0.000f;
         static auto physicsQuery = createQuery< physics::physicsComponent>();
         physicsQuery.queryEntities();
 
@@ -275,14 +283,14 @@ public:
                         //face->forEachEdge(drawFunc);
                         physics::HalfEdgeEdge* initialEdge = face->startEdge;
                         physics::HalfEdgeEdge* currentEdge = face->startEdge;
-
+                        math::vec3 worldNormal = (localTransform * math::vec4(face->normal, 0));
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
-                        math::vec3 faceEnd = faceStart + math::vec3((localTransform * math::vec4(face->normal, 0))) * 0.1f;
-                        
+                        math::vec3 faceEnd = faceStart + worldNormal * 0.1f;
+               
                         //debug::user_projectDrawLine(faceStart, faceEnd, math::colors::green, 2.0f);
 
                         if (!currentEdge) { return; }
-
+                        
                         do
                         {
                             physics::HalfEdgeEdge* edgeToExecuteOn = currentEdge;
@@ -291,7 +299,7 @@ public:
                             math::vec3 worldStart = localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1);
                             math::vec3 worldEnd = localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1);
 
-                            debug::user_projectDrawLine(worldStart, worldEnd, usedColor, 2.0f, 0.0f, useDepth);
+                            //debug::user_projectDrawLine(worldStart + worldNormal * offset, worldEnd + worldNormal * offset, usedColor, 2.0f, 0.0f, useDepth);
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);
                     }
