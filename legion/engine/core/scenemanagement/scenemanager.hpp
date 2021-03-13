@@ -15,10 +15,17 @@ namespace legion::core::scenemanagement
     class SceneManager final : public core::System<SceneManager>
     {
     public:
+        using additional_loader_fn = delegate<void(ecs::entity_handle)>;
+    private:
+        static std::unordered_map<id_type,additional_loader_fn> m_additionalLoaders;
+    public:
+
+
         static int sceneCount;
         static std::string currentScene;
         static std::unordered_map < id_type, std::string> sceneNames;
         static std::unordered_map < id_type, ecs::component_handle <scene > > sceneList;
+        
 
         SceneManager() = default;
 
@@ -88,6 +95,10 @@ namespace legion::core::scenemanagement
          */
         static ecs::entity_handle get_scene_entity(std::string name);
 
-       
+        template <class component_type>
+        static void add_loader(additional_loader_fn additional_loader)
+        {
+            m_additionalLoaders[typeHash<component_type>()] = additional_loader;
+        }
     };
 }

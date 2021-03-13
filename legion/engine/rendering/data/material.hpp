@@ -82,6 +82,8 @@ namespace legion::rendering
         friend struct material_handle;
     private:
         shader_handle m_shader;
+        bool m_canLoadOrSave = true;
+
 
         void init(const shader_handle& shader)
         {
@@ -99,6 +101,9 @@ namespace legion::rendering
         id_type m_currentVariant = 0;
         std::unordered_map<id_type, variant_submaterial> m_variants;
     public:
+
+
+
         bool has_variant(id_type variantId) const;
         bool has_variant(const std::string& variant) const;
         void set_variant(id_type variantId);
@@ -161,9 +166,12 @@ namespace legion::rendering
         {
             if (m_currentVariant == 0)
                 m_currentVariant = nameHash("default");
-   
+
             return m_variants[m_currentVariant].parameters;
         }
+
+        void make_unsavable();
+
     };
 
     /**@class material_handle
@@ -221,7 +229,7 @@ namespace legion::rendering
         template<typename T>
         L_NODISCARD T get_param(GLint location);
 
-        L_NODISCARD const std::string& get_name();
+        L_NODISCARD const std::string& get_name() const;
 
         L_NODISCARD const std::unordered_map<id_type, std::unique_ptr<material_parameter_base>>& get_params();
 
@@ -236,8 +244,12 @@ namespace legion::rendering
 
         template<class Archive>
         void load(Archive& oa);
+
+        bool getLoadOrSaveBit() const;
+        void setLoadOrSaveBit(bool canBeSavedOrLoaded);
+
     };
-    
+
 
     /**@brief Default invalid material handle.
      */
@@ -274,6 +286,7 @@ namespace legion::rendering
          * @return material_handle Handle to a material attached to the given name, may be invalid if there is no material attached to that name yet.
          */
         static material_handle get_material(const std::string& name);
+
     };
 
 #pragma region implementations
@@ -509,6 +522,7 @@ namespace legion::rendering
     template <class Archive>
     void material_handle::save(Archive& oa) const
     {
+
         async::readonly_guard guard(MaterialCache::m_materialLock);
         material& m = MaterialCache::m_materials[id];
 
@@ -548,6 +562,7 @@ namespace legion::rendering
             // add the key + the equals sign
             // for instance
             // "material_input.emissive="
+            bob.push_state();
             bob.glyph(kv).eq();
 
             // determine  what type of variable we are dealing with
@@ -591,7 +606,13 @@ namespace legion::rendering
             {
                 //for the texture handle we need to extract the texture first and ask it for its path
                 texture_handle th = static_cast<material_parameter<texture_handle>*>(value.get())->get_value();
-                bob.value(th.get_texture().path).finish_entry();
+                std::string path = th.get_texture().path;
+                if(path.empty())
+                {
+                    bob.pop_state();
+                    continue;
+                }
+                bob.value(path).finish_entry();
                 continue;
             }
         }
@@ -604,9 +625,15 @@ namespace legion::rendering
     template <class Archive>
     void material_handle::load(Archive& ia)
     {
+        if (!getLoadOrSaveBit())
+        {
+            return;
+        }
+
         std::string filepath;
         ia(cereal::make_nvp("MaterialFile", filepath));
         const fs::view file(filepath);
+        if (!file.file_info().exists) return;
 
         const auto shader_location = extract_string("base", "shader", file);
 
@@ -616,6 +643,17 @@ namespace legion::rendering
     }
 
 
+    inline bool material_handle::getLoadOrSaveBit() const
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        return MaterialCache::m_materials[id].m_canLoadOrSave;
+    }
+
+    inline void material_handle::setLoadOrSaveBit(bool canBeSavedOrLoaded)
+    {
+        async::readwrite_guard guard(MaterialCache::m_materialLock);
+        MaterialCache::m_materials[id].m_canLoadOrSave = canBeSavedOrLoaded;
+    }
 }
 
 

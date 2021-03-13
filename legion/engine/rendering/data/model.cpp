@@ -195,7 +195,7 @@ namespace legion::rendering
             settings.materials = &matList;
         }
 
-        if (settings.contextFolder.get_virtual_path() == "")
+        if (settings.contextFolder.get_virtual_path().empty())
         {
             settings.contextFolder = file.parent();
         }
@@ -207,13 +207,13 @@ namespace legion::rendering
             return invalid_model_handle;
         }
 
-        if (loadedMaterials && loadedMaterials->size() > 0)
+        if (loadedMaterials && !loadedMaterials->empty())
         {
             for (auto& mat : *loadedMaterials)
             {
                 static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
 
-                auto material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
+                material_handle material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
 
                 if (mat.doubleSided)
                     material.set_variant("double_sided");
@@ -304,6 +304,7 @@ namespace legion::rendering
                     material.set_param("useHeight", false);
                 }
 
+                material.setLoadOrSaveBit(false);
                 materials.push_back(material);
                 log::debug("Loaded embedded material {}/{}", name, mat.name);
             }

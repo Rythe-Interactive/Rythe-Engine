@@ -142,6 +142,11 @@ namespace legion::rendering
         return invalid_material_handle;
     }
 
+    void material::make_unsavable()
+    {
+        m_canLoadOrSave = false;
+    }
+
     bool material_handle::has_variant(id_type variantId) const
     {
         async::readonly_guard guard(MaterialCache::m_materialLock);
@@ -175,7 +180,7 @@ namespace legion::rendering
         MaterialCache::m_materials[id].bind();
     }
 
-    L_NODISCARD const std::string& material_handle::get_name()
+    L_NODISCARD const std::string& material_handle::get_name() const
     {
         async::readonly_guard guard(MaterialCache::m_materialLock);
         return MaterialCache::m_materials[id].get_name();
@@ -199,8 +204,8 @@ namespace legion::rendering
         return m_shader.has_variant(variantId);
     }
 
-	bool material::has_variant(const std::string& variant) const
-	{
+    bool material::has_variant(const std::string& variant) const
+    {
         return m_shader.has_variant(variant);
     }
 

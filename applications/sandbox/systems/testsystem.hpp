@@ -15,6 +15,8 @@
 #include <core/compute/context.hpp>
 #include <core/compute/kernel.hpp>
 #include <core/compute/high_level/function.hpp>
+#include <core/serialization/use_embedded_material.hpp>
+
 #include <rendering/debugrendering.hpp>
 
 #include <physics/physics_statics.hpp>
@@ -582,6 +584,7 @@ public:
             {
                 suzanneMaterials[0].set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(suzanneMaterials[0]));
+                ent.add_components<use_embedded_material>(use_embedded_material{"assets://models/suzanne-test.obj"});
             }
             else
                 ent.add_components<rendering::mesh_renderable>(mesh_filter(suzanneH.get_mesh()), rendering::mesh_renderer(gfx::invalid_material_handle));
@@ -2321,7 +2324,7 @@ public:
         //auto& scales = sahQuery.get<scale>();
 
         float dt = deltaTime;
-
+        /*
         m_scheduler->queueJobs(sahQuery.size(), [&]()
             {
                 id_type idx = async::this_job::get_id();
