@@ -3,8 +3,8 @@
 #include <audio/audio.hpp>
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
-#include "../data/crosshair.hpp"
 #include "gui_test.hpp"
+#include "../data/crosshair.hpp"
 
 using namespace legion;
 
@@ -177,6 +177,7 @@ public:
             escaped = false;
             window.enableCursor(false);
         }
+        GuiTestSystem::CaptureKeyboard(!escaped);
     }
 
     void onVSYNCSwap(vsync_action* action)

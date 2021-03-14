@@ -152,6 +152,12 @@ namespace legion::rendering
         m_canLoadOrSave = false;
     }
 
+    id_type material_handle::current_variant() const
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        return MaterialCache::m_materials[id].current_variant();
+    }
+
     bool material_handle::has_variant(id_type variantId) const
     {
         async::readonly_guard guard(MaterialCache::m_materialLock);
@@ -178,6 +184,12 @@ namespace legion::rendering
         MaterialCache::m_materials[id].set_variant(variantId);
     }
 
+    L_NODISCARD shader_handle material_handle::get_shader()
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        return MaterialCache::m_materials[id].m_shader;
+    }
+
     void material_handle::bind()
     {
         OPTICK_EVENT();
@@ -202,6 +214,11 @@ namespace legion::rendering
     {
         async::readonly_guard guard(MaterialCache::m_materialLock);
         return MaterialCache::m_materials[id].m_shader.get_attribute(name);
+    }
+
+    id_type material::current_variant() const
+    {
+        return m_currentVariant;
     }
 
     bool material::has_variant(id_type variantId) const

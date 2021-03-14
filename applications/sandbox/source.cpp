@@ -4,18 +4,16 @@
 #endif
 //#define LEGION_LOW_POWER
 #define LEGION_MIN_THREADS 4 // Update, Rendering, Input, Physics
+#define AUDIO_EXIT_ON_FAIL
 
+#include "module/testmodule.hpp"
 
 #include <core/core.hpp>
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
-#define AUDIO_EXIT_ON_FAIL
 #include <audio/audio.hpp>
 #include <physics/physics.hpp>
 #include <rendering/module/renderingmodule.hpp>
-
-
-#include "module/testmodule.hpp"
 
 using namespace legion;
 

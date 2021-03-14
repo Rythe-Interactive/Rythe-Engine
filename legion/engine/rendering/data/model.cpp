@@ -311,12 +311,14 @@ namespace legion::rendering
         }
 
         // Copy the sub-mesh data.
-        auto [lock, data] = handle.get();
-        async::readonly_guard guard(lock);
-        meshName = data.filePath;
+        {
+            auto [lock, data] = handle.get();
+            async::readonly_guard guard(lock);
+            meshName = data.filePath;
 
-        for (auto& submeshData : data.submeshes)
-            model.submeshes.push_back(submeshData);
+            for (auto& submeshData : data.submeshes)
+                model.submeshes.push_back(submeshData);
+        }
 
         // The model still needs to be buffered on the rendering thread.
         model.buffered = false;

@@ -118,4 +118,3 @@ lib/*
 include/**
 */**/Thumbs.db
 applications/sandbox/imgui.ini
-legion/engine_ref

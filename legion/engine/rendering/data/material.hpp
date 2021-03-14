@@ -68,6 +68,7 @@ namespace legion::rendering
 
     struct variant_submaterial
     {
+        std::string name;
         std::unordered_map<id_type, std::unique_ptr<material_parameter_base>> parameters;
         std::unordered_map<GLint, id_type> idOfLocation;
     };
@@ -92,6 +93,7 @@ namespace legion::rendering
                 for (auto& [name, location, type] : variantInfo)
                 {
                     id_type hash = nameHash(name);
+                    m_variants[variantId].name = m_shader.get_variant(variantId).name;
                     m_variants[variantId].parameters.emplace(hash, material_parameter_base::create_param(name, location, type));
                     m_variants[variantId].idOfLocation[location] = hash;
                 }
@@ -102,7 +104,7 @@ namespace legion::rendering
         std::unordered_map<id_type, variant_submaterial> m_variants;
     public:
 
-
+        id_type current_variant() const;
 
         bool has_variant(id_type variantId) const;
         bool has_variant(const std::string& variant) const;
@@ -183,10 +185,14 @@ namespace legion::rendering
     {
         id_type id;
 
+        id_type current_variant() const;
+
         bool has_variant(id_type variantId) const;
         bool has_variant(const std::string& variant) const;
         void set_variant(id_type variantId);
         void set_variant(const std::string& variant);
+
+        L_NODISCARD shader_handle get_shader();
 
         /**@brief Bind the material to the rendering context and prepare for use.
          */

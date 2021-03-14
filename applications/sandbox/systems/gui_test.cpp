@@ -1,3 +1,4 @@
 #include "gui_test.hpp"
 
-bool GuiTestSystem::isEditingText = false;
+bool legion::GuiTestSystem::captured = false;
+bool legion::GuiTestSystem::isEditingText = false;
