@@ -287,6 +287,7 @@ namespace legion::rendering
          */
         static material_handle get_material(const std::string& name);
 
+        static std::pair<async::rw_spinlock&, std::unordered_map<id_type, material>&> get_all_materials();
     };
 
 #pragma region implementations
@@ -638,7 +639,9 @@ namespace legion::rendering
         const auto shader_location = extract_string("base", "shader", file);
 
         async::readwrite_guard guard(MaterialCache::m_materialLock);
-        id = MaterialCache::create_material(filepath, fs::view(shader_location)).id;
+        auto materialname = file.get_filename().decay();
+        materialname = materialname.substr(0, materialname.find_last_of('.'));
+        id = MaterialCache::create_material(materialname, fs::view(shader_location)).id;
         apply_material_conf(*this, "custom", file);
     }
 

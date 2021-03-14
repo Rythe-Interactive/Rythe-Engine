@@ -491,6 +491,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="math\precision.hpp" />
     <ClInclude Include="math\trigonometry.hpp" />
     <ClInclude Include="platform\platform.hpp" />
+    <ClInclude Include="platform\shellinvoke.hpp" />
+    <ClInclude Include="scenemanagement\components\scene.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="scheduling\process.hpp" />

@@ -3,13 +3,8 @@
     #define LEGION_KEEP_CONSOLE
 #endif
 //#define LEGION_LOW_POWER
-//#define SUPER_LOW_POWER
-#if defined(SUPER_LOW_POWER)
-#define LEGION_MIN_THREADS 3 // Update, Rendering, Input, excluding physics
-#define LEGION_LOW_POWER
-#else
 #define LEGION_MIN_THREADS 4 // Update, Rendering, Input, Physics
-#endif
+
 
 #include <core/core.hpp>
 #include <application/application.hpp>
@@ -31,9 +26,6 @@ void LEGION_CCONV reportModules(Engine* engine)
     engine->reportModule<TestModule>();
     engine->reportModule<app::ApplicationModule>();
     engine->reportModule<rendering::RenderingModule>();
-
-#if !defined(SUPER_LOW_POWER)
     engine->reportModule<physics::PhysicsModule>();
     engine->reportModule<audio::AudioModule>();
-#endif
 }

@@ -129,7 +129,7 @@ namespace legion::rendering
         model model{};
         std::string meshName;
 
-        if (settings.contextFolder.get_virtual_path() == "")
+        if (settings.contextFolder.get_virtual_path().empty())
         {
             settings.contextFolder = file.parent();
         }
@@ -310,10 +310,10 @@ namespace legion::rendering
             }
         }
 
-            // Copy the sub-mesh data.
-            auto [lock, data] = handle.get();
-            async::readonly_guard guard(lock);
-            meshName = data.filePath;
+        // Copy the sub-mesh data.
+        auto [lock, data] = handle.get();
+        async::readonly_guard guard(lock);
+        meshName = data.filePath;
 
         for (auto& submeshData : data.submeshes)
             model.submeshes.push_back(submeshData);
@@ -593,6 +593,24 @@ namespace legion::rendering
     mesh_handle ModelCache::get_mesh(id_type id)
     {
         return MeshCache::get_handle(id);
+    }
+
+    void ModelCache::destroy_model(const std::string& name)
+    {
+        bool erased = false;
+        id_type id = nameHash(name);
+        {
+            async::readwrite_guard guard(m_modelLock);
+
+            if (!m_models.contains(id))
+                return;
+
+            MeshCache::destroy_mesh(id);
+            erased = m_models.erase(id);
+        }
+
+        if (erased)
+            log::debug("Destroyed model {}", name);
     }
 
     mesh_handle ModelCache::get_mesh(const std::string& name)

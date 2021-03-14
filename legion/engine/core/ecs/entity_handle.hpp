@@ -87,6 +87,11 @@ namespace legion::core::ecs
             return m_id == other.m_id;
         }
 
+        bool operator!=(const entity_handle& other) const
+        {
+            return m_id != other.m_id;
+        }
+
         operator bool() const
         {
             return valid();

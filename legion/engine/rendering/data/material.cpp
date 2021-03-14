@@ -127,6 +127,11 @@ namespace legion::rendering
         return { id };
     }
 
+    std::pair<async::rw_spinlock&, std::unordered_map<id_type, material>&> MaterialCache::get_all_materials()
+    {
+        return std::make_pair(std::ref(m_materialLock), std::ref(m_materials));
+    }
+
     material_handle MaterialCache::get_material(const std::string& name)
     {
         if (!m_materials.count(invalid_id))

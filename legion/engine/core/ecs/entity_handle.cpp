@@ -15,6 +15,18 @@ namespace legion::core::ecs
         return *this;
     }
 
+    std::string entity_handle::get_name() const noexcept
+    {
+        return read_component<hierarchy>().name;
+    }
+
+    void entity_handle::set_name(const std::string& name)
+    {
+        auto hry = read_component<hierarchy>();
+        hry.name = name;
+        write_component(hry);
+    }
+
     entity_handle entity_handle::clone(bool keep_parent, bool clone_children, bool clone_components) const
     {
         OPTICK_EVENT();

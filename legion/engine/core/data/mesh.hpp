@@ -161,5 +161,6 @@ namespace legion::core
          */
         static mesh_handle get_handle(id_type id);
 
+        static void destroy_mesh(id_type id);
     };
 }

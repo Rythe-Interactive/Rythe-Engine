@@ -9,6 +9,7 @@
 #include <core/defaults/coremodule.hpp>
 #include <core/logging/logging.hpp>
 #include <core/ecs/component_handle.hpp>
+#include <core/scenemanagement/scenemanager.hpp>
 
 #include <map>
 #include <vector>
@@ -60,6 +61,7 @@ namespace legion::core
             SystemBase::m_scheduler = &m_scheduler;
             ecs::component_handle_base::m_registry = &m_ecs;
             ecs::component_handle_base::m_eventBus = &m_eventbus;
+            scenemanagement::SceneManager::m_ecs = &m_ecs;
 
             reportModule<CoreModule>();
         }
