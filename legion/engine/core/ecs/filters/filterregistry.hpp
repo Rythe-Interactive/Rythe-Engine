@@ -16,7 +16,7 @@
 namespace legion::core::ecs
 {
     /**@class FilterRegistry
-     * @brief 
+     * @brief Manager and owner of all entity filter related data.
      */
     class FilterRegistry
     {
@@ -26,45 +26,44 @@ namespace legion::core::ecs
         template<typename... component_types>
         friend struct filter_info;
 
-        /**@brief 
-         * @param componentId
-         * @param target
+        /**@brief Message that a certain component was added to an entity. This will update all filters that might be interested in this entity.
+         * @param componentId Id of the component type.
+         * @param target Entity that was changed.
          */
         static void markComponentAdd(id_type componentId, entity target);
 
-        /**@brief 
-         * @param componentId
-         * @param target
+        /**@brief Message that a certain component was removed from an entity. This will update all filters that might be interested in this entity.
+         * @param componentId Id of the component type.
+         * @param target Entity that was changed.
          */
         static void markComponentErase(id_type componentId, entity target);
 
-        /**@brief 
-         * @tparam component_type
-         * @param target 
+        /**@brief Message that a certain component was added to an entity. This will update all filters that might be interested in this entity.
+         * @tparam component_type Type of component that was added.
+         * @param target Entity that was changed.
          */
         template<typename component_type>
         static void markComponentAdd(entity target);
 
-        /**@brief
-         * @tparam component_type
-         * @param target
+        /**@brief Message that a certain component was removed from an entity. This will update all filters that might be interested in this entity.
+         * @tparam component_type Type of component that was removed.
+         * @param target Entity that was changed.
          */
         template<typename component_type>
         static void markComponentErase(entity target);
 
-        /**@brief 
-         * @param target
+        /**@brief Message that a certain entity was destroyed. This will erase the entity from all interested filters.
+         * @param target Entity that was destroyed.
          */
         static void markEntityDestruction(entity target);
 
-        /**@brief 
-         * @param target
+        /**@brief Message that a certain entity was created with components already applied. This will insert the entity to all interested filters.
+         * @param target Entity that was created.
          */
         static void markEntityFullCreation(entity target);
 
-        /**@brief 
-         * @param filterId
-         * @return 
+        /**@brief Fetch the list of entities that apply to a certain filter.
+         * @param filterId Id of the filter.
          */
         static entity_set& getList(id_type filterId);
 

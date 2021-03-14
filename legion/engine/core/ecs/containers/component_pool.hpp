@@ -25,7 +25,7 @@ namespace legion::core::ecs
 
         /**@brief Creates a component attached to a certain entity. (uses a prototype to serialize the component)
          * @param target Entity ID to create the component for.
-         * @param prototype
+         * @param prototype Prototype used to serialize the component.
          * @return Pointer to the created component.
          */
         virtual void* create_component(id_type target, const serialization::component_prototype_base& prototype) LEGION_PURE;
@@ -37,21 +37,20 @@ namespace legion::core::ecs
          */
         L_NODISCARD virtual bool contains(id_type target) const LEGION_PURE;
 
-        /**@brief
-         * @param target
-         * @return
+        /**@brief Fetch the component attached to a certain entity.
+         * @param target Entity ID of the entity the component is attached to.
+         * @return Pointer to the component.
          */
         L_NODISCARD virtual void* get_component(id_type target) const LEGION_PURE;
 
-        /**@brief
-         * @param target
-         * @return
+        /**@brief Erase a component attached to a certain entity.
+         * @param target Entity ID of the entity the component is attached to.
          */
         virtual void destroy_component(id_type target) LEGION_PURE;
 
-        /**@brief
-         * @param target
-         * @return
+        /**@brief Serialize a certain component into a prototype.
+         * @param target Entity ID of the entity the component is attached to.
+         * @return `std::unique_ptr` with the prototype.
          */
         L_NODISCARD virtual std::unique_ptr<serialization::component_prototype_base> create_prototype(id_type target) const LEGION_PURE;
     };
@@ -68,26 +67,77 @@ namespace legion::core::ecs
     public:
         static sparse_map<id_type, component_type> m_components;
 
+        /**@brief Creates a component attached to a certain entity.
+         * @param target Entity ID to create the component for.
+         * @return Pointer to the created component.
+         */
         virtual void* create_component(id_type target);
+
+        /**@brief Creates a component attached to a certain entity. (uses a prototype to serialize the component)
+         * @param target Entity ID to create the component for.
+         * @param prototype Prototype used to serialize the component.
+         * @return Pointer to the created component.
+         */
         virtual void* create_component(id_type target, const serialization::component_prototype_base& prototype);
         virtual void* create_component(id_type target, serialization::component_prototype_base&& prototype);
 
+        /**@brief Check if a certain entity has the type of component managed by this pool.
+         * @param target Entity ID of the entity to check for.
+         * @return True if the specified entity is registered with this pool, false if not.
+         */
         L_NODISCARD virtual bool contains(id_type target) const;
 
+        /**@brief Fetch the component attached to a certain entity.
+         * @param target Entity ID of the entity the component is attached to.
+         * @return Pointer to the component.
+         */
         L_NODISCARD virtual void* get_component(id_type target) const;
 
+        /**@brief Erase a component attached to a certain entity.
+         * @param target Entity ID of the entity the component is attached to.
+         */
         virtual void destroy_component(id_type target);
 
+        /**@brief Serialize a certain component into a prototype.
+         * @param target Entity ID of the entity the component is attached to.
+         * @return `std::unique_ptr` with the prototype.
+         */
         L_NODISCARD virtual std::unique_ptr<serialization::component_prototype_base> create_prototype(id_type target) const;
 
+        /**@brief Creates a component attached to a certain entity.
+         * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.
+         * @param target Entity ID to create the component for.
+         * @return Reference to the component.
+         */
         static component_type& create_component_direct(id_type target);
+
+        /**@brief Creates a component attached to a certain entity. (uses a prototype to serialize the component)
+         * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.
+         * @param target Entity ID to create the component for.
+         * @param prototype Prototype used to serialize the component.
+         * @return Reference to the component.
+         */
         static component_type& create_component_direct(id_type target, const serialization::component_prototype_base& prototype);
         static component_type& create_component_direct(id_type target, serialization::component_prototype_base&& prototype);
 
+        /**@brief Check if a certain entity has the type of component managed by this pool.
+         * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.
+         * @param target Entity ID of the entity to check for.
+         * @return True if the specified entity is registered with this pool, false if not.
+         */
         L_NODISCARD static bool contains_direct(id_type target);
 
+        /**@brief Fetch the component attached to a certain entity.
+         * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.
+         * @param target Entity ID of the entity the component is attached to.
+         * @return Reference to the component.
+         */
         L_NODISCARD static component_type& get_component_direct(id_type target);
 
+        /**@brief Erase a component attached to a certain entity.
+         * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.
+         * @param target Entity ID of the entity the component is attached to.
+         */
         static void destroy_component_direct(id_type target);
     };
 }

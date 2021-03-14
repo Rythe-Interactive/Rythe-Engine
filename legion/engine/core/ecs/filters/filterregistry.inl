@@ -42,9 +42,11 @@ namespace legion::core::ecs
         // Register the component types if it they aren't yet.
         Registry::registerComponentType<component_types...>();
 
+        // Emplace filter info.
         filters().emplace_back(new filter_info<component_types...>());
         entityLists().emplace(id, hashed_sparse_set<entity>{});
 
+        // Check for any already existing entities that should be in this filter.
         for (auto& [entId, composition] : Registry::entityCompositions())
             if (filter_info<component_types...>{}.contains(composition))
                 entityLists().at(id).insert(entity{ &Registry::entityData(entId) });
