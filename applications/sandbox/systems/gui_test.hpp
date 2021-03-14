@@ -754,6 +754,7 @@ namespace legion
 
                     std::string modelPath;
 
+                    if(mesh.id != invalid_id)
                     {
                         auto [lock, data] = mesh.get();
                         async::readonly_guard guard(lock);

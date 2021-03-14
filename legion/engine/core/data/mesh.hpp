@@ -61,7 +61,7 @@ namespace legion::core
      */
     struct mesh_handle
     {
-        id_type id;
+        id_type id = invalid_id;
 
         /**@brief Get the mesh and the attached lock.
          */
