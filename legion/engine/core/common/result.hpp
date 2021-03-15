@@ -71,7 +71,7 @@ namespace legion::core::common {
     template <class T>                  class ok_proxy<T> : public ok_ident
     {
     public:
-        ok_proxy(ok_proxy&&) noexcept = default;
+        ok_proxy(ok_proxy&&) noexcept(noexcept(T(std::declval<T>()))) = default;
         ok_proxy(T val) : m_val(std::move(val)) {}
         explicit ok_proxy(const std::tuple<T>& tpl) : m_val(std::get<0>(tpl)) {}
         explicit ok_proxy(tuple_create_helper, std::tuple<T>& tpl) : m_val(std::get<0>(tpl)) {}
@@ -90,7 +90,7 @@ namespace legion::core::common {
     {
     public:
         using tuple_type = std::tuple<T, Any...>;
-        ok_proxy(ok_proxy&&) noexcept = default;
+        ok_proxy(ok_proxy&&) noexcept(noexcept(tuple_type(std::declval<tuple_type>()))) = default;
 
         template <typename = std::enable_if_t<!std::is_same<T, tuple_create_helper>::value>>
         ok_proxy(T val, Any... args) : ok_proxy(tuple_create_helper{}, std::make_tuple(std::move(val), std::move(args)...)) {}
@@ -170,7 +170,7 @@ namespace legion::core::common {
     template <class T>                  class err_proxy<T> : public err_ident
     {
     public:
-        err_proxy(err_proxy&&) noexcept = default;
+        err_proxy(err_proxy&&) noexcept(noexcept(T(std::declval<T>()))) = default;
         err_proxy(T  val) : m_val(std::move(val)) {}
         explicit err_proxy(const std::tuple<T >& tpl) : m_val(std::get<0>(tpl)) {}
         explicit err_proxy(tuple_create_helper, std::tuple<T >& tpl) : m_val(std::get<0>(tpl)) {}
@@ -190,8 +190,8 @@ namespace legion::core::common {
         using tuple_type = std::tuple<T, Any ...>;
         template <typename = std::enable_if_t<!std::is_same<T, tuple_create_helper>::value>>
         err_proxy(T  val, Any ... args) : err_proxy(tuple_create_helper{}, std::make_tuple(std::move(val), std::move(args...))) {}
-        explicit err_proxy(tuple_type  tpl) : m_values(std::move(tpl)) {}
-        explicit err_proxy(tuple_create_helper, tuple_type  tpl) :m_values(std::move(tpl)) {}
+        explicit err_proxy(tuple_type&& tpl) : m_values(std::move(tpl)) {}
+        explicit err_proxy(tuple_create_helper, tuple_type&& tpl) :m_values(std::move(tpl)) {}
 
         operator std::tuple<T, Any ...>& ()
         {
