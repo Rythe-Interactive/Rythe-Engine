@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include <core/types/types.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 
@@ -47,6 +49,111 @@ namespace legion::core::ecs
 
     static constexpr id_type world_entity_id = 1;
     struct entity_data;
+
+    struct child_iterator
+    {
+        friend struct entity;
+    private:
+        struct impl;
+
+        std::shared_ptr<impl> m_pimpl;
+        child_iterator(impl* implptr);
+
+    public:
+
+        friend bool operator==(const child_iterator& lhs, const child_iterator& rhs);
+
+        friend bool operator!=(const child_iterator& lhs, const child_iterator& rhs) { return !(lhs == rhs); }
+
+        entity& operator*();
+
+        entity* operator->();
+
+        child_iterator& operator++();
+        child_iterator& operator--();
+        child_iterator operator++(int);
+        child_iterator operator--(int);
+
+    };
+
+    struct const_child_iterator
+    {
+        friend struct entity;
+    private:
+        struct impl;
+
+        std::shared_ptr<impl> m_pimpl;
+        const_child_iterator(impl* implptr);
+
+    public:
+
+        friend bool operator==(const const_child_iterator& lhs, const const_child_iterator& rhs);
+
+        friend bool operator!=(const const_child_iterator& lhs, const const_child_iterator& rhs) { return !(lhs == rhs); }
+
+        const entity& operator*();
+
+        const entity* operator->();
+
+        const_child_iterator& operator++();
+        const_child_iterator& operator--();
+        const_child_iterator operator++(int);
+        const_child_iterator operator--(int);
+
+    };
+    
+    struct child_reverse_iterator
+    {
+        friend struct entity;
+    private:
+        struct impl;
+
+        std::shared_ptr<impl> m_pimpl;
+        child_reverse_iterator(impl* implptr);
+
+    public:
+
+        friend bool operator==(const child_reverse_iterator& lhs, const child_reverse_iterator& rhs);
+
+        friend bool operator!=(const child_reverse_iterator& lhs, const child_reverse_iterator& rhs) { return !(lhs == rhs); }
+
+        entity& operator*();
+
+        entity* operator->();
+
+        child_reverse_iterator& operator++();
+        child_reverse_iterator& operator--();
+        child_reverse_iterator operator++(int);
+        child_reverse_iterator operator--(int);
+
+    };
+    
+    struct const_child_reverse_iterator
+    {
+        friend struct entity;
+    private:
+        struct impl;
+
+        std::shared_ptr<impl> m_pimpl;
+        const_child_reverse_iterator(impl* implptr);
+
+    public:
+
+        friend bool operator==(const const_child_reverse_iterator& lhs, const const_child_reverse_iterator& rhs);
+
+        friend bool operator!=(const const_child_reverse_iterator& lhs, const const_child_reverse_iterator& rhs) { return !(lhs == rhs); }
+
+        const entity& operator*();
+
+        const entity* operator->();
+
+        const_child_reverse_iterator& operator++();
+        const_child_reverse_iterator& operator--();
+        const_child_reverse_iterator operator++(int);
+        const_child_reverse_iterator operator--(int);
+
+    };
+
 
     /**@struct entity
      * @brief Handle to an entity.
@@ -132,27 +239,27 @@ namespace legion::core::ecs
 
         /**@brief Gets iterator to the first child.
          */
-        L_NODISCARD entity_set::iterator begin();
-        L_NODISCARD entity_set::const_iterator begin() const;
-        L_NODISCARD entity_set::const_iterator cbegin() const;
+        L_NODISCARD child_iterator begin();
+        L_NODISCARD const_child_iterator begin() const;
+        L_NODISCARD const_child_iterator cbegin() const;
 
         /**@brief Gets reverse iterator to the last child.
          */
-        L_NODISCARD entity_set::reverse_iterator rbegin();
-        L_NODISCARD entity_set::const_reverse_iterator rbegin() const;
-        L_NODISCARD entity_set::const_reverse_iterator crbegin() const;
+        L_NODISCARD child_reverse_iterator rbegin();
+        L_NODISCARD const_child_reverse_iterator rbegin() const;
+        L_NODISCARD const_child_reverse_iterator crbegin() const;
 
         /**@brief Gets iterator to the last child.
          */
-        L_NODISCARD entity_set::iterator end();
-        L_NODISCARD entity_set::const_iterator end() const;
-        L_NODISCARD entity_set::const_iterator cend() const;
+        L_NODISCARD child_iterator end();
+        L_NODISCARD const_child_iterator end() const;
+        L_NODISCARD const_child_iterator cend() const;
 
         /**@brief Gets reverse iterator to the first child.
          */
-        L_NODISCARD entity_set::reverse_iterator rend();
-        L_NODISCARD entity_set::const_reverse_iterator rend() const;
-        L_NODISCARD entity_set::const_reverse_iterator crend() const;
+        L_NODISCARD child_reverse_iterator rend();
+        L_NODISCARD const_child_reverse_iterator rend() const;
+        L_NODISCARD const_child_reverse_iterator crend() const;
 
         /**@brief Destroys the entity and it's components. May Destroy all children recursively.
          * @param recurse Whether deeper layers of hierarchy should be destroyed as well or just this entity.

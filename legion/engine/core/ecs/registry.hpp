@@ -58,7 +58,7 @@ namespace legion::core::ecs
          * @tparam component_type Type of struct you with to register as a component.
          */
         template<typename component_type, typename... Args>
-        L_NODISCARD static void registerComponentType(Args&&... args);
+        static void registerComponentType(Args&&... args);
 
         /**@brief Manually registers a component type. Allows use of non templated functions for this component type.
          * @note This function generally not necessary to call manually. All templated functions will try to register
@@ -67,7 +67,7 @@ namespace legion::core::ecs
          * @tparam component_type Type of struct you with to register as a component.
          */
         template<typename component_type0, typename component_type1, typename... component_types, typename... Args>
-        L_NODISCARD static void registerComponentType(Args&&... args);
+        static void registerComponentType(Args&&... args);
 
         /**@brief Get a pointer to the family of a certain component type.
          */

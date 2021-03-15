@@ -498,9 +498,9 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="scenemanagement\components\scene.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
+    <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="types\reflector.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
-    <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\clock.hpp" />
     <ClInclude Include="time\defaults.hpp" />
     <ClInclude Include="time\time.hpp" />

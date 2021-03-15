@@ -392,7 +392,6 @@
     <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
-    <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="math\geometry.hpp" />
     <ClInclude Include="math\close_enough.hpp" />
@@ -423,6 +422,7 @@
     <ClInclude Include="common\string_literal.hpp" />
     <ClInclude Include="ecs\handles\filter.hpp" />
     <ClInclude Include="ecs\filters\filter_info.hpp" />
+    <ClInclude Include="serialization\serializationutil.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

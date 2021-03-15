@@ -26,16 +26,6 @@ namespace legion::core
     inline constexpr name_hash::name_hash(const string_literal<N>& name) noexcept
         : hash({ nameHash<N>(name) }) {}
 
-    constexpr id_type type_hash_base::local() const noexcept
-    {
-        return value;
-    }
-
-    constexpr std::string_view type_hash_base::local_name() const noexcept
-    {
-        return name;
-    }
-
     constexpr name_hash literals::operator""_hs(cstring src)
     {
         return name_hash{ nameHash(src) };

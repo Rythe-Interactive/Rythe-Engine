@@ -62,7 +62,7 @@ namespace legion::core
 
     id_type type_reference::local() const
     {
-        return value->value;
+        return value->local();
     }
 
     id_type type_reference::global() const
@@ -72,7 +72,7 @@ namespace legion::core
 
     std::string_view type_reference::local_name() const
     {
-        return value->name;
+        return value->local_name();
     }
 
     std::string_view type_reference::global_name() const

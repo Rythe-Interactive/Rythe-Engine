@@ -1,11 +1,13 @@
 #pragma once
 #include <core/platform/platform.hpp>
 
+#include <cereal/cereal.hpp>
 #include <cereal/types/unordered_map.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/archives/portable_binary.hpp>
+#include <cereal/archives/binary.hpp>
 #include <core/filesystem/filesystem.hpp>
 
 #include <sstream>

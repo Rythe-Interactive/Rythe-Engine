@@ -49,22 +49,23 @@ namespace legion::core
     {
         friend struct type_reference;
 
-        std::string_view name;
-
-        constexpr id_type local() const noexcept;
-        constexpr std::string_view local_name() const noexcept;
+        virtual id_type local() const noexcept LEGION_PURE;
+        virtual std::string_view local_name() const noexcept LEGION_PURE;
         virtual id_type global() const noexcept LEGION_PURE;
         virtual std::string_view global_name() const noexcept LEGION_PURE;
+
     protected:
         virtual type_hash_base* copy() const LEGION_PURE;
 
-        constexpr type_hash_base(id_type value, std::string_view name) noexcept : name(name) { this->value = value; }
+        constexpr type_hash_base(id_type value) noexcept { this->value = value; }
     };
 
     template<typename T>
     struct type_hash : public type_hash_base
     {
-        constexpr type_hash() noexcept : type_hash_base(localTypeHash<T>(), localNameOfType<T>()) {}
+        std::string_view name;
+
+        constexpr type_hash() noexcept : type_hash_base(localTypeHash<T>()), name(localNameOfType<T>()) {}
 
         type_hash(const type_hash& src) noexcept : type_hash_base(src.value, src.name) {}
         type_hash(type_hash&& src) noexcept : type_hash_base(src.value, src.name) {}
@@ -81,6 +82,16 @@ namespace legion::core
             value = src.value;
             name = src.name;
             return *this;
+        }
+
+        virtual id_type local() const noexcept
+        {
+            return value;
+        }
+
+        virtual std::string_view local_name() const noexcept
+        {
+            return name;
         }
 
         virtual id_type global() const noexcept
