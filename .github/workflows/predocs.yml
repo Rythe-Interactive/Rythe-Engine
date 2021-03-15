@@ -3,7 +3,7 @@ name: docs-action
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, develop/*, develop* ]
 
 jobs:
  docs:

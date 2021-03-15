@@ -2,9 +2,9 @@ name: build-action
 
 on:
   push:
-    branches: [main, develop, develop/*]
+    branches: [main, develop, develop/*, develop* ]
   pull_request:
-    branches: [main, develop, develop/* ]
+    branches: [main, develop, develop/*, develop* ]
 
 jobs:
   build:
