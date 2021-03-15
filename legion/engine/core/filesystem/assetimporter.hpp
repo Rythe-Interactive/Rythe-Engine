@@ -118,14 +118,14 @@ namespace legion::core::filesystem
                 if (typeHash<T>() == base->result_type())
                 {
                     // Retrieve the correct converter to use.
-                    auto* converter = reinterpret_cast<resource_converter<T, Settings...>*>(base);
+                    auto* converter = static_cast<resource_converter<T, Settings...>*>(base);
 
                     // Attempt the conversion and return the result.
                     auto loadresult = converter->load(result, std::forward<Settings>(settings)...);
                     if (loadresult == common::valid)
-                        return decay(Ok(static_cast<T>(loadresult)));
+                        return decay(Ok(std::move(loadresult.decay())));
 
-                    return decay(Err(loadresult.get_error()));
+                    return decay(Err(std::move(loadresult.get_error())));
                 }
             }
 

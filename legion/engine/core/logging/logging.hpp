@@ -380,6 +380,7 @@ namespace legion::core::log
         case severity::error:return spdlog::level::err;
         case severity::fatal:return spdlog::level::critical;
         }
+        return spdlog::level::err;
     }
 
     /** @brief prints a log line, using the specified `severity`
