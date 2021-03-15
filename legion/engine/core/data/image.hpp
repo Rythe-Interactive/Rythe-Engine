@@ -47,7 +47,8 @@ namespace legion::core
         channel_format format;
         image_components components;
         size_type dataSize;
-        byte* data;
+
+        std::shared_ptr<byte_vec> data = nullptr;
 
         /**@brief Get the binary representation of the image with different pointer types.
          *        Each pointer type is only enabled if the channel format is the same.
@@ -75,110 +76,6 @@ namespace legion::core
             return m_id == other.m_id;
         }
 
-        image() = default;
-
-        image(const image& other) : name(other.name), size(other.size), format(other.format), components(other.components), m_id(other.m_id), dataSize(other.dataSize), data(other.data)
-        {
-            if (m_id)
-            {
-                std::lock_guard guard(m_refsLock);
-                m_refs[m_id]++;
-            }
-        }
-
-        image(image&& other)
-            : name(std::move(other.name)),
-            size(std::move(other.size)),
-            format(std::move(other.format)),
-            components(std::move(other.components)),
-            m_id(std::move(other.m_id)),
-            dataSize(std::move(other.dataSize)),
-            data(other.data)
-        {
-            if (m_id)
-            {
-                std::lock_guard guard(m_refsLock);
-                m_refs[m_id]++;
-            }
-        }
-
-        image& operator=(const image& other)
-        {
-
-            {
-                std::lock_guard guard(m_refsLock);
-
-                if (m_id)
-                {
-                    m_refs[m_id]--;
-                    if (m_refs[m_id] == 0)
-                    {
-                        delete[] data;
-                        data = nullptr;
-                        m_refs.erase(m_id);
-                    }
-                }
-
-                m_id = other.m_id;
-
-                m_refs[m_id]++;
-            }
-
-            name = other.name;
-            size = other.size;
-            format = other.format;
-            components = other.components;
-            dataSize = other.dataSize;
-            data = other.data;
-            return *this;
-        }
-
-        image& operator=(image&& other)
-        {
-            {
-                std::lock_guard guard(m_refsLock);
-
-                if (m_id)
-                {
-                    m_refs[m_id]--;
-                    if (m_refs[m_id] == 0)
-                    {
-                        delete[] data;
-                        data = nullptr;
-                        m_refs.erase(m_id);
-                    }
-                }
-
-                m_id = other.m_id;
-
-                m_refs[m_id]++;
-            }
-
-            name = std::move(other.name);
-            size = std::move(other.size);
-            format = std::move(other.format);
-            components = std::move(other.components);
-            dataSize = std::move(other.dataSize);
-            data = other.data;
-            return *this;
-        }
-
-        ~image()
-        {
-            if (m_id)
-            {
-                std::lock_guard guard(m_refsLock);
-
-                m_refs[m_id]--;
-                if (m_refs[m_id] == 0)
-                {
-                    delete[] data;
-                    data = nullptr;
-                    m_refs.erase(m_id);
-                }
-            }
-        }
-
     private:
 
         static std::unordered_map<id_type, uint> m_refs;
@@ -196,14 +93,14 @@ namespace legion::core
     template<>
     inline void* image::get_raw_data<void>()
     {
-        return reinterpret_cast<void*>(data);
+        return reinterpret_cast<void*>(data->data());
     }
 
     template<>
     inline byte* image::get_raw_data<byte>()
     {
         if (format == channel_format::eight_bit)
-            return data;
+            return data->data();
         return nullptr;
     }
 
@@ -211,7 +108,7 @@ namespace legion::core
     inline uint16* image::get_raw_data<uint16>()
     {
         if (format == channel_format::sixteen_bit)
-            return reinterpret_cast<uint16*>(data);
+            return reinterpret_cast<uint16*>(data->data());
         return nullptr;
     }
 
@@ -219,7 +116,7 @@ namespace legion::core
     inline float* image::get_raw_data<float>()
     {
         if (format == channel_format::float_hdr)
-            return reinterpret_cast<float*>(data);
+            return reinterpret_cast<float*>(data->data());
         return nullptr;
     }
 

@@ -57,11 +57,12 @@ namespace legion::core
         }
 
         image.format = settings.fileFormat;
-        image.data = new byte[dataSize];
         image.dataSize = dataSize;
+        image.data = std::make_shared<byte_vec>();
         image.components = settings.components;
 
-        memmove(image.data, imageData, dataSize);
+        image.data->resize(dataSize);
+        memmove(image.data->data(), imageData, dataSize);
         stbi_image_free(imageData);
 
         return decay(Ok(image));
