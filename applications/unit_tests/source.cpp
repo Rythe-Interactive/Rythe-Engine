@@ -1,12 +1,9 @@
 #define LEGION_ENTRY
-#define LEGION_KEEP_CONSOLE
+#define LEGION_SHOW_CONSOLE
 
 #include <core/core.hpp>
 
-
 #define DOCTEST_CONFIG_IMPLEMENT
-
-
 
 #include "doctest.h"
 #include "tests/core/filesystem.hpp"

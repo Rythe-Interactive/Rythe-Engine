@@ -33,6 +33,9 @@ jobs:
     - name: make
       run: make CXX=clang++-9 config=debug64 all
 
+    - name: run unit tests
+      run: unit_tests
+
 
 
     # TODO(algo-ryth-mix): here I need to publish artifacts. this is currently still a bit of a mystery to me

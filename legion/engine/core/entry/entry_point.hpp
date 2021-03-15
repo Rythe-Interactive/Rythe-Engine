@@ -29,7 +29,7 @@ __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 
 int main(int argc, char** argv)
 {
-#if (!defined(LEGION_DEBUG) && defined(LEGION_WINDOWS) && !defined(LEGION_KEEP_CONSOLE))
+#if defined(LEGION_WINDOWS) && (!(defined(LEGION_KEEP_CONSOLE) || defined(LEGION_SHOW_CONSOLE) || defined(LEGION_DEBUG)) || defined(LEGION_HIDE_CONSOLE))
     ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
 #endif
 
@@ -105,7 +105,7 @@ int main(int argc, char** argv)
     engine.run();
 
 #if defined(LEGION_KEEP_CONSOLE)
-    std::cout << "Press any key to exit." << std::endl;
+    std::cout << "Press enter to exit." << std::endl;
     std::cin.ignore();
 #endif
     return 0;
