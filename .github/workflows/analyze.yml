@@ -16,7 +16,7 @@ jobs:
        xargs -I"{}" sudo mv {} /usr/bin
 
     - name: get cppcheck
-      run: DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 cppcheck
+      run: DEBIAN_FRONTEND=noninteractive sudo apt-get update -yqq --allow-releaseinfo-change -o::Dpkg::Use-Pty=0 && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 cppcheck
 
     - name: get dependencies
       run: DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev libc++abi-dev
