@@ -35,6 +35,8 @@ namespace legion::core::serialization
         composition.clear();
         for (auto typeId : ecs::Registry::entityComposition(src))
             composition.emplace(typeId, ecs::Registry::getFamily(typeId)->create_prototype(src));
+
+        return *this;
     }
 
     inline prototype<ecs::entity>& prototype<ecs::entity>::operator=(const prototype& src)

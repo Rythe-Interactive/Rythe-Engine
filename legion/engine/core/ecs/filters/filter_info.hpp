@@ -34,6 +34,8 @@ namespace legion::core::ecs
          * @param components Unordered set of component type ids.
          */
         virtual bool contains(const std::unordered_set<id_type>& components) LEGION_PURE;
+
+        ~filter_info_base() = default;
     };
 
     template<typename... component_types>

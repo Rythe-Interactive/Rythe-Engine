@@ -53,6 +53,8 @@ namespace legion::core::ecs
          * @return `std::unique_ptr` with the prototype.
          */
         L_NODISCARD virtual std::unique_ptr<serialization::component_prototype_base> create_prototype(id_type target) const LEGION_PURE;
+
+        virtual ~component_pool_base() = default;
     };
 
     /**@struct component_pool

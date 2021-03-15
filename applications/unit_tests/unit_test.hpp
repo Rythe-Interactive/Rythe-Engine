@@ -159,10 +159,10 @@ namespace legion
         std::invoke(c, std::forward<Args>(args)...);
     }
 
-#define Benchmark_N(n, c, ...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), n, c, __VA_ARGS__)
-#define Benchmark(c, ...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), 10000, c, __VA_ARGS__)
+#define Benchmark_N(n, ...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), n, __VA_ARGS__)
+#define Benchmark(...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), 10000, __VA_ARGS__)
 
-#define Test(c, ...) legion::Test_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), c, __VA_ARGS__)
+#define Test(...) legion::Test_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), __VA_ARGS__)
 
 #define LEGION_FUNCNAME_IMPL(f) #f
 

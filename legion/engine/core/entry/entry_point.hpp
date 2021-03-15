@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     if (setpriority(PRIO_PROCESS, pid, sched_get_priority_max(sched_getscheduler(pid))) == -1)
     {
         int errornum = errno;
-        cstring error;
+        const char* error;
 
         switch (errornum)
         {
