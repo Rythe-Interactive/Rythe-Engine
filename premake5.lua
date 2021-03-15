@@ -53,7 +53,10 @@ include "applications/unit_tests/build-tests.lua"
 
 project "*"
     includedirs { "deps/include/" }
-
+    targetdir "bin/%{cfg.buildcfg}"
+    libdirs { "deps/lib/", "bin/%{cfg.buildcfg}/" }
+    defines { "USE_OPTICK=0" }
+    
 -- how to build:
 --[[
     you require a copy of premake5 which can be obtained from https://premake.github.io/download.html#v5

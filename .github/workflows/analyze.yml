@@ -16,10 +16,10 @@ jobs:
        xargs -I"{}" sudo mv {} /usr/bin
 
     - name: get cppcheck
-      run: sudo apt-get update -yqq && sudo apt-get install -yqq cppcheck
+      run: DEBIAN_FRONTEND=noninteractive sudo apt-get update -yqq -o::Dpkg::Use-Pty=0 && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 cppcheck
 
     - name: get dependencies
-      run: sudo apt-get install -yqq libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev
+      run: DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev libc++abi-dev
 
     - name: get intercept-build
       run: pip install scan-build
@@ -28,6 +28,9 @@ jobs:
       run: |
        premake5 --file=premake5.lua gmake && \
        premake5 --file=premake5.lua vs2019
+
+    - name: build legion dependencies
+      run: make legion-core
 
     - name: intercept-build & analyze-build
       run: |

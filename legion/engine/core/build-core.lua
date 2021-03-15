@@ -25,19 +25,19 @@ DEALINGS IN THE SOFTWARE.
 project "legion-core"
     kind "StaticLib"
     language "C++"
-    targetdir "../../bin/%{cfg.buildcfg}"
     cppdialect "C++17"
-    includedirs { "../","./" }
+    includedirs { "../", "./" }
 
-    files {"**.h", "**.hpp" ,"**.c", "**.cpp"}
+    files { "**.h", "**.hpp" ,"**.c", "**.cpp" }
 
     filter "configurations:Debug*"
-        defines {"DEBUG"}
+        defines { "DEBUG" }
         symbols "On"
 
     filter "configurations:Release*"
-        defines {"NDEBUG"}
+        defines { "NDEBUG" }
         optimize "On"
 
     filter "configurations:*64"
        architecture "x86_64"
+       

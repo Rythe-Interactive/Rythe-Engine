@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: doxygen run
-      run: "sudo apt-get update -yqq && sudo apt-get install doxygen && cd docs && doxygen"
+      run: "DEBIAN_FRONTEND=noninteractive sudo apt-get update -yqq -o::Dpkg::Use-Pty=0 && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 doxygen && cd docs && doxygen"
 
     - uses: Algo-ryth-mix/sphinx-action@master
       with:

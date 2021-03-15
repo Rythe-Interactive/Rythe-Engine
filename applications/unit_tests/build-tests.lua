@@ -25,12 +25,12 @@ DEALINGS IN THE SOFTWARE.
 project "unit_tests"
     kind "ConsoleApp"
     language "C++"
-    targetdir "../../bin/%{cfg.buildcfg}"
     cppdialect "C++17"
-    includedirs { "../../legion/engine/","./" }
+    includedirs { "../../legion/engine/", "./" }
     dependson { "legion-core" }
+    links { "legion-core" }
 
-    files {"**.h", "**.hpp" ,"**.c", "**.cpp"}
+    files { "**.h", "**.hpp" ,"**.c", "**.cpp" }
 
     filter "configurations:Debug*"
         defines {"DEBUG"}
@@ -42,3 +42,5 @@ project "unit_tests"
 
     filter "configurations:*64"
        architecture "x86_64"
+
+       
