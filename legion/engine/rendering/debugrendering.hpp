@@ -31,8 +31,6 @@ namespace legion::debug
             return start == other.start && end == other.end && color == other.color && width == other.width && ignoreDepth == other.ignoreDepth;
         }
 
-        virtual bool unique() override { return false; }
-
         virtual id_type get_id()
         {
             static id_type id = nameHash("debug_line");
@@ -44,7 +42,8 @@ namespace legion::debug
 
     inline void drawLine(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
     {
-        Engine::eventbus->raiseEvent(std::unique_ptr<events::event_base>(new debug_line_event(start, end, color, width, time, ignoreDepth)));
+        auto val = debug_line_event(start, end, color, width, time, ignoreDepth);
+        events::EventBus::raiseEvent(val);
     }
 
 #define drawCube CONCAT_DEFINE(PROJECT_NAME, DrawCube)
