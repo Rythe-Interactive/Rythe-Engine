@@ -54,7 +54,7 @@ namespace legion
             items++;
             if (benchmark)
             {
-                time = &(subdomaintimes.at(lastSubDomain).second);
+                time = &(subdomaintimes[lastSubDomain].second);
                 clck.start();
             }
         }
@@ -130,7 +130,7 @@ namespace legion
             long double total = 0;
             for (auto& name : subdomainnames)
             {
-                auto& [indent, time] = subdomaintimes.at(name);
+                auto& [indent, time] = subdomaintimes[name];
                 std::cout << '[' << *lastDomain << "] ";
                 for (int i = 0; i <= indent; i++)
                     std::cout << "    ";
