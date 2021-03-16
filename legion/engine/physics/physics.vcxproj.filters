@@ -203,5 +203,8 @@
     <ClInclude Include="components\fracturecountdown.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data\collider_face_to_vert.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

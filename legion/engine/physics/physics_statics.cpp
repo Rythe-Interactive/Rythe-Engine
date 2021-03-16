@@ -1,6 +1,7 @@
 #include <core/core.hpp>
 #include <physics/physics_statics.hpp>
 #include <rendering/debugrendering.hpp>
+#include <physics/data/collider_face_to_vert.hpp>
 namespace legion::physics
 {
     void PhysicsStatics::DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB
@@ -356,15 +357,59 @@ namespace legion::physics
 
     std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices, int maxDraw, math::mat4 DEBUG_transform )
     {
-        auto convexCollider = std::make_shared<ConvexCollider>();
+        
+        std::vector<HalfEdgeFace*> faces;
+
         //Build Initial Hull
-        if (!qHBuildInitialHull(vertices, convexCollider,DEBUG_transform))
+        if (!qHBuildInitialHull(vertices, faces,DEBUG_transform))
         {
             return nullptr;
         }
 
-        //For each vertex
-            //merge vertex into hull
+        //populate list with current collider
+        std::list<ColliderFaceToVert> facesWithOutsideVerts;
+
+        //for each vertex in vertices
+        for (const math::vec3& vertex : vertices)
+        {
+            bool foundInList = false;
+
+            for (ColliderFaceToVert& faceToVert : facesWithOutsideVerts)
+            {
+                if (IsPointAbovePlane(faceToVert.face->normal, faceToVert.face->centroid, vertex))
+                {
+                    faceToVert.outsideVerts.push_back(vertex);
+                    foundInList = true;
+                    break;
+                }
+            }
+
+            if (!foundInList)
+            {
+                for (HalfEdgeFace* face : faces)
+                {
+                    if (IsPointAbovePlane(face->normal, face->centroid, vertex))
+                    {
+                        facesWithOutsideVerts.emplace_back(face, vertex);
+                        break;
+                    }
+                }
+            }
+
+
+
+        }
+            //find first face that is in front of vertex in current list
+                //add to list if found
+
+            //if not found, go through collider list
+                //add new ColliderFaceToVert if not
+            
+
+
+        auto convexCollider = std::make_shared<ConvexCollider>();
+        auto& halfEdgesVector = convexCollider->GetHalfEdgeFaces();
+        halfEdgesVector = std::move(faces);
 
         auto& verticesVec = convexCollider->GetVertices();
         
@@ -382,9 +427,15 @@ namespace legion::physics
         return convexCollider;
     }
 
-    bool PhysicsStatics::qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::shared_ptr<ConvexCollider> collider, math::mat4 DEBUG_transform )
+    bool PhysicsStatics::qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::vector<HalfEdgeFace*>& faces, math::mat4 DEBUG_transform )
     {
-        //TODO handle degenerate cases
+        //Summary:
+        //[1] Find the 2 most distant vertices in 'vertices'
+        //[2] Find the vertex most distant from the line created by the 2 most distance vertices
+        //[3] Create first collider face using that line and the vertex most distant to it
+        //[4] Find the most distant vertex from the plane where the first collider face lies
+        //[5] Create a set of faces connecting the first collider face to the most distant vertex,
+        //this create a tetrahedron shaped collider
 
         //[1] Find the 2 most distant vertices in 'vertices'
 
@@ -496,7 +547,7 @@ namespace legion::physics
             math::normalize(math::cross(secondDistant - firstDistant, *thirdDistant - secondDistant)));
 
         //(3.4) Add to collider
-        collider->GetHalfEdgeFaces().push_back(initialFace);
+        faces.push_back(initialFace);
 
         //[4] Find the most distant vertex from the plane where the first collider face lies
 
@@ -593,7 +644,7 @@ namespace legion::physics
             HalfEdgeFace* face = new HalfEdgeFace(pairing, faceNormal);
 
             //push new face into list 
-            collider->GetHalfEdgeFaces().push_back(face);
+            faces.push_back(face);
 
             //connect to 
             if (pairingToConnectTo)
