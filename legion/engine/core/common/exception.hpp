@@ -153,117 +153,117 @@
 
 namespace legion::core
 {
-	/**@class exception
-	 * @brief Args generic exception with file name, line number, and function name.
-	 */
-	class exception : public std::exception
-	{
-	private:
-		cstring m_file;
-		uint m_line;
-		cstring m_func;
-		cstring m_message;
+    /**@class exception
+     * @brief Args generic exception with file name, line number, and function name.
+     */
+    class exception : public std::exception
+    {
+    private:
+        cstring m_file;
+        uint m_line;
+        cstring m_func;
+        cstring m_message;
 
-	public:
-		exception(cstring file, uint line, cstring func) : std::exception(), m_file(file), m_line(line), m_func(func), m_message("Args generic exception occurred.") {}
-		exception(cstring msg, cstring file, uint line, cstring func) : std::exception(), m_file(file), m_line(line), m_func(func), m_message(msg) {}
+    public:
+        exception(cstring file, uint line, cstring func) : std::exception(), m_file(file), m_line(line), m_func(func), m_message("Args generic exception occurred.") {}
+        exception(cstring msg, cstring file, uint line, cstring func) : std::exception(), m_file(file), m_line(line), m_func(func), m_message(msg) {}
 
-		virtual cstring what() const noexcept override { return m_message; }
-		cstring file() const noexcept { return m_file; }
-		uint line() const noexcept { return m_line; }
-		cstring func() const noexcept { return m_func; }
-	};
+        virtual cstring what() const noexcept override { return m_message; }
+        cstring file() const noexcept { return m_file; }
+        uint line() const noexcept { return m_line; }
+        cstring func() const noexcept { return m_func; }
+    };
 
 #pragma region invalid fetch
-	/**@class invalid_fetch_error
-	 * @brief Args generic fetch exception.
-	 */
-	class invalid_fetch_error : public exception
-	{
-	public:
-		invalid_fetch_error(cstring file, uint line, cstring func) : exception("Invalid fetch occurred.", file, line, func) {}
-		invalid_fetch_error(cstring msg, cstring file, uint line, cstring func) : exception(msg, file, line, func) {}
-	};
+    /**@class invalid_fetch_error
+     * @brief Args generic fetch exception.
+     */
+    class invalid_fetch_error : public exception
+    {
+    public:
+        invalid_fetch_error(cstring file, uint line, cstring func) : exception("Invalid fetch occurred.", file, line, func) {}
+        invalid_fetch_error(cstring msg, cstring file, uint line, cstring func) : exception(msg, file, line, func) {}
+    };
 
-	class invalid_component_error : public invalid_fetch_error
-	{
-	public:
-		invalid_component_error(cstring file, uint line, cstring func) : invalid_fetch_error("Component invalid.", file, line, func) {}
-		invalid_component_error(cstring msg, cstring file, uint line, cstring func) : invalid_fetch_error(msg, file, line, func) {}
-	};
+    class invalid_component_error : public invalid_fetch_error
+    {
+    public:
+        invalid_component_error(cstring file, uint line, cstring func) : invalid_fetch_error("Component invalid.", file, line, func) {}
+        invalid_component_error(cstring msg, cstring file, uint line, cstring func) : invalid_fetch_error(msg, file, line, func) {}
+    };
 
-	class component_destroyed_error : public invalid_component_error
-	{
-	public:
-		component_destroyed_error(cstring file, uint line, cstring func) : invalid_component_error("Component no longer exists.", file, line, func) {}
-		component_destroyed_error(cstring msg, cstring file, uint line, cstring func) : invalid_component_error(msg, file, line, func) {}
-	};
+    class component_destroyed_error : public invalid_component_error
+    {
+    public:
+        component_destroyed_error(cstring file, uint line, cstring func) : invalid_component_error("Component no longer exists.", file, line, func) {}
+        component_destroyed_error(cstring msg, cstring file, uint line, cstring func) : invalid_component_error(msg, file, line, func) {}
+    };
 
-	class invalid_entity_error : public invalid_fetch_error
-	{
-	public:
-		invalid_entity_error(cstring file, uint line, cstring func) : invalid_fetch_error("Entity invalid.", file, line, func) {}
-		invalid_entity_error(cstring msg, cstring file, uint line, cstring func) : invalid_fetch_error(msg, file, line, func) {}
-	};
+    class invalid_entity_error : public invalid_fetch_error
+    {
+    public:
+        invalid_entity_error(cstring file, uint line, cstring func) : invalid_fetch_error("Entity invalid.", file, line, func) {}
+        invalid_entity_error(cstring msg, cstring file, uint line, cstring func) : invalid_fetch_error(msg, file, line, func) {}
+    };
 
-	class entity_not_found_error : public invalid_entity_error
-	{
-	public:
-		entity_not_found_error(cstring file, uint line, cstring func) : invalid_entity_error("Entity does not exist.", file, line, func) {}
-		entity_not_found_error(cstring msg, cstring file, uint line, cstring func) : invalid_entity_error(msg, file, line, func) {}
-	};
+    class entity_not_found_error : public invalid_entity_error
+    {
+    public:
+        entity_not_found_error(cstring file, uint line, cstring func) : invalid_entity_error("Entity does not exist.", file, line, func) {}
+        entity_not_found_error(cstring msg, cstring file, uint line, cstring func) : invalid_entity_error(msg, file, line, func) {}
+    };
 #pragma endregion
 
 #pragma region invalid creation
-	/**@class invalid_creation_error
-	 * @brief Args generic creation exception.
-	 */
-	class invalid_creation_error : public exception
-	{
-	public:
-		invalid_creation_error(cstring file, uint line, cstring func) : exception("Creation invalid.", file, line, func) {}
-		invalid_creation_error(cstring msg, cstring file, uint line, cstring func) : exception(msg, file, line, func) {}
-	};
+    /**@class invalid_creation_error
+     * @brief Args generic creation exception.
+     */
+    class invalid_creation_error : public exception
+    {
+    public:
+        invalid_creation_error(cstring file, uint line, cstring func) : exception("Creation invalid.", file, line, func) {}
+        invalid_creation_error(cstring msg, cstring file, uint line, cstring func) : exception(msg, file, line, func) {}
+    };
 
-	class entity_exists_error : public invalid_creation_error
-	{
-	public:
-		entity_exists_error(cstring file, uint line, cstring func) : invalid_creation_error("Entity already exist.", file, line, func) {}
-		entity_exists_error(cstring msg, cstring file, uint line, cstring func) : invalid_creation_error(msg, file, line, func) {}
-	};
+    class entity_exists_error : public invalid_creation_error
+    {
+    public:
+        entity_exists_error(cstring file, uint line, cstring func) : invalid_creation_error("Entity already exist.", file, line, func) {}
+        entity_exists_error(cstring msg, cstring file, uint line, cstring func) : invalid_creation_error(msg, file, line, func) {}
+    };
 
-	class component_exists_error : public invalid_creation_error
-	{
-	public:
-		component_exists_error(cstring file, uint line, cstring func) : invalid_creation_error("Component already exist.", file, line, func) {}
-		component_exists_error(cstring msg, cstring file, uint line, cstring func) : invalid_creation_error(msg, file, line, func) {}
-	};
+    class component_exists_error : public invalid_creation_error
+    {
+    public:
+        component_exists_error(cstring file, uint line, cstring func) : invalid_creation_error("Component already exist.", file, line, func) {}
+        component_exists_error(cstring msg, cstring file, uint line, cstring func) : invalid_creation_error(msg, file, line, func) {}
+    };
 #pragma endregion
 
 #pragma region invalid type
-	/**@class invalid_type_error
-	 * @brief Args generic type exception.
-	 */
-	class invalid_type_error : public exception
-	{
-	public:
-		invalid_type_error(cstring file, uint line, cstring func) : exception("Type invalid.", file, line, func) {}
-		invalid_type_error(cstring msg, cstring file, uint line, cstring func) : exception(msg, file, line, func) {}
-	};
+    /**@class invalid_type_error
+     * @brief Args generic type exception.
+     */
+    class invalid_type_error : public exception
+    {
+    public:
+        invalid_type_error(cstring file, uint line, cstring func) : exception("Type invalid.", file, line, func) {}
+        invalid_type_error(cstring msg, cstring file, uint line, cstring func) : exception(msg, file, line, func) {}
+    };
 
-	class unknown_component_error : public invalid_type_error
-	{
-	public:
-		unknown_component_error(cstring file, uint line, cstring func) : invalid_type_error("Unknown component type.", file, line, func) {}
-		unknown_component_error(cstring msg, cstring file, uint line, cstring func) : invalid_type_error(msg, file, line, func) {}
-	};
+    class unknown_component_error : public invalid_type_error
+    {
+    public:
+        unknown_component_error(cstring file, uint line, cstring func) : invalid_type_error("Unknown component type.", file, line, func) {}
+        unknown_component_error(cstring msg, cstring file, uint line, cstring func) : invalid_type_error(msg, file, line, func) {}
+    };
 
-	class unknown_system_error : public invalid_type_error
-	{
-	public:
-		unknown_system_error(cstring file, uint line, cstring func) : invalid_type_error("Unknown system type.", file, line, func) {}
-		unknown_system_error(cstring msg, cstring file, uint line, cstring func) : invalid_type_error(msg, file, line, func) {}
-	};
+    class unknown_system_error : public invalid_type_error
+    {
+    public:
+        unknown_system_error(cstring file, uint line, cstring func) : invalid_type_error("Unknown system type.", file, line, func) {}
+        unknown_system_error(cstring msg, cstring file, uint line, cstring func) : invalid_type_error(msg, file, line, func) {}
+    };
 #pragma endregion
 
 #pragma region filesystem

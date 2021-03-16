@@ -16,21 +16,21 @@
 #include "../detail/_fixes.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_matrix_transform extension included")
+#   pragma message("GLM: GLM_EXT_matrix_transform extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_matrix_common
-	/// @{
+    /// @addtogroup ext_matrix_common
+    /// @{
 
-	template<length_t C, length_t R, typename T, typename U, qualifier Q>
-	GLM_FUNC_DECL mat<C, R, T, Q> mix(mat<C, R, T, Q> const& x, mat<C, R, T, Q> const& y, mat<C, R, U, Q> const& a);
+    template<length_t C, length_t R, typename T, typename U, qualifier Q>
+    GLM_FUNC_DECL mat<C, R, T, Q> mix(mat<C, R, T, Q> const& x, mat<C, R, T, Q> const& y, mat<C, R, U, Q> const& a);
 
-	template<length_t C, length_t R, typename T, typename U, qualifier Q>
-	GLM_FUNC_DECL mat<C, R, T, Q> mix(mat<C, R, T, Q> const& x, mat<C, R, T, Q> const& y, U a);
+    template<length_t C, length_t R, typename T, typename U, qualifier Q>
+    GLM_FUNC_DECL mat<C, R, T, Q> mix(mat<C, R, T, Q> const& x, mat<C, R, T, Q> const& y, U a);
 
-	/// @}
+    /// @}
 }//namespace legion::core::math
 
 #include "matrix_common.inl"

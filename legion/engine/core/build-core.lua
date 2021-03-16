@@ -1,7 +1,7 @@
---! Args Core Build Script for premake5
+--! Legion Core Build Script for premake5
 --[[
 author: Raphael Baier
-copyright: (c) 2020 Raphael Baier, The Args-Team
+copyright: (c) 2020 Raphael Baier, The Legion-Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the "Software"), to deal in the Software
@@ -25,19 +25,19 @@ DEALINGS IN THE SOFTWARE.
 project "legion-core"
     kind "StaticLib"
     language "C++"
-    targetdir "../../bin/%{cfg.buildcfg}"
     cppdialect "C++17"
-    includedirs { "../","./" }
+    includedirs { "../", "./" }
 
-    files {"**.h", "**.hpp" ,"**.c", "**.cpp"}
+    files { "**.h", "**.hpp" ,"**.c", "**.cpp" }
 
     filter "configurations:Debug*"
-        defines {"DEBUG"}
+        defines { "DEBUG" }
         symbols "On"
 
     filter "configurations:Release*"
-        defines {"NDEBUG"}
+        defines { "NDEBUG" }
         optimize "On"
 
     filter "configurations:*64"
        architecture "x86_64"
+       

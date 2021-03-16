@@ -100,11 +100,11 @@ namespace legion::core::filesystem
 
         /** @brief same as get().decay().to<T>()
          */
-        template <class T,class... Args>
+        template <class T, class... Args>
         auto load_as(Args&&...args) -> decltype(auto)
         {
             OPTICK_EVENT();
-            return get().decay().to<T>(std::forward<Args>(args)...);
+            return get().decay().template to<T>(std::forward<Args>(args)...);
         }
 
         L_NODISCARD common::result_decay_more<std::vector<view>,fs_error> ls() const;

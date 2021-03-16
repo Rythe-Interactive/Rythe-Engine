@@ -23,9 +23,9 @@ struct vsync_action : public app::input_action<vsync_action> {};
 class SimpleCameraController final : public System<SimpleCameraController>
 {
 public:
-    ecs::entity_handle camera;
-    ecs::entity_handle skybox;
-    ecs::entity_handle groundplane;
+    ecs::entity camera;
+    ecs::entity skybox;
+    ecs::entity groundplane;
 
     bool escaped = true;
     float movementspeed = 5.f;

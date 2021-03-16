@@ -17,7 +17,7 @@ namespace legion::core
          */
         struct any_type {
             template<class T>
-            constexpr operator T(); // non explicit
+            constexpr operator T(); // implicit conversion to any type.
         };
     }
 
@@ -42,7 +42,7 @@ namespace legion::core
 #if !defined(DOXY_EXCLUDE)
     template<typename T, typename... MemberTypes>
     reflector(T&&, std::array<std::string, sizeof...(MemberTypes)>&&, MemberTypes&&...)
-        ->reflector<std::remove_cv_t<std::remove_reference_t<T>>, std::remove_cv_t<std::remove_reference_t<MemberTypes>>...>;
+        ->reflector<remove_cvr_t<T>, remove_cvr_t<MemberTypes>...>;
 #endif
 
     /**@brief Template specialization for empty classes and unreflectable types.
@@ -75,7 +75,7 @@ namespace legion::core
     // Reflector return code
 #define RETURN_REFLECTOR(...)                                                       \
     auto&& [__VA_ARGS__] = std::forward<T>(object);                                 \
-    return reflector(std::forward<T>(object), {STRINGIFY_SEPERATE(__VA_ARGS__)}, __VA_ARGS__);
+    return reflector(std::forward<T>(object), { STRINGIFY_SEPERATE(__VA_ARGS__) }, __VA_ARGS__);
 
     /**@brief Create reflector of a certain value.
      * @param object Object to reflect.
@@ -84,7 +84,7 @@ namespace legion::core
     template<typename T>
     auto make_reflector(T&& object)
     {
-        using type = std::remove_cv_t<std::remove_reference_t<T>>;
+        using type = remove_cvr_t<T>;
 
         // Check for a custom specialization.
         if constexpr (is_brace_constructible_v<reflector<type>, T>)
@@ -226,7 +226,7 @@ namespace legion::core
         template<template<typename>typename Compare, typename T, T A, T B>
         struct compare
         {
-            static constexpr inline Compare<T> comp;
+            static constexpr inline Compare<T> comp{};
             static constexpr inline bool value = comp(A, B);
         };
 

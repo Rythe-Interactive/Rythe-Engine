@@ -17,33 +17,33 @@
 #include "../ext/scalar_uint_sized.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_vector_uint3_sized extension included")
+#   pragma message("GLM: GLM_EXT_vector_uint3_sized extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_vector_uint3_sized
-	/// @{
+    /// @addtogroup ext_vector_uint3_sized
+    /// @{
 
-	/// 8 bit unsigned integer vector of 3 components type.
-	///
-	/// @see ext_vector_uint3_sized
-	typedef vec<3, uint8, defaultp>		u8vec3;
+    /// 8 bit unsigned integer vector of 3 components type.
+    ///
+    /// @see ext_vector_uint3_sized
+    typedef vec<3, uint8, defaultp>     u8vec3;
 
-	/// 16 bit unsigned integer vector of 3 components type.
-	///
-	/// @see ext_vector_uint3_sized
-	typedef vec<3, uint16, defaultp>	u16vec3;
+    /// 16 bit unsigned integer vector of 3 components type.
+    ///
+    /// @see ext_vector_uint3_sized
+    typedef vec<3, uint16, defaultp>    u16vec3;
 
-	/// 32 bit unsigned integer vector of 3 components type.
-	///
-	/// @see ext_vector_uint3_sized
-	typedef vec<3, uint32, defaultp>	u32vec3;
+    /// 32 bit unsigned integer vector of 3 components type.
+    ///
+    /// @see ext_vector_uint3_sized
+    typedef vec<3, uint32, defaultp>    u32vec3;
 
-	/// 64 bit unsigned integer vector of 3 components type.
-	///
-	/// @see ext_vector_uint3_sized
-	typedef vec<3, uint64, defaultp>	u64vec3;
+    /// 64 bit unsigned integer vector of 3 components type.
+    ///
+    /// @see ext_vector_uint3_sized
+    typedef vec<3, uint64, defaultp>    u64vec3;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

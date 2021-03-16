@@ -199,8 +199,8 @@ namespace legion::rendering
         return m_shader.has_variant(variantId);
     }
 
-	bool material::has_variant(const std::string& variant) const
-	{
+    bool material::has_variant(const std::string& variant) const
+    {
         return m_shader.has_variant(variant);
     }
 

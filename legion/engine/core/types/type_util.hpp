@@ -1,12 +1,12 @@
 #pragma once
 #include <typeinfo>
+#include <string>
+#include <string_view>
+
 #include <core/types/primitives.hpp>
 #include <core/types/meta.hpp>
 #include <core/platform/platform.hpp>
 #include <core/common/string_extra.hpp>
-#include <string>
-#include <string_view>
-#include <cstring>
 
 #include <Optick/optick.h>
 
@@ -114,6 +114,72 @@ namespace legion::core
     }
 #endif
 
+    /**@brief Returns compile-time evaluable type name.
+     * @warning This version is not compiler agnostic! If you need it to be compiler agnostic use `nameOfType`.
+     */
+    template<typename T>
+    constexpr std::string_view localNameOfType() noexcept
+    {
+#if defined(LEGION_CLANG) || defined(LEGION_GCC)
+        cstring p = __PRETTY_FUNCTION__;
+
+        while (*p++ != '=');
+
+        for (; *p == ' '; ++p);
+
+        cstring p2 = p;
+        int count = 1;
+
+        for (;; ++p2)
+        {
+            switch (*p2)
+            {
+            case '[':
+                ++count;
+                break;
+            case ']':
+            case ';':
+                --count;
+                if (!count)
+                    return { p, size_type(p2 - p) };
+            }
+        }
+
+        return {};
+#elif defined(LEGION_MSVC)
+        cstring p = __FUNCSIG__;
+
+        while (*p != 'T' || *(p + 1) != 'y' || *(p + 2) != 'p' || *(p + 3) != 'e' || *(p + 4) != '<')
+            p++;
+
+        while (*p++ != ' ');
+
+        cstring p2 = p;
+        int count = 1;
+        size_type size = 0;
+
+        for (; size == 0; ++p2)
+        {
+            switch (*p2)
+            {
+            case '<':
+                ++count;
+                break;
+            case '>':
+                --count;
+                if (!count)
+                {
+                    size = (p2 - p);
+                }
+            }
+        }
+
+        return { p, size };
+#else
+#error unknown compiler
+#endif
+    }
+
     /**@brief Returns type name with namespaces other than that it's undecorated.
      * @tparam T type of which you want the name.
      */
@@ -139,15 +205,44 @@ namespace legion::core
      * @tparam N Length of the string literal
      * @param name Name you wish to hash
      * @note Since this version takes a const char[] it can only really be used with data coming from a string literal.
-     *		 Because it takes in a const char[] this function is able to be constexpr and thus have minimal overhead.
+     *       Because it takes in a const char[] this function is able to be constexpr and thus have minimal overhead.
      */
     template<size_type N>
-    id_type nameHash(const char(&name)[N])
+    constexpr id_type nameHash(const char(&name)[N]) noexcept
     {
-        OPTICK_EVENT();
         id_type hash = 0xcbf29ce484222325;
-        uint64 prime = 0x00000100000001b3;
-        for (int i = 0; i < N - 1; i++)
+        constexpr uint64 prime = 0x00000100000001b3;
+
+        size_type size = N;
+        if (name[size - 1] == '\0')
+            size--;
+
+        for (int i = 0; i < size; i++)
+        {
+            hash = hash ^ static_cast<const byte>(name[i]);
+            hash *= prime;
+        }
+
+        return hash;
+    }
+
+    /**@brief Returns hash of a certain string
+     * @tparam N Length of the string literal
+     * @param name Name you wish to hash
+     * @note Since this version takes a const char[] it can only really be used with data coming from a string literal.
+     *       Because it takes in a const char[] this function is able to be constexpr and thus have minimal overhead.
+     */
+    template<size_type N>
+    constexpr id_type nameHash(const std::array<char, N>& name) noexcept
+    {
+        id_type hash = 0xcbf29ce484222325;
+        constexpr uint64 prime = 0x00000100000001b3;
+
+        size_type size = N;
+        if (name[size - 1] == '\0')
+            size--;
+
+        for (int i = 0; i < size; i++)
         {
             hash = hash ^ static_cast<const byte>(name[i]);
             hash *= prime;
@@ -159,17 +254,46 @@ namespace legion::core
     /**@brief Returns hash of a certain string
      * @param name Name you wish to hash
      */
-    id_type LEGION_FUNC nameHash(cstring name);
+    constexpr id_type nameHash(cstring name) noexcept
+    {
+        id_type hash = 0xcbf29ce484222325;
+        constexpr uint64 prime = 0x00000100000001b3;
+
+        for (size_type i = 0; i < common::constexpr_strlen(name); i++)
+        {
+            hash = hash ^ static_cast<const byte>(name[i]);
+            hash *= prime;
+        }
+
+        return hash;
+    }
 
     /**@brief Returns hash of a certain string
      * @param name Name you wish to hash
      */
-    id_type LEGION_FUNC nameHash(const std::string& name);
+    id_type nameHash(const std::string& name);
 
     /**@brief Returns hash of a certain string
      * @param name Name you wish to hash
      */
-    id_type LEGION_FUNC nameHash(const std::string_view& name);
+    constexpr id_type nameHash(const std::string_view& name) noexcept
+    {
+        id_type hash = 0xcbf29ce484222325;
+        constexpr uint64 prime = 0x00000100000001b3;
+
+        size_type size = name.size();
+
+        if (name[size - 1] == '\0')
+            size--;
+
+        for (size_type i = 0; i < size; i++)
+        {
+            hash = hash ^ static_cast<const byte>(name[i]);
+            hash *= prime;
+        }
+
+        return hash;
+    }
 
     namespace detail
     {
@@ -177,26 +301,25 @@ namespace legion::core
         id_type typeHashImpl()
         {
             OPTICK_EVENT();
-            id_type hash = 0xcbf29ce484222325;
-            uint64 prime = 0x00000100000001b3;
-            cstring name = nameOfType<T>();
-            while (*name != '\0')
-            {
-                hash = hash ^ (byte)*name;
-                hash *= prime;
-                name++;
-            }
-            return hash;
+            return nameHash(nameOfType<T>());
         }
     }
 
-    /**@brief Returns hash of the type name.
+    /**@brief Returns compile-time evaluable hash of the type name.
+     * @warning This version is not compiler agnostic! If you need it to be compiler agnostic use `typeHash`.
+     */
+    template<typename T>
+    constexpr id_type localTypeHash() noexcept
+    {
+        return nameHash(localNameOfType<T>());
+    }
+
+    /**@brief Returns compiler agnostic hash of the type name.
      * @tparam T type of which you want the hash.
      */
     template<typename T>
     id_type typeHash()
     {
-        OPTICK_EVENT();
         static id_type hash = detail::typeHashImpl<T>();
         return hash;
     }
@@ -208,8 +331,7 @@ namespace legion::core
     template<typename T>
     id_type typeHash(T expr)
     {
-        OPTICK_EVENT();
-        return typeHash<std::decay_t<T>>();
+        return typeHash<remove_cvr_t<T>>();
     }
 
     template<typename Iterator>

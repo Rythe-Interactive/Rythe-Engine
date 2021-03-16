@@ -311,7 +311,7 @@ namespace legion::audio
         alSourcef(source.m_sourceId, AL_MAX_DISTANCE, 15);
 
         // NOTE TO SELF:
-        //		Set position and velocity to entity position and velocty
+        //      Set position and velocity to entity position and velocty
         alSource3f(source.m_sourceId, AL_POSITION, 0, 0, 0);
         alSource3f(source.m_sourceId, AL_VELOCITY, 0, 0, 0);
 

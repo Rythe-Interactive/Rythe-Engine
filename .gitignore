@@ -116,6 +116,10 @@ lib/*
 
 # Legion Includes
 include/**
+
+# Misc
 */**/Thumbs.db
 applications/sandbox/imgui.ini
-**/legion/engine_ref/*
+
+# Reference files (not for upload)
+**/**_ref/*

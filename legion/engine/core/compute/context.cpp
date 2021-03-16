@@ -1,11 +1,11 @@
-﻿#include <core/compute/context.hpp>
+#include <core/compute/context.hpp>
 #include <core/logging/logging.hpp>
 
 #include <string>
 
 namespace legion::core::compute {
 
-	//Initialize static variables
+    //Initialize static variables
     bool Context::m_initialized = false;
     cl_context Context::m_context = nullptr;
     cl_platform_id Context::m_platform_id = nullptr;
@@ -23,7 +23,7 @@ namespace legion::core::compute {
         //get a suitable computing platform
         cl_int ret = clGetPlatformIDs(1, &m_platform_id, &ret_num_platforms);
 
-    	//error checking for clGetPlatformIDs
+        //error checking for clGetPlatformIDs
         if (ret != CL_SUCCESS)
         {
             log::error("clGetPlatformIDs failed: {}", ret == CL_INVALID_VALUE ? "CL_INVALID_VALUE (params are bad)" : "CL_OUT_OF_HOST_MEMORY");
@@ -34,7 +34,7 @@ namespace legion::core::compute {
         //get a suitable computing device (this should find the best device in the average pc)
         ret = clGetDeviceIDs(m_platform_id, CL_DEVICE_TYPE_DEFAULT, 1, &m_device_id, &ret_num_devices);
 
-    	//error checking for clGetDeviceIDs
+        //error checking for clGetDeviceIDs
         if (ret != CL_SUCCESS)
         {
             std::string error = "Unknown Error";
@@ -57,7 +57,7 @@ namespace legion::core::compute {
         //create the computing context
         m_context = clCreateContext(nullptr, 1, &m_device_id, nullptr, nullptr, &ret);
 
-    	//error checking for clCreateContext
+        //error checking for clCreateContext
         if (ret != CL_SUCCESS)
         {
             std::string error = "Unknown Error" + std::to_string(ret);
@@ -77,7 +77,7 @@ namespace legion::core::compute {
             return;
         }
 
-    	//if everything works out, we can now assume that the context is initialized
+        //if everything works out, we can now assume that the context is initialized
         m_initialized = true;
     }
 

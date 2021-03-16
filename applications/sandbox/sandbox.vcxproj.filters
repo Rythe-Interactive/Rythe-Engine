@@ -18,18 +18,6 @@
     <ClCompile Include="source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="data\animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="systems\animation_editor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="systems\animator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="data\crosshair.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systems\testsystem.hpp">
@@ -38,22 +26,7 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\simplecameracontroller.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\testsystem2.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\pointcloudtestsystem2.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\explosion_particlesystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="systems\pointcloud_particlesystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\gui_test.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\pp_blur.hpp">
@@ -62,28 +35,10 @@
     <ClInclude Include="data\pp_edgedetect.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\testsystemconvexhull.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\animation.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\animator.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\animation_editor.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\animation_events.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\pp_bloom.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="module\testmodule.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="data\crosshair.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

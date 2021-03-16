@@ -24,6 +24,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>ClangCL</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -48,14 +49,14 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\intermediates\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(SolutionDir)args;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\intermediates\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <IncludePath>$(SolutionDir)args;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -67,12 +68,15 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-core.lib;args-application.lib;args-audio.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;glfw3.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legion-core.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++D.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -86,14 +90,16 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>args-core.lib;args-application.lib;args-audio.lib;args-editor.lib;args-networking.lib;args-physics.lib;args-rendering.lib;args-scripting.lib;glfw3.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legion-core.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -103,7 +109,10 @@
     <None Include="assets\kernels\vadd_kernel.cl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="test_filesystem.hpp" />
+    <ClInclude Include="doctest.h" />
+    <ClInclude Include="tests\core\ecs.hpp" />
+    <ClInclude Include="tests\core\filesystem.hpp" />
+    <ClInclude Include="unit_test.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

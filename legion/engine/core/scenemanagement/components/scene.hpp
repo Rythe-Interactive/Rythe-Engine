@@ -1,6 +1,5 @@
 #pragma once
 #include <core/engine/system.hpp>
-#include <core/ecs/component_handle.hpp>
 #include <core/scenemanagement/scenemanager.hpp>
 
 namespace legion::core::scenemanagement

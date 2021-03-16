@@ -6,33 +6,33 @@
 
 namespace legion::physics
 {
-	struct HalfEdgeEdge
-	{
-		HalfEdgeEdge* pairingEdge = nullptr;
-		HalfEdgeEdge* nextEdge = nullptr;
-		HalfEdgeEdge* prevEdge = nullptr;
+    struct HalfEdgeEdge
+    {
+        HalfEdgeEdge* pairingEdge = nullptr;
+        HalfEdgeEdge* nextEdge = nullptr;
+        HalfEdgeEdge* prevEdge = nullptr;
 
-		HalfEdgeFace* face = nullptr;
+        HalfEdgeFace* face = nullptr;
 
         EdgeLabel label;
         
-		math::vec3 edgePosition;
+        math::vec3 edgePosition;
         std::string id;
 
         HalfEdgeEdge() = default;
 
-		HalfEdgeEdge(math::vec3 newEdgePositionPtr) : edgePosition{ newEdgePositionPtr }
-		{
+        HalfEdgeEdge(math::vec3 newEdgePositionPtr) : edgePosition{ newEdgePositionPtr }
+        {
 
-		}
+        }
 
-		/**@brief sets 'nextEdge' and 'prevEdge' with the given HalfEdgeEdges
-		*/
-		void setNextAndPrevEdge(HalfEdgeEdge* newPrevEdge,HalfEdgeEdge* newNextEdge)
-		{
-			nextEdge = newNextEdge;
-			prevEdge = newPrevEdge;
-		}
+        /**@brief sets 'nextEdge' and 'prevEdge' with the given HalfEdgeEdges
+        */
+        void setNextAndPrevEdge(HalfEdgeEdge* newPrevEdge,HalfEdgeEdge* newNextEdge)
+        {
+            nextEdge = newNextEdge;
+            prevEdge = newPrevEdge;
+        }
 
         /**@brief Sets the pairingEdge to the passed in edge, and sets the edge.pairingEdge to this
          * if this edge or the passed edge already have pairing edge, the pairing edge of the pairing edge will be set to nullptr
@@ -43,18 +43,18 @@ namespace legion::physics
             edge->pairingEdge = this;
         }
 
-		math::vec3 getLocalNormal() const
-		{
-			return face->normal;
-		}
+        math::vec3 getLocalNormal() const
+        {
+            return face->normal;
+        }
 
-		/**@brief Gets the direction of the edge by getting the
-		* vector starting from the current edge's position to the next edge
-		*/
-		math::vec3 getLocalEdgeDirection()  const
-		{
-			return nextEdge->edgePosition - edgePosition;
-		}
+        /**@brief Gets the direction of the edge by getting the
+        * vector starting from the current edge's position to the next edge
+        */
+        math::vec3 getLocalEdgeDirection()  const
+        {
+            return nextEdge->edgePosition - edgePosition;
+        }
 
         bool isVertexVisible(const math::vec3& vert)
         {
@@ -93,6 +93,6 @@ namespace legion::physics
         }
 
 
-	};
+    };
 }
 

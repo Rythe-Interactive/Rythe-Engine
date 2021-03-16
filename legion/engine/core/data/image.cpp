@@ -82,8 +82,8 @@ namespace legion::core
 
             output.reserve(image.size.x * image.size.y);
 
-            byte* start = image.data;
-            byte* end = image.data + image.dataSize;
+            byte* start = image.data->data();
+            byte* end = image.data->data() + image.dataSize;
             size_type channelSize = static_cast<uint>(image.format);
             size_type colorSize = static_cast<int>(image.components) * channelSize;
             for (byte* colorPtr = start; colorPtr < end; colorPtr += colorSize)

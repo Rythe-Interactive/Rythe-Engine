@@ -26,9 +26,9 @@ namespace legion::core::async
     /**@class rw_spinlock
      * @brief Lock used with ::async::readonly_guard and ::async::readwrite_guard.
      * @note Read-only operations can happen simultaneously without waiting for each other.
-     *		 Read-only operations will only wait for Read-Write operations to be finished.
+     *       Read-only operations will only wait for Read-Write operations to be finished.
      * @note Read-Write operations cannot happen simultaneously and will wait for each other.
-     *		 Read-Write operations will also wait for any Read-only operations to be finished.
+     *       Read-Write operations will also wait for any Read-only operations to be finished.
      * @ref legion::core::async::readonly_guard
      * @ref legion::core::async::readwrite_guard
      * @ref legion::core::async::readonly_multiguard
@@ -75,17 +75,17 @@ namespace legion::core::async
 
         /**@brief Lock for a certain permission level. (locking for idle does nothing)
          * @note Locking stacks, locking for readonly multiple times will remain readonly.
-         *		 Locking for write after already being locked for readonly in the same thread
+         *       Locking for write after already being locked for readonly in the same thread
          *       will attempt to elevate lock permission of this thread to write.
-         *		 Locking for write multiple times will remain in write.
+         *       Locking for write multiple times will remain in write.
          * @param permissionLevel
          */
         void lock(lock_state permissionLevel = lock_state::write, wait_priority priority = wait_priority::real_time) const;
 
         /**@brief Try to lock for a certain permission level. If it fails it will return false otherwise true. (locking for idle does nothing)
          * @note Locking stacks, locking for readonly multiple times will remain readonly.
-         *		 Locking for write after already being locked for readonly in the same thread will attempt to elevate lock permission of this thread to write.
-         *		 Locking for write multiple times will remain in write.
+         *       Locking for write after already being locked for readonly in the same thread will attempt to elevate lock permission of this thread to write.
+         *       Locking for write multiple times will remain in write.
          * @param permissionLevel
          * @return bool True when locked.
          */
@@ -125,7 +125,7 @@ namespace legion::core::async
     /**@class readonly_guard
      * @brief RAII guard that uses ::async::rw_spinlock to lock for read-only.
      * @note Read-only operations can happen simultaneously without waiting for each other.
-     *		 Read-only operations will only wait for Read-Write operations to be finished.
+     *       Read-only operations will only wait for Read-Write operations to be finished.
      * @ref legion::core::async::rw_spinlock
      */
     class readonly_guard final
@@ -156,7 +156,7 @@ namespace legion::core::async
     /**@class readonly_multiguard
      * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for read-only. (similar to std::lock)
      * @note Read-only operations can happen simultaneously without waiting for each other.
-     *		 Read-only operations will only wait for Read-Write operations to be finished.
+     *       Read-only operations will only wait for Read-Write operations to be finished.
      * @ref legion::core::async::rw_spinlock
      */
     template<size_type S>
@@ -219,7 +219,7 @@ namespace legion::core::async
     /**@class readwrite_guard
      * @brief RAII guard that uses ::async::rw_spinlock to lock for read-write.
      * @note Read-Write operations cannot happen simultaneously and will wait for each other.
-     *		 Read-Write operations will also wait for any Read-only operations to be finished.
+     *       Read-Write operations will also wait for any Read-only operations to be finished.
      * @ref legion::core::async::rw_spinlock
      */
     class readwrite_guard final
@@ -251,7 +251,7 @@ namespace legion::core::async
     /**@class readwrite_multiguard
      * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for read-write. (similar to std::lock)
      * @note Read-Write operations cannot happen simultaneously and will wait for each other.
-     *		 Read-Write operations will also wait for any Read-only operations to be finished.
+     *       Read-Write operations will also wait for any Read-only operations to be finished.
      * @ref legion::core::async::rw_spinlock
      */
     template<size_type S>
@@ -313,9 +313,9 @@ namespace legion::core::async
     /**@class mixed_multiguard
      * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for user specified permissions. (similar to std::lock)
      * @note Read-only operations can happen simultaneously without waiting for each other.
-     *		 Read-only operations will only wait for Read-Write operations to be finished.
+     *       Read-only operations will only wait for Read-Write operations to be finished.
      * @note Read-Write operations cannot happen simultaneously and will wait for each other.
-     *		 Read-Write operations will also wait for any Read-only operations to be finished.
+     *       Read-Write operations will also wait for any Read-only operations to be finished.
      * @ref legion::core::async::rw_spinlock
      */
     template<size_type S>

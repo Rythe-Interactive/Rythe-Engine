@@ -17,16 +17,16 @@
 #include "../detail/qualifier.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_vector_packing extension included")
+#   pragma message("GLM: GLM_EXT_vector_packing extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_vector_packing
-	/// @{
+    /// @addtogroup ext_vector_packing
+    /// @{
 
 
-	/// @}
+    /// @}
 }// namespace legion::core::math
 
 #include "vector_packing.inl"

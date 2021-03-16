@@ -13,11 +13,11 @@
 #pragma once
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	ifndef GLM_ENABLE_EXPERIMENTAL
-#		pragma message("GLM: GLM_GTX_hash is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it.")
-#	else
-#		pragma message("GLM: GLM_GTX_hash extension included")
-#	endif
+#   ifndef GLM_ENABLE_EXPERIMENTAL
+#       pragma message("GLM: GLM_GTX_hash is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it.")
+#   else
+#       pragma message("GLM: GLM_GTX_hash extension included")
+#   endif
 #endif
 
 #include <functional>
@@ -43,7 +43,7 @@
 #include "../mat4x4.hpp"
 
 #if !GLM_HAS_CXX11_STL
-#	error "GLM_GTX_hash requires C++11 standard library support"
+#   error "GLM_GTX_hash requires C++11 standard library support"
 #endif
 
 #if !defined(DOXY_EXCLUDE)

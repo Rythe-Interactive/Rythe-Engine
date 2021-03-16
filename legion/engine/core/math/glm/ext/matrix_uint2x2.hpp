@@ -16,23 +16,23 @@
 #include "../mat2x2.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_matrix_uint2x2 extension included")
+#   pragma message("GLM: GLM_EXT_matrix_uint2x2 extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_matrix_uint2x2
-	/// @{
+    /// @addtogroup ext_matrix_uint2x2
+    /// @{
 
-	/// Unsigned integer 2x2 matrix.
-	///
-	/// @see ext_matrix_uint2x2
-	typedef mat<2, 2, uint, defaultp>	umat2x2;
+    /// Unsigned integer 2x2 matrix.
+    ///
+    /// @see ext_matrix_uint2x2
+    typedef mat<2, 2, uint, defaultp>   umat2x2;
 
-	/// Unsigned integer 2x2 matrix.
-	///
-	/// @see ext_matrix_uint2x2
-	typedef mat<2, 2, uint, defaultp>	umat2;
+    /// Unsigned integer 2x2 matrix.
+    ///
+    /// @see ext_matrix_uint2x2
+    typedef mat<2, 2, uint, defaultp>   umat2;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

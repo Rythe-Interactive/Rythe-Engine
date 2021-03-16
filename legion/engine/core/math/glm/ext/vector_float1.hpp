@@ -16,16 +16,16 @@
 #include "../detail/type_vec1.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_vector_float1 extension included")
+#   pragma message("GLM: GLM_EXT_vector_float1 extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_vector_float1
-	/// @{
+    /// @addtogroup ext_vector_float1
+    /// @{
 
-	/// 1 components vector of single-precision floating-point numbers.
-	typedef vec<1, float, defaultp>		vec1;
+    /// 1 components vector of single-precision floating-point numbers.
+    typedef vec<1, float, defaultp>     vec1;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

@@ -43,16 +43,20 @@ workspace "legion-engine"
 
 -- core module, must not have any dependencies and should be first
 include "legion/engine/core/build-core.lua"
-include "legion/engine/physics/build-physics.lua"
-include "legion/engine/scripting/build-scripting.lua"
-include "legion/engine/networking/build-networking.lua"
-include "legion/engine/audio/build-audio.lua"
-include "legion/engine/application/build-application.lua"
-include "legion/engine/rendering/build-rendering.lua"
+--include "legion/engine/physics/build-physics.lua"
+--include "legion/engine/scripting/build-scripting.lua"
+--include "legion/engine/networking/build-networking.lua"
+--include "legion/engine/audio/build-audio.lua"
+--include "legion/engine/application/build-application.lua"
+--include "legion/engine/rendering/build-rendering.lua"
+include "applications/unit_tests/build-tests.lua"
 
 project "*"
     includedirs { "deps/include/" }
-
+    targetdir "bin/%{cfg.buildcfg}"
+    libdirs { "deps/lib/", "bin/%{cfg.buildcfg}/" }
+    defines { "USE_OPTICK=0" }
+    
 -- how to build:
 --[[
     you require a copy of premake5 which can be obtained from https://premake.github.io/download.html#v5

@@ -3,6 +3,35 @@
  * @file platform.hpp
  */
 
+#if defined(_WIN64)
+ /**@def LEGION_WINDOWS
+  * @brief Defined when compiling for Windows.
+  */
+#define LEGION_WINDOWS
+
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+#define NOMINMAX
+#include <Windows.h>
+#include <shellapi.h>
+#include <shlobj.h>
+#include <shlwapi.h>
+#include <objbase.h>
+#elif defined(__linux__)
+ /**@def LEGION_LINUX
+  * @brief Defined when compiling for Linux.
+  */
+#define LEGION_LINUX
+
+#include <sys/prctl.h>
+#include <sys/resource.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <sched.h>
+#include <errno.h>
+#endif
+
 #if !defined(PROJECT_NAME)
 #define PROJECT_NAME user_project
 #endif
@@ -15,24 +44,31 @@
 #define CONCAT_DEFINE(A, B) CONCAT(A, B)
 
                                                                
-#define L_NAME_1 (x)                                                                    #x
-#define L_NAME_2 (x, x2)                                                                #x , #x2
-#define L_NAME_3 (x, x2, x3)                                                            #x , #x2, #x3
-#define L_NAME_4 (x, x2, x3, x4)                                                        #x , #x2, #x3, #x4
-#define L_NAME_5 (x, x2, x3, x4, x5)                                                    #x , #x2, #x3, #x4, #x5
-#define L_NAME_6 (x, x2, x3, x4, x5, x6)                                                #x , #x2, #x3, #x4, #x5, #x6
-#define L_NAME_7 (x, x2, x3, x4, x5, x6, x7)                                            #x , #x2, #x3, #x4, #x5, #x6, #x7
-#define L_NAME_8 (x, x2, x3, x4, x5, x6, x7, x8)                                        #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8
-#define L_NAME_9 (x, x2, x3, x4, x5, x6, x7, x8, x9)                                    #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9
-#define L_NAME_10(x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10
-#define L_NAME_11(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11
-#define L_NAME_12(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12
-#define L_NAME_13(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13
-#define L_NAME_14(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14
-#define L_NAME_15(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14, #x15
-#define L_NAME_16(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) #x , #x2, #x3, #x4, #x5, #x6, #x7, #x8, #x9, #x10, #x11, #x12, #x13, #x14, #x15, #x16
+#define  L_NAME_1(x)                                                                    #x
+#define  L_NAME_2(x, x2)                                                                #x , #x2
+#define  L_NAME_3(x, x2, x3)                                                            #x , #x2 , #x3
+#define  L_NAME_4(x, x2, x3, x4)                                                        #x , #x2 , #x3 , #x4
+#define  L_NAME_5(x, x2, x3, x4, x5)                                                    #x , #x2 , #x3 , #x4 , #x5
+#define  L_NAME_6(x, x2, x3, x4, x5, x6)                                                #x , #x2 , #x3 , #x4 , #x5 , #x6
+#define  L_NAME_7(x, x2, x3, x4, x5, x6, x7)                                            #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7
+#define  L_NAME_8(x, x2, x3, x4, x5, x6, x7, x8)                                        #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8
+#define  L_NAME_9(x, x2, x3, x4, x5, x6, x7, x8, x9)                                    #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9
+#define L_NAME_10(x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9 , #x10
+#define L_NAME_11(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9 , #x10 , #x11
+#define L_NAME_12(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9 , #x10 , #x11 , #x12
+#define L_NAME_13(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9 , #x10 , #x11 , #x12 , #x13
+#define L_NAME_14(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9 , #x10 , #x11 , #x12 , #x13 , #x14
+#define L_NAME_15(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9 , #x10 , #x11 , #x12 , #x13 , #x14 , #x15
+#define L_NAME_16(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9 , #x10 , #x11 , #x12 , #x13 , #x14 , #x15 , #x16
 
 #define STRINGIFY_SEPERATE(args...) CONCAT_DEFINE(L_NAME_, NARGS(args))(args)
+
+#define RULE_OF_5(type)\
+type() = default;\
+type(const type&) = default;\
+type(type&&) = default;\
+type& operator=(const type&) = default;\
+type& operator=(type&&) = default;
 
 /**@def LEGION_CPP17V
  * @brief the version number of c++17 as long
@@ -72,48 +108,8 @@
     #define LEGION_HIGH_PERFORMANCE
 #endif
 
-
-#if defined(_WIN64)
-    /**@def LEGION_WINDOWS
-     * @brief Defined when compiling for Windows.
-     */
-    #define LEGION_WINDOWS
-
-    #define WIN32_LEAN_AND_MEAN
-    #define VC_EXTRALEAN
-    #define NOMINMAX
-    #include <Windows.h>
-    #include <shellapi.h>
-    #include <shlobj.h>
-    #include <shlwapi.h>
-    #include <objbase.h>
-#elif defined(__linux__)
-    /**@def LEGION_LINUX
-     * @brief Defined when compiling for Linux.
-     */
-    #define LEGION_LINUX
-
-    #include <sys/prctl.h>
-    #include <sys/resource.h>
-    #include <sys/types.h>
-    #include <sys/wait.h>
-    #include <unistd.h>
-    #include <sched.h>
-    #include <errno.h>
-#endif
-
 #ifndef __FUNC__
     #define __FUNC__ __func__ 
-#endif
-
-#ifndef __FULL_FUNC__
-    #if defined(LEGION_WINDOWS)
-        #define __FULL_FUNC__ __FUNCSIG__
-    #elif defined(__linux__)
-        #define __FULL_FUNC__ __PRETTY_FUNCTION__
-    #else
-        #define __FULL_FUNC__ __func__
-    #endif
 #endif
 
 #if defined(__clang__)
@@ -137,13 +133,31 @@
 #define L_PAUSE_INSTRUCTION _mm_pause
 #endif
 
+#ifndef __FULL_FUNC__
+#if defined(LEGION_CLANG) || defined(LEGION_GCC)
+#define __FULL_FUNC__ __PRETTY_FUNCTION__
+#elif defined(LEGION_MSVC)
+#define __FULL_FUNC__ __FUNCSIG__
+#else
+#define __FULL_FUNC__ __func__
+#endif
+#endif
+
 #if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
     /**@def LEGION_CCONV
      * @brief the calling convention exported functions will use in the args engine
      */
     #define LEGION_CCONV __fastcall
-#else
+#elif defined(LEGION_MSVC)
     #define LEGION_CCONV __cdecl
+#else
+    #define LEGION_CCONV
+#endif
+
+#if defined(LEGION_GCC) || defined(LEGION_CLANG)
+#define L_ALWAYS_INLINE __attribute__((always_inline))
+#else
+#define L_ALWAYS_INLINE __forceinline
 #endif
 
 /**@def NO_MANGLING
@@ -190,8 +204,8 @@
 
 #if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(maybe_unused) || defined(DOXY_INCLUDE)
 
-/**@def L_NODISCARD
- * @brief Marks a function as "nodiscard" meaning that result must be captured and should not be discarded.
+/**@def L_MAYBEUNUSED
+ * @brief [[maybe_unused]]
  */
 #define L_MAYBEUNUSED [[maybe_unused]]
 #else

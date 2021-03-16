@@ -23,7 +23,16 @@
     <None Include="assets\kernels\vadd_kernel.cl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="test_filesystem.hpp">
+    <ClInclude Include="tests\core\filesystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="doctest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\core\ecs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unit_test.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,12 +9,12 @@ namespace legion::core
     struct pair_range
     {
         using iterator = T;
-        pair_range(const std::pair<T, T> r) : range(r)
+        pair_range(const std::pair<T, T> r) noexcept : range(r)
         {
         }
 
         template<typename ItType>
-        pair_range(ItType begin, ItType end) : range(std::move(begin), std::move(end))
+        pair_range(ItType begin, ItType end) noexcept : range(std::move(begin), std::move(end))
         {
         }
 

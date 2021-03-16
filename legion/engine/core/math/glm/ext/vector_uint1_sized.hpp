@@ -17,33 +17,33 @@
 #include "../ext/scalar_uint_sized.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_vector_uint1_sized extension included")
+#   pragma message("GLM: GLM_EXT_vector_uint1_sized extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_vector_uint1_sized
-	/// @{
+    /// @addtogroup ext_vector_uint1_sized
+    /// @{
 
-	/// 8 bit unsigned integer vector of 1 component type.
-	///
-	/// @see ext_vector_uint1_sized
-	typedef vec<1, uint8, defaultp>		u8vec1;
+    /// 8 bit unsigned integer vector of 1 component type.
+    ///
+    /// @see ext_vector_uint1_sized
+    typedef vec<1, uint8, defaultp>     u8vec1;
 
-	/// 16 bit unsigned integer vector of 1 component type.
-	///
-	/// @see ext_vector_uint1_sized
-	typedef vec<1, uint16, defaultp>	u16vec1;
+    /// 16 bit unsigned integer vector of 1 component type.
+    ///
+    /// @see ext_vector_uint1_sized
+    typedef vec<1, uint16, defaultp>    u16vec1;
 
-	/// 32 bit unsigned integer vector of 1 component type.
-	///
-	/// @see ext_vector_uint1_sized
-	typedef vec<1, uint32, defaultp>	u32vec1;
+    /// 32 bit unsigned integer vector of 1 component type.
+    ///
+    /// @see ext_vector_uint1_sized
+    typedef vec<1, uint32, defaultp>    u32vec1;
 
-	/// 64 bit unsigned integer vector of 1 component type.
-	///
-	/// @see ext_vector_uint1_sized
-	typedef vec<1, uint64, defaultp>	u64vec1;
+    /// 64 bit unsigned integer vector of 1 component type.
+    ///
+    /// @see ext_vector_uint1_sized
+    typedef vec<1, uint64, defaultp>    u64vec1;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

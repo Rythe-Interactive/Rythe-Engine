@@ -17,33 +17,33 @@
 #include "../ext/scalar_int_sized.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_vector_int2_sized extension included")
+#   pragma message("GLM: GLM_EXT_vector_int2_sized extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_vector_int2_sized
-	/// @{
+    /// @addtogroup ext_vector_int2_sized
+    /// @{
 
-	/// 8 bit signed integer vector of 2 components type.
-	///
-	/// @see ext_vector_int2_sized
-	typedef vec<2, int8, defaultp>		i8vec2;
+    /// 8 bit signed integer vector of 2 components type.
+    ///
+    /// @see ext_vector_int2_sized
+    typedef vec<2, int8, defaultp>      i8vec2;
 
-	/// 16 bit signed integer vector of 2 components type.
-	///
-	/// @see ext_vector_int2_sized
-	typedef vec<2, int16, defaultp>		i16vec2;
+    /// 16 bit signed integer vector of 2 components type.
+    ///
+    /// @see ext_vector_int2_sized
+    typedef vec<2, int16, defaultp>     i16vec2;
 
-	/// 32 bit signed integer vector of 2 components type.
-	///
-	/// @see ext_vector_int2_sized
-	typedef vec<2, int32, defaultp>		i32vec2;
+    /// 32 bit signed integer vector of 2 components type.
+    ///
+    /// @see ext_vector_int2_sized
+    typedef vec<2, int32, defaultp>     i32vec2;
 
-	/// 64 bit signed integer vector of 2 components type.
-	///
-	/// @see ext_vector_int2_sized
-	typedef vec<2, int64, defaultp>		i64vec2;
+    /// 64 bit signed integer vector of 2 components type.
+    ///
+    /// @see ext_vector_int2_sized
+    typedef vec<2, int64, defaultp>     i64vec2;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

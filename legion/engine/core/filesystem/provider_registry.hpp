@@ -87,7 +87,7 @@ namespace legion::core::filesystem{
         static resolver_sentinel domain_get_resolver_end();
 
         /** @brief use resolver_sentinel::operator* instead */
-        static resolver_ptr		 domain_get_resolver_at(const resolver_sentinel& iterator);
+        static resolver_ptr      domain_get_resolver_at(const resolver_sentinel& iterator);
         
 
     private:

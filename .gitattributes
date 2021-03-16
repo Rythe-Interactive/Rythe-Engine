@@ -5,3 +5,13 @@
 *.mp3 filter=lfs diff=lfs merge=lfs -text
 *.avi filter=lfs diff=lfs merge=lfs -text
 *.ogg filter=lfs diff=lfs merge=lfs -text
+*.inl text=auto eol=LF
+*.inl text=auto eol=LF
+*.h text=auto eol=LF
+*.h text=auto eol=LF
+*.hpp text=auto eol=LF
+*.hpp text=auto eol=LF
+*.c text=auto eol=LF
+*.c text=auto eol=LF
+*.cpp text=auto eol=LF
+*.cpp text=auto eol=LF

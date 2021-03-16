@@ -68,6 +68,8 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,6 +131,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="async\ring_sync_lock.hpp" />
     <ClInclude Include="async\thread_util.hpp" />
     <ClInclude Include="async\wait_priority.hpp" />
+    <ClInclude Include="common\hash.hpp" />
+    <ClInclude Include="common\string_literal.hpp" />
     <ClInclude Include="containers\runnable.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
@@ -162,7 +166,11 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="ecs\containers\component_pool.hpp" />
-    <ClInclude Include="ecs\data\hierarchy.hpp" />
+    <ClInclude Include="ecs\data\entity_data.hpp" />
+    <ClInclude Include="ecs\ecs.hpp" />
+    <ClInclude Include="ecs\filters\filter_info.hpp" />
+    <ClInclude Include="ecs\handles\filter.hpp" />
+    <ClInclude Include="ecs\filters\filterregistry.hpp" />
     <ClInclude Include="ecs\handles\component.hpp" />
     <ClInclude Include="ecs\handles\entity.hpp" />
     <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
@@ -490,9 +498,9 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="scenemanagement\components\scene.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
+    <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="types\reflector.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
-    <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\clock.hpp" />
     <ClInclude Include="time\defaults.hpp" />
     <ClInclude Include="time\time.hpp" />
@@ -508,6 +516,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="async\job_pool.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
     <ClCompile Include="async\spinlock.cpp" />
+    <ClCompile Include="common\hash.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\high_level\function.cpp" />
@@ -516,7 +525,10 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="data\mesh.cpp" />
+    <ClCompile Include="ecs\filters\filterregistry.cpp" />
+    <ClCompile Include="ecs\handles\entity.cpp" />
     <ClCompile Include="ecs\registry.cpp" />
+    <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="engine\system.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
@@ -538,7 +550,16 @@ del ".\xcopyexclude"</Command>
   <ItemGroup>
     <None Include="..\..\.clang-tidy" />
     <None Include="..\..\.editorconfig" />
+    <None Include="common\hash.inl" />
+    <None Include="ecs\containers\component_pool.inl" />
+    <None Include="ecs\filters\filterregistry.inl" />
+    <None Include="ecs\filters\filter_info.inl" />
+    <None Include="ecs\handles\component.inl" />
+    <None Include="ecs\handles\entity.inl" />
+    <None Include="ecs\handles\filter.inl" />
+    <None Include="ecs\prototypes\entity_prototype.inl" />
     <None Include="ecs\registry.inl" />
+    <None Include="engine\engine.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />
     <None Include="math\glm\detail\func_exponential.inl" />

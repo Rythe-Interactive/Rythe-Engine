@@ -31,6 +31,10 @@
     <ClCompile Include="async\async_operation.cpp" />
     <ClCompile Include="async\job_pool.cpp" />
     <ClCompile Include="ecs\registry.cpp" />
+    <ClCompile Include="ecs\handles\entity.cpp" />
+    <ClCompile Include="common\hash.cpp" />
+    <ClCompile Include="ecs\filters\filterregistry.cpp" />
+    <ClCompile Include="engine\engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -388,7 +392,6 @@
     <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
-    <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="math\geometry.hpp" />
     <ClInclude Include="math\close_enough.hpp" />
@@ -409,10 +412,17 @@
     <ClInclude Include="ecs\handles\entity.hpp" />
     <ClInclude Include="ecs\containers\component_pool.hpp" />
     <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
-    <ClInclude Include="ecs\data\hierarchy.hpp" />
+    <ClInclude Include="ecs\data\entity_data.hpp" />
     <ClInclude Include="ecs\handles\component.hpp" />
     <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
     <ClInclude Include="types\reflector.hpp" />
+    <ClInclude Include="ecs\ecs.hpp" />
+    <ClInclude Include="ecs\filters\filterregistry.hpp" />
+    <ClInclude Include="common\hash.hpp" />
+    <ClInclude Include="common\string_literal.hpp" />
+    <ClInclude Include="ecs\handles\filter.hpp" />
+    <ClInclude Include="ecs\filters\filter_info.hpp" />
+    <ClInclude Include="serialization\serializationutil.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -555,5 +565,14 @@
     <None Include="..\..\.editorconfig" />
     <None Include="..\..\.clang-tidy" />
     <None Include="ecs\registry.inl" />
+    <None Include="ecs\containers\component_pool.inl" />
+    <None Include="ecs\handles\component.inl" />
+    <None Include="ecs\prototypes\entity_prototype.inl" />
+    <None Include="common\hash.inl" />
+    <None Include="ecs\filters\filterregistry.inl" />
+    <None Include="engine\engine.inl" />
+    <None Include="ecs\handles\entity.inl" />
+    <None Include="ecs\handles\filter.inl" />
+    <None Include="ecs\filters\filter_info.inl" />
   </ItemGroup>
 </Project>

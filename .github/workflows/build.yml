@@ -2,9 +2,9 @@ name: build-action
 
 on:
   push:
-    branches: [main, develop, develop/*]
+    branches: [main, develop, develop/*, develop* ]
   pull_request:
-    branches: [main, develop, develop/* ]
+    branches: [main, develop, develop/*, develop* ]
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
       run: premake5 --file=premake5.lua gmake
 
     - name: get dependencies
-      run: sudo apt-get update -yqq && sudo apt-get install -yqq libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev libc++abi-dev
+      run: DEBIAN_FRONTEND=noninteractive sudo apt-get update -yqq --allow-releaseinfo-change -o::Dpkg::Use-Pty=0 && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev libc++abi-dev
 
       # TODO(algo-ryth-mix): there is an error here somewhere (sometimes old stuff is used)
       # the below two steps are here to aid in finding the bugs and should be removed when ironed out
@@ -32,6 +32,9 @@ jobs:
 
     - name: make
       run: make CXX=clang++-9 config=debug64 all
+
+    - name: run unit tests
+      run: cp -R applications/unit_tests/assets . && bin/Debug64/unit_tests -nobenchmark
 
 
 

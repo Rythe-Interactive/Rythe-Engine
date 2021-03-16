@@ -71,7 +71,7 @@ namespace legion::core::common {
     template <class T>                  class ok_proxy<T> : public ok_ident
     {
     public:
-        ok_proxy(ok_proxy&&) noexcept = default;
+        ok_proxy(ok_proxy&&) noexcept(noexcept(T(std::declval<T>()))) = default;
         ok_proxy(T val) : m_val(std::move(val)) {}
         explicit ok_proxy(const std::tuple<T>& tpl) : m_val(std::get<0>(tpl)) {}
         explicit ok_proxy(tuple_create_helper, std::tuple<T>& tpl) : m_val(std::get<0>(tpl)) {}
@@ -90,12 +90,12 @@ namespace legion::core::common {
     {
     public:
         using tuple_type = std::tuple<T, Any...>;
-        ok_proxy(ok_proxy&&) noexcept = default;
+        ok_proxy(ok_proxy&&) noexcept(noexcept(tuple_type(std::declval<tuple_type>()))) = default;
 
         template <typename = std::enable_if_t<!std::is_same<T, tuple_create_helper>::value>>
         ok_proxy(T val, Any... args) : ok_proxy(tuple_create_helper{}, std::make_tuple(std::move(val), std::move(args)...)) {}
-        explicit ok_proxy(tuple_type  tpl) : m_values(std::move(tpl)) {}
-        explicit ok_proxy(tuple_create_helper, tuple_type tpl) :m_values(std::move(tpl)) {}
+        explicit ok_proxy(tuple_type&& tpl) :m_values(std::move(tpl)) {}
+        explicit ok_proxy(tuple_create_helper, tuple_type&& tpl) :m_values(std::move(tpl)) {}
 
         operator std::tuple<T, Any ...>()  const
         {
@@ -170,7 +170,7 @@ namespace legion::core::common {
     template <class T>                  class err_proxy<T> : public err_ident
     {
     public:
-        err_proxy(err_proxy&&) noexcept = default;
+        err_proxy(err_proxy&&) noexcept(noexcept(T(std::declval<T>()))) = default;
         err_proxy(T  val) : m_val(std::move(val)) {}
         explicit err_proxy(const std::tuple<T >& tpl) : m_val(std::get<0>(tpl)) {}
         explicit err_proxy(tuple_create_helper, std::tuple<T >& tpl) : m_val(std::get<0>(tpl)) {}
@@ -190,8 +190,8 @@ namespace legion::core::common {
         using tuple_type = std::tuple<T, Any ...>;
         template <typename = std::enable_if_t<!std::is_same<T, tuple_create_helper>::value>>
         err_proxy(T  val, Any ... args) : err_proxy(tuple_create_helper{}, std::make_tuple(std::move(val), std::move(args...))) {}
-        explicit err_proxy(tuple_type  tpl) : m_values(std::move(tpl)) {}
-        explicit err_proxy(tuple_create_helper, tuple_type  tpl) :m_values(std::move(tpl)) {}
+        explicit err_proxy(tuple_type&& tpl) : m_values(std::move(tpl)) {}
+        explicit err_proxy(tuple_create_helper, tuple_type&& tpl) :m_values(std::move(tpl)) {}
 
         operator std::tuple<T, Any ...>& ()
         {
@@ -411,8 +411,8 @@ namespace legion::core::common {
         public result_ident {
     public:
         using rimpl = result_impl<ok_proxy<OkArgs...>, err_proxy<ErrArgs...>, std::tuple<OkArgs...>, std::tuple<ErrArgs...>>;
-        result(ok_proxy<OkArgs...>  ok) : rimpl((std::make_unique<ok_proxy<OkArgs...>>(std::move(ok))), nullptr) {};
-        result(err_proxy<ErrArgs...>  err) : rimpl(nullptr, (std::make_unique<err_proxy<ErrArgs...>>(std::move(err)))) {};
+        result(ok_proxy<OkArgs...>&& ok) : rimpl(std::unique_ptr<ok_proxy<OkArgs...>>(new ok_proxy<OkArgs...>(std::move(ok))), nullptr) {};
+        result(err_proxy<ErrArgs...>&& err) : rimpl(nullptr, std::unique_ptr<err_proxy<ErrArgs...>>(new err_proxy<ErrArgs...>(std::move(err)))) {};
         using rimpl::operator typename try_static_cast_result<std::tuple<OkArgs...>, ok_proxy<OkArgs...>>::type;
     };
     template <class ErrType, class... Args>
@@ -421,8 +421,8 @@ namespace legion::core::common {
         public result_ident {
     public:
         using rimpl = result_impl<ok_proxy<Args...>, err_proxy<ErrType>, std::tuple<Args...>, ErrType>;
-        result(ok_proxy<Args...>  ok) : rimpl((std::make_unique<ok_proxy<Args...>>(std::move(ok))), nullptr) {};
-        result(err_proxy<ErrType>  err) : rimpl(nullptr, (std::make_unique<err_proxy<ErrType>>(std::move(err)))) {};
+        result(ok_proxy<Args...>&& ok) : rimpl(std::unique_ptr<ok_proxy<Args...>>(new ok_proxy<Args...>(std::move(ok))), nullptr) {};
+        result(err_proxy<ErrType>&& err) : rimpl(nullptr, std::unique_ptr<err_proxy<ErrType>>(new err_proxy<ErrType>(std::move(err)))) {};
         using rimpl::operator typename try_static_cast_result<std::tuple<Args...>, ok_proxy<Args...>>::type;
     };
     template <class OkType, class... Args>
@@ -431,8 +431,8 @@ namespace legion::core::common {
         public result_ident {
     public:
         using rimpl = result_impl<ok_proxy<OkType>, err_proxy<Args...>, OkType, std::tuple<Args...>>;
-        result(ok_proxy<OkType>  ok) : rimpl((std::make_unique<ok_proxy<OkType>>(std::move(ok))), nullptr) {};
-        result(err_proxy<Args...>  err) : rimpl(nullptr, (std::make_unique<err_proxy<Args...>>(std::move(err)))) {};
+        result(ok_proxy<OkType>&& ok) : rimpl(std::unique_ptr<ok_proxy<OkType>>(new ok_proxy<OkType>(std::move(ok))), nullptr) {};
+        result(err_proxy<Args...>&& err) : rimpl(nullptr, std::unique_ptr<err_proxy<Args...>>(new err_proxy<Args...>(std::move(err)))) {};
         using rimpl::operator typename try_static_cast_result<OkType, ok_proxy<OkType>>::type;
     };
     template <class OkType, class ErrType>
@@ -441,8 +441,8 @@ namespace legion::core::common {
         public result_ident {
     public:
         using rimpl = result_impl<ok_proxy<OkType>, err_proxy<ErrType>, OkType, ErrType>;
-        result(ok_proxy<OkType>  ok) : rimpl((std::make_unique<ok_proxy<OkType>>(std::move(ok))), nullptr) {};
-        result(err_proxy<ErrType>  err) : rimpl(nullptr, (std::make_unique<err_proxy<ErrType>>(std::move(err)))) {};
+        result(ok_proxy<OkType>&& ok) : rimpl(std::unique_ptr<ok_proxy<OkType>>(new ok_proxy<OkType>(std::move(ok))), nullptr) {};
+        result(err_proxy<ErrType>&& err) : rimpl(nullptr, std::unique_ptr<err_proxy<ErrType>>(new err_proxy<ErrType>(std::move(err)))) {};
         using rimpl::operator typename try_static_cast_result<OkType, ok_proxy<OkType>>::type;
     };
 

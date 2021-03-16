@@ -77,7 +77,7 @@ namespace legion::core::compute {
             char buffer[8192*4];
 
             clGetProgramBuildInfo(m_program,device,CL_PROGRAM_BUILD_LOG,sizeof(buffer),buffer,&length);
-            buffer[length] = NULL;
+            buffer[length] = '\0';
             log::warn("BUILD LOG:\n{}",buffer);
         }
 

@@ -17,35 +17,35 @@
 #include "../detail/setup.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	ifndef GLM_ENABLE_EXPERIMENTAL
-#		pragma message("GLM: GLM_GTX_raw_data is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it.")
-#	else
-#		pragma message("GLM: GLM_GTX_raw_data extension included")
-#	endif
+#   ifndef GLM_ENABLE_EXPERIMENTAL
+#       pragma message("GLM: GLM_GTX_raw_data is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it.")
+#   else
+#       pragma message("GLM: GLM_GTX_raw_data extension included")
+#   endif
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup gtx_raw_data
-	/// @{
+    /// @addtogroup gtx_raw_data
+    /// @{
 
-	//! Type for byte numbers.
-	//! From GLM_GTX_raw_data extension.
-	typedef detail::uint8		byte;
+    //! Type for byte numbers.
+    //! From GLM_GTX_raw_data extension.
+    typedef detail::uint8       byte;
 
-	//! Type for word numbers.
-	//! From GLM_GTX_raw_data extension.
-	typedef detail::uint16		word;
+    //! Type for word numbers.
+    //! From GLM_GTX_raw_data extension.
+    typedef detail::uint16      word;
 
-	//! Type for dword numbers.
-	//! From GLM_GTX_raw_data extension.
-	typedef detail::uint32		dword;
+    //! Type for dword numbers.
+    //! From GLM_GTX_raw_data extension.
+    typedef detail::uint32      dword;
 
-	//! Type for qword numbers.
-	//! From GLM_GTX_raw_data extension.
-	typedef detail::uint64		qword;
+    //! Type for qword numbers.
+    //! From GLM_GTX_raw_data extension.
+    typedef detail::uint64      qword;
 
-	/// @}
+    /// @}
 }// namespace legion::core::math
 
 #include "raw_data.inl"

@@ -16,18 +16,18 @@
 #include "../mat2x4.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_matrix_int2x4 extension included")
+#   pragma message("GLM: GLM_EXT_matrix_int2x4 extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_matrix_int2x4
-	/// @{
+    /// @addtogroup ext_matrix_int2x4
+    /// @{
 
-	/// Signed integer 2x4 matrix.
-	///
-	/// @see ext_matrix_int2x4
-	typedef mat<2, 4, int, defaultp>	imat2x4;
+    /// Signed integer 2x4 matrix.
+    ///
+    /// @see ext_matrix_int2x4
+    typedef mat<2, 4, int, defaultp>    imat2x4;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

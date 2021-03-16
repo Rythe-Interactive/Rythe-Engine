@@ -1,4 +1,4 @@
-﻿#include <core/data/mesh.hpp>
+#include <core/data/mesh.hpp>
 #include <core/data/importers/mesh_importers.hpp>
 
 namespace legion::core

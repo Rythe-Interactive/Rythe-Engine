@@ -23,17 +23,17 @@
 #include "../detail/type_quat.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_quaternion_double extension included")
+#   pragma message("GLM: GLM_EXT_quaternion_double extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_quaternion_double
-	/// @{
+    /// @addtogroup ext_quaternion_double
+    /// @{
 
-	/// Quaternion of double-precision floating-point numbers.
-	typedef qua<double, defaultp>		dquat;
+    /// Quaternion of double-precision floating-point numbers.
+    typedef qua<double, defaultp>       dquat;
 
-	/// @}
+    /// @}
 } //namespace legion::core::math
 

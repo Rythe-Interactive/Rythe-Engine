@@ -70,12 +70,13 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-physics.lib;legion-rendering.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++D.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legion-core.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++D.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <!--
       <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-networking.lib;legion-physics.lib;legion-rendering.lib;legion-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies);mono-2.0-sgen.lib;OptickCore.lib</AdditionalDependencies>
       -->
@@ -92,6 +93,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <AdditionalOptions>-flto=thin -fsanitize=address,undefined %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -107,30 +109,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="data\animation.cpp" />
-    <ClCompile Include="data\crosshair.cpp" />
     <ClCompile Include="source.cpp" />
-    <ClCompile Include="systems\animation_editor.cpp" />
-    <ClCompile Include="systems\animator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="data\animation.hpp" />
-    <ClInclude Include="data\animation_events.hpp" />
-    <ClInclude Include="data\crosshair.hpp" />
     <ClInclude Include="data\pp_bloom.hpp" />
     <ClInclude Include="data\pp_edgedetect.hpp" />
     <ClInclude Include="module\testmodule.hpp" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="systems\animation_editor.hpp" />
-    <ClInclude Include="systems\animator.hpp" />
-    <ClInclude Include="systems\gui_test.hpp" />
-    <ClInclude Include="systems\pointcloudtestsystem2.hpp" />
-    <ClInclude Include="systems\explosion_particlesystem.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="data\pp_blur.hpp" />
-    <ClInclude Include="systems\simplecameracontroller.hpp" />
-    <ClInclude Include="systems\testsystem2.hpp" />
-    <ClInclude Include="systems\testsystemconvexhull.hpp" />
     <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>
   <ItemGroup>

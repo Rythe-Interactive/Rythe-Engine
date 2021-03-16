@@ -112,10 +112,10 @@ namespace legion::core
         }
 
         /** @brief gets the value at index idx
-	     *  checks if the index is valid before returning and throws and std::out_of_range exception if it is not
-	     *  @param idx the index to query
-	     *  @returns the value at idx
-	     */
+         *  checks if the index is valid before returning and throws and std::out_of_range exception if it is not
+         *  @param idx the index to query
+         *  @returns the value at idx
+         */
         L_NODISCARD value_type at(size_type idx) const
         {
             if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");
@@ -123,9 +123,9 @@ namespace legion::core
         }
 
         /** @brief gets the value at index idx
-	     *  @param idx the index to query
-	     *  @returns the value at idx
-	     */	
+         *  @param idx the index to query
+         *  @returns the value at idx
+         */ 
         value_type& operator[](size_type idx)
         {
             if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");
@@ -133,8 +133,8 @@ namespace legion::core
         }
 
         /**@brief const version of above
-	     * @see value_type& operator[](size_type)
-	     */
+         * @see value_type& operator[](size_type)
+         */
         L_NODISCARD value_type operator[](size_type idx) const
         {
             if(idx > m_targetSize) throw std::out_of_range("data_view subscript out of range");
@@ -172,15 +172,15 @@ namespace legion::core
         }
 
         /**@brief gets the size of the target array-view
-	     */
+         */
         L_NODISCARD size_type size() const noexcept
         {
             return m_targetSize;
         }
 
         /**@brief gets the max size this container could grow to.
-	     * since the container is non resizable same as size()
-	     */
+         * since the container is non resizable same as size()
+         */
         L_NODISCARD size_type max_size() const noexcept
         {
             return m_targetSize;

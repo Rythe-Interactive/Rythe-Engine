@@ -82,7 +82,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::vec2> {
+    struct formatter<legion::core::math::vec2> {
         // Presentation format: 'f' - fixed, 'e' - exponential.
         char presentation = 'f';
 
@@ -126,7 +126,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::ivec2> {
+    struct formatter<legion::core::math::ivec2> {
 
         constexpr auto parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
@@ -146,7 +146,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::vec3> {
+    struct formatter<legion::core::math::vec3> {
         char presentation = 'f';
 
         constexpr auto parse(format_parse_context& ctx) {
@@ -169,7 +169,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::ivec3> {
+    struct formatter<legion::core::math::ivec3> {
 
         constexpr auto parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
@@ -189,7 +189,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::vec4> {
+    struct formatter<legion::core::math::vec4> {
         char presentation = 'f';
 
         constexpr auto parse(format_parse_context& ctx) {
@@ -212,7 +212,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::color> {
+    struct formatter<legion::core::math::color> {
         char presentation = 'f';
 
         constexpr auto parse(format_parse_context& ctx) {
@@ -235,7 +235,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::quat> {
+    struct formatter<legion::core::math::quat> {
         char presentation = 'f';
 
         constexpr auto parse(format_parse_context& ctx) {
@@ -380,6 +380,7 @@ namespace legion::core::log
         case severity::error:return spdlog::level::err;
         case severity::fatal:return spdlog::level::critical;
         }
+        return spdlog::level::err;
     }
 
     /** @brief prints a log line, using the specified `severity`
