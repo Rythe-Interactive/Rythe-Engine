@@ -112,6 +112,9 @@ namespace legion
     template<typename Callable, typename... Args>
     inline L_ALWAYS_INLINE void Benchmark_IMPL(const std::string& func, size_type n, Callable c, Args&&... args)
     {
+        if (Engine::cliargs["nobenchmark"])
+            return;
+
         subdomaintimes.clear();
         lastDomain = &GetTestDomains()[func];
         std::cout << '[' << *lastDomain << "] Running benchmark: " << n << " cases\n";

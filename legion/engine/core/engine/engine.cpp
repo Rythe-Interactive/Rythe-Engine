@@ -3,9 +3,11 @@
 namespace legion::core
 {
     size_type Engine::exitCode = 0;
+    argh::parser Engine::cliargs;
 
-    Engine::Engine(int argc, char** argv) : m_cliargs(argv, argv + argc), m_modules()
+    Engine::Engine(int argc, char** argv) : m_modules()
     {
+        cliargs.parse(argc, argv);
         log::setup();
     }
 
@@ -24,10 +26,4 @@ namespace legion::core
     {
         //m_scheduler.run();
     }
-
-    std::vector<char*>& Engine::getCliArgs()
-    {
-        return m_cliargs;
-    }
-
 }

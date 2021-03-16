@@ -34,7 +34,7 @@ jobs:
       run: make CXX=clang++-9 config=debug64 all
 
     - name: run unit tests
-      run: cp -R applications/unit_tests/assets . && bin/Debug64/unit_tests
+      run: cp -R applications/unit_tests/assets . && bin/Debug64/unit_tests -nobenchmark
 
 
 

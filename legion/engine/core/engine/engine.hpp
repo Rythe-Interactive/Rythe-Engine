@@ -8,6 +8,7 @@
 #include <core/events/eventbus.hpp>
 //#include <core/defaults/coremodule.hpp>
 #include <core/logging/logging.hpp>
+#include <argh.h>
 
 #include <map>
 #include <vector>
@@ -31,11 +32,12 @@ namespace legion::core
     class Engine
     {
     private:
-        std::vector<char*> m_cliargs;
         std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
 
     public:
         static size_type exitCode;
+
+        static argh::parser cliargs;
 
         Engine(int argc, char** argv);
 
@@ -56,8 +58,6 @@ namespace legion::core
         /**@brief Runs engine loop.
          */
         void run();
-
-        std::vector<char*>& getCliArgs();
     };
 }
 

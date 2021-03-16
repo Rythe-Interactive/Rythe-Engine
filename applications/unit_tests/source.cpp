@@ -33,7 +33,7 @@ public:
 void LEGION_CCONV reportModules(Engine* engine)
 {
     doctest::Context ctx;
-    ctx.applyCommandLine(engine->getCliArgs().size(), engine->getCliArgs().data());
+    ctx.applyCommandLine(engine->cliargs.size(), engine->cliargs.data());
 
     engine->exitCode = ctx.run();
 
