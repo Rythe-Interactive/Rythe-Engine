@@ -30,7 +30,7 @@ jobs:
        premake5 --file=premake5.lua vs2019
 
     - name: build legion dependencies
-      run: make legion-core
+      run: make CXX=clang++-9 config=debug64 legion-core
 
     - name: intercept-build & analyze-build
       run: |
