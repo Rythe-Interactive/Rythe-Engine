@@ -32,7 +32,7 @@ namespace std
 {
     template<> struct hash<legion::core::ecs::entity>
     {
-        constexpr std::size_t operator()(legion::core::ecs::entity const& handle) const noexcept;
+        std::size_t operator()(legion::core::ecs::entity const& handle) const noexcept;
     };
 }
 #endif
