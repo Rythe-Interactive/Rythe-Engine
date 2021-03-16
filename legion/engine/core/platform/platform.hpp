@@ -148,14 +148,10 @@ type& operator=(type&&) = default;
      * @brief the calling convention exported functions will use in the args engine
      */
     #define LEGION_CCONV __fastcall
-#else
-#if defined(LEGION_MSVC)
+#elif defined(LEGION_MSVC)
     #define LEGION_CCONV __cdecl
-#elif defined(LEGION_CLANG_GCC) || defined(LEGION_GCC)
-    #define LEGION_CCONV __attribute__ ((__cdecl__))
 #else
     #define LEGION_CCONV
-#endif
 #endif
 
 #if defined(LEGION_GCC) || defined(LEGION_CLANG)

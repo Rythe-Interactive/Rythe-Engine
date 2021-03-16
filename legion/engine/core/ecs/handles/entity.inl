@@ -61,14 +61,14 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
-    inline component<component_type> entity::add_component(const serialization::component_prototype<component_type>& prot)
+    inline component<component_type> entity::add_component(const serialization::prototype<component<component_type>>& prot)
     {
         Registry::createComponent<component_type>(*this, prot);
         return { {}, entity{data} };
     }
 
     template<typename component_type>
-    inline component<component_type> entity::add_component(serialization::component_prototype<component_type>&& prot)
+    inline component<component_type> entity::add_component(serialization::prototype<component<component_type>>&& prot)
     {
         Registry::createComponent<component_type>(*this, std::move(prot));
         return { {}, entity{data} };
@@ -103,7 +103,7 @@ namespace legion::core::ecs
 #if !defined(DOXY_EXCLUDE)
 namespace std
 {
-    constexpr size_t hash<legion::core::ecs::entity>::operator()(legion::core::ecs::entity const& handle) const noexcept
+    size_t hash<legion::core::ecs::entity>::operator()(legion::core::ecs::entity const& handle) const noexcept
     {
         return handle->id;
     }

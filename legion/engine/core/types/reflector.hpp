@@ -226,7 +226,7 @@ namespace legion::core
         template<template<typename>typename Compare, typename T, T A, T B>
         struct compare
         {
-            static constexpr inline Compare<T> comp;
+            static constexpr inline Compare<T> comp{};
             static constexpr inline bool value = comp(A, B);
         };
 

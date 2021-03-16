@@ -26,9 +26,6 @@ namespace legion::core::ecs
      */
     class Registry
     {
-        template<typename component_type>
-        friend struct component_pool;
-
     private:
         // All miscellaneous data on entities, eg: hierarchy, active, alive.
         static std::unordered_map<id_type, entity_data> m_entities;

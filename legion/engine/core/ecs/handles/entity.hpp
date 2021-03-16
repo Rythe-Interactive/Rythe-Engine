@@ -24,11 +24,6 @@ namespace legion::core
     {
         template<typename T>
         struct prototype;
-
-        using component_prototype_base = prototype<ecs::component_base>;
-
-        template<typename component_type>
-        using component_prototype = prototype<ecs::component<component_type>>;
     }
 }
 
@@ -48,6 +43,7 @@ namespace legion::core::ecs
     using entity_set = hashed_sparse_set<entity>;
 
     static constexpr id_type world_entity_id = 1;
+
     struct entity_data;
 
     struct child_iterator
@@ -280,9 +276,9 @@ namespace legion::core::ecs
          * @return Component handle to the component.
          */
         template<typename component_type>
-        component<component_type> add_component(const serialization::component_prototype<component_type>& prot);
+        component<component_type> add_component(const serialization::prototype<component<component_type>>& prot);
         template<typename component_type>
-        component<component_type> add_component(serialization::component_prototype<component_type>&& prot);
+        component<component_type> add_component(serialization::prototype<component<component_type>>&& prot);
 
         /**@brief Checks whether this entity has a certain component.
          * @tparam component_type Type of the component to check for.
