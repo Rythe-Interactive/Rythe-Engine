@@ -34,7 +34,7 @@ jobs:
       run: make CXX=clang++-9 config=debug64 all
 
     - name: run unit tests
-      run: unit_tests
+      run: ./bin/debug64/unit_tests
 
 
 
