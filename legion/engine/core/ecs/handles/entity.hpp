@@ -37,7 +37,6 @@ namespace std
 }
 #endif
 
-
 namespace legion::core::ecs
 {
     using entity_set = hashed_sparse_set<entity>;

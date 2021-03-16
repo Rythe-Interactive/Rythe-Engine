@@ -2,6 +2,15 @@
 #include <core/ecs/registry.hpp>
 #pragma once
 
+#if !defined(DOXY_EXCLUDE)
+namespace std
+{
+    inline size_t hash<legion::core::ecs::entity>::operator()(legion::core::ecs::entity const& handle) const noexcept
+    {
+        return handle->id;
+    }
+}
+#endif
 
 namespace legion::core::ecs
 {
@@ -99,13 +108,3 @@ namespace legion::core::ecs
     }
 
 }
-
-#if !defined(DOXY_EXCLUDE)
-namespace std
-{
-    size_t hash<legion::core::ecs::entity>::operator()(legion::core::ecs::entity const& handle) const noexcept
-    {
-        return handle->id;
-    }
-}
-#endif
