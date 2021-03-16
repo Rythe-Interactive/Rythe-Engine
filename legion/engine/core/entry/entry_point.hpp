@@ -108,6 +108,6 @@ int main(int argc, char** argv)
     std::cout << "Press enter to exit." << std::endl;
     std::cin.ignore();
 #endif
-    return 0;
+    return engine.exitCode;
 }
 #endif

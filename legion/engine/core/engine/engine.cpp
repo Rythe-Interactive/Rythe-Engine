@@ -2,6 +2,8 @@
 
 namespace legion::core
 {
+    size_type Engine::exitCode = 0;
+
     Engine::Engine(int argc, char** argv) : m_cliargs(argv, argv + argc), m_modules()
     {
         log::setup();

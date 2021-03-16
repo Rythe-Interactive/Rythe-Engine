@@ -35,6 +35,8 @@ namespace legion::core
         std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
 
     public:
+        static size_type exitCode;
+
         Engine(int argc, char** argv);
 
         /**@brief Reports an engine module.

@@ -120,23 +120,23 @@ void TestFS()
     bool nested_contents_valid = nested_contents == common::valid;
 
     //perform tests with mock
-    Check(nested_contents_valid);
+    L_CHECK(nested_contents_valid);
 
     auto traits = fs::view("only_test_valid://test.txt").file_info();
 
-    Check(traits != fs::invalid_file_t);
-    // Check(fs::view("only_test_valid://test.txt").get() == common::valid);
+    L_CHECK(traits != fs::invalid_file_t);
+    // L_CHECK(fs::view("only_test_valid://test.txt").get() == common::valid);
 
      //perform tests with actual data
     auto contents = fs::view("basic://config/test.txt").get();
 
     bool contents_valid = contents == common::valid;
 
-    Check(contents_valid);
+    L_CHECK(contents_valid);
 
     auto result = fs::view("basic://config/test2.txt").set(contents);
 
-    Check(!result.has_err());
+    L_CHECK(!result.has_err());
 }
 
 LEGION_TEST("core::fs")

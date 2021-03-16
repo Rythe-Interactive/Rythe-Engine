@@ -1983,6 +1983,21 @@ int registerReporter(const char* name, int priority, bool isReporter) {
         DOCTEST_ASSERT_IMPLEMENT_2(assert_type, __VA_ARGS__);                                      \
     } while(false)
 
+#define DOCTEST_ASSERT_IMPLEMENT_SPEC_2(assert_type, file, line, ...)                              \
+    DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Woverloaded-shift-op-parentheses")                  \
+    doctest::detail::ResultBuilder _DOCTEST_RB(doctest::assertType::assert_type, file,             \
+                                               line, #__VA_ARGS__);                                \
+    DOCTEST_WRAP_IN_TRY(_DOCTEST_RB.setResult(                                                     \
+            doctest::detail::ExpressionDecomposer(doctest::assertType::assert_type)                \
+            << __VA_ARGS__))                                                                       \
+    DOCTEST_ASSERT_LOG_AND_REACT(_DOCTEST_RB)                                                      \
+    DOCTEST_CLANG_SUPPRESS_WARNING_POP
+
+#define DOCTEST_ASSERT_IMPLEMENT_SPEC_1(assert_type, file, line, ...)                              \
+    do {                                                                                           \
+        DOCTEST_ASSERT_IMPLEMENT_SPEC_2(assert_type, file, line, __VA_ARGS__);                     \
+    } while(false)
+
 #else // DOCTEST_CONFIG_SUPER_FAST_ASSERTS
 
 // necessary for <ASSERT>_MESSAGE
@@ -1999,6 +2014,7 @@ int registerReporter(const char* name, int priority, bool isReporter) {
 
 #define DOCTEST_WARN(...) DOCTEST_ASSERT_IMPLEMENT_1(DT_WARN, __VA_ARGS__)
 #define DOCTEST_CHECK(...) DOCTEST_ASSERT_IMPLEMENT_1(DT_CHECK, __VA_ARGS__)
+#define DOCTEST_CHECK_SPEC(...) DOCTEST_ASSERT_IMPLEMENT_SPEC_1(DT_CHECK, __VA_ARGS__)
 #define DOCTEST_REQUIRE(...) DOCTEST_ASSERT_IMPLEMENT_1(DT_REQUIRE, __VA_ARGS__)
 #define DOCTEST_WARN_FALSE(...) DOCTEST_ASSERT_IMPLEMENT_1(DT_WARN_FALSE, __VA_ARGS__)
 #define DOCTEST_CHECK_FALSE(...) DOCTEST_ASSERT_IMPLEMENT_1(DT_CHECK_FALSE, __VA_ARGS__)
@@ -2468,6 +2484,7 @@ int registerReporter(const char* name, int priority, bool isReporter) {
 #define WARN_THROWS_WITH_AS DOCTEST_WARN_THROWS_WITH_AS
 #define WARN_NOTHROW DOCTEST_WARN_NOTHROW
 #define CHECK DOCTEST_CHECK
+#define CHECK_SPEC DOCTEST_CHECK_SPEC
 #define CHECK_FALSE DOCTEST_CHECK_FALSE
 #define CHECK_THROWS DOCTEST_CHECK_THROWS
 #define CHECK_THROWS_AS DOCTEST_CHECK_THROWS_AS

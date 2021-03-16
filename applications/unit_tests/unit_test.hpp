@@ -37,7 +37,7 @@ namespace legion
         return 0;
     }
 
-    using CheckFunc = void(*)(bool);
+    using CheckFunc = void(*)(bool, cstring, int);
     using SubDomainFunc = bool(*)(cstring);
 
     CheckFunc Check;
@@ -71,14 +71,14 @@ namespace legion
         constexpr operator bool() const noexcept { return true; }
     };
 
-    inline L_ALWAYS_INLINE void NoOpt(bool value)
+    inline L_ALWAYS_INLINE void NoOpt(bool value, L_MAYBEUNUSED cstring file, L_MAYBEUNUSED int line)
     {
         DoNotOptimize(value);
     }
 
-    inline L_ALWAYS_INLINE void DoCheck(bool value)
+    inline L_ALWAYS_INLINE void DoCheck(bool value, cstring file, int line)
     {
-        CHECK(value);
+        CHECK_SPEC(file, line, value);
     }
 
     inline L_ALWAYS_INLINE bool NoPrint(cstring val)
@@ -158,6 +158,8 @@ namespace legion
         StartSubDomain = &DoPrint;
         std::invoke(c, std::forward<Args>(args)...);
     }
+
+#define L_CHECK(b) Check(b, __FILE__, __LINE__)
 
 #define Benchmark_N(n, ...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), n, __VA_ARGS__)
 #define Benchmark(...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), 10000, __VA_ARGS__)

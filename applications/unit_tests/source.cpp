@@ -18,7 +18,7 @@ public:
         reportSystem<ExitHelper>();
     }
 
-    priority_type priority() override { return PRIORITY_MAX ;};
+    priority_type priority() override { return PRIORITY_MAX; };
 
     class ExitHelper : public System<ExitHelper>
     {
@@ -33,13 +33,13 @@ public:
 void LEGION_CCONV reportModules(Engine* engine)
 {
     doctest::Context ctx;
-    ctx.applyCommandLine(engine->getCliArgs().size(),engine->getCliArgs().data());
+    ctx.applyCommandLine(engine->getCliArgs().size(), engine->getCliArgs().data());
 
-    [[maybe_unused]] const int res = ctx.run();
+    engine->exitCode = ctx.run();
 
-     if(ctx.shouldExit())
+    if (ctx.shouldExit())
         engine->reportModule<Exitus>();
-        //std::exit(res);
+    //std::exit(res);
 
-    // additional application code
+// additional application code
 }
