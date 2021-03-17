@@ -6,6 +6,7 @@
 #include <Voro++/voro++.hh>
 #include <rendering/debugrendering.hpp>
 #include <physics/data/convex_convex_collision_info.hpp>
+#include <physics/data/collider_face_to_vert.hpp>
 
 namespace legion::physics
 {
@@ -622,8 +623,10 @@ namespace legion::physics
 
         static void createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint,
             const std::vector<HalfEdgeEdge*>& edges, std::vector<HalfEdgeFace*>& createdFaces);
-        
 
+        static bool foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, ColliderFaceToVert& outChosenFace);
+        
+        static void partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces, std::list<ColliderFaceToVert>& outFacesWithOutsideVerts);
 
     };
 }

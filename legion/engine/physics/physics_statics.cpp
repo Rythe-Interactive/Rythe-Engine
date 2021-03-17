@@ -1,7 +1,7 @@
 #include <core/core.hpp>
 #include <physics/physics_statics.hpp>
 #include <rendering/debugrendering.hpp>
-#include <physics/data/collider_face_to_vert.hpp>
+
 namespace legion::physics
 {
     void PhysicsStatics::DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB
@@ -359,6 +359,7 @@ namespace legion::physics
     {
         
         std::vector<HalfEdgeFace*> faces;
+        faces.reserve(4);
 
         //Build Initial Hull
         if (!qHBuildInitialHull(vertices, faces,DEBUG_transform))
@@ -368,43 +369,32 @@ namespace legion::physics
 
         //populate list with current collider
         std::list<ColliderFaceToVert> facesWithOutsideVerts;
+        partitionVerticesToList(vertices, faces, facesWithOutsideVerts);
 
-        //for each vertex in vertices
-        for (const math::vec3& vertex : vertices)
+        ColliderFaceToVert& currentFaceToVert = facesWithOutsideVerts.front();
+        int safetyInt = 0;
+        //while facesWithOutsideVerts is not empty
+        while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
         {
-            bool foundInList = false;
+            //find furhtest vertex of last face
 
-            for (ColliderFaceToVert& faceToVert : facesWithOutsideVerts)
-            {
-                if (IsPointAbovePlane(faceToVert.face->normal, faceToVert.face->centroid, vertex))
-                {
-                    faceToVert.outsideVerts.push_back(vertex);
-                    foundInList = true;
-                    break;
-                }
-            }
+            //identify faces that can see vertex
 
-            if (!foundInList)
-            {
-                for (HalfEdgeFace* face : faces)
-                {
-                    if (IsPointAbovePlane(face->normal, face->centroid, vertex))
-                    {
-                        facesWithOutsideVerts.emplace_back(face, vertex);
-                        break;
-                    }
-                }
-            }
+            //identify horizon edges and put them into list
+
+            //reverse iterate the list to find their pairings, add them to new list
+
+            //create new faces based on pairing list
+
+            //delete all old faces that can see vertex
 
 
-
+            safetyInt++;
+            assert(safetyInt < 999);
         }
-            //find first face that is in front of vertex in current list
-                //add to list if found
-
-            //if not found, go through collider list
-                //add new ColliderFaceToVert if not
             
+
+
 
 
         auto convexCollider = std::make_shared<ConvexCollider>();
@@ -666,6 +656,51 @@ namespace legion::physics
 
     void PhysicsStatics::createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint, const std::vector<HalfEdgeEdge*>& edges, std::vector<HalfEdgeFace*>& createdFaces)
     {
+    }
+
+    bool PhysicsStatics::foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, ColliderFaceToVert& outChosenFace)
+    {
+        for (auto faceWithOutsideVert : facesWithOutsideVerts)
+        {
+            if (faceWithOutsideVert.outsideVerts.size())
+            {
+                outChosenFace = faceWithOutsideVert;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void PhysicsStatics::partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces, std::list<ColliderFaceToVert>& outFacesWithOutsideVerts)
+    {
+        //for each vertex in vertices
+        for (const math::vec3& vertex : vertices)
+        {
+            bool foundInList = false;
+
+            for (ColliderFaceToVert& faceToVert : outFacesWithOutsideVerts)
+            {
+                if (IsPointAbovePlane(faceToVert.face->normal, faceToVert.face->centroid, vertex))
+                {
+                    faceToVert.outsideVerts.push_back(vertex);
+                    foundInList = true;
+                    break;
+                }
+            }
+
+            if (!foundInList)
+            {
+                for (HalfEdgeFace* face : faces)
+                {
+                    if (IsPointAbovePlane(face->normal, face->centroid, vertex))
+                    {
+                        outFacesWithOutsideVerts.emplace_back(face, vertex);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
 };
