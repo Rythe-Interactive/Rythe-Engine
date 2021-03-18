@@ -228,7 +228,7 @@ namespace legion::core::async
         if (m_forceRelease)
             return;
 
-        assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == (int)lock_state::idle);
+        assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == static_cast<int>(lock_state::idle));
         m_id = source.m_id;
     }
 
@@ -237,7 +237,7 @@ namespace legion::core::async
         if (m_forceRelease)
             return *this;
 
-        assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == (int)lock_state::idle);
+        assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == static_cast<int>(lock_state::idle));
         m_id = source.m_id;
         return *this;
     }
