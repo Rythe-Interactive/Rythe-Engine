@@ -25,10 +25,10 @@
 namespace legion::core
 {
     template<typename T>
-    class delegate_base;
+    struct delegate_base;
 
     template<typename return_type, typename ...parameter_types>
-    class delegate_base<return_type(parameter_types...)>
+    struct delegate_base<return_type(parameter_types...)>
     {
     protected:
 
@@ -39,8 +39,8 @@ namespace legion::core
 
         struct invocation_element
         {
-            invocation_element() = default;
-            invocation_element(void* this_ptr, stub_type aStub, allocator aCopy = nullptr, allocator aMove = nullptr, deleter aDelete = nullptr) : object(this_ptr), stub(aStub), copy(aCopy), move(aMove), del(aDelete) {}
+            invocation_element() noexcept = default;
+            invocation_element(void* this_ptr, stub_type aStub, allocator aCopy = nullptr, deleter aDelete = nullptr) noexcept : object(this_ptr), stub(aStub), copy(aCopy), del(aDelete) {}
             invocation_element(const invocation_element& source)
             {
                 if (source.copy != nullptr)
@@ -51,22 +51,9 @@ namespace legion::core
                     object = source.object;
                 stub = source.stub;
                 copy = source.copy;
-                move = source.move;
                 del = source.del;
             }
-            invocation_element(invocation_element&& source)
-            {
-                if (source.move != nullptr)
-                {
-                    object = source.move(source.object);
-                }
-                else
-                    object = source.object;
-                stub = source.stub;
-                copy = source.copy;
-                move = source.move;
-                del = source.del;
-            }
+            invocation_element(invocation_element&& source) noexcept = default;
 
             ~invocation_element()
             {
@@ -84,27 +71,13 @@ namespace legion::core
                     object = source.object;
                 stub = source.stub;
                 copy = source.copy;
-                move = source.move;
                 del = source.del;
                 return *this;
             }
 
-            invocation_element& operator=(invocation_element&& source)
-            {
-                if (source.move != nullptr)
-                {
-                    object = source.move(source.object);
-                }
-                else
-                    object = source.object;
-                stub = source.stub;
-                copy = source.copy;
-                move = source.move;
-                del = source.del;
-                return *this;
-            }
+            invocation_element& operator=(invocation_element&& source) noexcept = default;
 
-            void Clone(invocation_element& target) const
+            void clone(invocation_element& target) const
             {
                 if (copy != nullptr)
                 {
@@ -114,23 +87,21 @@ namespace legion::core
                     target.object = object;
                 target.stub = stub;
                 target.copy = copy;
-                target.move = move;
                 target.del = del;
             }
 
-            bool operator ==(const invocation_element& other) const
+            bool operator ==(const invocation_element& other) const noexcept
             {
-                return other.stub == stub && (object == other.object || (copy == other.copy && move == other.move && del == other.del));
+                return other.stub == stub && object == other.object;
             }
-            bool operator !=(const invocation_element& other) const
+            bool operator !=(const invocation_element& other) const noexcept
             {
-                return other.stub != stub || (object != other.object || (copy != other.copy || move != other.move || del != other.del));
+                return other.stub != stub || object != other.object;
             }
 
             void* object = nullptr;
             stub_type stub = nullptr;
             allocator copy = nullptr;
-            allocator move = nullptr;
             deleter del = nullptr;
         };
     };
@@ -140,41 +111,37 @@ namespace legion::core
     template <typename T> class multicast_delegate;
 
     template<typename return_type, typename ...parameter_types>
-    class delegate<return_type(parameter_types...)> final : private delegate_base<return_type(parameter_types...)>
+    struct delegate<return_type(parameter_types...)> final : private delegate_base<return_type(parameter_types...)>
     {
     public:
         delegate() = default;
-        delegate(delegate&&) = default;
-        delegate& operator=(delegate&&) = default;
-        delegate(const delegate& other) = default;
-
-        bool isNull() const
-        {
-            return m_invocation.stub == nullptr;
-        }
-
-        bool operator ==(void* ptr) const
-        {
-            return (ptr == nullptr) && isNull();
-        }
-        bool operator !=(void* ptr) const
-        {
-            return (ptr != nullptr) || (!isNull());
-        }
-
         delegate(std::nullptr_t)
         {
         }
 
+        bool valid() const
+        {
+            return m_invocation.stub != nullptr;
+        }
+
+        bool operator ==(std::nullptr_t) const
+        {
+            return !valid();
+        }
+        bool operator !=(std::nullptr_t) const
+        {
+            return valid();
+        }
+
         delegate& operator=(std::nullptr_t)
         {
-            m_invocation.stub = nullptr;
+            m_invocation.~invocation_element();
             return *this;
         }
 
         void clear()
         {
-            m_invocation.stub = nullptr;
+            m_invocation.~invocation_element();
         }
 
         template <typename lambda_type>
@@ -185,11 +152,6 @@ namespace legion::core
                 {
                     lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
                     return (void*)(new lambda_type(*p));
-                },
-                [](void* ptr)
-                {
-                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
-                    return (void*)(new lambda_type(std::move(*p)));
                 },
                 [](void* ptr)
                 {
@@ -213,11 +175,7 @@ namespace legion::core
                     lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
                     return (void*)(new lambda_type(*p));
                 },
-                [](void* ptr)
-                {
-                    lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
-                    return (void*)(new lambda_type(std::move(*p)));
-                },
+                nullptr,
                     [](void* ptr)
                 {
                     lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
@@ -276,7 +234,7 @@ namespace legion::core
                     lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
                     return (void*)(new lambda_type(std::move(*p)));
                 },
-                [](void* ptr)
+                    [](void* ptr)
                 {
                     lambda_type* p = reinterpret_cast<lambda_type*>(ptr);
                     delete p;

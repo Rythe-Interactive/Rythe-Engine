@@ -36,6 +36,7 @@
     <ClCompile Include="ecs\filters\filterregistry.cpp" />
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="time\defaults.cpp" />
+    <ClCompile Include="scheduling\clock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -426,6 +427,7 @@
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="scheduling\clock.hpp" />
+    <ClInclude Include="containers\newdelegate.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

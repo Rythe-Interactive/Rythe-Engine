@@ -5,38 +5,76 @@
 
 namespace legion::core::time
 {
-    template<typename time_type = time64>
+    struct main_clock_time
+    {
+        using type = time64;
+    };
+
+    template<typename precision = time64, typename chrono_clock = std::chrono::high_resolution_clock>
     struct stopwatch
     {
+    public:
+        using time_type = precision;
+        using span_type = time_span<time_type>;
+        using clock_type = chrono_clock;
+
     private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> m_start = std::chrono::high_resolution_clock::now();
+        std::chrono::time_point<clock_type> m_start = clock_type::now();
     public:
 
         void start() noexcept {
-            m_start = std::chrono::high_resolution_clock::now();
+            m_start = clock_type::now();
         }
 
-        time_span<time_type> startPoint() const noexcept
+        span_type start_point() const noexcept
         {
             return m_start.time_since_epoch();
         }
 
-        time_span<time_type> elapsedTime() const noexcept
+        span_type elapsed_time() const noexcept
         {
-            return time_span<time_type>(std::chrono::high_resolution_clock::now() - m_start);
+            return span_type(clock_type::now() - m_start);
         }
 
-        time_span<time_type> end() noexcept
+        span_type end() noexcept
         {
-            return time_span<time_type>(std::chrono::high_resolution_clock::now() - m_start);
+            return span_type(clock_type::now() - m_start);
         }
 
-        time_span<time_type> restart() noexcept
+        span_type restart() noexcept
         {
-            auto startTime = std::chrono::high_resolution_clock::now();
-            time_span<time_type> time(startTime - m_start);
+            auto startTime = clock_type::now();
+            span_type time(startTime - m_start);
             m_start = startTime;
             return time;
+        }
+    };
+
+    template<>
+    struct stopwatch<main_clock_time, std::chrono::high_resolution_clock>
+    {
+    public:
+        using time_type = main_clock_time::type;
+        using span_type = time_span<time_type>;
+        using clock_type = std::chrono::high_resolution_clock;
+
+    private:
+        const std::chrono::time_point<clock_type> m_start = clock_type::now();
+    public:
+
+        span_type start_point() const noexcept
+        {
+            return m_start.time_since_epoch();
+        }
+
+        span_type elapsed_time() const noexcept
+        {
+            return span_type(clock_type::now() - m_start);
+        }
+
+        span_type now() const noexcept
+        {
+            return span_type(clock_type::now() - m_start);
         }
     };
 

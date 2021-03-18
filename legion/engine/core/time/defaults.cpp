@@ -3,5 +3,5 @@
 
 namespace legion::core::time
 {
-    const stopwatch<precise_time> mainClock;
+    const stopwatch<main_clock_time> mainClock;
 }

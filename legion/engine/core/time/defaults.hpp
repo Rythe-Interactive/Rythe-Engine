@@ -4,5 +4,5 @@
 
 namespace legion::core::time
 {
-    extern const stopwatch<precise_time> mainClock;
+    extern const stopwatch<main_clock_time> mainClock;
 }

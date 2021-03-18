@@ -134,6 +134,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="async\wait_priority.hpp" />
     <ClInclude Include="common\hash.hpp" />
     <ClInclude Include="common\string_literal.hpp" />
+    <ClInclude Include="containers\newdelegate.hpp" />
     <ClInclude Include="containers\runnable.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
@@ -548,6 +549,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
+    <ClCompile Include="scheduling\clock.cpp" />
     <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
