@@ -18,6 +18,7 @@ namespace legion::core::async
             return;
 
         assert_msg("Attempted to move a spinlock that was locked.", !source.m_lock.load(std::memory_order_relaxed));
+        m_id = source.m_id;
     }
 
     spinlock& spinlock::operator=(spinlock&& source) noexcept
@@ -26,7 +27,7 @@ namespace legion::core::async
             return *this;
 
         assert_msg("Attempted to move a spinlock that was locked.", !source.m_lock.load(std::memory_order_relaxed));
-
+        m_id = source.m_id;
         return *this;
     }
 

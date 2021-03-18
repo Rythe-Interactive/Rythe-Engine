@@ -245,6 +245,11 @@ namespace legion::core
         PairIteratorContainer& m_container;
     };
 
+#if !defined(DOXY_EXCLUDE)
+    template <class PairIteratorContainer>
+    keys_only(PairIteratorContainer&) -> keys_only<PairIteratorContainer>;
+#endif
+
     template <class PairIteratorContainer>
     class values_only
     {
@@ -264,5 +269,9 @@ namespace legion::core
         PairIteratorContainer& m_container;
     };
 
+#if !defined(DOXY_EXCLUDE)
+    template <class PairIteratorContainer>
+    values_only(PairIteratorContainer&) -> values_only<PairIteratorContainer>;
+#endif
 
 }

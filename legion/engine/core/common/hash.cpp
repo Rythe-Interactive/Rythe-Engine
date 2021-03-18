@@ -17,9 +17,9 @@ namespace legion::core
         return detail::hash_to_reference.at(hash);
     }
 
-    name_hash::name_hash(const name_hash& src) noexcept { this->value = value; }
+    name_hash::name_hash(const name_hash& src) noexcept { value = src.value; }
 
-    name_hash::name_hash(name_hash&& src) noexcept { this->value = value; }
+    name_hash::name_hash(name_hash&& src) noexcept { value = src.value; }
 
     name_hash& name_hash::operator=(const name_hash& src) noexcept
     {

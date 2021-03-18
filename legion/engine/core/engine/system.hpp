@@ -14,17 +14,16 @@ namespace legion::core
         friend class Engine;
     public:
         const type_reference id;
-        const std::string name;
 
     protected:
-        SystemBase(type_reference&& id, const std::string& name) : id(id), name(name) {}
+        SystemBase(type_reference&& id) : id(id) {}
     };
 
     template<typename SelfType>
     class System : public SystemBase
     {
     public:
-        System() : SystemBase(make_hash<SelfType>(), nameOfType<SelfType>()) {}
+        System() : SystemBase(make_hash<SelfType>()) {}
 
 
     };

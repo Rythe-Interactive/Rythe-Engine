@@ -85,7 +85,7 @@ namespace legion::core::scenemanagement
         return false;
     }
 
-    bool SceneManager::load_scene(const std::string& name)
+    bool SceneManager::load_scene(L_MAYBEUNUSED const std::string& name)
     {
         //std::string filename = name;
         //if (!common::ends_with(filename, ".cornflake")) filename += ".cornflake";
@@ -111,7 +111,7 @@ namespace legion::core::scenemanagement
         return true;
     }
 
-    bool SceneManager::save_scene(const std::string& name, ecs::entity& ent)
+    bool SceneManager::save_scene(L_MAYBEUNUSED const std::string& name, L_MAYBEUNUSED ecs::entity& ent)
     {
         //std::ofstream outFile("assets/scenes/" + name + ".cornflake");
         //serialization::SerializationUtil::JSONSerialize<ecs::entity>(outFile, ent);

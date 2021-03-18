@@ -23,7 +23,7 @@ public:
     class ExitHelper : public System<ExitHelper>
     {
     public:
-        void setup() override
+        void setup()
         {
             //raiseEvent<events::exit>();
         }
@@ -33,7 +33,7 @@ public:
 void LEGION_CCONV reportModules(Engine* engine)
 {
     doctest::Context ctx;
-    ctx.applyCommandLine(engine->cliargs.size(), engine->cliargs.data());
+    ctx.applyCommandLine(static_cast<int>(engine->cliargs.size()), engine->cliargs.data());
 
     engine->exitCode = ctx.run();
 

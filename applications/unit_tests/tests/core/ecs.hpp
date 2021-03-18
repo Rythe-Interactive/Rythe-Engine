@@ -2,15 +2,15 @@
 #include "unit_test.hpp"
 #include <core/core.hpp>
 
-using namespace legion;
 
 struct test_comp
 {
     int value;
 };
 
-void TestECS()
+static void TestECS()
 {
+    using namespace legion;
     LEGION_SUBTEST("Basic component and entity behaviour")
     {
         auto ent = ecs::Registry::createEntity();
@@ -162,7 +162,7 @@ void TestECS()
             ent.add_component<test_comp>();
         }
 
-        size_type count = 0;
+        int count = 0;
 
         for (auto& ent : fltr)
         {
@@ -175,7 +175,7 @@ void TestECS()
                 L_CHECK(false);
         }
 
-        L_CHECK(count == 100 && count == fltr.size());
+        L_CHECK(count == 100 && count == static_cast<int>(fltr.size()));
         count = 0;
         for (auto& ent : fltr.reverse_range())
         {

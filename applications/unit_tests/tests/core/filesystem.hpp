@@ -18,8 +18,6 @@ inline namespace {
         mock_resolver(mock_resolver&& other) noexcept = default;
         mock_resolver& operator=(const mock_resolver& other) = default;
         mock_resolver& operator=(mock_resolver&& other) noexcept = default;
-        ~mock_resolver() = default;
-
 
         [[nodiscard]] bool is_file() const noexcept override
         {
@@ -101,7 +99,7 @@ inline namespace {
 //}
 }
 
-void TestFS()
+static void TestFS()
 {
     using namespace legion;
 

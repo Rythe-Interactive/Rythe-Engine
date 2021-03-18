@@ -74,8 +74,8 @@ public:
     static Buffer createImage(image& img,buffer_type type, std::string name ="")
     {
         OPTICK_EVENT();
-        size_type width = img.size.x;
-        size_type height = img.size.y;
+        size_type width = static_cast<size_type>(img.size.x);
+        size_type height = static_cast<size_type>(img.size.y);
         size_type depth = 0;
 
         cl_image_format fmt;
@@ -84,6 +84,7 @@ public:
         case channel_format::eight_bit: fmt.image_channel_data_type = CL_UNORM_INT8; break;
         case channel_format::sixteen_bit: fmt.image_channel_data_type = CL_UNORM_INT16; break;
         case channel_format::float_hdr: fmt.image_channel_data_type = CL_FLOAT;break;
+        case channel_format::depth_stencil:
         default:
             {
                 log::warn("Buffer::createImage invalid Image format!");
@@ -97,6 +98,9 @@ public:
         case image_components::grey_alpha: fmt.image_channel_order = CL_RA; break;
         case image_components::rgb: fmt.image_channel_order = CL_RGB; break;
         case image_components::rgba: fmt.image_channel_order = CL_RGBA; break;
+        case image_components::depth:
+        case image_components::depth_stencil:
+        case image_components::stencil:
         default:
             {
                 log::warn("Buffer::createImage invalid Image Components!");

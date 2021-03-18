@@ -31,7 +31,7 @@ namespace legion::core::async
 
     float async_progress::progress() const noexcept
     {
-        return ((float)m_progress.load(std::memory_order_relaxed)) / m_size;
+        return static_cast<float>(m_progress.load(std::memory_order_relaxed)) / static_cast<float>(m_size);
     }
 
 }

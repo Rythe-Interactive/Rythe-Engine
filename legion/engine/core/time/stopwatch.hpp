@@ -6,12 +6,13 @@
 namespace legion::core::time
 {
     template<typename time_type = time64>
-    class clock
+    struct stopwatch
     {
     private:
         std::chrono::time_point<std::chrono::high_resolution_clock> m_start = std::chrono::high_resolution_clock::now();
     public:
-        void start() {
+
+        void start() noexcept {
             m_start = std::chrono::high_resolution_clock::now();
         }
 
@@ -20,17 +21,17 @@ namespace legion::core::time
             return m_start.time_since_epoch();
         }
 
-        time_span<time_type> elapsedTime() const
+        time_span<time_type> elapsedTime() const noexcept
         {
             return time_span<time_type>(std::chrono::high_resolution_clock::now() - m_start);
         }
 
-        time_span<time_type> end()
+        time_span<time_type> end() noexcept
         {
             return time_span<time_type>(std::chrono::high_resolution_clock::now() - m_start);
         }
 
-        time_span<time_type> restart()
+        time_span<time_type> restart() noexcept
         {
             auto startTime = std::chrono::high_resolution_clock::now();
             time_span<time_type> time(startTime - m_start);
@@ -39,5 +40,5 @@ namespace legion::core::time
         }
     };
 
-    using timer = clock<>;
+    using timer = stopwatch<>;
 }

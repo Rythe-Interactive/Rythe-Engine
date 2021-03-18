@@ -91,7 +91,9 @@ int main(int argc, char** argv)
     std::cout << "| Engine will start in low power mode. |" << std::endl;
     std::cout << "========================================" << std::endl;
 #endif
-    legion::core::Engine engine(argc, argv);
+    legion::core::Engine::cliargs.parse(argc, argv);
+    legion::core::log::setup();
+    legion::core::Engine engine;
 
     reportModules(&engine);
     std::cout << "==========================" << std::endl;

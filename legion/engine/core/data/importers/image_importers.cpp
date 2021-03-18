@@ -35,25 +35,28 @@ namespace legion::core
         // Load the image data using stb_image.
         switch (settings.fileFormat)
         {
-        default: [[fallthrough]];
+        default:
         case channel_format::eight_bit:
         {
-            imageData = stbi_load_from_memory(data.data(), data.size(), &image.size.x, &image.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
-            dataSize = image.size.x * image.size.y * static_cast<int>(settings.components) * sizeof(byte);
+            imageData = stbi_load_from_memory(data.data(), static_cast<int>(data.size()), &image.size.x, &image.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+            dataSize = static_cast<size_type>(image.size.x * image.size.y) * static_cast<size_type>(settings.components) * sizeof(byte);
             break;
         }
         case channel_format::sixteen_bit:
         {
-            imageData = stbi_load_16_from_memory(data.data(), data.size(), &image.size.x, &image.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
-            dataSize = image.size.x * image.size.y * static_cast<int>(settings.components) * sizeof(uint16);
+            imageData = stbi_load_16_from_memory(data.data(), static_cast<int>(data.size()), &image.size.x, &image.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+            dataSize = static_cast<size_type>(image.size.x * image.size.y) * static_cast<size_type>(settings.components) * sizeof(uint16);
             break;
         }
         case channel_format::float_hdr:
         {
-            imageData = stbi_loadf_from_memory(data.data(), data.size(), &image.size.x, &image.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
-            dataSize = image.size.x * image.size.y * static_cast<int>(settings.components) * sizeof(float);
+            imageData = stbi_loadf_from_memory(data.data(), static_cast<int>(data.size()), &image.size.x, &image.size.y, reinterpret_cast<int*>(&components), static_cast<int>(settings.components));
+            dataSize = static_cast<size_type>(image.size.x * image.size.y) * static_cast<size_type>(settings.components) * sizeof(float);
             break;
         }
+        case channel_format::depth_stencil:
+            log::error("invalid channel format");
+            abort();
         }
 
         image.format = settings.fileFormat;

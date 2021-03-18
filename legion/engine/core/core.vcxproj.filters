@@ -35,6 +35,7 @@
     <ClCompile Include="common\hash.cpp" />
     <ClCompile Include="ecs\filters\filterregistry.cpp" />
     <ClCompile Include="engine\engine.cpp" />
+    <ClCompile Include="time\defaults.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -68,7 +69,7 @@
     <ClInclude Include="filesystem\mem_filesystem_resolver.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="platform\platform.hpp" />
-    <ClInclude Include="time\clock.hpp" />
+    <ClInclude Include="time\stopwatch.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
     <ClInclude Include="types\meta.hpp" />
@@ -423,6 +424,8 @@
     <ClInclude Include="ecs\handles\filter.hpp" />
     <ClInclude Include="ecs\filters\filter_info.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
+    <ClInclude Include="scheduling\scheduling.hpp" />
+    <ClInclude Include="scheduling\clock.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

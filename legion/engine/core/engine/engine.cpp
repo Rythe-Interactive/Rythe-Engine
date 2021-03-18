@@ -2,13 +2,11 @@
 
 namespace legion::core
 {
-    size_type Engine::exitCode = 0;
+    int Engine::exitCode = 0;
     argh::parser Engine::cliargs;
 
-    Engine::Engine(int argc, char** argv) : m_modules()
+    Engine::Engine()
     {
-        cliargs.parse(argc, argv);
-        log::setup();
     }
 
     void Engine::init()

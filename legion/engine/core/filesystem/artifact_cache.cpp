@@ -70,7 +70,7 @@ namespace legion::core::filesystem {
         //elements while gc is running, such that we do not insert and remove simultaneously
         async::readwrite_guard guard(m_big_gc_lock);
 
-        composer([&score_heap](auto& p,auto score)
+        composer([&score_heap](L_MAYBEUNUSED auto& p,auto score)
         {
             //push all scores into a heap for sorting
             score_heap.emplace_back(score);
