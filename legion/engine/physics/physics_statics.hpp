@@ -37,7 +37,7 @@ namespace legion::physics
          * @return returns true if a seperating axis was found
          */
         static void GetSupportPoint(const math::vec3& planePosition, const math::vec3& direction, ConvexCollider* collider, const math::mat4& colliderTransform
-            , math::vec3& worldSupportPoint)
+            , math::vec3& worldSupportPoint) 
         {
             float largestDistanceInDirection = std::numeric_limits<float>::lowest();
 

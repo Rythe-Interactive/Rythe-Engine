@@ -1,10 +1,13 @@
 #pragma once
 #include <physics/halfedgeface.hpp>
 #include <core/core.hpp>
+
 namespace legion::physics
 {
-    struct ColliderFaceToVert
+    class ColliderFaceToVert
     {
+    public:
+
         std::vector<math::vec3> outsideVerts;
         HalfEdgeFace* face = nullptr;
 
@@ -12,6 +15,11 @@ namespace legion::physics
         {
             outsideVerts.push_back(initialVert);
         }
+
+        std::pair<math::vec3,float> GetFurthestOutsideVert() const;
+        
+
+
         
     };
 }

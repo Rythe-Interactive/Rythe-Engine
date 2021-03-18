@@ -371,38 +371,55 @@ namespace legion::physics
         std::list<ColliderFaceToVert> facesWithOutsideVerts;
         partitionVerticesToList(vertices, faces, facesWithOutsideVerts);
 
-        ColliderFaceToVert& currentFaceToVert = facesWithOutsideVerts.front();
-        int safetyInt = 0;
-        //while facesWithOutsideVerts is not empty
-        while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
+        if (!facesWithOutsideVerts.empty())
         {
+            ColliderFaceToVert& currentFaceToVert = facesWithOutsideVerts.front();
+            int safetyInt = 0;
+
+            currentFaceToVert.face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, 20.0f);
             //find furhtest vertex of last face
+            auto [furthestVec, distance] = currentFaceToVert.GetFurthestOutsideVert();
+            math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVec, 1);
 
-            //identify faces that can see vertex
+            debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, 20.0f, false);
 
-            //identify horizon edges and put them into list
+            //check if we should merge this vertex
 
-            //reverse iterate the list to find their pairings, add them to new list
+                //identify faces that can see vertex
 
-            //create new faces based on pairing list
+                //identify horizon edges and put them into list
 
-            //delete all old faces that can see vertex
+                //reverse iterate the list to find their pairings, add them to new list
 
+                //create new faces based on pairing list
 
-            safetyInt++;
-            assert(safetyInt < 999);
-        }
+            //while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
+            //{
             
+            //    
+           
+
+            //    
+
+            //    
+
+            //    
+
+            //    //delete all old faces that can see vertex
 
 
+            //    safetyInt++;
+            //    assert(safetyInt < 999);
+            //}
+        }
 
 
         auto convexCollider = std::make_shared<ConvexCollider>();
         auto& halfEdgesVector = convexCollider->GetHalfEdgeFaces();
         halfEdgesVector = std::move(faces);
 
+        //populate list of vertices in collider list
         auto& verticesVec = convexCollider->GetVertices();
-        
         for (auto face : convexCollider->GetHalfEdgeFaces())
         {
             auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
@@ -411,7 +428,6 @@ namespace legion::physics
             };
 
             face->forEachEdge(collectVertices);
-
         }
 
         return convexCollider;
@@ -582,12 +598,12 @@ namespace legion::physics
         }
 
         //DEBUG draw most distant
-        {
+        /*{
             math::vec3 transformFirst = DEBUG_transform * math::vec4(*firstEyePoint, 1);
 
             debug::drawLine(transformFirst, transformFirst + math::vec3(0, 0.1f, 0), drawC, 5.0f, FLT_MAX, true);
 
-        }
+        }*/
 
         //[5] Create a set of faces connecting the first collider face to the most distant vertex
 

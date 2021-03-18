@@ -66,6 +66,9 @@
     <ClCompile Include="halfedgeedge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="data\collider_face_to_vert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube_collider_params.hpp">

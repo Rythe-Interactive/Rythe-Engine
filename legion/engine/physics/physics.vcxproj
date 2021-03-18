@@ -14,6 +14,7 @@
     <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp" />
     <ClCompile Include="colliders\convexcollider.cpp" />
     <ClCompile Include="components\fracturer.cpp" />
+    <ClCompile Include="data\collider_face_to_vert.cpp" />
     <ClCompile Include="data\convexconvexpenetrationquery.cpp" />
     <ClCompile Include="data\edgepenetrationquery.cpp" />
     <ClCompile Include="halfedgeedge.cpp" />
