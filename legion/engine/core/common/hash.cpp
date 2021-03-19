@@ -39,7 +39,7 @@ namespace legion::core
     type_reference::type_reference(const type_hash_base& src)
         : value(src.copy())
     {
-        detail::hash_to_reference.emplace(value->value, *this);
+        detail::hash_to_reference.emplace(value->local(), *this);
     }
 
     type_reference::type_reference(const type_reference& src)
@@ -82,6 +82,6 @@ namespace legion::core
 
     type_reference::operator id_type() const
     {
-        return value->value;
+        return value->local();
     }
 }

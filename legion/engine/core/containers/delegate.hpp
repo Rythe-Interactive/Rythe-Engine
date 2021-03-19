@@ -445,7 +445,7 @@ namespace legion::core
         L_NODISCARD bool empty() const noexcept { return m_invocationList.empty(); }
         L_NODISCARD size_type size() const noexcept { return m_invocationList.size(); }
         L_NODISCARD size_type max_size() const noexcept { return m_invocationList.max_size(); }
-        void reserve(size_type newSize) { m_invocationList.reserve(newSize) }
+        void reserve(size_type newSize) { m_invocationList.reserve(newSize); }
         L_NODISCARD size_type capacity() const noexcept { return m_invocationList.capacity(); }
         void shrink_to_fit() { m_invocationList.shrink_to_fit(); }
 #pragma endregion
@@ -455,7 +455,7 @@ namespace legion::core
         void assign(size_type count, const_reference value) { m_invocationList.assign(count, value); }
         template<typename InputIt>
         void assign(InputIt first, InputIt last) { m_invocationList.assign(first, last); }
-        void assign(std::initializer_list<value_type> ilist) { m_invocationList.assign(iList); }
+        void assign(std::initializer_list<value_type> ilist) { m_invocationList.assign(ilist); }
 #pragma endregion
 
         void clear() noexcept { m_invocationList.clear(); }

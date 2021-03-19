@@ -119,6 +119,7 @@ namespace legion
             return;
 
         test_data::subdomaintimes.clear();
+        test_data::subdomainnames.clear();
         test_data::lastDomain = &test_data::GetTestDomains()[func];
         std::cout << '[' << *test_data::lastDomain << "] Running benchmark: " << n << " cases\n";
         test_data::Check = &NoOpt;

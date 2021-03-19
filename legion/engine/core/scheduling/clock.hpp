@@ -32,25 +32,25 @@ namespace legion::core::scheduling
         template <class owner_type, void(owner_type::* func_type)(span_type)>
         static void subscribeToTick(owner_type* instance)
         {
-            m_onTick += delegate<void(span_type)>::create<owner_type, func_type>(instance);
+            m_onTick.insert_back<owner_type, func_type>(instance);
         }
 
         template <class owner_type, void(owner_type::* func_type)(span_type) const>
         static void subscribeToTick(owner_type const* instance)
         {
-            m_onTick += delegate<void(span_type)>::create<owner_type, func_type>(instance);
+            m_onTick.insert_back<owner_type, func_type>(instance);
         }
 
         template <void(*func_type)(span_type)>
         static void subscribeToTick()
         {
-            m_onTick += delegate<void(span_type)>::create<func_type>();
+            m_onTick.insert_back<func_type>();
         }
 
         template <typename lambda_type>
         static void subscribeToTick(const lambda_type& instance)
         {
-            m_onTick += delegate<void(span_type)>::create<lambda_type>(instance);
+            m_onTick.insert_back(instance);
         }
 
         void setAdvancementProtocol(advancement_protocol protocol) noexcept;
