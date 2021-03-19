@@ -134,7 +134,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="async\wait_priority.hpp" />
     <ClInclude Include="common\hash.hpp" />
     <ClInclude Include="common\string_literal.hpp" />
-    <ClInclude Include="containers\newdelegate.hpp" />
+    <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="containers\runnable.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
@@ -155,7 +155,6 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\data_view.hpp" />
     <ClInclude Include="containers\iterator_tricks.hpp" />
-    <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="containers\hashed_sparse_set.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />

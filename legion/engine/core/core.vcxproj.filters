@@ -84,7 +84,6 @@
     <ClInclude Include="detail\internals.hpp" />
     <ClInclude Include="filesystem\basic_resolver.hpp" />
     <ClInclude Include="async\ring_sync_lock.hpp" />
-    <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="engine\system.hpp" />
     <ClInclude Include="events\defaultevents.hpp" />
     <ClInclude Include="events\event.hpp" />
@@ -427,7 +426,7 @@
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="scheduling\clock.hpp" />
-    <ClInclude Include="containers\newdelegate.hpp" />
+    <ClInclude Include="containers\delegate.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

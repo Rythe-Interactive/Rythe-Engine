@@ -26,17 +26,13 @@ namespace legion::core
         friend class Engine;
     private:
         multicast_delegate<void()> m_setupFuncs;
-        std::vector<delegate<void(time::span)>> m_updateFuncs;
+        multicast_delegate<void(time::span)> m_updateFuncs;
 
         sparse_map<id_type, std::unique_ptr<SystemBase>> m_systems;
 
         void init()
         {
             m_setupFuncs.invoke();
-            for (auto& updateFunc : m_updateFuncs)
-            {
-                // Create update process.
-            }
         };
 
     protected:
@@ -52,11 +48,11 @@ namespace legion::core
             m_systems.insert(make_hash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...));
             if constexpr (has_setup_v<SystemType, void()>)
             {
-                m_setupFuncs += delegate<void()>::create<SystemType, &SystemType::setup>(static_cast<SystemType*>(m_systems.at(make_hash<SystemType>()).get()));
+                m_setupFuncs.insert_back<SystemType, &SystemType::setup>(static_cast<SystemType*>(m_systems.at(make_hash<SystemType>()).get()));
             }
             if constexpr (has_update_v<SystemType, void(time::span)>)
             {
-                m_updateFuncs.push_back(delegate<void()>::create<SystemType, &SystemType::setup>(static_cast<SystemType*>(m_systems.at(make_hash<SystemType>()).get())));
+                m_updateFuncs.insert_back<SystemType, &SystemType::update>(static_cast<SystemType*>(m_systems.at(make_hash<SystemType>()).get()));
             }
         }
 
