@@ -8,6 +8,7 @@
 #include "doctest.h"
 #include "tests/core/filesystem.hpp"
 #include "tests/core/ecs.hpp"
+#include "tests/core/containers/delegate.hpp"
 
 using namespace legion;
 

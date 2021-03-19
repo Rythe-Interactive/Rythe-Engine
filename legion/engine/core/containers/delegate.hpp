@@ -29,7 +29,7 @@ namespace legion::core
      */
     template <typename Func> struct multicast_delegate;
 
-    template<class R, class ...Args>
+    template<typename R, typename... Args>
     struct delegate<R(Args...)>
     {
     public:
@@ -55,31 +55,31 @@ namespace legion::core
 
         delegate(std::nullptr_t const) noexcept : delegate() { }
 
-        template <class owner_type, typename = typename std::enable_if_t<std::is_class_v<owner_type>>>
+        template <typename owner_type, typename = typename std::enable_if_t<std::is_class_v<owner_type>>>
         explicit delegate(owner_type const* const o) noexcept : object_ptr_(const_cast<owner_type*>(o)) {}
 
-        template <class owner_type, typename = typename std::enable_if_t<std::is_class_v<owner_type>>>
+        template <typename owner_type, typename = typename std::enable_if_t<std::is_class_v<owner_type>>>
         explicit delegate(owner_type const& o) noexcept : object_ptr_(const_cast<owner_type*>(&o)) {}
 
-        template <class owner_type>
+        template <typename owner_type>
         delegate(owner_type* const object_ptr, return_type(owner_type::* const method_ptr)(Args...))
         {
             *this = from(object_ptr, method_ptr);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         delegate(owner_type* const object_ptr, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             *this = from(object_ptr, method_ptr);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         delegate(owner_type& object, return_type(owner_type::* const method_ptr)(Args...))
         {
             *this = from(object, method_ptr);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         delegate(owner_type const& object, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             *this = from(object, method_ptr);
@@ -107,13 +107,19 @@ namespace legion::core
 
         delegate& operator=(delegate&&) = default;
 
-        template <class owner_type>
+        delegate& operator=(std::nullptr_t)
+        {
+            reset();
+            return *this;
+        }
+
+        template <typename owner_type>
         delegate& operator=(return_type(owner_type::* const rhs)(Args...))
         {
             return *this = from(static_cast<owner_type*>(object_ptr_), rhs);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         delegate& operator=(return_type(owner_type::* const rhs)(Args...) const)
         {
             return *this = from(static_cast<owner_type const*>(object_ptr_), rhs);
@@ -155,25 +161,25 @@ namespace legion::core
             return { nullptr, function_stub<function_ptr> };
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...)>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...)>
         static delegate from(owner_type* const object_ptr) noexcept
         {
             return { object_ptr, method_stub<owner_type, method_ptr> };
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
         static delegate from(owner_type const* const object_ptr) noexcept
         {
             return { const_cast<owner_type*>(object_ptr), const_method_stub<owner_type, method_ptr> };
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...)>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...)>
         static delegate from(owner_type& object) noexcept
         {
             return { &object, method_stub<owner_type, method_ptr> };
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
         static delegate from(owner_type const& object) noexcept
         {
             return { const_cast<owner_type*>(&object), const_method_stub<owner_type, method_ptr> };
@@ -190,31 +196,31 @@ namespace legion::core
             return function_ptr;
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         using member_pair = std::pair<owner_type* const, return_type(owner_type::* const)(Args...)>;
 
-        template <class owner_type>
+        template <typename owner_type>
         using const_member_pair = std::pair<owner_type const* const, return_type(owner_type::* const)(Args...) const>;
 
-        template <class owner_type>
+        template <typename owner_type>
         static delegate from(owner_type* const object_ptr, return_type(owner_type::* const method_ptr)(Args...))
         {
             return member_pair<owner_type>(object_ptr, method_ptr);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         static delegate from(owner_type const* const object_ptr, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             return const_member_pair<owner_type>(object_ptr, method_ptr);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         static delegate from(owner_type& object, return_type(owner_type::* const method_ptr)(Args...))
         {
             return member_pair<owner_type>(&object, method_ptr);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         static delegate from(owner_type const& object, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             return const_member_pair<owner_type>(&object, method_ptr);
@@ -295,7 +301,7 @@ namespace legion::core
         std::shared_ptr<void> store_;
         std::size_t store_size_;
 
-        template <class T>
+        template <typename T>
         static void functor_deleter(void* const p)
         {
             static_cast<T*>(p)->~T();
@@ -304,7 +310,7 @@ namespace legion::core
         }
 
 #pragma region stubs
-        template <class T>
+        template <typename T>
         static void deleter_stub(void* const p)
         {
             static_cast<T*>(p)->~T();
@@ -316,14 +322,14 @@ namespace legion::core
             return function_ptr(std::forward<Args>(args)...);
         }
 
-        template <class owner_type, return_type(owner_type::* method_ptr)(Args...)>
+        template <typename owner_type, return_type(owner_type::* method_ptr)(Args...)>
         static return_type method_stub(void* const object_ptr, Args&&... args)
         {
             return (static_cast<owner_type*>(object_ptr)->*method_ptr)(
                 std::forward<Args>(args)...);
         }
 
-        template <class owner_type, return_type(owner_type::* method_ptr)(Args...) const>
+        template <typename owner_type, return_type(owner_type::* method_ptr)(Args...) const>
         static return_type const_method_stub(void* const object_ptr, Args&&... args)
         {
             return (static_cast<owner_type const*>(object_ptr)->*method_ptr)(
@@ -344,7 +350,7 @@ namespace legion::core
         template <typename>
         struct is_const_member_pair : std::false_type { };
 
-        template <class owner_type>
+        template <typename owner_type>
         struct is_const_member_pair<std::pair<owner_type const* const, return_type(owner_type::* const)(Args...) const>> : std::true_type
         {
         };
@@ -486,7 +492,7 @@ namespace legion::core
             return size - m_invocationList.size();
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...)>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...)>
         size_type erase(owner_type* const object_ptr)
         {
             auto size = m_invocationList.size();
@@ -496,7 +502,7 @@ namespace legion::core
             return size - m_invocationList.size();
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
         size_type erase(owner_type const* const object_ptr)
         {
             auto size = m_invocationList.size();
@@ -506,7 +512,7 @@ namespace legion::core
             return size - m_invocationList.size();
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...)>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...)>
         size_type erase(owner_type& object)
         {
             auto size = m_invocationList.size();
@@ -516,7 +522,7 @@ namespace legion::core
             return size - m_invocationList.size();
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
         size_type erase(owner_type const& object)
         {
             auto size = m_invocationList.size();
@@ -545,7 +551,7 @@ namespace legion::core
             return size - m_invocationList.size();
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         size_type erase(owner_type* const object_ptr, return_type(owner_type::* const method_ptr)(Args...))
         {
             auto size = m_invocationList.size();
@@ -555,7 +561,7 @@ namespace legion::core
             return size - m_invocationList.size();
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         size_type erase(owner_type const* const object_ptr, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             auto size = m_invocationList.size();
@@ -565,7 +571,7 @@ namespace legion::core
             return size - m_invocationList.size();
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         size_type erase(owner_type& object, return_type(owner_type::* const method_ptr)(Args...))
         {
             auto size = m_invocationList.size();
@@ -575,7 +581,7 @@ namespace legion::core
             return size - m_invocationList.size();
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         size_type erase(owner_type const& object, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             auto size = m_invocationList.size();
@@ -603,25 +609,25 @@ namespace legion::core
             m_invocationList.push_back(invocation_type::template from<function_ptr>());
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...)>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...)>
         void insert_back(owner_type* const object_ptr)
         {
             m_invocationList.push_back(invocation_type::template from<owner_type, method_ptr>(object_ptr));
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
         void insert_back(owner_type const* const object_ptr)
         {
             m_invocationList.push_back(invocation_type::template from<owner_type, method_ptr>(object_ptr));
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...)>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...)>
         void insert_back(owner_type& object)
         {
             m_invocationList.push_back(invocation_type::template from<owner_type, method_ptr>(object));
         }
 
-        template <class owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
+        template <typename owner_type, return_type(owner_type::* const method_ptr)(Args...) const>
         void insert_back(owner_type const& object)
         {
             m_invocationList.push_back(invocation_type::template from<owner_type, method_ptr>(object));
@@ -638,25 +644,25 @@ namespace legion::core
             m_invocationList.push_back(invocation_type::from(function_ptr));
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         void insert_back(owner_type* const object_ptr, return_type(owner_type::* const method_ptr)(Args...))
         {
             m_invocationList.push_back(invocation_type::template from<owner_type>(object_ptr, method_ptr));
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         void insert_back(owner_type const* const object_ptr, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             m_invocationList.push_back(invocation_type::template from<owner_type>(object_ptr, method_ptr));
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         void insert_back(owner_type& object, return_type(owner_type::* const method_ptr)(Args...))
         {
             m_invocationList.push_back(invocation_type::template from<owner_type>(object, method_ptr));
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         void insert_back(owner_type const& object, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             m_invocationList.push_back(invocation_type::template from<owner_type>(object, method_ptr));
@@ -664,25 +670,25 @@ namespace legion::core
 #pragma endregion
 
 #pragma region emplace_back
-        template <class owner_type>
+        template <typename owner_type>
         decltype(auto) emplace_back(owner_type* const object_ptr, return_type(owner_type::* const method_ptr)(Args...))
         {
             return m_invocationList.emplace_back(object_ptr, method_ptr);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         decltype(auto) emplace_back(owner_type* const object_ptr, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             return m_invocationList.emplace_back(object_ptr, method_ptr);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         decltype(auto) emplace_back(owner_type& object, return_type(owner_type::* const method_ptr)(Args...))
         {
             return m_invocationList.emplace_back(object, method_ptr);
         }
 
-        template <class owner_type>
+        template <typename owner_type>
         decltype(auto) emplace_back(owner_type const& object, return_type(owner_type::* const method_ptr)(Args...) const)
         {
             return m_invocationList.emplace_back(object, method_ptr);
@@ -762,10 +768,11 @@ namespace legion::core
     };
 }
 
+#if !defined(DOXY_EXCLUDE)
 namespace std
 {
     template <typename return_type, typename ...Args>
-    struct hash<legion::core::delegate<return_type(Args...)> >
+    struct hash<legion::core::delegate<return_type(Args...)>>
     {
         size_t operator()(legion::core::delegate<return_type(Args...)> const& d) const noexcept
         {
@@ -776,3 +783,4 @@ namespace std
         }
     };
 }
+#endif
