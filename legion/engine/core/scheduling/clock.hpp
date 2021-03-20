@@ -47,10 +47,34 @@ namespace legion::core::scheduling
             m_onTick.insert_back<func_type>();
         }
 
-        template <typename lambda_type>
-        static void subscribeToTick(const lambda_type& instance)
+        template <typename invocable_type>
+        static void subscribeToTick(const invocable_type& instance)
         {
-            m_onTick.insert_back(instance);
+            m_onTick.erase(instance);
+        }
+
+        template <class owner_type, void(owner_type::* func_type)(span_type)>
+        static void unsubscribeFromTick(owner_type* instance)
+        {
+            m_onTick.erase<owner_type, func_type>(instance);
+        }
+
+        template <class owner_type, void(owner_type::* func_type)(span_type) const>
+        static void unsubscribeFromTick(owner_type const* instance)
+        {
+            m_onTick.erase<owner_type, func_type>(instance);
+        }
+
+        template <void(*func_type)(span_type)>
+        static void unsubscribeFromTick()
+        {
+            m_onTick.erase<func_type>();
+        }
+
+        template <typename invocable_type>
+        static void unsubscribeFromTick(const invocable_type& instance)
+        {
+            m_onTick.erase(instance);
         }
 
         void setAdvancementProtocol(advancement_protocol protocol) noexcept;

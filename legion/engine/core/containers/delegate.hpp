@@ -87,10 +87,10 @@ namespace legion::core
 
         template <typename T, typename = typename std::enable_if_t<!std::is_same_v<delegate, typename std::decay_t<T>>>>
         delegate(T&& f) :
-            store_(operator new(sizeof(typename std::decay<T>::type)), functor_deleter<typename std::decay<T>::type>),
-            store_size_(sizeof(typename std::decay<T>::type))
+            store_(operator new(sizeof(typename std::decay_t<T>)), functor_deleter<typename std::decay_t<T>>),
+            store_size_(sizeof(typename std::decay_t<T>))
         {
-            using functor_type = typename std::decay<T>::type;
+            using functor_type = typename std::decay_t<T>;
 
             new (store_.get()) functor_type(std::forward<T>(f));
 
@@ -263,11 +263,28 @@ namespace legion::core
 
         explicit operator bool() const noexcept { return stub_ptr_; }
 
-        auto invoke(Args... args) const
+        auto invoke(Args... args) const noexcept(
+            (std::is_same_v<return_type, void> ||
+                std::is_default_constructible_v<return_type> ||
+                std::is_constructible_v<return_type, std::nullptr_t>) &&
+            noexcept(stub_ptr_(std::declval<decltype(object_ptr_)>(), std::declval<Args>()...)))
         {
             if constexpr (std::is_same_v<return_type, void>)
             {
-                stub_ptr_(object_ptr_, std::forward<Args>(args)...);
+                if (stub_ptr_)
+                    stub_ptr_(object_ptr_, std::forward<Args>(args)...);
+            }
+            else if constexpr (std::is_default_constructible_v<return_type>)
+            {
+                if (!stub_ptr_)
+                    return return_type{};
+                return stub_ptr_(object_ptr_, std::forward<Args>(args)...);
+            }
+            else if constexpr (std::is_constructible_v<return_type, std::nullptr_t>)
+            {
+                if (!stub_ptr_)
+                    return return_type{ nullptr };
+                return stub_ptr_(object_ptr_, std::forward<Args>(args)...);
             }
             else
             {
@@ -275,11 +292,22 @@ namespace legion::core
             }
         }
 
-        auto operator()(Args... args) const
+        auto operator()(Args... args) const noexcept(
+            (std::is_same_v<return_type, void> ||
+                std::is_default_constructible_v<return_type> ||
+                std::is_constructible_v<return_type, std::nullptr_t>) &&
+            noexcept(stub_ptr_(std::declval<decltype(object_ptr_)>(), std::declval<Args>()...)))
         {
             if constexpr (std::is_same_v<return_type, void>)
             {
-                stub_ptr_(object_ptr_, std::forward<Args>(args)...);
+                if (stub_ptr_)
+                    stub_ptr_(object_ptr_, std::forward<Args>(args)...);
+            }
+            else if constexpr (std::is_default_constructible_v<return_type>)
+            {
+                if (!stub_ptr_)
+                    return return_type{};
+                return stub_ptr_(object_ptr_, std::forward<Args>(args)...);
             }
             else
             {
@@ -537,7 +565,7 @@ namespace legion::core
         {
             auto size = m_invocationList.size();
             m_invocationList.erase(std::remove(m_invocationList.begin(), m_invocationList.end(),
-                invocation_type::template from<T>(std::move(f))
+                invocation_type::from(std::forward<T>(f))
             ), m_invocationList.end());
             return size - m_invocationList.size();
         }
@@ -636,7 +664,7 @@ namespace legion::core
         template <typename T>
         void insert_back(T&& f)
         {
-            m_invocationList.push_back(invocation_type::template from<T>(std::move(f)));
+            m_invocationList.push_back(invocation_type::from(std::forward<T>(f)));
         }
 
         void insert_back(return_type(* const function_ptr)(Args...))
