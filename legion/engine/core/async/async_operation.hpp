@@ -1,11 +1,12 @@
 #pragma once
+#include <atomic>
+#include <memory>
+#include <thread>
+
 #include <core/platform/platform.hpp>
 #include <core/types/types.hpp>
 #include <core/async/wait_priority.hpp>
 #include <core/containers/delegate.hpp>
-#include <atomic>
-#include <memory>
-#include <thread>
 
 namespace legion::core::async
 {

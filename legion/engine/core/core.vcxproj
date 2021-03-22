@@ -155,6 +155,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="containers\data_view.hpp" />
     <ClInclude Include="containers\iterator_tricks.hpp" />
     <ClInclude Include="containers\hashed_sparse_set.hpp" />
+    <ClInclude Include="containers\pointer.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />

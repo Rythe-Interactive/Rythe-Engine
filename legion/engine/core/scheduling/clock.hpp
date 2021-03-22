@@ -29,8 +29,8 @@ namespace legion::core::scheduling
         void advance(span_type start, span_type elapsed);
 
     public:
-        void subscribeToTick(delegate<void(span_type)>& func);
-        void unsubscribeFromTick(delegate<void(span_type)>& func);
+        void subscribeToTick(const delegate<void(span_type)>& func);
+        void unsubscribeFromTick(const delegate<void(span_type)>& func);
 
         void setAdvancementProtocol(advancement_protocol protocol) noexcept;
 

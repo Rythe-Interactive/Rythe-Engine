@@ -1,6 +1,7 @@
 #pragma once
 #include <core/async/async_operation.hpp>
 #include <core/containers/delegate.hpp>
+#include <core/containers/pointer.hpp>
 
 namespace legion::core::async
 {
@@ -29,17 +30,6 @@ namespace legion::core::async
             return m_progress;
         }
 
-        const delegate<void()>* pop_job()
-        {
-            size_type idx = m_index.fetch_sub(1, std::memory_order_acquire);
-            if (idx < 1 || idx > m_size)
-                return nullptr;
-
-            size_type id = m_size - idx;
-            this_job::m_id = id;
-            return &m_job;
-        }
-
         bool empty() const noexcept
         {
             size_type idx = m_index.load(std::memory_order_relaxed);
@@ -48,6 +38,13 @@ namespace legion::core::async
 
         void complete_job()
         {
+            size_type idx = m_index.fetch_sub(1, std::memory_order_acquire);
+            if (idx < 1 || idx > m_size)
+                return;
+
+            size_type id = m_size - idx;
+            this_job::m_id = id;
+            m_job();
             m_progress->advance_progress();
         }
 
@@ -66,12 +63,8 @@ namespace legion::core::async
         void execute_job() const noexcept
         {
             OPTICK_EVENT();
-            auto* job = jobPoolPtr->pop_job();
-            if (job)
-            {
-                job->execute();
-                jobPoolPtr->complete_job();
-            }
+
+            jobPoolPtr->complete_job();
 
             if (jobPoolPtr->is_done())
             {
@@ -122,6 +115,6 @@ namespace legion::core::async
     job_operation(
         const std::shared_ptr<async_progress>&,
         const std::shared_ptr<job_pool>&,
-        const Func&, const CompletionFunc&) -> job_operation<Func, CompletionFunc>;
+        const Func&, const CompletionFunc&)->job_operation<Func, CompletionFunc>;
 #endif
 }

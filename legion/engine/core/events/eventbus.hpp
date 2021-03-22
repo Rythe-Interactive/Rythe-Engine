@@ -1,13 +1,13 @@
 #pragma once
+#include <memory>
+
+#include <Optick/optick.h>
+
 #include <core/containers/delegate.hpp>
 #include <core/containers/sparse_map.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 #include <core/types/types.hpp>
 #include <core/events/event.hpp>
-
-#include <Optick/optick.h>
-
-#include <memory>
 
 /**@file eventbus.hpp
  */
@@ -33,7 +33,7 @@ namespace legion::core::events
             if (m_eventCallbacks.contains(event_type::id))
             {
                 event_type event(arguments...); // Create new event.
-                force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(event); // Notify.
+                force_value_cast<multicast_delegate<void(event_type&)>>(m_eventCallbacks[event_type::id]).invoke(event); // Notify.
             }
         }
 
@@ -60,9 +60,27 @@ namespace legion::core::events
          * @tparam event_type Event type to subscribe to.
          */
         template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+        static void bindToEvent(const delegate<void(event_type&)>& callback)
+        {
+            m_eventCallbacks[event_type::id].push_back(reinterpret_cast<const delegate<void(event_base&)>&>(callback));
+        }
+
+        /**@brief Non-templated function to link a callback to an event type in order to get notified whenever one gets raised.
+         * @param id Type id of the event to subscribe to.
+         * @param callback Function to bind.
+         */
+        static void bindToEvent(id_type id, const delegate<void(event_base&)>& callback)
+        {
+            m_eventCallbacks[id].push_back(callback);
+        }
+
+        /**@brief Link a callback to an event type in order to get notified whenever one gets raised.
+         * @tparam event_type Event type to subscribe to.
+         */
+        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
         static void bindToEvent(delegate<void(event_type&)>&& callback)
         {
-            m_eventCallbacks[event_type::id].insert_back(reinterpret_cast<delegate<void(event_base*)>&&>(callback));
+            m_eventCallbacks[event_type::id].push_back(reinterpret_cast<delegate<void(event_base&)>&&>(callback));
         }
 
         /**@brief Non-templated function to link a callback to an event type in order to get notified whenever one gets raised.
@@ -71,7 +89,25 @@ namespace legion::core::events
          */
         static void bindToEvent(id_type id, delegate<void(event_base&)>&& callback)
         {
-            m_eventCallbacks[id].insert_back(std::move(callback));
+            m_eventCallbacks[id].push_back(std::move(callback));
+        }
+
+        /**@brief Link a callback to an event type in order to get notified whenever one gets raised.
+         * @tparam event_type Event type to subscribe to.
+         */
+        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+        static void unbindFromEvent(const delegate<void(event_type&)>& callback)
+        {
+            m_eventCallbacks[event_type::id].erase(reinterpret_cast<const delegate<void(event_base&)>&>(callback));
+        }
+
+        /**@brief Non-templated function to link a callback to an event type in order to get notified whenever one gets raised.
+         * @param id Type id of the event to subscribe to.
+         * @param callback Function to bind.
+         */
+        static void unbindFromEvent(id_type id, const delegate<void(event_base&)>& callback)
+        {
+            m_eventCallbacks[id].erase(callback);
         }
     };
 }

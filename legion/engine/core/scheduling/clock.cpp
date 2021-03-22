@@ -9,12 +9,12 @@ namespace legion::core::scheduling
         m_onTick(elapsed);
     }
 
-    void Clock::subscribeToTick(delegate<void(span_type)>& func)
+    void Clock::subscribeToTick(const delegate<void(span_type)>& func)
     {
         m_onTick.push_back(func);
     }
 
-    void Clock::unsubscribeFromTick(delegate<void(span_type)>& func)
+    void Clock::unsubscribeFromTick(const delegate<void(span_type)>& func)
     {
         m_onTick.erase(func);
     }
