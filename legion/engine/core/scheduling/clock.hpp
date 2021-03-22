@@ -29,53 +29,8 @@ namespace legion::core::scheduling
         void advance(span_type start, span_type elapsed);
 
     public:
-        template <class owner_type, void(owner_type::* func_type)(span_type)>
-        static void subscribeToTick(owner_type* instance)
-        {
-            m_onTick.insert_back<owner_type, func_type>(instance);
-        }
-
-        template <class owner_type, void(owner_type::* func_type)(span_type) const>
-        static void subscribeToTick(owner_type const* instance)
-        {
-            m_onTick.insert_back<owner_type, func_type>(instance);
-        }
-
-        template <void(*func_type)(span_type)>
-        static void subscribeToTick()
-        {
-            m_onTick.insert_back<func_type>();
-        }
-
-        template <typename invocable_type>
-        static void subscribeToTick(const invocable_type& instance)
-        {
-            m_onTick.erase(instance);
-        }
-
-        template <class owner_type, void(owner_type::* func_type)(span_type)>
-        static void unsubscribeFromTick(owner_type* instance)
-        {
-            m_onTick.erase<owner_type, func_type>(instance);
-        }
-
-        template <class owner_type, void(owner_type::* func_type)(span_type) const>
-        static void unsubscribeFromTick(owner_type const* instance)
-        {
-            m_onTick.erase<owner_type, func_type>(instance);
-        }
-
-        template <void(*func_type)(span_type)>
-        static void unsubscribeFromTick()
-        {
-            m_onTick.erase<func_type>();
-        }
-
-        template <typename invocable_type>
-        static void unsubscribeFromTick(const invocable_type& instance)
-        {
-            m_onTick.erase(instance);
-        }
+        void subscribeToTick(delegate<void(span_type)>& func);
+        void unsubscribeFromTick(delegate<void(span_type)>& func);
 
         void setAdvancementProtocol(advancement_protocol protocol) noexcept;
 

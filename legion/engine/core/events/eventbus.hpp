@@ -20,7 +20,7 @@ namespace legion::core::events
     class EventBus
     {
     private:
-        static sparse_map<id_type, multicast_delegate<void(event_base*)>> m_eventCallbacks;
+        static sparse_map<id_type, multicast_delegate<void(event_base&)>> m_eventCallbacks;
 
     public:
         /**@brief Insert event into bus and notify all subscribers.
@@ -33,7 +33,7 @@ namespace legion::core::events
             if (m_eventCallbacks.contains(event_type::id))
             {
                 event_type event(arguments...); // Create new event.
-                force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(&event); // Notify.
+                force_value_cast<multicast_delegate<void(event_type*)>>(m_eventCallbacks[event_type::id]).invoke(event); // Notify.
             }
         }
 
@@ -43,7 +43,7 @@ namespace legion::core::events
         static void raiseEvent(event_base& value)
         {
             if (m_eventCallbacks.contains(value.get_id()))
-                m_eventCallbacks[value.get_id()].invoke(&value);
+                m_eventCallbacks[value.get_id()].invoke(value);
         }
 
         /**@brief Unsafe, non-templated raise event function. This version is unsafe because it is allowed to trigger undefined behavior if the id is incompatible with the passed value.
@@ -53,14 +53,14 @@ namespace legion::core::events
         static void raiseEventUnsafe(event_base& value, id_type id)
         {
             if (m_eventCallbacks.contains(id))
-                m_eventCallbacks[id].invoke(&value);
+                m_eventCallbacks[id].invoke(value);
         }
 
         /**@brief Link a callback to an event type in order to get notified whenever one gets raised.
          * @tparam event_type Event type to subscribe to.
          */
         template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
-        static void bindToEvent(delegate<void(event_type*)>&& callback)
+        static void bindToEvent(delegate<void(event_type&)>&& callback)
         {
             m_eventCallbacks[event_type::id].insert_back(reinterpret_cast<delegate<void(event_base*)>&&>(callback));
         }
@@ -69,7 +69,7 @@ namespace legion::core::events
          * @param id Type id of the event to subscribe to.
          * @param callback Function to bind.
          */
-        static void bindToEvent(id_type id, delegate<void(event_base*)>&& callback)
+        static void bindToEvent(id_type id, delegate<void(event_base&)>&& callback)
         {
             m_eventCallbacks[id].insert_back(std::move(callback));
         }

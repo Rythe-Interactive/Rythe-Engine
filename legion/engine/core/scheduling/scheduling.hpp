@@ -1,5 +1,5 @@
 #pragma once
-#include <core/scheduling/stopwatch.hpp>
+#include <core/scheduling/clock.hpp>
 
 namespace legion::core
 {

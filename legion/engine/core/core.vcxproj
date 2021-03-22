@@ -135,7 +135,6 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="common\hash.hpp" />
     <ClInclude Include="common\string_literal.hpp" />
     <ClInclude Include="containers\delegate.hpp" />
-    <ClInclude Include="containers\runnable.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
@@ -177,6 +176,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
     <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
     <ClInclude Include="scheduling\clock.hpp" />
+    <ClInclude Include="scheduling\scheduler.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="serialization\prototype.hpp" />
     <ClInclude Include="ecs\registry.hpp" />

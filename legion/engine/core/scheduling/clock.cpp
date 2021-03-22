@@ -6,6 +6,17 @@ namespace legion::core::scheduling
     {
         m_lastTickDuration = elapsed;
         m_lastTickStart = start;
+        m_onTick(elapsed);
+    }
+
+    void Clock::subscribeToTick(delegate<void(span_type)>& func)
+    {
+        m_onTick.push_back(func);
+    }
+
+    void Clock::unsubscribeFromTick(delegate<void(span_type)>& func)
+    {
+        m_onTick.erase(func);
     }
 
     void Clock::setAdvancementProtocol(advancement_protocol protocol) noexcept

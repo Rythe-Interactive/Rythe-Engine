@@ -2,6 +2,7 @@
 #include <core/platform/platform.hpp>
 #include <core/types/types.hpp>
 #include <core/async/wait_priority.hpp>
+#include <core/containers/delegate.hpp>
 #include <atomic>
 #include <memory>
 #include <thread>
@@ -26,14 +27,14 @@ namespace legion::core::async
         float progress() const noexcept;
     };
 
-    template<typename Func>
+    template<typename return_type, typename... argument_types>
     struct async_operation
     {
     protected:
         std::shared_ptr<async_progress> m_progress;
-        Func m_repeater;
+        delegate<return_type(argument_types...)> m_repeater;
     public:
-        async_operation(const std::shared_ptr<async_progress>& progress, const Func& repeater) : m_progress(progress), m_repeater(repeater) {}
+        async_operation(const std::shared_ptr<async_progress>& progress, const delegate<return_type(argument_types...)>& repeater) : m_progress(progress), m_repeater(repeater) {}
         async_operation() = default;
         async_operation(const async_operation&) = default;
         async_operation(async_operation&&) = default;
@@ -69,21 +70,23 @@ namespace legion::core::async
             }
         }
 
-        template<typename... Args>
-        auto then(Args&&... args) const
+        auto then(argument_types... args) const
         {
             wait();
-            return m_repeater(std::forward<Args>(args)...);
+            return m_repeater(std::forward<argument_types>(args)...);
         }
 
-        template<typename... Args>
-        auto then(wait_priority priority, Args&&... args) const
+        auto then(wait_priority priority, argument_types... args) const
         {
             wait(priority);
-            return m_repeater(std::forward<Args>(args)...);
+            return m_repeater(std::forward<argument_types>(args)...);
         }
+
+        virtual ~async_operation() = default;
     };
 
+#if !defined(DOXY_EXCLUDE)
     template<typename Func>
     async_operation(const std::shared_ptr<async_progress>&, const Func&)->async_operation<Func>;
+#endif
 }
