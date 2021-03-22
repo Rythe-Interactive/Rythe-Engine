@@ -1,0 +1,1932 @@
+{
+    "class legion::core::ecs::entity_handle": {
+        "Name": "Scene Test",
+        "Id": 33,
+        "Name": "Entity",
+        "Components": [
+            {
+                "Owner": 33,
+                "Component Type": 5290901135681259365,
+                "Component Name": "legion::core::scenemanagement::scene",
+                "NAME": "Scene"
+            },
+            {
+                "Owner": 33,
+                "Component Type": 14234945005408008119,
+                "Component Name": "legion::core::hierarchy"
+            }
+        ],
+        "Children": [
+            {
+                "Name": "Skybox",
+                "Id": 2,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 2,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    },
+                    {
+                        "Owner": 2,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 8436013952758271681,
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
+                    },
+                    {
+                        "Owner": 2,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\skybox.material"
+                        }
+                    },
+                    {
+                        "Owner": 2,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 2,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 2,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Ground Plane",
+                "Id": 3,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 3,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    },
+                    {
+                        "Owner": 3,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 3566131216048347293,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 3,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\floor.material"
+                        }
+                    },
+                    {
+                        "Owner": 3,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 3,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 3,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "",
+                "Id": 4,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 4,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 4,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.16837938129901887,
+                        "y": 0.6738424897193909,
+                        "z": -0.16186246275901795,
+                        "w": 0.70098876953125
+                    },
+                    {
+                        "Owner": 4,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -22.988643646240236,
+                        "y": 17.683238983154298,
+                        "z": -2.940082311630249
+                    },
+                    {
+                        "Owner": 4,
+                        "Component Type": 11518894322830570044,
+                        "Component Name": "legion::audio::audio_listener"
+                    },
+                    {
+                        "Owner": 4,
+                        "Component Type": 15654855102072282618,
+                        "Component Name": "legion::rendering::camera",
+                        "Fov": 22.5,
+                        "NearZ": 0.0010000000474974514,
+                        "FarZ": 1000.0
+                    },
+                    {
+                        "Owner": 4,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Decal",
+                "Id": 5,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 5,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    },
+                    {
+                        "Owner": 5,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 2.999999761581421,
+                        "y": 2.0,
+                        "z": 2.999999761581421
+                    },
+                    {
+                        "Owner": 5,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.3826834559440613,
+                        "z": 0.0,
+                        "w": 0.9238795638084412
+                    },
+                    {
+                        "Owner": 5,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 5.0,
+                        "y": 0.0,
+                        "z": 5.0
+                    },
+                    {
+                        "Owner": 5,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 7109538280558967578,
+                        "Filepath": "assets:\\\\models\\cube.obj"
+                    },
+                    {
+                        "Owner": 5,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\decal.material"
+                        }
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Defaut Plane",
+                "Id": 6,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 6,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 3566131216048347293,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 6,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\default.material"
+                        }
+                    },
+                    {
+                        "Owner": 6,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 6,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 6,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 0.009999999776482582,
+                        "z": 0.0
+                    },
+                    {
+                        "Owner": 6,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Copper Plane",
+                "Id": 7,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 7,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 3566131216048347293,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 7,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\copper.material"
+                        }
+                    },
+                    {
+                        "Owner": 7,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 7,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 7,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 10.0,
+                        "y": 0.009999999776482582,
+                        "z": 0.0
+                    },
+                    {
+                        "Owner": 7,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Rock Plane",
+                "Id": 8,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 8,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 3566131216048347293,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 8,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\rock.material"
+                        }
+                    },
+                    {
+                        "Owner": 8,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 8,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 8,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 10.956764221191407,
+                        "y": 0.009999992325901986,
+                        "z": 11.581987380981446
+                    },
+                    {
+                        "Owner": 8,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Granite Plane",
+                "Id": 9,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 9,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 3566131216048347293,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 9,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\granite.material"
+                        }
+                    },
+                    {
+                        "Owner": 9,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 9,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 9,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 10.0,
+                        "y": 0.009999999776482582,
+                        "z": -10.0
+                    },
+                    {
+                        "Owner": 9,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "UV Plane",
+                "Id": 10,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 10,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 3566131216048347293,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 10,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\uv.material"
+                        }
+                    },
+                    {
+                        "Owner": 10,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 10,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 10,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -14.415493965148926,
+                        "y": 0.010000031441450119,
+                        "z": -2.4945240020751955
+                    },
+                    {
+                        "Owner": 10,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Normal Plane",
+                "Id": 11,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 11,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 3566131216048347293,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\normal.material"
+                        }
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 9.994988441467286,
+                        "y": 9.999067306518555,
+                        "z": 9.999065399169922
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": -7.004159670032095e-7,
+                        "y": 0.7372754216194153,
+                        "z": -0.6755922436714172,
+                        "w": 5.825457378705323e-7
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -12.0,
+                        "y": 5.0,
+                        "z": 13.0
+                    },
+                    {
+                        "Owner": 11,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Wireframe Plane",
+                "Id": 12,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 12,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 3566131216048347293,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\wireframe.material"
+                        }
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 0.009999999776482582,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 12,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Vertex Color Plane",
+                "Id": 13,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 13,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 3566131216048347293,
+                        "Filepath": "assets:\\\\models\\plane.obj"
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\vertex color.material"
+                        }
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -0.9283102750778198,
+                        "y": 0.010000022128224373,
+                        "z": -13.383755683898926
+                    },
+                    {
+                        "Owner": 13,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Entity 14",
+                "Id": 14,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 14,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Green Spotlight 0",
+                "Id": 15,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 15,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 12356534967552134382,
+                        "Filepath": "assets:\\\\models\\spot-light.obj"
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\spot light.material"
+                        }
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 17923777057385106779,
+                        "Component Name": "legion::rendering::light",
+                        "LightType": 2,
+                        "Attenuation": 50.0,
+                        "Intensity": 0.5,
+                        "Index": 4,
+                        "Direction": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 1.0
+                        },
+                        "Falloff": 3.141592025756836,
+                        "Position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Angle": 0.7853981852531433,
+                        "Color": {
+                            "x": 0.0,
+                            "y": 1.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -10.0,
+                        "y": 0.5,
+                        "z": -10.0
+                    },
+                    {
+                        "Owner": 15,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Green Spotlight 1",
+                "Id": 16,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 16,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 12356534967552134382,
+                        "Filepath": "assets:\\\\models\\spot-light.obj"
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\spot light.material"
+                        }
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 17923777057385106779,
+                        "Component Name": "legion::rendering::light",
+                        "LightType": 2,
+                        "Attenuation": 50.0,
+                        "Intensity": 0.5,
+                        "Index": 7,
+                        "Direction": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 1.0
+                        },
+                        "Falloff": 3.141592025756836,
+                        "Position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Angle": 0.7853981852531433,
+                        "Color": {
+                            "x": 0.0,
+                            "y": 1.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 0.5,
+                        "z": -10.0
+                    },
+                    {
+                        "Owner": 16,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Green Spotlight 2",
+                "Id": 17,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 17,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 12356534967552134382,
+                        "Filepath": "assets:\\\\models\\spot-light.obj"
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\spot light.material"
+                        }
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 17923777057385106779,
+                        "Component Name": "legion::rendering::light",
+                        "LightType": 2,
+                        "Attenuation": 50.0,
+                        "Intensity": 0.5,
+                        "Index": 10,
+                        "Direction": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 1.0
+                        },
+                        "Falloff": 3.141592025756836,
+                        "Position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Angle": 0.7853981852531433,
+                        "Color": {
+                            "x": 0.0,
+                            "y": 1.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 10.0,
+                        "y": 0.5,
+                        "z": -10.0
+                    },
+                    {
+                        "Owner": 17,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Red Pointlight 1",
+                "Id": 18,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 18,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 18342160618331844328,
+                        "Filepath": "assets:\\\\models\\point-light.obj"
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\point light.material"
+                        }
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 17923777057385106779,
+                        "Component Name": "legion::rendering::light",
+                        "LightType": 0,
+                        "Attenuation": 50.0,
+                        "Intensity": 0.5,
+                        "Index": 13,
+                        "Direction": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 1.0
+                        },
+                        "Falloff": 3.141592025756836,
+                        "Position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Angle": 0.7853981852531433,
+                        "Color": {
+                            "x": 1.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    {
+                        "Owner": 18,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Red pointlight 0",
+                "Id": 19,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 19,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 18342160618331844328,
+                        "Filepath": "assets:\\\\models\\point-light.obj"
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\point light.material"
+                        }
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 17923777057385106779,
+                        "Component Name": "legion::rendering::light",
+                        "LightType": 0,
+                        "Attenuation": 50.0,
+                        "Intensity": 0.5,
+                        "Index": 16,
+                        "Direction": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 1.0
+                        },
+                        "Falloff": 3.141592025756836,
+                        "Position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Angle": 0.7853981852531433,
+                        "Color": {
+                            "x": 1.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": -10.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    {
+                        "Owner": 19,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Red Pointlight 2",
+                "Id": 20,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 20,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 18342160618331844328,
+                        "Filepath": "assets:\\\\models\\point-light.obj"
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\point light.material"
+                        }
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 17923777057385106779,
+                        "Component Name": "legion::rendering::light",
+                        "LightType": 0,
+                        "Attenuation": 50.0,
+                        "Intensity": 0.5,
+                        "Index": 19,
+                        "Direction": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 1.0
+                        },
+                        "Falloff": 3.141592025756836,
+                        "Position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Angle": 0.7853981852531433,
+                        "Color": {
+                            "x": 1.0,
+                            "y": 0.0,
+                            "z": 0.0,
+                            "w": 1.0
+                        }
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0,
+                        "w": 1.0
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 10.0,
+                        "y": 1.0,
+                        "z": 0.0
+                    },
+                    {
+                        "Owner": 20,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Embedded Material Suzzane",
+                "Id": 21,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 21,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 6546381963644500447,
+                        "Filepath": "assets:\\\\models\\suzanne-test.obj"
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\suzanne\\Material.001.material"
+                        }
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 9566391368147235142,
+                        "Component Name": "legion::core::use_embedded_material",
+                        "EmbeddedMaterialPath": "assets://models/suzanne-test.obj",
+                        "MaterialName": "suzanne/Material.001"
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.001564860343933,
+                        "y": 0.9999997615814209,
+                        "z": 1.001565933227539
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.00003474406912573613,
+                        "y": 0.2931915819644928,
+                        "z": -0.00001827613596105948,
+                        "w": 0.9600598812103272
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": 5.099999904632568
+                    },
+                    {
+                        "Owner": 21,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Wireframe Suzanne",
+                "Id": 22,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 22,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 2198368113600752348,
+                        "Filepath": "assets:\\\\models\\suzanne-test.obj"
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\wireframe.material"
+                        }
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0213717222213746,
+                        "y": 0.9999997615814209,
+                        "z": 1.0213708877563477
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.000027855361622641796,
+                        "y": -0.3172142803668976,
+                        "z": -0.000023673990654060618,
+                        "w": -0.9517044425010681
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": 8.100000381469727
+                    },
+                    {
+                        "Owner": 22,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Copper Suzanne",
+                "Id": 23,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 23,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 2198368113600752348,
+                        "Filepath": "assets:\\\\models\\suzanne-test.obj"
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\copper.material"
+                        }
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.00273597240448,
+                        "y": 0.9999998807907105,
+                        "z": 1.0027371644973755
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": -0.000012020113899779972,
+                        "y": -0.32635098695755007,
+                        "z": 0.000011627163075900171,
+                        "w": -0.9480004906654358
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": 11.100000381469727
+                    },
+                    {
+                        "Owner": 23,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Test Cube",
+                "Id": 24,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 24,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 7109538280558967578,
+                        "Filepath": "assets:\\\\models\\cube.obj"
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\default.material"
+                        }
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0350501537322999,
+                        "y": 0.9999995827674866,
+                        "z": 1.035048246383667
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.000029796141461702065,
+                        "y": 0.31285515427589419,
+                        "z": -0.00005751029311795719,
+                        "w": 0.9502673745155335
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 5.099999904632568,
+                        "y": 9.0,
+                        "z": 0.0
+                    },
+                    {
+                        "Owner": 24,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Copper Ball",
+                "Id": 25,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 25,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 7189033483858936074,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\copper.material"
+                        }
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0435477495193482,
+                        "y": 0.9999998807907105,
+                        "z": 1.0435477495193482
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": -0.000008761940080148634,
+                        "y": 0.35315263271331789,
+                        "z": 0.000013634088645630982,
+                        "w": 0.9355693459510803
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -5.099999904632568
+                    },
+                    {
+                        "Owner": 25,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "",
+                "Id": 26,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 26,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 7189033483858936074,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\granite2.material"
+                        }
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.4072188436985016,
+                        "z": 0.0,
+                        "w": 0.9325306415557861
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -8.0
+                    },
+                    {
+                        "Owner": 26,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "",
+                "Id": 27,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 27,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 7189033483858936074,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\rock2.material"
+                        }
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.4048698842525482,
+                        "z": 0.0,
+                        "w": 0.9335601329803467
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -2.200000047683716
+                    },
+                    {
+                        "Owner": 27,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "",
+                "Id": 28,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 28,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 7189033483858936074,
+                        "Filepath": "assets:\\\\models\\sphere.obj"
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\default.material"
+                        }
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.4023154675960541,
+                        "z": 0.0,
+                        "w": 0.9346229434013367
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 4.0,
+                        "y": 3.0,
+                        "z": -8.0
+                    },
+                    {
+                        "Owner": 28,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "",
+                "Id": 29,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 29,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 8436013952758271681,
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\copper.material"
+                        }
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.4000115692615509,
+                        "z": 0.0,
+                        "w": 0.9356839060783386
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -3.5999999046325685
+                    },
+                    {
+                        "Owner": 29,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "",
+                "Id": 30,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 30,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 8436013952758271681,
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\granite2.material"
+                        }
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.39871278405189516,
+                        "z": 0.0,
+                        "w": 0.9362139105796814
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -6.5
+                    },
+                    {
+                        "Owner": 30,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "",
+                "Id": 31,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 31,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 8436013952758271681,
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\rock2.material"
+                        }
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.39700275659561159,
+                        "z": 0.0,
+                        "w": 0.9369962811470032
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 0.0,
+                        "y": 3.0,
+                        "z": -0.699999988079071
+                    },
+                    {
+                        "Owner": 31,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "",
+                "Id": 32,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 32,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 8436013952758271681,
+                        "Filepath": "assets:\\\\models\\uvsphere.obj"
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\default.material"
+                        }
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 13028145369583378910,
+                        "Component Name": "custom_component"
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.0,
+                        "y": 0.39544665813446047,
+                        "z": 0.0,
+                        "w": 0.9376160502433777
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 4.0,
+                        "y": 3.0,
+                        "z": -6.5
+                    },
+                    {
+                        "Owner": 32,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            },
+            {
+                "Name": "Sun",
+                "Id": 34,
+                "Name": "Entity",
+                "Components": [
+                    {
+                        "Owner": 34,
+                        "Component Type": 17829838403855360956,
+                        "Component Name": "legion::core::mesh_filter",
+                        "value0": 7757082633988396914,
+                        "Filepath": "assets:\\\\models\\directional-light.obj"
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 14566645459790289390,
+                        "Component Name": "legion::rendering::mesh_renderer",
+                        "material": {
+                            "MaterialFile": "assets:\\\\materials\\directional light.material"
+                        }
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 17923777057385106779,
+                        "Component Name": "legion::rendering::light",
+                        "LightType": 1,
+                        "Attenuation": 10.0,
+                        "Intensity": 10.0,
+                        "Index": 22,
+                        "Direction": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 1.0
+                        },
+                        "Falloff": 3.1415927410125734,
+                        "Position": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "Angle": 0.7853981852531433,
+                        "Color": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 0.800000011920929,
+                            "w": 1.0
+                        }
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 7976621606494152606,
+                        "Component Name": "legion::core::scale",
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 6841436683689612098,
+                        "Component Name": "legion::core::rotation",
+                        "x": 0.115916907787323,
+                        "y": -0.8804763555526733,
+                        "z": 0.2798481583595276,
+                        "w": 0.3647052049636841
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 5024733841066084311,
+                        "Component Name": "legion::core::position",
+                        "x": 10.0,
+                        "y": 10.0,
+                        "z": 10.0
+                    },
+                    {
+                        "Owner": 34,
+                        "Component Type": 14234945005408008119,
+                        "Component Name": "legion::core::hierarchy"
+                    }
+                ],
+                "Children": []
+            }
+        ]
+    }
+}

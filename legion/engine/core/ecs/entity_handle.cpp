@@ -15,6 +15,18 @@ namespace legion::core::ecs
         return *this;
     }
 
+    std::string entity_handle::get_name() const noexcept
+    {
+        return read_component<hierarchy>().name;
+    }
+
+    void entity_handle::set_name(const std::string& name)
+    {
+        auto hry = read_component<hierarchy>();
+        hry.name = name;
+        write_component(hry);
+    }
+
     entity_handle entity_handle::clone(bool keep_parent, bool clone_children, bool clone_components) const
     {
         OPTICK_EVENT();
@@ -155,14 +167,19 @@ namespace legion::core::ecs
         std::vector <ecs::component_handle_base> components;
         std::vector <ecs::entity_handle> children;
         auto composition = component_composition();
-        for (int i = 0; i < composition.size(); i++)
+        for (auto& elem : composition)
         {
-            components.push_back(m_registry->getComponent(m_id, composition[i]));
+            components.push_back(m_registry->getComponent(m_id, elem));
         }
-        for (auto child : read_component<hierarchy>().children)
+
+        hierarchy hry = read_component<hierarchy>();
+
+        for (auto child : hry.children)
         {
             children.push_back(child);
         }
+
+        oarchive(cereal::make_nvp("Name",hry.name));
         oarchive(cereal::make_nvp("Id", m_id), cereal::make_nvp("Name", std::string("Entity")));
         oarchive(cereal::make_nvp("Components", components), cereal::make_nvp("Children", children));
     }
@@ -196,10 +213,13 @@ namespace legion::core::ecs
         else
             ent = m_registry->getEntity(m_id);
 
-
+        std::string name;
+        oarchive(cereal::make_nvp("Name",name));
         oarchive(cereal::make_nvp("Components", components), cereal::make_nvp("Children", children));
 
-
+        modify_component<hierarchy>([&name](hierarchy& hry){
+           hry.name = name;
+        });
 
         for (auto child : children)
         {
@@ -317,4 +337,4 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         return m_registry->validateEntity(m_id);
     }
-    }
+}

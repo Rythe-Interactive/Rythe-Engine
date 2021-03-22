@@ -427,6 +427,9 @@
     <ClInclude Include="defaults\hierarchysystem.hpp" />
     <ClInclude Include="time\defaults.hpp" />
     <ClInclude Include="async\thread_util.hpp" />
+    <ClInclude Include="serialization\use_embedded_material.hpp" />
+    <ClInclude Include="scenemanagement\components\scene.hpp" />
+    <ClInclude Include="platform\shellinvoke.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecsregistry.cpp">

@@ -75,7 +75,7 @@ namespace legion::core::ecs
     {
         friend class std::hash<component_handle<component_type>>;
     public:
-        component_handle() : component_handle_base() {}
+        component_handle() : component_handle_base(invalid_id, typeHash<component_type>()) {}
         component_handle(const component_handle& other) : component_handle_base(other) {};
         component_handle(component_handle&& other) : component_handle_base(other) {};
 

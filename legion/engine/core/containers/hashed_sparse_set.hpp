@@ -64,9 +64,9 @@ namespace legion::core
         L_NODISCARD const_iterator end() const { return m_dense.cbegin() + m_size; }
         L_NODISCARD const_iterator cend() const { return m_dense.cbegin() + m_size; }
 
-        L_NODISCARD reverse_iterator rbegin() { return m_dense.rbegin() - (m_dense.size() - m_size); }
-        L_NODISCARD const_reverse_iterator rbegin() const { return m_dense.crbegin() - (m_dense.size() - m_size); }
-        L_NODISCARD const_reverse_iterator crbegin() const { return m_dense.crbegin() - (m_dense.size() - m_size); }
+        L_NODISCARD reverse_iterator rbegin() { return m_dense.rbegin() + (m_dense.size() - m_size); }
+        L_NODISCARD const_reverse_iterator rbegin() const { return m_dense.crbegin() + (m_dense.size() - m_size); }
+        L_NODISCARD const_reverse_iterator crbegin() const { return m_dense.crbegin() + (m_dense.size() - m_size); }
 
         L_NODISCARD reverse_iterator rend() { return m_dense.rend(); }
         L_NODISCARD const_reverse_iterator rend() const { return m_dense.crend(); }

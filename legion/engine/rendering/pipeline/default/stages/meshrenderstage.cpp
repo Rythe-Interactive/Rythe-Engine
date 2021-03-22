@@ -122,18 +122,21 @@ namespace legion::rendering
 
             for (auto [modelHandle, instances] : instancesPerMaterial)
             {
+                if (modelHandle.id == invalid_id)
+                    return;
+
                 ModelCache::create_model(modelHandle.id);
                 auto modelName = ModelCache::get_model_name(modelHandle.id);
                 OPTICK_EVENT("Rendering instances");
                 OPTICK_TAG("Model", modelName.c_str());
 
                 const model& mesh = modelHandle.get_model();
+
                 if (!mesh.buffered)
                     modelHandle.buffer_data(*modelMatrixBuffer);
 
                 if (mesh.submeshes.empty())
                 {
-
                     log::warn("Empty mesh found. Model name: {},  Model ID {}", modelName, modelHandle.get_mesh().id);
                     continue;
                 }

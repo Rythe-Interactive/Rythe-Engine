@@ -14,11 +14,20 @@ namespace legion::core::scenemanagement
 
     class SceneManager final : public core::System<SceneManager>
     {
+        friend class legion::core::Engine;
     public:
+        using additional_loader_fn = delegate<void(ecs::entity_handle)>;
+    private:
+        static std::unordered_map<id_type, additional_loader_fn> m_additionalLoaders;
+        static ecs::EcsRegistry* m_ecs;
+
+    public:
+
         static int sceneCount;
-        static std::string currentScene;
-        static std::unordered_map < id_type, std::string> sceneNames;
-        static std::unordered_map < id_type, ecs::component_handle <scene > > sceneList;
+        static ecs::component_handle<scene> currentScene;
+        static std::unordered_map<id_type, std::string> sceneNames;
+        static std::unordered_map<id_type, ecs::component_handle<scene>> sceneList;
+
 
         SceneManager() = default;
 
@@ -38,7 +47,8 @@ namespace legion::core::scenemanagement
                         if (file.get_extension().decay() == ".cornflake")
                         {
                             auto fileName = file.get_filename().decay();
-                            log::debug("Added {}",fileName);
+                            fileName = fileName.substr(0, fileName.find_last_of('.'));
+                            log::debug("Added {}", fileName);
                             sceneNames.emplace(nameHash(fileName), fileName);
                         }
                     }
@@ -48,33 +58,33 @@ namespace legion::core::scenemanagement
 
         /**@brief Creates a scene entity, to store all objects
          */
-        static ecs::entity_handle create_scene_entity();
+        static ecs::entity_handle create_scene_entity(const std::string& name = "Scene");
 
         /**@brief Creates a scene with given name.
           * @param name The name you wish to set the scene.
           * @returns bool Signifying whether it was successful.
           */
-        static bool create_scene(const std::string& name);
+        static ecs::component_handle<scene> create_scene(const std::string& name = "Scene");
 
         /**@brief Creates a scene with given name.
           * @param name The name you wish to set the scene to.
           * @param ent A specific entity to create a scene from.
           * @returns bool Signifying whether it was successful.
           */
-        static bool create_scene(const std::string& name, ecs::entity_handle& ent);
+        static ecs::component_handle<scene> create_scene(const std::string& name, ecs::entity_handle& ent);
 
         /**@brief Deserializes the scene from the disk.
          * @param name The name of the file to deserialize.
          * @returns bool Signifying whether it was successful.
          */
-        static bool load_scene(const std::string& name);
+        static ecs::component_handle<scene> load_scene(const std::string& name);
 
         /**@brief Serializes a scene to disk
           * @param name string of the name of the scene you wish to save.
           * @param ent a specific entity to serialize.
           * @returns bool Signifying whether it was successful.
          */
-        static bool save_scene(const std::string& name, ecs::entity_handle& ent);
+        static ecs::component_handle<scene> save_scene(const std::string& name, ecs::entity_handle& ent);
 
         /**@brief Gets a scene from the scene list.
           * @param name The name of the scene that you wish to save.
@@ -88,6 +98,10 @@ namespace legion::core::scenemanagement
          */
         static ecs::entity_handle get_scene_entity(std::string name);
 
-       
+        template <class component_type>
+        static void add_loader(additional_loader_fn additional_loader)
+        {
+            m_additionalLoaders[typeHash<component_type>()] = additional_loader;
+        }
     };
 }

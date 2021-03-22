@@ -7,9 +7,9 @@ shader= assets:\\shaders\decal.shs
 ; Custom Parameters contains dynamic information about the material
 ; if you _really_ need to edit this file, it is probably something here!
 [custom]
-skycolor= 0.100000 0.300000 1.000000 1.000000 
 material_input.heightScale= 0.000000 
+material_input.MRDAo= engine:\\resources\default\MRDAo 
 material_input.albedo= engine:\\resources\default\albedo 
 material_input.normalHeight= engine:\\resources\default\normalHeight 
-material_input.MRDAo= engine:\\resources\default\MRDAo 
 material_input.emissive= engine:\\resources\default\emissive 
+skycolor= 0.100000 0.300000 1.000000 1.000000 

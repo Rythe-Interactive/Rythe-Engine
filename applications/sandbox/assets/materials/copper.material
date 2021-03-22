@@ -8,9 +8,9 @@ shader= assets:\\shaders\pbr.shs
 ; if you _really_ need to edit this file, it is probably something here!
 [custom]
 discardExcess= false 
-skycolor= 0.100000 0.300000 1.000000 1.000000 
+material_input.emissive= assets:\\textures\copper\copper-emissive-2048.png 
+material_input.normalHeight= assets:\\textures\copper\copper-normalHeight-2048.png 
+material_input.albedo= assets:\\textures\copper\copper-albedo-2048.png 
+material_input.MRDAo= assets:\\textures\copper\copper-MRDAo-2048.png 
 material_input.heightScale= 1.000000 
-material_input.albedo= assets:\\textures\copper\copper-albedo-512.png 
-material_input.normalHeight= assets:\\textures\copper\copper-normalHeight-512.png 
-material_input.MRDAo= assets:\\textures\copper\copper-MRDAo-512.png 
-material_input.emissive= assets:\\textures\copper\copper-emissive-512.png 
+skycolor= 0.100000 0.300000 1.000000 1.000000 

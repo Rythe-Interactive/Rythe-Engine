@@ -105,6 +105,8 @@
     <ClInclude Include="pipeline\default\postfx\bloom.hpp" />
     <ClInclude Include="components\point_cloud_particle_container.hpp" />
     <ClInclude Include="pipeline\default\postfx\depthoffield.hpp" />
+    <ClInclude Include="util\additional_material_loader.hpp" />
+    <ClInclude Include="systems\serilization_rendering_extra.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\buffer.inl" />

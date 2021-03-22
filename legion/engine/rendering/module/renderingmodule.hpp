@@ -8,6 +8,8 @@
 #include <rendering/systems/pointcloudgeneration.hpp>
 #include <rendering/systems/lod_manager.hpp>
 #include <rendering/components/point_emitter_data.hpp>
+#include <rendering/systems/serilization_rendering_extra.hpp>
+
 namespace legion::rendering
 {
     class RenderingModule : public Module
@@ -33,6 +35,7 @@ namespace legion::rendering
             reportComponentType<lod>();
             reportSystem<PointCloudGeneration>();
             reportSystem<LODManager>();
+            reportSystem<SerializationRenderingExtra>();
         }
 
         virtual priority_type priority() override

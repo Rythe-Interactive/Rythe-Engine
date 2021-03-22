@@ -7,10 +7,10 @@ shader= assets:\\shaders\pbr.shs
 ; Custom Parameters contains dynamic information about the material
 ; if you _really_ need to edit this file, it is probably something here!
 [custom]
-discardExcess= true 
-skycolor= 0.100000 0.300000 1.000000 1.000000 
+discardExcess= false 
+material_input.emissive= engine:\\resources\default\emissive 
+material_input.normalHeight= engine:\\resources\default\normalHeight 
+material_input.albedo= engine:\\resources\default\albedo 
+material_input.MRDAo= engine:\\resources\default\MRDAo 
 material_input.heightScale= 1.000000 
-material_input.albedo= assets:\\textures\bog\bog-albedo-512.png 
-material_input.normalHeight= assets:\\textures\bog\bog-normalHeight-512.png 
-material_input.MRDAo= assets:\\textures\bog\bog-MRDAo-512.png 
-material_input.emissive= assets:\\textures\bog\bog-emissive-512.png 
+skycolor= 0.100000 0.300000 1.000000 1.000000 

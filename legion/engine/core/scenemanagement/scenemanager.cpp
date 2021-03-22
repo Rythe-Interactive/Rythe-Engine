@@ -8,33 +8,28 @@
 
 namespace legion::core::scenemanagement
 {
+    ecs::EcsRegistry* SceneManager::m_ecs;
     int SceneManager::sceneCount;
-    std::string SceneManager::currentScene = "Main";
-    std::unordered_map < id_type, std::string> SceneManager::sceneNames;
+    ecs::component_handle<scene> SceneManager::currentScene;
+    std::unordered_map<id_type, std::string> SceneManager::sceneNames;
     std::unordered_map<id_type, ecs::component_handle<scene>> SceneManager::sceneList;
+    std::unordered_map<id_type, SceneManager::additional_loader_fn> SceneManager::m_additionalLoaders;
 
-    ecs::entity_handle SceneManager::create_scene_entity()
+    ecs::entity_handle SceneManager::create_scene_entity(const std::string& name)
     {
-        ecs::entity_handle sceneEntity;
-        static ecs::EntityQuery sceneEntities = m_ecs->createQuery<scenemanagement::scene>();
-        sceneEntities.queryEntities();
-        if (sceneEntities.size() == 0)
+        ecs::entity_handle sceneEntity = get_scene_entity(name);
+
+        if (!sceneEntity)
         {
             log::debug("Creating a Scene Entity");
             sceneEntity = m_ecs->createEntity();
-            sceneEntity.add_component<hierarchy>();
             sceneEntity.add_component<scene>();
-            std::vector<ecs::entity_handle> children;
             auto hry = world.read_component<hierarchy>();
+            auto worldHry = hry;
+            hry.name = name;
+            hry.children.erase(sceneEntity);
 
-            for (auto& child : hry.children)
-            {
-                children.push_back(child);
-            }
-            int i = 0;
-            sceneEntity.write_component(hry);
-
-            for (ecs::entity_handle child : children)
+            for (ecs::entity_handle child : hry.children)
             {
                 if (child.has_component<hierarchy>())
                 {
@@ -43,32 +38,33 @@ namespace legion::core::scenemanagement
                     child.write_component(h);
                 }
             }
-            hry.children.clear();
-            hry.children.insert(sceneEntity);
-            world.write_component(hry);
-        }
-        else
-        {
-            sceneEntity = sceneEntities[0];
+
+            sceneEntity.add_component(hry);
+
+            worldHry.children.clear();
+            worldHry.children.insert(sceneEntity);
+            world.write_component(worldHry);
         }
         return sceneEntity;
     }
 
-    bool SceneManager::create_scene(const std::string& name)
+    ecs::component_handle<scene> SceneManager::create_scene(const std::string& name)
     {
-        ecs::entity_handle sceneEntity = create_scene_entity();
+        ecs::entity_handle sceneEntity = create_scene_entity(name);
 
-        if (!get_scene(name))
+        if (!get_scene_entity(name))
         {
-            scene s;
+            scene s = sceneEntity.read_component<scene>();
             s.id = nameHash(name);
             sceneNames.emplace(s.id, name);
-            sceneList.emplace(nameHash(name), sceneEntity);
+            sceneEntity.write_component<scene>(s);
+            sceneList.emplace(nameHash(name), sceneEntity.get_component_handle<scene>());
+            sceneCount++;
         }
         return SceneManager::save_scene(name, sceneEntity);
     }
 
-    bool SceneManager::create_scene(const std::string& name, ecs::entity_handle& ent)
+    ecs::component_handle<scene> SceneManager::create_scene(const std::string& name, ecs::entity_handle& ent)
     {
         if (!ent.has_component<scene>())
         {
@@ -81,11 +77,22 @@ namespace legion::core::scenemanagement
             //true if entity does not have the scene component
             return save_scene(name, ent);
         }
-        //false if it doesn't
-        return false;
+        else
+        {
+            auto s = ent.read_component<scene>();
+            if (s.id != nameHash(name))
+            {
+                s.id = nameHash(name);
+                sceneNames.emplace(s.id, name);
+                sceneList.emplace(s.id, ent.get_component_handle<scene>());
+                sceneCount++;
+                ent.set_name(name);
+            }
+            return save_scene(name, ent);
+        }
     }
 
-    bool SceneManager::load_scene(const std::string& name)
+    ecs::component_handle<scene> SceneManager::load_scene(const std::string& name)
     {
         std::string filename = name;
         if (!common::ends_with(filename, ".cornflake")) filename += ".cornflake";
@@ -104,18 +111,44 @@ namespace legion::core::scenemanagement
         log::debug("Child Count After: {}", world.child_count());
 
         auto sceneEntity = serialization::SerializationUtil::JSONDeserialize<ecs::entity_handle>(inFile);
-        currentScene = name;
+        currentScene = sceneEntity.get_component_handle<scene>();
+
+        for (auto& [id, fn] : m_additionalLoaders)
+        {
+            hashed_sparse_set<id_type> types;
+            types.insert(id);
+            auto query = m_ecs->createQuery(types);
+            query.queryEntities();
+            for (const auto& child : query)
+            {
+                fn(child);
+            }
+        }
+
+
+        static auto sceneQuery = m_ecs->createQuery<scene>();
+        sceneQuery.queryEntities();
+
+        for (auto ent : sceneQuery)
+        {
+            auto sceneHandle = ent.get_component_handle<scene>();
+            auto s = sceneHandle.read();
+
+            sceneList[s.id] = sceneHandle;
+        }
 
         //SceneManager::saveScene(name, sceneEntity);
         //log::debug("........Done saving scene");
-        return true;
+        return sceneEntity.get_component_handle<scene>();
     }
 
-    bool SceneManager::save_scene(const std::string& name, ecs::entity_handle& ent)
+    ecs::component_handle<scene> SceneManager::save_scene(const std::string& name, ecs::entity_handle& ent)
     {
         std::ofstream outFile("assets/scenes/" + name + ".cornflake");
+        outFile.clear();
         serialization::SerializationUtil::JSONSerialize<ecs::entity_handle>(outFile, ent);
-        return true;
+        outFile.close();
+        return ent.get_component_handle<scene>();
     }
 
     ecs::component_handle<scene> SceneManager::get_scene(std::string name)

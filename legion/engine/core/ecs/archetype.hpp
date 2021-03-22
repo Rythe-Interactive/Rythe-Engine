@@ -82,6 +82,7 @@ namespace legion::core::ecs
 
 }
 
+#if !defined(DOXY_EXCLUDE)
 namespace std // NOLINT(cert-dcl58-cpp)
 {
     template <::std::size_t I,class ... Args>
@@ -125,3 +126,4 @@ namespace std // NOLINT(cert-dcl58-cpp)
     };
 
 }
+#endif

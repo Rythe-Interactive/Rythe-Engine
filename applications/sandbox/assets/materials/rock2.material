@@ -7,10 +7,10 @@ shader= assets:\\shaders\pbr.shs
 ; Custom Parameters contains dynamic information about the material
 ; if you _really_ need to edit this file, it is probably something here!
 [custom]
-discardExcess= true 
-skycolor= 0.100000 0.300000 1.000000 1.000000 
+discardExcess= false 
+material_input.emissive= assets:\\textures\detailedRock\Rock020_1K_emissive.png 
+material_input.normalHeight= assets:\\textures\detailedRock\Rock020_1K_NormalHeight.png 
+material_input.albedo= assets:\\textures\detailedRock\Rock020_1K_Albedo.png 
+material_input.MRDAo= assets:\\textures\detailedRock\Rock020_1K_MRDAo.png 
 material_input.heightScale= 1.000000 
-material_input.albedo= assets:\\textures\slate\slate-albedo-512.png 
-material_input.normalHeight= assets:\\textures\slate\slate-normalHeight-512.png 
-material_input.MRDAo= assets:\\textures\slate\slate-MRDAo-512.png 
-material_input.emissive= assets:\\textures\slate\slate-emissive-512.png 
+skycolor= 0.100000 0.300000 1.000000 1.000000 

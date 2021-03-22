@@ -61,7 +61,7 @@ namespace legion::core
      */
     struct mesh_handle
     {
-        id_type id;
+        id_type id = invalid_id;
 
         /**@brief Get the mesh and the attached lock.
          */
@@ -79,9 +79,9 @@ namespace legion::core
     {
         std::string name;
 
-        bool opaque;            
-        float alphaCutoff;                
-        bool doubleSided;                 
+        bool opaque;
+        float alphaCutoff;
+        bool doubleSided;
 
         math::color albedoValue;
         image_handle albedoMap;
@@ -123,9 +123,8 @@ namespace legion::core
         friend struct mesh_handle;
     private:
         static std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, mesh>>> m_meshes;
+        static std::unordered_map<id_type, filesystem::view> m_materialsToDigest;
         static async::rw_spinlock m_meshesLock;
-
-
     public:
         static id_type debugId;
 
@@ -161,5 +160,7 @@ namespace legion::core
          * @param id Name hash
          */
         static mesh_handle get_handle(id_type id);
+
+        static void destroy_mesh(id_type id);
     };
 }
