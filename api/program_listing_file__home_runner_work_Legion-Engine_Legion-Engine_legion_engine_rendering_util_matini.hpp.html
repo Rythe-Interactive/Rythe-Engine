@@ -82,10 +82,15 @@
 
             <span class="n">IniBuilder</span><span class="o">&amp;</span> <span class="n">finish_entry</span><span class="p">()</span>                  <span class="p">{</span> <span class="k">return</span> <span class="n">glyph</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> <span class="p">}</span>
 
+            <span class="n">IniBuilder</span><span class="o">&amp;</span> <span class="n">push_state</span><span class="p">()</span>                    <span class="p">{</span> <span class="n">m_copy</span> <span class="o">=</span> <span class="n">m_contents</span><span class="p">;</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> <span class="p">}</span>
+            <span class="n">IniBuilder</span><span class="o">&amp;</span> <span class="n">pop_state</span><span class="p">()</span>                     <span class="p">{</span> <span class="n">m_contents</span> <span class="o">=</span> <span class="n">m_copy</span><span class="p">;</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;}</span>
+
+
             <span class="n">L_NODISCARD</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">get</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">m_contents</span><span class="p">;</span> <span class="p">}</span>
 
         <span class="k">private</span><span class="o">:</span>
             <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_contents</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">m_copy</span><span class="p">;</span>
         <span class="p">};</span>
 
         <span class="k">class</span> <span class="nc">handler_to_cpp</span>

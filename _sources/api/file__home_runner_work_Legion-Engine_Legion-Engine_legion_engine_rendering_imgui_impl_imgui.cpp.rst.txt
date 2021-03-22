@@ -66,13 +66,13 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_imgui_8cpp_1ab61bcc85f74e05dd59cec573fc2a8e9f`
+- :ref:`exhale_function_imgui_8cpp_1a37201b4dd6e1ff9e6dfd3c8180b681a2`
 
 - :ref:`exhale_function_imgui_8cpp_1aa1b7f477fbb6049d246a41ac0616534f`
 
-- :ref:`exhale_function_imgui_8cpp_1ad4fc3ffd38147a034d7a6e77f0dc845c`
+- :ref:`exhale_function_imgui_8cpp_1ab0d4a1eea971819a147b655c9b939d51`
 
-- :ref:`exhale_function_imgui_8cpp_1a2b0bc4ba122704e5025907c77f313b7f`
+- :ref:`exhale_function_imgui_8cpp_1aec5b9dca69b64cb0a6a474dbf2bb84b9`
 
 - :ref:`exhale_function_imgui_8cpp_1a1dc50294d00308b0e87af6cace2fe04e`
 
@@ -268,7 +268,7 @@ Functions
 
 - :ref:`exhale_function_imgui_8cpp_1a2bbbbc51af7ad094958521233b053c48`
 
-- :ref:`exhale_function_imgui_8cpp_1a116c105198e1e942a2ade0e7d9855969`
+- :ref:`exhale_function_imgui_8cpp_1a64bae9e3d35b6624c9114caf19773076`
 
 - :ref:`exhale_function_imgui_8cpp_1a9924fbe297e670b0a477e2844f1a53c8`
 

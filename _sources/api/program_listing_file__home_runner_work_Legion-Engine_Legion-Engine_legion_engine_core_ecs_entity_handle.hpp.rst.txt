@@ -51,6 +51,9 @@ Program Listing for File entity_handle.hpp
    
            entity_handle& operator=(const entity_handle& other) noexcept;
    
+           L_NODISCARD std::string get_name() const noexcept;
+           void set_name(const std::string& name);
+   
            L_NODISCARD entity_handle clone(bool keep_parent = true, bool clone_children = true, bool clone_components = true) const;
    
            L_NODISCARD hashed_sparse_set<id_type> component_composition() const;
@@ -60,6 +63,11 @@ Program Listing for File entity_handle.hpp
            bool operator==(const entity_handle& other) const
            {
                return m_id == other.m_id;
+           }
+   
+           bool operator!=(const entity_handle& other) const
+           {
+               return m_id != other.m_id;
            }
    
            operator bool() const
@@ -190,6 +198,8 @@ Program Listing for File entity_handle.hpp
            template<typename archetype_type, typename = inherits_from<archetype_type, archetype_base>>
            void remove_components();
    
+           template <class component_type, class Func,typename = doesnt_inherit_from<component_type,archetype_base>>
+           void modify_component(Func&& f);
    
            void destroy(bool recurse = true);
    

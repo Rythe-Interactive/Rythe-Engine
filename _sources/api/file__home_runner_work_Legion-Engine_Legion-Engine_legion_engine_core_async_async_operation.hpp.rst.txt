@@ -60,6 +60,10 @@ Namespaces
 ----------
 
 
+- :ref:`namespace_legion`
+
+- :ref:`namespace_legion__core`
+
 - :ref:`namespace_legion__core__async`
 
 
@@ -70,11 +74,4 @@ Classes
 - :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1async__operation`
 
 - :ref:`exhale_struct_structlegion_1_1core_1_1async_1_1async__progress`
-
-
-Functions
----------
-
-
-- :ref:`exhale_function_async__operation_8hpp_1a4e28bbac5d29e54a5ea3d7cfec819ce8`
 

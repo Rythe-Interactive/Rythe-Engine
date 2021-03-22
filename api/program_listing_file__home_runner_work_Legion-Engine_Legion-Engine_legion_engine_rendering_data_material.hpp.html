@@ -97,6 +97,7 @@
 
     <span class="k">struct</span> <span class="n">variant_submaterial</span>
     <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">material_parameter_base</span><span class="o">&gt;&gt;</span> <span class="n">parameters</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">GLint</span><span class="p">,</span> <span class="n">id_type</span><span class="o">&gt;</span> <span class="n">idOfLocation</span><span class="p">;</span>
     <span class="p">};</span>
@@ -107,6 +108,8 @@
         <span class="k">friend</span> <span class="k">struct</span> <span class="n">material_handle</span><span class="p">;</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="n">shader_handle</span> <span class="n">m_shader</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">m_canLoadOrSave</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
 
         <span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="k">const</span> <span class="n">shader_handle</span><span class="o">&amp;</span> <span class="n">shader</span><span class="p">)</span>
         <span class="p">{</span>
@@ -115,6 +118,7 @@
                 <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">type</span><span class="p">]</span> <span class="o">:</span> <span class="n">variantInfo</span><span class="p">)</span>
                 <span class="p">{</span>
                     <span class="n">id_type</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+                    <span class="n">m_variants</span><span class="p">[</span><span class="n">variantId</span><span class="p">].</span><span class="n">name</span> <span class="o">=</span> <span class="n">m_shader</span><span class="p">.</span><span class="n">get_variant</span><span class="p">(</span><span class="n">variantId</span><span class="p">).</span><span class="n">name</span><span class="p">;</span>
                     <span class="n">m_variants</span><span class="p">[</span><span class="n">variantId</span><span class="p">].</span><span class="n">parameters</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">hash</span><span class="p">,</span> <span class="n">material_parameter_base</span><span class="o">::</span><span class="n">create_param</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">type</span><span class="p">));</span>
                     <span class="n">m_variants</span><span class="p">[</span><span class="n">variantId</span><span class="p">].</span><span class="n">idOfLocation</span><span class="p">[</span><span class="n">location</span><span class="p">]</span> <span class="o">=</span> <span class="n">hash</span><span class="p">;</span>
                 <span class="p">}</span>
@@ -124,7 +128,10 @@
         <span class="n">id_type</span> <span class="n">m_currentVariant</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">variant_submaterial</span><span class="o">&gt;</span> <span class="n">m_variants</span><span class="p">;</span>
     <span class="k">public</span><span class="o">:</span>
-        <span class="kt">bool</span> <span class="n">has_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="n">id_type</span> <span class="n">current_variant</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+        <span class="kt">bool</span> <span class="nf">has_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
         <span class="kt">bool</span> <span class="nf">has_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
         <span class="kt">void</span> <span class="nf">set_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">);</span>
         <span class="kt">void</span> <span class="nf">set_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">);</span>
@@ -171,16 +178,23 @@
 
             <span class="k">return</span> <span class="n">m_variants</span><span class="p">[</span><span class="n">m_currentVariant</span><span class="p">].</span><span class="n">parameters</span><span class="p">;</span>
         <span class="p">}</span>
+
+        <span class="kt">void</span> <span class="n">make_unsavable</span><span class="p">();</span>
+
     <span class="p">};</span>
 
     <span class="k">struct</span> <span class="n">material_handle</span>
     <span class="p">{</span>
         <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
 
+        <span class="n">id_type</span> <span class="nf">current_variant</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
         <span class="kt">bool</span> <span class="nf">has_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
         <span class="kt">bool</span> <span class="nf">has_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
         <span class="kt">void</span> <span class="nf">set_variant</span><span class="p">(</span><span class="n">id_type</span> <span class="n">variantId</span><span class="p">);</span>
         <span class="kt">void</span> <span class="nf">set_variant</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">variant</span><span class="p">);</span>
+
+        <span class="n">L_NODISCARD</span> <span class="n">shader_handle</span> <span class="nf">get_shader</span><span class="p">();</span>
 
         <span class="kt">void</span> <span class="nf">bind</span><span class="p">();</span>
 
@@ -207,7 +221,7 @@
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
         <span class="n">L_NODISCARD</span> <span class="n">T</span> <span class="n">get_param</span><span class="p">(</span><span class="n">GLint</span> <span class="n">location</span><span class="p">);</span>
 
-        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">get_name</span><span class="p">();</span>
+        <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">get_name</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
 
         <span class="n">L_NODISCARD</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">material_parameter_base</span><span class="o">&gt;&gt;&amp;</span> <span class="n">get_params</span><span class="p">();</span>
 
@@ -220,6 +234,10 @@
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
         <span class="kt">void</span> <span class="n">load</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">oa</span><span class="p">);</span>
+
+        <span class="kt">bool</span> <span class="nf">getLoadOrSaveBit</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">setLoadOrSaveBit</span><span class="p">(</span><span class="kt">bool</span> <span class="n">canBeSavedOrLoaded</span><span class="p">);</span>
+
     <span class="p">};</span>
 
 
@@ -240,6 +258,8 @@
         <span class="k">static</span> <span class="n">material_handle</span> <span class="nf">create_material</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">,</span> <span class="k">const</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&amp;</span> <span class="n">shaderFile</span><span class="p">,</span> <span class="n">shader_import_settings</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">default_shader_settings</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="n">material_handle</span> <span class="nf">get_material</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">material</span><span class="o">&gt;&amp;&gt;</span> <span class="n">get_all_materials</span><span class="p">();</span>
     <span class="p">};</span>
 
 <span class="cp">#pragma region implementations</span>
@@ -475,6 +495,7 @@
     <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
     <span class="kt">void</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">save</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">oa</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
+
         <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
         <span class="n">material</span><span class="o">&amp;</span> <span class="n">m</span> <span class="o">=</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
 
@@ -514,6 +535,7 @@
             <span class="c1">// add the key + the equals sign</span>
             <span class="c1">// for instance</span>
             <span class="c1">// &quot;material_input.emissive=&quot;</span>
+            <span class="n">bob</span><span class="p">.</span><span class="n">push_state</span><span class="p">();</span>
             <span class="n">bob</span><span class="p">.</span><span class="n">glyph</span><span class="p">(</span><span class="n">kv</span><span class="p">).</span><span class="n">eq</span><span class="p">();</span>
 
             <span class="c1">// determine  what type of variable we are dealing with</span>
@@ -557,7 +579,13 @@
             <span class="p">{</span>
                 <span class="c1">//for the texture handle we need to extract the texture first and ask it for its path</span>
                 <span class="n">texture_handle</span> <span class="n">th</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">material_parameter</span><span class="o">&lt;</span><span class="n">texture_handle</span><span class="o">&gt;*&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">get</span><span class="p">())</span><span class="o">-&gt;</span><span class="n">get_value</span><span class="p">();</span>
-                <span class="n">bob</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="n">th</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">path</span><span class="p">).</span><span class="n">finish_entry</span><span class="p">();</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">path</span> <span class="o">=</span> <span class="n">th</span><span class="p">.</span><span class="n">get_texture</span><span class="p">().</span><span class="n">path</span><span class="p">;</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="n">bob</span><span class="p">.</span><span class="n">pop_state</span><span class="p">();</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">bob</span><span class="p">.</span><span class="n">value</span><span class="p">(</span><span class="n">path</span><span class="p">).</span><span class="n">finish_entry</span><span class="p">();</span>
                 <span class="k">continue</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -570,18 +598,37 @@
     <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Archive</span><span class="o">&gt;</span>
     <span class="kt">void</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">load</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">ia</span><span class="p">)</span>
     <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">getLoadOrSaveBit</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+
         <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">filepath</span><span class="p">;</span>
         <span class="n">ia</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;MaterialFile&quot;</span><span class="p">,</span> <span class="n">filepath</span><span class="p">));</span>
         <span class="k">const</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span> <span class="n">file</span><span class="p">(</span><span class="n">filepath</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">.</span><span class="n">file_info</span><span class="p">().</span><span class="n">exists</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
 
         <span class="k">const</span> <span class="k">auto</span> <span class="n">shader_location</span> <span class="o">=</span> <span class="n">extract_string</span><span class="p">(</span><span class="s">&quot;base&quot;</span><span class="p">,</span> <span class="s">&quot;shader&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">);</span>
 
         <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
-        <span class="n">id</span> <span class="o">=</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">create_material</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="n">shader_location</span><span class="p">)).</span><span class="n">id</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">materialname</span> <span class="o">=</span> <span class="n">file</span><span class="p">.</span><span class="n">get_filename</span><span class="p">().</span><span class="n">decay</span><span class="p">();</span>
+        <span class="n">materialname</span> <span class="o">=</span> <span class="n">materialname</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">materialname</span><span class="p">.</span><span class="n">find_last_of</span><span class="p">(</span><span class="sc">&#39;.&#39;</span><span class="p">));</span>
+        <span class="n">id</span> <span class="o">=</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">create_material</span><span class="p">(</span><span class="n">materialname</span><span class="p">,</span> <span class="n">fs</span><span class="o">::</span><span class="n">view</span><span class="p">(</span><span class="n">shader_location</span><span class="p">)).</span><span class="n">id</span><span class="p">;</span>
         <span class="n">apply_material_conf</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">,</span> <span class="s">&quot;custom&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">);</span>
     <span class="p">}</span>
 
 
+    <span class="kr">inline</span> <span class="kt">bool</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">getLoadOrSaveBit</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readonly_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">m_canLoadOrSave</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="kt">void</span> <span class="n">material_handle</span><span class="o">::</span><span class="n">setLoadOrSaveBit</span><span class="p">(</span><span class="kt">bool</span> <span class="n">canBeSavedOrLoaded</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materialLock</span><span class="p">);</span>
+        <span class="n">MaterialCache</span><span class="o">::</span><span class="n">m_materials</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">m_canLoadOrSave</span> <span class="o">=</span> <span class="n">canBeSavedOrLoaded</span><span class="p">;</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 
 

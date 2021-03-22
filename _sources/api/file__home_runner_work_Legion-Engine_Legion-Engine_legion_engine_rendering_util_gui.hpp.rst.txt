@@ -48,5 +48,7 @@ Namespaces
 ----------
 
 
+- :ref:`namespace_imgui`
+
 - :ref:`namespace_imgui__base`
 

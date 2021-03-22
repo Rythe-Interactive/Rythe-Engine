@@ -89,6 +89,61 @@
 <span id="_CPPv3N6legion9rendering11RenderStage11createQueryERK17hashed_sparse_setI7id_typeE"></span><span id="_CPPv2N6legion9rendering11RenderStage11createQueryERK17hashed_sparse_setI7id_typeE"></span><span id="legion::rendering::RenderStage::createQuery__hashed_sparse_set:id_type:CR"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1ad4a7adc8f2b2af278e70c799016a3ea6"></span><em class="property">inline</em> ecs::EntityQuery <code class="sig-name descname">createQuery</code><span class="sig-paren">(</span><em class="property">const</em> hashed_sparse_set&lt;id_type&gt; &amp;<em>componentTypes</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11RenderStage11createQueryERK17hashed_sparse_setI7id_typeE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
+<dl class="cpp function">
+<dt id="_CPPv4I0DpEN6legion9rendering11RenderStage10raiseEventEvDp4Args">
+<span id="_CPPv3I0DpEN6legion9rendering11RenderStage10raiseEventEDp4Args"></span><span id="_CPPv2I0DpEN6legion9rendering11RenderStage10raiseEventEDp4Args"></span>template&lt;typename <code class="sig-name descname">event_type</code>, typename ...<code class="sig-name descname">Args</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1a48a0b10bcb1abe0d0056646a73c1b5f5"></span><em class="property">inline</em> void <code class="sig-name descname">raiseEvent</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpEN6legion9rendering11RenderStage10raiseEventEvDp4Args" title="legion::rendering::RenderStage::raiseEvent::Args">Args</a>... <em>arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN6legion9rendering11RenderStage10raiseEventEvDp4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11RenderStage10raiseEventERRNSt10unique_ptrIN6events10event_baseEEE">
+<span id="_CPPv3N6legion9rendering11RenderStage10raiseEventERRNSt10unique_ptrIN6events10event_baseEEE"></span><span id="_CPPv2N6legion9rendering11RenderStage10raiseEventERRNSt10unique_ptrIN6events10event_baseEEE"></span><span id="legion::rendering::RenderStage::raiseEvent__std::unique_ptr:events::event_base:RR"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1aec4a01bf41b3e356ee0c2e1cc89ad95e"></span><em class="property">inline</em> void <code class="sig-name descname">raiseEvent</code><span class="sig-paren">(</span>std::unique_ptr&lt;events::event_base&gt; &amp;&amp;<em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11RenderStage10raiseEventERRNSt10unique_ptrIN6events10event_baseEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering11RenderStage16raiseEventUnsafeERRNSt10unique_ptrIN6events10event_baseEEE7id_type">
+<span id="_CPPv3N6legion9rendering11RenderStage16raiseEventUnsafeERRNSt10unique_ptrIN6events10event_baseEEE7id_type"></span><span id="_CPPv2N6legion9rendering11RenderStage16raiseEventUnsafeERRNSt10unique_ptrIN6events10event_baseEEE7id_type"></span><span id="legion::rendering::RenderStage::raiseEventUnsafe__std::unique_ptr:events::event_base:RR.id_type"></span><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1a3c83ecf0588a149710dcb8cfb972c0da"></span><em class="property">inline</em> void <code class="sig-name descname">raiseEventUnsafe</code><span class="sig-paren">(</span>std::unique_ptr&lt;events::event_base&gt; &amp;&amp;<em>value</em>, id_type <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion9rendering11RenderStage16raiseEventUnsafeERRNSt10unique_ptrIN6events10event_baseEEE7id_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0ENK6legion9rendering11RenderStage10checkEventEbv">
+<span id="_CPPv3I0ENK6legion9rendering11RenderStage10checkEventEv"></span><span id="_CPPv2I0ENK6legion9rendering11RenderStage10checkEventEv"></span>template&lt;typename <code class="sig-name descname">event_type</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1a2c86dcf9e30772b8eb44e086b27dc556"></span><em class="property">inline</em> bool <code class="sig-name descname">checkEvent</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK6legion9rendering11RenderStage10checkEventEbv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0ENK6legion9rendering11RenderStage13getEventCountE9size_typev">
+<span id="_CPPv3I0ENK6legion9rendering11RenderStage13getEventCountEv"></span><span id="_CPPv2I0ENK6legion9rendering11RenderStage13getEventCountEv"></span>template&lt;typename <code class="sig-name descname">event_type</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1a65cc3ca33a8a7cda2ca743c6c77fa6b0"></span><em class="property">inline</em> size_type <code class="sig-name descname">getEventCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK6legion9rendering11RenderStage13getEventCountE9size_typev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0ENK6legion9rendering11RenderStage8getEventERK10event_type10index_type">
+<span id="_CPPv3I0ENK6legion9rendering11RenderStage8getEventE10index_type"></span><span id="_CPPv2I0ENK6legion9rendering11RenderStage8getEventE10index_type"></span>template&lt;typename <code class="sig-name descname">event_type</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1a83901e8547417d48127ca10cf0f10d19"></span><em class="property">inline</em> <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0ENK6legion9rendering11RenderStage8getEventERK10event_type10index_type" title="legion::rendering::RenderStage::getEvent::event_type">event_type</a> &amp;<code class="sig-name descname">getEvent</code><span class="sig-paren">(</span>index_type <em>index</em> = 0<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK6legion9rendering11RenderStage8getEventERK10event_type10index_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0ENK6legion9rendering11RenderStage12getLastEventERK10event_typev">
+<span id="_CPPv3I0ENK6legion9rendering11RenderStage12getLastEventEv"></span><span id="_CPPv2I0ENK6legion9rendering11RenderStage12getLastEventEv"></span>template&lt;typename <code class="sig-name descname">event_type</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1abe73fd7541aa31c868bd0387034267ee"></span><em class="property">inline</em> <em class="property">const</em> <a class="reference internal" href="#_CPPv4I0ENK6legion9rendering11RenderStage12getLastEventERK10event_typev" title="legion::rendering::RenderStage::getLastEvent::event_type">event_type</a> &amp;<code class="sig-name descname">getLastEvent</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4I0ENK6legion9rendering11RenderStage12getLastEventERK10event_typev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering11RenderStage10clearEventEv10index_type">
+<span id="_CPPv3I0EN6legion9rendering11RenderStage10clearEventE10index_type"></span><span id="_CPPv2I0EN6legion9rendering11RenderStage10clearEventE10index_type"></span>template&lt;typename <code class="sig-name descname">event_type</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1a68c4a9c864fe8fe4669d2f3c6498afea"></span><em class="property">inline</em> void <code class="sig-name descname">clearEvent</code><span class="sig-paren">(</span>index_type <em>index</em> = 0<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering11RenderStage10clearEventEv10index_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering11RenderStage14clearLastEventEvv">
+<span id="_CPPv3I0EN6legion9rendering11RenderStage14clearLastEventEv"></span><span id="_CPPv2I0EN6legion9rendering11RenderStage14clearLastEventEv"></span>template&lt;typename <code class="sig-name descname">event_type</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1a67d179c9ca22f2c45b0773b3a140a948"></span><em class="property">inline</em> void <code class="sig-name descname">clearLastEvent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering11RenderStage14clearLastEventEvv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt>
+<span class="target" id="classlegion_1_1rendering_1_1_render_stage_1a896e61699a5c817aecadc410ac42faa5"></span><code class="sig-name descname">template&lt;typename event_type, void(SelfType::*)(event_type *) func_type&gt; inline void bindToEvent ()</code></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering11RenderStage11bindToEventEv8delegateIFvP10event_typeEE">
+<span id="_CPPv3I0EN6legion9rendering11RenderStage11bindToEventE8delegateIFvP10event_typeEE"></span><span id="_CPPv2I0EN6legion9rendering11RenderStage11bindToEventE8delegateIFvP10event_typeEE"></span>template&lt;typename <code class="sig-name descname">event_type</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_render_stage_1ac3112150aa3bf6350dfaa50bb455d2db"></span><em class="property">inline</em> void <code class="sig-name descname">bindToEvent</code><span class="sig-paren">(</span>delegate&lt;void<span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN6legion9rendering11RenderStage11bindToEventEv8delegateIFvP10event_typeEE" title="legion::rendering::RenderStage::bindToEvent::event_type">event_type</a>*<span class="sig-paren">)</span>&gt; <em>callback</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering11RenderStage11bindToEventEv8delegateIFvP10event_typeEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
 </div>
 </dd></dl>
 

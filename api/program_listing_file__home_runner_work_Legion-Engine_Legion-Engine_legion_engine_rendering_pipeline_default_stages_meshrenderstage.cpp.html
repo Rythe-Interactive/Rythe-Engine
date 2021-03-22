@@ -170,18 +170,21 @@
 
             <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="p">[</span><span class="n">modelHandle</span><span class="p">,</span> <span class="n">instances</span><span class="p">]</span> <span class="o">:</span> <span class="n">instancesPerMaterial</span><span class="p">)</span>
             <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">modelHandle</span><span class="p">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">invalid_id</span><span class="p">)</span>
+                    <span class="k">return</span><span class="p">;</span>
+
                 <span class="n">ModelCache</span><span class="o">::</span><span class="n">create_model</span><span class="p">(</span><span class="n">modelHandle</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
                 <span class="k">auto</span> <span class="n">modelName</span> <span class="o">=</span> <span class="n">ModelCache</span><span class="o">::</span><span class="n">get_model_name</span><span class="p">(</span><span class="n">modelHandle</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
                 <span class="n">OPTICK_EVENT</span><span class="p">(</span><span class="s">&quot;Rendering instances&quot;</span><span class="p">);</span>
                 <span class="n">OPTICK_TAG</span><span class="p">(</span><span class="s">&quot;Model&quot;</span><span class="p">,</span> <span class="n">modelName</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
 
                 <span class="k">const</span> <span class="n">model</span><span class="o">&amp;</span> <span class="n">mesh</span> <span class="o">=</span> <span class="n">modelHandle</span><span class="p">.</span><span class="n">get_model</span><span class="p">();</span>
+
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">mesh</span><span class="p">.</span><span class="n">buffered</span><span class="p">)</span>
                     <span class="n">modelHandle</span><span class="p">.</span><span class="n">buffer_data</span><span class="p">(</span><span class="o">*</span><span class="n">modelMatrixBuffer</span><span class="p">);</span>
 
                 <span class="k">if</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">submeshes</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
                 <span class="p">{</span>
-
                     <span class="n">log</span><span class="o">::</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Empty mesh found. Model name: {},  Model ID {}&quot;</span><span class="p">,</span> <span class="n">modelName</span><span class="p">,</span> <span class="n">modelHandle</span><span class="p">.</span><span class="n">get_mesh</span><span class="p">().</span><span class="n">id</span><span class="p">);</span>
                     <span class="k">continue</span><span class="p">;</span>
                 <span class="p">}</span>

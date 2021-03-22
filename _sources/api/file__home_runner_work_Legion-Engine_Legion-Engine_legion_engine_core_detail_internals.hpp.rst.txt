@@ -10,7 +10,8 @@ File internals.hpp
 
 
 collection of common utilities that don't fall into a specific category 
- 
+
+
 
 .. contents:: Contents
    :local:

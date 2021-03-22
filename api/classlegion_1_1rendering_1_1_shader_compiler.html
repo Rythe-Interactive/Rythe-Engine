@@ -66,7 +66,7 @@
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="cpp var">
 <dt>
-<span class="target" id="classlegion_1_1rendering_1_1_shader_compiler_1a5fc021026d1cd440cc716e639997c09f"></span><code class="sig-name descname">template&lt;typename lambda_type delegate&lt; void(const std::string &amp;, log::severity)&gt;&gt;  int  = 0)&gt;        static void setErrorCallback(const lambda_type&amp; lambda)        {            m_callback = delegate&lt;void(const std::string&amp;, log::severity)&gt;::template create&lt;lambda_type&gt;(lambda);        }        template &lt;void(*func_type)(const std::string&amp;, log::severity)&gt;        static void setErrorCallback()        {            m_callback = delegate&lt;void(const std::string&amp;, log::severity)&gt;::template create&lt;func_type&gt;();        }        static void cleanCache()</code></dt>
+<span class="target" id="classlegion_1_1rendering_1_1_shader_compiler_1a5fc021026d1cd440cc716e639997c09f"></span><code class="sig-name descname">template&lt;typename lambda_type&gt;  int  = 0)&gt;        static void setErrorCallback(const lambda_type&amp; lambda)        {            m_callback = delegate&lt;void(const std::string&amp;, log::severity)&gt;::template create&lt;lambda_type&gt;(lambda);        }        template &lt;void(*func_type)(const std::string&amp;, log::severity)&gt;        static void setErrorCallback()        {            m_callback = delegate&lt;void(const std::string&amp;, log::severity)&gt;::template create&lt;func_type&gt;();        }        static void cleanCache()</code></dt>
 <dd></dd></dl>
 
 </div>

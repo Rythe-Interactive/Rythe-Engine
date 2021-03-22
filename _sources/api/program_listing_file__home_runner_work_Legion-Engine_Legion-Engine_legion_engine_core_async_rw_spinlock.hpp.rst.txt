@@ -235,8 +235,10 @@ Program Listing for File rw_spinlock.hpp
            readwrite_multiguard& operator=(readwrite_multiguard&&) = delete;
        };
    
+   #if !defined(DOXY_EXCLUDE)
        template<typename... types>
        readwrite_multiguard(types...)->readwrite_multiguard<sizeof...(types)>;
+   #endif
    
        template<size_type S>
        class mixed_multiguard final
@@ -307,7 +309,9 @@ Program Listing for File rw_spinlock.hpp
            mixed_multiguard& operator=(const mixed_multiguard&) = delete;
        };
    
+   #if !defined(DOXY_EXCLUDE)
        // CTAD so you don't need to input the size of the guard parameters.
        template<typename... types>
        mixed_multiguard(types...)->mixed_multiguard<sizeof...(types)>;
+   #endif
    }

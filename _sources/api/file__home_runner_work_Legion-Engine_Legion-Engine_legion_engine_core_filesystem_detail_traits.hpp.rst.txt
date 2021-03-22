@@ -42,6 +42,10 @@ Namespaces
 ----------
 
 
+- :ref:`namespace_legion`
+
+- :ref:`namespace_legion__core`
+
 - :ref:`namespace_legion__core__filesystem`
 
 
@@ -73,7 +77,7 @@ Variables
 ---------
 
 
-- :ref:`exhale_variable_traits_8hpp_1a18f2ca0f1402d31f6a2649585dd28d94`
+- :ref:`exhale_variable_traits_8hpp_1a9540906c662f0aae86ec248cdf4de56e`
 
-- :ref:`exhale_variable_traits_8hpp_1a6cdaecf32f3edbcc05d9137af7003e7d`
+- :ref:`exhale_variable_traits_8hpp_1abb0ff896ebed51a547d1eab0eafb591c`
 

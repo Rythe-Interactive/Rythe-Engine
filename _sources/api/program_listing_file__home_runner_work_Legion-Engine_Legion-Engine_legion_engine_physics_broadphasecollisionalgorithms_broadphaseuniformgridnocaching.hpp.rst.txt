@@ -1,0 +1,41 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphaseuniformgridnocaching.hpp:
+
+Program Listing for File broadphaseuniformgridnocaching.hpp
+===========================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphaseuniformgridnocaching.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/physics/broadphasecollisionalgorithms/broadphaseuniformgridnocaching.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <physics/broadphasecollisionalgorithms/broadphasecollisionalgorithm.hpp>
+   #include <physics/physics_statics.hpp>
+   
+   namespace legion::physics
+   {
+       class BroadphaseUniformGridNoCaching : public BroadPhaseCollisionAlgorithm
+       {
+       public:
+           BroadphaseUniformGridNoCaching(math::ivec3 cellSize) : m_cellSize(cellSize)
+           {
+           }
+   
+           const std::vector<std::vector<physics_manifold_precursor>>& collectPairs(
+               std::vector<physics_manifold_precursor>&& manifoldPrecursors) override;
+   
+           void setCellSize(math::ivec3 cellSize)
+           {
+               m_cellSize = cellSize;
+           }
+   
+       private:
+           math::ivec3 m_cellSize;
+   
+           math::ivec3 calculateCellIndex(const math::vec3 point);
+   
+           std::vector<std::vector<physics_manifold_precursor>> manifoldPrecursorGrouping;
+       };
+   }

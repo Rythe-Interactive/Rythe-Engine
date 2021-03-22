@@ -29,5 +29,6 @@ Files
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_kernel.hpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.cpp`
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_program.hpp`
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_README.MD`
 
 

@@ -1,0 +1,28 @@
+
+.. _program_listing_file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_serilization_rendering_extra.hpp:
+
+Program Listing for File serilization_rendering_extra.hpp
+=========================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_serilization_rendering_extra.hpp>` (``/home/runner/work/Legion-Engine/Legion-Engine/legion/engine/rendering/systems/serilization_rendering_extra.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #pragma once
+   #include <core/engine/system.hpp>
+   #include <core/scenemanagement/scenemanager.hpp>
+   #include <rendering/util/additional_material_loader.hpp>
+   
+   namespace legion::rendering
+   {
+       class SerializationRenderingExtra : public core::System<SerializationRenderingExtra>
+       {
+           void setup() override
+           {
+               using scenemanagement::SceneManager;
+               SceneManager::add_loader<use_embedded_material>(SceneManager::additional_loader_fn::create<&EmbeddedLoader::loader>()); 
+           }  
+       };
+   }

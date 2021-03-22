@@ -1,0 +1,13 @@
+.. _exhale_function_imgui_8cpp_1a64bae9e3d35b6624c9114caf19773076:
+
+Function SetupDrawData
+======================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imgui.cpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: SetupDrawData(ImVector<ImDrawList *> *, ImDrawData *)

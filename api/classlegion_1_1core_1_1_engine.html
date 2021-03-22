@@ -75,6 +75,51 @@
 <span id="_CPPv3N6legion4core6EngineD0Ev"></span><span id="_CPPv2N6legion4core6EngineD0Ev"></span><span id="legion::core::Engine::~Engine"></span><span class="target" id="classlegion_1_1core_1_1_engine_1a8b37e5578f22edc85f0f5d18cab8e40c"></span><em class="property">inline</em> <code class="sig-name descname">~Engine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6EngineD0Ev" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
+<dl class="cpp function">
+<dt id="_CPPv4I0DpEN6legion4core6Engine12reportModuleEvDpRR4Args">
+<span id="_CPPv3I0DpEN6legion4core6Engine12reportModuleEDpRR4Args"></span><span id="_CPPv2I0DpEN6legion4core6Engine12reportModuleEDpRR4Args"></span>template&lt;class <code class="sig-name descname">ModuleType</code>, class ...<code class="sig-name descname">Args</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1_engine_1a9b9215e75f3e16cf2064b6fa4921afeb"></span><em class="property">inline</em> void <code class="sig-name descname">reportModule</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpEN6legion4core6Engine12reportModuleEvDpRR4Args" title="legion::core::Engine::reportModule::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN6legion4core6Engine12reportModuleEvDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>reports an engine module </p>
+<p><dl class="simple">
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ModuleType</span></code>: the module you want to report </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">s</span></code>: a signal that you want to pass arguments to the constructor of the <a class="reference internal" href="classlegion_1_1core_1_1_module.html#classlegion_1_1core_1_1_module"><span class="std std-ref">Module</span></a> </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args</span></code>: the arguments you want to pass <a class="reference internal" href="classlegion_1_1core_1_1_module.html#classlegion_1_1core_1_1_module"><span class="std std-ref">legion::core::Module</span></a> </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core6Engine4initEv">
+<span id="_CPPv3N6legion4core6Engine4initEv"></span><span id="_CPPv2N6legion4core6Engine4initEv"></span><span id="legion::core::Engine::init"></span><span class="target" id="classlegion_1_1core_1_1_engine_1ae6a8513886439b88c647f2fbbd83bab9"></span><em class="property">inline</em> void <code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6Engine4initEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calls init on all reported modules and thus engine internals. </p>
+<p><dl class="simple">
+<dt><strong>Note</strong></dt><dd><p>Needs to be called manually if LEGION_ENTRY was not used. </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">argc</span></code>: argc of main </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">argv</span></code>: argv of main <a class="reference internal" href="classlegion_1_1core_1_1_module.html#classlegion_1_1core_1_1_module"><span class="std std-ref">legion::core::Module</span></a> </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core6Engine3runEv">
+<span id="_CPPv3N6legion4core6Engine3runEv"></span><span id="_CPPv2N6legion4core6Engine3runEv"></span><span id="legion::core::Engine::run"></span><span class="target" id="classlegion_1_1core_1_1_engine_1abd80545646cb0d25020353d442ca1752"></span><em class="property">inline</em> void <code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6Engine3runEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Runs engine loop. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion4core6Engine10getCliArgsEv">
+<span id="_CPPv3N6legion4core6Engine10getCliArgsEv"></span><span id="_CPPv2N6legion4core6Engine10getCliArgsEv"></span><span id="legion::core::Engine::getCliArgs"></span><span class="target" id="classlegion_1_1core_1_1_engine_1a0670214359f27f44ac61f9c73c6164b2"></span><em class="property">inline</em> std::vector&lt;char*&gt; &amp;<code class="sig-name descname">getCliArgs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6Engine10getCliArgsEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Static Attributes</p>

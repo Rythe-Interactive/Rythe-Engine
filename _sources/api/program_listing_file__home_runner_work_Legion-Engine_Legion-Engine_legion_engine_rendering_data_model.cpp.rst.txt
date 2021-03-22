@@ -141,7 +141,7 @@ Program Listing for File model.cpp
            model model{};
            std::string meshName;
    
-           if (settings.contextFolder.get_virtual_path() == "")
+           if (settings.contextFolder.get_virtual_path().empty())
            {
                settings.contextFolder = file.parent();
            }
@@ -207,7 +207,7 @@ Program Listing for File model.cpp
                settings.materials = &matList;
            }
    
-           if (settings.contextFolder.get_virtual_path() == "")
+           if (settings.contextFolder.get_virtual_path().empty())
            {
                settings.contextFolder = file.parent();
            }
@@ -219,13 +219,13 @@ Program Listing for File model.cpp
                return invalid_model_handle;
            }
    
-           if (loadedMaterials && loadedMaterials->size() > 0)
+           if (loadedMaterials && !loadedMaterials->empty())
            {
                for (auto& mat : *loadedMaterials)
                {
                    static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
    
-                   auto material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
+                   material_handle material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
    
                    if (mat.doubleSided)
                        material.set_variant("double_sided");
@@ -316,18 +316,21 @@ Program Listing for File model.cpp
                        material.set_param("useHeight", false);
                    }
    
+                   material.setLoadOrSaveBit(false);
                    materials.push_back(material);
                    log::debug("Loaded embedded material {}/{}", name, mat.name);
                }
            }
    
-               // Copy the sub-mesh data.
+           // Copy the sub-mesh data.
+           {
                auto [lock, data] = handle.get();
                async::readonly_guard guard(lock);
                meshName = data.filePath;
    
-           for (auto& submeshData : data.submeshes)
-               model.submeshes.push_back(submeshData);
+               for (auto& submeshData : data.submeshes)
+                   model.submeshes.push_back(submeshData);
+           }
    
            // The model still needs to be buffered on the rendering thread.
            model.buffered = false;
@@ -604,6 +607,24 @@ Program Listing for File model.cpp
        mesh_handle ModelCache::get_mesh(id_type id)
        {
            return MeshCache::get_handle(id);
+       }
+   
+       void ModelCache::destroy_model(const std::string& name)
+       {
+           bool erased = false;
+           id_type id = nameHash(name);
+           {
+               async::readwrite_guard guard(m_modelLock);
+   
+               if (!m_models.contains(id))
+                   return;
+   
+               MeshCache::destroy_mesh(id);
+               erased = m_models.erase(id);
+           }
+   
+           if (erased)
+               log::debug("Destroyed model {}", name);
        }
    
        mesh_handle ModelCache::get_mesh(const std::string& name)

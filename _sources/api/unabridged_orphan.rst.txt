@@ -390,6 +390,11 @@ Files
 .. toctree::
    :maxdepth: 5
 
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_util_additional_material_loader.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
    file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_application_application.hpp.rst
 
 .. toctree::
@@ -546,6 +551,16 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphaseuniformgrid.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphaseuniformgridnocaching.cpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphaseuniformgridnocaching.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -1700,6 +1715,11 @@ Files
 .. toctree::
    :maxdepth: 5
 
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_compute_README.MD.rst
+
+.. toctree::
+   :maxdepth: 5
+
    file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_components_renderable.hpp.rst
 
 .. toctree::
@@ -1836,6 +1856,11 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationUtil.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_serilization_rendering_extra.hpp.rst
 
 .. toctree::
    :maxdepth: 5
@@ -2011,6 +2036,11 @@ Files
    :maxdepth: 5
 
    file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_common_unit_conversion.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_use_embedded_material.hpp.rst
 
 .. toctree::
    :maxdepth: 5

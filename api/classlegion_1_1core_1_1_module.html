@@ -76,18 +76,18 @@
 <dl class="cpp class">
 <dt id="_CPPv4N6legion4core6ModuleE">
 <span id="_CPPv3N6legion4core6ModuleE"></span><span id="_CPPv2N6legion4core6ModuleE"></span><span id="legion::core::Module"></span><span class="target" id="classlegion_1_1core_1_1_module"></span><em class="property">class </em><code class="sig-prename descclassname">legion::core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">Module</code><a class="headerlink" href="#_CPPv4N6legion4core6ModuleE" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>interface for engine-modules, must be implemented legion::core::Engine::reportModule&lt;T,…&gt;() </p>
+<dd><p>interface for engine-modules, must be implemented <a class="reference internal" href="classlegion_1_1core_1_1_engine.html#classlegion_1_1core_1_1_engine_1a9b9215e75f3e16cf2064b6fa4921afeb"><span class="std std-ref">legion::core::Engine::reportModule&lt;T,…&gt;()</span></a> </p>
 <p>Subclassed by <a class="reference internal" href="classlegion_1_1application_1_1_application_module.html#classlegion_1_1application_1_1_application_module"><span class="std std-ref">legion::application::ApplicationModule</span></a>, <a class="reference internal" href="classlegion_1_1audio_1_1_audio_module.html#classlegion_1_1audio_1_1_audio_module"><span class="std std-ref">legion::audio::AudioModule</span></a>, <a class="reference internal" href="classlegion_1_1core_1_1_core_module.html#classlegion_1_1core_1_1_core_module"><span class="std std-ref">legion::core::CoreModule</span></a>, <a class="reference internal" href="classlegion_1_1editor_1_1detail_1_1_editor_engine_module.html#classlegion_1_1editor_1_1detail_1_1_editor_engine_module"><span class="std std-ref">legion::editor::detail::EditorEngineModule</span></a>, <a class="reference internal" href="classlegion_1_1physics_1_1_physics_module.html#classlegion_1_1physics_1_1_physics_module"><span class="std std-ref">legion::physics::PhysicsModule</span></a>, <a class="reference internal" href="classlegion_1_1rendering_1_1_rendering_module.html#classlegion_1_1rendering_1_1_rendering_module"><span class="std std-ref">legion::rendering::RenderingModule</span></a></p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Protected Functions</p>
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4I_9size_typeEN6legion4core6Module15addProcessChainEvRA5charc_Kc">
-<span id="_CPPv3I_9size_typeEN6legion4core6Module15addProcessChainERA5charc_Kc"></span><span id="_CPPv2I_9size_typeEN6legion4core6Module15addProcessChainERAcharc_Kc"></span>template&lt;<a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">charc</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1_module_1abfec8ada66896ac313930bd12d99c49a"></span><em class="property">inline</em> void <code class="sig-name descname">addProcessChain</code><span class="sig-paren">(</span><em class="property">const</em> char (&amp;<em>name</em>)[charc]<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_9size_typeEN6legion4core6Module15addProcessChainEvRA5charc_Kc" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N6legion4core6Module5setupEv">
+<span id="_CPPv3N6legion4core6Module5setupEv"></span><span id="_CPPv2N6legion4core6Module5setupEv"></span><span id="legion::core::Module::setup"></span><span class="target" id="classlegion_1_1core_1_1_module_1a84bc467efecc9ae3a0d85eac6c4179fe"></span><em class="property">virtual</em> void <code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = 0<a class="headerlink" href="#_CPPv4N6legion4core6Module5setupEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt>
-<span class="target" id="classlegion_1_1core_1_1_module_1ae0bfdfb72a447372c4536bc56622f33d"></span><code class="sig-name descname">template&lt;typename SystemType, typename... Args System&lt; SystemType &gt;&gt; virtual priority_type priority ()</code></dt>
+<span class="target" id="classlegion_1_1core_1_1_module_1a050dc5b6068b4c064dba6dff01881dca"></span><code class="sig-name descname">virtual priority_type priority () LEGION_IMPURE_RETURN(default_priority)</code></dt>
 <dd><p>determines the execution priority of this module <a class="reference internal" href="define_platform_8hpp_1a9e1b74a95a9ab8cf840c8616de875e61.html#platform_8hpp_1a9e1b74a95a9ab8cf840c8616de875e61"><span class="std std-ref">LEGION_IMPURE_RETURN</span></a> </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>priority_type signed int8 higher is higher priority and get called first </p>
@@ -103,6 +103,24 @@
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core6ModuleD0Ev">
 <span id="_CPPv3N6legion4core6ModuleD0Ev"></span><span id="_CPPv2N6legion4core6ModuleD0Ev"></span><span id="legion::core::Module::~Module"></span><span class="target" id="classlegion_1_1core_1_1_module_1a43919119f64ae3b2418d356f9eb5b694"></span><em class="property">virtual</em> <code class="sig-name descname">~Module</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = default<a class="headerlink" href="#_CPPv4N6legion4core6ModuleD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Protected Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4I_9size_typeEN6legion4core6Module15addProcessChainEvRA5charc_Kc">
+<span id="_CPPv3I_9size_typeEN6legion4core6Module15addProcessChainERA5charc_Kc"></span><span id="_CPPv2I_9size_typeEN6legion4core6Module15addProcessChainERAcharc_Kc"></span>template&lt;<a class="reference internal" href="typedef_primitives_8hpp_1a99e20fddc046184189e5dd441cd81bdd.html#_CPPv4N6legion4core9size_typeE" title="legion::core::size_type">size_type</a> <code class="sig-name descname">charc</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1_module_1abfec8ada66896ac313930bd12d99c49a"></span><em class="property">inline</em> void <code class="sig-name descname">addProcessChain</code><span class="sig-paren">(</span><em class="property">const</em> char (&amp;<em>name</em>)[charc]<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_9size_typeEN6legion4core6Module15addProcessChainEvRA5charc_Kc" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0DpEN6legion4core6Module12reportSystemEvDpRR4Args">
+<span id="_CPPv3I0DpEN6legion4core6Module12reportSystemEDpRR4Args"></span><span id="_CPPv2I0DpEN6legion4core6Module12reportSystemEDpRR4Args"></span>template&lt;typename <code class="sig-name descname">SystemType</code>, typename ...<code class="sig-name descname">Args</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1_module_1ad763a3de0082d8bcf68ec2cb92a6ea20"></span><em class="property">inline</em> void <code class="sig-name descname">reportSystem</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0DpEN6legion4core6Module12reportSystemEvDpRR4Args" title="legion::core::Module::reportSystem::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN6legion4core6Module12reportSystemEvDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion4core6Module19reportComponentTypeEvv">
+<span id="_CPPv3I0EN6legion4core6Module19reportComponentTypeEv"></span><span id="_CPPv2I0EN6legion4core6Module19reportComponentTypeEv"></span>template&lt;typename <code class="sig-name descname">component_type</code>&gt;<br /><span class="target" id="classlegion_1_1core_1_1_module_1a459ec207c2985624fd7d325098566e58"></span><em class="property">inline</em> void <code class="sig-name descname">reportComponentType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion4core6Module19reportComponentTypeEvv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>

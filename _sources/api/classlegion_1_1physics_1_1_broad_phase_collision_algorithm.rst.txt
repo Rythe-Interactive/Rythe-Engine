@@ -14,6 +14,7 @@ Derived Types
 
 - ``public legion::physics::BroadphaseBruteforce`` (:ref:`exhale_class_classlegion_1_1physics_1_1_broadphase_bruteforce`)
 - ``public legion::physics::BroadphaseUniformGrid`` (:ref:`exhale_class_classlegion_1_1physics_1_1_broadphase_uniform_grid`)
+- ``public legion::physics::BroadphaseUniformGridNoCaching`` (:ref:`exhale_class_classlegion_1_1physics_1_1_broadphase_uniform_grid_no_caching`)
 
 
 Class Documentation

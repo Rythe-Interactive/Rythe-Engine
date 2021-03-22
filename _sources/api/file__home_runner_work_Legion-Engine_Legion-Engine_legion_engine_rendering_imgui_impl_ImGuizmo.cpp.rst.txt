@@ -95,9 +95,9 @@ Functions
 
 - :ref:`exhale_function__im_guizmo_8cpp_1ab234527a26d2749e1e3286df3d8fb584`
 
-- :ref:`exhale_function__im_guizmo_8cpp_1a5dba4a5602b5bc9eee7af56ac5289110`
-
 - :ref:`exhale_function__im_guizmo_8cpp_1a7f02eb7f42865f8a7e6ff710f14cb838`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a5dba4a5602b5bc9eee7af56ac5289110`
 
 - :ref:`exhale_function__im_guizmo_8cpp_1a09dd6209cabcd9c0f558931b7f442ae3`
 
@@ -253,5 +253,5 @@ Variables
 
 - :ref:`exhale_variable__im_guizmo_8cpp_1ae3a0059c2841cb0bb1483306394470db`
 
-- :ref:`exhale_variable__im_guizmo_8cpp_1a946a6ea4a2021bbeac407af8d852a3cb`
+- :ref:`exhale_variable__im_guizmo_8cpp_1a6382548cf0190c82af16fe746670fae2`
 

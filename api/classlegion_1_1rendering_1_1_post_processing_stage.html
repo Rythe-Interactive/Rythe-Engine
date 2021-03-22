@@ -75,13 +75,31 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt>
-<span class="target" id="classlegion_1_1rendering_1_1_post_processing_stage_1ad7ed8d93e4447988cc7dacf1dc2d7ee7"></span><code class="sig-name descname">template&lt;typename effect_type, typename ...Args PostProcessingEffect&lt; effect_type &gt;&gt; virtual void render (app::window &amp;context, camera &amp;cam, const camera::camera_input &amp;camInput, time::span deltaTime) override</code></dt>
+<dt id="_CPPv4N6legion9rendering19PostProcessingStage5setupERN3app6windowE">
+<span id="_CPPv3N6legion9rendering19PostProcessingStage5setupERN3app6windowE"></span><span id="_CPPv2N6legion9rendering19PostProcessingStage5setupERN3app6windowE"></span><span id="legion::rendering::PostProcessingStage::setup__app::windowR"></span><span class="target" id="classlegion_1_1rendering_1_1_post_processing_stage_1abd9bb1e7d3520e426baf9a99971d26e0"></span><em class="property">virtual</em> void <code class="sig-name descname">setup</code><span class="sig-paren">(</span>app::window &amp;<em>context</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion9rendering19PostProcessingStage5setupERN3app6windowE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4N6legion9rendering19PostProcessingStage6renderERN3app6windowER6cameraRKN6camera12camera_inputEN4time4spanE">
+<span id="_CPPv3N6legion9rendering19PostProcessingStage6renderERN3app6windowER6cameraRKN6camera12camera_inputEN4time4spanE"></span><span id="_CPPv2N6legion9rendering19PostProcessingStage6renderERN3app6windowER6cameraRKN6camera12camera_inputEN4time4spanE"></span><span id="legion::rendering::PostProcessingStage::render__app::windowR.cameraR.camera::camera_inputCR.time::span"></span><span class="target" id="classlegion_1_1rendering_1_1_post_processing_stage_1adbe76a369cce45b95b887e4f136f8ff2"></span><em class="property">virtual</em> void <code class="sig-name descname">render</code><span class="sig-paren">(</span>app::window &amp;<em>context</em>, <a class="reference internal" href="class_structlegion_1_1rendering_1_1camera.html#_CPPv4N6legion9rendering6cameraE" title="legion::rendering::camera">camera</a> &amp;<em>cam</em>, <em class="property">const</em> <a class="reference internal" href="class_structlegion_1_1rendering_1_1camera.html#_CPPv4N6legion9rendering6cameraE" title="legion::rendering::camera">camera</a>::<a class="reference internal" href="class_structlegion_1_1rendering_1_1camera.html#_CPPv4N6legion9rendering6camera12camera_inputE" title="legion::rendering::camera::camera_input">camera_input</a> &amp;<em>camInput</em>, time::span <em>deltaTime</em><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion9rendering19PostProcessingStage6renderERN3app6windowER6cameraRKN6camera12camera_inputEN4time4spanE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion9rendering19PostProcessingStage8priorityEv">
 <span id="_CPPv3N6legion9rendering19PostProcessingStage8priorityEv"></span><span id="_CPPv2N6legion9rendering19PostProcessingStage8priorityEv"></span><span id="legion::rendering::PostProcessingStage::priority"></span><span class="target" id="classlegion_1_1rendering_1_1_post_processing_stage_1a430b2782b5efec1d15271a8c9611bc9e"></span><em class="property">virtual</em> priority_type <code class="sig-name descname">priority</code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property">override</em><a class="headerlink" href="#_CPPv4N6legion9rendering19PostProcessingStage8priorityEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="cpp function">
+<dt id="_CPPv4I0DpEN6legion9rendering19PostProcessingStage9addEffectEv13priority_typeDpRR4Args">
+<span id="_CPPv3I0DpEN6legion9rendering19PostProcessingStage9addEffectE13priority_typeDpRR4Args"></span><span id="_CPPv2I0DpEN6legion9rendering19PostProcessingStage9addEffectE13priority_typeDpRR4Args"></span>template&lt;typename <code class="sig-name descname">effect_type</code>, typename ...<code class="sig-name descname">Args</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_post_processing_stage_1a6a50137656c60b6ae57b7e2216d2b4b8"></span><em class="property">static</em> <em class="property">inline</em> void <code class="sig-name descname">addEffect</code><span class="sig-paren">(</span>priority_type <em>priority</em> = default_priority, <a class="reference internal" href="#_CPPv4I0DpEN6legion9rendering19PostProcessingStage9addEffectEv13priority_typeDpRR4Args" title="legion::rendering::PostProcessingStage::addEffect::Args">Args</a>&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0DpEN6legion9rendering19PostProcessingStage9addEffectEv13priority_typeDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt id="_CPPv4I0EN6legion9rendering19PostProcessingStage12removeEffectEvv">
+<span id="_CPPv3I0EN6legion9rendering19PostProcessingStage12removeEffectEv"></span><span id="_CPPv2I0EN6legion9rendering19PostProcessingStage12removeEffectEv"></span>template&lt;typename <code class="sig-name descname">effect_type</code>&gt;<br /><span class="target" id="classlegion_1_1rendering_1_1_post_processing_stage_1a65a8806da114002b4e380f513edf8d77"></span><em class="property">static</em> <em class="property">inline</em> void <code class="sig-name descname">removeEffect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6legion9rendering19PostProcessingStage12removeEffectEvv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>

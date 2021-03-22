@@ -70,7 +70,7 @@ Functions
 ---------
 
 
-- :ref:`exhale_function_core_2compute_2buffer_8cpp_1a695235fb2d9e5438db1f87bd07d2c9f6`
+- :ref:`exhale_function_core_2compute_2buffer_8cpp_1a02bbf24f7bfd35d6f51f4ed847a512f6`
 
 - :ref:`exhale_function_core_2compute_2buffer_8hpp_1a82a0d5cd18aa1549402dceebbdbed0b7`
 

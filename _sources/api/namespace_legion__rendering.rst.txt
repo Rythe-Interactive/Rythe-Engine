@@ -26,6 +26,8 @@ Classes
 
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1camera_1_1camera__input`
 
+- :ref:`exhale_struct_structlegion_1_1rendering_1_1_embedded_loader`
+
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1light`
 
 - :ref:`exhale_struct_structlegion_1_1rendering_1_1lod`
@@ -135,6 +137,8 @@ Classes
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage`
 
 - :ref:`exhale_class_classlegion_1_1rendering_1_1_render_stage_base`
+
+- :ref:`exhale_class_classlegion_1_1rendering_1_1_serialization_rendering_extra`
 
 - :ref:`exhale_class_structlegion_1_1rendering_1_1shader`
 

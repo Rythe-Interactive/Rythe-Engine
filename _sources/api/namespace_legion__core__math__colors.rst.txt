@@ -6,7 +6,8 @@ Namespace legion::core::math::colors
 
 
 Default colors in RGBA. 
- 
+
+
 
 
 .. contents:: Contents

@@ -271,8 +271,10 @@
         <span class="n">readwrite_multiguard</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">readwrite_multiguard</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
     <span class="p">};</span>
 
+<span class="cp">#if !defined(DOXY_EXCLUDE)</span>
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">types</span><span class="o">&gt;</span>
     <span class="n">readwrite_multiguard</span><span class="p">(</span><span class="n">types</span><span class="p">...)</span><span class="o">-&gt;</span><span class="n">readwrite_multiguard</span><span class="o">&lt;</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">types</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="cp">#endif</span>
 
     <span class="k">template</span><span class="o">&lt;</span><span class="n">size_type</span> <span class="n">S</span><span class="o">&gt;</span>
     <span class="k">class</span> <span class="nc">mixed_multiguard</span> <span class="k">final</span>
@@ -343,9 +345,11 @@
         <span class="n">mixed_multiguard</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">mixed_multiguard</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
     <span class="p">};</span>
 
+<span class="cp">#if !defined(DOXY_EXCLUDE)</span>
     <span class="c1">// CTAD so you don&#39;t need to input the size of the guard parameters.</span>
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">types</span><span class="o">&gt;</span>
     <span class="n">mixed_multiguard</span><span class="p">(</span><span class="n">types</span><span class="p">...)</span><span class="o">-&gt;</span><span class="n">mixed_multiguard</span><span class="o">&lt;</span><span class="k">sizeof</span><span class="p">...(</span><span class="n">types</span><span class="p">)</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="cp">#endif</span>
 <span class="p">}</span>
 </pre></div>
 </div>

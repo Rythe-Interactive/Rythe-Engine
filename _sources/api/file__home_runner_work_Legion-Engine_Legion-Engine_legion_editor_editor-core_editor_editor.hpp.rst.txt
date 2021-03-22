@@ -48,6 +48,8 @@ Namespaces
 ----------
 
 
+- :ref:`namespace_legion`
+
 - :ref:`namespace_legion__editor`
 
 - :ref:`namespace_legion__editor__detail`

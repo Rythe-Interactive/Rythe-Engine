@@ -56,7 +56,7 @@
     <span class="k">struct</span> <span class="n">scene</span>
     <span class="p">{</span>
     <span class="k">public</span><span class="o">:</span>
-        <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
 
         <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
         <span class="kt">void</span> <span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">);</span>
@@ -65,7 +65,10 @@
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Archive</span><span class="o">&gt;</span>
     <span class="kr">inline</span> <span class="kt">void</span> <span class="n">scene</span><span class="o">::</span><span class="n">serialize</span><span class="p">(</span><span class="n">Archive</span><span class="o">&amp;</span> <span class="n">archive</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="n">archive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;NAME&quot;</span><span class="p">,</span><span class="n">SceneManager</span><span class="o">::</span><span class="n">sceneNames</span><span class="p">[</span><span class="n">id</span><span class="p">]));</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span> <span class="o">=</span> <span class="n">SceneManager</span><span class="o">::</span><span class="n">sceneNames</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+        <span class="n">archive</span><span class="p">(</span><span class="n">cereal</span><span class="o">::</span><span class="n">make_nvp</span><span class="p">(</span><span class="s">&quot;NAME&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">));</span>
+        <span class="n">id</span> <span class="o">=</span> <span class="n">nameHash</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="n">SceneManager</span><span class="o">::</span><span class="n">sceneNames</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

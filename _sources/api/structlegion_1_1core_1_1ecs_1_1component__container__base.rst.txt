@@ -12,7 +12,6 @@ Inheritance Relationships
 Derived Types
 *************
 
-- ``public legion::core::ecs::component_container< component_type >`` (:ref:`exhale_class_structlegion_1_1core_1_1ecs_1_1component__container`)
 - ``public legion::core::ecs::component_container< std::nullptr_t >`` (:ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1component__container_3_01std_1_1nullptr__t_01_4`)
 - ``public legion::core::ecs::component_container< void >`` (:ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1component__container_3_01void_01_4`)
 

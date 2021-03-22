@@ -1,0 +1,16 @@
+.. _exhale_struct_structlegion_1_1core_1_1use__embedded__material:
+
+Struct use_embedded_material
+============================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_use_embedded_material.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: legion::core::use_embedded_material
+   :members:
+   :protected-members:
+   :undoc-members:

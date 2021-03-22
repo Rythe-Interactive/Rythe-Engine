@@ -1,0 +1,25 @@
+.. _exhale_class_classlegion_1_1physics_1_1_broadphase_uniform_grid_no_caching:
+
+Class BroadphaseUniformGridNoCaching
+====================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_physics_broadphasecollisionalgorithms_broadphaseuniformgridnocaching.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public legion::physics::BroadPhaseCollisionAlgorithm`` (:ref:`exhale_class_classlegion_1_1physics_1_1_broad_phase_collision_algorithm`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: legion::physics::BroadphaseUniformGridNoCaching
+   :members:
+   :protected-members:
+   :undoc-members:

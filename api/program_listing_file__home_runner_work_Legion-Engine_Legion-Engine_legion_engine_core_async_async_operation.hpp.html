@@ -132,8 +132,10 @@
         <span class="p">}</span>
     <span class="p">};</span>
 
+<span class="cp">#if !defined(DOXY_EXCLUDE)</span>
     <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Func</span><span class="o">&gt;</span>
     <span class="n">async_operation</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">async_progress</span><span class="o">&gt;&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">Func</span><span class="o">&amp;</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">async_operation</span><span class="o">&lt;</span><span class="n">Func</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="cp">#endif</span>
 <span class="p">}</span>
 </pre></div>
 </div>

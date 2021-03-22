@@ -174,8 +174,10 @@
 <span class="c">        std::array&lt;view&amp;,S&gt; m_views;</span>
 <span class="c">    };</span>
 
+<span class="cp">#if !defined(DOXY_EXCLUDE)</span>
 <span class="c">    template&lt;class... Views&gt;</span>
 <span class="c">    combined_view(Views...) -&gt; combined_view&lt;sizeof...(Views)&gt;;</span>
+<span class="cp">#endif</span>
 
 <span class="c">    template &lt;std::size_t S&gt;</span>
 <span class="c">    view combined_view&lt;S&gt;::find(std::string_view identifier)</span>

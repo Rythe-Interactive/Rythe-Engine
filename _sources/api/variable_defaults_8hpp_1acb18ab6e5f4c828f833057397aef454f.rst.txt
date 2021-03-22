@@ -1,0 +1,13 @@
+.. _exhale_variable_defaults_8hpp_1acb18ab6e5f4c828f833057397aef454f:
+
+Variable legion::core::time::mainClock
+======================================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_time_defaults.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: legion::core::time::mainClock

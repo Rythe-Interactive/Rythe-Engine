@@ -76,15 +76,15 @@ Enums
 -----
 
 
-- :ref:`exhale_enum_imnodes_8cpp_1a1f3d1be5eaecdd976fc75476cf13590d`
+- :ref:`exhale_enum_namespaceimgui_1_1nodes_1_1_0d286_1a6b9a3bdc4c432361de76718cb86f18ab`
 
-- :ref:`exhale_enum_imnodes_8cpp_1a0e1d6df3580b0a6cc96a5de5875a200b`
+- :ref:`exhale_enum_namespaceimgui_1_1nodes_1_1_0d286_1a66b3594a3667f5ac3babf21b7f7ebb17`
 
-- :ref:`exhale_enum_imnodes_8cpp_1aa2099dfdce9ce3ee24753f939738460d`
+- :ref:`exhale_enum_namespaceimgui_1_1nodes_1_1_0d286_1a3454b3a492deff8693de44b25329e397`
 
-- :ref:`exhale_enum_imnodes_8cpp_1a8b2791e809fa108643aa502f0350fe03`
+- :ref:`exhale_enum_namespaceimgui_1_1nodes_1_1_0d286_1ac75aad3733d04765a6e9cd666e2c0837`
 
-- :ref:`exhale_enum_imnodes_8cpp_1a3d28cdd126d088c9874e6eeeba3ec088`
+- :ref:`exhale_enum_namespaceimgui_1_1nodes_1_1_0d286_1a8f535befbbb0d6f90ae090d2e1ba9d9f`
 
 
 Functions
@@ -261,7 +261,7 @@ Variables
 
 - :ref:`exhale_variable_imnodes_8cpp_1a5285257b8b97a192295521df12094982`
 
-- :ref:`exhale_variable_imnodes_8cpp_1a6760ced7ff6b0bbe7a73303063db6e0b`
+- :ref:`exhale_variable_imnodes_8cpp_1ab31b3db2ace99111e68fd7e7eefc9ba2`
 
 - :ref:`exhale_variable_imnodes_8cpp_1ae29a495ccc00d005a525d1df9af08893`
 
@@ -273,7 +273,7 @@ Variables
 
 - :ref:`exhale_variable_imnodes_8cpp_1a09154e5d5e76a1c3802428e21ccc7ec1`
 
-- :ref:`exhale_variable_imnodes_8cpp_1ad391c5a32664e1b185b401eeea8b3244`
+- :ref:`exhale_variable_imnodes_8cpp_1a058f35584da0bf6a5575df8b04d46164`
 
 - :ref:`exhale_variable_imnodes_8cpp_1a5df8cc85f9d8ee73ebdd14f6d4d2c3d9`
 
@@ -327,7 +327,7 @@ Variables
 
 - :ref:`exhale_variable_imnodes_8cpp_1ad4431eb5de33536080630069ee806087`
 
-- :ref:`exhale_variable_imnodes_8cpp_1ac1cb31d8a79f92ab578d06c46895e9a6`
+- :ref:`exhale_variable_imnodes_8cpp_1a151dc99c429f66db638509fcdaa97c0e`
 
 - :ref:`exhale_variable_imnodes_8cpp_1a4d264ff82607202326fc23ed7227b110`
 
@@ -335,7 +335,7 @@ Variables
 
 - :ref:`exhale_variable_imnodes_8cpp_1ab6863faf3e944997d1a028563803198f`
 
-- :ref:`exhale_variable_imnodes_8cpp_1a226ee6e176d35ec6ec82dae405de0fe3`
+- :ref:`exhale_variable_imnodes_8cpp_1a3ac24a513a964ae59c2e324c95052362`
 
 - :ref:`exhale_variable_imnodes_8cpp_1a36c8783edc686f74df4589493972ccec`
 

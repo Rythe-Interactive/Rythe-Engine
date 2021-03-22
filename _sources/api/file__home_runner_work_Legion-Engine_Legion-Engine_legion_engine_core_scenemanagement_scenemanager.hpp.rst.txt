@@ -47,7 +47,11 @@ Included By
 
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_audio_systems_audiosystem.inl`
 
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_engine_engine.hpp`
+
 - :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_scenemanagement_components_scene.hpp`
+
+- :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_systems_serilization_rendering_extra.hpp`
 
 
 
@@ -55,6 +59,10 @@ Included By
 Namespaces
 ----------
 
+
+- :ref:`namespace_legion`
+
+- :ref:`namespace_legion__core`
 
 - :ref:`namespace_legion__core__scenemanagement`
 

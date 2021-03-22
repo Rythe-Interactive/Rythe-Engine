@@ -90,7 +90,7 @@
 
     <span class="k">struct</span> <span class="n">mesh_handle</span>
     <span class="p">{</span>
-        <span class="n">id_type</span> <span class="n">id</span><span class="p">;</span>
+        <span class="n">id_type</span> <span class="n">id</span> <span class="o">=</span> <span class="n">invalid_id</span><span class="p">;</span>
 
         <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&amp;&gt;</span> <span class="n">get</span><span class="p">();</span>
 
@@ -140,9 +140,8 @@
         <span class="k">friend</span> <span class="k">struct</span> <span class="n">mesh_handle</span><span class="p">;</span>
     <span class="k">private</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span><span class="p">,</span> <span class="n">mesh</span><span class="o">&gt;&gt;&gt;</span> <span class="n">m_meshes</span><span class="p">;</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">id_type</span><span class="p">,</span> <span class="n">filesystem</span><span class="o">::</span><span class="n">view</span><span class="o">&gt;</span> <span class="n">m_materialsToDigest</span><span class="p">;</span>
         <span class="k">static</span> <span class="n">async</span><span class="o">::</span><span class="n">rw_spinlock</span> <span class="n">m_meshesLock</span><span class="p">;</span>
-
-
     <span class="k">public</span><span class="o">:</span>
         <span class="k">static</span> <span class="n">id_type</span> <span class="n">debugId</span><span class="p">;</span>
 
@@ -157,6 +156,8 @@
         <span class="k">static</span> <span class="n">mesh_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">);</span>
 
         <span class="k">static</span> <span class="n">mesh_handle</span> <span class="nf">get_handle</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="kt">void</span> <span class="nf">destroy_mesh</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">);</span>
     <span class="p">};</span>
 <span class="p">}</span>
 </pre></div>

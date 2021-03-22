@@ -60,4 +60,4 @@ Variables
 ---------
 
 
-- :ref:`exhale_variable_logging_8hpp_1a85bcafb4c666bd69619ee0f06502aa28`
+- :ref:`exhale_variable_logging_8hpp_1aa640f4bf5bca9b18c37110e7fce8213e`

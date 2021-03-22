@@ -59,9 +59,9 @@ Functions
 
 - :ref:`exhale_function__im_guizmo_8cpp_1ab234527a26d2749e1e3286df3d8fb584`
 
-- :ref:`exhale_function__im_guizmo_8cpp_1a5dba4a5602b5bc9eee7af56ac5289110`
-
 - :ref:`exhale_function__im_guizmo_8cpp_1a7f02eb7f42865f8a7e6ff710f14cb838`
+
+- :ref:`exhale_function__im_guizmo_8cpp_1a5dba4a5602b5bc9eee7af56ac5289110`
 
 - :ref:`exhale_function__im_guizmo_8cpp_1a09dd6209cabcd9c0f558931b7f442ae3`
 

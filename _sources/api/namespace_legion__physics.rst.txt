@@ -86,6 +86,8 @@ Classes
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_broadphase_uniform_grid`
 
+- :ref:`exhale_class_classlegion_1_1physics_1_1_broadphase_uniform_grid_no_caching`
+
 - :ref:`exhale_class_structlegion_1_1physics_1_1collision__event`
 
 - :ref:`exhale_class_classlegion_1_1physics_1_1_convergance_identifier`

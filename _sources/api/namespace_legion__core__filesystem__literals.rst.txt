@@ -6,7 +6,8 @@ Namespace legion::core::filesystem::literals
 
 
 Work the same as the above, but the path parameter is replaced by the string literal. 
- 
+
+
 
 
 .. contents:: Contents

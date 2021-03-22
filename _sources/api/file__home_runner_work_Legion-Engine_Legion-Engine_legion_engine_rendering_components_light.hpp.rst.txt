@@ -52,6 +52,8 @@ Namespaces
 ----------
 
 
+- :ref:`namespace_legion`
+
 - :ref:`namespace_legion__rendering`
 
 - :ref:`namespace_legion__rendering__detail`

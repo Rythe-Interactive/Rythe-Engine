@@ -1,0 +1,13 @@
+.. _exhale_enum_namespaceimgui_1_1nodes_1_1_0d286_1a6b9a3bdc4c432361de76718cb86f18ab:
+
+Enum AttributeType
+==================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: imgui::nodes::@286::AttributeType

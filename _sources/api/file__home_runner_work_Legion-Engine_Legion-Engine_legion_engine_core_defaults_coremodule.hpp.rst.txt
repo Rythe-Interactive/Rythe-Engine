@@ -49,6 +49,8 @@ Includes
 
 - ``core/serialization/serializationUtil.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_serializationUtil.hpp`)
 
+- ``core/serialization/use_embedded_material.hpp`` (:ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_serialization_use_embedded_material.hpp`)
+
 
 
 Included By
@@ -63,6 +65,8 @@ Included By
 Namespaces
 ----------
 
+
+- :ref:`namespace_legion`
 
 - :ref:`namespace_legion__core`
 

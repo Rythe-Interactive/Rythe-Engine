@@ -1,0 +1,13 @@
+.. _exhale_variable_imnodes_8cpp_1ab31b3db2ace99111e68fd7e7eefc9ba2:
+
+Variable box_selector
+=====================
+
+- Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_rendering_imgui_impl_imnodes.cpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: box_selector

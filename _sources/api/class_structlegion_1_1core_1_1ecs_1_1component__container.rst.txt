@@ -1,19 +1,9 @@
 .. _exhale_class_structlegion_1_1core_1_1ecs_1_1component__container:
 
-Template Class component_container
-==================================
+Class component_container
+=========================
 
 - Defined in :ref:`file__home_runner_work_Legion-Engine_Legion-Engine_legion_engine_core_ecs_component_container.hpp`
-
-
-Inheritance Relationships
--------------------------
-
-Base Types
-**********
-
-- ``public legion::core::ecs::component_container_base`` (:ref:`exhale_struct_structlegion_1_1core_1_1ecs_1_1component__container__base`)
-- ``public std::vector< component_type >``
 
 
 Class Documentation

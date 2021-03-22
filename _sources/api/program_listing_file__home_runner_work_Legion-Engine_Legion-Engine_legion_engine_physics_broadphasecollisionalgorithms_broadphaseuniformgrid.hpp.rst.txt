@@ -46,7 +46,7 @@ Program Listing for File broadphaseuniformgrid.hpp
    
        private:
            math::ivec3 m_cellSize;
-           size_type m_emptyCellDestroyThreshold;
+           size_type m_emptyCellDestroyThreshold = 0;
    
            math::ivec3 calculateCellIndex(const math::vec3 point);
    

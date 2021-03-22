@@ -750,6 +750,7 @@
         <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">shaderVariant</span><span class="p">,</span> <span class="n">variantSource</span><span class="p">]</span> <span class="o">:</span> <span class="n">shaders</span><span class="p">)</span>
         <span class="p">{</span>
             <span class="n">shader_variant</span><span class="o">&amp;</span> <span class="n">variant</span> <span class="o">=</span> <span class="n">shader</span><span class="p">.</span><span class="n">m_variants</span><span class="p">[</span><span class="n">nameHash</span><span class="p">(</span><span class="n">shaderVariant</span><span class="p">)];</span>
+            <span class="n">variant</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">shaderVariant</span><span class="p">;</span>
 
             <span class="n">GLenum</span> <span class="n">blendSrc</span> <span class="o">=</span> <span class="n">GL_SRC_ALPHA</span><span class="p">,</span> <span class="n">blendDst</span> <span class="o">=</span> <span class="n">GL_ONE_MINUS_SRC_ALPHA</span><span class="p">;</span>
 

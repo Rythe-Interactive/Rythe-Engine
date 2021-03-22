@@ -109,14 +109,14 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core6events10event_base10persistentEv">
-<span id="_CPPv3N6legion4core6events10event_base10persistentEv"></span><span id="_CPPv2N6legion4core6events10event_base10persistentEv"></span><span id="legion::core::events::event_base::persistent"></span><span class="target" id="structlegion_1_1core_1_1events_1_1event__base_1a30783eaced0c91573ac85e22ff8d7438"></span><em class="property">virtual</em> bool <code class="sig-name descname">persistent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6events10event_base10persistentEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt>
+<span class="target" id="structlegion_1_1core_1_1events_1_1event__base_1ae4476f7ea8c6033a46938775194150db"></span><code class="sig-name descname">virtual bool persistent () LEGION_IMPURE_RETURN(false)</code></dt>
 <dd><p>Returns a value that decides whether the event should be kept in the bus or destroyed after all subscribers have been notified. </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N6legion4core6events10event_base6uniqueEv">
-<span id="_CPPv3N6legion4core6events10event_base6uniqueEv"></span><span id="_CPPv2N6legion4core6events10event_base6uniqueEv"></span><span id="legion::core::events::event_base::unique"></span><span class="target" id="structlegion_1_1core_1_1events_1_1event__base_1a72d82e3432b39c469b101e0bf21e68d9"></span><em class="property">virtual</em> bool <code class="sig-name descname">unique</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6events10event_base6uniqueEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt>
+<span class="target" id="structlegion_1_1core_1_1events_1_1event__base_1a873086ec321b8eab60a2f38cc7ef0790"></span><code class="sig-name descname">virtual bool unique () LEGION_IMPURE_RETURN(true)</code></dt>
 <dd><p>Returns a value that decides whether more than one of this event type should be able to exist. If true and an event of this type already exists then the event-bus will only notify the subscribers and nothing else. </p>
 </dd></dl>
 
@@ -127,7 +127,7 @@
 
 <dl class="cpp function">
 <dt id="_CPPv4N6legion4core6events10event_base6get_idEv">
-<span id="_CPPv3N6legion4core6events10event_base6get_idEv"></span><span id="_CPPv2N6legion4core6events10event_base6get_idEv"></span><span id="legion::core::events::event_base::get_id"></span><span class="target" id="structlegion_1_1core_1_1events_1_1event__base_1aa8bc675b77bb2a425e98c1ade9245090"></span><em class="property">virtual</em> <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <code class="sig-name descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6legion4core6events10event_base6get_idEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6legion4core6events10event_base6get_idEv"></span><span id="_CPPv2N6legion4core6events10event_base6get_idEv"></span><span id="legion::core::events::event_base::get_id"></span><span class="target" id="structlegion_1_1core_1_1events_1_1event__base_1aefd3b2805a681c4837893fd410df5608"></span><em class="property">virtual</em> <a class="reference internal" href="typedef_primitives_8hpp_1afed6f2f9b8f9f7b4b1b52efbb6cd1da7.html#_CPPv4N6legion4core7id_typeE" title="legion::core::id_type">id_type</a> <code class="sig-name descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span> = 0<a class="headerlink" href="#_CPPv4N6legion4core6events10event_base6get_idEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Get’s the type id of an event. (only available in <a class="reference internal" href="#structlegion_1_1core_1_1events_1_1event__base"><span class="std std-ref">event_base</span></a>) </p>
 </dd></dl>
 

@@ -23,6 +23,7 @@ Derived Types
 - ``public legion::core::System< PointCloudGeneration >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 - ``public legion::core::System< Renderer >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 - ``public legion::core::System< SceneManager >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
+- ``public legion::core::System< SerializationRenderingExtra >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 - ``public legion::core::System< WindowSystem >`` (:ref:`exhale_class_classlegion_1_1core_1_1_system`)
 
 

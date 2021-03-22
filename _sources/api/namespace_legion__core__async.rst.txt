@@ -59,17 +59,6 @@ Enums
 - :ref:`exhale_enum_wait__priority_8hpp_1ac3d04663d64559a0b7524486a4d42233`
 
 
-Functions
----------
-
-
-- :ref:`exhale_function_async__operation_8hpp_1a4e28bbac5d29e54a5ea3d7cfec819ce8`
-
-- :ref:`exhale_function_rw__spinlock_8hpp_1a89751c24fa6156877ab4556b15eb0ace`
-
-- :ref:`exhale_function_rw__spinlock_8hpp_1a882e9a409db10b6a954c63620d929ad7`
-
-
 Variables
 ---------
 

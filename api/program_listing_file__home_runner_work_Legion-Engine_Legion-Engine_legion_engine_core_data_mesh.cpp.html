@@ -308,6 +308,23 @@
             <span class="k">return</span> <span class="p">{</span> <span class="n">id</span> <span class="p">};</span>
         <span class="k">return</span> <span class="n">invalid_mesh_handle</span><span class="p">;</span>
     <span class="p">}</span>
+
+    <span class="kt">void</span> <span class="n">MeshCache</span><span class="o">::</span><span class="n">destroy_mesh</span><span class="p">(</span><span class="n">id_type</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">bool</span> <span class="n">erased</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+
+        <span class="p">{</span>
+            <span class="n">async</span><span class="o">::</span><span class="n">readwrite_guard</span> <span class="n">guard</span><span class="p">(</span><span class="n">MeshCache</span><span class="o">::</span><span class="n">m_meshesLock</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">m_meshes</span><span class="p">.</span><span class="n">count</span><span class="p">(</span><span class="n">id</span><span class="p">))</span>
+                <span class="k">return</span><span class="p">;</span>
+
+            <span class="n">erased</span> <span class="o">=</span> <span class="n">m_meshes</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">erased</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">::</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Destroyed mesh {}&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>

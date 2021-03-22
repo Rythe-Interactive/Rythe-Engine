@@ -21,9 +21,9 @@ Functions
 
 - :ref:`exhale_function__im_gradient_8cpp_1a00fb3ab77dde3d2c6d4277af77894900`
 
-- :ref:`exhale_function__im_gradient_8cpp_1a4732ebf5c9e2adb5c1b9236db7088b5b`
-
 - :ref:`exhale_function__im_gradient_8cpp_1a45c1c7eb28e661cf518bf4e19a5354d2`
+
+- :ref:`exhale_function__im_gradient_8cpp_1a4732ebf5c9e2adb5c1b9236db7088b5b`
 
 - :ref:`exhale_function__im_gradient_8cpp_1a6de1101df3e3e7a3483ec5d3bd9227d4`
 

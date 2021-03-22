@@ -328,19 +328,7 @@
                         <span class="n">splitter</span><span class="p">.</span><span class="n">MultipleSplitMesh</span><span class="p">(</span><span class="n">splittingParams</span><span class="p">,</span> <span class="n">entitiesGenerated</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
                         <span class="n">totalMeshSplitting</span> <span class="o">+=</span> <span class="n">meshSplitting</span><span class="p">.</span><span class="n">elapsedTime</span><span class="p">().</span><span class="n">milliseconds</span><span class="p">();</span>
 
-
                         <span class="n">meshToColliderPairing</span><span class="p">.</span><span class="n">meshSplitterPairing</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">splitter</span><span class="p">);</span>
-
-                        <span class="k">if</span> <span class="p">(</span><span class="n">fractureID</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-                        <span class="p">{</span>
-                            <span class="k">auto</span> <span class="n">ent</span> <span class="o">=</span> <span class="n">entitiesGenerated</span><span class="p">.</span><span class="n">back</span><span class="p">();</span>
-                            <span class="k">auto</span> <span class="n">idH</span> <span class="o">=</span> <span class="n">ent</span><span class="p">.</span><span class="n">add_component</span><span class="o">&lt;</span><span class="n">identifier</span><span class="o">&gt;</span><span class="p">();</span>
-                            <span class="k">auto</span> <span class="n">id</span> <span class="o">=</span> <span class="n">idH</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
-                            <span class="n">id</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="s">&quot;problem&quot;</span><span class="p">;</span>
-                            <span class="n">idH</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
-
-                        <span class="p">}</span>
-
 
                     <span class="p">}</span>
 

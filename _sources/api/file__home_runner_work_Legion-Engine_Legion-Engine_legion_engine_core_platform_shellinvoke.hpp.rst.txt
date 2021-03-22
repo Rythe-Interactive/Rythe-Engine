@@ -52,5 +52,7 @@ Namespaces
 ----------
 
 
+- :ref:`namespace_legion`
+
 - :ref:`namespace_legion__core`
 
