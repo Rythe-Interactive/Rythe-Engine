@@ -37,6 +37,7 @@
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="scheduling\clock.cpp" />
+    <ClCompile Include="scheduling\process.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -428,6 +429,8 @@
     <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="scheduling\scheduler.hpp" />
     <ClInclude Include="containers\pointer.hpp" />
+    <ClInclude Include="scheduling\processchain.hpp" />
+    <ClInclude Include="scheduling\process.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -579,5 +582,6 @@
     <None Include="ecs\handles\entity.inl" />
     <None Include="ecs\handles\filter.inl" />
     <None Include="ecs\filters\filter_info.inl" />
+    <None Include="scheduling\process.inl" />
   </ItemGroup>
 </Project>

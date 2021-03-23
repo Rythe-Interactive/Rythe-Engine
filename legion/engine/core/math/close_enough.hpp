@@ -17,6 +17,7 @@
 #pragma once
 #include <cstdlib>
 #include <numeric>
+#include <limits>
 #include <cmath>
 #include <type_traits>
 

@@ -47,11 +47,11 @@ namespace legion::core
         }
 
     public:
-        delegate() = default;
+        delegate() noexcept = default;
 
-        delegate(delegate const&) = default;
+        delegate(delegate const&) noexcept = default;
 
-        delegate(delegate&&) = default;
+        delegate(delegate&&) noexcept = default;
 
         delegate(std::nullptr_t const) noexcept : delegate() { }
 
@@ -62,7 +62,7 @@ namespace legion::core
         explicit delegate(owner_type const& o) noexcept : object_ptr_(const_cast<owner_type*>(&o)) {}
 
         template <typename owner_type>
-        delegate(owner_type* const object_ptr, return_type(owner_type::* const method_ptr)(Args...))
+        delegate(owner_type* const object_ptr, return_type(owner_type::* const method_ptr)(Args...)) 
         {
             *this = from(object_ptr, method_ptr);
         }

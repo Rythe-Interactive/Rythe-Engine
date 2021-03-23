@@ -33,14 +33,14 @@ namespace legion::core
         L_NODISCARD constexpr bool operator<=(const pointer& other) const noexcept { return ptr <= other.ptr; }
         L_NODISCARD constexpr bool operator> (const pointer& other) const noexcept { return ptr > other.ptr; }
         L_NODISCARD constexpr bool operator>=(const pointer& other) const noexcept { return ptr >= other.ptr; }
-                     
+
         L_NODISCARD constexpr bool operator==(T* other) const noexcept { return ptr == other; }
         L_NODISCARD constexpr bool operator!=(T* other) const noexcept { return ptr != other; }
         L_NODISCARD constexpr bool operator< (T* other) const noexcept { return ptr < other; }
         L_NODISCARD constexpr bool operator<=(T* other) const noexcept { return ptr <= other; }
         L_NODISCARD constexpr bool operator> (T* other) const noexcept { return ptr > other; }
         L_NODISCARD constexpr bool operator>=(T* other) const noexcept { return ptr >= other; }
-                     
+
         L_NODISCARD constexpr bool operator==(std::nullptr_t) const noexcept { return ptr == nullptr; }
         L_NODISCARD constexpr bool operator!=(std::nullptr_t) const noexcept { return ptr != nullptr; }
         L_NODISCARD constexpr bool operator< (std::nullptr_t) const noexcept { return ptr < nullptr; }

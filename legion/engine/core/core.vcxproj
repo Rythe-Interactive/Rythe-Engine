@@ -177,6 +177,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
     <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
     <ClInclude Include="scheduling\clock.hpp" />
+    <ClInclude Include="scheduling\process.hpp" />
+    <ClInclude Include="scheduling\processchain.hpp" />
     <ClInclude Include="scheduling\scheduler.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="serialization\prototype.hpp" />
@@ -550,6 +552,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="math\glm\detail\glm.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="scheduling\clock.cpp" />
+    <ClCompile Include="scheduling\process.cpp" />
     <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
@@ -703,6 +706,7 @@ del ".\xcopyexclude"</Command>
     <None Include="math\glm\gtx\vector_query.inl" />
     <None Include="math\glm\gtx\wrap.inl" />
     <None Include="platform\cpp.hint" />
+    <None Include="scheduling\process.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

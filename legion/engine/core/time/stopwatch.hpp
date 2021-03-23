@@ -10,7 +10,7 @@ namespace legion::core::time
         using type = time64;
     };
 
-    template<typename precision = time64, typename chrono_clock = std::chrono::high_resolution_clock>
+    template<typename precision = fast_time, typename chrono_clock = std::chrono::high_resolution_clock>
     struct stopwatch
     {
     public:

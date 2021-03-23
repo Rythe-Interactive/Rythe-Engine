@@ -144,88 +144,98 @@ namespace legion::core::time
         }
     };
 
-
-    template <typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
-        operator+(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1> && std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        using common_span = time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
-        return common_span(lhs.duration + rhs.duration);
-    }
-
-    template <typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
-        operator-(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1> && std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        using common_span = time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
-        return common_span(lhs.duration - rhs.duration);
-    }
-    
-    template <typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
-        operator*(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1> && std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        using common_span = time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
-        return common_span(lhs.duration * rhs.duration);
-    }
-    
-    template <typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
-        operator/(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1> && std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        using common_span = time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
-        return common_span(lhs.duration / rhs.duration);
-    }
-    
-    template <typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
-        operator%(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1> && std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        using common_span = time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
-        return common_span(lhs.duration % rhs.duration);
-    }
-
-    template<typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr bool
-        operator==(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        return math::close_enough(lhs.duration.count(), rhs.duration.count());
-    }
-
-    template<typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr bool
-        operator!=(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        return !(lhs == rhs);
-    }
-
-    template<typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr bool
-        operator<(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        return lhs.duration < rhs.duration;
-    }
-
-    template<typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr bool
-        operator<=(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        return lhs.duration <= rhs.duration;
-    }
-
-    template<typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr bool
-        operator>(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        return lhs.duration > rhs.duration;
-    }
-
-    template<typename PrecisionType1, typename PrecisionType2>
-    L_NODISCARD constexpr bool
-        operator>=(const time_span<PrecisionType1>& lhs, const time_span<PrecisionType2>& rhs) noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
-    {
-        return lhs.duration >= rhs.duration;
-    }
-
     using span = time_span<>;
+}
+
+template <typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD constexpr legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
+operator+(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    using common_span = legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
+    return common_span(lhs.duration + rhs.duration);
+}
+
+template <typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD constexpr legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
+operator-(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    using common_span = legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
+    return common_span(lhs.duration - rhs.duration);
+}
+
+template <typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD constexpr legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
+operator*(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    using common_span = legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
+    return common_span(lhs.duration * rhs.duration);
+}
+
+template <typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD constexpr legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
+operator/(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    using common_span = legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
+    return common_span(lhs.duration / rhs.duration);
+}
+
+template <typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD constexpr legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>
+operator%(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    using common_span = legion::core::time::time_span<std::common_type_t<PrecisionType1, PrecisionType2>>;
+    return common_span(lhs.duration % rhs.duration);
+}
+
+template<typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD bool
+operator==(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    return legion::core::math::close_enough(lhs.duration.count(), rhs.duration.count());
+}
+
+template<typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD bool
+operator!=(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    return !(lhs == rhs);
+}
+
+template<typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD constexpr bool
+operator<(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+    noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    return lhs.duration < rhs.duration;
+}
+
+template<typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD constexpr bool
+operator<=(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    return lhs.duration <= rhs.duration;
+}
+
+template<typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD constexpr bool
+operator>(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    return lhs.duration > rhs.duration;
+}
+
+template<typename PrecisionType1, typename PrecisionType2>
+L_NODISCARD constexpr bool
+operator>=(const legion::core::time::time_span<PrecisionType1>& lhs, const legion::core::time::time_span<PrecisionType2>& rhs)
+noexcept(std::is_arithmetic_v<PrecisionType1>&& std::is_arithmetic_v<PrecisionType2>) /* strengthened */
+{
+    return lhs.duration >= rhs.duration;
 }
