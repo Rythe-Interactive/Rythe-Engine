@@ -628,6 +628,10 @@ namespace legion::physics
         
         static void partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces, std::list<ColliderFaceToVert>& outFacesWithOutsideVerts);
 
+        static void findHorizonEdgesFromFaces(const math::vec3& eyePoint, std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges);
+
+        
+
     };
 }
 
