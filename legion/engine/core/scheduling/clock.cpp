@@ -9,12 +9,22 @@ namespace legion::core::scheduling
         m_onTick(elapsed);
     }
 
-    void Clock::subscribeToTick(const delegate<void(span_type)>& func)
+    Clock::span_type Clock::elapsedSinceTickStart() const noexcept
+    {
+        return time::mainClock.now() - m_lastTickStart;
+    }
+
+    Clock::span_type Clock::lastTickDuration() const noexcept
+    {
+        return m_lastTickDuration;
+    }
+
+    void Clock::subscribeToTick(const tick_callback_delegate& func)
     {
         m_onTick.push_back(func);
     }
 
-    void Clock::unsubscribeFromTick(const delegate<void(span_type)>& func)
+    void Clock::unsubscribeFromTick(const tick_callback_delegate& func)
     {
         m_onTick.erase(func);
     }

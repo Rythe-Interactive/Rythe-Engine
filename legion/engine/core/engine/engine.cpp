@@ -20,8 +20,8 @@ namespace legion::core
                 module->init();
     }
 
-    void Engine::run()
+    void Engine::run(bool low_power, uint minThreads)
     {
-        //m_scheduler.run();
+       exitCode = scheduling::Scheduler::run(low_power, minThreads);
     }
 }

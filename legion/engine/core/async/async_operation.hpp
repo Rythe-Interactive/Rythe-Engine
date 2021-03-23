@@ -28,14 +28,14 @@ namespace legion::core::async
         float progress() const noexcept;
     };
 
-    template<typename return_type, typename... argument_types>
+    template<typename functor>
     struct async_operation
     {
     protected:
         std::shared_ptr<async_progress> m_progress;
-        delegate<return_type(argument_types...)> m_repeater;
+        functor m_repeater;
     public:
-        async_operation(const std::shared_ptr<async_progress>& progress, const delegate<return_type(argument_types...)>& repeater) : m_progress(progress), m_repeater(repeater) {}
+        async_operation(const std::shared_ptr<async_progress>& progress, functor&& repeater) : m_progress(progress), m_repeater(repeater) {}
         async_operation() = default;
         async_operation(const async_operation&) = default;
         async_operation(async_operation&&) = default;
@@ -71,12 +71,14 @@ namespace legion::core::async
             }
         }
 
+        template<typename... argument_types>
         auto then(argument_types... args) const
         {
             wait();
             return m_repeater(std::forward<argument_types>(args)...);
         }
 
+        template<typename... argument_types>
         auto then(wait_priority priority, argument_types... args) const
         {
             wait(priority);
@@ -87,7 +89,7 @@ namespace legion::core::async
     };
 
 #if !defined(DOXY_EXCLUDE)
-    template<typename Func>
-    async_operation(const std::shared_ptr<async_progress>&, const Func&)->async_operation<Func>;
+    template<typename functor>
+    async_operation(const std::shared_ptr<async_progress>&, functor&&)->async_operation<functor>;
 #endif
 }

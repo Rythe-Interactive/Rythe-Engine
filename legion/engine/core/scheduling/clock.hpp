@@ -15,6 +15,8 @@ namespace legion::core::scheduling
     {
     public:
         using span_type = decltype(time::mainClock)::span_type;
+        using tick_callback_type = void(span_type);
+        using tick_callback_delegate = delegate<tick_callback_type>;
 
     private:
         static span_type m_lastTickStart;
@@ -24,13 +26,16 @@ namespace legion::core::scheduling
         static span_type m_waitBuffer;
         static std::atomic<bool> m_stop;
         static std::atomic<bool> m_doTick;
-        static multicast_delegate<void(span_type)> m_onTick;
+        static multicast_delegate<tick_callback_type> m_onTick;
 
         void advance(span_type start, span_type elapsed);
 
     public:
-        void subscribeToTick(const delegate<void(span_type)>& func);
-        void unsubscribeFromTick(const delegate<void(span_type)>& func);
+        span_type elapsedSinceTickStart() const noexcept;
+        span_type lastTickDuration() const noexcept;
+
+        void subscribeToTick(const tick_callback_delegate& func);
+        void unsubscribeFromTick(const tick_callback_delegate& func);
 
         void setAdvancementProtocol(advancement_protocol protocol) noexcept;
 

@@ -82,7 +82,7 @@
     <ClInclude Include="filesystem\provider_registry.hpp" />
     <ClInclude Include="filesystem\detail\meta.hpp" />
     <ClInclude Include="filesystem\view.hpp" />
-    <ClInclude Include="detail\internals.hpp" />
+    <ClInclude Include="common\assert.hpp" />
     <ClInclude Include="filesystem\basic_resolver.hpp" />
     <ClInclude Include="async\ring_sync_lock.hpp" />
     <ClInclude Include="engine\system.hpp" />

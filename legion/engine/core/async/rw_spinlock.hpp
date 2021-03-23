@@ -8,7 +8,7 @@
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/sparse_set.hpp>
-#include <core/detail/internals.hpp>
+#include <core/common/assert.hpp>
 #include <core/async/wait_priority.hpp>
 
 /**

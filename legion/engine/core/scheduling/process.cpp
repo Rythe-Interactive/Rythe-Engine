@@ -2,7 +2,6 @@
 
 namespace legion::core::scheduling
 {
-
     Process::Process(const std::string& name, id_type nameHash, time::span interval) : m_name(name), m_nameHash(nameHash)
     {
         setInterval(interval);
@@ -48,5 +47,4 @@ namespace legion::core::scheduling
             }
         }
     }
-
 }

@@ -4,7 +4,7 @@
 #include <core/types/primitives.hpp>
 #include <core/types/meta.hpp>
 #include <core/ecs/registry.hpp>
-//#include <core/scheduling/scheduler.hpp>
+#include <core/scheduling/scheduler.hpp>
 #include <core/events/eventbus.hpp>
 //#include <core/defaults/coremodule.hpp>
 #include <core/logging/logging.hpp>
@@ -57,7 +57,7 @@ namespace legion::core
 
         /**@brief Runs engine loop.
          */
-        void run();
+        void run(bool low_power = false, uint minThreads = 0);
     };
 }
 

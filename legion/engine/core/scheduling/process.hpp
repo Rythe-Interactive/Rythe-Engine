@@ -16,7 +16,7 @@ namespace legion::core::scheduling
         std::string m_name;
         id_type m_nameHash;
 
-        hashed_sparse_set<id_type> m_hooks;
+        std::unordered_set<id_type> m_hooks;
 
         delegate<void(time::span)> m_operation;
 
