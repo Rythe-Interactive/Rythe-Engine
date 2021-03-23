@@ -23,6 +23,10 @@ namespace legion::core::scheduling
         multicast_delegate<chain_callback_type> m_onChainEnd;
 
     public:
+        /**@brief Returns the hash of the name of the process-chain.
+         */
+        id_type id();
+
         void subscribeToChainStart(const chain_callback_delegate& callback);
         void unsubscribeFromChainStart(const chain_callback_delegate& callback);
 

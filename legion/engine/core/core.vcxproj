@@ -553,6 +553,8 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="scheduling\clock.cpp" />
     <ClCompile Include="scheduling\process.cpp" />
+    <ClCompile Include="scheduling\processchain.cpp" />
+    <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
@@ -707,6 +709,7 @@ del ".\xcopyexclude"</Command>
     <None Include="math\glm\gtx\wrap.inl" />
     <None Include="platform\cpp.hint" />
     <None Include="scheduling\process.inl" />
+    <None Include="scheduling\scheduler.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

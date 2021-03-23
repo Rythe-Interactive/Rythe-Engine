@@ -32,7 +32,7 @@ namespace legion::core::common
             void operator()(T* const _ptr) const
             {
 #if defined(LEGION_DEBUG)
-                assert_msg("Managed resource deleter is a mock deleter and should not be used for dynamic memory management.", _ptr == &m_store)
+                assert_msg("Managed resource deleter is a mock deleter and should not be used for dynamic memory management.", _ptr == &m_store);
 #endif
                     m_destroyFunc(*_ptr);
             }
@@ -52,7 +52,7 @@ namespace legion::core::common
         explicit managed_resource(std::nullptr_t) : value(), m_destroyFunc(nullptr), m_ref_counter(nullptr) {}
 
         template<typename... Args>
-        managed_resource(delegate<void(T&)> destroyFunc, Args&&... args) noexcept(std::is_nothrow_constructible_v<T, std::invoke_result_t<std::forward<Args>, decltype(args)>...>)
+        managed_resource(delegate<void(T&)> destroyFunc, Args&&... args) noexcept(std::is_nothrow_constructible_v<T, std::invoke_result_t<decltype(std::forward<Args>), decltype(args)>...>)
             : value(std::forward<Args>(args)...), m_destroyFunc(destroyFunc),
 #if defined(LEGION_DEBUG)
             m_ref_counter(&value, detail::_managed_resource_del<T>{value, m_destroyFunc})
@@ -68,7 +68,7 @@ namespace legion::core::common
         }
 
         managed_resource(managed_resource<T>&& src) noexcept(std::is_nothrow_move_constructible_v<T>)
-            : value(std::move(src.value)), m_destroyFunc(std::move(src.m_destroyFunc)), m_ref_counter(std:move(src.m_ref_counter))
+            : value(std::move(src.value)), m_destroyFunc(std::move(src.m_destroyFunc)), m_ref_counter(std::move(src.m_ref_counter))
         {
         }
 

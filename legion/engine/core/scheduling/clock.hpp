@@ -15,6 +15,7 @@ namespace legion::core::scheduling
     {
     public:
         using span_type = decltype(time::mainClock)::span_type;
+        using time_type = span_type::time_type;
         using tick_callback_type = void(span_type);
         using tick_callback_delegate = delegate<tick_callback_type>;
 
@@ -27,30 +28,34 @@ namespace legion::core::scheduling
         static std::atomic<bool> m_stop;
         static std::atomic<bool> m_doTick;
         static multicast_delegate<tick_callback_type> m_onTick;
+        static time_type m_timeScale;
 
-        void advance(span_type start, span_type elapsed);
+        static void advance(span_type start, span_type elapsed);
 
     public:
-        span_type elapsedSinceTickStart() const noexcept;
-        span_type lastTickDuration() const noexcept;
+        static time_type timeScale() noexcept;
+        static void setTimeScale(time_type value) noexcept;
 
-        void subscribeToTick(const tick_callback_delegate& func);
-        void unsubscribeFromTick(const tick_callback_delegate& func);
+        static span_type elapsedSinceTickStart() noexcept;
+        static span_type lastTickDuration() noexcept;
+        static span_type unscaledElapsedSinceTickStart() noexcept;
+        static span_type unscaledLastTickDuration() noexcept;
 
-        void setAdvancementProtocol(advancement_protocol protocol) noexcept;
+        static void subscribeToTick(const tick_callback_delegate& func);
+        static void unsubscribeFromTick(const tick_callback_delegate& func);
 
-        void setTickSpeed(span_type interval) noexcept;
+        static void setAdvancementProtocol(advancement_protocol protocol) noexcept;
 
-        void run();
+        static void setTickSpeed(span_type interval) noexcept;
 
-        void pause(span_type duration) noexcept;
+        static void run();
 
-        void bufferPause(span_type duration) noexcept;
+        static void pause(span_type duration) noexcept;
 
-        void stop() noexcept;
+        static void bufferPause(span_type duration) noexcept;
 
-        void tick();
+        static void stop() noexcept;
 
-        span_type tickDuration() noexcept;
+        static void tick();
     };
 }

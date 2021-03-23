@@ -17,20 +17,23 @@ namespace legion::core::time
 
         constexpr time_span() noexcept = default;
 
-        template<typename other_time>
-        constexpr time_span(const std::chrono::duration<other_time>& other) noexcept : duration(other) {}
-        template<typename other_time>
-        constexpr time_span(const time_span<other_time>& other) noexcept : duration(other.duration) {}
+        constexpr time_span(time_type other) noexcept : duration(other) {}
 
         template<typename other_time>
-        constexpr time_span(std::chrono::duration<other_time>&& other) noexcept : duration(other) {}
-        template<typename other_time>
-        constexpr time_span(time_span<other_time>&& other) noexcept : duration(std::move(other.duration)) {}
+        constexpr explicit time_span(const std::chrono::duration<other_time>& other) noexcept : duration(other) {}
+        template<typename other_time CNDOXY(std::enable_if_t<!std::is_same_v<other_time, time_type>, int> = 0)>
+        constexpr explicit time_span(const time_span<other_time>& other) noexcept : duration(other.duration) {}
 
         template<typename other_time>
-        constexpr time_span(other_time other) noexcept : duration(other) {}
+        constexpr explicit time_span(std::chrono::duration<other_time>&& other) noexcept : duration(other) {}
+        template<typename other_time CNDOXY(std::enable_if_t<!std::is_same_v<other_time, time_type>, int> = 0)>
+        constexpr explicit time_span(time_span<other_time>&& other) noexcept : duration(std::move(other.duration)) {}
 
-        constexpr explicit time_span(time_type other) noexcept : duration(other) {}
+        template<typename other_time CNDOXY(std::enable_if_t<!std::is_same_v<other_time, time_type>, int> = 0)>
+        constexpr explicit time_span(other_time other) noexcept : duration(other) {}
+
+        template<typename other_time>
+        constexpr time_span<other_time> cast() const noexcept { return { *this }; }
 
         template<typename T>
         L_NODISCARD constexpr T hours() const noexcept(std::is_arithmetic_v<time_type>&& std::is_arithmetic_v<T>) { return std::chrono::duration_cast<std::chrono::duration<T, std::ratio<3600>>>(duration).count(); }

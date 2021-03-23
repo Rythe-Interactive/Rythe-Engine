@@ -9,12 +9,32 @@ namespace legion::core::scheduling
         m_onTick(elapsed);
     }
 
-    Clock::span_type Clock::elapsedSinceTickStart() const noexcept
+    Clock::time_type Clock::timeScale() noexcept
+    {
+        return m_timeScale;
+    }
+
+    void Clock::setTimeScale(time_type value) noexcept
+    {
+        m_timeScale = value;
+    }
+
+    Clock::span_type Clock::elapsedSinceTickStart() noexcept
+    {
+        return (time::mainClock.now() - m_lastTickStart) * m_timeScale;
+    }
+
+    Clock::span_type Clock::lastTickDuration() noexcept
+    {
+        return m_lastTickDuration * m_timeScale;
+    }
+
+    Clock::span_type Clock::unscaledElapsedSinceTickStart() noexcept
     {
         return time::mainClock.now() - m_lastTickStart;
     }
 
-    Clock::span_type Clock::lastTickDuration() const noexcept
+    Clock::span_type Clock::unscaledLastTickDuration() noexcept
     {
         return m_lastTickDuration;
     }
@@ -89,10 +109,4 @@ namespace legion::core::scheduling
     {
         m_doTick.store(true, std::memory_order_release);
     }
-
-    Clock::span_type Clock::tickDuration() noexcept
-    {
-        return m_lastTickDuration;
-    }
-
 }

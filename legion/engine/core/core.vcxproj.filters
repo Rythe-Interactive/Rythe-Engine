@@ -38,6 +38,8 @@
     <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="scheduling\clock.cpp" />
     <ClCompile Include="scheduling\process.cpp" />
+    <ClCompile Include="scheduling\processchain.cpp" />
+    <ClCompile Include="scheduling\scheduler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -583,5 +585,6 @@
     <None Include="ecs\handles\filter.inl" />
     <None Include="ecs\filters\filter_info.inl" />
     <None Include="scheduling\process.inl" />
+    <None Include="scheduling\scheduler.inl" />
   </ItemGroup>
 </Project>
