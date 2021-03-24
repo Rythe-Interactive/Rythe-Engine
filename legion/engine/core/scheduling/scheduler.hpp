@@ -23,20 +23,23 @@ namespace legion::core::scheduling
         using chain_callback_delegate = typename ProcessChain::chain_callback_delegate;
 
     private:
+        template<typename resource>
+        using per_thread_map = std::unordered_map<std::thread::id, resource>;
+
         static sparse_map<id_type, ProcessChain> m_processChains;
 
         static const size_type m_maxThreadCount;
         static size_type m_availableThreads;
-        static std::queue<std::thread::id> m_unreservedThreads;
-        static std::unordered_map<std::thread::id, std::thread> m_threads;
 
-        static std::unordered_map<std::thread::id, std::pair<async::rw_spinlock, std::queue<std::unique_ptr<async::async_runnable_base>>>> m_commands;
+        static per_thread_map<std::thread> m_threads;
 
-        static async::rw_spinlock m_jobQueueLock;
-        static std::queue<std::shared_ptr<async::job_pool>> m_jobs;
+        static per_thread_map<async::rw_lock_pair<async::runnables_queue>> m_commands;
+        static async::rw_lock_pair<async::job_queue> m_jobs;
 
         static bool m_exit;
         static int m_exitCode;
+
+        static void threadMain(bool lowPower);
 
         template<typename Function, typename... Args >
         static pointer<std::thread> createThread(Function&& function, Args&&... args);

@@ -28,7 +28,7 @@ namespace legion::core::time
 
         span_type start_point() const noexcept
         {
-            return m_start.time_since_epoch();
+            return span_type(m_start.time_since_epoch());
         }
 
         span_type elapsed_time() const noexcept
@@ -64,7 +64,7 @@ namespace legion::core::time
 
         span_type start_point() const noexcept
         {
-            return m_start.time_since_epoch();
+            return span_type(m_start.time_since_epoch());
         }
 
         span_type elapsed_time() const noexcept

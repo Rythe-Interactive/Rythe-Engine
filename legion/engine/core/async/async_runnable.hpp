@@ -1,4 +1,6 @@
 #pragma once
+#include <queue>
+#include <memory>
 
 #include <core/containers/delegate.hpp>
 
@@ -54,6 +56,8 @@ namespace legion::core::async
             m_progress->complete();
         }
     };
+
+    using runnables_queue = std::queue<std::unique_ptr<async_runnable_base>>;
 
 #if !defined(DOXY_EXCLUDE)
     template<typename functor>

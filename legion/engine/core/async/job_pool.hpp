@@ -1,4 +1,7 @@
 #pragma once
+#include <queue>
+#include <memory>
+
 #include <core/async/async_operation.hpp>
 #include <core/containers/delegate.hpp>
 #include <core/containers/pointer.hpp>
@@ -53,6 +56,8 @@ namespace legion::core::async
             return m_progress->is_done();
         }
     };
+
+    using job_queue = std::queue<std::shared_ptr<job_pool>>;
 
     template<typename Func, typename CompleteFunc>
     struct job_operation : public async_operation<Func>

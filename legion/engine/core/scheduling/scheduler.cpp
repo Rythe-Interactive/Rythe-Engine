@@ -3,6 +3,41 @@
 
 namespace legion::core::scheduling
 {
+    void Scheduler::threadMain(bool lowPower)
+    {
+        while (!m_exit)
+        {
+            {
+                auto& [lock, commandQueue] = m_commands.at(std::this_thread::get_id());
+
+                async::readonly_guard guard(lock);
+
+                commandQueue.front()->execute();
+                commandQueue.pop();
+            }
+
+            {
+                auto& [lock, jobQueue] = m_jobs;
+                async::readonly_guard guard(lock);
+
+                auto jobPoolPtr = jobQueue.front();
+                if (jobPoolPtr->is_done())
+                {
+                    async::readwrite_guard wguard(lock);
+                    if (jobPoolPtr->is_done())
+                        jobQueue.pop();
+                }
+                else
+                    jobPoolPtr->complete_job();
+            }
+
+            if (lowPower)
+                std::this_thread::yield();
+            else
+                L_PAUSE_INSTRUCTION();
+        }
+    }
+
     pointer<std::thread> Scheduler::getThread(std::thread::id id)
     {
         return { &m_threads.at(id) };
@@ -19,45 +54,14 @@ namespace legion::core::scheduling
             m_availableThreads = minThreads;
 
         pointer<std::thread> ptr;
-        while ((ptr = createThread([&]() { // TODO: move this to a function.
-            while (!m_exit)
-            {
-                {
-                    auto& [lock, commandQueue] = m_commands.at(std::this_thread::get_id());
-
-                    async::readonly_guard guard(lock);
-
-                    commandQueue.front()->execute();
-                    commandQueue.pop();
-                }
-
-                {
-                    async::readonly_guard guard(m_jobQueueLock);
-
-                    auto jobPoolPtr = m_jobs.front();
-                    if (jobPoolPtr->is_done())
-                    {
-                        async::readwrite_guard wguard(m_jobQueueLock);
-                        if (jobPoolPtr->is_done())
-                            m_jobs.pop();
-                    }
-                    else
-                        jobPoolPtr->complete_job();
-                }
-
-                if (m_lowPower)
-                    std::this_thread::yield();
-                else
-                    L_PAUSE_INSTRUCTION();
-            }
-            })) != nullptr)
+        while ((ptr = createThread(Scheduler::threadMain, m_lowPower)) != nullptr)
         {
             m_commands.try_emplace(ptr->get_id());
         }
 
         while (!m_exit)
         {
-            time::span dt = Clock::lastTickDuration();
+            time::span dt{ Clock::lastTickDuration() };
             for (auto [_, chain] : m_processChains)
                 chain.runInCurrentThread(dt);
 
@@ -66,6 +70,7 @@ namespace legion::core::scheduling
             else
                 L_PAUSE_INSTRUCTION();
         }
+
         return m_exitCode;
     }
 

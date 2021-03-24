@@ -45,4 +45,7 @@ namespace legion::core::async
          */
         void unlock() noexcept;
     };
+
+    template<typename resource_type>
+    using lock_pair = std::pair<spinlock, resource_type>;
 }

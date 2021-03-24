@@ -12,7 +12,7 @@ namespace legion::core::scheduling
 
             std::thread newThread{ std::forward<Function>(function), std::forward<Args>(args)... }; // Create a new thread and run it.
             std::thread::id id = newThread.get_id();
-            m_unreservedThreads.push(id);
+
             auto [it, _] = m_threads.emplace(id, std::move(newThread));
             return { &it->second };
         }
@@ -32,8 +32,9 @@ namespace legion::core::scheduling
         auto* command = new async::async_runnable(function, taskSize);
 
         {
-            async::readwrite_guard guard(m_commandLocks[id]);
-            m_commands[id].push(std::unique_ptr<async::async_runnable_base>(command));
+            auto& [lock, commandQueue] = m_commands[id];
+            async::readwrite_guard guard(lock);
+            commandQueue.push(std::unique_ptr<async::async_runnable_base>(command));
         }
 
         return command->getOperation(

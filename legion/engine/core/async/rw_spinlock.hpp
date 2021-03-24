@@ -122,6 +122,9 @@ namespace legion::core::async
         }
     };
 
+    template<typename resource_type>
+    using rw_lock_pair = std::pair<rw_spinlock, resource_type>;
+
     /**@class readonly_guard
      * @brief RAII guard that uses ::async::rw_spinlock to lock for read-only.
      * @note Read-only operations can happen simultaneously without waiting for each other.
