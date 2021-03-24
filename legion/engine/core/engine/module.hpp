@@ -8,6 +8,7 @@
 #include <core/containers/sparse_map.hpp>
 #include <core/ecs/registry.hpp>
 #include <core/events/eventbus.hpp>
+#include <core/scheduling/scheduling.hpp>
 
 #include <core/engine/system.hpp>
 
@@ -37,9 +38,9 @@ namespace legion::core
 
     protected:
         template<size_type charc>
-        void addProcessChain(const char(&name)[charc])
+        void createProcessChain(const char(&name)[charc])
         {
-            //m_scheduler->addProcessChain<charc>(name);
+            schd::Scheduler::createProcessChain<charc>(name);
         }
 
         template<typename SystemType, typename... Args CNDOXY(inherits_from<SystemType, System<SystemType>> = 0)>

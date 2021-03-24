@@ -71,6 +71,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,6 +103,8 @@ del ".\xcopyexclude"</Command>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -709,6 +712,7 @@ del ".\xcopyexclude"</Command>
     <None Include="math\glm\gtx\wrap.inl" />
     <None Include="platform\cpp.hint" />
     <None Include="scheduling\process.inl" />
+    <None Include="scheduling\processchain.inl" />
     <None Include="scheduling\scheduler.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

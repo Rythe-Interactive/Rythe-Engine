@@ -3,38 +3,68 @@
 
 namespace legion::core::scheduling
 {
-    void Scheduler::threadMain(bool lowPower)
+    constexpr size_type reserved_threads = 2; // this, OS
+
+    sparse_map<id_type, ProcessChain> Scheduler::m_processChains;
+
+    const size_type Scheduler::m_maxThreadCount = reserved_threads >= std::thread::hardware_concurrency() ? 0 : std::thread::hardware_concurrency() - reserved_threads;
+    size_type Scheduler::m_availableThreads = m_maxThreadCount;
+
+    Scheduler::per_thread_map<std::thread> Scheduler::m_threads;
+
+    Scheduler::per_thread_map<async::rw_lock_pair<async::runnables_queue>> Scheduler::m_commands;
+    async::rw_lock_pair<async::job_queue> Scheduler::m_jobs;
+
+    std::atomic<bool> Scheduler::m_exit = { false };
+    std::atomic<bool> Scheduler::m_start = { false };
+    int Scheduler::m_exitCode = 0;
+
+    void Scheduler::threadMain(bool lowPower, std::string name)
     {
-        while (!m_exit)
+        log::info("Thread {} assigned.", std::this_thread::get_id());
+        async::set_thread_name(name.c_str());
+
+        while (!m_start.load(std::memory_order_relaxed))
+            std::this_thread::yield();
+
+        while (!m_exit.load(std::memory_order_relaxed))
         {
+            bool noWork = true;
+
             {
                 auto& [lock, commandQueue] = m_commands.at(std::this_thread::get_id());
 
                 async::readonly_guard guard(lock);
 
-                commandQueue.front()->execute();
-                commandQueue.pop();
+                if (!commandQueue.empty())
+                {
+                    noWork = false;
+                    commandQueue.front()->execute();
+                    commandQueue.pop();
+                }
             }
 
             {
                 auto& [lock, jobQueue] = m_jobs;
                 async::readonly_guard guard(lock);
-
-                auto jobPoolPtr = jobQueue.front();
-                if (jobPoolPtr->is_done())
+                if (!jobQueue.empty())
                 {
-                    async::readwrite_guard wguard(lock);
+                    noWork = false;
+
+                    auto jobPoolPtr = jobQueue.front();
                     if (jobPoolPtr->is_done())
-                        jobQueue.pop();
+                    {
+                        async::readwrite_guard wguard(lock);
+                        if (jobPoolPtr->is_done())
+                            jobQueue.pop();
+                    }
+                    else
+                        jobPoolPtr->complete_job();
                 }
-                else
-                    jobPoolPtr->complete_job();
             }
 
-            if (lowPower)
-                std::this_thread::yield();
-            else
-                L_PAUSE_INSTRUCTION();
+            if (lowPower || noWork)
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
         }
     }
 
@@ -43,23 +73,30 @@ namespace legion::core::scheduling
         return { &m_threads.at(id) };
     }
 
-    int Scheduler::run(bool lowPower, uint minThreads)
+    int Scheduler::run(bool lowPower, size_type minThreads)
     {
         bool m_lowPower = lowPower;
 
-        if (std::thread::hardware_concurrency() < minThreads)
+        size_type m_minThreads = minThreads < 1 ? 1 : minThreads;
+
+        if (m_maxThreadCount < m_minThreads)
             m_lowPower = true;
 
-        if (m_availableThreads < minThreads)
-            m_availableThreads = minThreads;
+        if (m_availableThreads < m_minThreads)
+            m_availableThreads = m_minThreads;
 
         pointer<std::thread> ptr;
-        while ((ptr = createThread(Scheduler::threadMain, m_lowPower)) != nullptr)
+        std::string name = "Worker ";
+        int i = 0;
+        while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(i))) != nullptr)
         {
+            log::impl::thread_names[ptr->get_id()] = name + std::to_string(i++);
             m_commands.try_emplace(ptr->get_id());
         }
 
-        while (!m_exit)
+        m_start.store(true, std::memory_order_release);
+
+        while (!m_exit.load(std::memory_order_relaxed))
         {
             time::span dt{ Clock::lastTickDuration() };
             for (auto [_, chain] : m_processChains)
@@ -77,7 +114,13 @@ namespace legion::core::scheduling
     void Scheduler::exit(int exitCode)
     {
         m_exitCode = exitCode;
-        m_exit = true;
+        m_exit.store(true, std::memory_order_release);
+    }
+
+    pointer<ProcessChain> Scheduler::createProcessChain(cstring name)
+    {
+        id_type id = nameHash(name);
+        return { &m_processChains.emplace(id, name, id).first.value() };
     }
 
     pointer<ProcessChain> Scheduler::getChain(id_type id)
@@ -97,34 +140,46 @@ namespace legion::core::scheduling
 
     void Scheduler::subscribeToChainStart(id_type chainId, const chain_callback_delegate& callback)
     {
+        m_processChains.at(chainId).subscribeToChainStart(callback);
     }
 
     void Scheduler::subscribeToChainStart(cstring chainName, const chain_callback_delegate& callback)
     {
+        id_type chainId = nameHash(chainName);
+        m_processChains.at(chainId).subscribeToChainStart(callback);
     }
 
     void Scheduler::unsubscribeFromChainStart(id_type chainId, const chain_callback_delegate& callback)
     {
+        m_processChains.at(chainId).unsubscribeFromChainStart(callback);
     }
 
     void Scheduler::unsubscribeFromChainStart(cstring chainName, const chain_callback_delegate& callback)
     {
+        id_type chainId = nameHash(chainName);
+        m_processChains.at(chainId).unsubscribeFromChainStart(callback);
     }
 
     void Scheduler::subscribeToChainEnd(id_type chainId, const chain_callback_delegate& callback)
     {
+        m_processChains.at(chainId).subscribeToChainEnd(callback);
     }
 
     void Scheduler::subscribeToChainEnd(cstring chainName, const chain_callback_delegate& callback)
     {
+        id_type chainId = nameHash(chainName);
+        m_processChains.at(chainId).subscribeToChainEnd(callback);
     }
 
     void Scheduler::unsubscribeFromChainEnd(id_type chainId, const chain_callback_delegate& callback)
     {
+        m_processChains.at(chainId).unsubscribeFromChainEnd(callback);
     }
 
     void Scheduler::unsubscribeFromChainEnd(cstring chainName, const chain_callback_delegate& callback)
     {
+        id_type chainId = nameHash(chainName);
+        m_processChains.at(chainId).unsubscribeFromChainEnd(callback);
     }
 
     bool Scheduler::hookProcess(cstring chainName, Process& process)

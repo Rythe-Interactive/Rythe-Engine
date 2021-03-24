@@ -43,6 +43,13 @@ namespace legion::core::scheduling
     }
 
     template<size_type charc>
+    inline pointer<ProcessChain> Scheduler::createProcessChain(const char(&name)[charc])
+    {
+        id_type id = nameHash<charc>(name);
+        return { &m_processChains.emplace(id, name, id).first.value() };
+    }
+
+    template<size_type charc>
     inline pointer<ProcessChain> Scheduler::getChain(const char(&name)[charc])
     {
         id_type id = nameHash<charc>(name);

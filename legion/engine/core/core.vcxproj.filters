@@ -586,5 +586,6 @@
     <None Include="ecs\filters\filter_info.inl" />
     <None Include="scheduling\process.inl" />
     <None Include="scheduling\scheduler.inl" />
+    <None Include="scheduling\processchain.inl" />
   </ItemGroup>
 </Project>

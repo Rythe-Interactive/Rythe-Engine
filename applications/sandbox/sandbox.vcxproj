@@ -62,7 +62,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -114,11 +114,11 @@
   <ItemGroup>
     <ClInclude Include="data\pp_bloom.hpp" />
     <ClInclude Include="data\pp_edgedetect.hpp" />
-    <ClInclude Include="module\testmodule.hpp" />
+    <ClInclude Include="module\examplemodule.hpp" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="systems\examplesystem.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="data\pp_blur.hpp" />
-    <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\kernels\vadd_kernel.cl" />

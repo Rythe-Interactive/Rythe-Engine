@@ -11,8 +11,8 @@ namespace legion::application
     public:
         virtual void setup() override
         {
-            addProcessChain("Rendering");
-            addProcessChain("Input");
+            createProcessChain("Rendering");
+            createProcessChain("Input");
             reportComponentType<window>();
             reportSystem<WindowSystem>();
             reportSystem<InputSystem>();

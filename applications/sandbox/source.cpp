@@ -4,24 +4,10 @@
 #endif
 
 #include <core/core.hpp>
-#include "module/testmodule.hpp"
 
-using namespace legion;
+#include "module/examplemodule.hpp"
 
-void LEGION_CCONV reportModules(Engine* engine)
+void LEGION_CCONV reportModules(legion::Engine* engine)
 {
-    log::filter(log::severity::debug);
-
-    engine->reportModule<TestModule>();
+    engine->reportModule<ExampleModule>();
 }
-
-//int main(void)
-//{
-//    TestModule tm{};
-//    TestSystem ts{};
-//
-//    std::cout << "test\n";
-//    tm.setup();
-//    ts.setup();
-//    return 0;
-//}

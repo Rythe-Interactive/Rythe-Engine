@@ -2,6 +2,16 @@
 
 namespace legion::core::scheduling
 {
+    Clock::span_type Clock::m_lastTickStart = 0;
+    advancement_protocol Clock::m_protocol = advancement_protocol::Free;
+    Clock::span_type Clock::m_interval = static_cast<Clock::time_type>(1.0 / 60.0);
+    Clock::span_type Clock::m_lastTickDuration = 0;
+    Clock::span_type Clock::m_waitBuffer = 0;
+    std::atomic<bool> Clock::m_stop = { false };
+    std::atomic<bool> Clock::m_doTick = { false };
+    multicast_delegate<Clock::tick_callback_type> Clock::m_onTick;
+    Clock::time_type Clock::m_timeScale = static_cast<Clock::time_type>(1);
+
     void Clock::advance(span_type start, span_type elapsed)
     {
         m_lastTickDuration = elapsed;

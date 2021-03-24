@@ -23,6 +23,15 @@ namespace legion::core::scheduling
         multicast_delegate<chain_callback_type> m_onChainEnd;
 
     public:
+        ProcessChain() = default;
+        ProcessChain(ProcessChain&&) = default;
+        ProcessChain& operator=(ProcessChain&&) = default;
+
+        template<size_type charc>
+        ProcessChain(const char(&name)[charc]);
+        ProcessChain(cstring name);
+        ProcessChain(cstring name, id_type id);
+
         /**@brief Returns the hash of the name of the process-chain.
          */
         id_type id();
@@ -47,3 +56,5 @@ namespace legion::core::scheduling
         void runInCurrentThread(time::span deltaTime);
     };
 }
+
+#include <core/scheduling/processchain.inl>

@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef> 
 #include <cstdint> 
 #include <vector>  
 #include <string>
@@ -24,6 +25,7 @@ namespace legion::core
 
     using size_type = std::size_t;
     using index_type = std::size_t;
+    using diff_type = std::ptrdiff_t;
 
     using f32 = float;
     using f64 = double;

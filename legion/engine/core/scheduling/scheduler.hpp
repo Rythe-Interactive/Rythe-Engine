@@ -36,39 +36,50 @@ namespace legion::core::scheduling
         static per_thread_map<async::rw_lock_pair<async::runnables_queue>> m_commands;
         static async::rw_lock_pair<async::job_queue> m_jobs;
 
-        static bool m_exit;
+        static std::atomic<bool> m_exit;
+        static std::atomic<bool> m_start;
         static int m_exitCode;
 
-        static void threadMain(bool lowPower);
+        static void threadMain(bool lowPower, std::string name);
 
         template<typename Function, typename... Args >
-        static pointer<std::thread> createThread(Function&& function, Args&&... args);
+        L_NODISCARD static pointer<std::thread> createThread(Function&& function, Args&&... args);
 
     public:
         template<typename functor, typename... argument_types>
-        static pointer<std::thread> reserveThread(functor&& function, argument_types&&... args);
+        L_NODISCARD static pointer<std::thread> reserveThread(functor&& function, argument_types&&... args);
 
-        static pointer<std::thread> getThread(std::thread::id id);
+        L_NODISCARD static pointer<std::thread> getThread(std::thread::id id);
 
         template<typename functor>
         static auto sendCommand(std::thread::id id, functor&& function, size_type taskSize = 1);
 
-        static int run(bool lowPower = false, uint minThreads = 0);
+        static int run(bool lowPower = false, size_type minThreads = 0);
 
         static void exit(int exitCode);
+
+
+        /**@brief Create a new process-chain.
+         */
+        template<size_type charc>
+        static pointer<ProcessChain> createProcessChain(const char(&name)[charc]);
+
+        /**@brief Create a new process-chain.
+         */
+        static pointer<ProcessChain> createProcessChain(cstring name);
 
         /**@brief Get pointer to a certain process-chain.
          */
         template<size_type charc>
-        static pointer<ProcessChain> getChain(const char(&name)[charc]);
+        L_NODISCARD static pointer<ProcessChain> getChain(const char(&name)[charc]);
 
         /**@brief Get pointer to a certain process-chain.
          */
-        static pointer<ProcessChain> getChain(id_type id);
+        L_NODISCARD static pointer<ProcessChain> getChain(id_type id);
 
         /**@brief Get pointer to a certain process-chain.
          */
-        static pointer<ProcessChain> getChain(cstring name);
+        L_NODISCARD static pointer<ProcessChain> getChain(cstring name);
 
         static void subscribeToChainStart(id_type chainId, const chain_callback_delegate& callback);
         static void subscribeToChainStart(cstring chainName, const chain_callback_delegate& callback);

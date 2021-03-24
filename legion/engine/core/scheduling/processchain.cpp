@@ -4,6 +4,14 @@
 
 namespace legion::core::scheduling
 {
+    ProcessChain::ProcessChain(cstring name) : m_name(name), m_nameHash(nameHash(name))
+    {
+    }
+
+    ProcessChain::ProcessChain(cstring name, id_type id) : m_name(name), m_nameHash(id)
+    {
+    }
+
     id_type ProcessChain::id()
     {
         return m_nameHash;
