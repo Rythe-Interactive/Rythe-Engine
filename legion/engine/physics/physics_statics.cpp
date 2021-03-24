@@ -377,7 +377,7 @@ namespace legion::physics
             ColliderFaceToVert& currentFaceToVert = facesWithOutsideVerts.front();
             int safetyInt = 0;
 
-            currentFaceToVert.face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, 20.0f);
+            //currentFaceToVert.face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, 20.0f);
             //find furhtest vertex of last face
             auto [furthestVert, distanceFromFace] = currentFaceToVert.GetFurthestOutsideVert();
             math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVert, 1);
@@ -411,27 +411,31 @@ namespace legion::physics
 
                 for (auto face : facesToBeRemoved)
                 {
-                    face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
+                    //face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
                 }
 
                 std::vector<HalfEdgeEdge*> horizonEdges;
                 //identify horizon edges and put them into list
-                findHorizonEdgesFromFaces(furthestVert, facesToBeRemoved, horizonEdges);
+                findHorizonEdgesFromFaces(furthestVert, facesToBeRemoved, horizonEdges,DEBUG_transform);
                 
-
-
 
                 //reverse iterate the list to find their pairings, add them to new list
+                {
+                    std::vector<HalfEdgeEdge*> tempEdges = std::move(horizonEdges);
+                    horizonEdges.clear();
+
+                    //what we actually want is its pairings
+                    for (auto horizonEdge : tempEdges)
+                    {
+                        horizonEdges.push_back(horizonEdge->pairingEdge);
+                    }
+
+
+                }
+
+                
 
             }
-
-            
-
-                
-
-                
-
-                
 
                 //create new faces based on pairing list
 
@@ -663,10 +667,17 @@ namespace legion::physics
         //(5.2) For each edge create a new face that connects the initial face with the eyePoint
         math::vec3 eyePoint = *firstEyePoint;
 
+        createHalfEdgeFaceFromEyePoint(eyePoint, reverseHalfEdgeList,faces);
+
+        return true;
+    }
+
+    void PhysicsStatics::createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint, const std::vector<HalfEdgeEdge*>& reversedEdges, std::vector<HalfEdgeFace*>& createdFaces)
+    {
         HalfEdgeEdge* pairingToConnectTo = nullptr;
         HalfEdgeEdge* initialPairing = nullptr;
 
-        for (auto edge : reverseHalfEdgeList)
+        for (auto edge : reversedEdges)
         {
             //initialize pairing its position is on next
             HalfEdgeEdge* pairing = new HalfEdgeEdge(edge->nextEdge->edgePosition);
@@ -692,7 +703,7 @@ namespace legion::physics
             HalfEdgeFace* face = new HalfEdgeFace(pairing, faceNormal);
 
             //push new face into list 
-            faces.push_back(face);
+            createdFaces.push_back(face);
 
             //connect to 
             if (pairingToConnectTo)
@@ -708,12 +719,6 @@ namespace legion::physics
         }
 
         initialPairing->setPairingEdge(pairingToConnectTo);
-
-        return true;
-    }
-
-    void PhysicsStatics::createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint, const std::vector<HalfEdgeEdge*>& edges, std::vector<HalfEdgeFace*>& createdFaces)
-    {
     }
 
     bool PhysicsStatics::foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, ColliderFaceToVert& outChosenFace)
@@ -761,14 +766,63 @@ namespace legion::physics
         }
     }
 
-    void PhysicsStatics::findHorizonEdgesFromFaces(const math::vec3& eyePoint, std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges)
+    void PhysicsStatics::findHorizonEdgesFromFaces(const math::vec3& eyePoint, std::vector<HalfEdgeFace*>& faces,
+        std::vector<HalfEdgeEdge*>& outHorizonEdges, math::mat4 DEBUG_transform)
     {
         //[1] Find first horizon edge
+        HalfEdgeEdge* initialHorizon = nullptr;
 
+        auto findFirstHorizon = [&eyePoint,&initialHorizon](HalfEdgeEdge*edge)
+        {
+            if (initialHorizon) { return; }
 
+            if (edge->isEdgeHorizonFromVertex(eyePoint))
+            {
+                initialHorizon = edge;
+            }
+        };
+
+        for (auto face : faces)
+        {
+            if (initialHorizon) { break; }
+
+            face->forEachEdge(findFirstHorizon);
+            
+        }
+
+        assert(initialHorizon);
 
         //[2] Loop through the collider to collect the other horizon edges
 
+        HalfEdgeEdge* currentEdge = initialHorizon;
+        outHorizonEdges.push_back(currentEdge);
+
+        do
+        {
+            currentEdge = currentEdge->nextEdge;
+
+            if (currentEdge->isEdgeHorizonFromVertex(eyePoint))
+            {
+                outHorizonEdges.push_back(currentEdge);
+            }
+            else
+            {
+                do
+                {
+                    currentEdge = currentEdge->pairingEdge->nextEdge;
+                }
+                while (!currentEdge->isEdgeHorizonFromVertex(eyePoint));
+            }
+
+
+
+        } while (currentEdge != initialHorizon);
+
+
+        for (auto edge : outHorizonEdges)
+        {
+            edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX, 5.0f);
+        }
 
     }
 

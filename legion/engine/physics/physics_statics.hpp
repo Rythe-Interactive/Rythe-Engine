@@ -622,13 +622,14 @@ namespace legion::physics
             math::mat4 DEBUG_transform = math::mat4(1.0f));
 
         static void createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint,
-            const std::vector<HalfEdgeEdge*>& edges, std::vector<HalfEdgeFace*>& createdFaces);
+            const std::vector<HalfEdgeEdge*>& reversedEdges, std::vector<HalfEdgeFace*>& createdFaces);
 
         static bool foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, ColliderFaceToVert& outChosenFace);
         
         static void partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces, std::list<ColliderFaceToVert>& outFacesWithOutsideVerts);
 
-        static void findHorizonEdgesFromFaces(const math::vec3& eyePoint, std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges);
+        static void findHorizonEdgesFromFaces(const math::vec3& eyePoint,
+            std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges, math::mat4 DEBUG_transform = math::mat4(1.0f));
 
         
 
