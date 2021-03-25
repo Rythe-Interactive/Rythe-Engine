@@ -22,7 +22,7 @@ public:
     {
         lgn::ecs::filter<example_component> filter;
 
-        //auto comps = filter.get<example_component>();
+        auto comps = filter.get<example_component>();
 
         int sum = 0;
         for (auto& ent : filter)
