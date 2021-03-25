@@ -371,16 +371,23 @@ namespace legion::core::log
         fatal // highest severity
     };
 
-    inline spdlog::level::level_enum args2spdlog(severity s)
+    constexpr severity severity_trace = severity::trace;
+    constexpr severity severity_debug = severity::debug;
+    constexpr severity severity_info = severity::info;
+    constexpr severity severity_warn = severity::warn;
+    constexpr severity severity_error = severity::error;
+    constexpr severity severity_fatal = severity::fatal;
+
+    constexpr spdlog::level::level_enum args2spdlog(severity s)
     {
         switch (s)
         {
-        case severity::trace:return spdlog::level::trace;
-        case severity::debug:return spdlog::level::debug;
-        case severity::info: return spdlog::level::info;
-        case severity::warn: return spdlog::level::warn;
-        case severity::error:return spdlog::level::err;
-        case severity::fatal:return spdlog::level::critical;
+        case severity_trace:return spdlog::level::trace;
+        case severity_debug:return spdlog::level::debug;
+        case severity_info: return spdlog::level::info;
+        case severity_warn: return spdlog::level::warn;
+        case severity_error:return spdlog::level::err;
+        case severity_fatal:return spdlog::level::critical;
         }
         return spdlog::level::err;
     }
@@ -396,7 +403,7 @@ namespace legion::core::log
     void println(severity s, const FormatString& format, Args&&... a)
     {
         OPTICK_EVENT();
-        logger->log(args2spdlog(s),format,std::forward<Args>(a)...);
+        logger->log(args2spdlog(s), format, std::forward<Args>(a)...);
     }
 
 
@@ -408,7 +415,7 @@ namespace legion::core::log
         logger->set_level(args2spdlog(level));
     }
 
-     /** @brief same as println but with severity = trace */
+    /** @brief same as println but with severity = trace */
     template<class... Args, class FormatString>
     void trace(const FormatString& format, Args&&... a)
     {

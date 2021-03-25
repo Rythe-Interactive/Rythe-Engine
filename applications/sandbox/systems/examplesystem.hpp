@@ -11,6 +11,7 @@ class ExampleSystem final : public legion::System<ExampleSystem>
 public:
     virtual void setup()
     {
+        lgn::log::filter(lgn::log::severity_debug);
         lgn::log::debug("ExampleSystem setup");
 
         auto ent = lgn::ecs::Registry::createEntity();

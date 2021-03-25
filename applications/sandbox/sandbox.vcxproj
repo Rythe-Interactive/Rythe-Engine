@@ -84,7 +84,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -93,9 +93,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
-      <AdditionalOptions>-flto=thin -fsanitize=address,undefined %(AdditionalOptions)</AdditionalOptions>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -103,7 +101,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-physics.lib;legion-rendering.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legion-core.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ProgramDatabaseFile />
       <!--
       <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-networking.lib;legion-physics.lib;legion-rendering.lib;legion-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies);mono-2.0-sgen.lib;OptickCore.lib</AdditionalDependencies>
