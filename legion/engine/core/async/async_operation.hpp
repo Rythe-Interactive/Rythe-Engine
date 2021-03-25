@@ -54,13 +54,13 @@ namespace legion::core::async
     };
 
     template<typename functor>
-    struct async_operation
+    struct async_operation : public async_operation_base
     {
     protected:
         functor m_repeater;
 
     public:
-        async_operation(const std::shared_ptr<async_progress>& progress, functor&& repeater) : m_progress(progress), m_repeater(repeater) {}
+        async_operation(const std::shared_ptr<async_progress>& progress, functor&& repeater) : async_operation_base(progress), m_repeater(repeater) {}
         async_operation() noexcept(std::is_nothrow_default_constructible_v<functor>) = default;
         async_operation(const async_operation&) noexcept(std::is_nothrow_copy_constructible_v<functor>) = default;
         async_operation(async_operation&&) noexcept(std::is_nothrow_move_constructible_v<functor>) = default;
