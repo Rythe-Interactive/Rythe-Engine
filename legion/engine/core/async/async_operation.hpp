@@ -13,63 +13,57 @@ namespace legion::core::async
     struct async_progress
     {
     protected:
-        size_type m_size;
+        const size_type m_size;
         std::atomic<size_type> m_progress;
 
-    public:
-        async_progress(size_type size) : m_size(size), m_progress(0) {}
+        template<typename T>
+        constexpr static T precision_scale = static_cast<T>(1000);
 
-        size_type size() const noexcept;
+    public:
+        constexpr async_progress() noexcept : m_size(100 * precision_scale<size_type>), m_progress(0) {}
+        constexpr explicit async_progress(float size) noexcept : m_size(static_cast<size_type>(size) * precision_scale<size_type>), m_progress(0) {}
+
+        float size() const noexcept;
+        size_type rawSize() const noexcept;
         size_type rawProgress() const noexcept;
 
         void complete() noexcept;
-        void advance_progress(size_type progress = 1) noexcept;
+        void advance_progress(float progress = 1.f) noexcept;
         bool is_done() const noexcept;
         float progress() const noexcept;
+    };
+
+    struct async_operation_base
+    {
+    protected:
+        std::shared_ptr<async_progress> m_progress;
+
+    public:
+        explicit async_operation_base(const std::shared_ptr<async_progress>& progress) noexcept;
+        async_operation_base() noexcept = default;
+        async_operation_base(const async_operation_base&) noexcept = default;
+        async_operation_base(async_operation_base&&) noexcept = default;
+
+        bool is_done() const noexcept;
+
+        float progress() const noexcept;
+
+        virtual void wait(wait_priority priority = wait_priority_normal) const noexcept;
+
+        virtual ~async_operation_base() = default;
     };
 
     template<typename functor>
     struct async_operation
     {
     protected:
-        std::shared_ptr<async_progress> m_progress;
         functor m_repeater;
+
     public:
         async_operation(const std::shared_ptr<async_progress>& progress, functor&& repeater) : m_progress(progress), m_repeater(repeater) {}
-        async_operation() = default;
-        async_operation(const async_operation&) = default;
-        async_operation(async_operation&&) = default;
-
-        bool is_done() const noexcept
-        {
-            return m_progress->is_done();
-        }
-
-        float progress() const noexcept
-        {
-            return m_progress->progress();
-        }
-
-        virtual void wait(wait_priority priority = wait_priority_normal) const noexcept
-        {
-            OPTICK_EVENT("legion::core::async::async_operation<T>::wait");
-            while (!m_progress->is_done())
-            {
-                switch (priority)
-                {
-                case wait_priority::sleep:
-                    std::this_thread::sleep_for(std::chrono::microseconds(1));
-                    break;
-                case wait_priority::normal:
-                    std::this_thread::yield();
-                    break;
-                case wait_priority::real_time:
-                default:
-                    L_PAUSE_INSTRUCTION();
-                    break;
-                }
-            }
-        }
+        async_operation() noexcept(std::is_nothrow_default_constructible_v<functor>) = default;
+        async_operation(const async_operation&) noexcept(std::is_nothrow_copy_constructible_v<functor>) = default;
+        async_operation(async_operation&&) noexcept(std::is_nothrow_move_constructible_v<functor>) = default;
 
         template<typename... argument_types>
         auto then(argument_types... args) const

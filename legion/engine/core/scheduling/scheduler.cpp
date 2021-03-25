@@ -1,5 +1,4 @@
 #include <core/scheduling/scheduler.hpp>
-#include <core/scheduling/clock.hpp>
 
 namespace legion::core::scheduling
 {
@@ -23,6 +22,8 @@ namespace legion::core::scheduling
     {
         log::info("Thread {} assigned.", std::this_thread::get_id());
         async::set_thread_name(name.c_str());
+
+        OPTICK_THREAD(name.c_str());
 
         while (!m_start.load(std::memory_order_relaxed))
             std::this_thread::yield();
@@ -68,6 +69,28 @@ namespace legion::core::scheduling
         }
     }
 
+    void Scheduler::tryCompleteJobPool()
+    {
+        auto& [lock, jobQueue] = m_jobs;
+        async::readwrite_guard wguard(lock);
+        if (!jobQueue.empty())
+        {
+            if (jobQueue.front()->is_done())
+            {
+                jobQueue.pop();
+            }
+        }
+    }
+
+    void Scheduler::doTick(Clock::span_type deltaTime)
+    {
+        OPTICK_FRAME("Main thread");
+
+        time::span dt{ deltaTime };
+        for (auto [_, chain] : m_processChains)
+            chain.runInCurrentThread(dt);
+    }
+
     pointer<std::thread> Scheduler::getThread(std::thread::id id)
     {
         return { &m_threads.at(id) };
@@ -96,17 +119,22 @@ namespace legion::core::scheduling
 
         m_start.store(true, std::memory_order_release);
 
+        Clock::subscribeToTick(doTick);
+
+        log::impl::thread_names[std::this_thread::get_id()] = "Main thread";
         while (!m_exit.load(std::memory_order_relaxed))
         {
-            time::span dt{ Clock::lastTickDuration() };
-            for (auto [_, chain] : m_processChains)
-                chain.runInCurrentThread(dt);
+            Clock::update();
 
             if (m_lowPower)
                 std::this_thread::yield();
             else
                 L_PAUSE_INSTRUCTION();
         }
+
+        for (auto& [_, thread] : m_threads)
+            if (thread.joinable())
+                thread.join();
 
         return m_exitCode;
     }

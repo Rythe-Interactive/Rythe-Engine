@@ -42,13 +42,24 @@ namespace legion::core::scheduling
         m_processes.insert(process.id(), pointer<Process>{ &process });
     }
 
+    void ProcessChain::addProcess(pointer<Process> process)
+    {
+        m_processes.insert(process->id(), process);
+    }
+
     bool ProcessChain::removeProcess(Process& process)
     {
         return m_processes.erase(process.id());
     }
 
+    bool ProcessChain::removeProcess(pointer<Process> process)
+    {
+        return m_processes.erase(process->id());
+    }
+
     void ProcessChain::runInCurrentThread(time::span deltaTime)
     {
+        OPTICK_EVENT(m_name.c_str());
         m_onChainStart(deltaTime, time::span(Clock::elapsedSinceTickStart()));
 
         for (auto [_, ptr] : m_processes)

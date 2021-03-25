@@ -69,34 +69,31 @@ namespace legion::core::scheduling
         m_interval = interval;
     }
 
-    void Clock::run()
+    void Clock::update()
     {
-        while (!m_stop.load(std::memory_order_relaxed))
+        auto loopStart = time::mainClock.now();
+        auto elapsedSinceLastTick = loopStart - m_lastTickStart;
+
+        if (m_waitBuffer.nanoseconds() > static_cast<span_type::time_type>(0))
         {
-            auto loopStart = time::mainClock.now();
-            auto elapsedSinceLastTick = loopStart - m_lastTickStart;
+            m_waitBuffer -= elapsedSinceLastTick;
+            m_lastTickStart = loopStart;
+            return;
+        }
 
-            if (m_waitBuffer.nanoseconds() > static_cast<span_type::time_type>(0))
-            {
-                m_waitBuffer -= elapsedSinceLastTick;
-                m_lastTickStart = loopStart;
-                continue;
-            }
-
-            switch (m_protocol)
-            {
-            case advancement_protocol::Free:
+        switch (m_protocol)
+        {
+        case advancement_protocol::Free:
+            advance(loopStart, elapsedSinceLastTick);
+            break;
+        case advancement_protocol::Interval:
+            if (elapsedSinceLastTick >= m_interval)
                 advance(loopStart, elapsedSinceLastTick);
-                break;
-            case advancement_protocol::Interval:
-                if (elapsedSinceLastTick >= m_interval)
-                    advance(loopStart, elapsedSinceLastTick);
-                break;
-            case advancement_protocol::Manual:
-                if (m_doTick.exchange(false, std::memory_order_acquire))
-                    advance(loopStart, elapsedSinceLastTick);
-                break;
-            }
+            break;
+        case advancement_protocol::Manual:
+            if (m_doTick.exchange(false, std::memory_order_acquire))
+                advance(loopStart, elapsedSinceLastTick);
+            break;
         }
     }
 

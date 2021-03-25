@@ -11,6 +11,7 @@
 
 #include <core/scheduling/process.hpp>
 #include <core/scheduling/processchain.hpp>
+#include <core/scheduling/clock.hpp>
 
 namespace legion::core::scheduling
 {
@@ -45,6 +46,10 @@ namespace legion::core::scheduling
         template<typename Function, typename... Args >
         L_NODISCARD static pointer<std::thread> createThread(Function&& function, Args&&... args);
 
+        static void tryCompleteJobPool();
+
+        static void doTick(Clock::span_type deltaTime);
+
     public:
         template<typename functor, typename... argument_types>
         L_NODISCARD static pointer<std::thread> reserveThread(functor&& function, argument_types&&... args);
@@ -52,12 +57,14 @@ namespace legion::core::scheduling
         L_NODISCARD static pointer<std::thread> getThread(std::thread::id id);
 
         template<typename functor>
-        static auto sendCommand(std::thread::id id, functor&& function, size_type taskSize = 1);
+        static auto sendCommand(std::thread::id id, functor&& function, float taskSize = 1.f);
+
+        template<typename Func>
+        static auto queueJobs(size_type count, Func&& func);
 
         static int run(bool lowPower = false, size_type minThreads = 0);
 
         static void exit(int exitCode);
-
 
         /**@brief Create a new process-chain.
          */
@@ -102,7 +109,18 @@ namespace legion::core::scheduling
         /**@brief Hook a process to a certain chain.
          * @return bool True if succeeded, false if the chain doesn't exist.
          */
+        template<size_type charc>
+        static bool hookProcess(const char(&processChainName)[charc], pointer<Process> process);
+
+        /**@brief Hook a process to a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
         static bool hookProcess(cstring chainName, Process& process);
+
+        /**@brief Hook a process to a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
+        static bool hookProcess(cstring chainName, pointer<Process> process);
 
         /**@brief Unhook a process from a certain chain.
          * @return bool True if succeeded, false if the chain doesn't exist.
@@ -113,7 +131,18 @@ namespace legion::core::scheduling
         /**@brief Unhook a process from a certain chain.
          * @return bool True if succeeded, false if the chain doesn't exist.
          */
+        template<size_type charc>
+        static bool unhookProcess(const char(&chainName)[charc], pointer<Process> process);
+
+        /**@brief Unhook a process from a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
         static bool unhookProcess(cstring chainName, Process& process);
+
+        /**@brief Unhook a process from a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
+        static bool unhookProcess(cstring chainName, pointer<Process> process);
     };
 }
 

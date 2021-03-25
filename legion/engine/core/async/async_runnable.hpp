@@ -2,6 +2,8 @@
 #include <queue>
 #include <memory>
 
+#include <Optick/optick.h>
+
 #include <core/containers/delegate.hpp>
 
 #include <core/async/async_operation.hpp>
@@ -13,7 +15,7 @@ namespace legion::core::async
         std::shared_ptr<async_progress> m_progress;
 
         async_runnable_base() = default;
-        async_runnable_base(size_type taskSize) : m_progress(new async_progress(taskSize)) {}
+        async_runnable_base(float taskSize) : m_progress(new async_progress(taskSize)) {}
 
         std::shared_ptr<async_progress> getProgress() noexcept
         {
@@ -44,6 +46,7 @@ namespace legion::core::async
 
         void execute()
         {
+            OPTICK_EVENT();
             if constexpr (std::is_invocable_v<functor, async::async_progress&>)
             {
                 std::invoke(m_func, *m_progress);

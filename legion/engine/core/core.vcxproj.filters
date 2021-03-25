@@ -433,6 +433,7 @@
     <ClInclude Include="containers\pointer.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
+    <ClInclude Include="defaults\coremodule.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -587,5 +588,6 @@
     <None Include="scheduling\process.inl" />
     <None Include="scheduling\scheduler.inl" />
     <None Include="scheduling\processchain.inl" />
+    <None Include="engine\system.inl" />
   </ItemGroup>
 </Project>

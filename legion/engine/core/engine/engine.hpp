@@ -6,7 +6,6 @@
 #include <core/ecs/registry.hpp>
 #include <core/scheduling/scheduler.hpp>
 #include <core/events/eventbus.hpp>
-//#include <core/defaults/coremodule.hpp>
 #include <core/logging/logging.hpp>
 #include <argh.h>
 

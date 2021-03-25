@@ -1,4 +1,5 @@
 #include <core/engine/engine.hpp>
+#include <core/defaults/coremodule.hpp>
 
 namespace legion::core
 {
@@ -7,10 +8,13 @@ namespace legion::core
 
     Engine::Engine()
     {
+        reportModule<CoreModule>();
     }
 
     void Engine::init()
     {
+        log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
+
         for (const auto& [priority, moduleList] : m_modules)
             for (auto& module : moduleList)
                 module->setup();

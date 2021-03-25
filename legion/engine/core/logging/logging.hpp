@@ -3,6 +3,8 @@
 #define SPDLOG_HEADER_ONLY
 #include <sstream>
 
+#include <Optick/optick.h>
+
 #if !defined(DOXY_EXCLUDE)
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -393,6 +395,7 @@ namespace legion::core::log
     template <class... Args, class FormatString>
     void println(severity s, const FormatString& format, Args&&... a)
     {
+        OPTICK_EVENT();
         logger->log(args2spdlog(s),format,std::forward<Args>(a)...);
     }
 

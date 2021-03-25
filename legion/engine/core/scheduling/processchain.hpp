@@ -46,9 +46,17 @@ namespace legion::core::scheduling
          */
         void addProcess(Process& process);
 
+        /**@brief Hook a process for execution with this chain.
+         */
+        void addProcess(pointer<Process> process);
+
         /**@brief Unhook a process from execution with this chain.
          */
         bool removeProcess(Process& process);
+
+        /**@brief Unhook a process from execution with this chain.
+         */
+        bool removeProcess(pointer<Process> process);
 
         /**@brief Runs one iteration of the process-chains program loop without creating a new thread.
          * @note Loops through all hooked processes and executes them until they are all finished.

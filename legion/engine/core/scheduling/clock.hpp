@@ -48,7 +48,7 @@ namespace legion::core::scheduling
 
         static void setTickSpeed(span_type interval) noexcept;
 
-        static void run();
+        static void update();
 
         static void pause(span_type duration) noexcept;
 
