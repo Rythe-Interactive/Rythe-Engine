@@ -11,14 +11,14 @@ namespace legion::physics
         std::vector<math::vec3> outsideVerts;
         HalfEdgeFace* face = nullptr;
 
-        ColliderFaceToVert(HalfEdgeFace* pFace,const math::vec3& initialVert) : face(pFace)
+        ColliderFaceToVert(HalfEdgeFace* pFace) : face(pFace)
         {
-            outsideVerts.push_back(initialVert);
+
         }
 
         std::pair<math::vec3,float> GetFurthestOutsideVert() const;
         
-
+        void populateVectorWithVerts(std::vector<math::vec3>& vertVector);
 
         
     };

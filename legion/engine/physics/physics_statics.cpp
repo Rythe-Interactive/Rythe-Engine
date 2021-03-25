@@ -387,11 +387,13 @@ namespace legion::physics
             //check if we should merge this vertex
             if (distanceFromFace > scaledEpsilon)
             {
+                std::vector<math::vec3> unmergedVertices;
                 std::vector<HalfEdgeFace*> facesToBeRemoved;
 
                 //identify faces that can see vertex and remove them from list
                 for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
                 {
+                    
                     HalfEdgeFace* face = listIter->face;
                     
                     const math::vec3& planeCentroid = face->centroid;
@@ -401,6 +403,7 @@ namespace legion::physics
                     {
                         //face can see vertex, we must remove it from list
                         facesToBeRemoved.push_back(face);
+                        listIter->populateVectorWithVerts(unmergedVertices);
                         listIter = facesWithOutsideVerts.erase(listIter);
                     }
                     else
@@ -433,8 +436,20 @@ namespace legion::physics
 
                 }
 
-                
+                std::vector<HalfEdgeFace*> newFaces;
+                createHalfEdgeFaceFromEyePoint(furthestVert, horizonEdges, newFaces);
 
+                partitionVerticesToList(unmergedVertices, newFaces, facesWithOutsideVerts);
+
+                for (auto face : facesToBeRemoved)
+                {
+                    delete face;
+                }
+            }
+            else
+            {
+                //this face has no mergable vertices
+                currentFaceToVert.outsideVerts.clear();
             }
 
                 //create new faces based on pairing list
@@ -462,7 +477,12 @@ namespace legion::physics
 
         auto convexCollider = std::make_shared<ConvexCollider>();
         auto& halfEdgesVector = convexCollider->GetHalfEdgeFaces();
-        halfEdgesVector = std::move(faces);
+
+        for (auto& faceToVert : facesWithOutsideVerts)
+        {
+            halfEdgesVector.push_back(faceToVert.face);
+        }
+        
 
         //populate list of vertices in collider list
         auto& verticesVec = convexCollider->GetVertices();
@@ -737,6 +757,13 @@ namespace legion::physics
 
     void PhysicsStatics::partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces, std::list<ColliderFaceToVert>& outFacesWithOutsideVerts)
     {
+
+        for (HalfEdgeFace* face : faces)
+        {
+            outFacesWithOutsideVerts.emplace_back(face);
+        }
+
+
         //for each vertex in vertices
         for (const math::vec3& vertex : vertices)
         {
@@ -752,17 +779,7 @@ namespace legion::physics
                 }
             }
 
-            if (!foundInList)
-            {
-                for (HalfEdgeFace* face : faces)
-                {
-                    if (IsPointAbovePlane(face->normal, face->centroid, vertex))
-                    {
-                        outFacesWithOutsideVerts.emplace_back(face, vertex);
-                        break;
-                    }
-                }
-            }
+
         }
     }
 

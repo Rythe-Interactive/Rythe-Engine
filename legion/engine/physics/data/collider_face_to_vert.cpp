@@ -24,5 +24,13 @@ namespace legion::physics
 
         return std::make_pair(*mostDistantVert,largestDist);
     }
+    void ColliderFaceToVert::populateVectorWithVerts(std::vector<math::vec3>& vertVector)
+    {
+        for (auto& vert : outsideVerts)
+        {
+            vertVector.push_back(vert);
+        }
+
+    }
 }
 
