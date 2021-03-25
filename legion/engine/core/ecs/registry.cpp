@@ -24,6 +24,20 @@ namespace legion::core::ecs
     // Assign world entity.
     entity world = Registry::getWorld();
 
+    void Registry::clear()
+    {
+        m_entities.clear();
+        while (!m_recyclableEntities.empty())
+            m_recyclableEntities.pop();
+
+        for (auto& [_, family] : getFamilies())
+            family->clear();
+
+        entityCompositions().clear();
+        FilterRegistry::clear();
+        world = getWorld();
+    }
+
     L_NODISCARD component_pool_base* Registry::getFamily(id_type typeId)
     {
         OPTICK_EVENT();

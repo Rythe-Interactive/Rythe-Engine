@@ -2,6 +2,7 @@
 
 #include <core/platform/platform.hpp>
 #include <core/ecs/handles/entity.hpp>
+#include <core/ecs/containers/component_container.hpp>
 
 namespace legion::core::ecs
 {
@@ -26,6 +27,9 @@ namespace legion::core::ecs
 
         L_NODISCARD static entity& at(size_type index);
         L_NODISCARD entity& operator[](size_type index);
+
+        template<typename component_type>
+        L_NODISCARD static component_container<component_type> get();
 
     };
 

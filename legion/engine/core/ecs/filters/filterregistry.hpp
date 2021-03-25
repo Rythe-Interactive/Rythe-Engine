@@ -26,6 +26,8 @@ namespace legion::core::ecs
         template<typename... component_types>
         friend struct filter_info;
 
+        static void clear();
+
         /**@brief Message that a certain component was added to an entity. This will update all filters that might be interested in this entity.
          * @param componentId Id of the component type.
          * @param target Entity that was changed.

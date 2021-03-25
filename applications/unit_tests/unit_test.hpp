@@ -76,6 +76,9 @@ namespace legion
 
     inline L_ALWAYS_INLINE void NoOpt(bool value, L_MAYBEUNUSED cstring file, L_MAYBEUNUSED int line)
     {
+        if(!value)
+            DoNotOptimize(value);
+
         DoNotOptimize(value);
     }
 

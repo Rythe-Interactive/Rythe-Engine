@@ -1,6 +1,6 @@
 #define LEGION_ENTRY
 #if defined(NDEBUG)
-    #define LEGION_KEEP_CONSOLE
+#define LEGION_KEEP_CONSOLE
 #endif
 
 #include <core/core.hpp>

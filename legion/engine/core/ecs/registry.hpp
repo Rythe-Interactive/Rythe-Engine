@@ -43,6 +43,8 @@ namespace legion::core::ecs
         static component_pool<component_type>* tryEmplaceFamily(Args&&... args);
 
     public:
+        static void clear();
+
         /**@brief Creates world entity if it doesn't exist yet and returns it.
          * @note The world entity can also be retrieved using `ecs::world` and
          *       doesn't require a check for whether the world already exists or not.
