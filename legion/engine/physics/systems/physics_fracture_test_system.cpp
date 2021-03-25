@@ -1037,7 +1037,7 @@ namespace legion::physics
                             {
                                 math::vec3 currentEdgeConnect = worldStart + shift + (worldEnd - worldStart + shift * 2.0f) * 0.25;
                                 math::vec3 currentMeet = worldStart + (worldEnd - worldStart) * 0.25;
-                                //debug::drawLine(currentEdgeConnect, currentMeet, math::colors::red, 5.0f, 0.0f, useDepth);
+                                debug::drawLine(currentEdgeConnect, currentMeet, math::colors::red, 5.0f, 0.0f, useDepth);
 
                                  math::vec3 pairingWorldStart = (localTransform * math::vec4(pairing->edgePosition, 1));
                                 math::vec3 pairinWorldEnd = (localTransform * math::vec4(pairing->nextEdge->edgePosition, 1));
@@ -1046,7 +1046,7 @@ namespace legion::physics
                                 math::vec3 pairingEdgeConnect = pairingWorldStart + shift +
                                     (pairinWorldEnd - pairingWorldStart + shift * 2.0f) * 0.25;
 
-                                //debug::drawLine(pairingEdgeConnect, pairingMeet, math::colors::red, 5.0f, 0.0f, useDepth);
+                                debug::drawLine(pairingEdgeConnect, pairingMeet, math::colors::red, 5.0f, 0.0f, useDepth);
                             }
 
                         } while (initialEdge != currentEdge && currentEdge != nullptr);

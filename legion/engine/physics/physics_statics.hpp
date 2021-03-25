@@ -631,7 +631,8 @@ namespace legion::physics
         static void findHorizonEdgesFromFaces(const math::vec3& eyePoint,
             std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges, math::mat4 DEBUG_transform = math::mat4(1.0f));
 
-        
+        static void mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts
+            , math::mat4 DEBUG_transform);
 
         
 

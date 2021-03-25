@@ -377,7 +377,6 @@ namespace legion::physics
             ColliderFaceToVert& currentFaceToVert = facesWithOutsideVerts.front();
             int safetyInt = 0;
 
-            //currentFaceToVert.face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, 20.0f);
             //find furhtest vertex of last face
             auto [furthestVert, distanceFromFace] = currentFaceToVert.GetFurthestOutsideVert();
             math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVert, 1);
@@ -387,64 +386,8 @@ namespace legion::physics
             //check if we should merge this vertex
             if (distanceFromFace > scaledEpsilon)
             {
-                std::vector<math::vec3> unmergedVertices;
-                std::vector<HalfEdgeFace*> facesToBeRemoved;
-
-                //identify faces that can see vertex and remove them from list
-                for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
-                {
-                    
-                    HalfEdgeFace* face = listIter->face;
-                    
-                    const math::vec3& planeCentroid = face->centroid;
-                    const math::vec3& planeNormal = face->normal;
-
-                    if (IsPointAbovePlane(planeNormal, planeCentroid, furthestVert))
-                    {
-                        //face can see vertex, we must remove it from list
-                        facesToBeRemoved.push_back(face);
-                        listIter->populateVectorWithVerts(unmergedVertices);
-                        listIter = facesWithOutsideVerts.erase(listIter);
-                    }
-                    else
-                    {
-                        listIter++;
-                    }
-                }
-
-                for (auto face : facesToBeRemoved)
-                {
-                    //face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
-                }
-
-                std::vector<HalfEdgeEdge*> horizonEdges;
-                //identify horizon edges and put them into list
-                findHorizonEdgesFromFaces(furthestVert, facesToBeRemoved, horizonEdges,DEBUG_transform);
-                
-
-                //reverse iterate the list to find their pairings, add them to new list
-                {
-                    std::vector<HalfEdgeEdge*> tempEdges = std::move(horizonEdges);
-                    horizonEdges.clear();
-
-                    //what we actually want is its pairings
-                    for (auto horizonEdge : tempEdges)
-                    {
-                        horizonEdges.push_back(horizonEdge->pairingEdge);
-                    }
-
-
-                }
-
-                std::vector<HalfEdgeFace*> newFaces;
-                createHalfEdgeFaceFromEyePoint(furthestVert, horizonEdges, newFaces);
-
-                partitionVerticesToList(unmergedVertices, newFaces, facesWithOutsideVerts);
-
-                for (auto face : facesToBeRemoved)
-                {
-                    delete face;
-                }
+                mergeVertexToHull(furthestVert, facesWithOutsideVerts
+                    , DEBUG_transform);
             }
             else
             {
@@ -455,19 +398,7 @@ namespace legion::physics
                 //create new faces based on pairing list
 
             //while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
-            //{
-            
-            //    
-           
-
-            //    
-
-            //    
-
-            //    
-
-            //    //delete all old faces that can see vertex
-
+          
 
             //    safetyInt++;
             //    assert(safetyInt < 999);
@@ -485,14 +416,15 @@ namespace legion::physics
         
 
         //populate list of vertices in collider list
+
         auto& verticesVec = convexCollider->GetVertices();
+        auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
+        {
+            verticesVec.push_back(edge->edgePosition);
+        };
+
         for (auto face : convexCollider->GetHalfEdgeFaces())
         {
-            auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
-            {
-                verticesVec.push_back(edge->edgePosition);
-            };
-
             face->forEachEdge(collectVertices);
         }
 
@@ -763,7 +695,6 @@ namespace legion::physics
             outFacesWithOutsideVerts.emplace_back(face);
         }
 
-
         //for each vertex in vertices
         for (const math::vec3& vertex : vertices)
         {
@@ -838,8 +769,73 @@ namespace legion::physics
 
         for (auto edge : outHorizonEdges)
         {
-            edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX, 5.0f);
+            //edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX, 5.0f);
         }
+
+    }
+
+    void PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts
+        ,math::mat4 DEBUG_transform)
+    {
+        std::vector<math::vec3> unmergedVertices;
+        std::vector<HalfEdgeFace*> facesToBeRemoved;
+
+        //identify faces that can see vertex and remove them from list
+        for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
+        {
+
+            HalfEdgeFace* face = listIter->face;
+
+            const math::vec3& planeCentroid = face->centroid;
+            const math::vec3& planeNormal = face->normal;
+
+            if (IsPointAbovePlane(planeNormal, planeCentroid, eyePoint))
+            {
+                //face can see vertex, we must remove it from list
+                facesToBeRemoved.push_back(face);
+                listIter->populateVectorWithVerts(unmergedVertices);
+                listIter = facesWithOutsideVerts.erase(listIter);
+            }
+            else
+            {
+                listIter++;
+            }
+        }
+
+        for (auto face : facesToBeRemoved)
+        {
+            //face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
+        }
+
+        std::vector<HalfEdgeEdge*> horizonEdges;
+        //identify horizon edges and put them into list
+        findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges, DEBUG_transform);
+
+
+        //reverse iterate the list to find their pairings, add them to new list
+        {
+            std::vector<HalfEdgeEdge*> tempEdges = std::move(horizonEdges);
+            horizonEdges.clear();
+
+            //what we actually want is its pairings
+            for (auto horizonEdge : tempEdges)
+            {
+                horizonEdges.push_back(horizonEdge->pairingEdge);
+            }
+
+
+        }
+
+        std::vector<HalfEdgeFace*> newFaces;
+        createHalfEdgeFaceFromEyePoint(eyePoint, horizonEdges, newFaces);
+
+        partitionVerticesToList(unmergedVertices, newFaces, facesWithOutsideVerts);
+
+        for (auto face : facesToBeRemoved)
+        {
+            delete face;
+        }
+
 
     }
 
