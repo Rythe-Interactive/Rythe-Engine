@@ -7,7 +7,6 @@ namespace legion::core::scheduling
     Clock::span_type Clock::m_interval = static_cast<Clock::time_type>(1.0 / 60.0);
     Clock::span_type Clock::m_lastTickDuration = 0;
     Clock::span_type Clock::m_waitBuffer = 0;
-    std::atomic<bool> Clock::m_stop = { false };
     std::atomic<bool> Clock::m_doTick = { false };
     multicast_delegate<Clock::tick_callback_type> Clock::m_onTick;
     Clock::time_type Clock::m_timeScale = static_cast<Clock::time_type>(1);
@@ -105,11 +104,6 @@ namespace legion::core::scheduling
     void Clock::bufferPause(span_type duration) noexcept
     {
         m_waitBuffer += duration;
-    }
-
-    void Clock::stop() noexcept
-    {
-        m_stop.store(true, std::memory_order_release);
     }
 
     void Clock::tick()

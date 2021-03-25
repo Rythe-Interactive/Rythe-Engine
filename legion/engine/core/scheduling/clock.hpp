@@ -25,7 +25,6 @@ namespace legion::core::scheduling
         static span_type m_interval;
         static span_type m_lastTickDuration;
         static span_type m_waitBuffer;
-        static std::atomic<bool> m_stop;
         static std::atomic<bool> m_doTick;
         static multicast_delegate<tick_callback_type> m_onTick;
         static time_type m_timeScale;
@@ -53,8 +52,6 @@ namespace legion::core::scheduling
         static void pause(span_type duration) noexcept;
 
         static void bufferPause(span_type duration) noexcept;
-
-        static void stop() noexcept;
 
         static void tick();
     };

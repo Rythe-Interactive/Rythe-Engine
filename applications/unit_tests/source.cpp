@@ -40,6 +40,8 @@ void LEGION_CCONV reportModules(Engine* engine)
 
     if (ctx.shouldExit())
         engine->reportModule<Exitus>();
+
+    schd::Scheduler::exit(0);
     //std::exit(res);
 
 // additional application code
