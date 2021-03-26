@@ -1,11 +1,17 @@
 #pragma once
+#include <memory>
+#include <type_traits>
+
 #include <core/types/primitives.hpp>
+#include <core/types/meta.hpp>
+#include <core/types/type_util.hpp>
 #include <core/platform/platform.hpp>
-#include <core/engine/system.hpp>
 #include <core/containers/sparse_map.hpp>
 #include <core/ecs/registry.hpp>
 #include <core/events/eventbus.hpp>
-#include <memory>
+#include <core/scheduling/scheduling.hpp>
+
+#include <core/engine/system.hpp>
 
 /**
  * @file module.hpp
@@ -21,32 +27,40 @@ namespace legion::core
     {
         friend class Engine;
     private:
-        sparse_map<id_type, std::unique_ptr<SystemBase>> m_systems;
+        multicast_delegate<void()> m_setupFuncs;
+
+        std::unordered_map<id_type, std::unique_ptr<SystemBase>> m_systems;
 
         void init()
         {
-            for (auto [_, system] : m_systems)
-                system->setup();
+            m_setupFuncs.invoke();
         };
 
     protected:
         template<size_type charc>
-        void addProcessChain(const char(&name)[charc])
+        void createProcessChain(const char(&name)[charc])
         {
-            //m_scheduler->addProcessChain<charc>(name);
+            schd::Scheduler::createProcessChain<charc>(name);
         }
 
         template<typename SystemType, typename... Args CNDOXY(inherits_from<SystemType, System<SystemType>> = 0)>
         void reportSystem(Args&&... args)
         {
-            OPTICK_EVENT();
-            m_systems.insert(typeHash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...));
+            SystemType* system = static_cast<SystemType*>(m_systems.emplace(make_hash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...)).first->second.get());
+            if constexpr (has_setup_v<SystemType, void()>)
+            {
+                m_setupFuncs.insert_back<SystemType, &SystemType::setup>(system);
+            }
+            if constexpr (has_update_v<SystemType, void(time::span)>)
+            {
+                system->template createProcess<&SystemType::update>("Update");
+            }
         }
 
-        template<typename component_type>
-        void reportComponentType()
+        template<typename component_type, typename... Args>
+        void registerComponentType(Args&&... args)
         {
-            //m_ecs->reportComponentType<component_type>();
+            ecs::Registry::registerComponentType<component_type>(std::forward<Args>(args)...);
         }
 
     public:

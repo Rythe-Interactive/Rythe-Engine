@@ -4,18 +4,13 @@
 
 namespace legion::core::compute
 {
-    bool operator&(const buffer_type& lhs, const buffer_type& rhs)
-    {
-        return static_cast<int>(lhs) & static_cast<int>(rhs);
-    }
-
     Buffer::Buffer(cl_context ctx, void* data, size_type width, size_type height, size_type depth, cl_mem_object_type object_type, cl_image_format* format, buffer_type type, std::string name)
         : m_name(std::move(name))
-        , m_data((byte*)data)
+        , m_data(static_cast<byte*>(data))
 
     {
         OPTICK_EVENT();
-        int channelSize;
+        size_type channelSize;
 
         switch (format->image_channel_order)
         {
@@ -31,6 +26,8 @@ namespace legion::core::compute
         case CL_R:
             channelSize = 1;
             break;
+        default:
+            channelSize = 0;
         }
 
 
@@ -168,7 +165,7 @@ namespace legion::core::compute
             m_type = CL_MEM_READ_WRITE;
 
         cl_int ret;
-        m_memory_object = clCreateFromGLTexture(ctx, m_type, gl_target, miplevel, gl_texture, &ret);
+        m_memory_object = clCreateFromGLTexture(ctx, m_type, gl_target, static_cast<cl_int>(miplevel), gl_texture, &ret);
 
         if (ret != CL_SUCCESS)
         {

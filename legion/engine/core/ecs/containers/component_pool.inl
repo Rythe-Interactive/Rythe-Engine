@@ -8,7 +8,13 @@ namespace legion::core::ecs
     void* component_pool<component_type>::this_ptr = Registry::tryEmplaceFamily<component_type>();
     
     template<typename component_type>
-    sparse_map<id_type, component_type> component_pool<component_type>::m_components;
+    sparse_map<id_type, component_type> component_pool<component_type>::m_components = sparse_map<id_type, component_type>(125);
+
+    template<typename component_type>
+    inline void component_pool<component_type>::clear()
+    {
+        m_components.clear();
+    }
 
     template<typename component_type>
     inline void* component_pool<component_type>::create_component(id_type target)
@@ -87,15 +93,24 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
+    inline component_type& component_pool<component_type>::get_component_direct(id_type target)
+    {
+        return m_components.at(target);
+    }
+
+    template<typename component_type>
     inline void component_pool<component_type>::destroy_component_direct(id_type target)
     {
         m_components.erase(target);
     }
 
     template<typename component_type>
-    inline component_type& component_pool<component_type>::get_component_direct(id_type target)
+    inline void component_pool<component_type>::fill_container(component_container<component_type>& container, entity_set& entities)
     {
-        return m_components.at(target);
+        container.reserve(entities.size());
+
+        for (auto ent : entities)
+            container.emplace_back(m_components.at(ent));
     }
 
 }

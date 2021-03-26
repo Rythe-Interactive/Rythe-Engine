@@ -8,6 +8,7 @@ namespace legion::core::ecs
 
     L_NODISCARD entity Registry::getWorld()
     {
+        OPTICK_EVENT();
         // Create entity data.
         auto& [_, data] = *m_entities.try_emplace(world_entity_id).first;
         data.alive = true;
@@ -23,8 +24,23 @@ namespace legion::core::ecs
     // Assign world entity.
     entity world = Registry::getWorld();
 
+    void Registry::clear()
+    {
+        m_entities.clear();
+        while (!m_recyclableEntities.empty())
+            m_recyclableEntities.pop();
+
+        for (auto& [_, family] : getFamilies())
+            family->clear();
+
+        entityCompositions().clear();
+        FilterRegistry::clear();
+        world = getWorld();
+    }
+
     L_NODISCARD component_pool_base* Registry::getFamily(id_type typeId)
     {
+        OPTICK_EVENT();
         return getFamilies().at(typeId).get();
     }
 
@@ -43,6 +59,7 @@ namespace legion::core::ecs
 
     entity Registry::createEntity(entity parent)
     {
+        OPTICK_EVENT();
         // Keep track of what the next new entity ID should be.
         static id_type nextEntityId = world_entity_id + 1; // First entity should have ID 2; 0 is invalid and 1 is world.
 
@@ -80,6 +97,7 @@ namespace legion::core::ecs
 
     entity Registry::createEntity(entity parent, const serialization::entity_prototype& prototype)
     {
+        OPTICK_EVENT();
         // Call to create a new blank entity. No need to duplicate this logic.
         auto ent = createEntity(parent);
 
@@ -108,6 +126,7 @@ namespace legion::core::ecs
 
     void Registry::destroyEntity(entity target, bool recurse)
     {
+        OPTICK_EVENT();
         // Remove entity from filters to stop it from updating.
         FilterRegistry::markEntityDestruction(target);
 
@@ -154,11 +173,13 @@ namespace legion::core::ecs
 
     bool Registry::checkEntity(entity target)
     {
+        OPTICK_EVENT();
         return target.data && target.data->alive;
     }
 
     bool Registry::checkEntity(id_type target)
     {
+        OPTICK_EVENT();
         return m_entities.count(target) && m_entities.at(target).alive;
     }
 
@@ -191,6 +212,7 @@ namespace legion::core::ecs
 
     void* Registry::createComponent(id_type typeId, entity target)
     {
+        OPTICK_EVENT();
         // Update entity composition.
         entityCompositions().at(target).insert(typeId);
         // Update filters.
@@ -201,6 +223,7 @@ namespace legion::core::ecs
 
     void* Registry::createComponent(id_type typeId, entity target, const serialization::component_prototype_base& prototype)
     {
+        OPTICK_EVENT();
         // Update entity composition.
         entityCompositions().at(target).insert(typeId);
         // Update filters.
@@ -211,6 +234,7 @@ namespace legion::core::ecs
 
     void* Registry::createComponent(id_type typeId, entity target, serialization::component_prototype_base&& prototype)
     {
+        OPTICK_EVENT();
         // Update entity composition.
         entityCompositions().at(target).insert(typeId);
         // Update filters.
@@ -221,6 +245,7 @@ namespace legion::core::ecs
 
     void Registry::destroyComponent(id_type typeId, entity target)
     {
+        OPTICK_EVENT();
         // Update entity composition.
         entityCompositions().at(target).erase(typeId);
         // Update filters.
@@ -231,11 +256,13 @@ namespace legion::core::ecs
 
     bool Registry::hasComponent(id_type typeId, entity target)
     {
+        OPTICK_EVENT();
         return getFamily(typeId)->contains(target);
     }
 
     void* Registry::getComponent(id_type typeId, entity target)
     {
+        OPTICK_EVENT();
         return getFamily(typeId)->get_component(target);
     }
 

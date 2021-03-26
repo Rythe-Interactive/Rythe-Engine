@@ -4,9 +4,8 @@
 #include <core/types/primitives.hpp>
 #include <core/types/meta.hpp>
 #include <core/ecs/registry.hpp>
-//#include <core/scheduling/scheduler.hpp>
+#include <core/scheduling/scheduler.hpp>
 #include <core/events/eventbus.hpp>
-//#include <core/defaults/coremodule.hpp>
 #include <core/logging/logging.hpp>
 #include <argh.h>
 
@@ -35,11 +34,11 @@ namespace legion::core
         std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
 
     public:
-        static size_type exitCode;
+        static int exitCode;
 
         static argh::parser cliargs;
 
-        Engine(int argc, char** argv);
+        Engine();
 
         /**@brief Reports an engine module.
          * @tparam ModuleType The module you want to report.
@@ -57,7 +56,7 @@ namespace legion::core
 
         /**@brief Runs engine loop.
          */
-        void run();
+        void run(bool low_power = false, uint minThreads = 0);
     };
 }
 

@@ -29,7 +29,7 @@ namespace legion::core::async
         while (true)
         {
             // Read the current value and continue waiting until we're in a lockable state.
-            while ((state = m_lockState.load(std::memory_order_relaxed)) == (int)lock_state::write)
+            while ((state = m_lockState.load(std::memory_order_relaxed)) == static_cast<int>(lock_state::write))
             {
                 OPTICK_EVENT("Acquire read lock");
 
@@ -49,7 +49,7 @@ namespace legion::core::async
             }
 
             // Try to add a reader to the lock state. If the lock succeeded then we can continue.
-            if (m_lockState.compare_exchange_weak(state, state + (int)lock_state::read, std::memory_order_acquire, std::memory_order_relaxed))
+            if (m_lockState.compare_exchange_weak(state, state + static_cast<int>(lock_state::read), std::memory_order_acquire, std::memory_order_relaxed))
                 break;
         }
 
@@ -74,8 +74,8 @@ namespace legion::core::async
         // Expect idle as default.
         int state;
 
-        if ((state = m_lockState.load(std::memory_order_relaxed)) == (int)lock_state::write || // Check if we can lock at all first to reduce LSU abuse on SMT CPUs if this occurs in a try_lock loop.
-            !m_lockState.compare_exchange_strong(state, state + (int)lock_state::read, std::memory_order_acquire, std::memory_order_relaxed)) // Try to add a reader to the lock state.
+        if ((state = m_lockState.load(std::memory_order_relaxed)) == static_cast<int>(lock_state::write) || // Check if we can lock at all first to reduce LSU abuse on SMT CPUs if this occurs in a try_lock loop.
+            !m_lockState.compare_exchange_strong(state, state + static_cast<int>(lock_state::read), std::memory_order_acquire, std::memory_order_relaxed)) // Try to add a reader to the lock state.
             return false;
 
         // Report another reader to the lock.
@@ -106,7 +106,7 @@ namespace legion::core::async
         while (true)
         {
             // Read the current value and continue waiting until we're in a lockable state.
-            while ((state = m_lockState.load(std::memory_order_relaxed)) != (int)lock_state::idle)
+            while ((state = m_lockState.load(std::memory_order_relaxed)) != static_cast<int>(lock_state::idle))
             {
                 OPTICK_EVENT("Acquire write lock");
 
@@ -126,7 +126,7 @@ namespace legion::core::async
             }
 
             // Try to set the lock state to write. If the lock succeeded then we can continue.
-            if (m_lockState.compare_exchange_weak(state, (int)lock_state::write, std::memory_order_acquire, std::memory_order_relaxed))
+            if (m_lockState.compare_exchange_weak(state, static_cast<int>(lock_state::write), std::memory_order_acquire, std::memory_order_relaxed))
                 break;
         }
 
@@ -156,10 +156,10 @@ namespace legion::core::async
         }
 
         // Expect idle as default.
-        int state = (int)lock_state::idle;
+        int state = static_cast<int>(lock_state::idle);
 
-        if ((state = m_lockState.load(std::memory_order_relaxed)) != (int)lock_state::idle || // Check if we can lock at all first to reduce LSU abuse on SMT CPUs if this occurs in a try_lock loop.
-            !m_lockState.compare_exchange_strong(state, (int)lock_state::write, std::memory_order_acquire, std::memory_order_relaxed)) // Try to set the lock state to write.
+        if ((state = m_lockState.load(std::memory_order_relaxed)) != static_cast<int>(lock_state::idle) || // Check if we can lock at all first to reduce LSU abuse on SMT CPUs if this occurs in a try_lock loop.
+            !m_lockState.compare_exchange_strong(state, static_cast<int>(lock_state::write), std::memory_order_acquire, std::memory_order_relaxed)) // Try to set the lock state to write.
         {
             if (relock)
             {
@@ -189,7 +189,7 @@ namespace legion::core::async
             return;
         }
 
-        m_lockState.fetch_sub((int)lock_state::read, std::memory_order_release);
+        m_lockState.fetch_sub(static_cast<int>(lock_state::read), std::memory_order_release);
 
         m_localState.at(m_id) = lock_state::idle; // Set thread_local state to idle.
     }
@@ -209,12 +209,12 @@ namespace legion::core::async
         }
         else if (m_localReaders.at(m_id) > 0)
         {
-            m_lockState.store((int)lock_state::read, std::memory_order_release);
+            m_lockState.store(static_cast<int>(lock_state::read), std::memory_order_release);
             m_localState.at(m_id) = lock_state::read; // Set thread_local state to idle.
             return;
         }
 
-        m_lockState.store((int)lock_state::idle, std::memory_order_release);
+        m_lockState.store(static_cast<int>(lock_state::idle), std::memory_order_release);
         m_localState.at(m_id) = lock_state::idle; // Set thread_local state to idle.
     }
 
@@ -228,7 +228,7 @@ namespace legion::core::async
         if (m_forceRelease)
             return;
 
-        assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == (int)lock_state::idle);
+        assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == static_cast<int>(lock_state::idle));
         m_id = source.m_id;
     }
 
@@ -237,7 +237,7 @@ namespace legion::core::async
         if (m_forceRelease)
             return *this;
 
-        assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == (int)lock_state::idle);
+        assert_msg("Attempted to move a rw_spinlock that was locked.", source.m_lockState.load(std::memory_order_relaxed) == static_cast<int>(lock_state::idle));
         m_id = source.m_id;
         return *this;
     }
@@ -261,6 +261,7 @@ namespace legion::core::async
             return read_lock(priority);
         case lock_state::write:
             return write_lock(priority);
+        case legion::core::async::lock_state::idle:
         default:
             return;
         }
@@ -285,6 +286,7 @@ namespace legion::core::async
             return read_try_lock();
         case lock_state::write:
             return write_try_lock();
+        case legion::core::async::lock_state::idle:
         default:
             return false;
         }
@@ -302,6 +304,7 @@ namespace legion::core::async
             return read_unlock();
         case legion::core::async::lock_state::write:
             return write_unlock();
+        case legion::core::async::lock_state::idle:
         default:
             return;
         }

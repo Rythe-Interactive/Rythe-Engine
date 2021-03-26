@@ -1,5 +1,6 @@
 /// @ref core
 /// @file glm/glm.cpp
+#include <core/platform/platform.hpp>
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
 #define GLM_ENABLE_EXPERIMENTAL

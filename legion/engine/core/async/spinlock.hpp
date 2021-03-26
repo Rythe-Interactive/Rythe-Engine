@@ -1,6 +1,6 @@
 #pragma once
 #include <core/platform/platform.hpp>
-#include <core/detail/internals.hpp>
+#include <core/common/assert.hpp>
 #include <core/logging/logging.hpp>
 #include <atomic>
 #include <mutex> // Anyone who includes this file can also use std::lock_guard
@@ -45,4 +45,7 @@ namespace legion::core::async
          */
         void unlock() noexcept;
     };
+
+    template<typename resource_type>
+    using lock_pair = std::pair<spinlock, resource_type>;
 }

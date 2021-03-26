@@ -20,41 +20,44 @@ namespace legion
 #endif
     }
 
-    std::string* lastDomain = nullptr;
-    cstring lastSubDomain = nullptr;
-    std::vector<cstring> subdomainnames = decltype(subdomainnames){};
-    std::unordered_map<cstring, std::pair<size_type, long double>> subdomaintimes = decltype(subdomaintimes){};
-
-    std::unordered_map<std::string, std::string>& GetTestDomains()
-    {
-        static std::unordered_map<std::string, std::string> domains;
-        return domains;
-    }
-
-    int SetTestDomain(const std::string& func, cstring domain)
-    {
-        GetTestDomains()[func] = std::string(domain);
-        return 0;
-    }
-
     using CheckFunc = void(*)(bool, cstring, int);
     using SubDomainFunc = bool(*)(cstring);
 
-    CheckFunc Check;
-    SubDomainFunc StartSubDomain;
+    struct test_data
+    {
+        static std::string* lastDomain;
+        static cstring lastSubDomain;
+        static std::vector<cstring> subdomainnames;
+        static std::unordered_map<cstring, std::pair<size_type, long double>> subdomaintimes;
+
+        static std::unordered_map<std::string, std::string>& GetTestDomains()
+        {
+            static std::unordered_map<std::string, std::string> domains;
+            return domains;
+        }
+
+        static CheckFunc Check;
+        static SubDomainFunc StartSubDomain;
+    };
+
+    inline L_ALWAYS_INLINE int SetTestDomain(const std::string& func, cstring domain)
+    {
+        test_data::GetTestDomains()[func] = std::string(domain);
+        return 0;
+    }
 
     struct SubDomainStack
     {
         static inline size_type items = 0;
         long double* time;
-        time::clock<long double> clck;
+        time::stopwatch<long double> clck;
 
         SubDomainStack(bool benchmark) : time(nullptr)
         {
             items++;
             if (benchmark)
             {
-                time = &(subdomaintimes[lastSubDomain].second);
+                time = &(test_data::subdomaintimes[test_data::lastSubDomain].second);
                 clck.start();
             }
         }
@@ -73,6 +76,9 @@ namespace legion
 
     inline L_ALWAYS_INLINE void NoOpt(bool value, L_MAYBEUNUSED cstring file, L_MAYBEUNUSED int line)
     {
+        if(!value)
+            DoNotOptimize(value);
+
         DoNotOptimize(value);
     }
 
@@ -83,24 +89,24 @@ namespace legion
 
     inline L_ALWAYS_INLINE bool NoPrint(cstring val)
     {
-        lastSubDomain = val;
-        if (!subdomaintimes.count(val))
-            subdomainnames.push_back(val);
-        subdomaintimes.emplace(val, std::make_pair(SubDomainStack::items, (long double)0));
+        test_data::lastSubDomain = val;
+        if (!test_data::subdomaintimes.count(val))
+            test_data::subdomainnames.push_back(val);
+        test_data::subdomaintimes.emplace(val, std::make_pair(SubDomainStack::items, static_cast<long double>(0)));
         return true;
     }
 
     inline L_ALWAYS_INLINE bool DoPrint(cstring val)
     {
-        lastSubDomain = val;
-        std::cout << '[' << (lastDomain ? *lastDomain : "unknown") << "] ";
-        for (int i = 0; i <= SubDomainStack::items; i++)
+        test_data::lastSubDomain = val;
+        std::cout << '[' << (test_data::lastDomain ? *test_data::lastDomain : "unknown") << "] ";
+        for (size_type i = 0; i <= SubDomainStack::items; i++)
             std::cout << "    ";
         std::cout << val << '\n';
         return false;
     }
 
-    std::string SanitizeFunctionName(cstring func)
+    inline L_ALWAYS_INLINE std::string SanitizeFunctionName(cstring func)
     {
         std::string_view fname = func;
         auto end = fname.find_first_of('(');
@@ -115,54 +121,58 @@ namespace legion
         if (Engine::cliargs["nobenchmark"])
             return;
 
-        subdomaintimes.clear();
-        lastDomain = &GetTestDomains()[func];
-        std::cout << '[' << *lastDomain << "] Running benchmark: " << n << " cases\n";
-        Check = &NoOpt;
-        StartSubDomain = &NoPrint;
-        time::clock<long double> clck;
+        test_data::subdomaintimes.clear();
+        test_data::subdomainnames.clear();
+        test_data::lastDomain = &test_data::GetTestDomains()[func];
+        std::cout << '[' << *test_data::lastDomain << "] Running benchmark: " << n << " cases\n";
+        test_data::Check = &NoOpt;
+        test_data::StartSubDomain = &NoPrint;
+        time::stopwatch<long double> clck;
         clck.start();
-        for (int i = 0; i < n; i++)
+        for (size_type i = 0; i < n; i++)
         {
             std::invoke(c, std::forward<Args>(args)...);
         }
         auto elapsed = clck.end();
 
-        if (subdomainnames.size())
+        if (test_data::subdomainnames.size())
         {
             long double total = 0;
-            for (auto& name : subdomainnames)
+            for (auto& name : test_data::subdomainnames)
             {
-                auto& [indent, time] = subdomaintimes[name];
-                std::cout << '[' << *lastDomain << "] ";
-                for (int i = 0; i <= indent; i++)
+                auto& [indent, time] = test_data::subdomaintimes[name];
+                std::cout << '[' << *test_data::lastDomain << "] ";
+                for (size_type i = 0; i <= indent; i++)
                     std::cout << "    ";
-                std::cout << name << ": " << time << "ms total " << time / ((long double)n) << "ms on average\n";
+                std::cout << name << ": " << time << "ms total " << time / static_cast<long double>(n) << "ms on average\n";
                 total += time;
             }
-            subdomaintimes.clear();
+            test_data::subdomaintimes.clear();
 
-            std::cout << '[' << *lastDomain << "]     " << total / ((long double)n) << "ms on average\n";
-            std::cout << '[' << *lastDomain << "]     " << total << "ms total\n";
+            std::cout << '[' << *test_data::lastDomain << "]     " << total / static_cast<long double>(n) << "ms on average\n";
+            std::cout << '[' << *test_data::lastDomain << "]     " << total << "ms total\n";
         }
         else
         {
-            std::cout << '[' << *lastDomain << "]     " << elapsed.milliseconds() / ((long double)n) << "ms on average\n";
-            std::cout << '[' << *lastDomain << "]     " << elapsed.milliseconds() << "ms total\n";
+            std::cout << '[' << *test_data::lastDomain << "]     " << elapsed.milliseconds() / static_cast<long double>(n) << "ms on average\n";
+            std::cout << '[' << *test_data::lastDomain << "]     " << elapsed.milliseconds() << "ms total\n";
         }
     }
 
     template<typename Callable, typename... Args>
     inline L_ALWAYS_INLINE void Test_IMPL(const std::string& func, Callable c, Args&&... args)
     {
-        lastDomain = &GetTestDomains()[func];
-        std::cout << '[' << *lastDomain << "] Running test\n";
-        Check = &DoCheck;
-        StartSubDomain = &DoPrint;
+        test_data::lastDomain = &test_data::GetTestDomains()[func];
+        std::cout << '[' << *test_data::lastDomain << "] Running test\n";
+        test_data::Check = &DoCheck;
+        test_data::StartSubDomain = &DoPrint;
+        std::cout << '[' << *test_data::lastDomain << "] Iteration 1\n";
+        std::invoke(c, std::forward<Args>(args)...);
+        std::cout << '[' << *test_data::lastDomain << "] Iteration 2\n";
         std::invoke(c, std::forward<Args>(args)...);
     }
 
-#define L_CHECK(b) Check(b, __FILE__, __LINE__)
+#define L_CHECK(b) test_data::Check(b, __FILE__, __LINE__)
 
 #define Benchmark_N(n, ...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), n, __VA_ARGS__)
 #define Benchmark(...) legion::Benchmark_IMPL(legion::SanitizeFunctionName(__FULL_FUNC__), 10000, __VA_ARGS__)
@@ -181,6 +191,6 @@ namespace legion
 
 #define LEGION_TEST(domain) LEGION_REGISTER_TEST(DOCTEST_ANONYMOUS(_DOCTEST_ANON_FUNC_), domain)
 
-#define LEGION_SUBTEST(subdomain) if(const SubDomainStack& DOCTEST_ANONYMOUS(_DOCTEST_ANON_SUBCASE_) DOCTEST_UNUSED = StartSubDomain(subdomain))
+#define LEGION_SUBTEST(subdomain) if(const SubDomainStack& DOCTEST_ANONYMOUS(_DOCTEST_ANON_SUBCASE_) DOCTEST_UNUSED = test_data::StartSubDomain(subdomain))
 
 }

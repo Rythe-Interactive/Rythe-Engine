@@ -1,5 +1,5 @@
 #pragma once
-#include "filesystem_resolver.hpp"
+#include <core/filesystem/filesystem_resolver.hpp>
 
 
 
@@ -75,12 +75,12 @@ namespace legion::core::filesystem
          * @param [in] in The array with decompressed  data.
          * @param [out] out The array where to put compressed data.
          */
-        virtual void build_disk_representation(std::shared_ptr<const byte_vec> in, std::shared_ptr<byte_vec> out) const LEGION_IMPURE;
+        virtual void build_disk_representation(L_MAYBEUNUSED std::shared_ptr<const byte_vec> in, L_MAYBEUNUSED std::shared_ptr<byte_vec> out) const LEGION_IMPURE;
 
         /**@brief A hint to how big the fast memory representation is going to be.
          * @param [in] in The array with the compressed data.
          */
-        virtual std::size_t size_hint(std::shared_ptr<const byte_vec> in) const LEGION_IMPURE_RETURN(0);
+        virtual std::size_t size_hint(L_MAYBEUNUSED std::shared_ptr<const byte_vec> in) const LEGION_IMPURE_RETURN(0);
 
 
     private:

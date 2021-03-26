@@ -23,6 +23,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>ClangCL</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -44,7 +45,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediates\$(Platform)\$(Configuration)\engine\$(ProjectName)\</IntDir>
     <TargetName>legion-$(ProjectName)</TargetName>
@@ -61,7 +62,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>LEGION_INTERNAL;PROJECT_NAME=$(ProjectName);_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -69,7 +70,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -91,11 +92,11 @@ del ".\xcopyexclude"</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LEGION_INTERNAL;PROJECT_NAME=$(ProjectName);NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;LEGION_INTERNAL;PROJECT_NAME=$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -133,7 +134,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="async\wait_priority.hpp" />
     <ClInclude Include="common\hash.hpp" />
     <ClInclude Include="common\string_literal.hpp" />
-    <ClInclude Include="containers\runnable.hpp" />
+    <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\spinlock.hpp" />
     <ClInclude Include="async\transferable_atomic.hpp" />
@@ -153,8 +154,8 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="containers\containers.hpp" />
     <ClInclude Include="containers\data_view.hpp" />
     <ClInclude Include="containers\iterator_tricks.hpp" />
-    <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="containers\hashed_sparse_set.hpp" />
+    <ClInclude Include="containers\pointer.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />
@@ -164,7 +165,12 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="data\mesh.hpp" />
-    <ClInclude Include="detail\internals.hpp" />
+    <ClInclude Include="common\assert.hpp" />
+    <ClInclude Include="defaults\coremodule.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="ecs\containers\component_container.hpp" />
     <ClInclude Include="ecs\containers\component_pool.hpp" />
     <ClInclude Include="ecs\data\entity_data.hpp" />
     <ClInclude Include="ecs\ecs.hpp" />
@@ -175,6 +181,11 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="ecs\handles\entity.hpp" />
     <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
     <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
+    <ClInclude Include="scheduling\clock.hpp" />
+    <ClInclude Include="scheduling\process.hpp" />
+    <ClInclude Include="scheduling\processchain.hpp" />
+    <ClInclude Include="scheduling\scheduler.hpp" />
+    <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="serialization\prototype.hpp" />
     <ClInclude Include="ecs\registry.hpp" />
     <ClInclude Include="engine\engine.hpp" />
@@ -501,7 +512,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="types\reflector.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
-    <ClInclude Include="time\clock.hpp" />
+    <ClInclude Include="time\stopwatch.hpp" />
     <ClInclude Include="time\defaults.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
@@ -532,6 +543,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="engine\system.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
+    <ClCompile Include="events\eventbus.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
     <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />
@@ -545,6 +557,11 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="logging\logging.cpp" />
     <ClCompile Include="math\glm\detail\glm.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
+    <ClCompile Include="scheduling\clock.cpp" />
+    <ClCompile Include="scheduling\process.cpp" />
+    <ClCompile Include="scheduling\processchain.cpp" />
+    <ClCompile Include="scheduling\scheduler.cpp" />
+    <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -560,6 +577,8 @@ del ".\xcopyexclude"</Command>
     <None Include="ecs\prototypes\entity_prototype.inl" />
     <None Include="ecs\registry.inl" />
     <None Include="engine\engine.inl" />
+    <None Include="engine\system.inl" />
+    <None Include="events\eventbus.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />
     <None Include="math\glm\detail\func_exponential.inl" />
@@ -697,6 +716,9 @@ del ".\xcopyexclude"</Command>
     <None Include="math\glm\gtx\vector_query.inl" />
     <None Include="math\glm\gtx\wrap.inl" />
     <None Include="platform\cpp.hint" />
+    <None Include="scheduling\process.inl" />
+    <None Include="scheduling\processchain.inl" />
+    <None Include="scheduling\scheduler.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

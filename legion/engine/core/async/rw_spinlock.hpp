@@ -8,7 +8,7 @@
 #include <core/types/primitives.hpp>
 #include <core/platform/platform.hpp>
 #include <core/containers/sparse_set.hpp>
-#include <core/detail/internals.hpp>
+#include <core/common/assert.hpp>
 #include <core/async/wait_priority.hpp>
 
 /**
@@ -121,6 +121,9 @@ namespace legion::core::async
             return std::invoke(func);
         }
     };
+
+    template<typename resource_type>
+    using rw_lock_pair = std::pair<rw_spinlock, resource_type>;
 
     /**@class readonly_guard
      * @brief RAII guard that uses ::async::rw_spinlock to lock for read-only.

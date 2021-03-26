@@ -57,7 +57,7 @@ namespace legion::core
         retrieveBinaryData(submeshCount, start);
 
         // Read and append all sub-meshes
-        for (int i = 0; i < submeshCount; i++)
+        for (size_type i = 0; i < submeshCount; i++)
         {
             sub_mesh submesh;
             retrieveBinaryData(submesh.name, start);
@@ -75,7 +75,7 @@ namespace legion::core
 
         // Iterate over all triangles of each sub-mesh.
         for (auto& submesh : data->submeshes)
-            for (unsigned i = submesh.indexOffset; i < submesh.indexOffset + submesh.indexCount; i += 3)
+            for (size_type i = submesh.indexOffset; i < submesh.indexOffset + submesh.indexCount; i += 3)
             {
                 // Get vertices of the triangle.
                 math::vec3 vtx0 = data->vertices[data->indices[i]];

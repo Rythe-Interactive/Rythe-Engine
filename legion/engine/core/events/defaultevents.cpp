@@ -3,7 +3,7 @@
 
 namespace legion::core::events
 {
-    exit::exit(int exitcode) :exitcode(exitcode)
+    exit::exit(int exitCode) : exitcode(exitCode)
     {
         std::cout << "=========================\n| Shutting down engine. |\n=========================\n";
     }

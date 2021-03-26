@@ -1,18 +1,20 @@
 #include <core/engine/engine.hpp>
+#include <core/defaults/coremodule.hpp>
 
 namespace legion::core
 {
-    size_type Engine::exitCode = 0;
+    int Engine::exitCode = 0;
     argh::parser Engine::cliargs;
 
-    Engine::Engine(int argc, char** argv) : m_modules()
+    Engine::Engine()
     {
-        cliargs.parse(argc, argv);
-        log::setup();
+        reportModule<CoreModule>();
     }
 
     void Engine::init()
     {
+        log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
+
         for (const auto& [priority, moduleList] : m_modules)
             for (auto& module : moduleList)
                 module->setup();
@@ -22,8 +24,8 @@ namespace legion::core
                 module->init();
     }
 
-    void Engine::run()
+    void Engine::run(bool low_power, uint minThreads)
     {
-        //m_scheduler.run();
+       exitCode = scheduling::Scheduler::run(low_power, minThreads);
     }
 }

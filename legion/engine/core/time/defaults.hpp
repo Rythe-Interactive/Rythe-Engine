@@ -1,8 +1,8 @@
 #pragma once
 #include <core/time/time_span.hpp>
-#include <core/time/clock.hpp>
+#include <core/time/stopwatch.hpp>
 
 namespace legion::core::time
 {
-    const static inline clock<precise_time> mainClock;
+    extern const stopwatch<main_clock_time> mainClock;
 }

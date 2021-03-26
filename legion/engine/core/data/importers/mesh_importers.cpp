@@ -42,7 +42,7 @@ namespace legion::core::detail
         }
     };
 
-    image_handle loadGLTFImage(const tinygltf::Image& img)
+    static image_handle loadGLTFImage(const tinygltf::Image& img)
     {
         auto handle = ImageCache::get_handle(img.name);
         if (handle)
@@ -85,7 +85,7 @@ namespace legion::core::detail
      * @param componentType - tinygltf componentType, Vertex color is expected to come in float, unsigned byte or unsigned short - will be handled by the function
      * @param data - std::vector<color> the destination of the data copy. The vector will be resized to vector.size()+(tinygltf vertex color size)
      */
-    void handleGltfVertexColor(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int accessorType, int componentType, std::vector<math::color>* data)
+    static void handleGltfVertexColor(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int accessorType, int componentType, std::vector<math::color>* data)
     {
         //colors in glft are in vec3/vec4 float/unsigned byte/unsigned short
 
@@ -111,7 +111,7 @@ namespace legion::core::detail
             {
                 // Vertex colors in float
                 data->resize(size + bufferView.byteLength / sizeof(math::vec3));
-                for (int i = 0; i < bufferView.byteLength; i += 3 * sizeof(float))
+                for (size_type i = 0; i < bufferView.byteLength; i += 3 * sizeof(float))
                 {
                     float r = *reinterpret_cast<const float*>(&buffer.data.at(i) + bufferView.byteOffset);
                     float g = *reinterpret_cast<const float*>(&buffer.data.at(i + sizeof(float)) + bufferView.byteOffset);
@@ -146,7 +146,7 @@ namespace legion::core::detail
                 // Vertex colors in float
                 data->resize(size + bufferView.byteLength / sizeof(math::vec4));
 
-                for (int i = 0; i < bufferView.byteLength; i += 4 * sizeof(float))
+                for (size_type i = 0; i < bufferView.byteLength; i += 4 * sizeof(float))
                 {
                     float r = *reinterpret_cast<const float*>(&buffer.data.at(i) + bufferView.byteOffset);
                     float g = *reinterpret_cast<const float*>(&buffer.data.at(i + sizeof(float)) + bufferView.byteOffset);
@@ -171,7 +171,7 @@ namespace legion::core::detail
      * @param offset - The mesh Indices offset. ( e.g. For the first submesh 0, for the second submesh submesh[0].indices.size() )
      * @param data - The std::vector to copy the indices data into
      */
-    void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int offset, std::vector<unsigned int>* data)
+    static void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int offset, std::vector<unsigned int>* data)
     {
         size_t size = data->size();
         //indices in glft are in uin16
@@ -181,9 +181,9 @@ namespace legion::core::detail
         origin.resize(bufferView.byteLength / 2);
         memcpy(origin.data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
 
-        for (int i = 0; i < origin.size(); ++i)
+        for (size_type i = 0; i < origin.size(); ++i)
         {
-            data->at(i + size) = origin[i] + offset;
+            data->at(i + size) = static_cast<uint>(origin[i]) + static_cast<uint>(offset);
         }
     }
 }
@@ -272,7 +272,7 @@ namespace legion::core
             {
                 auto& material = settings.materials->emplace_back();
                 material.name = srcMat.name;
-                material.opaque = srcMat.dissolve == 1;
+                material.opaque = math::close_enough(srcMat.dissolve, 1);
                 material.alphaCutoff = 0.5f;
                 material.doubleSided = false;
 
@@ -313,7 +313,7 @@ namespace legion::core
 
         // Sparse map like constructs to map both vertices and indices.
         std::vector<detail::vertex_hash> vertices;
-        std::unordered_map<detail::vertex_hash, size_type> indices;
+        std::unordered_map<detail::vertex_hash, uint> indices;
 
         // Iterate submeshes.
         for (auto& shape : shapes)
@@ -326,9 +326,9 @@ namespace legion::core
             for (auto& indexData : shape.mesh.indices)
             {
                 // Get the indices into the tinyobj attributes.
-                uint vertexIndex = indexData.vertex_index * 3;
-                uint normalIndex = indexData.normal_index * 3;
-                uint uvIndex = indexData.texcoord_index * 2;
+                uint vertexIndex = static_cast<uint>(indexData.vertex_index) * 3;
+                uint normalIndex = static_cast<uint>(indexData.normal_index) * 3;
+                uint uvIndex = static_cast<uint>(indexData.texcoord_index) * 2;
 
                 // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
                 math::vec3 vertex(-attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
@@ -349,7 +349,7 @@ namespace legion::core
                 if (indices[hash] >= vertices.size() || vertices[indices[hash]] != hash)
                 {
                     // Insert new hash into sparse container.
-                    indices[hash] = vertices.size();
+                    indices[hash] = static_cast<uint>(vertices.size());
                     vertices.push_back(hash);
 
                     // Append vertex data.
@@ -368,7 +368,7 @@ namespace legion::core
         }
 
         // Because we only flip one axis we also need to flip the triangle rotation.
-        for (int i = 0; i < data.indices.size(); i += 3)
+        for (size_type i = 0; i < data.indices.size(); i += 3)
         {
             uint i1 = data.indices[i + 1];
             uint i2 = data.indices[i + 2];
@@ -399,7 +399,7 @@ namespace legion::core
         std::string warn;
 
         // Load gltf mesh data into model
-        bool ret = loader.LoadBinaryFromMemory(&model, &err, &warn, resource.data(), resource.size());
+        bool ret = loader.LoadBinaryFromMemory(&model, &err, &warn, resource.data(), static_cast<uint>(resource.size()));
 
         if (!err.empty())
         {
@@ -426,28 +426,62 @@ namespace legion::core
 
                 material.name = srcMat.name;
                 material.opaque = srcMat.alphaMode == "OPAQUE" || srcMat.alphaMode == "MASK";
-                material.alphaCutoff = srcMat.alphaCutoff;
+                material.alphaCutoff = static_cast<float>(srcMat.alphaCutoff);
                 material.doubleSided = srcMat.doubleSided;
 
-                material.albedoValue = math::color(pbrData.baseColorFactor[0], pbrData.baseColorFactor[1], pbrData.baseColorFactor[2], pbrData.baseColorFactor[3]);
+                material.albedoValue = math::color(
+                    static_cast<float>(pbrData.baseColorFactor[0]),
+                    static_cast<float>(pbrData.baseColorFactor[1]),
+                    static_cast<float>(pbrData.baseColorFactor[2]),
+                    static_cast<float>(pbrData.baseColorFactor[3]));
+
                 if (pbrData.baseColorTexture.index >= 0)
-                    material.albedoMap = detail::loadGLTFImage(model.images[model.textures[pbrData.baseColorTexture.index].source]);
+                    material.albedoMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(pbrData.baseColorTexture.index)
+                            ].source)
+                        ]);
 
                 material.metallicValue = static_cast<float>(pbrData.metallicFactor);
                 material.roughnessValue = static_cast<float>(pbrData.roughnessFactor);
 
                 if (pbrData.metallicRoughnessTexture.index >= 0)
-                    material.metallicRoughnessMap = detail::loadGLTFImage(model.images[model.textures[pbrData.metallicRoughnessTexture.index].source]);
+                    material.metallicRoughnessMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(pbrData.metallicRoughnessTexture.index)
+                            ].source)
+                        ]);
 
-                material.emissiveValue = math::color(srcMat.emissiveFactor[0], srcMat.emissiveFactor[1], srcMat.emissiveFactor[2]);
+                material.emissiveValue = math::color(
+                    static_cast<float>(srcMat.emissiveFactor[0]),
+                    static_cast<float>(srcMat.emissiveFactor[1]),
+                    static_cast<float>(srcMat.emissiveFactor[2]));
+
                 if (srcMat.emissiveTexture.index >= 0)
-                    material.emissiveMap = detail::loadGLTFImage(model.images[model.textures[srcMat.emissiveTexture.index].source]);
+                    material.emissiveMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(srcMat.emissiveTexture.index)
+                            ].source)
+                        ]);
 
                 if (srcMat.normalTexture.index >= 0)
-                    material.normalMap = detail::loadGLTFImage(model.images[model.textures[srcMat.normalTexture.index].source]);
+                    material.normalMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(srcMat.normalTexture.index)
+                            ].source)
+                        ]);
 
                 if (srcMat.occlusionTexture.index >= 0)
-                    material.aoMap = detail::loadGLTFImage(model.images[model.textures[srcMat.occlusionTexture.index].source]);
+                    material.aoMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(srcMat.occlusionTexture.index)
+                            ].source)
+                        ]);
 
                 material.heightMap = invalid_image_handle;
             }
@@ -467,19 +501,19 @@ namespace legion::core
                 // Primitives can be vertex position, normal, texcoord (uv) and vertex colors
 
                 // Find the indices of our mesh and copy them into meshData.indices
-                const tg::Accessor& accessor = model.accessors.at(primitive.indices);
-                tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
-                tg::Buffer& buff = model.buffers.at(view.buffer);
-                detail::handleGltfIndices(buff, view, meshData.vertices.size(), &(meshData.indices));
+                const tg::Accessor& indexAccessor = model.accessors.at(static_cast<size_type>(primitive.indices));
+                tg::BufferView& indexBufferView = model.bufferViews.at(static_cast<size_type>(indexAccessor.bufferView));
+                tg::Buffer& indexBuffer = model.buffers.at(static_cast<size_type>(indexBufferView.buffer));
+                detail::handleGltfIndices(indexBuffer, indexBufferView, static_cast<int>(meshData.vertices.size()), &(meshData.indices));
 
                 for (auto& attrib : primitive.attributes)
                 {
                     // Loop through the attributes of the primitive
                     // Depending on the attribute the data is copied into a different std::vector in meshData
 
-                    const tg::Accessor& accessor = model.accessors.at(attrib.second);
-                    tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
-                    tg::Buffer& buff = model.buffers.at(view.buffer);
+                    const tg::Accessor& accessor = model.accessors.at(static_cast<size_type>(attrib.second));
+                    tg::BufferView& view = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
+                    tg::Buffer& buff = model.buffers.at(static_cast<size_type>(view.buffer));
                     if (attrib.first.compare("POSITION") == 0)
                     {
                         // Position data
@@ -515,7 +549,7 @@ namespace legion::core
         }
 
         // Convert to left handed coord system
-        for (int i = 0; i < meshData.vertices.size(); ++i)
+        for (size_type i = 0; i < meshData.vertices.size(); ++i)
         {
             meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
             meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
@@ -525,7 +559,7 @@ namespace legion::core
         }
 
         // Because we only flip one axis we also need to flip the triangle rotation.
-        for (int i = 0; i < meshData.indices.size(); i += 3)
+        for (size_type i = 0; i < meshData.indices.size(); i += 3)
         {
             uint i1 = meshData.indices[i + 1];
             uint i2 = meshData.indices[i + 2];
@@ -580,7 +614,7 @@ namespace legion::core
         }
 
         // Load gltf mesh data into model
-        bool ret = loader.LoadASCIIFromString(&model, &err, &warn, ascii.c_str(), ascii.length(), resolver->get_absolute_path());
+        bool ret = loader.LoadASCIIFromString(&model, &err, &warn, ascii.c_str(), static_cast<uint>(ascii.length()), resolver->get_absolute_path());
 
         if (!err.empty())
         {
@@ -607,28 +641,62 @@ namespace legion::core
 
                 material.name = srcMat.name;
                 material.opaque = srcMat.alphaMode == "OPAQUE" || srcMat.alphaMode == "MASK";
-                material.alphaCutoff = srcMat.alphaCutoff;
+                material.alphaCutoff = static_cast<float>(srcMat.alphaCutoff);
                 material.doubleSided = srcMat.doubleSided;
 
-                material.albedoValue = math::color(pbrData.baseColorFactor[0], pbrData.baseColorFactor[1], pbrData.baseColorFactor[2], pbrData.baseColorFactor[3]);
+                material.albedoValue = math::color(
+                    static_cast<float>(pbrData.baseColorFactor[0]),
+                    static_cast<float>(pbrData.baseColorFactor[1]),
+                    static_cast<float>(pbrData.baseColorFactor[2]),
+                    static_cast<float>(pbrData.baseColorFactor[3]));
+
                 if (pbrData.baseColorTexture.index >= 0)
-                    material.albedoMap = detail::loadGLTFImage(model.images[model.textures[pbrData.baseColorTexture.index].source]);
+                    material.albedoMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(pbrData.baseColorTexture.index)
+                            ].source)
+                        ]);
 
                 material.metallicValue = static_cast<float>(pbrData.metallicFactor);
                 material.roughnessValue = static_cast<float>(pbrData.roughnessFactor);
 
                 if (pbrData.metallicRoughnessTexture.index >= 0)
-                    material.metallicRoughnessMap = detail::loadGLTFImage(model.images[model.textures[pbrData.metallicRoughnessTexture.index].source]);
+                    material.metallicRoughnessMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(pbrData.metallicRoughnessTexture.index)
+                            ].source)
+                        ]);
 
-                material.emissiveValue = math::color(srcMat.emissiveFactor[0], srcMat.emissiveFactor[1], srcMat.emissiveFactor[2]);
+                material.emissiveValue = math::color(
+                    static_cast<float>(srcMat.emissiveFactor[0]),
+                    static_cast<float>(srcMat.emissiveFactor[1]),
+                    static_cast<float>(srcMat.emissiveFactor[2]));
+
                 if (srcMat.emissiveTexture.index >= 0)
-                    material.emissiveMap = detail::loadGLTFImage(model.images[model.textures[srcMat.emissiveTexture.index].source]);
+                    material.emissiveMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(srcMat.emissiveTexture.index)
+                            ].source)
+                        ]);
 
                 if (srcMat.normalTexture.index >= 0)
-                    material.normalMap = detail::loadGLTFImage(model.images[model.textures[srcMat.normalTexture.index].source]);
+                    material.normalMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(srcMat.normalTexture.index)
+                            ].source)
+                        ]);
 
                 if (srcMat.occlusionTexture.index >= 0)
-                    material.aoMap = detail::loadGLTFImage(model.images[model.textures[srcMat.occlusionTexture.index].source]);
+                    material.aoMap = detail::loadGLTFImage(
+                        model.images[
+                            static_cast<size_type>(model.textures[
+                                static_cast<size_type>(srcMat.occlusionTexture.index)
+                            ].source)
+                        ]);
 
                 material.heightMap = invalid_image_handle;
             }
@@ -647,19 +715,19 @@ namespace legion::core
                 // Loop through all primitives in the mesh
                 // Primitives can be vertex position, normal, texcoord (uv) and vertex colors
 
-                const tg::Accessor& accessor = model.accessors.at(primitive.indices);
-                tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
-                tg::Buffer& buff = model.buffers.at(view.buffer);
-                detail::handleGltfIndices(buff, view, meshData.vertices.size(), &(meshData.indices));
+                const tg::Accessor& indexAccessor = model.accessors.at(static_cast<size_type>(primitive.indices));
+                tg::BufferView& indexBufferView = model.bufferViews.at(static_cast<size_type>(indexAccessor.bufferView));
+                tg::Buffer& indexBuffer = model.buffers.at(static_cast<size_type>(indexBufferView.buffer));
+                detail::handleGltfIndices(indexBuffer, indexBufferView, static_cast<int>(meshData.vertices.size()), &(meshData.indices));
 
                 for (auto& attrib : primitive.attributes)
                 {
                     // Loop through the attributes of the primitive
                     // Depending on the attribute the data is copied into a different std::vector in meshData
 
-                    const tg::Accessor& accessor = model.accessors.at(attrib.second);
-                    tg::BufferView& view = model.bufferViews.at(accessor.bufferView);
-                    tg::Buffer& buff = model.buffers.at(view.buffer);
+                    const tg::Accessor& accessor = model.accessors.at(static_cast<size_type>(attrib.second));
+                    tg::BufferView& view = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
+                    tg::Buffer& buff = model.buffers.at(static_cast<size_type>(view.buffer));
                     if (attrib.first.compare("POSITION") == 0)
                     {
                         // Position data
@@ -695,7 +763,7 @@ namespace legion::core
         }
 
         // Convert to left handed coord system
-        for (int i = 0; i < meshData.vertices.size(); ++i)
+        for (size_type i = 0; i < meshData.vertices.size(); ++i)
         {
             meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
             meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
@@ -705,7 +773,7 @@ namespace legion::core
         }
 
         // Because we only flip one axis we also need to flip the triangle rotation.
-        for (int i = 0; i < meshData.indices.size(); i += 3)
+        for (size_type i = 0; i < meshData.indices.size(); i += 3)
         {
             uint i1 = meshData.indices[i + 1];
             uint i2 = meshData.indices[i + 2];

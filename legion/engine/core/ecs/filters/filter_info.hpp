@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <unordered_set>
+#include <functional>
 
 #include <core/common/hash.hpp>
 
@@ -35,7 +36,7 @@ namespace legion::core::ecs
          */
         virtual bool contains(const std::unordered_set<id_type>& components) LEGION_PURE;
 
-        ~filter_info_base() = default;
+        virtual ~filter_info_base() = default;
     };
 
     template<typename... component_types>
@@ -55,11 +56,11 @@ namespace legion::core::ecs
         }
 
     public:
-        /**@brief The actual id of the filter variant. 
+        /**@brief The actual id of the filter variant.
          */
         static constexpr id_type filter_id = generateId<component_types...>();
 
-        /**@brief Array of the individual component type ids. 
+        /**@brief Array of the individual component type ids.
          */
         static constexpr std::array<id_type, sizeof...(component_types)> composition = { make_hash<component_types>()... };
 

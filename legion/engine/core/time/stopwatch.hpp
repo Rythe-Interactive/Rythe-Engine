@@ -1,0 +1,82 @@
+#pragma once
+#include <chrono>
+#include <core/time/time_span.hpp>
+#include <core/types/primitives.hpp>
+
+namespace legion::core::time
+{
+    struct main_clock_time
+    {
+        using type = time64;
+    };
+
+    template<typename precision = fast_time, typename chrono_clock = std::chrono::high_resolution_clock>
+    struct stopwatch
+    {
+    public:
+        using time_type = precision;
+        using span_type = time_span<time_type>;
+        using clock_type = chrono_clock;
+
+    private:
+        std::chrono::time_point<clock_type> m_start = clock_type::now();
+    public:
+
+        void start() noexcept {
+            m_start = clock_type::now();
+        }
+
+        span_type start_point() const noexcept
+        {
+            return span_type(m_start.time_since_epoch());
+        }
+
+        span_type elapsed_time() const noexcept
+        {
+            return span_type(clock_type::now() - m_start);
+        }
+
+        span_type end() noexcept
+        {
+            return span_type(clock_type::now() - m_start);
+        }
+
+        span_type restart() noexcept
+        {
+            auto startTime = clock_type::now();
+            span_type time(startTime - m_start);
+            m_start = startTime;
+            return time;
+        }
+    };
+
+    template<>
+    struct stopwatch<main_clock_time, std::chrono::high_resolution_clock>
+    {
+    public:
+        using time_type = main_clock_time::type;
+        using span_type = time_span<time_type>;
+        using clock_type = std::chrono::high_resolution_clock;
+
+    private:
+        const std::chrono::time_point<clock_type> m_start = clock_type::now();
+    public:
+
+        span_type start_point() const noexcept
+        {
+            return span_type(m_start.time_since_epoch());
+        }
+
+        span_type elapsed_time() const noexcept
+        {
+            return span_type(clock_type::now() - m_start);
+        }
+
+        span_type now() const noexcept
+        {
+            return span_type(clock_type::now() - m_start);
+        }
+    };
+
+    using timer = stopwatch<>;
+}

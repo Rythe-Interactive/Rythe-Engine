@@ -36,8 +36,8 @@ namespace legion::core::filesystem{
          *  
          */
         template <typename Resolver,
-                  typename ... Args,
-                  typename = typename std::enable_if<std::is_base_of<filesystem_resolver_common_base,Resolver>::value>::type>
+                  typename ... Args
+            CNDOXY(typename = typename std::enable_if<std::is_base_of<filesystem_resolver_common_base,Resolver>::value>::type)>
         static void domain_create_resolver(domain d,Args&&... args)
         {
             OPTICK_EVENT();
@@ -58,7 +58,7 @@ namespace legion::core::filesystem{
             static constexpr std::size_t sentinel_value = std::numeric_limits<std::size_t>::max();
 
             resolver_sentinel(std::nullptr_t) : index{sentinel_value}{}
-            resolver_sentinel(size_t index, domain d) : inspected_domain(d), index(index){}
+            resolver_sentinel(size_t idx, domain d) : inspected_domain(d), index(idx){}
             
         public:
             resolver_sentinel operator++() const;

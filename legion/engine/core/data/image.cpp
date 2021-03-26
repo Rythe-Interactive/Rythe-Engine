@@ -80,12 +80,12 @@ namespace legion::core
         {
             async::readonly_guard guard(lock);
 
-            output.reserve(image.size.x * image.size.y);
+            output.reserve(static_cast<size_type>(image.size.x * image.size.y));
 
             byte* start = image.data->data();
             byte* end = image.data->data() + image.dataSize;
-            size_type channelSize = static_cast<uint>(image.format);
-            size_type colorSize = static_cast<int>(image.components) * channelSize;
+            size_type channelSize = static_cast<size_type>(image.format);
+            size_type colorSize = static_cast<size_type>(image.components) * channelSize;
             for (byte* colorPtr = start; colorPtr < end; colorPtr += colorSize)
             {
                 math::color color;
@@ -123,6 +123,7 @@ namespace legion::core
                         color.a = 1.f;
                         break;
                     }
+                    case channel_format::depth_stencil:
                     default:
                         log::error("invalid channel format");
                         abort();
@@ -163,6 +164,7 @@ namespace legion::core
                         color.a = *reinterpret_cast<float*>(aPtr);
                         break;
                     }
+                    case channel_format::depth_stencil:
                     default:
                         log::error("invalid channel format");
                         abort();
@@ -201,6 +203,7 @@ namespace legion::core
                         color.a = 1.f;
                         break;
                     }
+                    case channel_format::depth_stencil:
                     default:
                         log::error("invalid channel format");
                         abort();
@@ -240,12 +243,16 @@ namespace legion::core
                         color.a = *reinterpret_cast<float*>(aPtr);
                         break;
                     }
+                    case channel_format::depth_stencil:
                     default:
                         log::error("invalid channel format");
                         abort();
                     }
                     break;
                 }
+                case image_components::depth:
+                case image_components::depth_stencil:
+                case image_components::stencil:
                 default:
                     log::error("invalid channel format");
                     abort();

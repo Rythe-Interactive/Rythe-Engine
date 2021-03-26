@@ -8,6 +8,7 @@
 #include "doctest.h"
 #include "tests/core/filesystem.hpp"
 #include "tests/core/ecs.hpp"
+#include "tests/core/containers/delegate.hpp"
 
 using namespace legion;
 
@@ -23,7 +24,7 @@ public:
     class ExitHelper : public System<ExitHelper>
     {
     public:
-        void setup() override
+        void setup()
         {
             //raiseEvent<events::exit>();
         }
@@ -33,12 +34,14 @@ public:
 void LEGION_CCONV reportModules(Engine* engine)
 {
     doctest::Context ctx;
-    ctx.applyCommandLine(engine->cliargs.size(), engine->cliargs.data());
+    ctx.applyCommandLine(static_cast<int>(engine->cliargs.size()), engine->cliargs.data());
 
     engine->exitCode = ctx.run();
 
     if (ctx.shouldExit())
         engine->reportModule<Exitus>();
+
+    schd::Scheduler::exit(0);
     //std::exit(res);
 
 // additional application code

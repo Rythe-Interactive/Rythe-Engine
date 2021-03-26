@@ -23,7 +23,7 @@ namespace legion::core::filesystem
             else
             {
                 std::string driveName;
-                for (int i = 0; i < charCount; i++)
+                for (DWORD i = 0; i < charCount; i++)
                 {
                     if (buffer[i] == '\0')
                     {
@@ -204,8 +204,4 @@ namespace legion::core::filesystem
         return lhs.index == rhs.index && rhs.inspected_domain == lhs.inspected_domain;
     }
 
-    bool operator!=(const provider_registry::resolver_sentinel& lhs, const provider_registry::resolver_sentinel& rhs)
-    {
-        return !(lhs==rhs);
-    }
 }

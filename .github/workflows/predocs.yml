@@ -2,9 +2,8 @@
 name: docs-action
 
 on:
-  push:
+  pull_request:
     branches: [ develop, develop/*, develop* ]
-
 jobs:
  docs:
     runs-on: ubuntu-latest

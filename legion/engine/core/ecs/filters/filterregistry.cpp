@@ -3,6 +3,12 @@
 
 namespace legion::core::ecs
 {
+    void FilterRegistry::clear()
+    {
+        for (auto& [_, list] : entityLists())
+            list.clear();
+    }
+
     void FilterRegistry::markComponentAdd(id_type componentId, entity target)
     {
         // Get the entities current component composition.

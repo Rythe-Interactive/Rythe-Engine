@@ -1,4 +1,5 @@
 #pragma once
+#include <core/platform/platform.hpp>
 
 namespace legion::core::filesystem
 {

@@ -6,6 +6,7 @@ namespace legion::core::ecs
     template<typename component_type, typename ...Args>
     inline component_pool<component_type>* Registry::tryEmplaceFamily(Args && ...args)
     {
+        OPTICK_EVENT();
         if (getFamilies().count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
             return static_cast<component_pool<component_type>*>(getFamilies().at(make_hash<component_type>()).get());
 
@@ -21,6 +22,7 @@ namespace legion::core::ecs
     template<typename component_type, typename... Args>
     inline void ecs::Registry::registerComponentType(Args&&... args)
     {
+        OPTICK_EVENT();
         getFamilies().try_emplace(
             make_hash<component_type>(),
             std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
@@ -37,12 +39,14 @@ namespace legion::core::ecs
     template<typename component_type, typename... Args>
     inline component_pool<component_type>* ecs::Registry::getFamily(Args&&... args)
     {
+        OPTICK_EVENT();
         return tryEmplaceFamily<component_type>(std::forward<Args>(args)...);
     }
 
     template<typename component_type>
     inline component_type& Registry::createComponent(entity target)
     {
+        OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
         static bool checked = false; // Prevent unnecessary unordered_map lookups.
         if (!checked && !getFamilies().count(make_hash<component_type>()))
@@ -62,6 +66,7 @@ namespace legion::core::ecs
     template<typename component_type>
     inline component_type& Registry::createComponent(entity target, const serialization::component_prototype<component_type>& prototype)
     {
+        OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
         static bool checked = false; // Prevent unnecessary unordered_map lookups.
         if (!checked && !getFamilies().count(make_hash<component_type>()))
@@ -81,6 +86,7 @@ namespace legion::core::ecs
     template<typename component_type>
     inline component_type& Registry::createComponent(entity target, serialization::component_prototype<component_type>&& prototype)
     {
+        OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
         static bool checked = false; // Prevent unnecessary unordered_map lookups.
         if (!checked && !getFamilies().count(make_hash<component_type>()))
@@ -100,6 +106,7 @@ namespace legion::core::ecs
     template<typename component_type>
     inline void Registry::destroyComponent(entity target)
     {
+        OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
         static bool checked = false; // Prevent unnecessary unordered_map lookups.
         if (!checked && !getFamilies().count(make_hash<component_type>()))
@@ -119,6 +126,7 @@ namespace legion::core::ecs
     template<typename component_type>
     inline bool Registry::hasComponent(entity target)
     {
+        OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
         static bool checked = false; // Prevent unnecessary unordered_map lookups.
         if (!checked && !getFamilies().count(make_hash<component_type>()))
@@ -133,6 +141,7 @@ namespace legion::core::ecs
     template<typename component_type>
     inline component_type& Registry::getComponent(entity target)
     {
+        OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
         static bool checked = false; // Prevent unnecessary unordered_map lookups.
         if (!checked && !getFamilies().count(make_hash<component_type>()))

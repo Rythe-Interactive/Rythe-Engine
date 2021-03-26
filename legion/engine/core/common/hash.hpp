@@ -8,17 +8,14 @@
 
 namespace legion::core
 {
-    struct hash
+    constexpr id_type combine_hash(id_type seed, id_type value);
+
+    struct name_hash
     {
         id_type value = invalid_id;
 
         constexpr operator id_type () const noexcept;
-    };
 
-    constexpr id_type combine_hash(id_type seed, id_type value);
-
-    struct name_hash : public hash
-    {
         constexpr name_hash() noexcept;
 
         template<size_type N>
@@ -45,7 +42,7 @@ namespace legion::core
     id_type local_cast(id_type global);
     id_type global_cast(id_type local);
 
-    struct type_hash_base : public hash
+    struct type_hash_base
     {
         friend struct type_reference;
 
@@ -56,19 +53,20 @@ namespace legion::core
 
     protected:
         virtual type_hash_base* copy() const LEGION_PURE;
-
-        constexpr type_hash_base(id_type value) noexcept { this->value = value; }
     };
 
     template<typename T>
     struct type_hash : public type_hash_base
     {
         std::string_view name;
+        id_type value = invalid_id;
 
-        constexpr type_hash() noexcept : type_hash_base(localTypeHash<T>()), name(localNameOfType<T>()) {}
+        constexpr operator id_type () const noexcept;
 
-        type_hash(const type_hash& src) noexcept : type_hash_base(src.value, src.name) {}
-        type_hash(type_hash&& src) noexcept : type_hash_base(src.value, src.name) {}
+        constexpr type_hash() noexcept : value(localTypeHash<T>()), name(localNameOfType<T>()) {}
+
+        type_hash(const type_hash& src) noexcept : value(src.value), name(src.name) {}
+        type_hash(type_hash&& src) noexcept : value(src.value), name(src.name) {}
 
         type_hash& operator=(const type_hash& src) noexcept
         {
@@ -129,6 +127,11 @@ namespace legion::core
         }
     };
 
+    //LEGION_CLANG_SUPPRESS_WARNING_PUSH
+    //LEGION_GCC_SUPPRESS_WARNING_PUSH
+    //LEGION_CLANG_SUPPRESS_WARNING("-Wdelete-abstract-non-virtual-dtor")
+    //LEGION_GCC_SUPPRESS_WARNING("-Wdelete-abstract-non-virtual-dtor")
+
     struct type_reference
     {
     private:
@@ -152,6 +155,9 @@ namespace legion::core
 
         operator id_type() const;
     };
+
+    //LEGION_GCC_SUPPRESS_WARNING_POP
+    //LEGION_CLANG_SUPPRESS_WARNING_POP
 
     namespace detail
     {

@@ -34,8 +34,8 @@ namespace legion::core::ecs
         return combine_hash(make_hash<component_type0>(), generateId<component_type1, component_types...>());
     }
 
-    template<typename ...component_types>
-    inline const id_type FilterRegistry::generateFilterImpl()
+    template<typename... component_types>
+    inline id_type FilterRegistry::generateFilterImpl()
     {
         // Get the id.
         constexpr id_type id = generateId<component_types...>();
@@ -43,7 +43,7 @@ namespace legion::core::ecs
         Registry::registerComponentType<component_types...>();
 
         // Emplace filter info.
-        filters().emplace_back(new filter_info<component_types...>());
+        filters().emplace_back(std::make_unique<filter_info<component_types...>>());
         entityLists().emplace(id, hashed_sparse_set<entity>{});
 
         // Check for any already existing entities that should be in this filter.
@@ -54,8 +54,8 @@ namespace legion::core::ecs
         return id;
     }
 
-    template<typename ...component_types>
-    inline const id_type FilterRegistry::generateFilter()
+    template<typename... component_types>
+    inline id_type FilterRegistry::generateFilter()
     {
         static const id_type id = generateFilterImpl<component_types...>();
         return id;

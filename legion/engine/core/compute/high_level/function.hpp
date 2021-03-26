@@ -10,7 +10,7 @@
 #include <core/compute/buffer.hpp>
 #include <core/compute/kernel.hpp>
 #include <core/compute/program.hpp>
-#include <core/detail/internals.hpp>
+#include <core/common/assert.hpp>
 #include <core/filesystem/resource.hpp>
 
 #include <Optick/optick.h>

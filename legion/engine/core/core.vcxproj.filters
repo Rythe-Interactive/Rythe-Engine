@@ -35,6 +35,12 @@
     <ClCompile Include="common\hash.cpp" />
     <ClCompile Include="ecs\filters\filterregistry.cpp" />
     <ClCompile Include="engine\engine.cpp" />
+    <ClCompile Include="time\defaults.cpp" />
+    <ClCompile Include="scheduling\clock.cpp" />
+    <ClCompile Include="scheduling\process.cpp" />
+    <ClCompile Include="scheduling\processchain.cpp" />
+    <ClCompile Include="scheduling\scheduler.cpp" />
+    <ClCompile Include="events\eventbus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -68,7 +74,7 @@
     <ClInclude Include="filesystem\mem_filesystem_resolver.hpp" />
     <ClInclude Include="filesystem\resource.hpp" />
     <ClInclude Include="platform\platform.hpp" />
-    <ClInclude Include="time\clock.hpp" />
+    <ClInclude Include="time\stopwatch.hpp" />
     <ClInclude Include="time\time.hpp" />
     <ClInclude Include="time\time_span.hpp" />
     <ClInclude Include="types\meta.hpp" />
@@ -79,10 +85,9 @@
     <ClInclude Include="filesystem\provider_registry.hpp" />
     <ClInclude Include="filesystem\detail\meta.hpp" />
     <ClInclude Include="filesystem\view.hpp" />
-    <ClInclude Include="detail\internals.hpp" />
+    <ClInclude Include="common\assert.hpp" />
     <ClInclude Include="filesystem\basic_resolver.hpp" />
     <ClInclude Include="async\ring_sync_lock.hpp" />
-    <ClInclude Include="containers\delegate.hpp" />
     <ClInclude Include="engine\system.hpp" />
     <ClInclude Include="events\defaultevents.hpp" />
     <ClInclude Include="events\event.hpp" />
@@ -400,7 +405,6 @@
     <ClInclude Include="async\rw_spinlock.hpp" />
     <ClInclude Include="async\async_operation.hpp" />
     <ClInclude Include="async\job_pool.hpp" />
-    <ClInclude Include="containers\runnable.hpp" />
     <ClInclude Include="async\wait_priority.hpp" />
     <ClInclude Include="async\async_runnable.hpp" />
     <ClInclude Include="time\defaults.hpp" />
@@ -423,6 +427,15 @@
     <ClInclude Include="ecs\handles\filter.hpp" />
     <ClInclude Include="ecs\filters\filter_info.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
+    <ClInclude Include="scheduling\scheduling.hpp" />
+    <ClInclude Include="scheduling\clock.hpp" />
+    <ClInclude Include="containers\delegate.hpp" />
+    <ClInclude Include="scheduling\scheduler.hpp" />
+    <ClInclude Include="containers\pointer.hpp" />
+    <ClInclude Include="scheduling\processchain.hpp" />
+    <ClInclude Include="scheduling\process.hpp" />
+    <ClInclude Include="defaults\coremodule.hpp" />
+    <ClInclude Include="ecs\containers\component_container.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -574,5 +587,10 @@
     <None Include="ecs\handles\entity.inl" />
     <None Include="ecs\handles\filter.inl" />
     <None Include="ecs\filters\filter_info.inl" />
+    <None Include="scheduling\process.inl" />
+    <None Include="scheduling\scheduler.inl" />
+    <None Include="scheduling\processchain.inl" />
+    <None Include="engine\system.inl" />
+    <None Include="events\eventbus.inl" />
   </ItemGroup>
 </Project>

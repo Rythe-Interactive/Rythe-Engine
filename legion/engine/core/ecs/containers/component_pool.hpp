@@ -4,6 +4,7 @@
 #include <core/containers/sparse_map.hpp>
 
 #include <core/ecs/prototypes/component_prototype.hpp>
+#include <core/ecs/containers/component_container.hpp>
 #include <core/ecs/filters/filterregistry.hpp>
 
 /**
@@ -17,6 +18,8 @@ namespace legion::core::ecs
      */
     struct component_pool_base
     {
+        virtual void clear() LEGION_PURE;
+
         /**@brief Creates a component attached to a certain entity.
          * @param target Entity ID to create the component for.
          * @return Pointer to the created component.
@@ -68,6 +71,8 @@ namespace legion::core::ecs
         static void* this_ptr;
     public:
         static sparse_map<id_type, component_type> m_components;
+
+        virtual void clear();
 
         /**@brief Creates a component attached to a certain entity.
          * @param target Entity ID to create the component for.
@@ -141,5 +146,7 @@ namespace legion::core::ecs
          * @param target Entity ID of the entity the component is attached to.
          */
         static void destroy_component_direct(id_type target);
+
+        static void fill_container(component_container<component_type>& container, entity_set& entities);
     };
 }

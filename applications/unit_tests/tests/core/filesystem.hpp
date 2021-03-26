@@ -18,8 +18,6 @@ inline namespace {
         mock_resolver(mock_resolver&& other) noexcept = default;
         mock_resolver& operator=(const mock_resolver& other) = default;
         mock_resolver& operator=(mock_resolver&& other) noexcept = default;
-        ~mock_resolver() = default;
-
 
         [[nodiscard]] bool is_file() const noexcept override
         {
@@ -101,7 +99,7 @@ inline namespace {
 //}
 }
 
-void TestFS()
+static void TestFS()
 {
     using namespace legion;
 
@@ -120,7 +118,7 @@ void TestFS()
     bool nested_contents_valid = nested_contents == common::valid;
 
     //perform tests with mock
-    L_CHECK(nested_contents_valid); // <-- fails
+    L_CHECK(nested_contents_valid);
 
     auto traits = fs::view("only_test_valid://test.txt").file_info();
 
@@ -132,9 +130,9 @@ void TestFS()
 
     bool contents_valid = contents == common::valid;
 
-    L_CHECK(contents_valid); // <-- fails
+    L_CHECK(contents_valid);
 
-    auto result = fs::view("basic://config/test2.txt").set(contents); // <-- throws: invalid file traits: (not valid) or (does not exist) or (cannot be read)
+    auto result = fs::view("basic://config/test2.txt").set(contents);
 
     L_CHECK(!result.has_err());
 }

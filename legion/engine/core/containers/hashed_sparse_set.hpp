@@ -102,7 +102,12 @@ namespace legion::core
         /**@brief Clears sparse_map.
          * @note Will not update capacity.
          */
-        void clear() noexcept { m_size = 0; }
+        void clear() noexcept {
+            m_size = 0;
+            m_dense.clear();
+            m_sparse.clear();
+            m_capacity = 0;
+        }
 
         /**@brief Reserves space in dense container for more items.
          * @param size Amount of items to reserve space for (would be the new capacity).
@@ -241,7 +246,7 @@ namespace legion::core
         {
             OPTICK_EVENT();
             if (contains(val))
-                return begin() + m_sparse[val];
+                return begin() + m_sparse.at(val);
             return end();
         }
 
@@ -253,7 +258,7 @@ namespace legion::core
         {
             OPTICK_EVENT();
             if (contains(val))
-                return begin() + m_sparse[val];
+                return begin() + m_sparse.at(val);
             return end();
         }
 #pragma endregion
@@ -274,7 +279,7 @@ namespace legion::core
                 auto itr = m_dense.begin() + m_size;
                 *itr = val;
 
-                m_sparse[val] = m_size;
+                m_sparse.insert_or_assign(val, m_size);
                 ++m_size;
                 return std::make_pair(itr, true);
             }
@@ -296,7 +301,7 @@ namespace legion::core
                 auto itr = m_dense.begin() + m_size;
                 *itr = std::move(val);
 
-                m_sparse[*itr] = m_size;
+                m_sparse.insert_or_assign(*itr, m_size);
                 ++m_size;
                 return std::make_pair(itr, true);
             }
@@ -311,7 +316,6 @@ namespace legion::core
         template<typename... Arguments>
         std::pair<iterator, bool> emplace(Arguments&&... arguments)
         {
-            OPTICK_EVENT();
             return insert(std::forward<value_type>(value_type(arguments...)));
         }
 #pragma endregion
