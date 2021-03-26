@@ -40,6 +40,7 @@
     <ClCompile Include="scheduling\process.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
+    <ClCompile Include="events\eventbus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -590,5 +591,6 @@
     <None Include="scheduling\scheduler.inl" />
     <None Include="scheduling\processchain.inl" />
     <None Include="engine\system.inl" />
+    <None Include="events\eventbus.inl" />
   </ItemGroup>
 </Project>

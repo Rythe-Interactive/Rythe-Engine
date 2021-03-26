@@ -543,6 +543,7 @@ del ".\xcopyexclude"</Command>
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="engine\system.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
+    <ClCompile Include="events\eventbus.cpp" />
     <ClCompile Include="filesystem\artifact_cache.cpp" />
     <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="filesystem\detail\strpath_manip.cpp" />
@@ -577,6 +578,7 @@ del ".\xcopyexclude"</Command>
     <None Include="ecs\registry.inl" />
     <None Include="engine\engine.inl" />
     <None Include="engine\system.inl" />
+    <None Include="events\eventbus.inl" />
     <None Include="math\glm\detail\func_common.inl" />
     <None Include="math\glm\detail\func_common_simd.inl" />
     <None Include="math\glm\detail\func_exponential.inl" />

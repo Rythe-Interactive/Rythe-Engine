@@ -47,7 +47,8 @@ namespace legion::core::scheduling
         /**@brief Set the interval at which to execute the set operation.
          */
         void setInterval(time::span interval) noexcept;
-       
+
+        std::unordered_set<id_type>& hooks() noexcept;
 
         /**@brief Update the process' internal time measurements and execute the operation if necessary.
          * @param deltaTime Time between execute calls.

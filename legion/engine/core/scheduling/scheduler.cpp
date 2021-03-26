@@ -223,11 +223,41 @@ namespace legion::core::scheduling
         return false;
     }
 
-    bool Scheduler::unhookProcess(cstring chainName, Process& process)
+    bool Scheduler::hookProcess(cstring chainName, pointer<Process> process)
     {
-        OPTICK_EVENT();
         id_type chainId = nameHash(chainName);
 
+        if (m_processChains.contains(chainId))
+        {
+            m_processChains[chainId].addProcess(process);
+            return true;
+        }
+
+        return false;
+    }
+
+    bool Scheduler::unhookProcess(cstring chainName, Process& process)
+    {
+        id_type chainId = nameHash(chainName);
+
+        if (m_processChains.contains(chainId))
+            return m_processChains[chainId].removeProcess(process);
+
+        return false;
+    }
+
+    bool Scheduler::unhookProcess(cstring chainName, pointer<Process> process)
+    {
+        id_type chainId = nameHash(chainName);
+
+        if (m_processChains.contains(chainId))
+            return m_processChains[chainId].removeProcess(process);
+
+        return false;
+    }
+
+    bool Scheduler::unhookProcess(id_type chainId, pointer<Process> process)
+    {
         if (m_processChains.contains(chainId))
             return m_processChains[chainId].removeProcess(process);
 

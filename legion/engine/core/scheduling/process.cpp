@@ -28,6 +28,11 @@ namespace legion::core::scheduling
         m_interval = interval;
     }
 
+    std::unordered_set<id_type>& Process::hooks() noexcept
+    {
+        return m_hooks;
+    }
+
     void Process::execute(time::span deltaTime)
     {
         OPTICK_EVENT("Execute process");

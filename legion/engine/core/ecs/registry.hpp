@@ -88,12 +88,12 @@ namespace legion::core::ecs
 
         /**@brief Creates empty entity with the world as its parent.
          */
-        static entity createEntity();
+        L_NODISCARD static entity createEntity();
 
         /**@brief Creates empty entity with a specific entity as its parent.
          * @param parent Entity to assign as the parent of the new entity.
          */
-        static entity createEntity(entity parent);
+        L_NODISCARD static entity createEntity(entity parent);
 
         /**@brief Creates empty entity with a specific entity as its parent. Entity is serialized from a prototype.
          *        This function will also create any components or child entities in the prototype structure.
@@ -119,8 +119,8 @@ namespace legion::core::ecs
          * @param target Entity to check.
          * @return True if the entity is valid and alive, false if the entity is dead or non existent.
          */
-        static bool checkEntity(entity target);
-        static bool checkEntity(id_type target);
+        L_NODISCARD static bool checkEntity(entity target);
+        L_NODISCARD static bool checkEntity(id_type target);
 
         /**@brief Gets the component compositions of all entities.
          */
@@ -193,14 +193,14 @@ namespace legion::core::ecs
          * @return True if the target has the component, false if not.
          */
         template<typename component_type>
-        static bool hasComponent(entity target);
+        L_NODISCARD static bool hasComponent(entity target);
 
         /**@brief Checks if a specific entity has a certain component.
          * @param typeId Type hash of the component type to check for.
          * @param target Entity to check the component for.
          * @return True if the target has the component, false if not.
          */
-        static bool hasComponent(id_type typeId, entity target);
+        L_NODISCARD static bool hasComponent(id_type typeId, entity target);
 
         /**@brief Gets a reference to an existing component.
          * @tparam component_type Type of the component to fetch.
@@ -208,14 +208,14 @@ namespace legion::core::ecs
          * @return Reference to the component.
          */
         template<typename component_type>
-        static component_type& getComponent(entity target);
+        L_NODISCARD static component_type& getComponent(entity target);
 
         /**@brief Gets a pointer to an existing component.
          * @param typeId Type hash of the component to fetch.
          * @param target Entity to get the component from.
          * @return Pointer to the component.
          */
-        static void* getComponent(id_type typeId, entity target);
+        L_NODISCARD static void* getComponent(id_type typeId, entity target);
     };
 
     /**@brief World entity. All entities and scenes are eventually parented to this entity.

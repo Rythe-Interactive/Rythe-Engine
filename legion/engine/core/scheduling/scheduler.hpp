@@ -143,6 +143,11 @@ namespace legion::core::scheduling
          * @return bool True if succeeded, false if the chain doesn't exist.
          */
         static bool unhookProcess(cstring chainName, pointer<Process> process);
+
+        /**@brief Unhook a process from a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
+        static bool unhookProcess(id_type chainId, pointer<Process> process);
     };
 }
 
