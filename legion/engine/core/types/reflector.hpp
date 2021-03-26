@@ -214,12 +214,14 @@ namespace legion::core
         return std::make_pair(std::ref(val.names[I]), std::ref(std::get<I>(val.values)));
     }
 
+#if !defined(DOXY_EXCLUDE)
     template <typename X, typename T, typename ... Types>
     reflector_element<variable_index_v<X, reflector<T, Types...>>, reflector<T, Types...>>
         get(reflector<T, Types...>& val)
     {
         return get<variable_index_v<X, reflector<T, Types...>>>(val);
     }
+#endif
 
     namespace detail
     {
@@ -245,9 +247,11 @@ namespace legion::core
             for_each_impl<I + 1>(std::forward<Reflector>(r), std::forward<Func>(f));
         };
 
+#if !defined(DOXY_EXCLUDE)
         template<int I, template<typename> typename Compare, int End, int Increment, typename Reflector, typename Func>
         typename std::enable_if_t<!compare_v<Compare, int, I, End>, void>
             for_i_impl(Reflector&& r, Func&& f) {};
+#endif
 
         template<int I, template<typename> typename Compare, int End, int Increment, typename Reflector, typename Func>
         typename std::enable_if_t<compare_v<Compare, int, I, End>, void>
@@ -292,6 +296,7 @@ namespace legion::core
         detail::for_i_impl<I, Compare, End, Increment>(std::forward<Reflector>(r), std::forward<Func>(f));
     }
 
+#if !defined(DOXY_EXCLUDE)
     /**@brief For loop iteration over items in a reflector according to an iteration pattern similar to: `int i = I; i < End; i += Increment`
      * @tparam I Start iteration value.
      * @tparam End Value to compare iteration index with to signal end of iteration.
@@ -309,8 +314,10 @@ namespace legion::core
     {
         detail::for_i_impl<I, std::less, End, Increment>(std::forward<Reflector>(r), std::forward<Func>(f));
     }
+#endif
 }
 
+#if !defined(DOXY_EXCLUDE)
 namespace std // NOLINT(cert-dcl58-cpp)
 {
     template <::std::size_t I, typename T, typename ... Types>
@@ -356,3 +363,4 @@ namespace std // NOLINT(cert-dcl58-cpp)
     };
 
 }
+#endif
