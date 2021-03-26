@@ -8,6 +8,9 @@ namespace legion::core::ecs
     const id_type filter<component_types...>::id = FilterRegistry::generateFilter<component_types...>();
 
     template<typename... component_types>
+    std::tuple<component_container<component_types>...> filter<component_types...>::m_containers;
+
+    template<typename... component_types>
     L_NODISCARD inline entity_set::iterator filter<component_types...>::begin() noexcept
     {
         return FilterRegistry::getList(id).begin();
@@ -79,4 +82,13 @@ namespace legion::core::ecs
         return FilterRegistry::getList(id).at(index);
     }
 
+    template<typename... component_types>
+    template<typename component_type>
+    L_NODISCARD inline component_container<component_type>& filter<component_types...>::get()
+    {
+        auto& container = std::get<component_container<component_type>>(m_containers);
+        container.clear();
+        ecs::component_pool<component_type>::fill_container(container, FilterRegistry::getList(id));
+        return container;
+    }
 }

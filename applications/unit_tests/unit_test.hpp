@@ -166,6 +166,9 @@ namespace legion
         std::cout << '[' << *test_data::lastDomain << "] Running test\n";
         test_data::Check = &DoCheck;
         test_data::StartSubDomain = &DoPrint;
+        std::cout << '[' << *test_data::lastDomain << "] Iteration 1\n";
+        std::invoke(c, std::forward<Args>(args)...);
+        std::cout << '[' << *test_data::lastDomain << "] Iteration 2\n";
         std::invoke(c, std::forward<Args>(args)...);
     }
 

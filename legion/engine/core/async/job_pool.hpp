@@ -15,8 +15,10 @@ namespace legion::core::async
         friend struct job_pool;
     private:
         static thread_local id_type m_id;
+        static thread_local float m_progress;
     public:
         static id_type get_id() noexcept;
+        static float get_progress() noexcept;
     };
 
     struct job_pool

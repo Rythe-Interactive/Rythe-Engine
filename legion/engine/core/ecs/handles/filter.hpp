@@ -10,7 +10,7 @@ namespace legion::core::ecs
     struct filter
     {
     private:
-        std::tuple<component_container<component_types>...> m_containers;
+        static std::tuple<component_container<component_types>...> m_containers;
 
     public:
         static const id_type id;
@@ -33,11 +33,6 @@ namespace legion::core::ecs
         L_NODISCARD entity& operator[](size_type index);
 
         template<typename component_type>
-        L_NODISCARD static component_container<component_type>& get()
-        {
-            return std::get<component_container<component_type>>(m_containers);
-        }
-
+        L_NODISCARD static component_container<component_type>& get();
     };
-
 }

@@ -5,6 +5,7 @@
 
 #include <core/ecs/prototypes/component_prototype.hpp>
 #include <core/ecs/filters/filterregistry.hpp>
+#include <core/ecs/containers/component_container.hpp>
 
 /**
  * @file component_pool.hpp
@@ -145,5 +146,7 @@ namespace legion::core::ecs
          * @param target Entity ID of the entity the component is attached to.
          */
         static void destroy_component_direct(id_type target);
+
+        static void fill_container(component_container<component_type>& container, entity_set& entities);
     };
 }

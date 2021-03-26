@@ -3,10 +3,16 @@
 namespace legion::core::async
 {
     thread_local id_type this_job::m_id;
+    thread_local float this_job::m_progress;
 
     id_type this_job::get_id() noexcept
     {
         return m_id;
+    }
+
+    float this_job::get_progress() noexcept
+    {
+        return m_progress;
     }
 
     std::shared_ptr<async_progress> job_pool::get_progress() const noexcept
@@ -29,6 +35,7 @@ namespace legion::core::async
 
         size_type id = m_size - idx;
         this_job::m_id = id;
+        this_job::m_progress = m_progress->progress();
         m_job();
         m_progress->advance_progress();
     }

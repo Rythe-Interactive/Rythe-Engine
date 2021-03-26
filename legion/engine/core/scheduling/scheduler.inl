@@ -51,7 +51,7 @@ namespace legion::core::scheduling
             return async::job_operation(std::shared_ptr<async::async_progress>(nullptr), std::shared_ptr<async::job_pool>(nullptr), repeater, tryCompleteJobPool);
 
         OPTICK_EVENT("legion::core::scheduling::Scheduler::queueJobs<T>");
-        std::shared_ptr<async::job_pool> jobPool = std::make_shared(count, func);
+        std::shared_ptr<async::job_pool> jobPool = std::make_shared<async::job_pool>(count, func);
 
         auto& [lock, jobQueue] = m_jobs;
         async::readwrite_guard guard(lock);

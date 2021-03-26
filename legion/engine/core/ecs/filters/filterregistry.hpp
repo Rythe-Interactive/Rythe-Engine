@@ -81,10 +81,10 @@ namespace legion::core::ecs
         constexpr static id_type generateId() noexcept;
 
         template<typename... component_types>
-        static const id_type generateFilterImpl();
+        static id_type generateFilterImpl();
 
         template<typename... component_types>
-        static const id_type generateFilter();
+        static id_type generateFilter();
     };
 }
 

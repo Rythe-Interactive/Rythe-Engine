@@ -56,7 +56,7 @@ namespace legion::core::scheduling
                     if (jobPoolPtr->is_done())
                     {
                         async::readwrite_guard wguard(lock);
-                        if (jobPoolPtr->is_done())
+                        if (!jobQueue.empty() && jobQueue.front()->is_done())
                             jobQueue.pop();
                     }
                     else
