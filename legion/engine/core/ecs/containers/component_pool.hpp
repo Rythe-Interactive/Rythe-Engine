@@ -4,8 +4,8 @@
 #include <core/containers/sparse_map.hpp>
 
 #include <core/ecs/prototypes/component_prototype.hpp>
-#include <core/ecs/filters/filterregistry.hpp>
 #include <core/ecs/containers/component_container.hpp>
+#include <core/ecs/filters/filterregistry.hpp>
 
 /**
  * @file component_pool.hpp

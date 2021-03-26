@@ -55,10 +55,10 @@ namespace legion::core
 
         delegate(std::nullptr_t const) noexcept : delegate() { }
 
-        template <typename owner_type, typename = typename std::enable_if_t<std::is_class_v<owner_type>>>
+        template <typename owner_type CNDOXY(typename = typename std::enable_if_t<std::is_class_v<owner_type>>)>
         explicit delegate(owner_type const* const o) noexcept : object_ptr_(const_cast<owner_type*>(o)) {}
 
-        template <typename owner_type, typename = typename std::enable_if_t<std::is_class_v<owner_type>>>
+        template <typename owner_type CNDOXY(typename = typename std::enable_if_t<std::is_class_v<owner_type>>)>
         explicit delegate(owner_type const& o) noexcept : object_ptr_(const_cast<owner_type*>(&o)) {}
 
         template <typename owner_type>
@@ -85,7 +85,7 @@ namespace legion::core
             *this = from(object, method_ptr);
         }
 
-        template <typename T, typename = typename std::enable_if_t<!std::is_same_v<delegate, typename std::decay_t<T>>>>
+        template <typename T CNDOXY(typename = typename std::enable_if_t<!std::is_same_v<delegate, typename std::decay_t<T>>>)>
         delegate(T&& f) :
             store_(operator new(sizeof(typename std::decay_t<T>)), functor_deleter<typename std::decay_t<T>>),
             store_size_(sizeof(typename std::decay_t<T>))
@@ -125,7 +125,7 @@ namespace legion::core
             return *this = from(static_cast<owner_type const*>(object_ptr_), rhs);
         }
 
-        template<typename T, typename = typename std::enable_if_t<!std::is_same_v<delegate, typename std::decay_t<T>>>>
+        template<typename T CNDOXY(typename = typename std::enable_if_t<!std::is_same_v<delegate, typename std::decay_t<T>>>)>
         delegate& operator=(T&& f)
         {
             using functor_type = typename std::decay<T>::type;
@@ -722,7 +722,7 @@ namespace legion::core
             return m_invocationList.emplace_back(object, method_ptr);
         }
 
-        template <typename T, typename = typename std::enable_if_t<!std::is_same_v<invocation_type, typename std::decay_t<T>>>>
+        template <typename T CNDOXY(typename = typename std::enable_if_t<!std::is_same_v<invocation_type, typename std::decay_t<T>>>)>
         decltype(auto) emplace_back(T&& f)
         {
             return m_invocationList.emplace_back(f);

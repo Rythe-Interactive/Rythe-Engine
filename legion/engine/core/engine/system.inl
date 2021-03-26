@@ -30,12 +30,12 @@ namespace legion::core
     }
 
     template<typename SelfType>
-    template<typename event_type, void(SelfType::* func_type)(event_type&), typename>
+    template<typename event_type, void(SelfType::* func_type)(event_type&) CNDOXY(typename)>
     inline L_ALWAYS_INLINE id_type System<SelfType>::bindToEvent()
     {
         id_type id = combine_hash(event_type::id, *force_cast<id_type>(func_type));
 
-        auto temp = delegate<void(event_type&)>::from<SelfType, func_type>(reinterpret_cast<SelfType*>(this));
+        auto temp = delegate<void(event_type&)>::template from<SelfType, func_type>(reinterpret_cast<SelfType*>(this));
         auto& del = m_bindings.try_emplace(id, reinterpret_cast<delegate<void(events::event_base&)>&&>(std::move(temp))).first->second;
 
         events::EventBus::bindToEvent<event_type>(reinterpret_cast<delegate<void(event_type&)>&>(del));
@@ -44,7 +44,7 @@ namespace legion::core
     }
 
     template<typename SelfType>
-    template <typename event_type, typename>
+    template <typename event_type CNDOXY(typename)>
     inline L_ALWAYS_INLINE void System<SelfType>::unbindFromEvent(id_type bindingId)
     {
         events::EventBus::unbindFromEvent<event_type>(reinterpret_cast<delegate<void(event_type&)>&>(m_bindings.at(bindingId)));
@@ -76,7 +76,7 @@ namespace legion::core
     }
 
     template<typename SelfType>
-    template<typename event_type, typename... Args, typename>
+    template<typename event_type, typename... Args CNDOXY(typename)>
     inline L_ALWAYS_INLINE void System<SelfType>::raiseEvent(Args&&... arguments)
     {
         events::EventBus::raiseEvent<event_type>(std::forward<Args>(arguments)...);

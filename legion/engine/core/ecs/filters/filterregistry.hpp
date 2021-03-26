@@ -6,7 +6,6 @@
 #include <core/types/primitives.hpp>
 
 #include <core/ecs/handles/entity.hpp>
-#include <core/ecs/handles/filter.hpp>
 #include <core/ecs/filters/filter_info.hpp>
 
 /**
@@ -15,6 +14,9 @@
 
 namespace legion::core::ecs
 {
+    template<typename... component_types>
+    struct filter;
+
     /**@class FilterRegistry
      * @brief Manager and owner of all entity filter related data.
      */
@@ -22,9 +24,10 @@ namespace legion::core::ecs
     {
     public:
         template<typename... component_types>
-        friend struct filter;
-        template<typename... component_types>
         friend struct filter_info;
+
+        template<typename... component_types>
+        friend struct filter;
 
         static void clear();
 
@@ -89,4 +92,3 @@ namespace legion::core::ecs
 }
 
 #include <core/ecs/filters/filter_info.inl>
-#include <core/ecs/handles/filter.inl>

@@ -1,8 +1,11 @@
 #pragma once
 
 #include <core/platform/platform.hpp>
+
 #include <core/ecs/handles/entity.hpp>
 #include <core/ecs/containers/component_container.hpp>
+#include <core/ecs/filters/filterregistry.hpp>
+#include <core/ecs/containers/component_pool.hpp>
 
 namespace legion::core::ecs
 {
@@ -36,3 +39,5 @@ namespace legion::core::ecs
         L_NODISCARD static component_container<component_type>& get();
     };
 }
+
+#include <core/ecs/handles/filter.inl>

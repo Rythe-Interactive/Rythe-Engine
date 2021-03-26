@@ -4,6 +4,7 @@
 
 #include <Optick/optick.h>
 
+#include <core/platform/platform.hpp>
 #include <core/containers/delegate.hpp>
 #include <core/types/types.hpp>
 #include <core/events/event.hpp>
@@ -26,7 +27,7 @@ namespace legion::core::events
          * @tparam event_type Event type to raise.
          * @param arguments Arguments to pass to the constructor of the event.
          */
-        template<typename event_type, typename... Args, typename = inherits_from<event_type, event<event_type>>>
+        template<typename event_type, typename... Args CNDOXY(typename = inherits_from<event_type, event<event_type>>)>
         static void raiseEvent(Args&&... arguments);
 
         /**@brief Non-templated raise event function. Inserts event into bus and notifies all subscribers.
@@ -43,7 +44,7 @@ namespace legion::core::events
         /**@brief Link a callback to an event type in order to get notified whenever one gets raised.
          * @tparam event_type Event type to subscribe to.
          */
-        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+        template<typename event_type CNDOXY(typename = inherits_from<event_type, event<event_type>>)>
         static void bindToEvent(const delegate<void(event_type&)>& callback);
 
         /**@brief Non-templated function to link a callback to an event type in order to get notified whenever one gets raised.
@@ -55,7 +56,7 @@ namespace legion::core::events
         /**@brief Link a callback to an event type in order to get notified whenever one gets raised.
          * @tparam event_type Event type to subscribe to.
          */
-        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+        template<typename event_type CNDOXY(typename = inherits_from<event_type, event<event_type>>)>
         static void bindToEvent(delegate<void(event_type&)>&& callback);
 
         /**@brief Non-templated function to link a callback to an event type in order to get notified whenever one gets raised.
@@ -67,7 +68,7 @@ namespace legion::core::events
         /**@brief Link a callback to an event type in order to get notified whenever one gets raised.
          * @tparam event_type Event type to subscribe to.
          */
-        template<typename event_type, typename = inherits_from<event_type, event<event_type>>>
+        template<typename event_type CNDOXY(typename = inherits_from<event_type, event<event_type>>)>
         static void unbindFromEvent(const delegate<void(event_type&)>& callback);
 
         /**@brief Non-templated function to link a callback to an event type in order to get notified whenever one gets raised.

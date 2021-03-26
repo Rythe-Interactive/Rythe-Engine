@@ -1,5 +1,4 @@
 #include <core/ecs/handles/filter.hpp>
-#include <core/ecs/filters/filterregistry.hpp>
 #pragma once
 
 namespace legion::core::ecs

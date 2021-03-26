@@ -36,8 +36,8 @@ namespace legion::core::filesystem{
          *  
          */
         template <typename Resolver,
-                  typename ... Args,
-                  typename = typename std::enable_if<std::is_base_of<filesystem_resolver_common_base,Resolver>::value>::type>
+                  typename ... Args
+            CNDOXY(typename = typename std::enable_if<std::is_base_of<filesystem_resolver_common_base,Resolver>::value>::type)>
         static void domain_create_resolver(domain d,Args&&... args)
         {
             OPTICK_EVENT();

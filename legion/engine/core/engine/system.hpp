@@ -40,10 +40,10 @@ namespace legion::core
          * @tparam event_type Event type to subscribe to.
          * @tparam func_type Function to bind to the event.
          */
-        template <typename event_type, void(SelfType::* func_type)(event_type&), typename = inherits_from<event_type, events::event<event_type>>>
+        template <typename event_type, void(SelfType::* func_type)(event_type&) CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
         id_type bindToEvent();
 
-        template <typename event_type, typename = inherits_from<event_type, events::event<event_type>>>
+        template <typename event_type CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
         void unbindFromEvent(id_type bindingId);
 
         /**@brief Creates empty entity with the world as its parent.
@@ -72,7 +72,7 @@ namespace legion::core
          * @tparam event_type Event type to raise.
          * @param arguments Arguments to pass to the constructor of the event.
          */
-        template<typename event_type, typename... Args, typename = inherits_from<event_type, events::event<event_type>>>
+        template<typename event_type, typename... Args CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
         static void raiseEvent(Args&&... arguments);
 
         /**@brief Non-templated raise event function. Inserts event into bus and notifies all subscribers.

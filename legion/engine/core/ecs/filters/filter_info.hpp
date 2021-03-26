@@ -5,9 +5,6 @@
 
 #include <core/common/hash.hpp>
 
-#include <core/ecs/handles/entity.hpp>
-#include <core/ecs/handles/filter.hpp>
-
 /**
  * @file filter_info.hpp
  */
