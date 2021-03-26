@@ -316,21 +316,7 @@ namespace legion::core
         template<typename... Arguments>
         std::pair<iterator, bool> emplace(Arguments&&... arguments)
         {
-            OPTICK_EVENT();
-            if (!contains(val))
-            {
-                if (m_size >= m_capacity)
-                    reserve(m_size + 1);
-
-                auto itr = m_dense.begin() + m_size;
-                itr->~value_type();
-                new(&*itr) value_type(std::forward<Arguments>(arguments)...);
-
-                m_sparse.insert_or_assign(*itr, m_size);
-                ++m_size;
-                return std::make_pair(itr, true);
-            }
-            return std::make_pair(end(), false);
+            return insert(std::forward<value_type>(value_type(arguments...)));
         }
 #pragma endregion
 
