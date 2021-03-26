@@ -24,7 +24,7 @@ namespace legion::core
         static_assert(alignof(T) == alignof(U), "Illegal cast of unaligned types.");
         static_assert(sizeof(T) == sizeof(U), "Illegal cast of non size similar types.");
 
-        return *reinterpret_cast<T*>(&value);
+        return *reinterpret_cast<std::remove_reference_t<T>*>(&value);
     }
 
     template<typename T, typename U>

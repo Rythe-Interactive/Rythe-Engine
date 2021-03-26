@@ -34,8 +34,12 @@ namespace legion::core
     inline L_ALWAYS_INLINE id_type System<SelfType>::bindToEvent()
     {
         id_type id = combine_hash(event_type::id, *force_cast<id_type>(func_type));
-        auto& del = m_bindings.try_emplace(id, reinterpret_cast<delegate<void(events::event_base&)>&&>(delegate<void(event_type&)>::from<SelfType, func_type>(reinterpret_cast<SelfType*>(this)))).first->second;
+
+        auto temp = delegate<void(event_type&)>::from<SelfType, func_type>(reinterpret_cast<SelfType*>(this));
+        auto& del = m_bindings.try_emplace(id, reinterpret_cast<delegate<void(events::event_base&)>&&>(std::move(temp))).first->second;
+
         events::EventBus::bindToEvent<event_type>(reinterpret_cast<delegate<void(event_type&)>&>(del));
+
         return id;
     }
 
@@ -43,8 +47,7 @@ namespace legion::core
     template <typename event_type, typename>
     inline L_ALWAYS_INLINE void System<SelfType>::unbindFromEvent(id_type bindingId)
     {
-        auto& del = m_bindings.at(bindingId);
-        events::EventBus::unbindFromEvent<event_type>(reinterpret_cast<delegate<void(event_type&)>&>(del));
+        events::EventBus::unbindFromEvent<event_type>(reinterpret_cast<delegate<void(event_type&)>&>(m_bindings.at(bindingId)));
         m_bindings.erase(bindingId);
     }
 
