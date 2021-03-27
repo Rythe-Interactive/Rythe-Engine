@@ -16,6 +16,17 @@ namespace legion::physics
 
         }
 
+        ~ColliderFaceToVert()
+        {
+
+        }
+
+        ColliderFaceToVert(const ColliderFaceToVert& other)
+        {
+            outsideVerts = other.outsideVerts;
+            face = other.face;
+        }
+
         std::pair<math::vec3,float> GetFurthestOutsideVert() const;
         
         void populateVectorWithVerts(std::vector<math::vec3>& vertVector);

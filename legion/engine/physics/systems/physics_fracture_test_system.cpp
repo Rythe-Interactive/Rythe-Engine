@@ -1065,6 +1065,7 @@ namespace legion::physics
     }
 
     int step = 0;
+    int maxStep = 0;
 
     void PhysicsFractureTestSystem::quickHullStep(QHULL * action)
     {

@@ -368,41 +368,43 @@ namespace legion::physics
             return nullptr;
         }
 
+        int currentDraw = 0;
+        
+
         //populate list with current collider
         std::list<ColliderFaceToVert> facesWithOutsideVerts;
         partitionVerticesToList(vertices, faces, facesWithOutsideVerts);
 
         if (!facesWithOutsideVerts.empty())
         {
-            ColliderFaceToVert& currentFaceToVert = facesWithOutsideVerts.front();
+            PointerEncapsulator< ColliderFaceToVert> currentFaceToVert;
+            currentFaceToVert.ptr = &facesWithOutsideVerts.front();
+   
             int safetyInt = 0;
 
-            //find furhtest vertex of last face
-            auto [furthestVert, distanceFromFace] = currentFaceToVert.GetFurthestOutsideVert();
-            math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVert, 1);
-
-            debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, false);
-
-            //check if we should merge this vertex
-            if (distanceFromFace > scaledEpsilon)
+            while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
             {
-                mergeVertexToHull(furthestVert, facesWithOutsideVerts
-                    , DEBUG_transform);
+                if (currentDraw >= maxDraw) { break; }
+                currentDraw++;
+                //find furhtest vertex of last face
+                auto [furthestVert, distanceFromFace] = currentFaceToVert.ptr->GetFurthestOutsideVert();
+                math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVert, 1);
+
+                debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, false);
+
+                //check if we should merge this vertex
+                if (distanceFromFace > scaledEpsilon)
+                {
+                    mergeVertexToHull(furthestVert, facesWithOutsideVerts
+                        , DEBUG_transform);
+                }
+                else
+                {
+                    //this face has no mergable vertices
+                    currentFaceToVert.ptr->outsideVerts.clear();
+                }
             }
-            else
-            {
-                //this face has no mergable vertices
-                currentFaceToVert.outsideVerts.clear();
-            }
 
-                //create new faces based on pairing list
-
-            //while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
-          
-
-            //    safetyInt++;
-            //    assert(safetyInt < 999);
-            //}
         }
 
 
@@ -587,7 +589,7 @@ namespace legion::physics
         float eyePointDistance =
             PhysicsStatics::PointDistanceToPlane(planeNormal, planePosition, *firstEyePoint);
         bool needInverse = eyePointDistance > 0.0f;
-        log::debug("planeNormal {0} ", math::to_string(planeNormal));
+        
 
         if (needInverse)
         {
@@ -673,15 +675,17 @@ namespace legion::physics
         initialPairing->setPairingEdge(pairingToConnectTo);
     }
 
-    bool PhysicsStatics::foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, ColliderFaceToVert& outChosenFace)
+    bool PhysicsStatics::foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, PointerEncapsulator< ColliderFaceToVert> outChosenFace)
     {
-        for (auto faceWithOutsideVert : facesWithOutsideVerts)
+        int i = 0;
+        for (auto& faceWithOutsideVert : facesWithOutsideVerts)
         {
-            if (faceWithOutsideVert.outsideVerts.size())
+            if (!faceWithOutsideVert.outsideVerts.empty())
             {
-                outChosenFace = faceWithOutsideVert;
+                outChosenFace.ptr = &faceWithOutsideVert;
                 return true;
             }
+            i++;
         }
 
         return false;
@@ -743,7 +747,7 @@ namespace legion::physics
         //[2] Loop through the collider to collect the other horizon edges
 
         HalfEdgeEdge* currentEdge = initialHorizon;
-        outHorizonEdges.push_back(currentEdge);
+        //outHorizonEdges.push_back(currentEdge);
 
         do
         {
