@@ -355,14 +355,38 @@ namespace legion::physics
         return start + (end - start) * interpolant;
     }
 
-    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices, int maxDraw, math::mat4 DEBUG_transform )
+    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices, int maxDraw, math::mat4 DEBUG_transform)
     {
-        const float scaledEpsilon = math::sqrt(math::epsilon<float>());
+        //[1] Calculate scaled epsilon
+        static float initialEpsilon = math::sqrt(math::epsilon<float>());
+
+        math::vec3 maxInDimension(std::numeric_limits<float>::lowest());
+
+        for (const auto& vert : vertices)
+        {
+            if (math::abs(vert.x) > maxInDimension.x)
+            {
+                maxInDimension.x = math::abs(vert.x);
+            }
+
+            if (math::abs(vert.y) > maxInDimension.y)
+            {
+                maxInDimension.y = math::abs(vert.y);
+            }
+
+            if (math::abs(vert.z) > maxInDimension.z)
+            {
+                maxInDimension.z = math::abs(vert.z);
+            }
+        }
+
+        //epsilon must take into account span of vertices
+        const float scaledEpsilon = (maxInDimension.x + maxInDimension.y + maxInDimension.z) * initialEpsilon;
 
         std::vector<HalfEdgeFace*> faces;
         faces.reserve(4);
 
-        //Build Initial Hull
+        //[2] Build Initial Hull
         if (!qHBuildInitialHull(vertices, faces,DEBUG_transform))
         {
             return nullptr;
@@ -371,10 +395,11 @@ namespace legion::physics
         int currentDraw = 0;
         
 
-        //populate list with current collider
+        //[3] populate list with faces of initial hull
         std::list<ColliderFaceToVert> facesWithOutsideVerts;
         partitionVerticesToList(vertices, faces, facesWithOutsideVerts);
 
+        //[4] loop through faces until there are no faces with unmerged vertices
         if (!facesWithOutsideVerts.empty())
         {
             PointerEncapsulator< ColliderFaceToVert> currentFaceToVert;
@@ -831,8 +856,18 @@ namespace legion::physics
         }
 
         std::vector<HalfEdgeFace*> newFaces;
+        newFaces.reserve(horizonEdges.size());
         createHalfEdgeFaceFromEyePoint(eyePoint, horizonEdges, newFaces);
 
+        //for each horizonEdge
+            //attempt to find coplanarity with its pairing
+
+            //if complanarity is found
+                //nullify new face
+                //delete new face
+
+        //remove all null faces
+            
         partitionVerticesToList(unmergedVertices, newFaces, facesWithOutsideVerts);
 
         for (auto face : facesToBeRemoved)
