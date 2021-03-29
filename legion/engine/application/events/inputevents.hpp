@@ -21,8 +21,6 @@ namespace legion::application
         inputmap::modifier_keys mods{};
         inputmap::method identifier{};
 
-        virtual bool unique() override { return false; }
-
         L_NODISCARD bool pressed()  const { return value == true;  }
         L_NODISCARD bool released() const { return value == false; }
     };
@@ -40,9 +38,6 @@ namespace legion::application
 
         std::vector<inputmap::method> identifier_parts{};
         inputmap::method identifier{};
-
-
-        virtual bool unique() override { return false; }
     };
 
 }

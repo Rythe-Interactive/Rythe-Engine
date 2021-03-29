@@ -22,13 +22,13 @@ namespace legion::rendering
          * @brief The function that is run to setup all the particles inside of the given emitter.
          * @param particle_emitter The particle emitter that holds the particles that you plan to iterate over.
          */
-        virtual void setup(ecs::component_handle<particle_emitter> particle_emitter) const LEGION_IMPURE;
+        virtual void setup(ecs::component<particle_emitter> particle_emitter) const LEGION_IMPURE;
         /**
          * @brief The function that runs every frame to update all the particles inside of the given emitter.
          * @param particle_list A list of particles to iterate over.
          * @param particle_emitter The emitter component handle holding the particles.
          */
-        virtual void update(std::vector<ecs::entity_handle>& particle_list, ecs::component_handle<particle_emitter> particle_emitter, ecs::EntityQuery& entities, time::span delta_time) const LEGION_IMPURE;
+        virtual void update(std::vector<ecs::entity_handle>& particle_list, ecs::component<particle_emitter> particle_emitter, ecs::EntityQuery& entities, time::span delta_time) const LEGION_IMPURE;
 
     protected:
         /**
@@ -50,7 +50,7 @@ namespace legion::rendering
          * @brief Checks if the given emitter has a particle ready to be used, otherwise make a new one.
          * @param emitterHandle The emitter that is being checked for an available particle.
          */
-        ecs::component_handle<particle> checkToRecycle(
+        ecs::component<particle> checkToRecycle(
             particle_emitter& emitterHandle) const;
 
         bool m_looping;

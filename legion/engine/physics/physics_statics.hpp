@@ -221,7 +221,7 @@ namespace legion::physics
 
 
         static std::pair< math::vec3,math::vec3> ConstructAABBFromPhysicsComponentWithTransform
-        (ecs::component_handle<physicsComponent> physicsComponentToUse, const math::mat4& transform);
+        (ecs::component<physicsComponent> physicsComponentToUse, const math::mat4& transform);
 
         static float GetPhysicsComponentSupportPointAtDirection(math::vec3 direction,physicsComponent& physicsComponentToUse);
 

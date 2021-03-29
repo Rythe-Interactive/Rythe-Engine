@@ -31,7 +31,7 @@ namespace legion::rendering
         }
     }
 
-    ecs::component_handle<particle> ParticleSystemBase::checkToRecycle(rendering::particle_emitter& emitter) const
+    ecs::component<particle> ParticleSystemBase::checkToRecycle(rendering::particle_emitter& emitter) const
     {
         ecs::entity_handle particularParticle;
 

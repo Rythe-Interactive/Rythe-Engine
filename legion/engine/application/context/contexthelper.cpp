@@ -41,7 +41,7 @@ namespace legion::application
         }
 
         async::readwrite_guard guard(m_initCallbackLock);
-        m_onInit += callback;
+        m_onInit.push_back(callback);
         return true;
     }
 

@@ -32,6 +32,7 @@ namespace legion::core::ecs
         L_NODISCARD operator component_type& ();
         L_NODISCARD operator const component_type& () const;
 
+        L_NODISCARD bool valid() const noexcept;
         L_NODISCARD operator bool() const noexcept;
 
         L_NODISCARD component_type* operator->();

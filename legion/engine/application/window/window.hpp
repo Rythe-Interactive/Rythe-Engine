@@ -12,14 +12,10 @@ namespace legion::application
     struct window
     {
         friend class WindowSystem;
-        window(GLFWwindow* ptr) : handle(ptr) {}
-        window() = default;
+        GLFWwindow* nativeHandle;
 
-        GLFWwindow* handle;
-        async::spinlock* lock;
-
-        operator GLFWwindow* () const { return handle; }
-        window& operator=(GLFWwindow* ptr) { handle = ptr; return *this; }
+        operator GLFWwindow* () const { return nativeHandle; }
+        window& operator=(GLFWwindow* ptr) { nativeHandle = ptr; return *this; }
 
         void enableCursor(bool enabled) const;
 
@@ -37,7 +33,6 @@ namespace legion::application
 
         const std::string& title() const;
 
-    private:
         std::string m_title;
         bool m_isFullscreen;
         int m_swapInterval;
@@ -76,10 +71,7 @@ namespace std
     {
         std::size_t operator()(legion::application::window const& win) const noexcept
         {
-            std::size_t hash;
-            std::size_t h1 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.handle));
-            std::size_t h2 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.lock));
-            return h1 ^ (h2 << 1);
+            return std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.nativeHandle));
         }
     };
 }

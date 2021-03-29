@@ -17,7 +17,7 @@ namespace legion::core::ecs
         data.parent = entity{ nullptr };
 
         // Create component composition.
-        entityCompositions().try_emplace(entity{ &data });
+        entityCompositions().try_emplace(world_entity_id);
         return entity{ &data };
     }
 

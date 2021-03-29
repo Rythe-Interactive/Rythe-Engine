@@ -23,10 +23,6 @@ namespace legion::rendering
         bool m_isInitialized = false;
 
     protected:
-        static ecs::EcsRegistry* m_ecs;
-        static schd::Scheduler* m_scheduler;
-        static events::EventBus* m_eventBus;
-
         virtual void setup(app::window& context) LEGION_PURE;
 
     public:
@@ -102,75 +98,75 @@ namespace legion::rendering
         void raiseEvent(Args... arguments)
         {
             OPTICK_EVENT();
-            m_eventBus->raiseEvent<event_type>(arguments...);
+            events::EventBus::raiseEvent<event_type>(arguments...);
         }
 
         void raiseEvent(std::unique_ptr<events::event_base>&& value)
         {
             OPTICK_EVENT();
-            m_eventBus->raiseEvent(std::move(value));
+            events::EventBus::raiseEvent(std::move(value));
         }
 
         void raiseEventUnsafe(std::unique_ptr<events::event_base>&& value, id_type id)
         {
             OPTICK_EVENT();
-            m_eventBus->raiseEventUnsafe(std::move(value), id);
+            events::EventBus::raiseEventUnsafe(std::move(value), id);
         }
 
         template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD bool checkEvent() const
         {
             OPTICK_EVENT();
-            return m_eventBus->checkEvent<event_type>();
+            return events::EventBus::checkEvent<event_type>();
         }
 
         template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD size_type getEventCount() const
         {
             OPTICK_EVENT();
-            return m_eventBus->getEventCount<event_type>();
+            return events::EventBus::getEventCount<event_type>();
         }
 
         template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD const event_type& getEvent(index_type index = 0) const
         {
             OPTICK_EVENT();
-            return m_eventBus->getEvent<event_type>(index);
+            return events::EventBus::getEvent<event_type>(index);
         }
         
         template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         L_NODISCARD const event_type& getLastEvent() const
         {
             OPTICK_EVENT();
-            return m_eventBus->getLastEvent<event_type>();
+            return events::EventBus::getLastEvent<event_type>();
         }
 
         template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void clearEvent(index_type index = 0)
         {
             OPTICK_EVENT();
-            m_eventBus->clearEvent<event_type>(index);
+            events::EventBus::clearEvent<event_type>(index);
         }
 
         template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void clearLastEvent()
         {
             OPTICK_EVENT();
-            m_eventBus->clearLastEvent<event_type>();
+            events::EventBus::clearLastEvent<event_type>();
         }
 
         template<typename event_type, void(SelfType::* func_type)(event_type*) CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void bindToEvent()
         {
             OPTICK_EVENT();
-            m_eventBus->bindToEvent<event_type>(delegate<void(event_type*)>::template create<SelfType, func_type>(static_cast<SelfType*>(this)));
+            events::EventBus::bindToEvent<event_type>(delegate<void(event_type*)>::template create<SelfType, func_type>(static_cast<SelfType*>(this)));
         }
 
         template<typename event_type CNDOXY(inherits_from<event_type, events::event<event_type>> = 0)>
         void bindToEvent(delegate<void(event_type*)> callback)
         {
             OPTICK_EVENT();
-            m_eventBus->bindToEvent<event_type>(callback);
+            events::EventBus::bindToEvent<event_type>(callback);
         }
 
     };

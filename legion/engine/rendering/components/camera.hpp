@@ -19,7 +19,7 @@ namespace legion::rendering
         friend class OldRenderer;
         friend class Renderer;
 
-        ecs::component_handle<app::window> targetWindow = ecs::component_handle<app::window>(world_entity_id);
+        ecs::component<app::window> targetWindow = ecs::component_handle<app::window>(world_entity_id);
         framebuffer renderTarget = framebuffer();
         math::color clearColor = math::colors::cornflower;
         struct camera_input

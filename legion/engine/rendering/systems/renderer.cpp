@@ -373,7 +373,7 @@ namespace legion::rendering
 
             math::ivec2 viewportSize;
             {
-                if (!app::WindowSystem::windowStillExists(win.handle))
+                if (!app::WindowSystem::windowStillExists(win.nativeHandle))
                     continue;
                 app::context_guard guard(win);
                 if (!guard.contextIsValid())

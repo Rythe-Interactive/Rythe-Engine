@@ -24,24 +24,8 @@ namespace legion::core
         std::unordered_map<id_type, delegate<void(events::event_base&)>> m_bindings;
 
         SystemBase(type_reference&& id) : id(id) {}
-    };
-
-    template<typename SelfType>
-    class System : public SystemBase
-    {
-        friend class legion::core::Module;
-    protected:
-        template <void(SelfType::* func_type)(time::span), size_type charc>
-        id_type createProcess(const char(&processChainName)[charc], time::span interval = 0);
 
         void destroyProcess(id_type procId);
-
-        /**@brief Link a function to an event type in order to get notified whenever one gets raised.
-         * @tparam event_type Event type to subscribe to.
-         * @tparam func_type Function to bind to the event.
-         */
-        template <typename event_type, void(SelfType::* func_type)(event_type&) CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
-        id_type bindToEvent();
 
         template <typename event_type CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
         void unbindFromEvent(id_type bindingId);
@@ -88,6 +72,22 @@ namespace legion::core
 
         template<typename Func>
         static auto queueJobs(size_type count, Func&& func);
+    };
+
+    template<typename SelfType>
+    class System : public SystemBase
+    {
+        friend class legion::core::Module;
+    protected:
+        template <void(SelfType::* func_type)(time::span), size_type charc>
+        id_type createProcess(const char(&processChainName)[charc], time::span interval = 0);
+
+        /**@brief Link a function to an event type in order to get notified whenever one gets raised.
+         * @tparam event_type Event type to subscribe to.
+         * @tparam func_type Function to bind to the event.
+         */
+        template <typename event_type, void(SelfType::* func_type)(event_type&) CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
+        id_type bindToEvent();
 
         template<void(SelfType::* func_type)()>
         auto queueJobs(size_type count);

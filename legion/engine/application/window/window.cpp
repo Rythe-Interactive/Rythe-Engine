@@ -6,7 +6,7 @@ namespace legion::application
     void window::enableCursor(bool enabled) const
     {
         context_guard guard(*this);
-        ContextHelper::setInputMode(handle, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+        ContextHelper::setInputMode(nativeHandle, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
     }
 
     void window::setSwapInterval(uint interval)
@@ -18,7 +18,7 @@ namespace legion::application
 
     void window::show() const
     {
-        ContextHelper::showWindow(handle);
+        ContextHelper::showWindow(nativeHandle);
     }
 
     int window::swapInterval() const
@@ -38,7 +38,7 @@ namespace legion::application
 
     math::ivec2 window::framebufferSize() const
     {
-        return ContextHelper::getFramebufferSize(handle);
+        return ContextHelper::getFramebufferSize(nativeHandle);
     }
 
     const std::string& window::title() const
@@ -49,9 +49,7 @@ namespace legion::application
     context_guard::context_guard(window win) : m_win(win)
     {
         OPTICK_EVENT();
-        win.lock->lock();
-
-        if (!WindowSystem::windowStillExists(win.handle))
+        if (!WindowSystem::windowStillExists(win.nativeHandle))
             return;
 
         m_contextIsValid = ContextHelper::makeContextCurrent(win);
@@ -65,6 +63,5 @@ namespace legion::application
             return;
 
         ContextHelper::makeContextCurrent(nullptr);
-        m_win.lock->unlock();
     }
 }

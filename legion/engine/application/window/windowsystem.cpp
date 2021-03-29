@@ -3,7 +3,7 @@
 
 namespace legion::application
 {
-    sparse_map<GLFWwindow*, ecs::component_handle<window>> WindowSystem::m_windowComponents;
+    sparse_map<GLFWwindow*, ecs::component<window>> WindowSystem::m_windowComponents;
     async::spinlock WindowSystem::m_creationLock;
 
     async::spinlock WindowSystem::m_creationRequestLock;
@@ -28,7 +28,7 @@ namespace legion::application
             async::spinlock* lock = nullptr;
             if (handle.valid())
             {
-                m_eventBus->raiseEvent<window_close>(m_windowComponents[window]); // Trigger any callbacks that want to know about any windows closing.
+                events::EventBus::raiseEvent<window_close>(m_windowComponents[window]); // Trigger any callbacks that want to know about any windows closing.
 
                 if (!ContextHelper::windowShouldClose(window)) // If a callback canceled the window destruction then we should cancel.
                     return;
@@ -45,7 +45,7 @@ namespace legion::application
 
                 if (handle.entity.get_id() == world_entity_id)
                 {
-                    m_eventBus->raiseEvent<events::exit>(); // If the current window we're closing is the main window we want to close the application.
+                    events::EventBus::raiseEvent<events::exit>(); // If the current window we're closing is the main window we want to close the application.
                 }                                           // (we might want to leave this up to the user at some point.)
 
                 ContextHelper::destroyWindow(window); // After all traces of the window throughout the engine have been erased we actually close the window.
@@ -58,7 +58,7 @@ namespace legion::application
     void WindowSystem::onWindowMoved(GLFWwindow* window, int x, int y)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<window_move>(m_windowComponents[window], math::ivec2(x, y));
+            events::EventBus::raiseEvent<window_move>(m_windowComponents[window], math::ivec2(x, y));
     }
 
     void WindowSystem::onWindowResize(GLFWwindow* win, int width, int height)
@@ -68,86 +68,86 @@ namespace legion::application
             auto wincomp = m_windowComponents[win].read();
             wincomp.m_size = math::ivec2(width, height);
             m_windowComponents[win].write(wincomp);
-            m_eventBus->raiseEvent<window_resize>(m_windowComponents[win], wincomp.m_size);
+            events::EventBus::raiseEvent<window_resize>(m_windowComponents[win], wincomp.m_size);
         }
     }
 
     void WindowSystem::onWindowRefresh(GLFWwindow* window)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<window_refresh>(m_windowComponents[window]);
+            events::EventBus::raiseEvent<window_refresh>(m_windowComponents[window]);
     }
 
     void WindowSystem::onWindowFocus(GLFWwindow* window, int focused)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<window_focus>(m_windowComponents[window], focused);
+            events::EventBus::raiseEvent<window_focus>(m_windowComponents[window], focused);
     }
 
     void WindowSystem::onWindowIconify(GLFWwindow* window, int iconified)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<window_iconified>(m_windowComponents[window], iconified);
+            events::EventBus::raiseEvent<window_iconified>(m_windowComponents[window], iconified);
     }
 
     void WindowSystem::onWindowMaximize(GLFWwindow* window, int maximized)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<window_maximized>(m_windowComponents[window], maximized);
+            events::EventBus::raiseEvent<window_maximized>(m_windowComponents[window], maximized);
     }
 
     void WindowSystem::onWindowFrameBufferResize(GLFWwindow* window, int width, int height)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<window_framebuffer_resize>(m_windowComponents[window], math::ivec2(width, height));
+            events::EventBus::raiseEvent<window_framebuffer_resize>(m_windowComponents[window], math::ivec2(width, height));
     }
 
     void WindowSystem::onWindowContentRescale(GLFWwindow* window, float xscale, float yscale)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<window_content_rescale>(m_windowComponents[window], math::fvec2(xscale, xscale));
+            events::EventBus::raiseEvent<window_content_rescale>(m_windowComponents[window], math::fvec2(xscale, xscale));
     }
 
     void WindowSystem::onItemDroppedInWindow(GLFWwindow* window, int count, const char** paths)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<window_item_dropped>(m_windowComponents[window], count, paths);
+            events::EventBus::raiseEvent<window_item_dropped>(m_windowComponents[window], count, paths);
     }
 
     void WindowSystem::onMouseEnterWindow(GLFWwindow* window, int entered)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<mouse_enter_window>(m_windowComponents[window], entered);
+            events::EventBus::raiseEvent<mouse_enter_window>(m_windowComponents[window], entered);
     }
 
     void WindowSystem::onKeyInput(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<key_input>(m_windowComponents[window], key, scancode, action, mods);
+            events::EventBus::raiseEvent<key_input>(m_windowComponents[window], key, scancode, action, mods);
     }
 
     void WindowSystem::onCharInput(GLFWwindow* window, uint codepoint)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<char_input>(m_windowComponents[window], codepoint);
+            events::EventBus::raiseEvent<char_input>(m_windowComponents[window], codepoint);
     }
 
     void WindowSystem::onMouseMoved(GLFWwindow* window, double xpos, double ypos)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<mouse_moved>(m_windowComponents[window], math::dvec2(xpos, ypos) / (math::dvec2)ContextHelper::getFramebufferSize(window));
+            events::EventBus::raiseEvent<mouse_moved>(m_windowComponents[window], math::dvec2(xpos, ypos) / (math::dvec2)ContextHelper::getFramebufferSize(window));
     }
 
     void WindowSystem::onMouseButton(GLFWwindow* window, int button, int action, int mods)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<mouse_button>(m_windowComponents[window], button, action, mods);
+            events::EventBus::raiseEvent<mouse_button>(m_windowComponents[window], button, action, mods);
     }
 
     void WindowSystem::onMouseScroll(GLFWwindow* window, double xoffset, double yoffset)
     {
         if (m_windowComponents.contains(window))
-            m_eventBus->raiseEvent<mouse_scrolled>(m_windowComponents[window], math::dvec2(xoffset, yoffset));
+            events::EventBus::raiseEvent<mouse_scrolled>(m_windowComponents[window], math::dvec2(xoffset, yoffset));
     }
 
     void WindowSystem::onExit(events::exit* event)
@@ -162,7 +162,7 @@ namespace legion::application
             async::spinlock* lock = nullptr;
             if (handle.valid())
             {
-                m_eventBus->raiseEvent<window_close>(handle); // Trigger any callbacks that want to know about any windows closing.
+                events::EventBus::raiseEvent<window_close>(handle); // Trigger any callbacks that want to know about any windows closing.
 
                 {
                     lock = handle.read().lock;
@@ -385,7 +385,7 @@ namespace legion::application
                 ContextHelper::makeContextCurrent(nullptr);
             };
 
-            ecs::component_handle<window> handle(request.entityId);
+            ecs::component<window> handle(request.entityId);
             if (!m_ecs->hasComponent<window>(request.entityId))
             {
                 win.lock = new async::spinlock();
