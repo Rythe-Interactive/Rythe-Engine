@@ -782,7 +782,7 @@ namespace legion::physics
         createQuickhullTestObject
         (math::vec3(0,5.0f,0),cubeH, wireFrameH);
 
-        ////cup
+        //cup
         createQuickhullTestObject
         (math::vec3(5.0f, 5.0f, 0), colaH, wireFrameH);
 
@@ -794,9 +794,9 @@ namespace legion::physics
         createQuickhullTestObject
         (math::vec3(15.0f, 5.0f, 0), suzzaneH, wireFrameH);
 
-        ////ohio teapot
-        //createQuickhullTestObject
-        //(math::vec3(20.0f, 5.0f, 0), cubeH, wireFrameH);
+        //ohio teapot
+       /* createQuickhullTestObject
+        (math::vec3(20.0f, 5.0f, 0), cubeH, wireFrameH);*/
         
 
         addStaircase(math::vec3(8, 2, 0));

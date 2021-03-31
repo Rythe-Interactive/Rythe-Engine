@@ -64,28 +64,9 @@ namespace legion::physics
         * @param worldSupportPoint [out] the resulting support point
         * @return returns true if a seperating axis was found
         */
-        static void GetSupportPointNoTransform( math::vec3 planePosition,  math::vec3 direction, ConvexCollider* collider, const math::mat4& colliderTransform
-            , math::vec3& worldSupportPoint)
-        {
-            float largestDistanceInDirection = std::numeric_limits<float>::lowest();
-            planePosition = math::inverse(colliderTransform) * math::vec4(planePosition, 1);
-            direction = math::inverse(colliderTransform) * math::vec4(direction, 0);
-
-            for (const auto& vert : collider->GetVertices())
-            {
-                math::vec3 transformedVert = math::vec4(vert, 1);
-
-                float dotResult = math::dot(transformedVert - planePosition, direction);
-
-                if (dotResult > largestDistanceInDirection)
-                {
-                    largestDistanceInDirection = dotResult;
-                    worldSupportPoint = transformedVert;
-                }
-            }
-
-            worldSupportPoint = colliderTransform * math::vec4(worldSupportPoint, 1);
-        }
+        static void GetSupportPointNoTransform(math::vec3 planePosition, math::vec3 direction, ConvexCollider* collider, const math::mat4& colliderTransform
+            , math::vec3& worldSupportPoint);
+       
 
 
         /** @brief Given a std::vector of vertices, gets the support point in the given direction
@@ -103,46 +84,8 @@ namespace legion::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>&refFace, float& maximumSeperation,bool shouldDebug = false)
-        {
-            //shouldDebug = false;
-
-            float currentMaximumSeperation = std::numeric_limits<float>::lowest();
-
-            for (auto face : convexB->GetHalfEdgeFaces())
-            {
-
-                //log::debug("face->normal {} ", math::to_string( face->normal));
-                //get inverse normal
-                math::vec3 seperatingAxis = math::normalize(transformB * math::vec4((face->normal), 0));
-
-                math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
-
-                //get extreme point of other face in normal direction
-                math::vec3 worldSupportPoint;
-                GetSupportPoint(transformedPositionB, -seperatingAxis,
-                    convexA, transformA, worldSupportPoint);
-
-                float seperation = math::dot(worldSupportPoint - transformedPositionB, seperatingAxis);
-
-                if (seperation > currentMaximumSeperation)
-                {
-                    currentMaximumSeperation = seperation;
-                    refFace.ptr = face;
-                }
-
-                if (seperation > 0)
-                {
-                    //we have found a seperating axis, we can exit early
-                    maximumSeperation = currentMaximumSeperation;
-                    return true;
-                }
-            }
-            //no seperating axis was found
-            maximumSeperation = currentMaximumSeperation;
-
-            return false;
-        }
+            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>& refFace, float& maximumSeperation, bool shouldDebug = false);
+      
 
         /** @brief Given 2 ConvexColliders, Goes through every single possible edge combination in order to check for a valid seperating axis. This is done
          * by creating a minkowski face with each edge combination.

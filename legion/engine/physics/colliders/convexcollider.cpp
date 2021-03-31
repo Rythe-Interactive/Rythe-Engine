@@ -19,13 +19,16 @@ namespace legion::physics
         auto& [low0, high0] = aabbThis;
         auto& [low1, high1] = aabbOther;
 
-        //debug::drawLine(low0, high0, math::colors::blue, 3.0f, FLT_MAX);
-        //debug::drawLine(low1, high1, math::colors::red, 3.0f, FLT_MAX);
+       
         if (!physics::PhysicsStatics::CollideAABB(low0, high0, low1, high1))
         {
+
             manifold.isColliding = false;
             return;
         }
+
+       /* debug::drawLine(low0, high0, math::colors::blue, 3.0f, FLT_MAX);
+        debug::drawLine(low1, high1, math::colors::red, 3.0f, FLT_MAX);*/
 
         //auto compIDA = manifold.entityA.get_component_handle<identifier>();
         //auto compIDB = manifold.entityB.get_component_handle<identifier>();
@@ -34,7 +37,7 @@ namespace legion::physics
         //'this' is colliderB and 'convexCollider' is colliderA
         
 
-        ////log::debug("-------------------- SAT CHECK -----------------");
+        log::debug("-------------------- SAT CHECK -----------------");
         PointerEncapsulator < HalfEdgeFace> ARefFace;
 
         ////log::debug("Face Check A");
@@ -70,18 +73,12 @@ namespace legion::physics
             manifold.isColliding = false;
             return;
         }
-      
-       /* ConvexConvexCollisionInfo convexCollisionInfo;
-       
-        PhysicsStatics::DetectConvexConvexCollision(this,convexCollider, 
-            manifold.transformA, manifold.transformB, convexCollisionInfo, manifold);*/
 
-        /*if (!manifold.isColliding)
-        {
-            return;
-        }*/
-  
-    
+        //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA,math::colors::red,3.0f);
+        //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB,  math::colors::blue, 3.0f);
+
+        //edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::magenta,3.0f);
+        //edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::green, 3.0f);
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
 
         //TODO all penetration querys should supply a constructor that takes in a  ConvexConvexCollisionInfo
@@ -110,6 +107,12 @@ namespace legion::physics
 
         //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
 
+
+        //log::debug("---- PENETRATION INFO");
+        //log::debug("---- abPenetrationQuery {0}", abPenetrationQuery->penetration);
+        //log::debug("---- baPenetrationQuery {0}", baPenetrationQuery->penetration);
+        //log::debug("---- abEdgePenetrationQuery {0}", abEdgePenetrationQuery->penetration);
+
         if (abPenetrationQuery->penetration + physics::constants::faceToFacePenetrationBias >
             baPenetrationQuery->penetration)
         {
@@ -128,16 +131,11 @@ namespace legion::physics
         }
 
         manifold.isColliding = true;
+        log::debug("---- chosen penetration {0}", manifold.penetrationInformation->penetration);
 
         //keeping this here so i can copy pasta when i need it again
-        //log::debug("---- PENETRATION INFO");
 
-        //log::debug("---- abPenetrationQuery {}",abPenetrationQuery->penetration);
-        //log::debug("---- baPenetrationQuery {}",baPenetrationQuery->penetration);
-        //log::debug("---- abEdgePenetrationQuery {}", abEdgePenetrationQuery->penetration);
-        //log::debug("---- chosen penetration {}", manifold.penetrationInformation->penetration);
-
-        //log::debug("Collision FOUND between {} and {}!" , compIDA.read().id, compIDB.read().id);
+       // log::debug("Collision FOUND between {} and {}!" , compIDA.read().id, compIDB.read().id);
 
         //physics::PhysicsSystem::penetrationQueries.push_back(manifold.penetrationInformation);
 
