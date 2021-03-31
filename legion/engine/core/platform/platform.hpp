@@ -240,8 +240,11 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 #define PROJECT_NAME user_project
 #endif
 
+#define EXPAND(x) x
+#define CALL(x, y) x(y)
+
 #define NARGS_(_1, _2, _3, _4, _5 , _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, N, ...) N
-#define NARGS(args...) NARGS_(args..., 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+#define NARGS(...) EXPAND(NARGS_(__VA_ARGS__, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1))
 
 #define CONCAT(A, B) A ## B
 
@@ -264,7 +267,49 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 #define L_NAME_15(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9 , #x10 , #x11 , #x12 , #x13 , #x14 , #x15
 #define L_NAME_16(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) #x , #x2 , #x3 , #x4 , #x5 , #x6 , #x7 , #x8 , #x9 , #x10 , #x11 , #x12 , #x13 , #x14 , #x15 , #x16
 
-#define STRINGIFY_SEPERATE(args...) CONCAT_DEFINE(L_NAME_, NARGS(args))(args)
+// turn: value0, value1, value2
+// into: "value0", "value1", "value2"
+#define STRINGIFY_SEPERATE(...) CONCAT_DEFINE(L_NAME_, EXPAND(NARGS(__VA_ARGS__)))EXPAND((__VA_ARGS__))
+
+#define pre_1(prefix, x)                             prefix##x
+#define pre_2(prefix, x, x2)                         prefix##x , prefix##x2
+#define pre_3(prefix, x, x2, x3)                     prefix##x , prefix##x2, prefix##x3
+#define pre_4(prefix, x, x2, x3, x4)                 prefix##x , prefix##x2, prefix##x3, prefix##x4
+#define pre_5(prefix, x, x2, x3, x4, x5)             prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5
+#define pre_6(prefix, x, x2, x3, x4, x5, x6)         prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6
+#define pre_7(prefix, x, x2, x3, x4, x5, x6, x7)     prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7
+#define pre_8(prefix, x, x2, x3, x4, x5, x6, x7, x8) prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8
+
+#define prepost_1(prefix, postfix, x)                             CAT(prefix##x, postfix)
+#define prepost_2(prefix, postfix, x, x2)                         CAT(prefix##x, postfix) , CAT(prefix##x2, postfix)
+#define prepost_3(prefix, postfix, x, x2, x3)                     CAT(prefix##x, postfix) , CAT(prefix##x2, postfix), CAT(prefix##x3, postfix)
+#define prepost_4(prefix, postfix, x, x2, x3, x4)                 CAT(prefix##x, postfix) , CAT(prefix##x2, postfix), CAT(prefix##x3, postfix), CAT(prefix##x4, postfix)
+#define prepost_5(prefix, postfix, x, x2, x3, x4, x5)             CAT(prefix##x, postfix) , CAT(prefix##x2, postfix), CAT(prefix##x3, postfix), CAT(prefix##x4, postfix), CAT(prefix##x5, postfix)
+#define prepost_6(prefix, postfix, x, x2, x3, x4, x5, x6)         CAT(prefix##x, postfix) , CAT(prefix##x2, postfix), CAT(prefix##x3, postfix), CAT(prefix##x4, postfix), CAT(prefix##x5, postfix), CAT(prefix##x6, postfix)
+#define prepost_7(prefix, postfix, x, x2, x3, x4, x5, x6, x7)     CAT(prefix##x, postfix) , CAT(prefix##x2, postfix), CAT(prefix##x3, postfix), CAT(prefix##x4, postfix), CAT(prefix##x5, postfix), CAT(prefix##x6, postfix), CAT(prefix##x7, postfix)
+#define prepost_8(prefix, postfix, x, x2, x3, x4, x5, x6, x7, x8) CAT(prefix##x, postfix) , CAT(prefix##x2, postfix), CAT(prefix##x3, postfix), CAT(prefix##x4, postfix), CAT(prefix##x5, postfix), CAT(prefix##x6, postfix), CAT(prefix##x7, postfix), CAT(prefix##x8, postfix)
+
+#define decltype_1(x)                             decltype(x)
+#define decltype_2(x, x2)                         decltype(x) , decltype(x2)
+#define decltype_3(x, x2, x3)                     decltype(x) , decltype(x2), decltype(x3)
+#define decltype_4(x, x2, x3, x4)                 decltype(x) , decltype(x2), decltype(x3), decltype(x4)
+#define decltype_5(x, x2, x3, x4, x5)             decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5)
+#define decltype_6(x, x2, x3, x4, x5, x6)         decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6)
+#define decltype_7(x, x2, x3, x4, x5, x6, x7)     decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7)
+#define decltype_8(x, x2, x3, x4, x5, x6, x7, x8) decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8)
+
+ // turn: value, 0, 1, 2
+ // into: value0, value1, value2
+#define CAT_PREFIX(prefix, ...) CONCAT_DEFINE(pre_,EXPAND(NARGS(__VA_ARGS__)))EXPAND((prefix, __VA_ARGS__))
+
+// turn: value, p, 0, 1, 2
+// into: value0p, value1p, value2p
+#define CAT_PREPOSTFIX(prefix, postfix, ...) CONCAT_DEFINE(prepost_,EXPAND(NARGS(__VA_ARGS__)))EXPAND((prefix, postfix, __VA_ARGS__))
+
+// turn: 0, 1, 2
+// into: decltype(0), decltype(1), decltype(2)
+#define decltypes_IMPL(count, ...) CONCAT_DEFINE(decltype_, count)EXPAND((__VA_ARGS__))
+#define decltypes(...) EXPAND(decltypes_IMPL(EXPAND(NARGS(__VA_AGRS__)), __VA_ARGS__))
 
 #define RULE_OF_5(type)\
 type() = default;\

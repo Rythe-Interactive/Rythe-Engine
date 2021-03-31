@@ -11,7 +11,12 @@ namespace legion::application
 {
     struct window
     {
+        Reflectable;
         friend class WindowSystem;
+
+        window() = default;
+        window(const std::string& title, bool fullscreen, int swapInterval, math::ivec2 size);
+
         GLFWwindow* nativeHandle;
 
         operator GLFWwindow* () const { return nativeHandle; }
@@ -33,6 +38,7 @@ namespace legion::application
 
         const std::string& title() const;
 
+    private:
         std::string m_title;
         bool m_isFullscreen;
         int m_swapInterval;
@@ -62,6 +68,7 @@ namespace legion::application
 
 }
 
+ManualReflector(legion::application::window, m_title, m_isFullscreen, m_swapInterval, m_size);
 
 #if !defined(DOXY_EXCLUDE)
 namespace std
