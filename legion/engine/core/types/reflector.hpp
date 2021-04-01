@@ -39,8 +39,8 @@ namespace legion::core
             : values(std::forward<Members>(members)...), names(memberNames) {}
     };
 
-#define Reflectable \
-template<typename, typename...>\
+#define Reflectable                         \
+template<typename, typename...>             \
 friend struct legion::core::reflector;
 
 #define ManualReflector(type, ...)                                                                                                          \
@@ -54,7 +54,7 @@ namespace legion::core{                                                         
         std::tuple<EXPAND(decltypes_IMPL(EXPAND(NARGS(__VA_ARGS__)), EXPAND(CAT_PREFIX(type::, __VA_ARGS__))))> values;                     \
         std::array<std::string, size> names;                                                                                                \
                                                                                                                                             \
-        reflector(type& src) : values(EXPAND(CAT_PREFIX(src., __VA_ARGS__))), names({ EXPAND(STRINGIFY_SEPERATE(__VA_ARGS__)) }) {}  \
+        reflector(type& src) : values(EXPAND(CAT_PREFIX(src., __VA_ARGS__))), names({ EXPAND(STRINGIFY_SEPERATE(__VA_ARGS__)) }) {}         \
     };                                                                                                                                      \
 }
 

@@ -271,14 +271,22 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 // into: "value0", "value1", "value2"
 #define STRINGIFY_SEPERATE(...) CONCAT_DEFINE(L_NAME_, EXPAND(NARGS(__VA_ARGS__)))EXPAND((__VA_ARGS__))
 
-#define pre_1(prefix, x)                             prefix##x
-#define pre_2(prefix, x, x2)                         prefix##x , prefix##x2
-#define pre_3(prefix, x, x2, x3)                     prefix##x , prefix##x2, prefix##x3
-#define pre_4(prefix, x, x2, x3, x4)                 prefix##x , prefix##x2, prefix##x3, prefix##x4
-#define pre_5(prefix, x, x2, x3, x4, x5)             prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5
-#define pre_6(prefix, x, x2, x3, x4, x5, x6)         prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6
-#define pre_7(prefix, x, x2, x3, x4, x5, x6, x7)     prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7
-#define pre_8(prefix, x, x2, x3, x4, x5, x6, x7, x8) prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8
+#define  pre_1(prefix, x)                                                                    prefix##x
+#define  pre_2(prefix, x, x2)                                                                prefix##x , prefix##x2
+#define  pre_3(prefix, x, x2, x3)                                                            prefix##x , prefix##x2, prefix##x3
+#define  pre_4(prefix, x, x2, x3, x4)                                                        prefix##x , prefix##x2, prefix##x3, prefix##x4
+#define  pre_5(prefix, x, x2, x3, x4, x5)                                                    prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5
+#define  pre_6(prefix, x, x2, x3, x4, x5, x6)                                                prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6
+#define  pre_7(prefix, x, x2, x3, x4, x5, x6, x7)                                            prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7
+#define  pre_8(prefix, x, x2, x3, x4, x5, x6, x7, x8)                                        prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8
+#define  pre_9(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9)                                    prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8, prefix##x9
+#define pre_10(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8, prefix##x9, prefix##x10
+#define pre_11(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8, prefix##x9, prefix##x10, prefix##x11
+#define pre_12(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8, prefix##x9, prefix##x10, prefix##x11, prefix##x12
+#define pre_13(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8, prefix##x9, prefix##x10, prefix##x11, prefix##x12, prefix##x13
+#define pre_14(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8, prefix##x9, prefix##x10, prefix##x11, prefix##x12, prefix##x13, prefix##x14
+#define pre_15(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8, prefix##x9, prefix##x10, prefix##x11, prefix##x12, prefix##x13, prefix##x14, prefix##x15
+#define pre_16(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) prefix##x , prefix##x2, prefix##x3, prefix##x4, prefix##x5, prefix##x6, prefix##x7, prefix##x8, prefix##x9, prefix##x10, prefix##x11, prefix##x12, prefix##x13, prefix##x14, prefix##x15, prefix##x16
 
 #define prepost_1(prefix, postfix, x)                             CAT(prefix##x, postfix)
 #define prepost_2(prefix, postfix, x, x2)                         CAT(prefix##x, postfix) , CAT(prefix##x2, postfix)

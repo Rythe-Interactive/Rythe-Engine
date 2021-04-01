@@ -5,61 +5,61 @@
 namespace legion::core::ecs
 {
     template<typename component_type>
-    inline component<component_type>::operator component_type& ()
+    inline L_ALWAYS_INLINE component<component_type>::operator component_type& ()
     {
         return Registry::getComponent<component_type>(owner);
     }
 
     template<typename component_type>
-    inline component<component_type>::operator const component_type& () const
+    inline L_ALWAYS_INLINE component<component_type>::operator const component_type& () const
     {
         return Registry::getComponent<component_type>(owner);
     }
 
     template<typename component_type>
-    inline bool component<component_type>::valid() const noexcept
+    inline L_ALWAYS_INLINE bool component<component_type>::valid() const noexcept
     {
 		return Registry::hasComponent<component_type>(owner);
 	}
 
     template<typename component_type>
-    inline component<component_type>::operator bool() const noexcept
+    inline L_ALWAYS_INLINE component<component_type>::operator bool() const noexcept
     {
         return Registry::hasComponent<component_type>(owner);
     }
 
     template<typename component_type>
-    inline component_type* component<component_type>::operator->()
+    inline L_ALWAYS_INLINE component_type* component<component_type>::operator->()
     {
         return &Registry::getComponent<component_type>(owner);
     }
 
     template<typename component_type>
-    inline const component_type* component<component_type>::operator->() const
+    inline L_ALWAYS_INLINE const component_type* component<component_type>::operator->() const
     {
         return &Registry::getComponent<component_type>(owner);
     }
 
     template<typename component_type>
-    inline bool component<component_type>::operator==(const component& other) const noexcept
+    inline L_ALWAYS_INLINE bool component<component_type>::operator==(const component& other) const noexcept
     {
         return owner == other.owner;
     }
 
     template<typename component_type>
-    inline component_type& component<component_type>::get()
+    inline L_ALWAYS_INLINE component_type& component<component_type>::get()
     {
         return Registry::getComponent<component_type>(owner);
     }
 
     template<typename component_type>
-    inline const component_type& component<component_type>::get() const
+    inline L_ALWAYS_INLINE const component_type& component<component_type>::get() const
     {
         return Registry::getComponent<component_type>(owner);
     }
 
     template<typename component_type>
-    inline void component<component_type>::destroy()
+    inline L_ALWAYS_INLINE void component<component_type>::destroy()
     {
         Registry::destroyComponent<component_type>(owner);
     }

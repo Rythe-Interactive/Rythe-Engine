@@ -26,8 +26,11 @@ public:
 
         static size_type sum = 0;
 
-        for (auto& ent : filter)
-            sum += ent.get_component<example_component>()->value;
+        for (auto& ent : ecs::filter<example_component>{})
+        {
+            auto comp = ent.get_component<example_component>();
+            sum += comp->value++;
+        }
 
         static fast_time buffer = 0;
         static fast_time avgTime = deltaTime;

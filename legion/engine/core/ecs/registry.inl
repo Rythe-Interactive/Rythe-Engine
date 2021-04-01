@@ -4,7 +4,7 @@
 namespace legion::core::ecs
 {
     template<typename component_type, typename ...Args>
-    inline component_pool<component_type>* Registry::tryEmplaceFamily(Args && ...args)
+    inline L_ALWAYS_INLINE component_pool<component_type>* Registry::tryEmplaceFamily(Args && ...args)
     {
         OPTICK_EVENT();
         if (getFamilies().count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
@@ -20,7 +20,7 @@ namespace legion::core::ecs
     }
 
     template<typename component_type, typename... Args>
-    inline void ecs::Registry::registerComponentType(Args&&... args)
+    inline L_ALWAYS_INLINE void ecs::Registry::registerComponentType(Args&&... args)
     {
         OPTICK_EVENT();
         getFamilies().try_emplace(
@@ -30,21 +30,21 @@ namespace legion::core::ecs
     }
 
     template<typename component_type0, typename component_type1, typename... component_types, typename... Args>
-    inline void ecs::Registry::registerComponentType(Args&&... args)
+    inline L_ALWAYS_INLINE void ecs::Registry::registerComponentType(Args&&... args)
     {
         registerComponentType<component_type0>(std::forward<Args>(args)...);
         registerComponentType<component_type1, component_types...>(std::forward<Args>(args)...);
     }
 
     template<typename component_type, typename... Args>
-    inline component_pool<component_type>* ecs::Registry::getFamily(Args&&... args)
+    inline L_ALWAYS_INLINE component_pool<component_type>* ecs::Registry::getFamily(Args&&... args)
     {
         OPTICK_EVENT();
         return tryEmplaceFamily<component_type>(std::forward<Args>(args)...);
     }
 
     template<typename component_type>
-    inline component_type& Registry::createComponent(entity target)
+    inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target)
     {
         OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
@@ -64,7 +64,7 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
-    inline component_type& Registry::createComponent(entity target, const serialization::component_prototype<component_type>& prototype)
+    inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, const serialization::component_prototype<component_type>& prototype)
     {
         OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
@@ -84,7 +84,7 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
-    inline component_type& Registry::createComponent(entity target, serialization::component_prototype<component_type>&& prototype)
+    inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, serialization::component_prototype<component_type>&& prototype)
     {
         OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
@@ -104,7 +104,7 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
-    inline void Registry::destroyComponent(entity target)
+    inline L_ALWAYS_INLINE void Registry::destroyComponent(entity target)
     {
         OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
@@ -124,7 +124,7 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
-    inline bool Registry::hasComponent(entity target)
+    inline L_ALWAYS_INLINE bool Registry::hasComponent(entity target)
     {
         OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
@@ -139,7 +139,7 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
-    inline component_type& Registry::getComponent(entity target)
+    inline L_ALWAYS_INLINE component_type& Registry::getComponent(entity target)
     {
         OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.

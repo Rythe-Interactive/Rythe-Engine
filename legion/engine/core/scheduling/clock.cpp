@@ -1,5 +1,7 @@
 #include <core/scheduling/clock.hpp>
 
+#include <thread>
+
 namespace legion::core::scheduling
 {
     Clock::span_type Clock::m_lastTickStart = 0;
@@ -92,6 +94,8 @@ namespace legion::core::scheduling
         case advancement_protocol::Manual:
             if (m_doTick.exchange(false, std::memory_order_acquire))
                 advance(loopStart, elapsedSinceLastTick);
+            else
+                std::this_thread::yield();
             break;
         }
     }

@@ -4,19 +4,19 @@
 namespace legion::core::ecs
 {
     template<typename... component_types>
-    inline id_type filter_info<component_types...>::id()
+    inline L_ALWAYS_INLINE id_type filter_info<component_types...>::id()
     {
         return filter_id;
     }
 
     template<typename... component_types>
-    inline bool filter_info<component_types...>::contains(id_type id) noexcept
+    inline L_ALWAYS_INLINE bool filter_info<component_types...>::contains(id_type id) noexcept
     {
         return contains_direct(id);
     }
 
     template<typename... component_types>
-    inline bool filter_info<component_types...>::contains(const std::unordered_set<id_type>& comp)
+    inline L_ALWAYS_INLINE bool filter_info<component_types...>::contains(const std::unordered_set<id_type>& comp)
     {
         if (!comp.size())
             return false;
