@@ -9,6 +9,19 @@ namespace legion::physics
         prevEdge = newPrevEdge;
     }
 
+    void HalfEdgeEdge::setNext(HalfEdgeEdge* newNextEdge)
+    {
+        nextEdge = newNextEdge;
+        newNextEdge->prevEdge = this;
+
+    }
+
+    void HalfEdgeEdge::setPrev(HalfEdgeEdge* newPrevEdge)
+    {
+        prevEdge = newPrevEdge;
+        newPrevEdge->nextEdge = this;
+    }
+
     void HalfEdgeEdge::setPairingEdge(HalfEdgeEdge* edge)
     {
         pairingEdge = edge;
@@ -56,8 +69,28 @@ namespace legion::physics
         math::vec3 worldEnd = nextEdge->edgePosition + spacing;
         math::vec3 endDifference = (worldCentroid - worldEnd) * 0.1f;
 
-
         debug::user_projectDrawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);
+    }
+
+    void HalfEdgeEdge::suicidalMergeWithPairing(math::mat4 transform)
+    {
+        HalfEdgeFace* otherFace = pairingEdge->face;
+        face->startEdge = this->nextEdge;
+        pairingEdge->prevEdge->setNext(this->nextEdge);
+        prevEdge->setNext(pairingEdge->nextEdge);
+       
+        //pairingEdge->prevEdge->DEBUG_drawEdge(transform, math::colors::red, FLT_MAX, 5.0f);
+        //this->nextEdge->DEBUG_drawEdge(transform, math::colors::blue, FLT_MAX, 5.0f);
+
+        //prevEdge->DEBUG_drawEdge(transform, math::colors::darkgrey, FLT_MAX, 5.0f);
+        //pairingEdge->nextEdge->DEBUG_drawEdge(transform, math::colors::magenta, FLT_MAX, 5.0f);
+
+        //nulify otherFace so its edges wont get deleted
+        otherFace->startEdge = nullptr;
+        delete otherFace;
+
+        delete pairingEdge;
+        delete this;
     }
 }
 

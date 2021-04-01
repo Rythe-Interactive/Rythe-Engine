@@ -31,6 +31,9 @@ namespace legion::physics
 		/**@brief sets 'nextEdge' and 'prevEdge' with the given HalfEdgeEdges
 		*/
         void setNextAndPrevEdge(HalfEdgeEdge* newPrevEdge, HalfEdgeEdge* newNextEdge);
+
+        void setNext(HalfEdgeEdge* newNextEdge);
+        void setPrev(HalfEdgeEdge* newPrevEdge);
 		
 
         /**@brief Sets the pairingEdge to the passed in edge, and sets the edge.pairingEdge to this
@@ -58,6 +61,8 @@ namespace legion::physics
         
 
         void DEBUG_drawInsetEdge(const math::vec3 spacing, const math::color& debugColor, float time = 20.0f, float width = 5.0f);
+
+        void suicidalMergeWithPairing(math::mat4 transform);
        
 
 

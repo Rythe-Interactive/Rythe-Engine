@@ -74,11 +74,7 @@ namespace legion::physics
             return;
         }
 
-        //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA,math::colors::red,3.0f);
-        //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB,  math::colors::blue, 3.0f);
 
-        //edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::magenta,3.0f);
-        //edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::green, 3.0f);
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
 
         //TODO all penetration querys should supply a constructor that takes in a  ConvexConvexCollisionInfo

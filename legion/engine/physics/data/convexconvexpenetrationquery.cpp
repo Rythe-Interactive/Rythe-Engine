@@ -34,6 +34,9 @@ namespace legion::physics
             }
         }
 
+       /* incFace->DEBUG_DrawFace(incTransform, math::colors::red, 3.0f);
+        refFace->DEBUG_DrawFace(refTransform, math::colors::blue, 3.0f);*/
+
         //------------------------------- get all world vertex positions in incFace -------------------------------------------------//
         std::vector<ContactVertex> outputContactPoints;
 

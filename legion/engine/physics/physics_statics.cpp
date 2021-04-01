@@ -54,10 +54,10 @@ namespace legion::physics
 
         for (auto face : convexB->GetHalfEdgeFaces())
         {
-            if (i == wantDebug && shouldDebug)
+           /* if (i == wantDebug && shouldDebug)
             {
                 face->DEBUG_DrawFace(transformB, math::colors::black, 3.0f);
-            }
+            }*/
             //log::debug("face->normal {} ", math::to_string( face->normal));
             //get inverse normal
             math::vec3 seperatingAxis = math::normalize(transformB * math::vec4((face->normal), 0));
@@ -71,11 +71,11 @@ namespace legion::physics
 
             float seperation = math::dot(worldSupportPoint - transformedPositionB, seperatingAxis);
 
-            if (i == wantDebug && shouldDebug)
+            /*if (i == wantDebug && shouldDebug)
             {
                 debug::drawLine(worldSupportPoint, worldSupportPoint + math::vec3(0, 0.1f, 0), math::colors::grey, 3.0f, 3.0f, true);
                 log::debug("seperation {}", seperation);
-            }
+            }*/
 
             if (seperation > currentMaximumSeperation)
             {
@@ -95,7 +95,7 @@ namespace legion::physics
         }
         //no seperating axis was found
         maximumSeperation = currentMaximumSeperation;
-        log::debug("maximumSeperation {}", maximumSeperation);
+        //log::debug("maximumSeperation {}", maximumSeperation);
 
         return false;
     }
@@ -947,6 +947,50 @@ namespace legion::physics
                 //delete new face
 
         //remove all null faces
+        
+        for (int i = 0; i < horizonEdges.size(); i++)
+        {
+            HalfEdgeFace* establishedFace = horizonEdges.at(i)->face;
+            HalfEdgeFace* newFace = newFaces.at(i);
+
+            int count = 0;
+            int bfr = 0;
+            int aft = 0;
+
+            auto countVert = [&count](HalfEdgeEdge* currentEdge) {count++; };
+
+            if (isFacesCoplanar(establishedFace, newFace))
+            {
+                establishedFace->forEachEdge(countVert);
+                bfr = count;
+                count = 0;
+
+                horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform);
+                newFaces.at(i) = nullptr;
+
+                establishedFace->forEachEdge(countVert);
+                aft = count;
+                count = 0;
+
+
+            }
+        }
+
+        {
+
+            std::vector<HalfEdgeFace*> tempNewFaces = std::move(newFaces);
+
+            for (auto face : tempNewFaces)
+            {
+                if (face)
+                {
+                    newFaces.push_back(face);
+                }
+            }
+
+
+        }
+
             
         partitionVerticesToList(unmergedVertices, newFaces, facesWithOutsideVerts);
 
@@ -956,6 +1000,14 @@ namespace legion::physics
         }
 
 
+    }
+
+    bool PhysicsStatics::isFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second)
+    {
+        static float angle = math::cos(math::radians(8.0f));
+
+        float dotResult = math::dot(first->normal,second->normal);
+        return dotResult > angle;
     }
 
 };

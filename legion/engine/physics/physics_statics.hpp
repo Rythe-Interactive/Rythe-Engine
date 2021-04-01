@@ -577,6 +577,8 @@ namespace legion::physics
         static void mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts
             , math::mat4 DEBUG_transform);
 
+        static bool isFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second);
+
         
 
     };
