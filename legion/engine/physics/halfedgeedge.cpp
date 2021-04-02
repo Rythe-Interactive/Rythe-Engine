@@ -78,6 +78,9 @@ namespace legion::physics
         face->startEdge = this->nextEdge;
         pairingEdge->prevEdge->setNext(this->nextEdge);
         prevEdge->setNext(pairingEdge->nextEdge);
+
+        //re-initialize face so that we take the new edges into account
+        face->initializeFace();
        
         //pairingEdge->prevEdge->DEBUG_drawEdge(transform, math::colors::red, FLT_MAX, 5.0f);
         //this->nextEdge->DEBUG_drawEdge(transform, math::colors::blue, FLT_MAX, 5.0f);

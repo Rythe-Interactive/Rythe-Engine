@@ -892,7 +892,6 @@ namespace legion::physics
         //identify faces that can see vertex and remove them from list
         for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
         {
-
             HalfEdgeFace* face = listIter->face;
 
             const math::vec3& planeCentroid = face->centroid;
@@ -916,8 +915,8 @@ namespace legion::physics
             //face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
         }
 
-        std::vector<HalfEdgeEdge*> horizonEdges;
         //identify horizon edges and put them into list
+        std::vector<HalfEdgeEdge*> horizonEdges;
         findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges, DEBUG_transform);
 
 
@@ -931,8 +930,6 @@ namespace legion::physics
             {
                 horizonEdges.push_back(horizonEdge->pairingEdge);
             }
-
-
         }
 
         std::vector<HalfEdgeFace*> newFaces;
@@ -977,7 +974,6 @@ namespace legion::physics
         }
 
         {
-
             std::vector<HalfEdgeFace*> tempNewFaces = std::move(newFaces);
 
             for (auto face : tempNewFaces)
@@ -987,8 +983,6 @@ namespace legion::physics
                     newFaces.push_back(face);
                 }
             }
-
-
         }
 
             

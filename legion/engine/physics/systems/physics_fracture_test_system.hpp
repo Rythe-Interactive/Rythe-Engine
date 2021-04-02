@@ -53,7 +53,7 @@ namespace legion::physics
         //SCENE HELPERS
         void createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH);
 
-        void PopulateFollowerList(ecs::entity_handle physicsEnt);
+        void PopulateFollowerList(ecs::entity_handle physicsEnt,int index);
        
         void addStaircase(math::vec3 position);
         //FUNCTION BINDED ACTIONS
@@ -139,5 +139,6 @@ namespace legion::physics
 
         std::vector< ecs::entity_handle> registeredColliderColorDraw;
 
+        std::vector<std::vector<ecs::entity_handle>> folowerObjects;
     };
 }

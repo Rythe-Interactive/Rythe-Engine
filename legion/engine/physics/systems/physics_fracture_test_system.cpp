@@ -803,6 +803,11 @@ namespace legion::physics
         /*addStaircase(math::vec3(8, 1, -1));
         addStaircase(math::vec3(8, 0, -2));
         addStaircase(math::vec3(8, -1, -3));*/
+
+        for (size_t i = 0; i < registeredColliderColorDraw.size(); i++)
+        {
+            folowerObjects.push_back(std::vector<ecs::entity_handle>());
+        }
     }
 
     void PhysicsFractureTestSystem::addStaircase(math::vec3 position)
@@ -856,13 +861,22 @@ namespace legion::physics
         registeredColliderColorDraw.push_back(ent);
     }
 
-    void PhysicsFractureTestSystem::PopulateFollowerList(ecs::entity_handle physicsEnt)
+    void PhysicsFractureTestSystem::PopulateFollowerList(ecs::entity_handle physicsEnt, int index)
     {
         app::window window = m_ecs->world.get_component_handle<app::window>().read();
 
         auto physicsComp = physicsEnt.read_component<physicsComponent>();
         auto collider = std::dynamic_pointer_cast<ConvexCollider>(physicsComp.colliders.at(0));
         auto [posH, rotH, scaleH] = physicsEnt.get_component_handles<transform>();
+
+        auto& currentContainer = folowerObjects.at(index);
+
+        for (auto ent : currentContainer)
+        {
+            m_ecs->destroyEntity(ent);
+        }
+
+        folowerObjects.at(index).clear();
 
         for (auto face : collider->GetHalfEdgeFaces())
         {
@@ -949,7 +963,7 @@ namespace legion::physics
             positionH.write(posH.read());
             count++;
 
-
+            currentContainer.push_back(newEnt);
 
         }
 
@@ -1071,13 +1085,12 @@ namespace legion::physics
     {
         if (!action->value)
         {
+            int i = 0;
             for (auto ent : registeredColliderColorDraw)
             {
                 //[1] Get transform
                 auto [posH,rotH,scaleH] = ent.get_component_handles<transform>();
 
-                
-       
                 math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
 
                 //auto 
@@ -1098,8 +1111,8 @@ namespace legion::physics
                 //[3] quickhull until step
 
                 //[4] use collider to generate follower objects
-                PopulateFollowerList(ent);
-
+                PopulateFollowerList(ent,i);
+                i++;
             }
 
             step++;

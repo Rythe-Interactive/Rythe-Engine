@@ -5,10 +5,15 @@ namespace legion::physics
 {
     HalfEdgeFace::HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal) : startEdge{ newStartEdge }, normal{ newNormal }
     {
+        initializeFace();
+    }
+
+    void HalfEdgeFace::initializeFace()
+    {
         /*log::debug("HalfEdgeFace::HalfEdgeFace");*/
         static int faceCount = 0;
 
-        DEBUG_color =math::color( math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f));
+        DEBUG_color = math::color(math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f), math::linearRand(0.25f, 0.7f));
         math::vec3 faceCenter{ 0.0f };
         int edgeCount = 0;
 
@@ -41,7 +46,6 @@ namespace legion::physics
         forEachEdge(initializeEdgeToFaceFunc);
 
         faceCount++;
-
     }
 
     void HalfEdgeFace::deleteEdges()

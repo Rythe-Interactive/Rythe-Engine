@@ -28,6 +28,8 @@ namespace legion::physics
         
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
+        void initializeFace();
+
         /**@brief Deletes all the edges of this face
          * Warning: pairing edges are not deleted because their face may still exist
          */
