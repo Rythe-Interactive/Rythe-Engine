@@ -448,6 +448,7 @@
     <ClInclude Include="data\loaders\gltfmeshloader.hpp" />
     <ClInclude Include="engine\enginesubsystem.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
+    <ClInclude Include="serialization\serializationregistry.hpp" />
     <ClInclude Include="types\prototype.hpp" />
   </ItemGroup>
   <ItemGroup>

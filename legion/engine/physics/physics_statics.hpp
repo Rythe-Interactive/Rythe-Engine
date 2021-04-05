@@ -486,7 +486,7 @@ namespace legion::physics
         {
             con.draw_cells_json("assets/voronoi/output/cells.json");
             std::ifstream f("assets/voronoi/output/cells.json");
-            return serialization::SerializationUtil::JSONDeserialize< std::vector<std::vector<math::vec4>>>(f);
+            return serialization::json_serializer<std::vector<std::vector<math::vec4>>>::deserialize(f);
         }
 
         /**@brief Checks collision between two AABB colliders and returns whether there is collision

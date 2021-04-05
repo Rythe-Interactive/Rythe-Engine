@@ -519,6 +519,7 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="scenemanagement\components\scene.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
+    <ClInclude Include="serialization\serializationregistry.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
     <ClInclude Include="time\utils.hpp" />
