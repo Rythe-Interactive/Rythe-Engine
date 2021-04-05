@@ -919,7 +919,6 @@ namespace legion::physics
         std::vector<HalfEdgeEdge*> horizonEdges;
         findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges, DEBUG_transform);
 
-
         //reverse iterate the list to find their pairings, add them to new list
         {
             std::vector<HalfEdgeEdge*> tempEdges = std::move(horizonEdges);
@@ -948,44 +947,38 @@ namespace legion::physics
         for (int i = 0; i < horizonEdges.size(); i++)
         {
             HalfEdgeFace* establishedFace = horizonEdges.at(i)->face;
+            ColliderFaceToVert& faceToVertEstablished = *establishedFace->faceToVert;
             HalfEdgeFace* newFace = newFaces.at(i);
 
-            int count = 0;
-            int bfr = 0;
-            int aft = 0;
+            //int count = 0;
+            //int bfr = 0;
+            //int aft = 0;
 
-            auto countVert = [&count](HalfEdgeEdge* currentEdge) {count++; };
+            //auto countVert = [&count](HalfEdgeEdge* currentEdge) {count++; };
 
             if (isFacesCoplanar(establishedFace, newFace))
             {
-                establishedFace->forEachEdge(countVert);
-                bfr = count;
-                count = 0;
 
-                horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform);
-                newFaces.at(i) = nullptr;
-
-                establishedFace->forEachEdge(countVert);
-                aft = count;
-                count = 0;
-
-
+                horizonEdges.at(i)->pairingEdge->suicidalMergeWithPairing(DEBUG_transform);
+                faceToVertEstablished.populateVectorWithVerts(unmergedVertices);
+                faceToVertEstablished.face = nullptr;
             }
         }
 
+        for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
         {
-            std::vector<HalfEdgeFace*> tempNewFaces = std::move(newFaces);
+            HalfEdgeFace* face = listIter->face;
 
-            for (auto face : tempNewFaces)
+            if (!face)
             {
-                if (face)
-                {
-                    newFaces.push_back(face);
-                }
+                listIter = facesWithOutsideVerts.erase(listIter);
+            }
+            else
+            {
+                listIter++;
             }
         }
 
-            
         partitionVerticesToList(unmergedVertices, newFaces, facesWithOutsideVerts);
 
         for (auto face : facesToBeRemoved)

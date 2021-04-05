@@ -13,7 +13,7 @@ namespace legion::physics
 
         ColliderFaceToVert(HalfEdgeFace* pFace) : face(pFace)
         {
-
+            pFace->faceToVert = this;
         }
 
         ~ColliderFaceToVert()

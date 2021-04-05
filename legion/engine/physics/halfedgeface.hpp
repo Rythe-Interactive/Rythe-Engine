@@ -2,9 +2,10 @@
 #include <core/core.hpp>
 #include <physics/halfedgeedge.hpp>
 
+
 namespace legion::physics
 {
-
+    struct ColliderFaceToVert;
 
 	struct HalfEdgeFace
 	{
@@ -21,10 +22,12 @@ namespace legion::physics
             concave
         };
 
-		HalfEdgeEdge* startEdge;
 		math::vec3 normal;
 		math::vec3 centroid;
         math::color DEBUG_color;
+        HalfEdgeEdge* startEdge = nullptr;
+        ColliderFaceToVert* faceToVert = nullptr; //only used for initialization of quickhull, unfortunately cant find a better solution
+      
         
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
