@@ -468,7 +468,7 @@ namespace legion::physics
 
         //------------------------------------------------------------ Quickhull -----------------------------------------------------------------------//
 
-        static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices,int maxDraw = INT_MAX,math::mat4 DEBUG_transform = math::mat4(1.0f));
+        static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices,int maxDraw = INT_MAX,int DEBUG_at = INT_MAX,math::mat4 DEBUG_transform = math::mat4(1.0f));
 
     private:
 
@@ -567,7 +567,7 @@ namespace legion::physics
         static void createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint,
             const std::vector<HalfEdgeEdge*>& reversedEdges, std::vector<HalfEdgeFace*>& createdFaces);
 
-        static bool foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, PointerEncapsulator< ColliderFaceToVert> outChosenFace);
+        static bool foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, PointerEncapsulator< ColliderFaceToVert>& outChosenFace);
         
         static void partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces, std::list<ColliderFaceToVert>& outFacesWithOutsideVerts);
 
@@ -575,7 +575,7 @@ namespace legion::physics
             std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges, math::mat4 DEBUG_transform = math::mat4(1.0f));
 
         static void mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts
-            , math::mat4 DEBUG_transform);
+            , math::mat4 DEBUG_transform,bool atDebug);
 
         static bool isFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second);
 

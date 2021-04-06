@@ -435,7 +435,7 @@ namespace legion::physics
         return start + (end - start) * interpolant;
     }
 
-    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices, int maxDraw, math::mat4 DEBUG_transform)
+    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices, int maxDraw, int DEBUG_at, math::mat4 DEBUG_transform)
     {
         //[1] Calculate scaled epsilon
         static float initialEpsilon = math::sqrt(math::epsilon<float>());
@@ -491,22 +491,34 @@ namespace legion::physics
             {
                 if (currentDraw >= maxDraw) { break; }
                 currentDraw++;
+
+                bool atDebug = currentDraw == DEBUG_at + 1;
+
                 //find furhtest vertex of last face
                 auto [furthestVert, distanceFromFace] = currentFaceToVert.ptr->GetFurthestOutsideVert();
                 math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVert, 1);
 
-                debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, false);
+                //debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, false);
 
                 //check if we should merge this vertex
                 if (distanceFromFace > scaledEpsilon)
                 {
                     mergeVertexToHull(furthestVert, facesWithOutsideVerts
-                        , DEBUG_transform);
+                        , DEBUG_transform, atDebug);
                 }
                 else
                 {
                     //this face has no mergable vertices
                     currentFaceToVert.ptr->outsideVerts.clear();
+                }
+
+                if (currentDraw == DEBUG_at)
+                {
+                    PointerEncapsulator< ColliderFaceToVert> debugFaceToVert;
+                    foundFaceWithOutsideVert(facesWithOutsideVerts, debugFaceToVert);
+                    auto [furthestVert, distanceFromFace] = debugFaceToVert.ptr->GetFurthestOutsideVert();
+                    math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVert, 1);
+                    debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, true);
                 }
             }
 
@@ -780,7 +792,7 @@ namespace legion::physics
         initialPairing->setPairingEdge(pairingToConnectTo);
     }
 
-    bool PhysicsStatics::foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, PointerEncapsulator< ColliderFaceToVert> outChosenFace)
+    bool PhysicsStatics::foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, PointerEncapsulator< ColliderFaceToVert>& outChosenFace)
     {
         int i = 0;
         for (auto& faceWithOutsideVert : facesWithOutsideVerts)
@@ -884,7 +896,7 @@ namespace legion::physics
     }
 
     void PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts
-        ,math::mat4 DEBUG_transform)
+        ,math::mat4 DEBUG_transform, bool atDebug)
     {
         std::vector<math::vec3> unmergedVertices;
         std::vector<HalfEdgeFace*> facesToBeRemoved;
@@ -910,11 +922,14 @@ namespace legion::physics
             }
         }
 
-        for (auto face : facesToBeRemoved)
+        if (atDebug)
         {
-            //face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
+            for (auto face : facesToBeRemoved)
+            {
+                face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
+            }
         }
-
+        
         //identify horizon edges and put them into list
         std::vector<HalfEdgeEdge*> horizonEdges;
         findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges, DEBUG_transform);
