@@ -26,10 +26,6 @@ struct MyRecord
         z = _z;
     }
 
-    template <class Archive>
-    void serialize(Archive& ar)
-    {
-    }
 };
 
 
@@ -37,10 +33,6 @@ struct Records
 {
     MyRecord records[20];
 
-    template <class Archive>
-    void serialize(Archive& ar)
-    {
-    }
 };
 #pragma endregion
 
@@ -50,23 +42,10 @@ namespace legion::core::serialization
     {
     public:
         template<typename type>
-        std::string serialize(type& serializable)
-        {
-            //todo
-            return "";
-        }
+        std::string serialize(type& serializable);
 
-        /**@brief JSON deserialization from a string
-         * @param json the input JSON string
-         * @returns the the deserialized object as type
-         */
         template<typename type>
-        type deserialize(std::string json)
-        {
-            //todo
-            type t;
-            return t;
-        }
+        type deserialize(std::string json);
     };
 
 
@@ -93,6 +72,7 @@ namespace legion::core::serialization
         {
             //todo
             type t;
+            log::debug("Deserializeing");
             return t;
         }
 

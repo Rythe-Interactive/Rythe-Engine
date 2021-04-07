@@ -2,6 +2,7 @@
 #include <core/serialization/serializationutil.hpp>
 #include <core/ecs/prototypes/component_prototype.hpp>
 #include <core/common/hash.hpp>
+#include <string>
 #include <map>
 #include <any>
 
@@ -10,11 +11,12 @@ namespace legion::core::serialization
     class SerializationRegistry
     {
     public:
-        std::map<type_hash_base, serializer_base> serializers;
+        std::map<type_hash<MyRecord>, serializer_base> serializers;
 
         template<typename type>
         void register_component()
         {
+            //static_assert(std::is_base_of<ecs::component<MyRecord>, type>::value, "type must derive from ecs::component_base");
             auto serializer = json_serializer();
             serializers.emplace(type_hash<type>(),serializer);
         }
@@ -29,6 +31,7 @@ namespace legion::core::serialization
         prototype<type> deserialize(std::string input)
         {
             type_hash<type> typehash = readtypehash<type>(input);
+            log::debug("heyo");
             return serializers[typehash].deserialize<prototype<type>>(input);
         }
     };
