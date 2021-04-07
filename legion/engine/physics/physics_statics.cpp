@@ -870,19 +870,16 @@ namespace legion::physics
         {
             currentEdge = currentEdge->nextEdge;
 
-            if (currentEdge->isEdgeHorizonFromVertex(eyePoint))
-            {
-                outHorizonEdges.push_back(currentEdge);
-            }
-            else
+            if (!currentEdge->isEdgeHorizonFromVertex(eyePoint))
             {
                 do
                 {
                     currentEdge = currentEdge->pairingEdge->nextEdge;
-                }
-                while (!currentEdge->isEdgeHorizonFromVertex(eyePoint));
+                } while (!currentEdge->isEdgeHorizonFromVertex(eyePoint));
+
             }
 
+            outHorizonEdges.push_back(currentEdge);
 
 
         } while (currentEdge != initialHorizon);
@@ -924,15 +921,23 @@ namespace legion::physics
 
         if (atDebug)
         {
-            for (auto face : facesToBeRemoved)
+            /*for (auto face : facesToBeRemoved)
             {
                 face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
-            }
+            }*/
         }
         
         //identify horizon edges and put them into list
         std::vector<HalfEdgeEdge*> horizonEdges;
         findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges, DEBUG_transform);
+
+        if (atDebug)
+        {
+            for (auto edge : horizonEdges)
+            {
+                edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX);
+            }
+        }
 
         //reverse iterate the list to find their pairings, add them to new list
         {
@@ -961,23 +966,19 @@ namespace legion::physics
         
         for (int i = 0; i < horizonEdges.size(); i++)
         {
+          /*  if (atDebug)
+            {
+            }
             HalfEdgeFace* establishedFace = horizonEdges.at(i)->face;
             ColliderFaceToVert& faceToVertEstablished = *establishedFace->faceToVert;
             HalfEdgeFace* newFace = newFaces.at(i);
 
-            //int count = 0;
-            //int bfr = 0;
-            //int aft = 0;
-
-            //auto countVert = [&count](HalfEdgeEdge* currentEdge) {count++; };
-
             if (isFacesCoplanar(establishedFace, newFace))
             {
-
                 horizonEdges.at(i)->pairingEdge->suicidalMergeWithPairing(DEBUG_transform);
                 faceToVertEstablished.populateVectorWithVerts(unmergedVertices);
                 faceToVertEstablished.face = nullptr;
-            }
+            }*/
         }
 
         for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)

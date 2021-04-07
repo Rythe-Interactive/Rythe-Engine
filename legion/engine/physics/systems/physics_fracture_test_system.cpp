@@ -779,16 +779,16 @@ namespace legion::physics
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
         //cube
-        createQuickhullTestObject
-        (math::vec3(0,5.0f,0),cubeH, wireFrameH);
+        //createQuickhullTestObject
+        //(math::vec3(0,5.0f,0),cubeH, wireFrameH);
 
         ////cup
         //createQuickhullTestObject
         //(math::vec3(5.0f, 5.0f, 0), colaH, wireFrameH);
 
-        //////hammer
-        //createQuickhullTestObject
-        //(math::vec3(10.0f, 5.0f, 0), hammerH, wireFrameH);
+        ////hammer
+        createQuickhullTestObject
+        (math::vec3(10.0f, 5.0f, 0), hammerH, wireFrameH);
 
         //////suzanne
         //createQuickhullTestObject
