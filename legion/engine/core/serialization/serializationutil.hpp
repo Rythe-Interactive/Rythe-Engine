@@ -1,63 +1,64 @@
 #pragma once
 #include <core/platform/platform.hpp>
+#include <core/ecs/handles/component.hpp>
+#include <core/ecs/prototypes/component_prototype.hpp>
 
 #include <sstream>
 #include <fstream>
 #include <string>
 #include <memory>
+#include <any>
 
 
-//Some testing objects for serialization
-#pragma region TestObjects
-struct MyRecord
-{
-
-    uint8_t x, y;
-    float z;
-    MyRecord()
-    {
-
-    }
-
-    MyRecord(uint8_t _x, uint8_t _y, float _z)
-    {
-        x = _x;
-        y = _y;
-        z = _z;
-    }
-
-};
-
-
-struct Records
-{
-    MyRecord records[20];
-
-};
-#pragma endregion
 
 namespace legion::core::serialization
 {
+    //Some testing objects for serialization
+#pragma region TestObjects
+    struct MyRecord
+    {
+    public:
+        uint8_t x;
+        uint8_t y;
+        float z;
+        MyRecord() = default;
+    };
+    struct Records
+    {
+        MyRecord records[20];
+
+    };
+#pragma endregion
+
     struct serializer_base
     {
     public:
-        template<typename type>
-        std::string serialize(type& serializable);
+        serializer_base() = default;
 
         template<typename type>
-        type deserialize(std::string json);
+        component_prototype<type> deserialize(std::string json);
     };
 
-
-    struct json_serializer : serializer_base
+    template<typename type>
+    struct serializer : public serializer_base
     {
     public:
-        json_serializer() = default;
+        serializer() : serializer_base() {}
+
+        component_prototype<type> deserialize(std::string json)
+        {
+            return component_prototype<type>(json_serializer::deserialize<type>(json));
+        }
+    };
+
+    struct json_serializer
+    {
+    public:
         /**@brief JSON serialization to a string
          * @param serializable template type that represents the object that needs to be serialized
          */
         template<typename type>
-        std::string serialize(type& serializable)
+        static std::string serialize(type& serializable)
         {
             //todo
             return "";
@@ -68,7 +69,7 @@ namespace legion::core::serialization
          * @returns the the deserialized object as type
          */
         template<typename type>
-        type deserialize(std::string json)
+        static type deserialize(std::string json)
         {
             //todo
             type t;
@@ -77,7 +78,7 @@ namespace legion::core::serialization
         }
 
         template<class type>
-        type deserialize(std::ifstream& fstream)
+        static type deserialize(std::ifstream& fstream)
         {
             //todo
             type t;
@@ -85,30 +86,4 @@ namespace legion::core::serialization
         }
     };
 
-    struct binary_serialize : serializer_base
-    {
-    public:
-        binary_serialize() = default;
-        /**@brief Binary serialization to a string
-        * @param serializable template type that represents the object that needs to be serialized
-        */
-        template<typename type>
-        std::string serialize(type serializable)
-        {
-            //todo
-            return "";
-        }
-
-        /**@brief Binary deserialization from a string
-         * @param binary the input Binary string
-         * @returns the the deserialized object as type
-         */
-        template<typename  type>
-        type deserialize(std::string binary)
-        {
-            //todo
-            type t;
-            return t;
-        }
-    };
 }

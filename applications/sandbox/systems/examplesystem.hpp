@@ -1,9 +1,8 @@
 #pragma once
 #include <core/core.hpp>
-//#include <core/serialization/serializationregistry.hpp>
-//#include <core/serialization/prototype.hpp>
-//#include <core/ecs/prototypes/component_prototype.hpp>
-//#include <core/ecs/handles/entity.hpp>
+
+#include <core/serialization/serializationregistry.hpp>
+#include <core/ecs/handles/entity.hpp>
 
 
 struct example_component
@@ -20,19 +19,18 @@ public:
         log::filter(log::severity_debug);
         log::debug("ExampleSystem setup");
 
+        serialization::SerializationRegistry::register_component<serialization::MyRecord>();
+
         for (int i = 0; i < 20000; i++)
             createEntity().add_component<example_component>();
-
-        //serialization::SerializationRegistry t;
-        //t.register_component<ecs::component<MyRecord>>();
-        //auto output = t.deserialize<ecs::component<MyRecord>>("{EY}");
-        //log::debug(output.names);
     }
 
     void update(legion::time::span deltaTime)
     {
         using namespace legion;
         ecs::filter<example_component> filter;
+        auto output = serialization::SerializationRegistry::getPrototype<serialization::MyRecord>();
+        log::debug(output.names[0]);
 
         static size_type sum = 0;
 

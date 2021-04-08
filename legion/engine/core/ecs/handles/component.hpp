@@ -2,7 +2,6 @@
 #include <core/platform/platform.hpp>
 #include <core/math/math.hpp>
 #include <core/common/hash.hpp>
-
 #include <core/ecs/handles/entity.hpp>
 
 /**

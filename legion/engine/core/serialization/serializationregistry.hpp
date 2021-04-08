@@ -1,38 +1,35 @@
 #pragma once
 #include <core/serialization/serializationutil.hpp>
-#include <core/ecs/prototypes/component_prototype.hpp>
 #include <core/common/hash.hpp>
-#include <string>
 #include <map>
 #include <any>
 
 namespace legion::core::serialization
 {
+
     class SerializationRegistry
     {
+    private:
+        static std::map<id_type, serializer_base*> serializers;
+
     public:
-        std::map<type_hash<MyRecord>, serializer_base> serializers;
-
         template<typename type>
-        void register_component()
+        static void register_component()
         {
-            //static_assert(std::is_base_of<ecs::component<MyRecord>, type>::value, "type must derive from ecs::component_base");
-            auto serializer = json_serializer();
-            serializers.emplace(type_hash<type>(),serializer);
+            SerializationRegistry::serializers.emplace(type_hash<type>().global(), serializer<type>());
         }
 
         template<typename type>
-        type_hash<type> readtypehash(std::string input)
+        static component_prototype<type> getPrototype(type_hash<type>* hash)
         {
-            return type_hash<type>();
+            return SerializationRegistry::serializers[hash->global()]->deserialize("{idk}");
         }
 
         template<typename type>
-        prototype<type> deserialize(std::string input)
+        static component_prototype<type> getPrototype()
         {
-            type_hash<type> typehash = readtypehash<type>(input);
-            log::debug("heyo");
-            return serializers[typehash].deserialize<prototype<type>>(input);
+            return SerializationRegistry::serializers[type_hash<type>().global()]->deserialize("{idk}");
         }
+
     };
 }
