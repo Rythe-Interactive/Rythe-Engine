@@ -13,7 +13,7 @@ namespace legion::application
         {
             createProcessChain("Rendering");
             createProcessChain("Input");
-            reportComponentType<window>();
+            registerComponentType<window>();
             reportSystem<WindowSystem>();
             reportSystem<InputSystem>();
         }

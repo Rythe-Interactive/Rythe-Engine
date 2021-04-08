@@ -64,6 +64,46 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
+    inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, component_type&& value)
+    {
+        OPTICK_EVENT();
+        // Check and emplace component family if it doesn't exist yet.
+        static bool checked = false; // Prevent unnecessary unordered_map lookups.
+        if (!checked && !getFamilies().count(make_hash<component_type>()))
+        {
+            checked = true;
+            registerComponentType<component_type>();
+        }
+
+        // Update entity composition.
+        entityCompositions().at(target).insert(make_hash<component_type>());
+        // Update filters.
+        FilterRegistry::markComponentAdd<component_type>(target);
+        // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
+        return component_pool<component_type>::create_component_direct(target, std::forward<component_type>(value));
+    }
+
+    template<typename component_type>
+    inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, const component_type& value)
+    {
+        OPTICK_EVENT();
+        // Check and emplace component family if it doesn't exist yet.
+        static bool checked = false; // Prevent unnecessary unordered_map lookups.
+        if (!checked && !getFamilies().count(make_hash<component_type>()))
+        {
+            checked = true;
+            registerComponentType<component_type>();
+        }
+
+        // Update entity composition.
+        entityCompositions().at(target).insert(make_hash<component_type>());
+        // Update filters.
+        FilterRegistry::markComponentAdd<component_type>(target);
+        // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
+        return component_pool<component_type>::create_component_direct(target, value);
+    }
+
+    template<typename component_type>
     inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, const serialization::component_prototype<component_type>& prototype)
     {
         OPTICK_EVENT();

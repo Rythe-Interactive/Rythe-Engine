@@ -44,8 +44,9 @@ namespace legion::core
         events::EventBus::raiseEvent<event_type>(std::forward<Args>(arguments)...);
     }
 
+    template<typename SelfType>
     template<typename Func>
-    inline L_ALWAYS_INLINE auto SystemBase::queueJobs(size_type count, Func&& func)
+    inline L_ALWAYS_INLINE auto System<SelfType>::queueJobs(size_type count, Func&& func)
     {
         if constexpr (std::is_invocable_v<Func, id_type>)
         {

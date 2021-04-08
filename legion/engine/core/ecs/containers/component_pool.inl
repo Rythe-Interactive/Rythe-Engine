@@ -77,6 +77,19 @@ namespace legion::core::ecs
     }
 
     template<typename component_type>
+    inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(id_type target, component_type&& value)
+    {
+        return m_components.emplace(target, std::forward<component_type>(value)).first.value();
+
+    }
+
+    template<typename component_type>
+    inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(id_type target, const component_type& value)
+    {
+        return m_components.emplace(target, value).first.value();
+    }
+
+    template<typename component_type>
     inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(id_type target, const serialization::component_prototype_base& prototype)
     {
         return m_components.emplace(target,

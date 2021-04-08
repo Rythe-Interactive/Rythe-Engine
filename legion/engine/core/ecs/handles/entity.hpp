@@ -269,6 +269,16 @@ namespace legion::core::ecs
         template<typename component_type>
         component<component_type> add_component();
 
+        /**@brief Adds a precreated component of a certain type to this entity.
+         * @tparam component_type Type of the component to add.
+         * @param value Component value to use.
+         * @return Component handle to the component.
+         */
+        template<typename component_type>
+        component<component_type> add_component(component_type&& value);
+        template<typename component_type>
+        component<component_type> add_component(const component_type& value);
+
         /**@brief Creates and adds a new component of a certain type to this entity. Component is serialized from a prototype.
          * @tparam component_type Type of the component to add.
          * @param prot Prototype to serialize component from.

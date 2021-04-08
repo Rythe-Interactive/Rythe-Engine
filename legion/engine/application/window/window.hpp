@@ -15,12 +15,17 @@ namespace legion::application
         friend class WindowSystem;
 
         window() = default;
-        window(const std::string& title, bool fullscreen, int swapInterval, math::ivec2 size);
+        window(GLFWwindow* ptr) : handle(ptr) {}
+        window(std::string m_title,
+            bool m_isFullscreen,
+            int m_swapInterval,
+            math::ivec2 m_size) {}
 
-        GLFWwindow* nativeHandle;
+        GLFWwindow* handle;
+        async::spinlock* lock;
 
-        operator GLFWwindow* () const { return nativeHandle; }
-        window& operator=(GLFWwindow* ptr) { nativeHandle = ptr; return *this; }
+        operator GLFWwindow* () const { return handle; }
+        window& operator=(GLFWwindow* ptr) { handle = ptr; return *this; }
 
         void enableCursor(bool enabled) const;
 
@@ -53,7 +58,7 @@ namespace legion::application
         bool m_contextIsValid = false;
 
     public:
-        context_guard(window win);
+        context_guard(const window& win);
         bool contextIsValid() { return m_contextIsValid; }
 
         context_guard() = delete;
@@ -63,7 +68,7 @@ namespace legion::application
         ~context_guard();
 
     private:
-        window m_win;
+        const window& m_win;
     };
 
 }
@@ -78,7 +83,7 @@ namespace std
     {
         std::size_t operator()(legion::application::window const& win) const noexcept
         {
-            return std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.nativeHandle));
+            return std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.handle));
         }
     };
 }

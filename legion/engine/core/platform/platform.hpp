@@ -317,7 +317,7 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 // turn: 0, 1, 2
 // into: decltype(0), decltype(1), decltype(2)
 #define decltypes_IMPL(count, ...) CONCAT_DEFINE(decltype_, count)EXPAND((__VA_ARGS__))
-#define decltypes(...) EXPAND(decltypes_IMPL(EXPAND(NARGS(__VA_AGRS__)), __VA_ARGS__))
+#define decltypes(...) EXPAND(decltypes_IMPL(EXPAND(NARGS(__VA_AGRS__)), EXPAND(__VA_ARGS__)))
 
 #define RULE_OF_5(type)\
 type() = default;\

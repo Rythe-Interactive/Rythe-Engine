@@ -19,6 +19,8 @@ namespace legion::core
     public:
         const type_reference id;
 
+        virtual ~SystemBase() = default;
+
     protected:
         std::unordered_map<id_type, std::unique_ptr<schd::Process>> m_processes;
         std::unordered_map<id_type, delegate<void(events::event_base&)>> m_bindings;
@@ -69,9 +71,6 @@ namespace legion::core
          * @param id Type id of the event to invoke for. Overrides the polymorphic id of the reference passed as value.
          */
         static void raiseEventUnsafe(events::event_base& value, id_type id);
-
-        template<typename Func>
-        static auto queueJobs(size_type count, Func&& func);
     };
 
     template<typename SelfType>
@@ -95,8 +94,13 @@ namespace legion::core
         template<void(SelfType::* func_type)(id_type)>
         auto queueJobs(size_type count);
 
+        template<typename Func>
+        static auto queueJobs(size_type count, Func&& func);
+
     public:
         System() : SystemBase(make_hash<SelfType>()) {}
+
+        virtual ~System() = default;
 
     };
 }

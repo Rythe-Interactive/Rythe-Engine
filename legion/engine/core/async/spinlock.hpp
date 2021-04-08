@@ -19,7 +19,7 @@ namespace legion::core::async
         static bool m_forceRelease;
         static std::atomic_uint m_lastId;
         static thread_local std::unordered_map<id_type, uint> m_localState;
-        std::atomic_bool m_lock = { false };
+        mutable std::atomic_bool m_lock = { false };
         uint m_id = m_lastId.fetch_add(1, std::memory_order_relaxed);
 
     public:
@@ -35,15 +35,15 @@ namespace legion::core::async
 
         /**@brief Locks the spinlock, blocks if the spinlock is not available.
          */
-        void lock() noexcept;
+        void lock() const noexcept;
 
         /**@brief Tries to lock the spinlock, returns if the spinlock is not available.
          */
-        L_NODISCARD bool try_lock() noexcept;
+        L_NODISCARD bool try_lock() const noexcept;
 
         /**@brief Unlocks the spinlock.
          */
-        void unlock() noexcept;
+        void unlock() const noexcept;
     };
 
     template<typename resource_type>

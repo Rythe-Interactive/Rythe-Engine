@@ -31,7 +31,7 @@ namespace legion::core::async
         return *this;
     }
 
-    void spinlock::lock() noexcept
+    void spinlock::lock() const noexcept
     {
         OPTICK_EVENT();
         if (m_forceRelease)
@@ -56,7 +56,7 @@ namespace legion::core::async
         locks++;
     }
 
-    L_NODISCARD bool spinlock::try_lock() noexcept
+    L_NODISCARD bool spinlock::try_lock() const noexcept
     {
         OPTICK_EVENT();
         if (m_forceRelease)
@@ -77,7 +77,7 @@ namespace legion::core::async
         return ret;
     }
 
-    void spinlock::unlock() noexcept
+    void spinlock::unlock() const noexcept
     {
         OPTICK_EVENT();
         if (m_forceRelease)

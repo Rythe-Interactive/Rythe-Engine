@@ -210,6 +210,11 @@ namespace legion::core::ecs
         return m_entities.at(target);
     }
 
+    L_NODISCARD entity Registry::getEntity(id_type target)
+    {
+        return entity{ &entityData(target) };
+    }
+
     void* Registry::createComponent(id_type typeId, entity target)
     {
         OPTICK_EVENT();

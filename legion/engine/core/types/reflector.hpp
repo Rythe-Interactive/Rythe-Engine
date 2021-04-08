@@ -43,7 +43,7 @@ namespace legion::core
 template<typename, typename...>             \
 friend struct legion::core::reflector;
 
-#define ManualReflector(type, ...)                                                                                                          \
+#define ManualReflector_IMPL(type, ...)                                                                                                     \
 namespace legion::core{                                                                                                                     \
     template<>                                                                                                                              \
     struct reflector<type>                                                                                                                  \
@@ -54,9 +54,11 @@ namespace legion::core{                                                         
         std::tuple<EXPAND(decltypes_IMPL(EXPAND(NARGS(__VA_ARGS__)), EXPAND(CAT_PREFIX(type::, __VA_ARGS__))))> values;                     \
         std::array<std::string, size> names;                                                                                                \
                                                                                                                                             \
-        reflector(type& src) : values(EXPAND(CAT_PREFIX(src., __VA_ARGS__))), names({ EXPAND(STRINGIFY_SEPERATE(__VA_ARGS__)) }) {}         \
+        reflector(const type& src) : values(EXPAND(CAT_PREFIX(src., __VA_ARGS__))), names({ EXPAND(STRINGIFY_SEPERATE(__VA_ARGS__)) }) {}   \
     };                                                                                                                                      \
 }
+
+#define ManualReflector(type, ...) EXPAND(ManualReflector_IMPL(type, __VA_ARGS__))
 
 #if !defined(DOXY_EXCLUDE)
     template<typename T, typename... MemberTypes>
