@@ -1,7 +1,7 @@
---! Legion Audio Build Script for premake5
+--! Legion Sandbox Build Script for premake5
 --[[
-authors: Raphael Baier, Glyn Leine
-copyright: (c) 2020 Raphael Baier, The Legion-Team
+author: Glyn Leine
+copyright: (c) 2020 The Legion-Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the "Software"), to deal in the Software
@@ -21,14 +21,15 @@ DEALINGS IN THE SOFTWARE.
 
 ]]--
 
-
-project "legion-audio"
-    kind "StaticLib"
+project "sandbox"
+    kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"
     includedirs { "./" }
-    defines { "LEGION_INTERNAL", "PROJECT_NAME=audio" }
 
-    files {"**.h", "**.hpp" ,"**.c", "**.cpp"}
+    files { "**.h", "**.hpp" ,"**.c", "**.cpp" }
 
-    include "../core/include-core.lua"
+    include "../../legion/engine/core/include-core.lua"
+    include "../../legion/engine/application/include-application.lua"
+
+       

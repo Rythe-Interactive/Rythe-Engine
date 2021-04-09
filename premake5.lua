@@ -1,6 +1,6 @@
 --! Legion Central Build Script for Legion-Engine
 --[[
-author: Raphael Baier
+authors: Raphael Baier, Glyn Leine
 copyright: (c) 2020 Raphael Baier, The Legion-Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -56,8 +56,19 @@ project "*"
     targetdir "bin/%{cfg.buildcfg}"
     libdirs { "deps/lib/", "bin/%{cfg.buildcfg}/" }
     defines { "USE_OPTICK=0" }
-    buildoptions { "-fsanitize=address,undefined" }
-    linkoptions { "-fsanitize=address,undefined" }
+        
+    filter "configurations:Debug*"
+        buildoptions { "-fsanitize=address,undefined" }
+        linkoptions { "-fsanitize=address,undefined" }
+        defines {"DEBUG"}
+        symbols "On"
+
+    filter "configurations:Release*"
+        defines {"NDEBUG"}
+        optimize "On"
+
+    filter "configurations:*64"
+    architecture "x86_64"
 
 -- how to build:
 --[[
