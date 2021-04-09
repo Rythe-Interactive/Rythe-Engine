@@ -58,13 +58,13 @@ public:
      */
     void setup(ecs::component<rendering::particle_emitter> emitter_handle) const override
     {
-        auto emitter = emitter_handle.read();
+        auto& emitter = emitter_handle.get();
         m_positions = emitter.pointInput;
         m_colors = emitter.colorInput;
 
         //Create data component
-        auto emitterDataHandle = emitter_handle.entity.add_component<rendering::point_emitter_data>();
-        auto emitterData = emitterDataHandle.read();
+        auto emitterDataHandle = emitter_handle.owner.add_component<rendering::point_emitter_data>();
+        auto& emitterData = emitterDataHandle.get();
 
         //define octree bounds
         float minX = std::numeric_limits<float>().max();
@@ -103,8 +103,6 @@ public:
         }
         //Write to handle
         emitter.container = &container;
-        emitter_handle.write(emitter);
-        emitterDataHandle.write(emitterData);
         //create the particles
         populateEmitter(emitter_handle, emitterDataHandle);
     }
@@ -151,7 +149,7 @@ public:
         rendering::point_emitter_data& data,
         int targetLod,
         int maxLod,
-        ecs::component_handle<rendering::point_emitter_data>& dataHandle,
+        ecs::component<rendering::point_emitter_data>& dataHandle,
         ecs::EntityQuery& enities
     ) const
 
@@ -236,7 +234,7 @@ public:
     /**
      * @brief populates the particle emitter with particles, creates LOD component and an Octree
      */
-    void populateEmitter(ecs::component<rendering::particle_emitter> emitter_handle, ecs::component_handle<rendering::point_emitter_data> data) const
+    void populateEmitter(ecs::component<rendering::particle_emitter> emitter_handle, ecs::component<rendering::point_emitter_data> data) const
     {
         //read particle emitter if tree is null something went wrong, return
         rendering::particle_emitter emitter = emitter_handle.read();

@@ -436,6 +436,7 @@
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="ecs\containers\component_container.hpp" />
+    <ClInclude Include="defaults\defaultcomponents.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

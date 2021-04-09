@@ -68,7 +68,7 @@ project "*"
         optimize "On"
 
     filter "configurations:*64"
-    architecture "x86_64"
+        architecture "x86_64"
 
 -- how to build:
 --[[

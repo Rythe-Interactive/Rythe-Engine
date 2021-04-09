@@ -23,6 +23,8 @@
 #include <core/filesystem/filesystem.hpp>
 #include <core/data/data.hpp>
 
+#include <core/defaults/defaultcomponents.hpp>
+
 namespace legion
 {
     using namespace core;
