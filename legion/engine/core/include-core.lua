@@ -21,7 +21,7 @@ DEALINGS IN THE SOFTWARE.
 
 ]]--
 
-includedirs { "./" }
+includedirs { "../" }
 dependson { "legion-core" }
 filter "kind:not StaticLib"
     links { "legion-core", "OpenCL", "stdc++" }

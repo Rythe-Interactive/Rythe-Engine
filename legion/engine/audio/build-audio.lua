@@ -26,7 +26,7 @@ project "legion-audio"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
-    includedirs { "./" }
+    includedirs { "../" }
     defines { "LEGION_INTERNAL", "PROJECT_NAME=audio" }
 
     files {"**.h", "**.hpp" ,"**.c", "**.cpp"}

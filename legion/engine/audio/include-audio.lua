@@ -23,7 +23,7 @@ DEALINGS IN THE SOFTWARE.
 
 include "../core/include-core.lua"
 
-includedirs { "./" }
+includedirs { "../" }
 dependson { "legion-audio" }
 filter "kind:not StaticLib"
     links { "legion-audio", "openal" }

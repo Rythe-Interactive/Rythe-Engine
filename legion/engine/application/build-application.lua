@@ -26,7 +26,7 @@ project "legion-application"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
-    includedirs { "./" }
+    includedirs { "../" }
     defines { "LEGION_INTERNAL", "PROJECT_NAME=application" }
 
     files {"**.h", "**.hpp" ,"**.c", "**.cpp"}
