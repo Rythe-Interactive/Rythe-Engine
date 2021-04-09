@@ -28,7 +28,7 @@ project "unit_tests"
     cppdialect "C++17"
     includedirs { "../../legion/engine/", "./" }
     dependson { "legion-core" }
-    links { "legion-core", "GL", "dl", "OpenAL-Soft", "OpenCL" }
+    links { "legion-core", "GL", "dl", "openal", "OpenCL", "stdc++" }
 
     files { "**.h", "**.hpp" ,"**.c", "**.cpp" }
 
