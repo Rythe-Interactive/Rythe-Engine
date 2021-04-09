@@ -34,20 +34,18 @@ namespace legion::core::serialization
     {
     public:
         serializer_base() = default;
-
-        template<typename type>
-        component_prototype<type> deserialize(std::string json);
+        virtual std::unique_ptr<component_prototype_base> deserialize(std::string json) LEGION_PURE;
     };
 
     template<typename type>
-    struct serializer : public serializer_base
+    struct serializer : serializer_base
     {
     public:
-        serializer() : serializer_base() {}
+        serializer() = default;
 
-        component_prototype<type> deserialize(std::string json)
+        virtual std::unique_ptr<component_prototype_base> deserialize(std::string json)
         {
-            return component_prototype<type>(json_serializer::deserialize<type>(json));
+            return json_serializer::deserialize<type>(json);
         }
     };
 
@@ -69,20 +67,9 @@ namespace legion::core::serialization
          * @returns the the deserialized object as type
          */
         template<typename type>
-        static type deserialize(std::string json)
+        static std::unique_ptr<component_prototype<type>> deserialize(std::string json)
         {
-            //todo
-            type t;
-            log::debug("Deserializeing");
-            return t;
-        }
-
-        template<class type>
-        static type deserialize(std::ifstream& fstream)
-        {
-            //todo
-            type t;
-            return t;
+            return std::unique_ptr<component_prototype<type>>();
         }
     };
 

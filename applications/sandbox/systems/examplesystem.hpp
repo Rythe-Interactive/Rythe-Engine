@@ -19,18 +19,18 @@ public:
         log::filter(log::severity_debug);
         log::debug("ExampleSystem setup");
 
-        serialization::SerializationRegistry::register_component<serialization::MyRecord>();
-
         for (int i = 0; i < 20000; i++)
             createEntity().add_component<example_component>();
+
+        serialization::SerializationRegistry::register_component<example_component>();
     }
 
     void update(legion::time::span deltaTime)
     {
         using namespace legion;
         ecs::filter<example_component> filter;
-        auto output = serialization::SerializationRegistry::getPrototype<serialization::MyRecord>();
-        log::debug(output.names[0]);
+        auto output = serialization::SerializationRegistry::getPrototype<example_component>();
+        log::debug(output->names[0]);
 
         static size_type sum = 0;
 

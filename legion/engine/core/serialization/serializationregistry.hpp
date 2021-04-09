@@ -10,7 +10,7 @@ namespace legion::core::serialization
     class SerializationRegistry
     {
     private:
-        static std::map<id_type, serializer_base*> serializers;
+        static std::map<id_type, std::unique_ptr<serializer_base>> serializers;
 
     public:
         template<typename type>
@@ -19,14 +19,12 @@ namespace legion::core::serialization
             SerializationRegistry::serializers.emplace(type_hash<type>().global(), serializer<type>());
         }
 
-        template<typename type>
-        static component_prototype<type> getPrototype(type_hash<type>* hash)
-        {
-            return SerializationRegistry::serializers[hash->global()]->deserialize("{idk}");
-        }
+        //static std::un getPrototype(type_hash<type>* hash)
+        //{
+        //    return SerializationRegistry::serializers[hash->global()]->deserialize("{idk}").get();
+        //}
 
-        template<typename type>
-        static component_prototype<type> getPrototype()
+        static std::unique_ptr<component_prototype_base> getPrototype(std::string json)
         {
             return SerializationRegistry::serializers[type_hash<type>().global()]->deserialize("{idk}");
         }
