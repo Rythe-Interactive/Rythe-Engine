@@ -45,7 +45,7 @@ namespace legion::application
         };
 
     public:
-        void setup() override
+        void setup()
         {
             //subscribe to the raw events emitted from the window system
             bindToEvent<key_input, &InputSystem::onKey>();
@@ -57,7 +57,7 @@ namespace legion::application
             createProcess<&InputSystem::onUpdate>("Input");
 
             //make sure we get the joystick-callback on initialization of GLFW
-            ContextHelper::addOnInitCallback(delegate<void()>::create([]
+            ContextHelper::addOnInitCallback(delegate<void()>::from([]
                 {
                     ContextHelper::setJoystickCallback(&InputSystem::onCheckGamepadPresence);
 
@@ -455,13 +455,13 @@ namespace legion::application
             return result;
         }
 
-        void onKey(key_input* window_key_event)
+        void onKey(key_input& window_key_event)
         {
-            const auto m = static_cast<inputmap::method>(window_key_event->key);
+            const auto m = static_cast<inputmap::method>(window_key_event.key);
             for (auto [_, action] : m_actions[m])
             {
-                action.last_state = window_key_event->action != GLFW_RELEASE;
-                action.last_mods = translateModifierKeys(window_key_event->mods);
+                action.last_state = window_key_event.action != GLFW_RELEASE;
+                action.last_mods = translateModifierKeys(window_key_event.mods);
                 action.last_method = m;
                 if (!action.repeat)
                     action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
@@ -469,10 +469,10 @@ namespace legion::application
             }
         }
 
-        void onMouseMove(mouse_moved* window_mouse_event)
+        void onMouseMove(mouse_moved& window_mouse_event)
         {
-            m_mouseDelta = window_mouse_event->position - m_mousePos;
-            m_mousePos = window_mouse_event->position;
+            m_mouseDelta = window_mouse_event.position - m_mousePos;
+            m_mousePos = window_mouse_event.position;
             if (math::abs(m_mouseDelta.x) < 0.0001)
                 m_mouseDelta.x = 0.0;
 
@@ -493,15 +493,15 @@ namespace legion::application
             }
         }
 
-        void onMouseButton(mouse_button* window_mouse_event)
+        void onMouseButton(mouse_button& window_mouse_event)
         {
-            switch (window_mouse_event->button)
+            switch (window_mouse_event.button)
             {
             case GLFW_MOUSE_BUTTON_LEFT: {
                 for (auto [_, action] : m_actions[inputmap::method::MOUSE_LEFT])
                 {
-                    action.last_state = window_mouse_event->action != GLFW_RELEASE;
-                    action.last_mods = translateModifierKeys(window_mouse_event->mods);
+                    action.last_state = window_mouse_event.action != GLFW_RELEASE;
+                    action.last_mods = translateModifierKeys(window_mouse_event.mods);
                     action.last_method = inputmap::method::MOUSE_LEFT;
                     if (!action.repeat)
                         action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
@@ -511,8 +511,8 @@ namespace legion::application
             case GLFW_MOUSE_BUTTON_MIDDLE: {
                 for (auto [_, action] : m_actions[inputmap::method::MOUSE_MIDDLE])
                 {
-                    action.last_state = window_mouse_event->action != GLFW_RELEASE;
-                    action.last_mods = translateModifierKeys(window_mouse_event->mods);
+                    action.last_state = window_mouse_event.action != GLFW_RELEASE;
+                    action.last_mods = translateModifierKeys(window_mouse_event.mods);
                     action.last_method = inputmap::method::MOUSE_MIDDLE;
                     if (!action.repeat)
                         action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
@@ -522,8 +522,8 @@ namespace legion::application
             case GLFW_MOUSE_BUTTON_RIGHT: {
                 for (auto [_, action] : m_actions[inputmap::method::MOUSE_RIGHT])
                 {
-                    action.last_state = window_mouse_event->action != GLFW_RELEASE;
-                    action.last_mods = translateModifierKeys(window_mouse_event->mods);
+                    action.last_state = window_mouse_event.action != GLFW_RELEASE;
+                    action.last_mods = translateModifierKeys(window_mouse_event.mods);
                     action.last_method = inputmap::method::MOUSE_RIGHT;
                     if (!action.repeat)
                         action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
@@ -533,9 +533,9 @@ namespace legion::application
             }
         }
 
-        void onMouseScrolled(mouse_scrolled* window_mouse_event)
+        void onMouseScrolled(mouse_scrolled& window_mouse_event)
         {
-            const auto pos = window_mouse_event->offset;
+            const auto pos = window_mouse_event.offset;
             for (auto [_, axis] : m_axes[inputmap::method::HSCROLL])
             {
                 axis.last_value += static_cast<float>(pos.x);
@@ -563,16 +563,21 @@ namespace legion::application
         void raiseCommandQueues(float delta)
         {
             OPTICK_EVENT();
-            for(auto  [key,value] : m_axes_command_queues){
-                auto axis = std::make_unique<input_axis<std::nullptr_t>>();
-                axis->value_parts = value.values;
-                axis->mods_parts = value.mods;
-                axis->identifier_parts = value.methods;
+            input_axis<std::nullptr_t> axis;
+            axis.input_delta = delta;
 
-                axis->input_delta = delta;
-                axis->value = std::accumulate(value.values.begin(),value.values.end(),0.0f);
+            for(auto  [key,value] : m_axes_command_queues)
+            {
+                // Can we move or assign here?
+                // value doesn't need the vectors anymore, and axis does. no need to copy right?
+                // value even needs to be cleared either way.
+                axis.value_parts = value.values;
+                axis.mods_parts = value.mods;
+                axis.identifier_parts = value.methods;
 
-                raiseEventUnsafe(std::move(axis),key);
+                axis.value = std::accumulate(value.values.begin(),value.values.end(),0.0f);
+
+                raiseEventUnsafe(axis, key);
                 value.mods.clear();
                 value.values.clear();
                 value.methods.clear();

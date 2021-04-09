@@ -1,6 +1,6 @@
 --! Legion Core Build Script for premake5
 --[[
-author: Raphael Baier
+authors: Raphael Baier, Glyn Leine
 copyright: (c) 2020 Raphael Baier, The Legion-Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -26,18 +26,8 @@ project "legion-core"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
-    includedirs { "../", "./" }
+    includedirs { "../" }
+    defines { "LEGION_INTERNAL", "PROJECT_NAME=core" }
 
     files { "**.h", "**.hpp" ,"**.c", "**.cpp" }
-
-    filter "configurations:Debug*"
-        defines { "DEBUG" }
-        symbols "On"
-
-    filter "configurations:Release*"
-        defines { "NDEBUG" }
-        optimize "On"
-
-    filter "configurations:*64"
-       architecture "x86_64"
        

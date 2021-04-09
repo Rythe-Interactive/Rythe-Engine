@@ -18,16 +18,18 @@ public:
         for (int i = 0; i < 20000; i++)
             createEntity().add_component<example_component>();
     }
-
+        
     void update(legion::time::span deltaTime)
     {
         using namespace legion;
         ecs::filter<example_component> filter;
 
-        static size_type sum = 0;
+        static std::atomic<size_type> sum = { 0 };
 
-        for (auto& ent : filter)
-            sum += ent.get_component<example_component>()->value;
+        queueJobs(filter.size(), [&](id_type jobID) {
+            auto comp = filter[jobID].get_component<example_component>();
+            sum.fetch_add(comp->value++, std::memory_order_relaxed);
+            }).wait();
 
         static fast_time buffer = 0;
         static fast_time avgTime = deltaTime;
@@ -37,7 +39,7 @@ public:
         if (buffer >= 1.f)
         {
             buffer--;
-            log::debug("sum: {} dt: {}s fps: {}", sum, avgTime, 1.f / avgTime);
+            log::debug("sum: {} dt: {}s fps: {}", sum.load(std::memory_order_relaxed), avgTime, 1.f / avgTime);
         }
     }
 };

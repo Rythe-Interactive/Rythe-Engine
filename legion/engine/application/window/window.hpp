@@ -11,9 +11,15 @@ namespace legion::application
 {
     struct window
     {
+        Reflectable;
         friend class WindowSystem;
-        window(GLFWwindow* ptr) : handle(ptr) {}
+
         window() = default;
+        window(GLFWwindow* ptr) : handle(ptr) {}
+        window(std::string m_title,
+            bool m_isFullscreen,
+            int m_swapInterval,
+            math::ivec2 m_size) {}
 
         GLFWwindow* handle;
         async::spinlock* lock;
@@ -52,7 +58,7 @@ namespace legion::application
         bool m_contextIsValid = false;
 
     public:
-        context_guard(window win);
+        context_guard(const window& win);
         bool contextIsValid() { return m_contextIsValid; }
 
         context_guard() = delete;
@@ -62,11 +68,12 @@ namespace legion::application
         ~context_guard();
 
     private:
-        window m_win;
+        const window& m_win;
     };
 
 }
 
+ManualReflector(legion::application::window, m_title, m_isFullscreen, m_swapInterval, m_size);
 
 #if !defined(DOXY_EXCLUDE)
 namespace std
@@ -76,10 +83,7 @@ namespace std
     {
         std::size_t operator()(legion::application::window const& win) const noexcept
         {
-            std::size_t hash;
-            std::size_t h1 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.handle));
-            std::size_t h2 = std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.lock));
-            return h1 ^ (h2 << 1);
+            return std::hash<intptr_t>{}(reinterpret_cast<intptr_t>(win.handle));
         }
     };
 }

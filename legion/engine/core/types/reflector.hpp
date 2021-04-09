@@ -4,9 +4,9 @@
 #include <array>
 #include <functional>
 
+#include <core/platform/platform.hpp>
 #include <core/types/meta.hpp>
 #include <core/types/primitives.hpp>
-#include <core/platform/platform.hpp>
 
 namespace legion::core
 {
@@ -38,6 +38,27 @@ namespace legion::core
         reflector(Type&&, std::array<std::string, sizeof...(MemberTypes)>&& memberNames, Members&&... members)
             : values(std::forward<Members>(members)...), names(memberNames) {}
     };
+
+#define Reflectable                         \
+template<typename, typename...>             \
+friend struct legion::core::reflector;
+
+#define ManualReflector_IMPL(type, ...)                                                                                                     \
+namespace legion::core{                                                                                                                     \
+    template<>                                                                                                                              \
+    struct reflector<type>                                                                                                                  \
+    {                                                                                                                                       \
+        using source_type = type;                                                                                                           \
+                                                                                                                                            \
+        inline static constexpr std::size_t size = EXPAND(NARGS(__VA_ARGS__));                                                              \
+        std::tuple<EXPAND(decltypes_IMPL(EXPAND(NARGS(__VA_ARGS__)), EXPAND(CAT_PREFIX(type::, __VA_ARGS__))))> values;                     \
+        std::array<std::string, size> names;                                                                                                \
+                                                                                                                                            \
+        reflector(const type& src) : values(EXPAND(CAT_PREFIX(src., __VA_ARGS__))), names({ EXPAND(STRINGIFY_SEPERATE(__VA_ARGS__)) }) {}   \
+    };                                                                                                                                      \
+}
+
+#define ManualReflector(type, ...) EXPAND(ManualReflector_IMPL(type, __VA_ARGS__))
 
 #if !defined(DOXY_EXCLUDE)
     template<typename T, typename... MemberTypes>
@@ -75,7 +96,7 @@ namespace legion::core
     // Reflector return code
 #define RETURN_REFLECTOR(...)                                                       \
     auto&& [__VA_ARGS__] = std::forward<T>(object);                                 \
-    return reflector(std::forward<T>(object), { STRINGIFY_SEPERATE(__VA_ARGS__) }, __VA_ARGS__);
+    return reflector(std::forward<T>(object), { EXPAND(STRINGIFY_SEPERATE(__VA_ARGS__)) }, __VA_ARGS__);
 
     /**@brief Create reflector of a certain value.
      * @param object Object to reflect.

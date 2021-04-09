@@ -269,7 +269,7 @@ namespace legion::physics
         return fractureCount == 0;
     }
 
-    void Fracturer::InitializeVoronoi(ecs::component_handle<physicsComponent> physicsComponent)
+    void Fracturer::InitializeVoronoi(ecs::component<physicsComponent> physicsComponent)
     {
         //using all colliders inside the physicsComponent, create a bounding box 
 
@@ -277,8 +277,8 @@ namespace legion::physics
 
     void Fracturer::InvestigateColliderToMeshPairing(ecs::entity_handle ent, std::vector<FracturerColliderToMeshPairing> colliderToMeshPairings)
     {
-        ecs::component_handle<mesh_filter> meshFilterHandle = ent.get_component_handle<mesh_filter>();
-        ecs::component_handle<physicsComponent> physicsComponentHandle = ent.get_component_handle<physicsComponent>();
+        ecs::component<mesh_filter> meshFilterHandle = ent.get_component_handle<mesh_filter>();
+        ecs::component<physicsComponent> physicsComponentHandle = ent.get_component_handle<physicsComponent>();
 
         if (!meshFilterHandle || !physicsComponentHandle) { return; }
     }

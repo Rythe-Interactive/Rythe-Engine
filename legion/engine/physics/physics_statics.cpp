@@ -61,7 +61,7 @@ namespace legion::physics
     }
 
     std::pair< math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromPhysicsComponentWithTransform
-    (ecs::component_handle<physicsComponent> physicsComponentToUse,const math::mat4& transform)
+    (ecs::component<physicsComponent> physicsComponentToUse,const math::mat4& transform)
     {
         math::vec3 min, max;
 

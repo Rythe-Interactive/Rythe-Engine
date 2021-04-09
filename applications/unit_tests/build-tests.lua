@@ -1,6 +1,6 @@
---! Legion Core Build Script for premake5
+--! Legion Unit-tests Build Script for premake5
 --[[
-author: Raphael Baier
+authors: Raphael Baier, Glyn Leine
 copyright: (c) 2020 Raphael Baier, The Legion-Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -21,26 +21,14 @@ DEALINGS IN THE SOFTWARE.
 
 ]]--
 
-
 project "unit_tests"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"
-    includedirs { "../../legion/engine/", "./" }
-    dependson { "legion-core" }
-    links { "legion-core" }
+    includedirs { "./" }
 
     files { "**.h", "**.hpp" ,"**.c", "**.cpp" }
 
-    filter "configurations:Debug*"
-        defines {"DEBUG"}
-        symbols "On"
-
-    filter "configurations:Release*"
-        defines {"NDEBUG"}
-        optimize "On"
-
-    filter "configurations:*64"
-       architecture "x86_64"
+    include "../../legion/engine/core/include-core.lua"
 
        

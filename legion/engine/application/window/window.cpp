@@ -46,7 +46,7 @@ namespace legion::application
         return m_title;
     }
 
-    context_guard::context_guard(window win) : m_win(win)
+    context_guard::context_guard(const window& win) : m_win(win)
     {
         OPTICK_EVENT();
         win.lock->lock();

@@ -80,7 +80,7 @@ namespace legion::rendering
             }
         }
         //calculates distince between cam and input positon
-        float CalculateDistance(ecs::component_handle<position> pos)
+        float CalculateDistance(ecs::component<position> pos)
         {
             return math::distance(pos.read(), m_camPosition);
         }

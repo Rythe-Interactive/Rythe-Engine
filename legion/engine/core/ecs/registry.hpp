@@ -138,6 +138,7 @@ namespace legion::core::ecs
         /**@brief Gets the entity specific data of a specific entity.
          */
         L_NODISCARD static entity_data& entityData(id_type target);
+        L_NODISCARD static entity getEntity(id_type target);
 
         /**@brief Creates a new component of a certain type for a specific entity.
          * @tparam component_type Type of component to create.
@@ -146,6 +147,17 @@ namespace legion::core::ecs
          */
         template<typename component_type>
         static component_type& createComponent(entity target);
+
+        /**@brief Adds a precreated component of a certain type to a specific entity.
+         * @tparam component_type Type of component to create.
+         * @param target Entity to create the component for.
+         * @param value Component value to use.
+         * @return Reference to the created component.
+         */
+        template<typename component_type>
+        static component_type& createComponent(entity target, component_type&& value);
+        template<typename component_type>
+        static component_type& createComponent(entity target, const component_type& value);
 
         /**@brief Creates a new component of a certain type for a specific entity. Component is serialized from a prototype.
          * @tparam component_type Type of component to create.

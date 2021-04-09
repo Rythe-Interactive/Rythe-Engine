@@ -56,7 +56,7 @@ public:
      * @brief Setup function that will be called to populate the emitter with the required particles.
      * @param emitter_handle The emitter that you are populating.
      */
-    void setup(ecs::component_handle<rendering::particle_emitter> emitter_handle) const override
+    void setup(ecs::component<rendering::particle_emitter> emitter_handle) const override
     {
         auto emitter = emitter_handle.read();
         m_positions = emitter.pointInput;
@@ -119,7 +119,7 @@ public:
         int index = 0;
         for (auto [newPos, newColor] : *inputData)
         {
-            ecs::component_handle<transform> trans = checkContainerToRecycle();
+            ecs::component<transform> trans = checkContainerToRecycle();
 
             //auto ent = trans.entity;
 
@@ -236,7 +236,7 @@ public:
     /**
      * @brief populates the particle emitter with particles, creates LOD component and an Octree
      */
-    void populateEmitter(ecs::component_handle<rendering::particle_emitter> emitter_handle, ecs::component_handle<rendering::point_emitter_data> data) const
+    void populateEmitter(ecs::component<rendering::particle_emitter> emitter_handle, ecs::component_handle<rendering::point_emitter_data> data) const
     {
         //read particle emitter if tree is null something went wrong, return
         rendering::particle_emitter emitter = emitter_handle.read();
@@ -292,7 +292,7 @@ public:
     /**
      * @brief Checks if there has been LOD changes, decreases or increases LOD
      */
-    void update(std::vector<ecs::entity_handle>& entity, ecs::component_handle<rendering::particle_emitter> emitterHandle, ecs::EntityQuery& entities, time::span) const override
+    void update(std::vector<ecs::entity_handle>& entity, ecs::component<rendering::particle_emitter> emitterHandle, ecs::EntityQuery& entities, time::span) const override
     {
         OPTICK_EVENT();
         auto lodComponent = emitterHandle.entity.get_component_handle<rendering::lod>().read();
@@ -322,7 +322,7 @@ public:
 
 
 private:
-    ecs::component_handle<transform> checkContainerToRecycle() const
+    ecs::component<transform> checkContainerToRecycle() const
     {
         OPTICK_EVENT();
 

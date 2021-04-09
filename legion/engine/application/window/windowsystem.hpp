@@ -60,10 +60,9 @@ namespace legion::application
             icon_request(id_type entityId, const std::string& iconName) : entityId(entityId), icon(ImageCache::get_handle(iconName)) {}
         };
 
-        static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
+        static sparse_map<GLFWwindow*, ecs::component<window>> m_windowComponents;
         static async::spinlock m_creationLock;
 
-        ecs::EntityQuery m_windowQuery{}; // Query with all the windows to update.
         bool m_exit = false; // Keep track of whether the exit event has been raised.
                              // If any window requests happen after this boolean has been set then they will be denied.
 
@@ -112,7 +111,7 @@ namespace legion::application
 
         static void onMouseScroll(GLFWwindow* window, double xoffset, double yoffset);
 
-        void onExit(events::exit* event);
+        void onExit(events::exit& event);
 #pragma endregion
 
     public:
@@ -130,7 +129,7 @@ namespace legion::application
 
         void showMainWindow()
         {
-            ContextHelper::showWindow(m_ecs->world.read_component<window>());
+            ContextHelper::showWindow(ecs::world.get_component<window>()->handle);
         }
 
         void exit()

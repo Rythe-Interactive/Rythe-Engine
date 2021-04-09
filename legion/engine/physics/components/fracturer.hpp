@@ -10,14 +10,14 @@ namespace legion::physics
     {
         FracturerColliderToMeshPairing(
             std::shared_ptr<ConvexCollider> pColliderPair,
-            ecs::component_handle<MeshSplitter> pMeshSplitterPairing) :
+            ecs::component<MeshSplitter> pMeshSplitterPairing) :
             colliderPair(pColliderPair) , meshSplitterPairing(pMeshSplitterPairing)
         {
             assert(pMeshSplitterPairing.entity);
         }
 
         std::shared_ptr<ConvexCollider> colliderPair;
-        ecs::component_handle<MeshSplitter> meshSplitterPairing;
+        ecs::component<MeshSplitter> meshSplitterPairing;
 
         void GenerateSplittingParamsFromCollider(std::shared_ptr<ConvexCollider> instantiatedCollider
             , std::vector<physics::MeshSplitParams>& meshSplitParams);
@@ -33,7 +33,7 @@ namespace legion::physics
 
         bool IsFractureConditionMet();
 
-        void InitializeVoronoi(ecs::component_handle<physicsComponent> physicsComponent);
+        void InitializeVoronoi(ecs::component<physicsComponent> physicsComponent);
 
         void InvestigateColliderToMeshPairing(ecs::entity_handle ent
             ,std::vector<FracturerColliderToMeshPairing> colliderToMeshPairings);

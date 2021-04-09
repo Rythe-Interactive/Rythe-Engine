@@ -789,16 +789,13 @@ struct OptickApp
 //			OPTICK_FRAME("MainThread");
 //			... code ...
 //		}
-#define OPTICK_FRAME_IMPL(FRAME_NAME, ...)	static ::Optick::ThreadScope mainThreadScope(FRAME_NAME);		\
+#define OPTICK_FRAME(FRAME_NAME, ...)	static ::Optick::ThreadScope mainThreadScope(FRAME_NAME);		\
 										OPTICK_UNUSED(mainThreadScope);									\
 										::Optick::EndFrame(__VA_ARGS__);								\
 										::Optick::Update();												\
 										uint32_t frameNumber = ::Optick::BeginFrame(__VA_ARGS__);		\
 										::Optick::Event OPTICK_CONCAT(autogen_event_, __LINE__)(*::Optick::GetFrameDescription(__VA_ARGS__)); \
 										OPTICK_TAG("Frame", frameNumber);
-
-#define OPTICK_FRAME(...) OPTICK_FRAME_IMPL(__VA_ARGS__)
-
 
 #define OPTICK_UPDATE()						::Optick::Update();
 #define OPTICK_FRAME_FLIP(...)				::Optick::EndFrame(__VA_ARGS__); ::Optick::BeginFrame(__VA_ARGS__);

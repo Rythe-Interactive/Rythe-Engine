@@ -17,7 +17,7 @@ namespace legion::core::ecs
         data.parent = entity{ nullptr };
 
         // Create component composition.
-        entityCompositions().try_emplace(entity{ &data });
+        entityCompositions().try_emplace(world_entity_id);
         return entity{ &data };
     }
 
@@ -208,6 +208,11 @@ namespace legion::core::ecs
     L_NODISCARD entity_data& Registry::entityData(id_type target)
     {
         return m_entities.at(target);
+    }
+
+    L_NODISCARD entity Registry::getEntity(id_type target)
+    {
+        return entity{ &entityData(target) };
     }
 
     void* Registry::createComponent(id_type typeId, entity target)

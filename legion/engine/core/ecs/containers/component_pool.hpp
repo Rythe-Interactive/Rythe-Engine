@@ -111,12 +111,22 @@ namespace legion::core::ecs
          */
         L_NODISCARD virtual std::unique_ptr<serialization::component_prototype_base> create_prototype(id_type target) const;
 
+        L_NODISCARD static serialization::component_prototype<component_type> create_prototype_direct(id_type target);
+
         /**@brief Creates a component attached to a certain entity.
          * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.
          * @param target Entity ID to create the component for.
          * @return Reference to the component.
          */
         static component_type& create_component_direct(id_type target);
+
+        /**@brief Attaches a precreated component to a certain entity.
+         * @param target Entity ID to create the component for.
+         * @param value Component value to use.
+         * @return Reference to the component.
+         */
+        static component_type& create_component_direct(id_type target, component_type&& value);
+        static component_type& create_component_direct(id_type target, const component_type& value);
 
         /**@brief Creates a component attached to a certain entity. (uses a prototype to serialize the component)
          * @note This is a more optimized direct variant, but it requires compile time info about what the component type is.

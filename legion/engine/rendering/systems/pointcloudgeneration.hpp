@@ -68,7 +68,7 @@ namespace legion::rendering
             }
         }
         //generates point clouds
-        void GeneratePointCloud(ecs::component_handle<point_cloud> pointCloud)
+        void GeneratePointCloud(ecs::component<point_cloud> pointCloud)
         {
             using compute::in, compute::out, compute::karg;
             auto realPointCloud = pointCloud.read();

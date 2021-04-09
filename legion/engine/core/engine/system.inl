@@ -18,18 +18,6 @@ namespace legion::core
     }
 
     template<typename SelfType>
-    inline L_ALWAYS_INLINE void System<SelfType>::destroyProcess(id_type procId)
-    {
-        auto& proc = m_processes.at(procId);
-
-        for (auto hook : proc->hooks())
-            schd::Scheduler::unhookProcess(hook, pointer{ proc.get() });
-
-        if (!proc->inUse())
-            m_processes.erase(procId);
-    }
-
-    template<typename SelfType>
     template<typename event_type, void(SelfType::* func_type)(event_type&) CNDOXY(typename)>
     inline L_ALWAYS_INLINE id_type System<SelfType>::bindToEvent()
     {
@@ -43,55 +31,17 @@ namespace legion::core
         return id;
     }
 
-    template<typename SelfType>
     template <typename event_type CNDOXY(typename)>
-    inline L_ALWAYS_INLINE void System<SelfType>::unbindFromEvent(id_type bindingId)
+    inline L_ALWAYS_INLINE void SystemBase::unbindFromEvent(id_type bindingId)
     {
         events::EventBus::unbindFromEvent<event_type>(reinterpret_cast<delegate<void(event_type&)>&>(m_bindings.at(bindingId)));
         m_bindings.erase(bindingId);
     }
 
-    template<typename SelfType>
-    inline L_ALWAYS_INLINE ecs::entity System<SelfType>::createEntity()
-    {
-        return ecs::Registry::createEntity();
-    }
-
-    template<typename SelfType>
-    inline L_ALWAYS_INLINE ecs::entity System<SelfType>::createEntity(ecs::entity parent)
-    {
-        return ecs::Registry::createEntity(parent);
-    }
-
-    template<typename SelfType>
-    inline L_ALWAYS_INLINE ecs::entity System<SelfType>::createEntity(ecs::entity parent, const serialization::entity_prototype& prototype)
-    {
-        return ecs::Registry::createEntity(parent, prototype);
-    }
-
-    template<typename SelfType>
-    inline L_ALWAYS_INLINE ecs::entity System<SelfType>::createEntity(const serialization::entity_prototype& prototype)
-    {
-        return ecs::Registry::createEntity(prototype);
-    }
-
-    template<typename SelfType>
     template<typename event_type, typename... Args CNDOXY(typename)>
-    inline L_ALWAYS_INLINE void System<SelfType>::raiseEvent(Args&&... arguments)
+    inline L_ALWAYS_INLINE void SystemBase::raiseEvent(Args&&... arguments)
     {
         events::EventBus::raiseEvent<event_type>(std::forward<Args>(arguments)...);
-    }
-
-    template<typename SelfType>
-    inline L_ALWAYS_INLINE void System<SelfType>::raiseEvent(events::event_base& value)
-    {
-        events::EventBus::raiseEvent(value);
-    }
-
-    template<typename SelfType>
-    inline L_ALWAYS_INLINE void System<SelfType>::raiseEventUnsafe(events::event_base& value, id_type id)
-    {
-        events::EventBus::raiseEventUnsafe(value, id);
     }
 
     template<typename SelfType>
