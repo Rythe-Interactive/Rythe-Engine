@@ -966,32 +966,28 @@ namespace legion::physics
         
         for (int i = 0; i < horizonEdges.size(); i++)
         {
-          /*  if (atDebug)
-            {
-            }
             HalfEdgeFace* establishedFace = horizonEdges.at(i)->face;
             ColliderFaceToVert& faceToVertEstablished = *establishedFace->faceToVert;
             HalfEdgeFace* newFace = newFaces.at(i);
 
             if (isFacesCoplanar(establishedFace, newFace))
             {
-                horizonEdges.at(i)->pairingEdge->suicidalMergeWithPairing(DEBUG_transform);
+                horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform);
                 faceToVertEstablished.populateVectorWithVerts(unmergedVertices);
-                faceToVertEstablished.face = nullptr;
-            }*/
+                newFaces.at(i) = nullptr;
+            }
         }
 
-        for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
         {
-            HalfEdgeFace* face = listIter->face;
 
-            if (!face)
+            std::vector<HalfEdgeFace*> tempNewFaces = std::move(newFaces);
+
+            for (auto face : tempNewFaces)
             {
-                listIter = facesWithOutsideVerts.erase(listIter);
-            }
-            else
-            {
-                listIter++;
+                if (face)
+                {
+                    newFaces.push_back(face);
+                }
             }
         }
 
@@ -1001,7 +997,6 @@ namespace legion::physics
         {
             delete face;
         }
-
 
     }
 

@@ -74,26 +74,68 @@ namespace legion::physics
 
     void HalfEdgeEdge::suicidalMergeWithPairing(math::mat4 transform)
     {
-        HalfEdgeFace* otherFace = pairingEdge->face;
-        face->startEdge = this->nextEdge;
-        pairingEdge->prevEdge->setNext(this->nextEdge);
-        prevEdge->setNext(pairingEdge->nextEdge);
+        //HalfEdgeFace* otherFace = pairingEdge->face;
+        //face->startEdge = this->nextEdge;
+        //pairingEdge->prevEdge->setNext(this->nextEdge);
+        //prevEdge->setNext(pairingEdge->nextEdge);
 
-        //re-initialize face so that we take the new edges into account
-        face->initializeFace();
+        ////re-initialize face so that we take the new edges into account
+        //face->initializeFace();
        
-        //pairingEdge->prevEdge->DEBUG_drawEdge(transform, math::colors::red, FLT_MAX, 5.0f);
-        //this->nextEdge->DEBUG_drawEdge(transform, math::colors::blue, FLT_MAX, 5.0f);
+        ////pairingEdge->prevEdge->DEBUG_drawEdge(transform, math::colors::red, FLT_MAX, 5.0f);
+        ////this->nextEdge->DEBUG_drawEdge(transform, math::colors::blue, FLT_MAX, 5.0f);
 
-        //prevEdge->DEBUG_drawEdge(transform, math::colors::darkgrey, FLT_MAX, 5.0f);
-        //pairingEdge->nextEdge->DEBUG_drawEdge(transform, math::colors::magenta, FLT_MAX, 5.0f);
+        ////prevEdge->DEBUG_drawEdge(transform, math::colors::darkgrey, FLT_MAX, 5.0f);
+        ////pairingEdge->nextEdge->DEBUG_drawEdge(transform, math::colors::magenta, FLT_MAX, 5.0f);
 
-        //nulify otherFace so its edges wont get deleted
-        otherFace->startEdge = nullptr;
-        delete otherFace;
+        ////identify 
+
+        ////nulify otherFace so its edges wont get deleted
+
+
+        
+
+        //----//
+        HalfEdgeFace* mergeFace = pairingEdge->face;
+        HalfEdgeEdge* prevFromCurrent = this->prevEdge->pairingEdge->face == mergeFace ? this->nextEdge : this->prevEdge;
+
+        //next-pairing->next
+        HalfEdgeEdge* prevFromCurrentConnection = prevFromCurrent->nextEdge->pairingEdge->nextEdge;
+        prevFromCurrent->setNext(prevFromCurrentConnection);
+
+        HalfEdgeEdge* nextFromCurrent = this->nextEdge->pairingEdge->face == mergeFace ? this->prevEdge : this->nextEdge;
+        HalfEdgeEdge* nextFromCurrentConnection = nextFromCurrent->prevEdge->pairingEdge->prevEdge;
+
+        nextFromCurrent->setPrev(nextFromCurrentConnection);
+
+        prevFromCurrent->DEBUG_drawEdge(transform, math::colors::red, FLT_MAX, 5.0f);
+        prevFromCurrentConnection->DEBUG_drawEdge(transform, math::colors::blue, FLT_MAX, 5.0f);
+
+        nextFromCurrent->DEBUG_drawEdge(transform, math::colors::darkgrey, FLT_MAX, 5.0f);
+        nextFromCurrentConnection->DEBUG_drawEdge(transform, math::colors::magenta, FLT_MAX, 5.0f);
+
+        face->startEdge = prevFromCurrent;
+        face->initializeFace();
+
+        if (prevEdge->pairingEdge->face == mergeFace)
+        {
+            delete prevEdge->pairingEdge;
+            delete prevEdge;
+        }
+
+        if (nextEdge->pairingEdge->face == mergeFace)
+        {
+            delete nextEdge->pairingEdge;
+            delete nextEdge;
+        }
+
+
+        mergeFace->startEdge = nullptr;
+        delete mergeFace;
 
         delete pairingEdge;
         delete this;
+
     }
 }
 
