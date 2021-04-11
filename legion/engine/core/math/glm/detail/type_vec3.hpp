@@ -10,7 +10,6 @@
 #   include "_swizzle_func.hpp"
 #endif
 #include <cstddef>
-#include <cereal/cereal.hpp>
 
 namespace legion::core::math
 {

@@ -1,5 +1,4 @@
 #include "../matrix.hpp"
-#include <cereal/cereal.hpp>
 
 namespace legion::core::math
 {

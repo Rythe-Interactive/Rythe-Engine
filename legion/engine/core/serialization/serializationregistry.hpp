@@ -16,18 +16,11 @@ namespace legion::core::serialization
         template<typename type>
         static void register_component()
         {
-            SerializationRegistry::serializers.emplace(type_hash<type>().global(), serializer<type>());
+            SerializationRegistry::serializers.emplace(0, std::make_unique<serializer<type>>());
         }
 
-        //static std::un getPrototype(type_hash<type>* hash)
-        //{
-        //    return SerializationRegistry::serializers[hash->global()]->deserialize("{idk}").get();
-        //}
+        static std::unique_ptr<component_prototype_base> getPrototype(json j);
 
-        static std::unique_ptr<component_prototype_base> getPrototype(std::string json)
-        {
-            return SerializationRegistry::serializers[type_hash<type>().global()]->deserialize("{idk}");
-        }
 
     };
 }

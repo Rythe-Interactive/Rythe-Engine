@@ -29,8 +29,11 @@ public:
     {
         using namespace legion;
         ecs::filter<example_component> filter;
-        auto output = serialization::SerializationRegistry::getPrototype<example_component>();
-        log::debug(output->names[0]);
+        example_component test;
+        test.value = 10;
+        auto j = serialization::json_serializer::serialize<example_component>(test);
+        auto output = serialization::SerializationRegistry::getPrototype(j);
+       //log::debug(output->names[0]);
 
         static size_type sum = 0;
 

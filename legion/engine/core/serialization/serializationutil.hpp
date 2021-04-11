@@ -2,6 +2,7 @@
 #include <core/platform/platform.hpp>
 #include <core/ecs/handles/component.hpp>
 #include <core/ecs/prototypes/component_prototype.hpp>
+#include <nlohmann/json.hpp>
 
 #include <sstream>
 #include <fstream>
@@ -13,6 +14,7 @@
 
 namespace legion::core::serialization
 {
+    using json = nlohmann::json;
     //Some testing objects for serialization
 #pragma region TestObjects
     struct MyRecord
@@ -34,7 +36,7 @@ namespace legion::core::serialization
     {
     public:
         serializer_base() = default;
-        virtual std::unique_ptr<component_prototype_base> deserialize(std::string json) LEGION_PURE;
+        virtual std::unique_ptr<component_prototype_base> deserialize(json j) LEGION_PURE;
     };
 
     template<typename type>
@@ -42,10 +44,9 @@ namespace legion::core::serialization
     {
     public:
         serializer() = default;
-
-        virtual std::unique_ptr<component_prototype_base> deserialize(std::string json)
+        virtual std::unique_ptr<component_prototype_base> deserialize(json j)
         {
-            return json_serializer::deserialize<type>(json);
+            return json_serializer::deserialize<type>(j);
         }
     };
 
@@ -56,10 +57,12 @@ namespace legion::core::serialization
          * @param serializable template type that represents the object that needs to be serialized
          */
         template<typename type>
-        static std::string serialize(type& serializable)
+        static json serialize(type t)
         {
-            //todo
-            return "";
+            auto temp = component_prototype<type>(t);
+            log::debug(temp.names[0]);
+            json j = { {temp.names[0].c_str(),std::get<0>(temp.values)} };
+            return j;
         }
 
         /**@brief JSON deserialization from a string
@@ -67,9 +70,11 @@ namespace legion::core::serialization
          * @returns the the deserialized object as type
          */
         template<typename type>
-        static std::unique_ptr<component_prototype<type>> deserialize(std::string json)
+        static std::unique_ptr<component_prototype<type>> deserialize(json j)
         {
-            return std::unique_ptr<component_prototype<type>>();
+            std::unique_ptr<component_prototype<type>> prototype;
+            log::debug(prototype->names[0]);
+            return prototype;
         }
     };
 

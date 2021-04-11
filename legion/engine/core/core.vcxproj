@@ -575,6 +575,7 @@ del /q ".\xcopyexclude"</Command>
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
+    <ClCompile Include="serialization\serializationregistry.cpp" />
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>

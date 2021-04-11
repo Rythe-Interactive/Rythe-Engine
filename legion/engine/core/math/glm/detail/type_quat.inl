@@ -2,7 +2,6 @@
 #include "../exponential.hpp"
 #include "../ext/quaternion_geometric.hpp"
 #include <limits>
-#include <cereal/cereal.hpp>
 
 namespace legion::core::math{
 namespace detail
