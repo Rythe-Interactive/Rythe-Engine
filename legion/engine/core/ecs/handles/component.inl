@@ -19,8 +19,8 @@ namespace legion::core::ecs
     template<typename component_type>
     inline L_ALWAYS_INLINE bool component<component_type>::valid() const noexcept
     {
-		return Registry::hasComponent<component_type>(owner);
-	}
+        return Registry::hasComponent<component_type>(owner);
+    }
 
     template<typename component_type>
     inline L_ALWAYS_INLINE component<component_type>::operator bool() const noexcept
