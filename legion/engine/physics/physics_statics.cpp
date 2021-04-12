@@ -933,10 +933,10 @@ namespace legion::physics
 
         if (atDebug)
         {
-            for (auto edge : horizonEdges)
+            /*for (auto edge : horizonEdges)
             {
                 edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX);
-            }
+            }*/
         }
 
         //reverse iterate the list to find their pairings, add them to new list
@@ -966,12 +966,14 @@ namespace legion::physics
         
         for (int i = 0; i < horizonEdges.size(); i++)
         {
+            //horizon is now 
             HalfEdgeFace* establishedFace = horizonEdges.at(i)->face;
             ColliderFaceToVert& faceToVertEstablished = *establishedFace->faceToVert;
             HalfEdgeFace* newFace = newFaces.at(i);
 
             if (isFacesCoplanar(establishedFace, newFace))
             {
+                //assert(establishedFace != horizonEdges.at(i)->face);
                 horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform);
                 faceToVertEstablished.populateVectorWithVerts(unmergedVertices);
                 newFaces.at(i) = nullptr;
@@ -979,7 +981,6 @@ namespace legion::physics
         }
 
         {
-
             std::vector<HalfEdgeFace*> tempNewFaces = std::move(newFaces);
 
             for (auto face : tempNewFaces)
