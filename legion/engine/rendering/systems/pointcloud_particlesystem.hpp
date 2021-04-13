@@ -290,7 +290,7 @@ public:
     /**
      * @brief Checks if there has been LOD changes, decreases or increases LOD
      */
-    void update(std::vector<ecs::entity_handle>& entity, ecs::component<rendering::particle_emitter> emitterHandle, ecs::EntityQuery& entities, time::span) const override
+    void update(std::vector<ecs::entity>& entity, ecs::component<rendering::particle_emitter> emitterHandle, ecs::EntityQuery& entities, time::span) const override
     {
         OPTICK_EVENT();
         auto lodComponent = emitterHandle.entity.get_component_handle<rendering::lod>().read();
@@ -324,7 +324,7 @@ private:
     {
         OPTICK_EVENT();
 
-        ecs::entity_handle particularParticle;
+        ecs::entity particularParticle;
 
         if (!container.deadParticles.empty())
         {

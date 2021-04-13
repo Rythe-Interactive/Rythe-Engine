@@ -6,7 +6,9 @@
 #include <array>
 #include <queue>
 #include <type_traits>
+
 #include <core/platform/platform.hpp>
+#include <core/types/primitives.hpp>
 
 namespace legion::core
 {
@@ -92,6 +94,43 @@ namespace legion::core
     {
     };
 
+    template<template<typename...>typename T, typename U, size_type I, typename... Args>
+    struct make_sequence : make_sequence<T, U, I - 1, Args..., U> {};
+
+    template<template<typename...>typename T, typename U, typename... Args>
+    struct make_sequence<T, U, 0, Args...>
+    {
+        using type = T<Args...>;
+    };
+
+    template<template<typename...>typename T, typename U, size_type I, typename... Args>
+    using make_sequence_t = typename make_sequence<T, U, I, Args...>::type;
+
+    template<template<typename>typename Compare, typename T, T A, T B>
+    struct compare
+    {
+        static constexpr inline Compare<T> comp{};
+        static constexpr inline bool value = comp(A, B);
+    };
+
+    template<template<typename>typename Compare, typename T, T A, T B>
+    inline constexpr bool compare_v = compare<Compare, T, A, B>::value;
+
+    template<size_type I, typename Type, typename... Types>
+    struct element_at : element_at<I - 1, Types...>
+    {
+        static_assert(I > (sizeof...(Types) + 1), "Index beyond template paremeter list size.");
+    };
+
+    template<typename Type, typename... Types>
+    struct element_at<0, Type, Types...>
+    {
+        using type = Type;
+    };
+
+    template<size_type I, typename Type, typename... Types>
+    using element_at_t = typename element_at<I, Type, Types...>::type;
+
     template<class T, typename... Args>
     decltype(void(T{ std::declval<Args>()... }), std::true_type())
         brace_construct_test(int);
@@ -134,8 +173,8 @@ namespace legion::core
         :public std::true_type
     {};
 
-    template <class T,size_t N>
-    struct is_container<std::array<T,N>>
+    template <class T, size_t N>
+    struct is_container<std::array<T, N>>
         :public std::true_type
     {};
 

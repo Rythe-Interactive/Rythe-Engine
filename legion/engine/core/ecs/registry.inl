@@ -63,6 +63,19 @@ namespace legion::core::ecs
         return component_pool<component_type>::create_component_direct(target);
     }
 
+
+    template<typename component_type0, typename component_type1, typename... component_typeN>
+    inline L_ALWAYS_INLINE std::tuple<component_type0&, component_type1&, component_typeN&...> Registry::createComponent(entity target)
+    {
+        return std::make_tuple(std::ref(createComponent<component_type0>(target)), std::ref(createComponent<component_type1>(target)), std::ref(createComponent<component_typeN>(target))...);
+    }
+
+    template<typename archetype_type>
+    inline L_ALWAYS_INLINE typename archetype_type::refGroup Registry::createComponent(entity target)
+    {
+        return archetype_type::create(target);
+    }
+
     template<typename component_type>
     inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, component_type&& value)
     {

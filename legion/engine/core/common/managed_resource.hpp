@@ -52,7 +52,7 @@ namespace legion::core::common
         explicit managed_resource(std::nullptr_t) : value(), m_destroyFunc(nullptr), m_ref_counter(nullptr) {}
 
         template<typename... Args>
-        managed_resource(delegate<void(T&)> destroyFunc, Args&&... args) noexcept(std::is_nothrow_constructible_v<T, std::invoke_result_t<decltype(std::forward<Args>), decltype(args)>...>)
+        managed_resource(delegate<void(T&)> destroyFunc, Args&&... args) noexcept(std::is_nothrow_constructible_v<T, Args...>)
             : value(std::forward<Args>(args)...), m_destroyFunc(destroyFunc),
 #if defined(LEGION_DEBUG)
             m_ref_counter(&value, detail::_managed_resource_del<T>{value, m_destroyFunc})

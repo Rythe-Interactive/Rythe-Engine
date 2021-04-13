@@ -8,7 +8,7 @@ namespace legion::rendering
     class LightBufferStage : public RenderStage<LightBufferStage>
     {
         static async::spinlock m_lightEntitiesLock;
-        static std::unordered_set<ecs::entity_handle> m_lightEntities;
+        static std::unordered_set<ecs::entity> m_lightEntities;
         static std::vector<detail::light_data> m_lights;
 
         void onLightCreate(events::component_creation<light>* event);

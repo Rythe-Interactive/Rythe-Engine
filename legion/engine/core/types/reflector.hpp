@@ -78,21 +78,6 @@ namespace legion::core{                                                         
         std::array<std::string, 0> names;
     };
 
-    namespace detail
-    {
-        template<template<typename...>typename T, typename U, size_type I, typename... Args>
-        struct make_sequence : make_sequence<T, U, I - 1, Args..., U> {};
-
-        template<template<typename...>typename T, typename U, typename... Args>
-        struct make_sequence<T, U, 0, Args...>
-        {
-            using type = T<Args...>;
-        };
-
-        template<template<typename...>typename T, typename U, size_type I, typename... Args>
-        using make_sequence_t = typename make_sequence<T, U, I, Args...>::type;
-    }
-
     // Reflector return code
 #define RETURN_REFLECTOR(...)                                                       \
     auto&& [__VA_ARGS__] = std::forward<T>(object);                                 \
@@ -114,59 +99,59 @@ namespace legion::core{                                                         
             return reflector<type>{ object };
         }
         // Check for construction with 16 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 16, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 16, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11, value12, value13, value14, value16);
         }
         // Check for construction with 15 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 15, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 15, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11, value12, value13, value14);
         }
         // Check for construction with 14 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 14, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 14, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11, value12, value13);
         }
         // Check for construction with 13 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 13, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 13, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11, value12);
         }
         // Check for construction with 12 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 12, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 12, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6, value7, value8, value9, value10, value11);
         }
         // Check for construction with 11 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 11, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 11, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6, value7, value8, value9, value10);
         }
         // Check for construction with 10 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 10, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 10, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6, value7, value8, value9);
         }
         // Check for construction with 9 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 9, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 9, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6, value7, value8);
         }
         // Check for construction with 8 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 8, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 8, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6, value7);
         }
         // Check for construction with 7 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 7, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 7, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5, value6);
         }
         // Check for construction with 6 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 6, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 6, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4, value5);
         }
         // Check for construction with 5 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 5, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 5, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3, value4);
         }
         // Check for construction with 4 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 4, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 4, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2, value3);
         }
         // Check for construction with 3 items.
-        else if constexpr (detail::make_sequence_t<is_brace_constructible, detail::any_type, 3, type>::value) {
+        else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 3, type>::value) {
             RETURN_REFLECTOR(value0, value1, value2);
         }
         // Check for construction with 2 items.
@@ -246,16 +231,6 @@ namespace legion::core{                                                         
 
     namespace detail
     {
-        template<template<typename>typename Compare, typename T, T A, T B>
-        struct compare
-        {
-            static constexpr inline Compare<T> comp{};
-            static constexpr inline bool value = comp(A, B);
-        };
-
-        template<template<typename>typename Compare, typename T, T A, T B>
-        inline constexpr bool compare_v = compare<Compare, T, A, B>::value;
-
         template<std::size_t I, typename Reflector, typename Func>
         typename std::enable_if_t<I == std::remove_reference_t<Reflector>::size, void>
             for_each_impl(Reflector&& r, Func&& f) {};

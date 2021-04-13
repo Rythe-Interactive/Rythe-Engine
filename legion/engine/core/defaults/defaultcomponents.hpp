@@ -122,11 +122,7 @@ namespace legion::core
     //struct transform : public ecs::archetype<position, rotation, scale>
     //{
     //    using base = ecs::archetype<position, rotation, scale>;
-
-    //    transform() = default;
-    //    transform(const base::handleGroup& handles) : base(handles) {}
-
-    //    L_NODISCARD std::tuple<position, rotation, scale> get_local_components();
+    //    using base::archetype;
 
     //    L_NODISCARD math::mat4 get_world_to_local_matrix()
     //    {
@@ -179,6 +175,13 @@ namespace legion::core
         bool operator==(const mesh_filter& other) const { return id == other.id; }
     };
 }
+
+ManualReflector(legion::core::position, x, y, z);
+ManualReflector(legion::core::rotation, x, y, z, w);
+ManualReflector(legion::core::scale, x, y, z);
+ManualReflector(legion::core::velocity, x, y, z);
+ManualReflector(legion::core::mesh_filter, id);
+
 
 #if !defined(DOXY_EXCLUDE)
 namespace fmt

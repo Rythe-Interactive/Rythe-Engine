@@ -5,9 +5,7 @@
 
 namespace legion::rendering
 {
-    ecs::EcsRegistry* ParticleSystemBase::m_registry;
-
-    void ParticleSystemBase::createParticle(ecs::entity_handle ent) const
+    void ParticleSystemBase::createParticle(ecs::entity ent) const
     {
         OPTICK_EVENT();
 
@@ -15,7 +13,7 @@ namespace legion::rendering
          ent.add_component<mesh_renderer>(rendering::mesh_renderer(m_particleMaterial, m_particleModel));
     }
 
-    void ParticleSystemBase::cleanUpParticle(ecs::entity_handle particleHandle, particle_emitter& emitter) const
+    void ParticleSystemBase::cleanUpParticle(ecs::entity particleHandle, particle_emitter& emitter) const
     {
         OPTICK_EVENT();
         //Read emitter
@@ -33,7 +31,7 @@ namespace legion::rendering
 
     ecs::component<particle> ParticleSystemBase::checkToRecycle(rendering::particle_emitter& emitter) const
     {
-        ecs::entity_handle particularParticle;
+        ecs::entity particularParticle;
 
         if (!emitter.deadParticles.empty())
         {
@@ -45,7 +43,7 @@ namespace legion::rendering
         else
         {
             //Create new particle entity.
-            particularParticle = m_registry->createEntity();
+            particularParticle = ecs::Registry::createEntity();
             //give newly created particle a transform
             particularParticle.add_components<transform>();
             particularParticle.add_component<particle>();
@@ -53,6 +51,6 @@ namespace legion::rendering
         //Add particle to living particle list.
         emitter.livingParticles.push_back(particularParticle);
 
-        return particularParticle.get_component_handle<particle>();
+        return particularParticle.get_component<particle>();
     }
 }

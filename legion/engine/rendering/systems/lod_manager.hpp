@@ -23,7 +23,7 @@ namespace legion::rendering
 
             //iterate all entities with an LOD
             m_query.queryEntities();
-            for (ecs::entity_handle entity : m_query)
+            for (ecs::entity entity : m_query)
             {
                 //get distance for current entity
                 float distance = CalculateDistance(entity.get_component_handle<position>());
@@ -71,7 +71,7 @@ namespace legion::rendering
         void UpdateCam()
         {
             m_CamQuery.queryEntities();
-            for (ecs::entity_handle entity : m_CamQuery)
+            for (ecs::entity entity : m_CamQuery)
             {
                 if (entity.has_component<position>())
                 {

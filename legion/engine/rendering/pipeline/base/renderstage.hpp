@@ -75,7 +75,7 @@ namespace legion::rendering
     protected:
         /**@brief Create a new entity and return the handle.
          */
-        L_NODISCARD ecs::entity_handle createEntity()
+        L_NODISCARD ecs::entity createEntity()
         {
             OPTICK_EVENT();
             return m_ecs->createEntity();

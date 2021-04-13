@@ -9,8 +9,8 @@ namespace legion::rendering
      */
     struct particle_emitter
     {
-        std::vector<ecs::entity_handle> livingParticles;
-        std::vector<ecs::entity_handle> deadParticles;
+        std::vector<ecs::entity> livingParticles;
+        std::vector<ecs::entity> deadParticles;
         bool playAnimation = false;
         ParticleSystemHandle particleSystemHandle;
         bool setupCompleted;

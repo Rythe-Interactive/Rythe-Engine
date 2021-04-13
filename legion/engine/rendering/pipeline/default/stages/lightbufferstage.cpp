@@ -3,7 +3,7 @@
 namespace legion::rendering
 {
    async::spinlock LightBufferStage::m_lightEntitiesLock;
-   std::unordered_set<ecs::entity_handle> LightBufferStage::m_lightEntities;
+   std::unordered_set<ecs::entity> LightBufferStage::m_lightEntities;
    std::vector<detail::light_data> LightBufferStage::m_lights;
 
     void LightBufferStage::onLightCreate(events::component_creation<light>* event)

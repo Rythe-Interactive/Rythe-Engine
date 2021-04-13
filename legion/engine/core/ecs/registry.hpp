@@ -148,6 +148,12 @@ namespace legion::core::ecs
         template<typename component_type>
         static component_type& createComponent(entity target);
 
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        static std::tuple<component_type0&, component_type1&, component_typeN&...> createComponent(entity target);
+
+        template<typename archetype_type>
+        static typename archetype_type::refGroup createComponent(entity target);
+
         /**@brief Adds a precreated component of a certain type to a specific entity.
          * @tparam component_type Type of component to create.
          * @param target Entity to create the component for.
@@ -158,6 +164,11 @@ namespace legion::core::ecs
         static component_type& createComponent(entity target, component_type&& value);
         template<typename component_type>
         static component_type& createComponent(entity target, const component_type& value);
+
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        static std::tuple<component_type0&, component_type1&, component_typeN&...> createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        static std::tuple<component_type0&, component_type1&, component_typeN&...> createComponent(entity target, const component_type0& value0, const component_type1& value1, const component_typeN&... valueN);
 
         /**@brief Creates a new component of a certain type for a specific entity. Component is serialized from a prototype.
          * @tparam component_type Type of component to create.
@@ -241,4 +252,5 @@ namespace legion::core::ecs
 #include <core/ecs/handles/entity.inl>
 #include <core/ecs/handles/component.inl>
 #include <core/ecs/prototypes/entity_prototype.inl>
+#include <core/ecs/archetype/archetype.inl>
 
