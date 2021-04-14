@@ -69,10 +69,17 @@ namespace legion::core::ecs
         return { {}, entity{data} };
     }
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component<component_type> entity::add_component(component_type&& value)
+    template<typename component_type0, typename component_type1, typename... component_typeN>
+    inline L_ALWAYS_INLINE component_tuple<component_type0, component_type1, component_typeN...> entity::add_component()
     {
-        Registry::createComponent<component_type>(*this, std::forward<component_type>(value));
+        Registry::createComponent<component_type0, component_type1, component_typeN...>(*this);
+        return std::make_tuple(component<component_type0>{ {}, entity{ data } }, component<component_type1>{ {}, entity{ data } }, component<component_typeN>{ {}, entity{ data } }...);
+    }
+
+    template<typename component_type>
+    inline L_ALWAYS_INLINE component<remove_cvr_t<component_type>> entity::add_component(component_type&& value)
+    {
+        Registry::createComponent<remove_cvr_t<component_type>>(*this, std::forward<component_type>(value));
         return { {}, entity{data} };
     }
 
@@ -81,6 +88,25 @@ namespace legion::core::ecs
     {
         Registry::createComponent<component_type>(*this, value);
         return { {}, entity{data} };
+    }
+
+
+    template<typename component_type0, typename component_type1, typename... component_typeN>
+    inline L_ALWAYS_INLINE component_tuple<component_type0, component_type1, component_typeN...> entity::add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN)
+    {
+        Registry::createComponent<remove_cvr_t<component_type0>>(*this, std::forward<component_type0>(value0));
+        Registry::createComponent<remove_cvr_t<component_type1>>(*this, std::forward<component_type1>(value1));
+        (Registry::createComponent<remove_cvr_t<component_typeN>>(*this, std::forward<component_typeN>(valueN)), ...);
+        return std::make_tuple(component<remove_cvr_t<component_type0>>{ {}, entity{ data } }, component<remove_cvr_t<component_type1>>{ {}, entity{ data } }, component<remove_cvr_t<component_typeN>>{ {}, entity{ data } }...);
+    }
+
+    template<typename component_type0, typename component_type1, typename... component_typeN>
+    inline L_ALWAYS_INLINE component_tuple<component_type0, component_type1, component_typeN...> entity::add_component(const component_type0& value0, const component_type1& value1, const component_typeN&... valueN)
+    {
+        Registry::createComponent<component_type0>(*this, value0);
+        Registry::createComponent<component_type1>(*this, value1);
+        (Registry::createComponent<component_typeN>(*this, valueN), ...);
+        return std::make_tuple(component<component_type0>{ {}, entity{ data } }, component<component_type1>{ {}, entity{ data } }, component<component_typeN>{ {}, entity{ data } }...);
     }
 
     template<typename component_type>

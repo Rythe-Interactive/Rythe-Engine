@@ -414,6 +414,70 @@ namespace legion::core
         }
 #pragma endregion
 
+    private:
+        inline L_ALWAYS_INLINE iterator _itr_at(index_type index) noexcept
+        {
+            return iterator(m_dense_key.begin() + index, m_dense_value.begin() + index);
+        }
+
+    public:
+
+#pragma region try_emplace
+        /**@brief Construct item in place.
+         * @param key Key to which the item should be created.
+         * @param arguments Arguments to pass to the item constructor.
+         */
+        template<typename... Arguments>
+        std::pair<iterator, bool> try_emplace(key_const_reference key, Arguments&&... arguments)
+        {
+            OPTICK_EVENT();
+            if (!contains(key))
+            {
+                if (m_size >= m_capacity)
+                    reserve(m_size + 1);
+
+                m_dense_value.emplace_back(arguments...);
+
+                m_dense_key.emplace_back(key);
+
+                m_sparse.insert_or_assign(key, m_size);
+                ++m_size;
+
+                return std::make_pair(iterator(m_dense_key.end() - 1, m_dense_value.end() - 1), true);
+            }
+
+            return std::make_pair(_itr_at(m_sparse.at(key)), false);
+        }
+
+        /**@brief Construct item in place.
+         * @param key Key to which the item should be created.
+         * @param arguments Arguments to pass to the item constructor.
+         */
+        template<typename... Arguments>
+        std::pair<iterator, bool> try_emplace(key_type&& key, Arguments&&... arguments)
+        {
+            OPTICK_EVENT();
+            if (!contains(key))
+            {
+                if (m_size >= m_capacity)
+                    reserve(m_size + 1);
+
+                m_dense_value.emplace_back(arguments...);
+
+                auto key_ref = m_dense_key.emplace_back(std::move(key));
+
+                m_sparse.insert_or_assign(key_ref, m_size);
+                ++m_size;
+
+                return std::make_pair(iterator(m_dense_key.end() - 1, m_dense_value.end() - 1), true);
+            }
+
+            return std::make_pair(_itr_at(m_sparse.at(key)), false);
+        }
+
+#pragma endregion
+
+
 #pragma region operator[]
         /**@brief Returns item from sparse_map, inserts default value if it doesn't exist yet.
          * @param key Key value that needs to be retrieved.
@@ -552,5 +616,5 @@ namespace legion::core
             }
             return false;
         }
-        };
-        }
+    };
+}

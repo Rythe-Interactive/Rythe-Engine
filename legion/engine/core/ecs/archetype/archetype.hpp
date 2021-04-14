@@ -34,6 +34,7 @@ namespace legion::core::ecs
     struct archetype : public archetype_base
     {
         friend class legion::core::ecs::Registry;
+        friend struct legion::core::ecs::entity;
     public:
         using handleGroup = std::tuple<component<component_type>, component<component_types>...>;
         using refGroup = std::tuple<component_type&, component_types&...>;
@@ -67,6 +68,7 @@ namespace legion::core::ecs
         static refGroup create(entity ent, archetype&& value);
 
         L_NODISCARD static refGroup get(entity ent);
+        L_NODISCARD static handleGroup get_handles(entity ent);
         static void destroy(entity ent);
         L_NODISCARD static bool has(entity ent);
     };
@@ -97,10 +99,10 @@ namespace legion::core::ecs
 
 namespace std // NOLINT(cert-dcl58-cpp)
 {
-    template <::std::size_t I, class... Args>
-    struct tuple_element<I, legion::core::ecs::archetype<Args...>>
+    template <::std::size_t I, class Arg, class... Args>
+    struct tuple_element<I, legion::core::ecs::archetype<Arg, Args...>>
     {
-        using type = typename legion::core::element_at_t<I, Args...>;
+        using type = typename legion::core::element_at_t<I, Arg, Args...>;
     };
 
     template <::std::size_t I, class... Args>

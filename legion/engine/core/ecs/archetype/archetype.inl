@@ -72,6 +72,12 @@ namespace legion::core::ecs
     }
 
     template<typename component_type, typename... component_types>
+    inline L_ALWAYS_INLINE std::tuple<component<component_type>, component<component_types>...> archetype<component_type, component_types...>::get_handles(entity ent)
+    {
+        return std::make_tuple(component<component_type>{ {}, ent }, component<component_types>{ {}, ent }...);
+    }
+
+    template<typename component_type, typename... component_types>
     inline L_ALWAYS_INLINE void archetype<component_type, component_types...>::destroy(entity ent)
     {
         Registry::template destroyComponents<component_type, component_types...>(ent);

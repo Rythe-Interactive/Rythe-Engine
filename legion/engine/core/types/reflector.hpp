@@ -245,12 +245,12 @@ namespace legion::core{                                                         
 
 #if !defined(DOXY_EXCLUDE)
         template<int I, template<typename> typename Compare, int End, int Increment, typename Reflector, typename Func>
-        typename std::enable_if_t<!compare_v<Compare, int, I, End>, void>
+        typename std::enable_if_t<!do_compare_v<Compare, int, I, End>, void>
             for_i_impl(Reflector&& r, Func&& f) {};
 #endif
 
         template<int I, template<typename> typename Compare, int End, int Increment, typename Reflector, typename Func>
-        typename std::enable_if_t<compare_v<Compare, int, I, End>, void>
+        typename std::enable_if_t<do_compare_v<Compare, int, I, End>, void>
             for_i_impl(Reflector&& r, Func&& f)
         {
             std::invoke(std::forward<Func>(f), r.names[I], std::get<I>(r.values));

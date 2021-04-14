@@ -49,14 +49,15 @@ static void TestECS()
         L_CHECK(!ecs::component_pool<test_comp>::contains_direct(entId));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
-        ent.add_component<test_comp>();
+        auto startVal = test_comp{ 13 };
+        ent.add_component(startVal);
         L_CHECK(comp);
         L_CHECK(comp2);
 
         auto& val = comp.get();
-        L_CHECK(val.value == 0);
+        L_CHECK(val.value == startVal.value);
         val.value++;
-        L_CHECK(comp->value == 1);
+        L_CHECK(comp->value == startVal.value + 1);
 
         comp.destroy();
         L_CHECK(!comp);
@@ -94,7 +95,7 @@ static void TestECS()
         L_CHECK(ent == ent->id);
         L_CHECK(!ent.has_component<test_comp>());
 
-        auto comp = ent.add_component<test_comp>();
+        auto [comp, pos, rot, scl] = ent.add_component<test_comp, position, rotation, scale>();
         L_CHECK(comp);
         L_CHECK(ent.has_component<test_comp>());
         L_CHECK(comp->value == 0);
@@ -117,14 +118,17 @@ static void TestECS()
         L_CHECK(!ecs::component_pool<test_comp>::contains_direct(entId));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
 
-        ent.add_component<test_comp>();
+        auto startVal = test_comp{ 13 };
+        position posVal;
+        rotation rotVal;
+        ent.add_component(startVal, posVal, rotVal);
         L_CHECK(comp);
         L_CHECK(comp2);
 
         auto& val = comp.get();
-        L_CHECK(val.value == 0);
+        L_CHECK(val.value == startVal.value);
         val.value++;
-        L_CHECK(comp->value == 1);
+        L_CHECK(comp->value == startVal.value + 1);
 
         comp.destroy();
         L_CHECK(!comp);
@@ -210,7 +214,7 @@ static void TestECS()
     LEGION_SUBTEST("Create 1000 entities")
     {
         for (int i = 0; i < 1000; i++)
-            ecs::Registry::createEntity();
+            (void)ecs::Registry::createEntity();
     }
 
     LEGION_SUBTEST("Destroy all entities")
@@ -228,7 +232,7 @@ static void TestECS()
 
         L_CHECK(ecs::component_pool<test_comp>::m_components.empty());
 
-        for (int i = 0; i < 100; i++)
+        for (size_type i = 0; i < 100; i++)
         {
             L_CHECK(ecs::component_pool<test_comp>::m_components.size() == i);
 

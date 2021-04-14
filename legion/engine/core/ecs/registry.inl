@@ -39,7 +39,6 @@ namespace legion::core::ecs
     template<typename component_type, typename... Args>
     inline L_ALWAYS_INLINE component_pool<component_type>* ecs::Registry::getFamily(Args&&... args)
     {
-        OPTICK_EVENT();
         return tryEmplaceFamily<component_type>(std::forward<Args>(args)...);
     }
 
@@ -117,31 +116,31 @@ namespace legion::core::ecs
     }
 
     template<typename archetype_type>
-    inline typename archetype_type::refGroup Registry::createComponent(entity target, archetype_type&& value)
+    inline L_ALWAYS_INLINE typename archetype_type::refGroup Registry::createComponent(entity target, archetype_type&& value)
     {
         return archetype_type::create(target, std::forward<archetype_type>(value));
     }
 
     template<typename archetype_type>
-    inline typename archetype_type::refGroup Registry::createComponent(entity target, const archetype_type& value)
+    inline L_ALWAYS_INLINE typename archetype_type::refGroup Registry::createComponent(entity target, const archetype_type& value)
     {
         return archetype_type::create(target, value);
     }
 
     template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
-    inline typename archetype_type::refGroup Registry::createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN)
+    inline L_ALWAYS_INLINE typename archetype_type::refGroup Registry::createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN)
     {
         return archetype_type::create(target, std::forward<component_type0>(value0), std::forward<component_type1>(value1), std::forward<component_typeN>(valueN)...);
     }
 
     template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
-    inline typename archetype_type::refGroup Registry::createComponent(entity target, const component_type0& value0, const component_type1& value1, const component_typeN&... valueN)
+    inline L_ALWAYS_INLINE typename archetype_type::refGroup Registry::createComponent(entity target, const component_type0& value0, const component_type1& value1, const component_typeN&... valueN)
     {
         return archetype_type::create(target, value0, value1, valueN...);
     }
 
     template<typename component_type0, typename component_type1, typename... component_typeN>
-    inline std::tuple<component_type0&, component_type1&, component_typeN&...> Registry::createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN)
+    inline L_ALWAYS_INLINE std::tuple<component_type0&, component_type1&, component_typeN&...> Registry::createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN)
     {
         return std::make_tuple(std::ref(createComponent<component_type0>(target, std::forward<component_type0>(value0))),
                                std::ref(createComponent<component_type1>(target, std::forward<component_type1>(value1))),
@@ -149,7 +148,7 @@ namespace legion::core::ecs
     }
 
     template<typename component_type0, typename component_type1, typename... component_typeN>
-    inline std::tuple<component_type0&, component_type1&, component_typeN&...> Registry::createComponent(entity target, const component_type0& value0, const component_type1& value1, const component_typeN&... valueN)
+    inline L_ALWAYS_INLINE std::tuple<component_type0&, component_type1&, component_typeN&...> Registry::createComponent(entity target, const component_type0& value0, const component_type1& value1, const component_typeN&... valueN)
     {
         return std::make_tuple(std::ref(createComponent<component_type0>(target, value0)),
                                std::ref(createComponent<component_type1>(target, value1)),

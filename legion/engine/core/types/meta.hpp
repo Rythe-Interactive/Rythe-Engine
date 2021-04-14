@@ -107,14 +107,14 @@ namespace legion::core
     using make_sequence_t = typename make_sequence<T, U, I, Args...>::type;
 
     template<template<typename>typename Compare, typename T, T A, T B>
-    struct compare
+    struct do_compare
     {
         static constexpr inline Compare<T> comp{};
         static constexpr inline bool value = comp(A, B);
     };
 
     template<template<typename>typename Compare, typename T, T A, T B>
-    inline constexpr bool compare_v = compare<Compare, T, A, B>::value;
+    inline constexpr bool do_compare_v = do_compare<Compare, T, A, B>::value;
 
     template<size_type I, typename Type, typename... Types>
     struct element_at : element_at<I - 1, Types...>
