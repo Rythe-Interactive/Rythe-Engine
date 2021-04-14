@@ -38,17 +38,17 @@ namespace legion::physics
         return nextEdge->edgePosition - edgePosition;
     }
 
-    bool HalfEdgeEdge::isVertexVisible(const math::vec3& vert)
+    bool HalfEdgeEdge::isVertexVisible(const math::vec3& vert,float epsilon)
     {
         float distanceToPlane =
             math::pointToPlane(vert, edgePosition, face->normal);
 
-        return distanceToPlane > math::sqrt(math::epsilon<float>());
+        return distanceToPlane > epsilon;
     }
 
-    bool HalfEdgeEdge::isEdgeHorizonFromVertex(const math::vec3& vert)
+    bool HalfEdgeEdge::isEdgeHorizonFromVertex(const math::vec3& vert, float epsilon)
     {
-        return isVertexVisible(vert) && !pairingEdge->isVertexVisible(vert);
+        return isVertexVisible(vert,epsilon) && !pairingEdge->isVertexVisible(vert,epsilon);
     }
 
     void HalfEdgeEdge::DEBUG_drawEdge(const math::mat4& transform, const math::color& debugColor, float time, float width)
@@ -72,7 +72,7 @@ namespace legion::physics
         debug::user_projectDrawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);
     }
 
-    void HalfEdgeEdge::suicidalMergeWithPairing(math::mat4 transform)
+    void HalfEdgeEdge::suicidalMergeWithPairing(math::mat4 transform,  bool shouldDebug)
     {
         //----//
         HalfEdgeFace* mergeFace = pairingEdge->face;
@@ -86,6 +86,16 @@ namespace legion::physics
         HalfEdgeEdge* nextFromCurrentConnection = nextFromCurrent->prevEdge->pairingEdge->prevEdge;
 
         nextFromCurrent->setPrev(nextFromCurrentConnection);
+
+        if (shouldDebug)
+        {
+            prevFromCurrent->DEBUG_drawEdge(transform, math::colors::red,FLT_MAX);
+            prevFromCurrentConnection->DEBUG_drawEdge(transform, math::colors::blue, FLT_MAX);
+
+            nextFromCurrent->DEBUG_drawEdge(transform, math::colors::green, FLT_MAX);
+            nextFromCurrentConnection->DEBUG_drawEdge(transform, math::colors::magenta, FLT_MAX);
+
+        }
 
         face->startEdge = prevFromCurrent;
         face->initializeFace();

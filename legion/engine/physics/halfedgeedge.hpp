@@ -51,10 +51,10 @@ namespace legion::physics
         math::vec3 getLocalEdgeDirection()  const;
 		
 
-        bool isVertexVisible(const math::vec3& vert);
+        bool isVertexVisible(const math::vec3& vert, float epsilon = math::sqrt(math::epsilon<float>()));
         
 
-        bool isEdgeHorizonFromVertex(const math::vec3& vert);
+        bool isEdgeHorizonFromVertex(const math::vec3& vert,float epsilon = math::sqrt(math::epsilon<float>()));
        
 
         void DEBUG_drawEdge(const math::mat4& transform, const math::color& debugColor, float time = 20.0f, float width = 5.0f);
@@ -62,7 +62,7 @@ namespace legion::physics
 
         void DEBUG_drawInsetEdge(const math::vec3 spacing, const math::color& debugColor, float time = 20.0f, float width = 5.0f);
 
-        void suicidalMergeWithPairing(math::mat4 transform);
+        void suicidalMergeWithPairing(math::mat4 transform,bool shouldDebug = false);
        
 
 

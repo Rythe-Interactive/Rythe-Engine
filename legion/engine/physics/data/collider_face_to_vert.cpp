@@ -26,9 +26,13 @@ namespace legion::physics
     }
     void ColliderFaceToVert::populateVectorWithVerts(std::vector<math::vec3>& vertVector)
     {
-        for (auto& vert : outsideVerts)
+        auto& vec = outsideVerts;
+        auto cap = outsideVerts.capacity();
+        auto size = outsideVerts.size();
+       
+        for (size_t i = 0; i < outsideVerts.size(); i++)
         {
-            vertVector.push_back(vert);
+            vertVector.push_back(outsideVerts.at(i));
         }
 
     }

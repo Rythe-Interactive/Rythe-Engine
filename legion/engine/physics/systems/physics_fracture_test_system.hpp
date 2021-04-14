@@ -28,8 +28,6 @@ namespace legion::physics
 
         virtual void colliderDraw(time::span dt);
 
-
-
     private:
 
         void CreateElongatedFloor(math::vec3 position,math::quat rot, math::vec3 scale, rendering::material_handle mat, bool hasCollider =true);

@@ -503,8 +503,8 @@ namespace legion::physics
                 //check if we should merge this vertex
                 if (distanceFromFace > scaledEpsilon)
                 {
-                    mergeVertexToHull(furthestVert, facesWithOutsideVerts
-                        , DEBUG_transform, atDebug);
+                    mergeVertexToHull(furthestVert, facesWithOutsideVerts,
+                        scaledEpsilon, DEBUG_transform, atDebug);
                 }
                 else
                 {
@@ -836,7 +836,7 @@ namespace legion::physics
     }
 
     void PhysicsStatics::findHorizonEdgesFromFaces(const math::vec3& eyePoint, std::vector<HalfEdgeFace*>& faces,
-        std::vector<HalfEdgeEdge*>& outHorizonEdges, math::mat4 DEBUG_transform)
+        std::vector<HalfEdgeEdge*>& outHorizonEdges, float scalingEpsilon, math::mat4 DEBUG_transform)
     {
         //[1] Find first horizon edge
         HalfEdgeEdge* initialHorizon = nullptr;
@@ -892,8 +892,8 @@ namespace legion::physics
 
     }
 
-    void PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts
-        ,math::mat4 DEBUG_transform, bool atDebug)
+    void PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts,
+        float scalingEpsilon,math::mat4 DEBUG_transform, bool atDebug)
     {
         std::vector<math::vec3> unmergedVertices;
         std::vector<HalfEdgeFace*> facesToBeRemoved;
@@ -906,7 +906,9 @@ namespace legion::physics
             const math::vec3& planeCentroid = face->centroid;
             const math::vec3& planeNormal = face->normal;
 
-            if (IsPointAbovePlane(planeNormal, planeCentroid, eyePoint))
+            float distanceToPlane = PointDistanceToPlane(planeNormal, planeCentroid, eyePoint);
+
+            if (distanceToPlane > scalingEpsilon)
             {
                 //face can see vertex, we must remove it from list
                 facesToBeRemoved.push_back(face);
@@ -921,22 +923,24 @@ namespace legion::physics
 
         if (atDebug)
         {
-            /*for (auto face : facesToBeRemoved)
+            for (auto face : facesToBeRemoved)
             {
                 face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
-            }*/
+            }
         }
         
         //identify horizon edges and put them into list
         std::vector<HalfEdgeEdge*> horizonEdges;
-        findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges, DEBUG_transform);
+        findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges,scalingEpsilon, DEBUG_transform);
 
         if (atDebug)
         {
-            /*for (auto edge : horizonEdges)
+           /* for (auto edge : horizonEdges)
             {
                 edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX);
             }*/
+            log::debug("at debug horizon edges {0} ", horizonEdges.size());
+            //return;
         }
 
         //reverse iterate the list to find their pairings, add them to new list
@@ -974,7 +978,14 @@ namespace legion::physics
             if (isFacesCoplanar(establishedFace, newFace))
             {
                 //assert(establishedFace != horizonEdges.at(i)->face);
-                horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform);
+                horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform,atDebug && i == 2);
+
+                if (atDebug && i == 2)
+                {
+                    DebugBreak();
+
+                }
+
                 faceToVertEstablished.populateVectorWithVerts(unmergedVertices);
                 newFaces.at(i) = nullptr;
             }

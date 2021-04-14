@@ -779,12 +779,12 @@ namespace legion::physics
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
         //cube
-        createQuickhullTestObject
-        (math::vec3(0,5.0f,0),cubeH, wireFrameH);
+        //createQuickhullTestObject
+        //(math::vec3(0,5.0f,0),cubeH, wireFrameH);
 
         //cup
-        //createQuickhullTestObject
-        //(math::vec3(5.0f, 5.0f, 0), colaH, wireFrameH);
+        createQuickhullTestObject
+        (math::vec3(5.0f, 5.0f, 0), colaH, wireFrameH);
 
         ////hammer
         //createQuickhullTestObject
@@ -881,13 +881,11 @@ namespace legion::physics
         for (auto face : collider->GetHalfEdgeFaces())
         {
             //populate localVert
-            log::debug("object draw");
             math::vec3 localCentroid = face->centroid;
             std::vector<math::vec3> localVert;
 
             auto populateVectorLambda = [&localVert](physics::HalfEdgeEdge* edge)
             {
-                log::debug("edge {}", math::to_string(edge->edgePosition));
                 localVert.push_back(edge->edgePosition);
             };
 
@@ -905,7 +903,6 @@ namespace legion::physics
             {
                 vertices.push_back(localVert.at(i));
                 vertices.push_back(localVert.at((i + 1) % localVert.size()));
-                log::debug("using {},{}", i, (i + 1));
                 vertices.push_back(localCentroid);
             }
 
