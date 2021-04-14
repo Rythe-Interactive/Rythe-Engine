@@ -2,6 +2,8 @@
 #include <tuple>
 #include <variant>
 #include <functional>
+#include <type_traits>
+
 #include <core/platform/platform.hpp>
 #include <core/types/primitives.hpp>
 #include <core/types/meta.hpp>
@@ -60,7 +62,9 @@ namespace legion::core::ecs
         std::variant<handleGroup, copyGroup> underlying;
 
         static refGroup create(entity ent);
-        static refGroup create(entity ent, component_type&& defaultValue, component_types&&... defaultValues);
+        template<typename component_type0, typename... component_typeN>
+        static refGroup create(entity ent, component_type0&& value0, component_typeN&&... valueN);
+        static refGroup create(entity ent, archetype&& value);
 
         L_NODISCARD static refGroup get(entity ent);
         static void destroy(entity ent);

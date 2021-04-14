@@ -165,6 +165,16 @@ namespace legion::core::ecs
         template<typename component_type>
         static component_type& createComponent(entity target, const component_type& value);
 
+        template<typename archetype_type>
+        static typename archetype_type::refGroup createComponent(entity target, archetype_type&& value);
+        template<typename archetype_type>
+        static typename archetype_type::refGroup createComponent(entity target, const archetype_type& value);
+
+        template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
+        static typename archetype_type::refGroup createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
+        template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
+        static typename archetype_type::refGroup createComponent(entity target, const component_type0& value0, const component_type1& value1, const component_typeN&... valueN);
+
         template<typename component_type0, typename component_type1, typename... component_typeN>
         static std::tuple<component_type0&, component_type1&, component_typeN&...> createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
         template<typename component_type0, typename component_type1, typename... component_typeN>

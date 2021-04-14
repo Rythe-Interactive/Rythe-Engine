@@ -81,6 +81,74 @@ static void TestECS()
         ent2.destroy();
     }
 
+    LEGION_SUBTEST("Multi-op and archetypes")
+    {
+        auto ent = ecs::Registry::createEntity();
+        id_type entId = ent;
+
+        L_CHECK(ent);
+        L_CHECK(ent != invalid_id);
+        L_CHECK(ent != nullptr);
+        L_CHECK(!(ent == nullptr));
+
+        L_CHECK(ent == ent->id);
+        L_CHECK(!ent.has_component<test_comp>());
+
+        auto comp = ent.add_component<test_comp>();
+        L_CHECK(comp);
+        L_CHECK(ent.has_component<test_comp>());
+        L_CHECK(comp->value == 0);
+        comp->value++;
+        L_CHECK(comp->value == 1);
+        L_CHECK(ecs::component_pool<test_comp>::contains_direct(entId));
+        L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
+
+        auto comp2 = ent.get_component<test_comp>();
+        L_CHECK(comp2);
+        L_CHECK(comp2 == comp);
+        L_CHECK(comp2->value == 1);
+        comp2->value++;
+        L_CHECK(comp->value == 2);
+
+        ent.remove_component<test_comp>();
+        L_CHECK(!comp);
+        L_CHECK(!comp2);
+        L_CHECK(!ent.has_component<test_comp>());
+        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(entId));
+        L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
+
+        ent.add_component<test_comp>();
+        L_CHECK(comp);
+        L_CHECK(comp2);
+
+        auto& val = comp.get();
+        L_CHECK(val.value == 0);
+        val.value++;
+        L_CHECK(comp->value == 1);
+
+        comp.destroy();
+        L_CHECK(!comp);
+        L_CHECK(!ent.has_component<test_comp>());
+        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(entId));
+        L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
+
+        ent.add_component<test_comp>();
+        L_CHECK(ecs::component_pool<test_comp>::contains_direct(entId));
+        L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
+        ent.destroy();
+        L_CHECK(!ent);
+        L_CHECK(ent == invalid_id);
+        L_CHECK(ent == nullptr);
+        L_CHECK(!(ent != nullptr));
+        L_CHECK(!ecs::component_pool<test_comp>::contains_direct(entId));
+        L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<test_comp>()));
+
+        auto ent2 = ecs::Registry::createEntity();
+        L_CHECK(ent2 == ent);
+        L_CHECK(!ent.has_component<test_comp>());
+        ent2.destroy();
+    }
+
     LEGION_SUBTEST("Hierarchy")
     {
         auto parent = ecs::Registry::createEntity();
