@@ -59,9 +59,15 @@ namespace legion::core::serialization
         template<typename type>
         static json serialize(type t)
         {
-            auto temp = component_prototype<type>(t);
-            log::debug(temp.names[0]);
-            json j = { {temp.names[0].c_str(),std::get<0>(temp.values)} };
+            component_prototype<type> temp = component_prototype<type>(t);
+            json j;
+            j["Type ID"] = type_hash<type>().local();
+            log::debug(type_hash<type>().local());
+            log::debug(type_hash<type>().local_name());
+            for (int i = 0; i < std::tuple_size<type>(temp.values); i++)
+            {
+                j += {temp.names[i], std::get<i>(temp.values)} ;
+            }
             return j;
         }
 
@@ -72,9 +78,15 @@ namespace legion::core::serialization
         template<typename type>
         static std::unique_ptr<component_prototype<type>> deserialize(json j)
         {
-            std::unique_ptr<component_prototype<type>> prototype;
-            log::debug(prototype->names[0]);
-            return prototype;
+            id_type id = j["Type ID"];
+            type out_type;
+      /*      for (int i = 1; i < j.size(); i++)
+            {
+                out_type[i] = j[i];
+            }*/
+
+            component_prototype<type> prototype(out_type);
+            return std::make_unique<component_prototype<type>>(prototype);
         }
     };
 

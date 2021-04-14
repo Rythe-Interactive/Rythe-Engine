@@ -23,17 +23,16 @@ public:
             createEntity().add_component<example_component>();
 
         serialization::SerializationRegistry::register_component<example_component>();
+        example_component test;
+        test.value = 10;
+        auto j = serialization::json_serializer::serialize<example_component>(test);
+        auto output = serialization::SerializationRegistry::getPrototype(j);
     }
 
     void update(legion::time::span deltaTime)
     {
         using namespace legion;
         ecs::filter<example_component> filter;
-        example_component test;
-        test.value = 10;
-        auto j = serialization::json_serializer::serialize<example_component>(test);
-        auto output = serialization::SerializationRegistry::getPrototype(j);
-       //log::debug(output->names[0]);
 
         static size_type sum = 0;
 
