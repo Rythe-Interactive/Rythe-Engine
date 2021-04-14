@@ -276,6 +276,9 @@ namespace legion::core::ecs
         template<typename component_type0, typename component_type1, typename... component_typeN>
         component_tuple<component_type0, component_type1, component_typeN...> add_component();
 
+        template<typename archetype_type>
+        typename archetype_type::handleGroup add_component();
+
         /**@brief Adds a precreated component of a certain type to this entity.
          * @tparam component_type Type of the component to add.
          * @param value Component value to use.
@@ -285,11 +288,19 @@ namespace legion::core::ecs
         component<remove_cvr_t<component_type>> add_component(component_type&& value);
         template<typename component_type>
         component<component_type> add_component(const component_type& value);
+
+        template<typename archetype_type>
+        typename archetype_type::handleGroup add_component(archetype_type&& value);
+        template<typename archetype_type>
+        typename archetype_type::handleGroup add_component(const archetype_type& value);
         
         template<typename component_type0, typename component_type1, typename... component_typeN>
         component_tuple<component_type0, component_type1, component_typeN...> add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
         template<typename component_type0, typename component_type1, typename... component_typeN>
         component_tuple<component_type0, component_type1, component_typeN...> add_component(const component_type0& value0, const component_type1& value1, const component_typeN&... valueN);
+
+        template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
+        typename archetype_type::handleGroup add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
 
         /**@brief Creates and adds a new component of a certain type to this entity. Component is serialized from a prototype.
          * @tparam component_type Type of the component to add.
