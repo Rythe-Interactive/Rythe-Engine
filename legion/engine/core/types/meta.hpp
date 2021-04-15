@@ -119,7 +119,6 @@ namespace legion::core
     template<size_type I, typename Type, typename... Types>
     struct element_at : element_at<I - 1, Types...>
     {
-        static_assert(I > (sizeof...(Types) + 1), "Index beyond template paremeter list size.");
     };
 
     template<typename Type, typename... Types>

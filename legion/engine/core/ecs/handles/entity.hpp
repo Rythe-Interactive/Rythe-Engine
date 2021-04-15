@@ -4,6 +4,8 @@
 #include <core/types/types.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 
+#include <core/ecs/meta/meta.hpp>
+
 /**
  * @file entity.hpp
  */
@@ -42,7 +44,7 @@ namespace legion::core::ecs
     using entity_set = hashed_sparse_set<entity>;
 
     template<typename... component_types>
-    using component_tuple = std::tuple<component<remove_cvr_t<component_types>>...>;
+    using component_tuple = std::tuple<std::conditional_t<maybe_component_v<component_types>, component<remove_cvr_t<component_types>>, remove_cvr_t<component_types>>...>;
 
     static constexpr id_type world_entity_id = 1;
 
@@ -271,13 +273,10 @@ namespace legion::core::ecs
          * @return Component handle to the component.
          */
         template<typename component_type>
-        component<component_type> add_component();
+        wrap_component_t<component_type> add_component();
 
         template<typename component_type0, typename component_type1, typename... component_typeN>
         component_tuple<component_type0, component_type1, component_typeN...> add_component();
-
-        template<typename archetype_type>
-        typename archetype_type::handleGroup add_component();
 
         /**@brief Adds a precreated component of a certain type to this entity.
          * @tparam component_type Type of the component to add.
@@ -285,15 +284,10 @@ namespace legion::core::ecs
          * @return Component handle to the component.
          */
         template<typename component_type>
-        component<remove_cvr_t<component_type>> add_component(component_type&& value);
+        wrap_component_t<component_type> add_component(component_type&& value);
         template<typename component_type>
-        component<component_type> add_component(const component_type& value);
-
-        template<typename archetype_type>
-        typename archetype_type::handleGroup add_component(archetype_type&& value);
-        template<typename archetype_type>
-        typename archetype_type::handleGroup add_component(const archetype_type& value);
-        
+        wrap_component_t<component_type> add_component(const component_type& value);
+                
         template<typename component_type0, typename component_type1, typename... component_typeN>
         component_tuple<component_type0, component_type1, component_typeN...> add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
         template<typename component_type0, typename component_type1, typename... component_typeN>

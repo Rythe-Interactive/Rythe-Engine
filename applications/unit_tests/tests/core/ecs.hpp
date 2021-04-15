@@ -95,7 +95,9 @@ static void TestECS()
         L_CHECK(ent == ent->id);
         L_CHECK(!ent.has_component<test_comp>());
 
-        auto [comp, pos, rot, scl] = ent.add_component<test_comp, position, rotation, scale>();
+        auto [comp, transf] = ent.add_component<test_comp, transform>();
+        auto [pos, rot, scal] = transf;
+
         L_CHECK(comp);
         L_CHECK(ent.has_component<test_comp>());
         L_CHECK(comp->value == 0);

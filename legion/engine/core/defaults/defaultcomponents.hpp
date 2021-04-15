@@ -119,27 +119,40 @@ namespace legion::core
 
     };
 
-    //struct transform : public ecs::archetype<position, rotation, scale>
-    //{
-    //    using base = ecs::archetype<position, rotation, scale>;
-    //    using base::archetype;
+    struct transform : public ecs::archetype<position, rotation, scale>
+    {
+        using base = ecs::archetype<position, rotation, scale>;
+        using base::archetype;
 
-    //    L_NODISCARD math::mat4 get_world_to_local_matrix()
-    //    {
-    //        OPTICK_EVENT();
-    //        return math::inverse(get_local_to_world_matrix());
-    //    }
+        L_NODISCARD math::mat4 from_world_matrix()
+        {
+            return math::inverse(to_world_matrix());
+        }
 
-    //    L_NODISCARD math::mat4 get_local_to_world_matrix();
+        L_NODISCARD math::mat4 to_world_matrix()
+        {
+            OPTICK_EVENT();
+            if (owner->parent)
+            {
+                transform parentTrans = owner->parent.get_component<transform>();
+                return parentTrans.to_world_matrix() * to_parent_matrix();
+            }
+            return to_parent_matrix();
+        }
 
-    //    L_NODISCARD math::mat4 get_local_to_parent_matrix()
-    //    {
-    //        OPTICK_EVENT();
-    //        auto [position, rotation, scale] = get_local_components();
-    //        return math::compose(scale, rotation, position);
-    //    }
+        L_NODISCARD math::mat4 from_parent_matrix()
+        {
+            return math::inverse(to_parent_matrix());
+        }
 
-    //};
+        L_NODISCARD math::mat4 to_parent_matrix()
+        {
+            OPTICK_EVENT();
+            auto [position, rotation, scale] = values();
+            return math::compose(scale, rotation, position);
+        }
+
+    };
 
     struct velocity : public math::vec3
     {
@@ -182,6 +195,54 @@ ManualReflector(legion::core::scale, x, y, z);
 ManualReflector(legion::core::velocity, x, y, z);
 ManualReflector(legion::core::mesh_filter, id);
 
+#if !defined(DOXY_EXCLUDE)
+namespace std // NOLINT(cert-dcl58-cpp)
+{
+    template <::std::size_t I>
+    struct tuple_element<I, legion::core::transform>
+    {
+        using type = typename legion::core::element_at_t<I, legion::core::position, legion::core::rotation, legion::core::scale>;
+    };
+
+    template <::std::size_t I>
+    legion::core::element_at_t<I, legion::core::position, legion::core::rotation, legion::core::scale>&
+        get(legion::core::transform& val)
+    {
+        return val.get<0>();
+    }
+
+    template <class X>
+    X& get(legion::core::transform& val)
+    {
+        return val.get<X>();
+    }
+
+    template<>
+    struct tuple_size<legion::core::transform>
+        : public std::integral_constant<std::size_t, 3>
+    {
+    };
+
+    template<>
+    struct tuple_size<const legion::core::transform>
+        : public std::integral_constant<std::size_t, 3>
+    {
+    };
+
+    template<>
+    struct tuple_size<volatile legion::core::transform>
+        : public std::integral_constant<std::size_t, 3>
+    {
+    };
+
+    template<>
+    struct tuple_size<const volatile legion::core::transform>
+        : public std::integral_constant<std::size_t, 3>
+    {
+    };
+
+}
+#endif
 
 #if !defined(DOXY_EXCLUDE)
 namespace fmt

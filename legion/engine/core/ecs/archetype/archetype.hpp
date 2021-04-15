@@ -8,6 +8,8 @@
 #include <core/types/primitives.hpp>
 #include <core/types/meta.hpp>
 
+#include <core/ecs/handles/entity.hpp>
+
 /**
  * @file archetype.hpp
  */
@@ -16,8 +18,6 @@ namespace legion::core::ecs
 {
     template<typename component_type>
     struct component;
-
-    struct entity;
 
     class Registry;
 
@@ -35,29 +35,48 @@ namespace legion::core::ecs
     {
         friend class legion::core::ecs::Registry;
         friend struct legion::core::ecs::entity;
+        template<typename X>
+        friend X& std::get(archetype&);
+        template<size_type I>
+        friend element_at_t<I, component_type, component_types...>& std::get(archetype&);
     public:
         using handleGroup = std::tuple<component<component_type>, component<component_types>...>;
         using refGroup = std::tuple<component_type&, component_types&...>;
         using copyGroup = std::tuple<const component_type&, const component_types&...>;
 
-        archetype() = default;
+        entity owner;
+
+        archetype() noexcept = default;
+        archetype(const archetype&) noexcept;
+        archetype(archetype&&) noexcept;
         archetype(const handleGroup& handles) noexcept;
 
         explicit archetype(const component_type& comp, const component_types&... comps) noexcept;
 
+        archetype& operator=(const archetype& src);
+        archetype& operator=(archetype&& src);
+
         /**@brief Get the handle to one of the components in the archetype.
          */
         template<typename T>
-        L_NODISCARD T& get() noexcept;
+        L_NODISCARD T& get();
 
-        L_NODISCARD refGroup get() noexcept;
+        L_NODISCARD refGroup get();
 
         template<std::size_t I>
-        L_NODISCARD element_at_t<I, component_type, component_types...>& get() noexcept;
+        L_NODISCARD element_at_t<I, component_type, component_types...>& get();
 
-        L_NODISCARD bool valid() const noexcept;
+        L_NODISCARD handleGroup handles();
+        L_NODISCARD refGroup values();
 
-        L_NODISCARD operator bool() const noexcept;
+        L_NODISCARD bool valid() const;
+
+        L_NODISCARD operator bool() const;
+
+        L_NODISCARD static handleGroup get_handles(entity ent);
+        L_NODISCARD static refGroup get(entity ent);
+        static void destroy(entity ent);
+        L_NODISCARD static bool has(entity ent);
 
     private:
         std::variant<handleGroup, copyGroup> underlying;
@@ -66,11 +85,6 @@ namespace legion::core::ecs
         template<typename component_type0, typename... component_typeN>
         static refGroup create(entity ent, component_type0&& value0, component_typeN&&... valueN);
         static refGroup create(entity ent, archetype&& value);
-
-        L_NODISCARD static refGroup get(entity ent);
-        L_NODISCARD static handleGroup get_handles(entity ent);
-        static void destroy(entity ent);
-        L_NODISCARD static bool has(entity ent);
     };
 
     template<typename component_type, typename... component_types>
@@ -105,17 +119,17 @@ namespace std // NOLINT(cert-dcl58-cpp)
         using type = typename legion::core::element_at_t<I, Arg, Args...>;
     };
 
-    template <::std::size_t I, class... Args>
-    tuple_element<I, legion::core::ecs::archetype<Args...>>
-        get(legion::core::ecs::archetype<Args...>& val)
+    template <::std::size_t I, class Arg, class... Args>
+    legion::core::element_at_t<I, Arg, Args...>&
+        get(legion::core::ecs::archetype<Arg, Args...>& val)
     {
-        return val.template get<I>();
+        return std::get<I>(std::get<0>(val.underlying));
     }
 
     template <class X, class ... Args>
-    legion::core::ecs::component<X> get(legion::core::ecs::archetype<Args...>& val)
+    X& get(legion::core::ecs::archetype<Args...>& val)
     {
-        return val.template get<X>();
+        return std::get<legion::core::ecs::component<X>>(std::get<0>(val.underlying));
     }
 
     template <class... Types>
