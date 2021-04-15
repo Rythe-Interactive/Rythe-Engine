@@ -461,7 +461,8 @@ namespace legion::physics
         }
 
         //epsilon must take into account span of vertices
-        const float scaledEpsilon = (maxInDimension.x + maxInDimension.y + maxInDimension.z) * initialEpsilon;
+        float dimensionSum = (maxInDimension.x + maxInDimension.y + maxInDimension.z);
+        const float scaledEpsilon = dimensionSum * initialEpsilon;
 
         std::vector<HalfEdgeFace*> faces;
         faces.reserve(4);
@@ -485,8 +486,6 @@ namespace legion::physics
             PointerEncapsulator< ColliderFaceToVert> currentFaceToVert;
             currentFaceToVert.ptr = &facesWithOutsideVerts.front();
    
-            int safetyInt = 0;
-
             while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
             {
                 if (currentDraw >= maxDraw) { break; }
@@ -925,7 +924,7 @@ namespace legion::physics
         {
             for (auto face : facesToBeRemoved)
             {
-                face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
+                //face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
             }
         }
         
@@ -978,18 +977,32 @@ namespace legion::physics
             if (isFacesCoplanar(establishedFace, newFace))
             {
                 //assert(establishedFace != horizonEdges.at(i)->face);
-                horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform,atDebug && i == 2);
-
-                if (atDebug && i == 2)
-                {
-                    DebugBreak();
-
-                }
+                horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform);
 
                 faceToVertEstablished.populateVectorWithVerts(unmergedVertices);
                 newFaces.at(i) = nullptr;
+                horizonEdges.at(i) = nullptr;
             }
         }
+
+        //for each edge in horizon edge
+            //if edge is available
+        for (size_t i = 0; i < horizonEdges.size(); i++)
+        {
+            size_t next = (i+1) % horizonEdges.size();
+
+            auto nextEdge = horizonEdges.at(next);
+
+            if (newFaces.at(i) && newFaces.at(next))
+            {
+                if (isFacesCoplanar(newFaces.at(i), newFaces.at(next)))
+                {
+                    nextEdge->pairingEdge->prevEdge->suicidalMergeWithPairing(DEBUG_transform);
+                    newFaces.at(i) = nullptr;
+                }
+            }
+        }
+
 
         {
             std::vector<HalfEdgeFace*> tempNewFaces = std::move(newFaces);
@@ -1014,7 +1027,7 @@ namespace legion::physics
 
     bool PhysicsStatics::isFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second)
     {
-        static float angle = math::cos(math::radians(8.0f));
+        static float angle = math::cos(math::radians(10.0f));
 
         float dotResult = math::dot(first->normal,second->normal);
         return dotResult > angle;

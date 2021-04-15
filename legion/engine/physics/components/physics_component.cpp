@@ -21,7 +21,7 @@ namespace legion::physics
         math::mat4 DEBUG_transform)
     {
         const auto& vertices = meshHandle.get().second.vertices;
-        auto collider = PhysicsStatics::GenerateConvexHull(vertices, DEBUG_stepMax,4, DEBUG_transform);
+        auto collider = PhysicsStatics::GenerateConvexHull(vertices, DEBUG_stepMax,2, DEBUG_transform);
 
         if (collider)
         {
