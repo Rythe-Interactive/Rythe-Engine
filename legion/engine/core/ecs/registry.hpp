@@ -16,6 +16,7 @@
 #include <core/ecs/handles/component.hpp>
 #include <core/ecs/data/entity_data.hpp>
 #include <core/ecs/prototypes/entity_prototype.hpp>
+#include <core/ecs/meta/meta.hpp>
 
 /**
  * @file registry.hpp

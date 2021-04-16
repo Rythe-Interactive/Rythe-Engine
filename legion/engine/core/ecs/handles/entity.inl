@@ -22,7 +22,7 @@ namespace legion::core::ecs
             if constexpr (maybe_component_v<component_type>)
                 return std::make_tuple(component<remove_cvr_t<component_type>>{ {}, target });
             else
-                return component_type::get_handles(target);
+                return std::make_tuple(component_type::get_handles(target));
         }
 
         template<typename component_type>

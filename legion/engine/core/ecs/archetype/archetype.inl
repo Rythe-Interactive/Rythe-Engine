@@ -27,7 +27,7 @@ namespace legion::core::ecs
     inline archetype<component_type, component_types...>& archetype<component_type, component_types...>::operator=(const archetype& src)
     {
         owner = src.owner;
-        underlying = src.underlying;
+        underlying = std::get<0>(src.underlying);
         return *this;
     }
 
@@ -35,7 +35,7 @@ namespace legion::core::ecs
     inline archetype<component_type, component_types...>& archetype<component_type, component_types...>::operator=(archetype&& src)
     {
         owner = std::move(src.owner);
-        underlying = std::move(src.underlying);
+        underlying = std::move(std::get<0>(src.underlying));
         return *this;
     }
 
