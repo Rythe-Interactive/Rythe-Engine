@@ -40,16 +40,17 @@ namespace legion::core::ecs
         template<size_type I>
         friend element_at_t<I, component_type, component_types...>& std::get(archetype&);
     public:
-        using handleGroup = std::tuple<component<component_type>, component<component_types>...>;
-        using refGroup = std::tuple<component_type&, component_types&...>;
-        using copyGroup = std::tuple<const component_type&, const component_types&...>;
+        using handle_group = std::tuple<component<component_type>, component<component_types>...>;
+        using const_handle_group = std::tuple<const component<component_type>, const component<component_types>...>;
+        using ref_group = std::tuple<component_type&, component_types&...>;
+        using copy_group = std::tuple<const component_type&, const component_types&...>;
 
         entity owner;
 
         archetype() noexcept = default;
         archetype(const archetype&) noexcept;
         archetype(archetype&&) noexcept;
-        archetype(const handleGroup& handles) noexcept;
+        archetype(const handle_group& handles) noexcept;
 
         explicit archetype(const component_type& comp, const component_types&... comps) noexcept;
 
@@ -61,30 +62,34 @@ namespace legion::core::ecs
         template<typename T>
         L_NODISCARD T& get();
 
-        L_NODISCARD refGroup get();
+        L_NODISCARD ref_group get();
 
         template<std::size_t I>
         L_NODISCARD element_at_t<I, component_type, component_types...>& get();
 
-        L_NODISCARD handleGroup handles();
-        L_NODISCARD refGroup values();
+        L_NODISCARD handle_group handles();
+        L_NODISCARD const_handle_group handles() const;
+        L_NODISCARD ref_group values();
 
         L_NODISCARD bool valid() const;
 
         L_NODISCARD operator bool() const;
 
-        L_NODISCARD static handleGroup get_handles(entity ent);
-        L_NODISCARD static refGroup get(entity ent);
+        void destroy();
+
+        L_NODISCARD static handle_group get_handles(entity ent);
+        L_NODISCARD static const_handle_group get_const_handles(entity ent);
+        L_NODISCARD static ref_group get(entity ent);
         static void destroy(entity ent);
         L_NODISCARD static bool has(entity ent);
 
     private:
-        std::variant<handleGroup, copyGroup> underlying;
+        std::variant<handle_group, copy_group> underlying;
 
-        static refGroup create(entity ent);
+        static ref_group create(entity ent);
         template<typename component_type0, typename... component_typeN>
-        static refGroup create(entity ent, component_type0&& value0, component_typeN&&... valueN);
-        static refGroup create(entity ent, archetype&& value);
+        static ref_group create(entity ent, component_type0&& value0, component_typeN&&... valueN);
+        static ref_group create(entity ent, archetype&& value);
     };
 
     template<typename component_type, typename... component_types>

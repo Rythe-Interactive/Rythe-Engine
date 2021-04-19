@@ -72,6 +72,8 @@ namespace legion::core::ecs
     public:
         static sparse_map<id_type, component_type> m_components;
 
+        static void reserve(size_type size);
+
         virtual void clear();
 
         /**@brief Creates a component attached to a certain entity.

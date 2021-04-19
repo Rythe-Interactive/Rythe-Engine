@@ -11,6 +11,12 @@ namespace legion::core::ecs
     sparse_map<id_type, component_type> component_pool<component_type>::m_components = sparse_map<id_type, component_type>(125);
 
     template<typename component_type>
+    inline L_ALWAYS_INLINE void component_pool<component_type>::reserve(size_type size)
+    {
+        m_components.reserve(size);
+    }
+
+    template<typename component_type>
     inline L_ALWAYS_INLINE void component_pool<component_type>::clear()
     {
         m_components.clear();

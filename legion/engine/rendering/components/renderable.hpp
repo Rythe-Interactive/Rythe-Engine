@@ -41,7 +41,7 @@ namespace legion::rendering
         using base = ecs::archetype<mesh_filter, mesh_renderer>;
 
         mesh_renderable() = default;
-        mesh_renderable(const base::handleGroup& handles) : base(handles) {}
+        mesh_renderable(const base::handle_group& handles) : base(handles) {}
 
         model_handle get_model()
         {

@@ -43,9 +43,6 @@ namespace legion::core::ecs
 {
     using entity_set = hashed_sparse_set<entity>;
 
-    template<typename... component_types>
-    using component_tuple = std::tuple<std::conditional_t<maybe_component_v<component_types>, component<remove_cvr_t<component_types>>, remove_cvr_t<component_types>>...>;
-
     static constexpr id_type world_entity_id = 1;
 
     struct entity_data;
@@ -294,7 +291,7 @@ namespace legion::core::ecs
         component_tuple<component_type0, component_type1, component_typeN...> add_component(const component_type0& value0, const component_type1& value1, const component_typeN&... valueN);
 
         template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
-        typename archetype_type::handleGroup add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
+        typename archetype_type::handle_group add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
 
         /**@brief Creates and adds a new component of a certain type to this entity. Component is serialized from a prototype.
          * @tparam component_type Type of the component to add.
@@ -312,20 +309,29 @@ namespace legion::core::ecs
          */
         template<typename component_type>
         L_NODISCARD bool has_component() const;
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        L_NODISCARD bool has_component() const;
 
         /**@brief Gets a component handle to a certain component on this entity. 
          * @tparam component_type Type of the component to get.
          * @return Component handle to the component.
          */
         template<typename component_type>
-        L_NODISCARD component<component_type> get_component();
+        L_NODISCARD wrap_component_t<component_type> get_component();
         template<typename component_type>
-        L_NODISCARD const component<component_type> get_component() const;
+        L_NODISCARD const_wrap_component_t<component_type> get_component() const;
+
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        L_NODISCARD component_tuple<component_type0, component_type1, component_typeN...> get_component();
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        L_NODISCARD const_component_tuple<component_type0, component_type1, component_typeN...> get_component() const;
 
         /**@brief Removes and destroys a component from this entity.
          * @tparam component_type Type of the component to remove.
          */
         template<typename component_type>
+        void remove_component();
+        template<typename component_type0, typename component_type1, typename... component_typeN>
         void remove_component();
     };
 }
