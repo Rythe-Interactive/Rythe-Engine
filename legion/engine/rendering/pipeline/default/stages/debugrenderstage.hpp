@@ -16,7 +16,7 @@ namespace legion::rendering
         static void startDebugDomain();
         static void endDebugDomain();
 
-        void drawDebugLine(events::event_base* event);
+        void drawDebugLine(events::event_base& event);
 
         virtual void setup(app::window& context) override;
         virtual void render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime) override;

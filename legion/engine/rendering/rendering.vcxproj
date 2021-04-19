@@ -17,7 +17,6 @@
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
-    <ClCompile Include="data\particle_system_cache.cpp" />
     <ClCompile Include="data\postprocessingeffect.cpp" />
     <ClCompile Include="data\renderbuffer.cpp" />
     <ClCompile Include="data\shader.cpp" />
@@ -52,7 +51,6 @@
     <ClCompile Include="pipeline\gui\stages\imguirenderstage.cpp" />
     <ClCompile Include="pipeline\default\stages\postprocessingstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
-    <ClCompile Include="data\particle_system_base.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
     <ClCompile Include="util\ini.c" />
     <ClCompile Include="util\matini.cpp" />
@@ -60,14 +58,8 @@
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\light.hpp" />
-    <ClInclude Include="components\lod.hpp" />
-    <ClInclude Include="components\particle.hpp" />
-    <ClInclude Include="components\particle_emitter.hpp" />
     <ClInclude Include="components\point.hpp" />
     <ClInclude Include="components\pointcloud_renderable.hpp" />
-    <ClInclude Include="components\point_cloud.hpp" />
-    <ClInclude Include="components\point_cloud_particle_container.hpp" />
-    <ClInclude Include="components\point_emitter_data.hpp" />
     <ClInclude Include="data\Octree.hpp" />
     <ClInclude Include="data\postprocessingeffect.hpp" />
     <ClInclude Include="data\screen_quad.hpp" />
@@ -79,14 +71,11 @@
     <ClInclude Include="pipeline\default\stages\debugrenderstage.hpp" />
     <ClInclude Include="pipeline\default\stages\postprocessingstage.hpp" />
     <ClInclude Include="pipeline\gui\stages\imguirenderstage.hpp" />
-    <ClInclude Include="systems\lod_manager.hpp" />
-    <ClInclude Include="systems\pointcloudgeneration.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\buffer.hpp" />
     <ClInclude Include="data\framebuffer.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
-    <ClInclude Include="data\particle_system_cache.hpp" />
     <ClInclude Include="data\renderbuffer.hpp" />
     <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="data\vertexarray.hpp" />
@@ -103,14 +92,11 @@
     <ClInclude Include="pipeline\default\stages\meshrenderstage.hpp" />
     <ClInclude Include="pipeline\default\stages\submitstage.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
-    <ClInclude Include="systems\particle_system_manager.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
     <ClInclude Include="pipeline\base\pipelinebase.hpp" />
     <ClInclude Include="pipeline\base\renderstage.hpp" />
     <ClInclude Include="rendering.hpp" />
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
-    <ClInclude Include="data\particle_system_base.hpp" />
-    <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="util\bindings.hpp" />
     <ClInclude Include="util\gui.hpp" />
     <ClInclude Include="util\matini.hpp" />
@@ -159,7 +145,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediates\$(Platform)\$(Configuration)\engine\$(ProjectName)\</IntDir>
-    <TargetName>legion-$(ProjectName)</TargetName>
+    <TargetName>legion-$(ProjectName)-d</TargetName>
     <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
   </PropertyGroup>

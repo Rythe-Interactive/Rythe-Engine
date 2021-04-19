@@ -16,10 +16,6 @@ namespace legion::rendering
         sparse_map<id_type, framebuffer> m_framebuffers;
         sparse_map<id_type, std::any> m_metadata;
 
-        static ecs::EcsRegistry* m_ecs;
-        static schd::Scheduler* m_scheduler;
-        static events::EventBus* m_eventBus;
-
         bool m_abort;
 
         static std::atomic_bool m_exiting;

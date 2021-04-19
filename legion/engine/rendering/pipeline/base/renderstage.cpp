@@ -3,9 +3,6 @@
 
 namespace legion::rendering
 {
-    ecs::EcsRegistry* RenderStageBase::m_ecs;
-    schd::Scheduler* RenderStageBase::m_scheduler;
-    events::EventBus* RenderStageBase::m_eventBus;
     RenderPipelineBase* RenderStageBase::m_pipeline;
 
     void RenderStageBase::abort()

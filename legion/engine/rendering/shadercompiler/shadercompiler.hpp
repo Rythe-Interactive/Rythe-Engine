@@ -22,13 +22,13 @@ namespace legion::rendering
         template<class owner_type, void(owner_type::* func_type)(const std::string&, log::severity)>
         static void setErrorCallback(owner_type* instance = nullptr)
         {
-            m_callback = delegate<void(const std::string&, log::severity)>::template create<owner_type, func_type>(instance);
+            m_callback = delegate<void(const std::string&, log::severity)>::template from<owner_type, func_type>(instance);
         }
 
         template<class owner_type, void(owner_type::* func_type)(const std::string&, log::severity) const>
         static void setErrorCallback(const owner_type* instance)
         {
-            m_callback = delegate<void(const std::string&, log::severity)>::template create<owner_type, func_type>(instance);
+            m_callback = delegate<void(const std::string&, log::severity)>::template from<owner_type, func_type>(instance);
         }
 
         static void setErrorCallback(const delegate<void(const std::string&, log::severity)>& func)
@@ -39,13 +39,13 @@ namespace legion::rendering
         template<typename lambda_type CNDOXY(std::enable_if_t<!std::is_same_v<std::remove_reference_t<lambda_type>, delegate<void(const std::string&, log::severity)>>, int> = 0)>
         static void setErrorCallback(const lambda_type& lambda)
         {
-            m_callback = delegate<void(const std::string&, log::severity)>::template create<lambda_type>(lambda);
+            m_callback = lambda;
         }
 
         template <void(*func_type)(const std::string&, log::severity)>
         static void setErrorCallback()
         {
-            m_callback = delegate<void(const std::string&, log::severity)>::template create<func_type>();
+            m_callback = delegate<void(const std::string&, log::severity)>::template from<func_type>();
         }
 
         static void cleanCache();

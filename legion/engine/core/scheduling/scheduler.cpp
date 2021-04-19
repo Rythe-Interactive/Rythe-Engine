@@ -87,8 +87,12 @@ namespace legion::core::scheduling
         OPTICK_FRAME("Main thread");
 
         time::span dt{ deltaTime };
+        m_onFrameStart(dt, time::span(Clock::elapsedSinceTickStart()));
+
         for (auto [_, chain] : m_processChains)
             chain.runInCurrentThread(dt);
+
+        m_onFrameEnd(dt, time::span(Clock::elapsedSinceTickStart()));
     }
 
     pointer<std::thread> Scheduler::getThread(std::thread::id id)

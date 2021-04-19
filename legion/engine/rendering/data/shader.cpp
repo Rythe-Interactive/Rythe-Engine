@@ -14,7 +14,6 @@ namespace legion::rendering
         return &m_shaders[id];
     }
 
-
     void ShaderCache::process_io(shader& shader, id_type id)
     {
         for (auto& [_, variant] : shader.m_variants)
@@ -361,7 +360,7 @@ namespace legion::rendering
         }
         else
         {
-            switch (settings.usePrecompiledIfAvailable)
+            switch (settings.usePrecompiledIfAvailable) // Clean up this monster function...
             {
             case true:
             {

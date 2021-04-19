@@ -292,7 +292,7 @@ static void TestECS()
     LEGION_SUBTEST("Create 1000 entities")
     {
         for (int i = 0; i < 1000; i++)
-            DoNotOptimize(ecs::Registry::createEntity());
+            (void)ecs::Registry::createEntity();
     }
 
     LEGION_SUBTEST("Destroy all entities")

@@ -97,7 +97,7 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         if constexpr (is_archetype_v<component_type>)
         {
-            return component_type::create(target, std::forward<archetype_type>(value));
+            return component_type::create(target, std::forward<component_type>(value));
         }
         else
         {

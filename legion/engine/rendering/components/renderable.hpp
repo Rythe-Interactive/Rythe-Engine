@@ -6,6 +6,7 @@ namespace legion::rendering
 {
     struct mesh_renderer
     {
+        Reflectable;
     private:
         model_handle m_tempHandle = invalid_model_handle;
     public:
@@ -35,7 +36,6 @@ namespace legion::rendering
         }
     };
 
-
     struct mesh_renderable : public ecs::archetype<mesh_filter, mesh_renderer>
     {
         using base = ecs::archetype<mesh_filter, mesh_renderer>;
@@ -45,7 +45,7 @@ namespace legion::rendering
 
         model_handle get_model()
         {
-            id_type id = get<mesh_filter>().read().id;
+            id_type id = get<mesh_filter>().id;
             if (id == invalid_id)
                 return { invalid_id };
             return ModelCache::create_model(id);
@@ -53,7 +53,9 @@ namespace legion::rendering
 
         material_handle get_material()
         {
-            return get<mesh_renderer>().read().material;
+            return get<mesh_renderer>().material;
         }
     };
 }
+
+ManualReflector(legion::rendering::mesh_renderer, material);
