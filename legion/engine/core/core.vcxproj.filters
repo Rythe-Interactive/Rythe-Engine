@@ -436,6 +436,9 @@
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="defaults\coremodule.hpp" />
     <ClInclude Include="ecs\containers\component_container.hpp" />
+    <ClInclude Include="defaults\defaultcomponents.hpp" />
+    <ClInclude Include="ecs\archetype\archetype.hpp" />
+    <ClInclude Include="ecs\meta\meta.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -592,5 +595,6 @@
     <None Include="scheduling\processchain.inl" />
     <None Include="engine\system.inl" />
     <None Include="events\eventbus.inl" />
+    <None Include="ecs\archetype\archetype.inl" />
   </ItemGroup>
 </Project>

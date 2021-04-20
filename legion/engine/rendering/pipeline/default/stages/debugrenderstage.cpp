@@ -45,24 +45,24 @@ namespace legion::rendering
         localLines->reserve(size);
     }
 
-    void DebugRenderStage::drawDebugLine(events::event_base* event)
+    void DebugRenderStage::drawDebugLine(events::event_base& event)
     {
-        debug::debug_line_event* line = reinterpret_cast<debug::debug_line_event*>(event);
-        if (localLines->count(*line))
-            localLines->erase(*line);
-        localLines->insert(*line);
+        debug::debug_line_event& line = reinterpret_cast<debug::debug_line_event&>(event);
+        if (localLines->count(line))
+            localLines->erase(line);
+        localLines->insert(line);
     }
 
     void DebugRenderStage::setup(app::window& context)
     {
-        scheduling::ProcessChain::subscribeToChainStart<&DebugRenderStage::startDebugDomain>();
-        scheduling::ProcessChain::subscribeToChainEnd<&DebugRenderStage::endDebugDomain>();
-        events::EventBus::bindToEvent(nameHash("debug_line"), delegate<void(events::event_base*)>::template create<DebugRenderStage, &DebugRenderStage::drawDebugLine>(this));
+        startDebugDomain();
+        events::EventBus::bindToEvent(nameHash("debug_line"), delegate<void(events::event_base&)>::template from<DebugRenderStage, &DebugRenderStage::drawDebugLine>(this));
     }
 
     void DebugRenderStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
         using namespace legion::core::fs::literals;
+        endDebugDomain();
 
         std::vector<debug::debug_line_event> lines;
 
@@ -249,6 +249,8 @@ namespace legion::rendering
         debugMaterial.release();
 
         fbo->release();
+
+        startDebugDomain();
     }
 
     priority_type DebugRenderStage::priority()

@@ -11,8 +11,6 @@
 #include <rendering/data/vertexarray.hpp>
 #include <rendering/data/material.hpp>
 #include <rendering/data/postprocessingeffect.hpp>
-#include <rendering/data/particle_system_base.hpp>
-#include <rendering/data/particle_system_cache.hpp>
 
 namespace legion
 {

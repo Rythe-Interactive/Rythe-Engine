@@ -2,9 +2,6 @@
 
 namespace legion::rendering
 {
-    ecs::EcsRegistry* RenderPipelineBase::m_ecs;
-    schd::Scheduler* RenderPipelineBase::m_scheduler;
-    events::EventBus* RenderPipelineBase::m_eventBus;
     std::atomic_bool RenderPipelineBase::m_exiting = { false };
 
     void RenderPipelineBase::exit()

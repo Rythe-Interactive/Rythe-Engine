@@ -2,6 +2,7 @@
 #include <utility>
 #include <functional>
 #include <core/platform/platform.hpp>
+#include <core/types/primitives.hpp>
 
 namespace legion::core
 {
@@ -50,7 +51,7 @@ namespace legion::core
         return true;
     }
 
-    template <class KeysIterator, class ValuesIterator>
+    template <class KeysIterator, class ValuesIterator, class Category = std::bidirectional_iterator_tag, class Diff = diff_type>
     class key_value_pair_iterator
     {
     public:
@@ -60,6 +61,9 @@ namespace legion::core
         using value_type = typename values_proxy_type::value_type;
         using pair_type = std::pair<key_type&, value_type&>;
         using const_pair_type = std::pair<const key_type&, const value_type&>;
+
+        using iterator_category = Category;
+        using difference_type = Diff;
 
         explicit key_value_pair_iterator(keys_proxy_type keys, values_proxy_type values) : m_key(keys), m_value(values) {}
 
@@ -107,13 +111,28 @@ namespace legion::core
             return rhs.m_key != lhs.m_key || rhs.m_value != lhs.m_value;
         }
 
-        auto operator++()
+        auto& operator++() noexcept
         {
-            return key_value_pair_iterator(m_key++, m_value++);
+            m_key++;
+            m_value++;
+            return *this;
         }
-        auto operator++() const
+
+        auto operator++(int) noexcept
         {
-            return key_value_pair_iterator(m_key++, m_value++);
+            return key_value_pair_iterator(++m_key, ++m_value);
+        }
+
+        auto& operator--() noexcept
+        {
+            m_key--;
+            m_value--;
+            return *this;
+        }
+
+        auto operator--(int) noexcept
+        {
+            return key_value_pair_iterator(--m_key, --m_value);
         }
 
     private:

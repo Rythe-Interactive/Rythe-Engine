@@ -6,6 +6,9 @@ namespace legion::core::scheduling
 
     sparse_map<id_type, ProcessChain> Scheduler::m_processChains;
 
+    multicast_delegate<Scheduler::frame_callback_type> Scheduler::m_onFrameStart;
+    multicast_delegate<Scheduler::frame_callback_type> Scheduler::m_onFrameEnd;
+
     const size_type Scheduler::m_maxThreadCount = reserved_threads >= std::thread::hardware_concurrency() ? 0 : std::thread::hardware_concurrency() - reserved_threads;
     size_type Scheduler::m_availableThreads = m_maxThreadCount;
 
@@ -87,8 +90,12 @@ namespace legion::core::scheduling
         OPTICK_FRAME("Main thread");
 
         time::span dt{ deltaTime };
+        m_onFrameStart(dt, time::span(Clock::elapsedSinceTickStart()));
+
         for (auto [_, chain] : m_processChains)
             chain.runInCurrentThread(dt);
+
+        m_onFrameEnd(dt, time::span(Clock::elapsedSinceTickStart()));
     }
 
     pointer<std::thread> Scheduler::getThread(std::thread::id id)
@@ -197,6 +204,26 @@ namespace legion::core::scheduling
     {
         id_type chainId = nameHash(chainName);
         m_processChains.at(chainId).subscribeToChainEnd(callback);
+    }
+
+    void Scheduler::subscribeToFrameStart(const frame_callback_delegate& callback)
+    {
+        m_onFrameStart.push_back(callback);
+    }
+
+    void Scheduler::unsubscribeFromFrameStart(const frame_callback_delegate& callback)
+    {
+        m_onFrameStart.erase(callback);
+    }
+
+    void Scheduler::subscribeToFrameEnd(const frame_callback_delegate& callback)
+    {
+        m_onFrameEnd.push_back(callback);
+    }
+
+    void Scheduler::unsubscribeFromFrameEnd(const frame_callback_delegate& callback)
+    {
+        m_onFrameEnd.erase(callback);
     }
 
     void Scheduler::unsubscribeFromChainEnd(id_type chainId, const chain_callback_delegate& callback)

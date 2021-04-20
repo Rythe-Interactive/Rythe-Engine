@@ -6,7 +6,7 @@ namespace legion::rendering
     inline void Renderer::setPipeline(Args&&... args)
     {
         OPTICK_EVENT();
-        m_pipelineProvider = delegate<RenderPipelineBase* (app::window&)>::create([&](app::window& context)
+        m_pipelineProvider = [&](app::window& context)
         {
             static std::unordered_map<app::window, std::unique_ptr<Pipeline>> m_pipelines;
 
@@ -20,6 +20,6 @@ namespace legion::rendering
                 RenderStageBase::m_pipeline = m_pipelines[context].get();
 
             return RenderStageBase::m_pipeline;
-        });
+        };
     }
 }

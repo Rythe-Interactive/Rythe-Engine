@@ -4,6 +4,8 @@
 #include <core/types/types.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 
+#include <core/ecs/meta/meta.hpp>
+
 /**
  * @file entity.hpp
  */
@@ -45,6 +47,7 @@ namespace legion::core::ecs
 
     struct entity_data;
 
+#pragma region Child Iterators
     struct child_iterator
     {
         friend struct entity;
@@ -148,7 +151,7 @@ namespace legion::core::ecs
         const_child_reverse_iterator operator--(int);
 
     };
-
+#pragma endregion
 
     /**@struct entity
      * @brief Handle to an entity.
@@ -267,7 +270,10 @@ namespace legion::core::ecs
          * @return Component handle to the component.
          */
         template<typename component_type>
-        component<component_type> add_component();
+        wrap_component_t<component_type> add_component();
+
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        component_tuple<component_type0, component_type1, component_typeN...> add_component();
 
         /**@brief Adds a precreated component of a certain type to this entity.
          * @tparam component_type Type of the component to add.
@@ -275,9 +281,17 @@ namespace legion::core::ecs
          * @return Component handle to the component.
          */
         template<typename component_type>
-        component<component_type> add_component(component_type&& value);
+        wrap_component_t<component_type> add_component(component_type&& value);
         template<typename component_type>
-        component<component_type> add_component(const component_type& value);
+        wrap_component_t<component_type> add_component(const component_type& value);
+                
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        component_tuple<component_type0, component_type1, component_typeN...> add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        component_tuple<component_type0, component_type1, component_typeN...> add_component(const component_type0& value0, const component_type1& value1, const component_typeN&... valueN);
+
+        template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
+        typename archetype_type::handle_group add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
 
         /**@brief Creates and adds a new component of a certain type to this entity. Component is serialized from a prototype.
          * @tparam component_type Type of the component to add.
@@ -295,20 +309,29 @@ namespace legion::core::ecs
          */
         template<typename component_type>
         L_NODISCARD bool has_component() const;
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        L_NODISCARD bool has_component() const;
 
         /**@brief Gets a component handle to a certain component on this entity. 
          * @tparam component_type Type of the component to get.
          * @return Component handle to the component.
          */
         template<typename component_type>
-        L_NODISCARD component<component_type> get_component();
+        L_NODISCARD wrap_component_t<component_type> get_component();
         template<typename component_type>
-        L_NODISCARD const component<component_type> get_component() const;
+        L_NODISCARD const_wrap_component_t<component_type> get_component() const;
+
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        L_NODISCARD component_tuple<component_type0, component_type1, component_typeN...> get_component();
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        L_NODISCARD const_component_tuple<component_type0, component_type1, component_typeN...> get_component() const;
 
         /**@brief Removes and destroys a component from this entity.
          * @tparam component_type Type of the component to remove.
          */
         template<typename component_type>
+        void remove_component();
+        template<typename component_type0, typename component_type1, typename... component_typeN>
         void remove_component();
     };
 }

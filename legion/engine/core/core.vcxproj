@@ -48,7 +48,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediates\$(Platform)\$(Configuration)\engine\$(ProjectName)\</IntDir>
-    <TargetName>legion-$(ProjectName)</TargetName>
+    <TargetName>legion-$(ProjectName)-d</TargetName>
     <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-clang-diagnostic-c++17-extensions</ClangTidyChecks>
   </PropertyGroup>
@@ -170,6 +170,9 @@ del ".\xcopyexclude"</Command>
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="defaults\defaultcomponents.hpp" />
+    <ClInclude Include="ecs\archetype\archetype.hpp" />
+    <ClInclude Include="ecs\meta\meta.hpp" />
     <ClInclude Include="ecs\containers\component_container.hpp" />
     <ClInclude Include="ecs\containers\component_pool.hpp" />
     <ClInclude Include="ecs\data\entity_data.hpp" />
@@ -568,6 +571,7 @@ del ".\xcopyexclude"</Command>
     <None Include="..\..\.clang-tidy" />
     <None Include="..\..\.editorconfig" />
     <None Include="common\hash.inl" />
+    <None Include="ecs\archetype\archetype.inl" />
     <None Include="ecs\containers\component_pool.inl" />
     <None Include="ecs\filters\filterregistry.inl" />
     <None Include="ecs\filters\filter_info.inl" />

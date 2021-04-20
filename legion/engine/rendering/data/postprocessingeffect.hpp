@@ -58,7 +58,7 @@ namespace legion::rendering
         template<void(Self::* func_type)(framebuffer&, RenderPipelineBase* ,camera&, const camera::camera_input&, time::span)>
         void addRenderPass()
         {
-            renderPasses.push_back(delegate<void(framebuffer&, RenderPipelineBase*, camera&, const camera::camera_input&, time::span)>::create<Self, func_type>(reinterpret_cast<Self*>(this)));
+            renderPasses.push_back(delegate<void(framebuffer&, RenderPipelineBase*, camera&, const camera::camera_input&, time::span)>::from<Self, func_type>(reinterpret_cast<Self*>(this)));
         }
     };
 

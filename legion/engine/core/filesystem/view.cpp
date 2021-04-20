@@ -147,12 +147,21 @@ namespace legion::core::filesystem
 
         //get & check traits
         const auto traits = resolver->get_traits();
-        if (traits.is_valid && traits.exists && traits.can_be_read)
+        if (!traits.is_valid_path)
         {
-            //wrap get in decay
-            return decay(resolver->get());
+            return decay(Err(legion_fs_error("invalid file traits: not a valid path")));
         }
-        return decay(Err(legion_fs_error("invalid file traits: (not valid) or (does not exist) or (cannot be read)")));
+        else if (!traits.exists)
+        {
+            return decay(Err(legion_fs_error("invalid file traits: file does not exist")));
+        }
+        else if (!traits.can_be_read)
+        {
+            return decay(Err(legion_fs_error("invalid file traits: file cannot be read")));
+        }
+
+        //wrap get in decay
+        return decay(resolver->get());
     }
 
     L_NODISCARD common::result_decay_more<const basic_resource, fs_error> view::get() const
@@ -173,7 +182,7 @@ namespace legion::core::filesystem
 
         //get & check traits
         const auto traits = resolver->get_traits();
-        if (traits.is_valid && traits.exists && traits.can_be_read)
+        if (traits.is_valid_path && traits.exists && traits.can_be_read)
         {
             //wrap get in decay
             return decay(std::const_pointer_cast<const filesystem_resolver>(resolver)->get());
@@ -196,7 +205,7 @@ namespace legion::core::filesystem
 
         //get & check traits
         const auto traits = resolver->get_traits();
-        if (traits.is_valid && ((traits.can_be_written && !traits.is_directory) || traits.can_be_created))
+        if (traits.is_valid_path && ((traits.can_be_written && !traits.is_directory) || traits.can_be_created))
         {
             //set
             return resolver->set(resource);
@@ -251,7 +260,7 @@ namespace legion::core::filesystem
 
         //get & check traits
         const auto traits = resolver->get_traits();
-        if (traits.is_valid && traits.exists)
+        if (traits.is_valid_path && traits.exists)
         {
             std::vector<view> results;
             for (auto entry : resolver->ls())

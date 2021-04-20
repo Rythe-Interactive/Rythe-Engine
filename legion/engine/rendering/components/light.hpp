@@ -28,12 +28,13 @@ namespace legion::rendering
 
     struct light
     {
+        Reflectable;
     private:
         static uint m_lastidx;
     public:
         light();
 
-        const detail::light_data& get_light_data(const ecs::component_handle<position>& pos, const ecs::component_handle<rotation>& rot);
+        const detail::light_data& get_light_data(const ecs::component<position>& pos, const ecs::component<rotation>& rot);
 
         void set_type(light_type type);
         void set_attenuation(float attenuation);
@@ -45,25 +46,6 @@ namespace legion::rendering
         L_NODISCARD static light directional(math::color color = math::colors::white, float intensity = 1.0);
         L_NODISCARD static light spot(math::color color = math::colors::white, float angle = 0.785398f, float intensity = 1.0, float attenuation = 10, float falloff = 3.141592f);
         L_NODISCARD static light point(math::color color = math::colors::white, float intensity = 1.0, float attenuation = 10, float falloff = 3.141592f);
-
-
-        template <class Archive>
-        void serialize(Archive& archive)
-        {
-            using cereal::make_nvp;
-
-            archive(
-                make_nvp("LightType",*reinterpret_cast<uint*>(&m_type)),
-                make_nvp("Attenuation",m_attenuation),
-                make_nvp("Intensity",m_intensity),
-                make_nvp("Index",m_index),
-                make_nvp("Direction",m_direction),
-                make_nvp("Falloff",m_falloff),
-                make_nvp("Position",m_position),
-                make_nvp("Angle",m_angle),
-                make_nvp("Color",*reinterpret_cast<math::vec4*>(&m_color))
-            );
-        }
 
     protected:
         union
@@ -85,3 +67,5 @@ namespace legion::rendering
         };
     };
 }
+
+ManualReflector(legion::rendering::light, m_type, m_attenuation, m_intensity, m_index, m_direction, m_falloff, m_position, m_angle, m_color);

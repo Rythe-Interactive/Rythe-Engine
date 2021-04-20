@@ -19,7 +19,7 @@ namespace legion::rendering
         friend class OldRenderer;
         friend class Renderer;
 
-        ecs::component<app::window> targetWindow = ecs::component_handle<app::window>(world_entity_id);
+        ecs::component<app::window> targetWindow = ecs::component<app::window>{ {}, ecs::world };
         framebuffer renderTarget = framebuffer();
         math::color clearColor = math::colors::cornflower;
         struct camera_input
@@ -93,18 +93,6 @@ namespace legion::rendering
         math::mat4 get_projection(float ratio)
         {
             return math::perspective(math::deg2rad(fov * ratio), ratio, farz, nearz);
-        }
-
-        template <class Archive>
-        void serialize(Archive& oa)
-        {
-            using cereal::make_nvp;
-
-            oa(
-                make_nvp("Fov",fov),
-                make_nvp("NearZ", nearz),
-                make_nvp("FarZ",farz)
-            );
         }
 
     };

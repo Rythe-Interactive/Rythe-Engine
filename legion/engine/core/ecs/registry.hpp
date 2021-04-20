@@ -16,6 +16,7 @@
 #include <core/ecs/handles/component.hpp>
 #include <core/ecs/data/entity_data.hpp>
 #include <core/ecs/prototypes/entity_prototype.hpp>
+#include <core/ecs/meta/meta.hpp>
 
 /**
  * @file registry.hpp
@@ -146,7 +147,10 @@ namespace legion::core::ecs
          * @return Reference to the created component.
          */
         template<typename component_type>
-        static component_type& createComponent(entity target);
+        static component_ref_t<component_type> createComponent(entity target);
+
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        static component_ref_tuple<component_type0, component_type1, component_typeN...> createComponent(entity target);
 
         /**@brief Adds a precreated component of a certain type to a specific entity.
          * @tparam component_type Type of component to create.
@@ -155,9 +159,17 @@ namespace legion::core::ecs
          * @return Reference to the created component.
          */
         template<typename component_type>
-        static component_type& createComponent(entity target, component_type&& value);
+        static component_ref_t<component_type> createComponent(entity target, component_type&& value);
         template<typename component_type>
-        static component_type& createComponent(entity target, const component_type& value);
+        static component_ref_t<component_type> createComponent(entity target, const component_type& value);
+
+        template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
+        static typename archetype_type::ref_group createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
+
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        static component_ref_tuple<component_type0, component_type1, component_typeN...> createComponent(entity target, component_type0&& value0, component_type1&& value1, component_typeN&&... valueN);
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        static component_ref_tuple<component_type0, component_type1, component_typeN...> createComponent(entity target, const component_type0& value0, const component_type1& value1, const component_typeN&... valueN);
 
         /**@brief Creates a new component of a certain type for a specific entity. Component is serialized from a prototype.
          * @tparam component_type Type of component to create.
@@ -193,6 +205,9 @@ namespace legion::core::ecs
         template<typename component_type>
         static void destroyComponent(entity target);
 
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        static void destroyComponent(entity target);
+
         /**@brief Destroys a certain component on a specific entity.
          * @param typeId Type hash of component type to destroy.
          * @param target Entity to destroy and remove the component from.
@@ -205,6 +220,9 @@ namespace legion::core::ecs
          * @return True if the target has the component, false if not.
          */
         template<typename component_type>
+        L_NODISCARD static bool hasComponent(entity target);
+
+        template<typename component_type0, typename component_type1, typename... component_typeN>
         L_NODISCARD static bool hasComponent(entity target);
 
         /**@brief Checks if a specific entity has a certain component.
@@ -220,7 +238,10 @@ namespace legion::core::ecs
          * @return Reference to the component.
          */
         template<typename component_type>
-        L_NODISCARD static component_type& getComponent(entity target);
+        L_NODISCARD static component_ref_t<component_type> getComponent(entity target);
+
+        template<typename component_type0, typename component_type1, typename... component_typeN>
+        L_NODISCARD static component_ref_tuple<component_type0, component_type1, component_typeN... > getComponent(entity target);
 
         /**@brief Gets a pointer to an existing component.
          * @param typeId Type hash of the component to fetch.
@@ -241,4 +262,5 @@ namespace legion::core::ecs
 #include <core/ecs/handles/entity.inl>
 #include <core/ecs/handles/component.inl>
 #include <core/ecs/prototypes/entity_prototype.inl>
+#include <core/ecs/archetype/archetype.inl>
 

@@ -11,6 +11,12 @@ namespace legion::core::ecs
     sparse_map<id_type, component_type> component_pool<component_type>::m_components = sparse_map<id_type, component_type>(125);
 
     template<typename component_type>
+    inline L_ALWAYS_INLINE void component_pool<component_type>::reserve(size_type size)
+    {
+        m_components.reserve(size);
+    }
+
+    template<typename component_type>
     inline L_ALWAYS_INLINE void component_pool<component_type>::clear()
     {
         m_components.clear();
@@ -19,13 +25,13 @@ namespace legion::core::ecs
     template<typename component_type>
     inline L_ALWAYS_INLINE void* component_pool<component_type>::create_component(id_type target)
     {
-        return &(m_components.emplace(target).first.value());
+        return &(m_components.try_emplace(target).first.value());
     }
 
     template<typename component_type>
     inline L_ALWAYS_INLINE void* component_pool<component_type>::create_component(id_type target, const serialization::component_prototype_base& prototype)
     {
-        return &(m_components.emplace(target,
+        return &(m_components.try_emplace(target,
             from_reflector(static_cast<const serialization::component_prototype<component_type>&>(prototype))
         ).first.value());
     }
@@ -33,7 +39,7 @@ namespace legion::core::ecs
     template<typename component_type>
     inline L_ALWAYS_INLINE void* component_pool<component_type>::create_component(id_type target, serialization::component_prototype_base&& prototype)
     {
-        return &(m_components.emplace(target,
+        return &(m_components.try_emplace(target,
             from_reflector(static_cast<serialization::component_prototype<component_type>&&>(prototype))
         ).first.value());
     }
@@ -73,26 +79,26 @@ namespace legion::core::ecs
     template<typename component_type>
     inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(id_type target)
     {
-        return m_components.emplace(target).first.value();
+        return m_components.try_emplace(target).first.value();
     }
 
     template<typename component_type>
     inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(id_type target, component_type&& value)
     {
-        return m_components.emplace(target, std::forward<component_type>(value)).first.value();
+        return m_components.try_emplace(target, std::forward<component_type>(value)).first.value();
 
     }
 
     template<typename component_type>
     inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(id_type target, const component_type& value)
     {
-        return m_components.emplace(target, value).first.value();
+        return m_components.try_emplace(target, value).first.value();
     }
 
     template<typename component_type>
     inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(id_type target, const serialization::component_prototype_base& prototype)
     {
-        return m_components.emplace(target,
+        return m_components.try_emplace(target,
             from_reflector(static_cast<const serialization::component_prototype<component_type>&>(prototype))
         ).first.value();
     }
@@ -100,7 +106,7 @@ namespace legion::core::ecs
     template<typename component_type>
     inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(id_type target, serialization::component_prototype_base&& prototype)
     {
-        return m_components.emplace(target,
+        return m_components.try_emplace(target,
             from_reflector(static_cast<serialization::component_prototype<component_type>&&>(prototype))
         ).first.value();
     }

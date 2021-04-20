@@ -6,13 +6,14 @@ namespace legion::rendering
 {
     struct mesh_renderer
     {
+        Reflectable;
     private:
         model_handle m_tempHandle = invalid_model_handle;
     public:
         mesh_renderer() = default;
         explicit mesh_renderer(const material_handle& src) { material = src; }
         mesh_renderer(const material_handle& src, const model_handle& model) { material = src; m_tempHandle = model; }
-        static void init(mesh_renderer& src, ecs::entity_handle owner)
+        static void init(mesh_renderer& src, ecs::entity owner)
         {
             OPTICK_EVENT();
             if (!owner.has_component<mesh_filter>())
@@ -35,17 +36,16 @@ namespace legion::rendering
         }
     };
 
-
     struct mesh_renderable : public ecs::archetype<mesh_filter, mesh_renderer>
     {
         using base = ecs::archetype<mesh_filter, mesh_renderer>;
 
         mesh_renderable() = default;
-        mesh_renderable(const base::handleGroup& handles) : base(handles) {}
+        mesh_renderable(const base::handle_group& handles) : base(handles) {}
 
         model_handle get_model()
         {
-            id_type id = get<mesh_filter>().read().id;
+            id_type id = get<mesh_filter>().id;
             if (id == invalid_id)
                 return { invalid_id };
             return ModelCache::create_model(id);
@@ -53,7 +53,9 @@ namespace legion::rendering
 
         material_handle get_material()
         {
-            return get<mesh_renderer>().read().material;
+            return get<mesh_renderer>().material;
         }
     };
 }
+
+ManualReflector(legion::rendering::mesh_renderer, material);
