@@ -39,17 +39,19 @@ namespace legion::core::filesystem
 
         L_NODISCARD bool is_file() const noexcept override
         {
-            return !is_directory() && is_valid();
+            return !is_directory() && is_valid_path();
         }
+
         L_NODISCARD bool is_directory() const noexcept override
         {
             const auto back = get_target().back();
 
             return (get_target().back() == '\\' || get_target().back() == '/')
-                    && is_valid()
+                    && is_valid_path()
                     && !std::filesystem::is_regular_file(strpath_manip::subdir(m_root_path,get_target()));
         }
-        L_NODISCARD bool is_valid() const noexcept override
+
+        L_NODISCARD bool is_valid_path() const noexcept override
         {
             auto full = strpath_manip::subdir(m_root_path,get_target());
 
@@ -70,9 +72,10 @@ namespace legion::core::filesystem
 
             return true;
         }
+
         L_NODISCARD bool writeable() const noexcept override
         {
-            if(!is_valid()) return false;
+            if(!is_valid_path()) return false;
 
             const auto full = strpath_manip::subdir(m_root_path,get_target());
 
@@ -110,6 +113,7 @@ namespace legion::core::filesystem
             }
             return true;
         }
+
         L_NODISCARD bool readable() const noexcept override
         {
             if(!exists()) return false;
@@ -133,10 +137,12 @@ namespace legion::core::filesystem
             #endif
             
         }
+
         L_NODISCARD bool creatable() const noexcept override
         {
             return !exists() && writeable();
         }
+
         L_NODISCARD bool exists() const noexcept override
         {
             return std::filesystem::exists(strpath_manip::subdir(m_root_path,get_target()));
@@ -157,6 +163,7 @@ namespace legion::core::filesystem
             }
             return entries;
         }
+
         common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) noexcept override
         {
             using common::Err, common::Ok;
@@ -207,6 +214,7 @@ namespace legion::core::filesystem
 
             return Ok();
         }
+
         void erase(interfaces::implement_signal_t) const noexcept override
         {
             //we really don't care if an error occured, but since this is noexcept we need to make sure that

@@ -239,7 +239,7 @@ namespace legion::core
                 {
                     resolver->set_target(s[0].second);
 
-                    if (!resolver->is_valid())
+                    if (!resolver->is_valid_path())
                         log::warn("Invalid obj context path");
                     else
                         baseDir = resolver->get_absolute_path();
@@ -259,9 +259,10 @@ namespace legion::core
         // Print any warnings.
         if (!reader.Warning().empty())
         {
+            log::warn("Some warnings ocurred during loading of mesh set log filter to trace to see them.");
             std::string warnings = reader.Warning();
             common::replace_items(warnings, "\n", " ");
-            log::warn(warnings.c_str());
+            log::trace(warnings.c_str());
         }
 
         if (settings.materials)
@@ -325,6 +326,9 @@ namespace legion::core
 
             for (auto& indexData : shape.mesh.indices)
             {
+                if (indexData.vertex_index < 0)
+                    return;
+
                 // Get the indices into the tinyobj attributes.
                 uint vertexIndex = static_cast<uint>(indexData.vertex_index) * 3;
                 uint normalIndex = static_cast<uint>(indexData.normal_index) * 3;
@@ -337,9 +341,12 @@ namespace legion::core
                 if (vertexIndex + 2 < attributes.colors.size())
                     color = math::color(attributes.colors[vertexIndex + 0], attributes.colors[vertexIndex + 1], attributes.colors[vertexIndex + 2]);
 
-                math::vec3 normal(-attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
+                math::vec3 normal = math::vec3::up;
+                if (indexData.normal_index >= 0 && normalIndex + 2 < attributes.normals.size())
+                    normal = math::vec3(-attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
+
                 math::vec2 uv{};
-                if (uvIndex + 1 < attributes.texcoords.size())
+                if (indexData.texcoord_index >= 0 && uvIndex + 1 < attributes.texcoords.size())
                     uv = math::vec2(attributes.texcoords[uvIndex + 0], attributes.texcoords[uvIndex + 1]);
 
                 // Create a hash to check for doubles.
@@ -552,10 +559,19 @@ namespace legion::core
         for (size_type i = 0; i < meshData.vertices.size(); ++i)
         {
             meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
-            meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
-            if (meshData.uvs.size() == i) meshData.uvs.push_back(math::vec2(0, 0));
-            else meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
-            if (meshData.colors.size() == i) meshData.colors.push_back(core::math::colors::grey);
+
+            if (meshData.normals.size() == i)
+                meshData.normals.push_back(math::vec3::up);
+            else
+                meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
+
+            if (meshData.uvs.size() == i)
+                meshData.uvs.push_back(math::vec2(0, 0));
+            else
+                meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
+
+            if (meshData.colors.size() == i)
+                meshData.colors.push_back(core::math::colors::grey);
         }
 
         // Because we only flip one axis we also need to flip the triangle rotation.
@@ -608,7 +624,7 @@ namespace legion::core
 
         resolver->set_target(s[0].second);
 
-        if (!resolver->is_valid())
+        if (!resolver->is_valid_path())
         {
             log::warn("Invalid gltf context path");
         }
@@ -766,10 +782,19 @@ namespace legion::core
         for (size_type i = 0; i < meshData.vertices.size(); ++i)
         {
             meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
-            meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
-            if (meshData.uvs.size() == i) meshData.uvs.push_back(math::vec2(0, 0));
-            else meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
-            if (meshData.colors.size() == i) meshData.colors.push_back(core::math::colors::grey);
+
+            if (meshData.normals.size() == i)
+                meshData.normals.push_back(math::vec3::up);
+            else
+                meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
+
+            if (meshData.uvs.size() == i)
+                meshData.uvs.push_back(math::vec2(0, 0));
+            else
+                meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
+
+            if (meshData.colors.size() == i)
+                meshData.colors.push_back(core::math::colors::grey);
         }
 
         // Because we only flip one axis we also need to flip the triangle rotation.

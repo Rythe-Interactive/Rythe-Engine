@@ -25,7 +25,7 @@ inline namespace {
             return false;
         }
         [[nodiscard]] bool is_directory() const noexcept override { return false; }
-        [[nodiscard]] bool is_valid() const noexcept override
+        [[nodiscard]] bool is_valid_path() const noexcept override
         {
             if (get_target() == "test.txt") return true;
             return false;

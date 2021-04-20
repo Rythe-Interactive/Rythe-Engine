@@ -4,7 +4,7 @@ namespace legion::core::filesystem {
     struct file_traits {
         bool is_file {};
         bool is_directory {};
-        bool is_valid{};
+        bool is_valid_path{};
 
         bool can_be_written{};
         bool can_be_read{};
@@ -21,7 +21,7 @@ namespace legion::core::filesystem {
 
         return rhs.is_file == lhs.is_file &&
                rhs.is_directory == lhs.is_directory &&
-               rhs.is_valid == lhs.is_valid &&
+               rhs.is_valid_path == lhs.is_valid_path &&
                rhs.can_be_written == lhs.can_be_written &&
                rhs.can_be_read == lhs.can_be_read &&
                rhs.can_be_created == lhs.can_be_created &&
@@ -74,7 +74,7 @@ namespace legion::core::filesystem {
         if(traits.exists)
         {
             traits.can_be_created = false;
-            traits.is_valid = true;
+            traits.is_valid_path = true;
             if(traits.is_file)
             {
                 traits.can_be_read = true;

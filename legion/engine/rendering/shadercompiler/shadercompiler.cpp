@@ -37,7 +37,7 @@ namespace legion::rendering
 
         resolver->set_target(s[0].second);
 
-        if (!resolver->is_valid())
+        if (!resolver->is_valid_path())
         {
             m_callback("Shader processor error: invalid path", severity::error);
             return "";
