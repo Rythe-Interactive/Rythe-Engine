@@ -132,11 +132,11 @@ namespace legion::core
         L_NODISCARD math::mat4 to_world_matrix()
         {
             OPTICK_EVENT();
-            //if (owner->parent)
-            //{
-            //    transform parentTrans = owner->parent.get_component<transform>();
-            //    return parentTrans.to_world_matrix() * to_parent_matrix();
-            //}
+            if (owner->parent)
+            {
+                transform parentTrans = owner->parent.get_component<transform>();
+                return parentTrans.to_world_matrix() * to_parent_matrix();
+            }
             return to_parent_matrix();
         }
 

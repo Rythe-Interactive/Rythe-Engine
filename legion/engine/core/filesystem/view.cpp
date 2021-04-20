@@ -182,12 +182,22 @@ namespace legion::core::filesystem
 
         //get & check traits
         const auto traits = resolver->get_traits();
-        if (traits.is_valid_path && traits.exists && traits.can_be_read)
+
+        if (!traits.is_valid_path)
         {
-            //wrap get in decay
-            return decay(std::const_pointer_cast<const filesystem_resolver>(resolver)->get());
+            return decay(Err(legion_fs_error("invalid file traits: not a valid path")));
         }
-        return decay(Err(legion_fs_error("invalid file traits: (not valid) or (does not exist) or (cannot be read)")));
+        else if (!traits.exists)
+        {
+            return decay(Err(legion_fs_error("invalid file traits: file does not exist")));
+        }
+        else if (!traits.can_be_read)
+        {
+            return decay(Err(legion_fs_error("invalid file traits: file cannot be read")));
+        }
+
+        //wrap get in decay
+        return decay(std::const_pointer_cast<const filesystem_resolver>(resolver)->get());
     }
 
     common::result<void, fs_error> view::set(const basic_resource& resource)
