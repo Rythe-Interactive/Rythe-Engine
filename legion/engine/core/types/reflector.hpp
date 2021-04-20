@@ -51,10 +51,10 @@ namespace legion::core{                                                         
         using source_type = type;                                                                                                           \
                                                                                                                                             \
         inline static constexpr std::size_t size = EXPAND(NARGS(__VA_ARGS__));                                                              \
-        std::tuple<EXPAND(decltypes_IMPL(EXPAND(NARGS(__VA_ARGS__)), EXPAND(CAT_PREFIX(type::, __VA_ARGS__))))> values;                     \
+        std::tuple<EXPAND(decltypes_count(NARGS(__VA_ARGS__), colon_access(type, __VA_ARGS__)))> values;                                    \
         std::array<std::string, size> names;                                                                                                \
                                                                                                                                             \
-        reflector(const type& src) : values(EXPAND(CAT_PREFIX(src., __VA_ARGS__))), names({ EXPAND(STRINGIFY_SEPERATE(__VA_ARGS__)) }) {}   \
+        reflector(const type& src) : values(std::make_tuple(EXPAND(dot_access(src, __VA_ARGS__)))), names({ EXPAND(STRINGIFY_SEPERATE(__VA_ARGS__)) }) {}    \
     };                                                                                                                                      \
 }
 

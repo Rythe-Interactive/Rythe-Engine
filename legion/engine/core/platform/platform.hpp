@@ -269,7 +269,7 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 
 // turn: value0, value1, value2
 // into: "value0", "value1", "value2"
-#define STRINGIFY_SEPERATE(...) CONCAT_DEFINE(L_NAME_, EXPAND(NARGS(__VA_ARGS__)))EXPAND((__VA_ARGS__))
+#define STRINGIFY_SEPERATE(...) EXPAND(CONCAT_DEFINE(L_NAME_, NARGS(__VA_ARGS__))(__VA_ARGS__))
 
 #define  pre_1(prefix, x)                                                                    prefix##x
 #define  pre_2(prefix, x, x2)                                                                prefix##x , prefix##x2
@@ -297,27 +297,79 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 #define prepost_7(prefix, postfix, x, x2, x3, x4, x5, x6, x7)     CAT(prefix##x, postfix) , CAT(prefix##x2, postfix), CAT(prefix##x3, postfix), CAT(prefix##x4, postfix), CAT(prefix##x5, postfix), CAT(prefix##x6, postfix), CAT(prefix##x7, postfix)
 #define prepost_8(prefix, postfix, x, x2, x3, x4, x5, x6, x7, x8) CAT(prefix##x, postfix) , CAT(prefix##x2, postfix), CAT(prefix##x3, postfix), CAT(prefix##x4, postfix), CAT(prefix##x5, postfix), CAT(prefix##x6, postfix), CAT(prefix##x7, postfix), CAT(prefix##x8, postfix)
 
-#define decltype_1(x)                             decltype(x)
-#define decltype_2(x, x2)                         decltype(x) , decltype(x2)
-#define decltype_3(x, x2, x3)                     decltype(x) , decltype(x2), decltype(x3)
-#define decltype_4(x, x2, x3, x4)                 decltype(x) , decltype(x2), decltype(x3), decltype(x4)
-#define decltype_5(x, x2, x3, x4, x5)             decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5)
-#define decltype_6(x, x2, x3, x4, x5, x6)         decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6)
-#define decltype_7(x, x2, x3, x4, x5, x6, x7)     decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7)
-#define decltype_8(x, x2, x3, x4, x5, x6, x7, x8) decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8)
+#define  decltype_1(x)                                                                    decltype(x)
+#define  decltype_2(x, x2)                                                                decltype(x) , decltype(x2)
+#define  decltype_3(x, x2, x3)                                                            decltype(x) , decltype(x2), decltype(x3)
+#define  decltype_4(x, x2, x3, x4)                                                        decltype(x) , decltype(x2), decltype(x3), decltype(x4)
+#define  decltype_5(x, x2, x3, x4, x5)                                                    decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5)
+#define  decltype_6(x, x2, x3, x4, x5, x6)                                                decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6)
+#define  decltype_7(x, x2, x3, x4, x5, x6, x7)                                            decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7)
+#define  decltype_8(x, x2, x3, x4, x5, x6, x7, x8)                                        decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8)
+#define  decltype_9(x, x2, x3, x4, x5, x6, x7, x8, x9)                                    decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8), decltype(x9)
+#define decltype_10(x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8), decltype(x9) , decltype(x10)
+#define decltype_11(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8), decltype(x9) , decltype(x10), decltype(x11)
+#define decltype_12(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8), decltype(x9) , decltype(x10), decltype(x11), decltype(x12)
+#define decltype_13(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8), decltype(x9) , decltype(x10), decltype(x11), decltype(x12), decltype(x13)
+#define decltype_14(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8), decltype(x9) , decltype(x10), decltype(x11), decltype(x12), decltype(x13), decltype(x14)
+#define decltype_15(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8), decltype(x9) , decltype(x10), decltype(x11), decltype(x12), decltype(x13), decltype(x14), decltype(x15)
+#define decltype_16(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) decltype(x) , decltype(x2), decltype(x3), decltype(x4), decltype(x5), decltype(x6), decltype(x7), decltype(x8), decltype(x9) , decltype(x10), decltype(x11), decltype(x12), decltype(x13), decltype(x14), decltype(x15), decltype(x16)
+
+#define  colon_1(prefix, x)                                                                    prefix::x
+#define  colon_2(prefix, x, x2)                                                                prefix::x , prefix::x2
+#define  colon_3(prefix, x, x2, x3)                                                            prefix::x , prefix::x2, prefix::x3
+#define  colon_4(prefix, x, x2, x3, x4)                                                        prefix::x , prefix::x2, prefix::x3, prefix::x4
+#define  colon_5(prefix, x, x2, x3, x4, x5)                                                    prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5
+#define  colon_6(prefix, x, x2, x3, x4, x5, x6)                                                prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6
+#define  colon_7(prefix, x, x2, x3, x4, x5, x6, x7)                                            prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7
+#define  colon_8(prefix, x, x2, x3, x4, x5, x6, x7, x8)                                        prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7, prefix::x8
+#define  colon_9(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9)                                    prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7, prefix::x8, prefix::x9
+#define colon_10(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7, prefix::x8, prefix::x9, prefix::x10
+#define colon_11(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7, prefix::x8, prefix::x9, prefix::x10, prefix::x11
+#define colon_12(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7, prefix::x8, prefix::x9, prefix::x10, prefix::x11, prefix::x12
+#define colon_13(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7, prefix::x8, prefix::x9, prefix::x10, prefix::x11, prefix::x12, prefix::x13
+#define colon_14(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7, prefix::x8, prefix::x9, prefix::x10, prefix::x11, prefix::x12, prefix::x13, prefix::x14
+#define colon_15(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7, prefix::x8, prefix::x9, prefix::x10, prefix::x11, prefix::x12, prefix::x13, prefix::x14, prefix::x15
+#define colon_16(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) prefix::x , prefix::x2, prefix::x3, prefix::x4, prefix::x5, prefix::x6, prefix::x7, prefix::x8, prefix::x9, prefix::x10, prefix::x11, prefix::x12, prefix::x13, prefix::x14, prefix::x15, prefix::x16
+
+#define  dot_1(prefix, x)                                                                    prefix.x
+#define  dot_2(prefix, x, x2)                                                                prefix.x , prefix.x2
+#define  dot_3(prefix, x, x2, x3)                                                            prefix.x , prefix.x2, prefix.x3
+#define  dot_4(prefix, x, x2, x3, x4)                                                        prefix.x , prefix.x2, prefix.x3, prefix.x4
+#define  dot_5(prefix, x, x2, x3, x4, x5)                                                    prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5
+#define  dot_6(prefix, x, x2, x3, x4, x5, x6)                                                prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6
+#define  dot_7(prefix, x, x2, x3, x4, x5, x6, x7)                                            prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7
+#define  dot_8(prefix, x, x2, x3, x4, x5, x6, x7, x8)                                        prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7, prefix.x8
+#define  dot_9(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9)                                    prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7, prefix.x8, prefix.x9
+#define dot_10(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7, prefix.x8, prefix.x9, prefix.x10
+#define dot_11(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7, prefix.x8, prefix.x9, prefix.x10, prefix.x11
+#define dot_12(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7, prefix.x8, prefix.x9, prefix.x10, prefix.x11, prefix.x12
+#define dot_13(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7, prefix.x8, prefix.x9, prefix.x10, prefix.x11, prefix.x12, prefix.x13
+#define dot_14(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7, prefix.x8, prefix.x9, prefix.x10, prefix.x11, prefix.x12, prefix.x13, prefix.x14
+#define dot_15(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7, prefix.x8, prefix.x9, prefix.x10, prefix.x11, prefix.x12, prefix.x13, prefix.x14, prefix.x15
+#define dot_16(prefix, x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) prefix.x , prefix.x2, prefix.x3, prefix.x4, prefix.x5, prefix.x6, prefix.x7, prefix.x8, prefix.x9, prefix.x10, prefix.x11, prefix.x12, prefix.x13, prefix.x14, prefix.x15, prefix.x16
 
  // turn: value, 0, 1, 2
  // into: value0, value1, value2
-#define CAT_PREFIX(prefix, ...) CONCAT_DEFINE(pre_,EXPAND(NARGS(__VA_ARGS__)))EXPAND((prefix, __VA_ARGS__))
+#define CAT_PREFIX(prefix, ...) EXPAND(CONCAT_DEFINE(pre_, NARGS(__VA_ARGS__))(prefix, __VA_ARGS__))
 
 // turn: value, p, 0, 1, 2
 // into: value0p, value1p, value2p
-#define CAT_PREPOSTFIX(prefix, postfix, ...) CONCAT_DEFINE(prepost_,EXPAND(NARGS(__VA_ARGS__)))EXPAND((prefix, postfix, __VA_ARGS__))
+#define CAT_PREPOSTFIX(prefix, postfix, ...) EXPAND(CONCAT_DEFINE(prepost_, NARGS(__VA_ARGS__))(prefix, postfix, __VA_ARGS__))
 
 // turn: 0, 1, 2
 // into: decltype(0), decltype(1), decltype(2)
-#define decltypes_IMPL(count, ...) CONCAT_DEFINE(decltype_, count)EXPAND((__VA_ARGS__))
-#define decltypes(...) EXPAND(decltypes_IMPL(EXPAND(NARGS(__VA_AGRS__)), EXPAND(__VA_ARGS__)))
+#define decltypes_count(count, ...) EXPAND(CONCAT_DEFINE(decltype_, count)(__VA_ARGS__))
+#define decltypes(...) EXPAND(CONCAT_DEFINE(decltype_, NARGS(__VA_AGRS__))(__VA_ARGS__))
+
+// turn: Foo, x, y, z
+// into: Foo::x, Foo::y, Foo::z
+#define colon_access_count(count, prefix, ...) EXPAND(CONCAT_DEFINE(colon_, count)(prefix, __VA_ARGS__))
+#define colon_access(prefix, ...) EXPAND(CONCAT_DEFINE(colon_, NARGS(__VA_ARGS__))(prefix, __VA_ARGS__))
+
+// turn: foo, x, y, z
+// into: foo.x, foo.y, foo.z
+#define dot_access_count(count, prefix, ...) EXPAND(CONCAT_DEFINE(dot_, count)(prefix, __VA_ARGS__))
+#define dot_access(prefix, ...) EXPAND(CONCAT_DEFINE(dot_, NARGS(__VA_ARGS__))(prefix, __VA_ARGS__))
 
 #define RULE_OF_5(type)\
 type() = default;\
