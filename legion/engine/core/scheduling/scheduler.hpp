@@ -22,8 +22,8 @@ namespace legion::core::scheduling
     public:
         using chain_callback_type = typename ProcessChain::chain_callback_type;
         using chain_callback_delegate = typename ProcessChain::chain_callback_delegate;
-        using frame_callback_type = typename chain_callback_type;
-        using frame_callback_delegate = typename chain_callback_delegate;
+        using frame_callback_type = chain_callback_type;
+        using frame_callback_delegate = chain_callback_delegate;
 
     private:
         template<typename resource>
@@ -94,10 +94,10 @@ namespace legion::core::scheduling
         L_NODISCARD static pointer<ProcessChain> getChain(cstring name);
 
         static void subscribeToFrameStart(const frame_callback_delegate& callback);
-        static void unsubscribeToFrameStart(const frame_callback_delegate& callback);
+        static void unsubscribeFromFrameStart(const frame_callback_delegate& callback);
 
         static void subscribeToFrameEnd(const frame_callback_delegate& callback);
-        static void unsubscribeToFrameEnd(const frame_callback_delegate& callback);
+        static void unsubscribeFromFrameEnd(const frame_callback_delegate& callback);
 
         static void subscribeToChainStart(id_type chainId, const chain_callback_delegate& callback);
         static void subscribeToChainStart(cstring chainName, const chain_callback_delegate& callback);
