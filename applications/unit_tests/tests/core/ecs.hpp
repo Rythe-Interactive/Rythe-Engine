@@ -154,6 +154,30 @@ static void TestECS()
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<rotation>()));
         L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<scale>()));
 
+
+        ent.add_component<scale, rotation, position>();
+        L_CHECK(ent.has_component<transform>());
+        tempBool = ent.has_component<rotation, scale, position>();
+        L_CHECK(tempBool);
+        L_CHECK(ecs::component_pool<position>::contains_direct(entId));
+        L_CHECK(ecs::component_pool<rotation>::contains_direct(entId));
+        L_CHECK(ecs::component_pool<scale>::contains_direct(entId));
+        L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<position>()));
+        L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<rotation>()));
+        L_CHECK(ecs::Registry::entityComposition(entId).count(make_hash<scale>()));
+
+        ent.remove_component<position, scale, rotation>();
+        L_CHECK(!ent.has_component<transform>());
+        tempBool = !ent.has_component<rotation, position, scale>();
+        L_CHECK(tempBool);
+        L_CHECK(!ecs::component_pool<position>::contains_direct(entId));
+        L_CHECK(!ecs::component_pool<rotation>::contains_direct(entId));
+        L_CHECK(!ecs::component_pool<scale>::contains_direct(entId));
+        L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<position>()));
+        L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<rotation>()));
+        L_CHECK(!ecs::Registry::entityComposition(entId).count(make_hash<scale>()));
+
+
         auto startVal = test_comp{ 13 };
         position posVal;
         rotation rotVal;

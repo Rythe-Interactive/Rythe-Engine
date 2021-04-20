@@ -209,7 +209,7 @@ namespace legion::core::ecs
     }
 
     template<typename component_type0, typename component_type1, typename... component_typeN>
-    inline L_ALWAYS_INLINE void remove_component()
+    inline L_ALWAYS_INLINE void entity::remove_component()
     {
         Registry::destroyComponent<component_type0, component_type1, component_typeN...>(*this);
     }
