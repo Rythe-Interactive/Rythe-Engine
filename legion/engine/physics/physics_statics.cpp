@@ -488,7 +488,14 @@ namespace legion::physics
    
             while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
             {
-                if (currentDraw >= maxDraw) { break; }
+                log::debug("Iter {0}", currentDraw);
+
+               /* if (currentDraw == 29)
+                {
+                    DebugBreak();
+                }*/
+
+                //if (currentDraw >= maxDraw) { break; }
                 currentDraw++;
 
                 bool atDebug = currentDraw == DEBUG_at + 1;
@@ -518,6 +525,11 @@ namespace legion::physics
                     auto [furthestVert, distanceFromFace] = debugFaceToVert.ptr->GetFurthestOutsideVert();
                     math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVert, 1);
                     debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, true);
+                }
+
+                if (atDebug)
+                {
+                    break;
                 }
             }
 
@@ -924,8 +936,9 @@ namespace legion::physics
         {
             for (auto face : facesToBeRemoved)
             {
-                //face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
+                face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
             }
+            return;
         }
         
         //identify horizon edges and put them into list
