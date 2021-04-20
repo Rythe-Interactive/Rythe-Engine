@@ -155,7 +155,7 @@ namespace legion::core::filesystem
         {
             return decay(Err(legion_fs_error("invalid file traits: file does not exist")));
         }
-        else if (traits.can_be_read)
+        else if (!traits.can_be_read)
         {
             return decay(Err(legion_fs_error("invalid file traits: file cannot be read")));
         }
