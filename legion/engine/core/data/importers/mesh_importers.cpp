@@ -327,10 +327,14 @@ namespace legion::core
             for (auto& indexData : shape.mesh.indices)
             {
                 if (indexData.vertex_index < 0)
-                    return;
+                    continue;
 
                 // Get the indices into the tinyobj attributes.
                 uint vertexIndex = static_cast<uint>(indexData.vertex_index) * 3;
+
+                if (vertexIndex + 3 > attributes.vertices.size())
+                    continue;
+
                 uint normalIndex = static_cast<uint>(indexData.normal_index) * 3;
                 uint uvIndex = static_cast<uint>(indexData.texcoord_index) * 2;
 
