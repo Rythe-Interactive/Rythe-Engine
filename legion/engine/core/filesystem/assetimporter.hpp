@@ -1,5 +1,7 @@
 #pragma once
 #include <any>
+#include <memory>
+
 #include <core/containers/containers.hpp>
 #include <core/filesystem/resource.hpp>
 #include <core/filesystem/view.hpp>
@@ -66,7 +68,7 @@ namespace legion::core::filesystem
     class AssetImporter
     {
     private:
-        static sparse_map<id_type, std::vector<detail::resource_converter_base*>> m_converters;
+        static sparse_map<id_type, std::vector<std::unique_ptr<detail::resource_converter_base>>> m_converters;
 
     public:
         /**@brief Reports a converter type to the importer and allows converting from the given extension to the given object type.
@@ -77,7 +79,7 @@ namespace legion::core::filesystem
         static void reportConverter(cstring extension)
         {
             OPTICK_EVENT();
-            m_converters[nameHash(extension)].push_back(new T());
+            m_converters[nameHash(extension)].push_back(std::make_unique<T>());
         }
 
 
@@ -112,13 +114,13 @@ namespace legion::core::filesystem
             if (result != common::valid)
                 return decay(Err(result.get_error()));
 
-            for (detail::resource_converter_base* base : m_converters[nameHash(view.get_extension())])
+            for (auto& base : m_converters[nameHash(view.get_extension())])
             {
                 // Do a safety check if the cast was valid before we call any functions on it.
                 if (typeHash<T>() == base->result_type())
                 {
                     // Retrieve the correct converter to use.
-                    auto* converter = static_cast<resource_converter<T, Settings...>*>(base);
+                    auto* converter = static_cast<resource_converter<T, Settings...>*>(base.get());
 
                     // Attempt the conversion and return the result.
                     auto loadresult = converter->load(result, std::forward<Settings>(settings)...);
