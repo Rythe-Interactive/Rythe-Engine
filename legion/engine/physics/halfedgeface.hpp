@@ -113,6 +113,8 @@ namespace legion::physics
 
         void DEBUG_DrawFace(const math::mat4& transform, const math::color& debugColor,  float time = 20.0f);
 
+        void DEBUG_DirectionDrawFace(const math::mat4& transform, const math::color& debugColor, float time = 20.0f);
+
 		~HalfEdgeFace();
 	};
 }

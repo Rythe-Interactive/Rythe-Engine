@@ -847,7 +847,7 @@ namespace legion::physics
     }
 
     void PhysicsStatics::findHorizonEdgesFromFaces(const math::vec3& eyePoint, std::vector<HalfEdgeFace*>& faces,
-        std::vector<HalfEdgeEdge*>& outHorizonEdges, float scalingEpsilon, math::mat4 DEBUG_transform)
+        std::vector<HalfEdgeEdge*>& outHorizonEdges, float scalingEpsilon, math::mat4 DEBUG_transform, bool atDebug)
     {
         //[1] Find first horizon edge
         HalfEdgeEdge* initialHorizon = nullptr;
@@ -876,19 +876,38 @@ namespace legion::physics
 
         HalfEdgeEdge* currentEdge = initialHorizon;
         //outHorizonEdges.push_back(currentEdge);
+        if (atDebug) { initialHorizon->DEBUG_drawEdge(DEBUG_transform, math::colors::orange, FLT_MAX, 5.0f); }
+        
 
         do
         {
+            if (atDebug) { log::debug("-> Iteration"); }
+
             currentEdge = currentEdge->nextEdge;
 
             if (!currentEdge->isEdgeHorizonFromVertex(eyePoint))
             {
+                if (atDebug) { log::debug("Next edge was not a horizon, finding horizon now"); }
+                int safetyCount = 0;
+
                 do
                 {
+                    if (atDebug) { log::debug("getting pairingEdge->nextEdge"); }
+
                     currentEdge = currentEdge->pairingEdge->nextEdge;
-                } while (!currentEdge->isEdgeHorizonFromVertex(eyePoint));
+
+                    safetyCount++;
+
+                    if (safetyCount > 10)
+                    {
+                        return;
+                    }
+                }
+                while (!currentEdge->isEdgeHorizonFromVertex(eyePoint));
 
             }
+
+            if (atDebug) { log::debug("getting nextEdge"); }
 
             outHorizonEdges.push_back(currentEdge);
 
@@ -936,17 +955,19 @@ namespace legion::physics
         {
             for (auto face : facesToBeRemoved)
             {
-                face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
+                face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
             }
-            return;
+            log::debug(" facesToBeRemoved {0} ", facesToBeRemoved.size());
+            //return;
         }
         
         //identify horizon edges and put them into list
         std::vector<HalfEdgeEdge*> horizonEdges;
-        findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges,scalingEpsilon, DEBUG_transform);
+        findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges,scalingEpsilon, DEBUG_transform,atDebug);
 
         if (atDebug)
         {
+            return;
            /* for (auto edge : horizonEdges)
             {
                 edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX);

@@ -72,6 +72,24 @@ namespace legion::physics
         debug::user_projectDrawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);
     }
 
+    void HalfEdgeEdge::DEBUG_directionDrawEdge(const math::mat4& transform, const math::color& debugColor, float time, float width)
+    {
+        math::vec3 worldStart = transform * math::vec4(edgePosition, 1);
+        math::vec3 worldEnd = transform * math::vec4(nextEdge->edgePosition, 1);
+
+        math::vec3 worldCentroid = transform * math::vec4(face->centroid, 1);
+
+        math::vec3 startDifference = (worldCentroid - worldStart) * 0.1f;
+        math::vec3 endDifference = (worldCentroid - worldEnd) * 0.1f;
+
+        debug::user_projectDrawLine(worldStart + startDifference, worldEnd + endDifference, debugColor, width, time, true);
+
+        math::vec3 pointStart = worldStart + startDifference;
+        math::vec3 diff = worldEnd + endDifference - (worldStart + startDifference);
+
+        debug::user_projectDrawLine(pointStart + diff * 0.75f, pointStart + diff * 0.75f + math::vec3(0,0.2f,0), math::colors::red, width, time, true);
+    }
+
     void HalfEdgeEdge::suicidalMergeWithPairing(math::mat4 transform,  bool shouldDebug)
     {
         //----//

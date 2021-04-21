@@ -572,7 +572,8 @@ namespace legion::physics
         static void partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces, std::list<ColliderFaceToVert>& outFacesWithOutsideVerts);
 
         static void findHorizonEdgesFromFaces(const math::vec3& eyePoint,
-            std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges,float scalingEpsilon, math::mat4 DEBUG_transform = math::mat4(1.0f));
+            std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges,float scalingEpsilon,
+            math::mat4 DEBUG_transform = math::mat4(1.0f),bool atDebug =false);
 
         static void mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts,
             float scalingEpsilon, math::mat4 DEBUG_transform,bool atDebug);

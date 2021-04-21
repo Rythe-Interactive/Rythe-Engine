@@ -431,6 +431,16 @@ namespace legion::physics
         forEachEdge(drawFunc);
     }
 
+    void HalfEdgeFace::DEBUG_DirectionDrawFace(const math::mat4& transform, const math::color& debugColor, float time)
+    {
+        auto drawFunc = [&transform, debugColor, time](HalfEdgeEdge* edge)
+        {
+            edge->DEBUG_directionDrawEdge(transform, debugColor, time, 5.0f);
+        };
+
+        forEachEdge(drawFunc);
+    }
+
     HalfEdgeFace::~HalfEdgeFace()
     {
         auto deleteFunc = [](HalfEdgeEdge* edge)
