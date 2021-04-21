@@ -62,10 +62,7 @@ namespace legion::rendering
 
 
         //call gui callback
-        if (!m_onGuiRender.isNull())
-        {
-            m_onGuiRender(context, cam, camInput, deltaTime);
-        }
+        m_onGuiRender(context, cam, camInput, deltaTime);
 
         //render gui
         ImGui::Render();

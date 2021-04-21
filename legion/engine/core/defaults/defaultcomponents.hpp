@@ -209,7 +209,7 @@ namespace std // NOLINT(cert-dcl58-cpp)
     legion::core::element_at_t<I, legion::core::position, legion::core::rotation, legion::core::scale>&
         get(legion::core::transform& val)
     {
-        return val.get<0>();
+        return val.get<I>();
     }
 
     template <class X>

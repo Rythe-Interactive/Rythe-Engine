@@ -67,8 +67,6 @@ namespace legion::rendering
 
         texture_handle texture = std::get<texture_handle>(colorAttachment);
 
-        math::ivec2 attachmentSize = texture.get_texture().size();
-
         bool stencil = false;
         auto depthAttachment = fbo->getAttachment(GL_DEPTH);
         if (std::holds_alternative<std::monostate>(depthAttachment))

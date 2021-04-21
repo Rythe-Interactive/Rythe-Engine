@@ -353,8 +353,10 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 
 #if defined(LEGION_GCC) || defined(LEGION_CLANG)
 #define L_ALWAYS_INLINE __attribute__((always_inline))
-#else
+#elif defined(LEGION_MSVC)
 #define L_ALWAYS_INLINE __forceinline
+#else
+#define L_ALWAYS_INLINE
 #endif
 
 #if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)

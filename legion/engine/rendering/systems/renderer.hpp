@@ -29,7 +29,7 @@ namespace legion::rendering
 
         virtual void setup();
 
-        void onExit(events::exit* event);
+        void onExit(events::exit& event);
 
         void render(time::span deltatime);
 

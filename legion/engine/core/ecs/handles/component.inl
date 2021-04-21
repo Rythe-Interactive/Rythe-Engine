@@ -5,14 +5,14 @@
 namespace legion::core::ecs
 {
     template<typename component_type>
-    component<component_type>& component<component_type>::operator=(const component_type& src)
+    inline L_ALWAYS_INLINE component<component_type>& component<component_type>::operator=(const component_type& src)
     {
         Registry::getComponent<component_type>(owner) = src;
         return *this;
     }
 
     template<typename component_type>
-    component<component_type>& component<component_type>::operator=(component_type&& src)
+    inline L_ALWAYS_INLINE component<component_type>& component<component_type>::operator=(component_type&& src)
     {
         Registry::getComponent<component_type>(owner) = std::move(src);
         return *this;
