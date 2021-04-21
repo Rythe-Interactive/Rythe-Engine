@@ -39,24 +39,30 @@ namespace legion::core
             : values(std::forward<Members>(members)...), names(memberNames) {}
     };
 
-#define Reflectable                         \
-template<typename, typename...>             \
-friend struct legion::core::reflector;
+#define Reflectable                                                                                                                         \
+template<typename, typename...>                                                                                                             \
+friend struct legion::core::reflector;                                                                                                      \
+template<class T, typename... Args>                                                                                                         \
+friend decltype(void(T{ std::declval<Args>()... }), std::true_type()) brace_construct_test_reflector(int);                                  \
+template <typename SRC, typename Reflector, size_type... I>                                                                                 \
+friend SRC make_from_reflector_impl(Reflector&& r, std::index_sequence<I...>)
 
-#define ManualReflector_IMPL(type, ...)                                                                                                     \
-namespace legion::core{                                                                                                                     \
-    template<>                                                                                                                              \
-    struct reflector<type>                                                                                                                  \
-    {                                                                                                                                       \
-        using source_type = type;                                                                                                           \
-                                                                                                                                            \
-        inline static constexpr std::size_t size = EXPAND(NARGS(__VA_ARGS__));                                                              \
-        std::tuple<EXPAND(decltypes_count(NARGS(__VA_ARGS__), colon_access(type, __VA_ARGS__)))> values;                                    \
-        std::array<std::string, size> names;                                                                                                \
-                                                                                                                                            \
+
+#define ManualReflector_IMPL(type, ...)                                                                                                                      \
+namespace legion::core{                                                                                                                                      \
+    template<>                                                                                                                                               \
+    struct reflector<type>                                                                                                                                   \
+    {                                                                                                                                                        \
+        using source_type = type;                                                                                                                            \
+                                                                                                                                                             \
+        inline static constexpr std::size_t size = EXPAND(NARGS(__VA_ARGS__));                                                                               \
+        std::tuple<EXPAND(decltypes_count(NARGS(__VA_ARGS__), colon_access(type, __VA_ARGS__)))> values;                                                     \
+        std::array<std::string, size> names;                                                                                                                 \
+                                                                                                                                                             \
         reflector(const type& src) : values(std::make_tuple(EXPAND(dot_access(src, __VA_ARGS__)))), names({ EXPAND(STRINGIFY_SEPERATE(__VA_ARGS__)) }) {}    \
-    };                                                                                                                                      \
+    };                                                                                                                                                       \
 }
+
 
 #define ManualReflector(type, ...) EXPAND(ManualReflector_IMPL(type, __VA_ARGS__))
 
@@ -174,10 +180,40 @@ namespace legion::core{                                                         
 
     namespace detail
     {
+        template<class T, typename... Args>
+        decltype(void(T{ std::declval<Args>()... }), std::true_type())
+            brace_construct_test_reflector(int);
+
+        template<class T, typename... Args>
+        std::false_type
+            brace_construct_test_reflector(...);
+
+        template<class T, typename... Args>
+        struct is_brace_constructible_reflector : decltype(brace_construct_test_reflector<T, Args...>(0))
+        {
+        };
+
         template <typename SRC, typename Reflector, size_type... I>
         constexpr SRC make_from_reflector_impl(Reflector&& r, std::index_sequence<I...>)
         {
-            return SRC{ std::get<I>(r.values)... };
+            if constexpr (is_brace_constructible_reflector<SRC, decltype(std::get<I>(r.values))...>::value)
+            {
+                return SRC{ std::get<I>(r.values)... };
+            }
+            else if constexpr (is_brace_constructible_reflector<SRC, Reflector>::value)
+            {
+                return SRC{ r };
+            }
+            else if constexpr (is_brace_constructible_reflector<SRC>::value)
+            {
+                L_WARNING("from_reflector has no viable way of turning a reflector back into the object");
+                return SRC{};
+            }
+            else
+            {
+                L_WARNING("from_reflector has no way of turning a reflector back into the object");
+                return SRC{ std::get<I>(r.values)... };
+            }
         }
     }
 
