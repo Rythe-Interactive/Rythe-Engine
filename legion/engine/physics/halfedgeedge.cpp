@@ -41,7 +41,7 @@ namespace legion::physics
     bool HalfEdgeEdge::isVertexVisible(const math::vec3& vert,float epsilon)
     {
         float distanceToPlane =
-            math::pointToPlane(vert, edgePosition, face->normal);
+            math::pointToPlane(vert, face->centroid, face->normal);
 
         return distanceToPlane > epsilon;
     }
@@ -87,7 +87,7 @@ namespace legion::physics
         math::vec3 pointStart = worldStart + startDifference;
         math::vec3 diff = worldEnd + endDifference - (worldStart + startDifference);
 
-        debug::user_projectDrawLine(pointStart + diff * 0.75f, pointStart + diff * 0.75f + math::vec3(0,0.2f,0), math::colors::red, width, time, true);
+        debug::user_projectDrawLine(pointStart + diff * 0.75f, pointStart + diff * 0.75f + math::vec3(-0.1f,0,0), math::colors::red, width, time, true);
     }
 
     void HalfEdgeEdge::suicidalMergeWithPairing(math::mat4 transform,  bool shouldDebug)

@@ -541,6 +541,7 @@ namespace legion::physics
 
         for (auto& faceToVert : facesWithOutsideVerts)
         {
+            
             halfEdgesVector.push_back(faceToVert.face);
         }
         
@@ -852,11 +853,11 @@ namespace legion::physics
         //[1] Find first horizon edge
         HalfEdgeEdge* initialHorizon = nullptr;
 
-        auto findFirstHorizon = [&eyePoint,&initialHorizon](HalfEdgeEdge*edge)
+        auto findFirstHorizon = [&eyePoint,&initialHorizon,scalingEpsilon](HalfEdgeEdge*edge)
         {
             if (initialHorizon) { return; }
-
-            if (edge->isEdgeHorizonFromVertex(eyePoint))
+           
+            if (edge->isEdgeHorizonFromVertex(eyePoint, scalingEpsilon))
             {
                 initialHorizon = edge;
             }
@@ -876,20 +877,23 @@ namespace legion::physics
 
         HalfEdgeEdge* currentEdge = initialHorizon;
         //outHorizonEdges.push_back(currentEdge);
-        if (atDebug) { initialHorizon->DEBUG_drawEdge(DEBUG_transform, math::colors::orange, FLT_MAX, 5.0f); }
+        if (atDebug)
+        {
+            initialHorizon->DEBUG_drawEdge(DEBUG_transform, math::colors::orange, FLT_MAX, 5.0f);
+        }
         
-
+        
         do
         {
             if (atDebug) { log::debug("-> Iteration"); }
 
             currentEdge = currentEdge->nextEdge;
 
-            if (!currentEdge->isEdgeHorizonFromVertex(eyePoint))
+            if (!currentEdge->isEdgeHorizonFromVertex(eyePoint, scalingEpsilon))
             {
                 if (atDebug) { log::debug("Next edge was not a horizon, finding horizon now"); }
                 int safetyCount = 0;
-
+                auto stuckEdge = currentEdge;
                 do
                 {
                     if (atDebug) { log::debug("getting pairingEdge->nextEdge"); }
@@ -900,6 +904,7 @@ namespace legion::physics
 
                     if (safetyCount > 10)
                     {
+                        stuckEdge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX, 5.0f);
                         return;
                     }
                 }
@@ -958,7 +963,7 @@ namespace legion::physics
                 face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
             }
             log::debug(" facesToBeRemoved {0} ", facesToBeRemoved.size());
-            //return;
+            return;
         }
         
         //identify horizon edges and put them into list
@@ -967,7 +972,7 @@ namespace legion::physics
 
         if (atDebug)
         {
-            return;
+            //return;
            /* for (auto edge : horizonEdges)
             {
                 edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX);
@@ -1063,7 +1068,7 @@ namespace legion::physics
     {
         static float angle = math::cos(math::radians(10.0f));
 
-        float dotResult = math::dot(first->normal,second->normal);
+        float dotResult = math::dot(math::normalize(first->normal), math::normalize(second->normal));
         return dotResult > angle;
     }
 
