@@ -158,7 +158,7 @@ namespace legion::core::ecs
         // Destroy every component in the composition and clear the composition.
         auto& composition = entityCompositions().at(target->id);
         for (auto& componentId : composition)
-            getFamily(componentId)->destroy_component(target->id);
+            getFamily(componentId)->destroy_component(target);
         composition.clear();
 
         // Mark entity as recyclable and invalidate ID.

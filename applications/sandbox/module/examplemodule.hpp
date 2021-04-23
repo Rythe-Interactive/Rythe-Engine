@@ -16,7 +16,7 @@ public:
             "Legion Icon",
             nullptr,
             nullptr,
-            1
+            0
         );
 
         lgn::log::debug("ExampleModule setup");

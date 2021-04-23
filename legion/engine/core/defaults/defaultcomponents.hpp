@@ -205,19 +205,6 @@ namespace std // NOLINT(cert-dcl58-cpp)
         using type = typename legion::core::element_at_t<I, legion::core::position, legion::core::rotation, legion::core::scale>;
     };
 
-    template <::std::size_t I>
-    legion::core::element_at_t<I, legion::core::position, legion::core::rotation, legion::core::scale>&
-        get(legion::core::transform& val)
-    {
-        return val.get<I>();
-    }
-
-    template <class X>
-    X& get(legion::core::transform& val)
-    {
-        return val.get<X>();
-    }
-
     template<>
     struct tuple_size<legion::core::transform>
         : public std::integral_constant<std::size_t, 3>

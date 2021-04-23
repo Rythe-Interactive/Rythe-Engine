@@ -27,6 +27,9 @@ namespace legion::core::ecs
     template<typename component_type>
     constexpr bool maybe_component_v = maybe_component<component_type>::value;
 
+    HAS_FUNC(init);
+    HAS_FUNC(destroy);
+
     namespace detail
     {
         template<bool,typename>

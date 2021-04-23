@@ -10,7 +10,7 @@ namespace legion::core
 #if defined(LEGION_MSVC) || defined(LEGION_CLANG_MSVC)
         static std::hash<std::string> hasher{};
         if (!name.empty() && name[name.size() - 1] == '\0')
-            return hasher(name.substr(0, name.size() - 2));
+            return nameHash(std::string_view(name));
 
         return hasher(name);
 #else

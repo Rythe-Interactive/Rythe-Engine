@@ -35,7 +35,31 @@ namespace legion::core
     };                                                                                                                  \
                                                                                                                         \
     template<typename C, typename F>                                                                                    \
-    constexpr bool CONCAT_DEFINE(has_, CONCAT(x, _v)) = CONCAT(has_, x)<C, F>::value;
+    constexpr bool CONCAT_DEFINE(has_, CONCAT(x, _v)) = CONCAT(has_, x)<C, F>::value;                                   \
+                                                                                                                        \
+    template<typename, typename T>                                                                                      \
+    struct CONCAT(has_static_, x) {                                                                                     \
+        static_assert(std::integral_constant<T, false>::value, "Second template param needs to be of function type.");  \
+    };                                                                                                                  \
+                                                                                                                        \
+    template<typename C, typename Ret, typename... Args>                                                                \
+    struct CONCAT(has_static_, x)<C, Ret(Args...)> {                                                                    \
+    private:                                                                                                            \
+        template<typename T>                                                                                            \
+        static constexpr auto check(T*)                                                                                 \
+            -> typename std::is_same<decltype(T:: x (std::declval<Args>()...)), Ret>::type;                             \
+                                                                                                                        \
+        template <typename>                                                                                             \
+        static constexpr auto check(...)                                                                                \
+            ->std::false_type;                                                                                          \
+                                                                                                                        \
+        typedef decltype(check<C>(nullptr)) type;                                                                       \
+    public:                                                                                                             \
+        static constexpr bool value = type::value;                                                                      \
+    };                                                                                                                  \
+                                                                                                                        \
+    template<typename C, typename F>                                                                                    \
+    constexpr bool CONCAT_DEFINE(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value;
 
 
     HAS_FUNC(setup);

@@ -95,7 +95,7 @@ namespace legion::core::scheduling
             if (m_doTick.exchange(false, std::memory_order_acquire))
                 advance(loopStart, elapsedSinceLastTick);
             else
-                std::this_thread::yield();
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
             break;
         }
     }

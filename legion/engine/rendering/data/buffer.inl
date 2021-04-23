@@ -5,20 +5,7 @@ namespace legion::rendering
 {
     template<typename T>
     buffer::buffer(GLenum target, const std::vector<T>& data, GLenum usage)
-        : m_id([](app::gl_id& value) { // Assign logic for buffer deletion to managed resource.
-            if (!app::ContextHelper::initialized())
-                return;
-
-#if defined(LEGION_DEBUG)
-            if (!app::ContextHelper::getCurrentContext())
-            {
-                log::error("No current context to delete buffer with.");
-                return;
-            }
-#endif
-            if (value)
-                glDeleteBuffers(1, &value);
-        }, invalid_id),
+        : m_id(&buffer::idDeleter, invalid_id),
         m_target(target),
         m_usage(usage)
     {
