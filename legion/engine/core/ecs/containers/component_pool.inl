@@ -96,14 +96,14 @@ namespace legion::core::ecs
 
         if constexpr (has_static_destroy_v<component_type, void(component_type&, entity)>)
         {
-            component_type::destroy(m_components.at(target), target);
+            component_type::destroy(m_components.at(target->id), target);
         }
         else if constexpr (has_static_destroy_v<component_type, void(component_type&)>)
         {
-            component_type::destroy(m_components.at(target));
+            component_type::destroy(m_components.at(target->id));
         }
 
-        m_components.erase(target);
+        m_components.erase(target->id);
     }
 
     template<typename component_type>
@@ -244,14 +244,14 @@ namespace legion::core::ecs
 
         if constexpr (has_static_destroy_v<component_type, void(component_type&, entity)>)
         {
-            component_type::destroy(m_components.at(target), target);
+            component_type::destroy(m_components.at(target->id), target);
         }
         else if constexpr (has_static_destroy_v<component_type, void(component_type&)>)
         {
-            component_type::destroy(m_components.at(target));
+            component_type::destroy(m_components.at(target->id));
         }
 
-        m_components.erase(target);
+        m_components.erase(target->id);
     }
 
     template<typename component_type>
