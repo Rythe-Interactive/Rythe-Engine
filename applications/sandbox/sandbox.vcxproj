@@ -48,7 +48,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\intermediates\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
@@ -111,6 +111,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp" />
+    <ClCompile Include="systems\gui_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\pp_bloom.hpp" />
@@ -118,8 +119,10 @@
     <ClInclude Include="module\examplemodule.hpp" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="systems\examplesystem.hpp" />
+    <ClInclude Include="systems\gui_test.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="data\pp_blur.hpp" />
+    <ClInclude Include="systems\simplecameracontroller.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\kernels\vadd_kernel.cl" />

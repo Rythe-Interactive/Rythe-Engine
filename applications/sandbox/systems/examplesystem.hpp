@@ -14,7 +14,6 @@ public:
         log::filter(log::severity_debug);
         log::debug("ExampleSystem setup");
 
-        log::debug("_texture {} {} {}", nameHash("_texture"), nameHash(std::string("_texture")), nameHash(std::string("_texture\0")));
 
         app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
 

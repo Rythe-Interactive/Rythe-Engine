@@ -82,6 +82,7 @@ namespace legion::core::ecs
         data.alive = true;
         data.active = true;
         data.id = currentEntityId;
+        data.name = std::to_string(currentEntityId);
         data.parent = parent;
 
         if (parent) // If our parent is a valid entity we want to add the new entity as a child to the parent.
