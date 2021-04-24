@@ -14,13 +14,7 @@ namespace legion::core::serialization
 
     public:
         template<typename type>
-        static void register_component()
-        {
-            SerializationRegistry::serializers.emplace(0, std::make_unique<serializer<type>>());
-        }
-
+        static void register_component();
         static std::unique_ptr<component_prototype_base> getPrototype(json j);
-
-
     };
 }

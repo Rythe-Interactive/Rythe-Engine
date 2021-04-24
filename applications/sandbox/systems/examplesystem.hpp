@@ -27,6 +27,7 @@ public:
         test.value = 10;
         auto j = serialization::json_serializer::serialize<example_component>(test);
         auto output = serialization::SerializationRegistry::getPrototype(j);
+        log::debug(output.get()->type.local_name());
     }
 
     void update(legion::time::span deltaTime)
