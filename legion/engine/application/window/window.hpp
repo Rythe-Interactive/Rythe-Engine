@@ -16,10 +16,6 @@ namespace legion::application
 
         window() = default;
         window(GLFWwindow* ptr) : handle(ptr) {}
-        window(std::string m_title,
-            bool m_isFullscreen,
-            int m_swapInterval,
-            math::ivec2 m_size) {}
 
         GLFWwindow* handle;
         async::spinlock* lock;
@@ -44,6 +40,14 @@ namespace legion::application
         const std::string& title() const;
 
     private:
+        // This constructor only exists temporarily untill this get's an entire overhoal.
+        // The reason for it's existance is to make reflection compile for the window in order to work with the new ECS.
+        // Window should never have been a component.
+        window(std::string m_title,
+            bool m_isFullscreen,
+            int m_swapInterval,
+            math::ivec2 m_size) {}
+
         std::string m_title;
         bool m_isFullscreen;
         int m_swapInterval;

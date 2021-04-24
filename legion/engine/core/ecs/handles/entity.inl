@@ -17,7 +17,7 @@ namespace legion::core::ecs
     namespace detail
     {
         template<typename component_type>
-        auto _wrap_in_tuple(entity target)
+        inline L_ALWAYS_INLINE auto _wrap_in_tuple(entity target)
         {
             if constexpr (maybe_component_v<component_type>)
                 return std::make_tuple(component<remove_cvr_t<component_type>>{ {}, target });
@@ -26,7 +26,7 @@ namespace legion::core::ecs
         }
 
         template<typename component_type>
-        auto _get_handle(entity target)
+        inline L_ALWAYS_INLINE auto _get_handle(entity target)
         {
             if constexpr (maybe_component_v<component_type>)
                 return component<remove_cvr_t<component_type>>{ {}, target };
@@ -35,7 +35,7 @@ namespace legion::core::ecs
         }
 
         template<typename... component_types>
-        auto _get_handles(entity target)
+        inline L_ALWAYS_INLINE auto _get_handles(entity target)
         {
             return std::tuple_cat(_wrap_in_tuple<component_types>(target)...);
         }

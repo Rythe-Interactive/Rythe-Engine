@@ -19,8 +19,7 @@ namespace  legion::rendering
         static id_type batchesId = nameHash("mesh batches");
         auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::vector<math::mat4>>>>(batchesId);
 
-        static auto renderablesQuery = createQuery<position, rotation, scale, mesh_filter, mesh_renderer>();
-        renderablesQuery.queryEntities();
+        static ecs::filter<position, rotation, scale, mesh_filter, mesh_renderer> renderablesQuery{};
 
         auto& positions = renderablesQuery.get<position>();
         auto& rotations = renderablesQuery.get<rotation>();
@@ -40,7 +39,7 @@ namespace  legion::rendering
             for (int i = 0; i < renderablesQuery.size(); i++)
             {
                 OPTICK_EVENT("instance");
-                (*batches)[renderers[i].material][model_handle{ filters[i].id }].push_back(math::compose(scales[i], rotations[i], positions[i]));
+                (*batches)[renderers[i].get().material][model_handle{ filters[i].get().id }].push_back(math::compose(scales[i].get(), rotations[i].get(), positions[i].get()));
             }
         }
     }

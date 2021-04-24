@@ -305,13 +305,6 @@ namespace legion::rendering
     void Renderer::setup()
     {
         OPTICK_EVENT();
-        RenderPipelineBase::m_ecs = m_ecs;
-        RenderPipelineBase::m_scheduler = m_scheduler;
-        RenderPipelineBase::m_eventBus = m_eventBus;
-
-        RenderStageBase::m_ecs = m_ecs;
-        RenderStageBase::m_scheduler = m_scheduler;
-        RenderStageBase::m_eventBus = m_eventBus;
 
         bindToEvent<events::exit, &Renderer::onExit>();
 
@@ -321,10 +314,10 @@ namespace legion::rendering
             OPTICK_EVENT("Initialization");
             log::trace("Waiting on main window.");
 
-            while (!world.has_component<app::window>())
+            while (!ecs::world.has_component<app::window>())
                 std::this_thread::yield();
 
-            app::window window = world.get_component_handle<app::window>().read();
+            app::window& window = ecs::world.get_component<app::window>();
 
             log::trace("Initializing context.");
 
@@ -347,7 +340,7 @@ namespace legion::rendering
         }
     }
 
-    void Renderer::onExit(events::exit* event)
+    void Renderer::onExit(events::exit& event)
     {
         OPTICK_EVENT();
         m_exiting.store(true, std::memory_order_release);
@@ -357,23 +350,23 @@ namespace legion::rendering
     {
         OPTICK_EVENT();
 
-        if (m_pipelineProvider.isNull())
+        if (!m_pipelineProvider)
             return;
 
-        static auto cameraQuery = createQuery<camera>();
-        cameraQuery.queryEntities();
+        static ecs::filter<camera> cameraQuery{};
+
         for (auto ent : cameraQuery)
         {
-            auto cam = ent.get_component_handle<camera>().read();
-            app::window win = cam.targetWindow.read();
+            camera& cam = ent.get_component<camera>();
+            app::window& win = cam.targetWindow;
             if (!win)
-                win = m_ecs->world.get_component_handle<app::window>().read();
+                win = ecs::world.get_component<app::window>();
             if (!win)
                 continue;
 
             math::ivec2 viewportSize;
             {
-                if (!app::WindowSystem::windowStillExists(win.nativeHandle))
+                if (!app::WindowSystem::windowStillExists(win.handle))
                     continue;
                 app::context_guard guard(win);
                 if (!guard.contextIsValid())
@@ -385,9 +378,9 @@ namespace legion::rendering
             if (viewportSize.x == 0 || viewportSize.y == 0)
                 continue;
 
-            position camPos = ent.get_component_handle<position>().read();
-            rotation camRot = ent.get_component_handle<rotation>().read();
-            scale camScale = ent.get_component_handle<scale>().read();
+            position& camPos = ent.get_component<position>();
+            rotation& camRot = ent.get_component<rotation>();
+            scale& camScale = ent.get_component<scale>();
 
             math::mat4 view(1.f);
             math::compose(view, camScale, camRot, camPos);
@@ -408,7 +401,7 @@ namespace legion::rendering
     L_NODISCARD RenderPipelineBase* Renderer::getPipeline(app::window& context)
     {
         OPTICK_EVENT();
-        if (m_pipelineProvider.isNull())
+        if (!m_pipelineProvider)
             return nullptr;
 
         if (context == app::invalid_window)
@@ -425,10 +418,10 @@ namespace legion::rendering
     L_NODISCARD RenderPipelineBase* Renderer::getMainPipeline()
     {
         OPTICK_EVENT();
-        if (m_pipelineProvider.isNull())
+        if (!m_pipelineProvider)
             return nullptr;
 
-        auto context = world.get_component_handle<app::window>().read();
+        app::window& context = ecs::world.get_component<app::window>();
         if (context == app::invalid_window)
             return nullptr;
 

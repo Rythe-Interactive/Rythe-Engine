@@ -11,19 +11,6 @@
 
 namespace legion::core::events
 {
-    namespace detail
-    {
-        static async::rw_spinlock eventNameLock;
-        static std::unordered_map<id_type, std::string> eventNames;
-
-        template<typename T>
-        id_type reportEventType()
-        {
-            eventNames[typeHash<T>()] = nameOfType<T>();
-            return typeHash<T>();
-        }
-    }
-
     /**@class event_base
      * @brief Base class of all events for polymorphic storage.
      */
@@ -44,7 +31,7 @@ namespace legion::core::events
     {
         friend  class EventBus;
 
-        inline static const id_type id = detail::reportEventType<Self>();
+        inline static const id_type id = typeHash<Self>();
 
         virtual ~event() = default;
     private:

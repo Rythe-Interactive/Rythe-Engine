@@ -108,7 +108,7 @@ namespace legion::rendering
                 }
 
                 // Insert uniform into the uniform list.
-                auto hashid = nameHash(std::string(name));
+                auto hashid = nameHash(name);
                 variant.uniforms[hashid] = std::unique_ptr<shader_parameter_base>(uniform);
                 variant.idOfLocation[location] = hashid;
             }
@@ -139,7 +139,7 @@ namespace legion::rendering
 
                 // Get location and create attribute object
                 GLint location = glGetAttribLocation(variant.programId, attribNameBuffer);
-                variant.attributes[nameHash(std::string(name).c_str())] = std::unique_ptr<attribute>(new attribute(id, name, type, location));
+                variant.attributes[nameHash(name)] = std::unique_ptr<attribute>(new attribute(id, name, type, location));
             }
 
             delete[] attribNameBuffer;

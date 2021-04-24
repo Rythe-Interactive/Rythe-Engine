@@ -240,7 +240,7 @@ namespace legion::application
             //creates a tuple with default value 0
             auto& data = m_actions[m][typeHash<Event>()];
 
-            data.callback = action_callback::create(
+            data.callback = action_callback::from(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
                 {
                     OPTICK_EVENT("Key to action callback");
@@ -261,7 +261,7 @@ namespace legion::application
         {
             auto& data = m_actions[m][typeHash<Event>()];
 
-            data.callback = action_callback::create(
+            data.callback = action_callback::from(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
                 {
                     self->pushCommand<Event>(state ? def : 0.0f,mods,method);
@@ -280,7 +280,7 @@ namespace legion::application
 
             auto& data = m_axes[m][typeHash<Event>()];
 
-            data.callback = axis_callback::create(
+            data.callback = axis_callback::from(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
                 {
                     OPTICK_EVENT("Axis to action callback");
@@ -302,7 +302,7 @@ namespace legion::application
 
             auto& data = m_axes[m][typeHash<Event>()];
 
-            data.callback = axis_callback::create(
+            data.callback = axis_callback::from(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
                 {
                     self->pushCommand<Event>(value,mods,method);
