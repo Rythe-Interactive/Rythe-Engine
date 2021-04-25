@@ -91,10 +91,14 @@ namespace legion::core::ecs
          */
         L_NODISCARD static entity createEntity();
 
+        L_NODISCARD static entity createEntity(const std::string& name);
+
         /**@brief Creates empty entity with a specific entity as its parent.
          * @param parent Entity to assign as the parent of the new entity.
          */
         L_NODISCARD static entity createEntity(entity parent);
+
+        L_NODISCARD static entity createEntity(const std::string& name, entity parent);
 
         /**@brief Creates empty entity with a specific entity as its parent. Entity is serialized from a prototype.
          *        This function will also create any components or child entities in the prototype structure.

@@ -3,8 +3,6 @@
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
 
-struct exit_action : public lgn::app::input_action<exit_action>{};
-
 class ExampleSystem final : public legion::System<ExampleSystem>
 {
 public:
@@ -14,14 +12,9 @@ public:
         log::filter(log::severity_debug);
         log::debug("ExampleSystem setup");
 
-
-        app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
-
-        bindToEvent<exit_action, &ExampleSystem::onExit>();
-
-        auto cament = createEntity();
-        cament.add_component<gfx::camera>()->set_projection(60.f, 0.01f, 1000.f);
-        cament.add_component(position(), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
+        schd::Scheduler::reserveThread([]() {
+            log::info("Thread {} assigned.", std::this_thread::get_id());
+            });
 
         app::window& win = ecs::world.get_component<app::window>();
         app::context_guard guard(win);
@@ -36,11 +29,6 @@ public:
             ent.add_component<transform>();
             ent.add_component(gfx::mesh_renderer(material, model));
         }
-    }
-
-    void onExit(exit_action& event)
-    {
-        raiseEvent<lgn::events::exit>();
     }
         
     void update(legion::time::span deltaTime)

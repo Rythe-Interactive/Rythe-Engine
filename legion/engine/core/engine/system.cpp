@@ -18,9 +18,24 @@ namespace legion::core
         return ecs::Registry::createEntity();
     }
 
+    ecs::entity SystemBase::createEntity(const std::string& name)
+    {
+        return ecs::Registry::createEntity(name);
+    }
+
     ecs::entity SystemBase::createEntity(ecs::entity parent)
     {
         return ecs::Registry::createEntity(parent);
+    }
+
+    ecs::entity SystemBase::createEntity(ecs::entity parent, const std::string& name)
+    {
+        return ecs::Registry::createEntity(name, parent);
+    }
+
+    ecs::entity SystemBase::createEntity(const std::string& name, ecs::entity parent)
+    {
+        return ecs::Registry::createEntity(name, parent);
     }
 
     ecs::entity SystemBase::createEntity(ecs::entity parent, const serialization::entity_prototype& prototype)

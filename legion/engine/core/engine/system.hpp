@@ -27,6 +27,8 @@ namespace legion::core
 
         SystemBase(type_reference&& id) : id(id) {}
 
+        // TODO: Inline all the things
+
         void destroyProcess(id_type procId);
 
         template <typename event_type CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
@@ -36,10 +38,15 @@ namespace legion::core
          */
         L_NODISCARD static ecs::entity createEntity();
 
+        L_NODISCARD static ecs::entity createEntity(const std::string& name);
+
         /**@brief Creates empty entity with a specific entity as its parent.
          * @param parent Entity to assign as the parent of the new entity.
          */
         L_NODISCARD static ecs::entity createEntity(ecs::entity parent);
+
+        L_NODISCARD static ecs::entity createEntity(ecs::entity parent, const std::string& name);
+        L_NODISCARD static ecs::entity createEntity(const std::string& name, ecs::entity parent);
 
         /**@brief Creates empty entity with a specific entity as its parent. Entity is serialized from a prototype.
          *        This function will also create any components or child entities in the prototype structure.
