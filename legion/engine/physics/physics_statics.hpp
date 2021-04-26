@@ -561,7 +561,7 @@ namespace legion::physics
 
         //------------------------------------------------------------ Quickhull Helpers-----------------------------------------------------------------------//
 
-        static bool qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::vector<HalfEdgeFace*>& outFaces,
+        static bool qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::array<math::vec3,6>& supportPoints,  std::vector<HalfEdgeFace*>& outFaces,
             math::mat4 DEBUG_transform = math::mat4(1.0f));
 
         static void createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint,

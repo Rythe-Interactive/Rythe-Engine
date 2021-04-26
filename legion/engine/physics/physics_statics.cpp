@@ -459,7 +459,7 @@ namespace legion::physics
                 maxInDimension.z = math::abs(vert.z);
             }
         }
-
+        
         //epsilon must take into account span of vertices
         float dimensionSum = (maxInDimension.x + maxInDimension.y + maxInDimension.z);
         const float scaledEpsilon = dimensionSum * initialEpsilon;
@@ -467,8 +467,23 @@ namespace legion::physics
         std::vector<HalfEdgeFace*> faces;
         faces.reserve(4);
 
+        //[3] Measure extents of mesh
+        std::array<math::vec3, 6> supportVertices;
+
+        //(1.1) Get support points in -x and x
+        GetSupportPoint(vertices, math::vec3(1, 0, 0), supportVertices.at(0));
+        GetSupportPoint(vertices, math::vec3(-1, 0, 0), supportVertices.at(1));
+
+        //(1.2) Get support points in -y and y
+        GetSupportPoint(vertices, math::vec3(0, 1, 0), supportVertices.at(2));
+        GetSupportPoint(vertices, math::vec3(0, -1, 0), supportVertices.at(3));
+
+        //(1.3) Get support points in -z and z
+        GetSupportPoint(vertices, math::vec3(0, 0, 1), supportVertices.at(4));
+        GetSupportPoint(vertices, math::vec3(0, 0, -1), supportVertices.at(5));
+
         //[2] Build Initial Hull
-        if (!qHBuildInitialHull(vertices, faces,DEBUG_transform))
+        if (!qHBuildInitialHull(vertices, supportVertices, faces,DEBUG_transform))
         {
             return nullptr;
         }
@@ -562,10 +577,11 @@ namespace legion::physics
         return convexCollider;
     }
 
-    bool PhysicsStatics::qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::vector<HalfEdgeFace*>& faces, math::mat4 DEBUG_transform )
+    bool PhysicsStatics::qHBuildInitialHull(const std::vector<math::vec3>& vertices,
+        std::array<math::vec3,6>& supportVertices, std::vector<HalfEdgeFace*>& faces, math::mat4 DEBUG_transform )
     {
         //Summary:
-        //[1] Find the 2 most distant vertices in 'vertices'
+        //[1] Find the 2 most distant vertices in 'support Vertices'
         //[2] Find the vertex most distant from the line created by the 2 most distance vertices
         //[3] Create first collider face using that line and the vertex most distant to it
         //[4] Find the most distant vertex from the plane where the first collider face lies
@@ -574,27 +590,12 @@ namespace legion::physics
 
         //[1] Find the 2 most distant vertices in 'vertices'
 
-        std::vector<math::vec3> supportVertices(6);
-
-        //(1.1) Get support points in -x and x
-        GetSupportPoint(vertices, math::vec3(1, 0, 0), supportVertices.at(0));
-        GetSupportPoint(vertices, math::vec3(-1, 0, 0), supportVertices.at(1));
-                  
-        //(1.2) Get support points in -y and y
-        GetSupportPoint(vertices, math::vec3(0, 1, 0), supportVertices.at(2));
-        GetSupportPoint(vertices, math::vec3(0, -1, 0), supportVertices.at(3));
-
-        //(1.3) Get support points in -z and z
-        GetSupportPoint(vertices, math::vec3(0, 0, 1), supportVertices.at(4));
-        GetSupportPoint(vertices, math::vec3(0, 0, -1), supportVertices.at(5));
-
-        //(1.4) Find most distant combination
         float mostDistant = std::numeric_limits<float>::lowest();
 
         math::vec3& firstDistant = supportVertices.at(0);
         math::vec3& secondDistant = supportVertices.at(1);
 
-        //(1.5) Iterate through support vertices to find the combination of vertices that represent the 2 most distant points
+        //(1.1) Iterate through support vertices to find the combination of vertices that represent the 2 most distant points
         for (int i = 0; i < supportVertices.size(); i++)
         {
             math::vec3& first = supportVertices.at(i);
@@ -719,7 +720,6 @@ namespace legion::physics
             PhysicsStatics::PointDistanceToPlane(planeNormal, planePosition, *firstEyePoint);
         bool needInverse = eyePointDistance > 0.0f;
         
-
         if (needInverse)
         {
             initialFace->inverse();
@@ -754,6 +754,7 @@ namespace legion::physics
 
         return true;
     }
+
 
     void PhysicsStatics::createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint, const std::vector<HalfEdgeEdge*>& reversedEdges, std::vector<HalfEdgeFace*>& createdFaces)
     {
@@ -885,18 +886,18 @@ namespace legion::physics
         
         do
         {
-            if (atDebug) { log::debug("-> Iteration"); }
+            //if (atDebug) { log::debug("-> Iteration"); }
 
             currentEdge = currentEdge->nextEdge;
 
             if (!currentEdge->isEdgeHorizonFromVertex(eyePoint, scalingEpsilon))
             {
-                if (atDebug) { log::debug("Next edge was not a horizon, finding horizon now"); }
+                //if (atDebug) { log::debug("Next edge was not a horizon, finding horizon now"); }
                 int safetyCount = 0;
                 auto stuckEdge = currentEdge;
                 do
                 {
-                    if (atDebug) { log::debug("getting pairingEdge->nextEdge"); }
+                    //if (atDebug) { log::debug("getting pairingEdge->nextEdge"); }
 
                     currentEdge = currentEdge->pairingEdge->nextEdge;
 
@@ -912,7 +913,7 @@ namespace legion::physics
 
             }
 
-            if (atDebug) { log::debug("getting nextEdge"); }
+            //if (atDebug) { log::debug("getting nextEdge"); }
 
             outHorizonEdges.push_back(currentEdge);
 
@@ -932,6 +933,32 @@ namespace legion::physics
     {
         std::vector<math::vec3> unmergedVertices;
         std::vector<HalfEdgeFace*> facesToBeRemoved;
+
+        //TODO we are doing the point to distance thing twice here, would be better if we reused the results somehow
+
+        //[1] Calculate volume created if this particular vertex was merged
+        for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
+        {
+            HalfEdgeFace* face = listIter->face;
+
+            const math::vec3& planeCentroid = face->centroid;
+            const math::vec3& planeNormal = face->normal;
+
+            float distanceToPlane = PointDistanceToPlane(planeNormal, planeCentroid, eyePoint);
+
+            if (distanceToPlane > scalingEpsilon)
+            {
+                ////face can see vertex, we must remove it from list
+                //facesToBeRemoved.push_back(face);
+                //listIter->populateVectorWithVerts(unmergedVertices);
+                //listIter = facesWithOutsideVerts.erase(listIter);
+
+
+
+            }
+        }
+
+        //[2] Only continue if volume is above a given threshold
 
         //identify faces that can see vertex and remove them from list
         for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
@@ -996,15 +1023,6 @@ namespace legion::physics
         std::vector<HalfEdgeFace*> newFaces;
         newFaces.reserve(horizonEdges.size());
         createHalfEdgeFaceFromEyePoint(eyePoint, horizonEdges, newFaces);
-
-        //for each horizonEdge
-            //attempt to find coplanarity with its pairing
-
-            //if complanarity is found
-                //nullify new face
-                //delete new face
-
-        //remove all null faces
         
         for (int i = 0; i < horizonEdges.size(); i++)
         {

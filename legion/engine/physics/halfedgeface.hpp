@@ -33,6 +33,8 @@ namespace legion::physics
 
         void initializeFace();
 
+        float CalculateFaceArea();
+
         /**@brief Deletes all the edges of this face
          * Warning: pairing edges are not deleted because their face may still exist
          */

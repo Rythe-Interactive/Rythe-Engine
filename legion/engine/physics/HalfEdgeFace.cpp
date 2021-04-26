@@ -48,6 +48,41 @@ namespace legion::physics
         faceCount++;
     }
 
+    float HalfEdgeFace::CalculateFaceArea() 
+    {
+        float sum = 0;
+        math::vec3& faceCentroidPos = centroid;
+
+        auto caculateEdgeArea = [&faceCentroidPos,&sum](HalfEdgeEdge* edge)
+        {
+            const math::vec3& currentEdgePos = edge->edgePosition;
+
+            //get vector of current and next position
+            math::vec3 direction = edge->nextEdge->edgePosition - currentEdgePos;
+            math::vec3 directionNorm = math::normalize(direction);
+
+            //get length of direction
+            float dirVeclength = math::length(direction);
+      
+            //dot (centroid - current) with normalized direction
+            float interpolant = math::dot(faceCentroidPos - currentEdgePos, directionNorm);
+
+            //divide by length,this is the interpolant of the vector
+            interpolant /= dirVeclength;
+
+            //use interpolant to get closest point to centroid
+            math::vec3 closestPointToCentroid = currentEdgePos + direction * interpolant;
+
+            float triangleHeight = math::length(closestPointToCentroid - faceCentroidPos);
+            //multiply length of direction with length of centroid-interpolant point divide by 2
+            sum += (triangleHeight * dirVeclength * 0.5f);
+        };
+
+        forEachEdge(CalculateFaceArea);
+
+        return sum;
+    }
+
     void HalfEdgeFace::deleteEdges()
     {
         HalfEdgeEdge* current = startEdge->nextEdge;
