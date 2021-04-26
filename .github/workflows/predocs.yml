@@ -2,8 +2,11 @@
 name: docs-action
 
 on:
+  push:
+    branches: [ develop, develop/*, develop* ]
   pull_request:
     branches: [ develop, develop/*, develop* ]
+
 jobs:
  docs:
     runs-on: ubuntu-latest

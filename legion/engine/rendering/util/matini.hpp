@@ -41,10 +41,15 @@ namespace legion::rendering {
 
             IniBuilder& finish_entry()                  { return glyph("\n"); }
 
+            IniBuilder& push_state()                    { m_copy = m_contents; return *this; }
+            IniBuilder& pop_state()                     { m_contents = m_copy; return *this;}
+
+
             L_NODISCARD std::string get() const noexcept { return m_contents; }
 
         private:
             std::string m_contents;
+            std::string m_copy;
         };
 
         class handler_to_cpp

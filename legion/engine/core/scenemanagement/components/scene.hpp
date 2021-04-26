@@ -7,7 +7,7 @@ namespace legion::core::scenemanagement
     struct scene
     {
     public:
-        id_type id;
+        id_type id = invalid_id;
 
         template<typename Archive>
         void serialize(Archive& archive);
@@ -16,6 +16,9 @@ namespace legion::core::scenemanagement
     template<typename Archive>
     inline void scene::serialize(Archive& archive)
     {
-        archive(cereal::make_nvp("NAME",SceneManager::sceneNames[id]));
+        std::string name = SceneManager::sceneNames[id];
+        archive(cereal::make_nvp("NAME", name));
+        id = nameHash(name);
+        SceneManager::sceneNames[id] = name;
     }
 }

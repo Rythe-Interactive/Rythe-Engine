@@ -310,8 +310,10 @@ namespace legion::core::async
         readwrite_multiguard& operator=(readwrite_multiguard&&) = delete;
     };
 
+#if !defined(DOXY_EXCLUDE)
     template<typename... types>
     readwrite_multiguard(types...)->readwrite_multiguard<sizeof...(types)>;
+#endif
 
     /**@class mixed_multiguard
      * @brief RAII guard that uses multiple ::async::readonly_rw_spinlocks to lock them all for user specified permissions. (similar to std::lock)
@@ -395,7 +397,9 @@ namespace legion::core::async
         mixed_multiguard& operator=(const mixed_multiguard&) = delete;
     };
 
+#if !defined(DOXY_EXCLUDE)
     // CTAD so you don't need to input the size of the guard parameters.
     template<typename... types>
     mixed_multiguard(types...)->mixed_multiguard<sizeof...(types)>;
+#endif
 }

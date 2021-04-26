@@ -529,10 +529,10 @@ namespace legion::application
         {
             window& win = entity.get_component<window>();
             {
-                std::lock_guard guard(*win.lock);
-                ContextHelper::makeContextCurrent(win);
+                context_guard guard(win);
+                if (!guard.contextIsValid())
+                    continue;
                 ContextHelper::swapBuffers(win);
-                ContextHelper::makeContextCurrent(nullptr);
             }
         }
     }

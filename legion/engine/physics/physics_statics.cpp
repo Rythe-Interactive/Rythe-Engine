@@ -60,6 +60,149 @@ namespace legion::physics
         return currentMaximumSupportPoint;
     }
 
+    bool PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(ConvexCollider* convexA, ConvexCollider* convexB, const math::mat4& transformA,
+        const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
+        math::vec3& seperatingAxisFound, float& maximumSeperation, bool shouldDebug)
+    {
+        float currentMinimumSeperation = std::numeric_limits<float>::max();
+
+        math::vec3 centroidDir = transformA * math::vec4(convexA->GetLocalCentroid(), 0);
+        math::vec3 positionA = math::vec3(transformA[3]) + centroidDir;
+
+        int facei = 0;
+        int facej = 0;
+
+        for (const auto faceA : convexA->GetHalfEdgeFaces())
+        {
+            //----------------- Get all edges of faceA ------------//
+            std::vector<HalfEdgeEdge*> convexAHalfEdges;
+
+            auto lambda = [&convexAHalfEdges](HalfEdgeEdge* edge)
+            {
+                convexAHalfEdges.push_back(edge);
+            };
+
+            faceA->forEachEdge(lambda);
+            facej = 0;
+
+            for (const auto faceB : convexB->GetHalfEdgeFaces())
+            {
+                //----------------- Get all edges of faceB ------------//
+                std::vector<HalfEdgeEdge*> convexBHalfEdges;
+
+                auto lambda = [&convexBHalfEdges](HalfEdgeEdge* edge)
+                {
+                    convexBHalfEdges.push_back(edge);
+                };
+
+                faceB->forEachEdge(lambda);
+
+                for (HalfEdgeEdge* edgeA : convexAHalfEdges)
+                {
+                    for (HalfEdgeEdge* edgeB : convexBHalfEdges)
+                    {
+                        //if the given edges creates a minkowski face
+                        if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
+                        {
+                            //get world edge direction
+                            math::vec3 edgeADirection = transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
+
+                            math::vec3 edgeBDirection = transformB * math::vec4(edgeB->getLocalEdgeDirection(), 0);
+
+                            edgeADirection = math::normalize(edgeADirection);
+                            edgeBDirection = math::normalize(edgeBDirection);
+
+                            //get the seperating axis
+                            math::vec3 seperatingAxis = math::cross(edgeADirection, edgeBDirection);
+
+                            if (math::epsilonEqual(math::length(seperatingAxis), 0.0f, math::epsilon<float>()))
+                            {
+                                continue;
+                            }
+
+                            seperatingAxis = math::normalize(seperatingAxis);
+
+                            //get world edge position
+                            math::vec3 edgeAtransformedPosition = transformA * math::vec4(edgeA->edgePosition, 1);
+                            math::vec3 edgeBtransformedPosition = transformB * math::vec4(edgeB->edgePosition, 1);
+
+                            //check if its pointing in the right direction 
+                            if (math::dot(seperatingAxis, edgeAtransformedPosition - positionA) < 0)
+                            {
+                                seperatingAxis = -seperatingAxis;
+                            }
+
+                            //check if given edges create a seperating axis
+                            float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
+                            //log::debug("distance {} , currentMinimumSeperation {}", distance, currentMinimumSeperation);
+                            if (distance < currentMinimumSeperation)
+                            {
+                                refEdge.ptr = edgeA;
+                                incEdge.ptr = edgeB;
+
+                                seperatingAxisFound = seperatingAxis;
+                                currentMinimumSeperation = distance;
+                            }
+                        }
+                    }
+                }
+                facej++;
+            }
+            facei++;
+        }
+
+        maximumSeperation = currentMinimumSeperation;
+        return currentMinimumSeperation > 0.0f;
+    }
+
+    bool PhysicsStatics::DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,
+        float& maximumSeperation)
+    {
+        //-----------------  check if the seperating axis is the line generated between the centroid of the hull and sphereWorldPosition ------------------//
+
+        math::vec3 worldHullCentroid = transformA * math::vec4(convexA->GetLocalCentroid(), 1);
+        math::vec3 centroidSeperatingAxis = math::normalize(worldHullCentroid - sphereWorldPosition);
+
+        math::vec3 seperatingPlanePosition = sphereWorldPosition + centroidSeperatingAxis * sphereRadius;
+
+        math::vec3 worldSupportPoint;
+        GetSupportPoint(seperatingPlanePosition, -centroidSeperatingAxis, convexA, transformA, worldSupportPoint);
+
+        float seperation = math::dot(worldSupportPoint - seperatingPlanePosition, centroidSeperatingAxis);
+
+        if (seperation > 0.0f)
+        {
+            maximumSeperation = seperation;
+            return false;
+        }
+
+        maximumSeperation = std::numeric_limits<float>::lowest();
+
+        //--------------------------------- check if the seperating axis one of the faces of the convex hull ----------------------------------------------//
+
+        for (auto faceA : convexA->GetHalfEdgeFaces())
+        {
+            math::vec3 worldFaceCentroid = transformA * math::vec4(faceA->centroid, 1);
+            math::vec3 worldFaceNormal = math::normalize(transformA * math::vec4(faceA->normal, 0));
+
+            float seperation = PointDistanceToPlane(worldFaceNormal, worldFaceCentroid, seperatingPlanePosition );
+
+            if (seperation > maximumSeperation)
+            {
+                maximumSeperation = seperation;
+            }
+
+            if (seperation > sphereRadius)
+            {
+                return false;
+            }
+
+        }
+
+
+        return true;
+    }
+
     std::pair< math::vec3, math::vec3> PhysicsStatics::ConstructAABBFromPhysicsComponentWithTransform
     (ecs::component<physicsComponent> physicsComponentToUse,const math::mat4& transform)
     {

@@ -456,12 +456,14 @@
 #   define GLM_FORCE_SWIZZLE
 #endif
 
+#if !defined(GLM_CONFIG_SWIZZLE)
 #if defined(GLM_FORCE_SWIZZLE) && (GLM_LANG & GLM_LANG_CXXMS_FLAG)
 #   define GLM_CONFIG_SWIZZLE GLM_SWIZZLE_OPERATOR
-#elif defined(GLM_FORCE_SWIZZLE)
+#elif defined(GLM_FORCE_SWIZZLE) || defined(GLM_FORCE_SWIZZLE_COMPAT)
 #   define GLM_CONFIG_SWIZZLE GLM_SWIZZLE_FUNCTION
 #else
 #   define GLM_CONFIG_SWIZZLE GLM_SWIZZLE_DISABLED
+#endif
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////////

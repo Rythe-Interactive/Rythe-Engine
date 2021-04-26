@@ -127,6 +127,11 @@ namespace legion::rendering
         return { id };
     }
 
+    std::pair<async::rw_spinlock&, std::unordered_map<id_type, material>&> MaterialCache::get_all_materials()
+    {
+        return std::make_pair(std::ref(m_materialLock), std::ref(m_materials));
+    }
+
     material_handle MaterialCache::get_material(const std::string& name)
     {
         if (!m_materials.count(invalid_id))
@@ -140,6 +145,17 @@ namespace legion::rendering
         if (m_materials.count(id))
             return { id };
         return invalid_material_handle;
+    }
+
+    void material::make_unsavable()
+    {
+        m_canLoadOrSave = false;
+    }
+
+    id_type material_handle::current_variant() const
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        return MaterialCache::m_materials[id].current_variant();
     }
 
     bool material_handle::has_variant(id_type variantId) const
@@ -168,6 +184,12 @@ namespace legion::rendering
         MaterialCache::m_materials[id].set_variant(variantId);
     }
 
+    L_NODISCARD shader_handle material_handle::get_shader()
+    {
+        async::readonly_guard guard(MaterialCache::m_materialLock);
+        return MaterialCache::m_materials[id].m_shader;
+    }
+
     void material_handle::bind()
     {
         OPTICK_EVENT();
@@ -175,7 +197,7 @@ namespace legion::rendering
         MaterialCache::m_materials[id].bind();
     }
 
-    L_NODISCARD const std::string& material_handle::get_name()
+    L_NODISCARD const std::string& material_handle::get_name() const
     {
         async::readonly_guard guard(MaterialCache::m_materialLock);
         return MaterialCache::m_materials[id].get_name();
@@ -192,6 +214,11 @@ namespace legion::rendering
     {
         async::readonly_guard guard(MaterialCache::m_materialLock);
         return MaterialCache::m_materials[id].m_shader.get_attribute(name);
+    }
+
+    id_type material::current_variant() const
+    {
+        return m_currentVariant;
     }
 
     bool material::has_variant(id_type variantId) const
