@@ -2,6 +2,8 @@
 #include <core/core.hpp>
 
 #include "../systems/examplesystem.hpp"
+#include "../systems/simplecameracontroller.hpp"
+#include "../systems/gui_test.hpp"
 
 class ExampleModule : public legion::Module
 {
@@ -20,6 +22,9 @@ public:
         );
 
         lgn::log::debug("ExampleModule setup");
+
+        reportSystem<SimpleCameraController>();
         reportSystem<ExampleSystem>();
+        reportSystem<GuiTestSystem>();
     }
 };

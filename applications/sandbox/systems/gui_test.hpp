@@ -8,11 +8,13 @@
 #include <rendering/pipeline/gui/stages/imguirenderstage.hpp>
 #include <rendering/systems/renderer.hpp>
 
+LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wdeprecated-declarations")
+
 namespace legion
 {
     using namespace legion::rendering;
     using namespace legion::core::filesystem::literals;
-    using namespace legion::core::scenemanagement;
+    //using namespace legion::core::scenemanagement;
 
     class GuiTestSystem : public System<GuiTestSystem>
     {
@@ -30,7 +32,6 @@ namespace legion
             captured = false;
         }
 
-    private:
         ecs::filter<camera, transform> cameraQuery;
         ecs::entity selected;
 
@@ -147,7 +148,7 @@ namespace legion
                 else
                     ImGui::Text("");
 
-                if (handle != ecs::world && !handle.has_component<camera>() && !handle.has_component<scene>())
+                if (handle != ecs::world && !handle.has_component<camera>()/* && !handle.has_component<scene>()*/)
                 {
                     ImGui::SameLine();
                     if (ImGui::Button("Destroy"))
@@ -240,39 +241,39 @@ namespace legion
         {
             if (ImGui::BeginMainMenuBar())
             {
-                if (ImGui::BeginMenu("File"))
-                {
-                    if (ImGui::BeginMenu("Save Scene"))
-                    {
-                        if (!SceneManager::currentScene)
-                        {
-                            SceneManager::currentScene = SceneManager::create_scene();
-                        }
-                        auto sceneEntity = SceneManager::currentScene.entity;
-                        std::string sceneName = sceneEntity.get_name();
+                //if (ImGui::BeginMenu("File"))
+                //{
+                //    if (ImGui::BeginMenu("Save Scene"))
+                //    {
+                //        if (!SceneManager::currentScene)
+                //        {
+                //            SceneManager::currentScene = SceneManager::create_scene();
+                //        }
+                //        auto sceneEntity = SceneManager::currentScene.entity;
+                //        std::string sceneName = sceneEntity.get_name();
 
-                        std::string text = "Save scene as:";
-                        text += sceneName;
-                        if (ImGui::Button(text.c_str()))
-                        {
-                            SceneManager::create_scene(sceneName, sceneEntity);
-                        }
-                        ImGui::EndMenu();
-                    }
+                //        std::string text = "Save scene as:";
+                //        text += sceneName;
+                //        if (ImGui::Button(text.c_str()))
+                //        {
+                //            SceneManager::create_scene(sceneName, sceneEntity);
+                //        }
+                //        ImGui::EndMenu();
+                //    }
 
-                    if (ImGui::BeginMenu("Load Scene"))
-                    {
-                        for (auto& [id, name] : SceneManager::sceneNames)
-                        {
-                            if (id && ImGui::MenuItem(name.c_str()))
-                            {
-                                SceneManager::load_scene(name);
-                            }
-                        }
-                        ImGui::EndMenu();
-                    }
-                    ImGui::EndMenu();
-                }
+                //    if (ImGui::BeginMenu("Load Scene"))
+                //    {
+                //        for (auto& [id, name] : SceneManager::sceneNames)
+                //        {
+                //            if (id && ImGui::MenuItem(name.c_str()))
+                //            {
+                //                SceneManager::load_scene(name);
+                //            }
+                //        }
+                //        ImGui::EndMenu();
+                //    }
+                //    ImGui::EndMenu();
+                //}
                 ImGui::EndMainMenuBar();
             }
         }
@@ -594,19 +595,17 @@ namespace legion
             {
                 windowName += "  (selected:";
 
-                auto hry = selected.read_component<hierarchy>();
-
-                if (hry.name.empty())
+                if (selected->name.empty())
                 {
-                    if (selected == world)
-                        hry.name = "World";
+                    if (selected == ecs::world)
+                        selected->name = "World";
                     else if (selected.has_component<camera>())
-                        hry.name = "camera";
+                        selected->name = "camera";
                     else
-                        hry.name = "Entity " + std::to_string(selected.get_id());
+                        selected->name = "Entity " + std::to_string(selected->id);
                 }
 
-                windowName += hry.name;
+                windowName += selected->name;
 
                 windowName += ")";
             }
@@ -615,7 +614,7 @@ namespace legion
 
             if (base::Begin(windowName.c_str()))
             {
-                BuildTree(m_ecs->world);
+                BuildTree(ecs::world);
             }
             base::End();
 
@@ -637,31 +636,28 @@ namespace legion
 
                     if (showGizmo)
                     {
-                        auto pos = selected.read_component<position>();
-                        auto rot = selected.read_component<rotation>();
-                        auto scal = selected.read_component<scale>();
+                        position& pos = selected.get_component<position>();
+                        rotation& rot = selected.get_component<rotation>();
+                        scale& scal = selected.get_component<scale>();
                         model = compose(scal, rot, pos);
                         gizmo::EditTransform(value_ptr(view), value_ptr(projection), value_ptr(model), true);
                         decompose(model, scal, rot, pos);
-                        selected.write_component<position>(pos);
-                        selected.write_component<rotation>(rot);
-                        selected.write_component<scale>(scal);
                     }
                 }
                 else if (ImGui::Button("Add Transform"))
                 {
-                    selected.add_components<transform>();
+                    selected.add_component<transform>();
                 }
 
-                if (selected.has_components<mesh_renderable>())
+                if (selected.has_component<mesh_renderable>())
                 {
-                    static ecs::entity_handle lastSelected;
+                    static ecs::entity lastSelected;
                     static char modelBuffer[512];
                     static char shaderBuffer[512];
                     static char variantBuffer[512];
 
-                    mesh_renderer renderer = selected.read_component<mesh_renderer>();
-                    mesh_filter mesh = selected.read_component<mesh_filter>();
+                    mesh_renderer& renderer = selected.get_component<mesh_renderer>();
+                    mesh_filter& mesh = selected.get_component<mesh_filter>();
 
                     std::string modelPath;
 
@@ -684,7 +680,6 @@ namespace legion
                             auto copy = default_mesh_settings;
                             copy.contextFolder = filesystem::view(modelPath).parent();
                             mesh.id = ModelCache::create_model(modelPath, filesystem::view(modelPath), copy).id;
-                            selected.write_component(mesh);
                         }
                     }
 
@@ -700,10 +695,9 @@ namespace legion
                         if (shaderPath != shaderBuffer)
                         {
                             shaderPath = shaderBuffer;
-                            std::string materialName = std::to_string(selected.get_id()) + shaderPath;
+                            std::string materialName = std::to_string(selected->id) + shaderPath;
                             shader = ShaderCache::create_shader(fs::view(shaderPath));
                             renderer.material = MaterialCache::create_material(materialName, shader);
-                            selected.write_component(renderer);
                         }
                     }
 
@@ -742,7 +736,7 @@ namespace legion
                 }
                 else if (ImGui::Button("Add Renderable"))
                 {
-                    selected.add_components<gfx::mesh_renderable>();
+                    selected.add_component<gfx::mesh_renderable>();
                 }
             }
             else
@@ -760,3 +754,5 @@ namespace legion
     };
 
 }
+
+LEGION_CLANG_SUPPRESS_WARNING_POP

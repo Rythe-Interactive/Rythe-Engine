@@ -1,6 +1,6 @@
 #pragma once
 #include <core/core.hpp>
-#include <audio/audio.hpp>
+//#include <audio/audio.hpp>
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
 #include "gui_test.hpp"
@@ -29,7 +29,7 @@ public:
     bool escaped = true;
     float movementspeed = 5.f;
 
-    virtual void setup()
+    void setup()
     {
         //Crosshair::setScale(math::vec2(1.f));
         //gfx::PostProcessingStage::addEffect<Crosshair>(-100);
@@ -104,7 +104,7 @@ public:
         groundplane.add_component<transform>();
 
         camera = createEntity("Camera");
-        camera.add_component<transform>(position(0.f, 3.f, 0.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
+        camera.add_component<transform>(position(0.f, 3.f, -30.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
         //camera.add_component<audio::audio_listener>();
 
         rendering::camera cam;

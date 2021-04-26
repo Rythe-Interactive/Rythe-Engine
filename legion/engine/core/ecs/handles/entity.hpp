@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <unordered_set>
 
 #include <core/types/types.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
