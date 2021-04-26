@@ -701,6 +701,7 @@ namespace legion::rendering
         for (auto& [shaderVariant, variantSource] : shaders)
         {
             shader_variant& variant = shader.m_variants[nameHash(shaderVariant)];
+            variant.name = shaderVariant;
 
             GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
 

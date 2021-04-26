@@ -36,12 +36,16 @@ namespace legion::core::ecs
         // All recyclable entities that are dead.
         static std::queue<id_type> m_recyclableEntities;
 
+        static std::unordered_map<id_type, std::string>& familyNames();
+
         /**@brief Inserts in-place if the component family does not exist, returns existing item if the family exists.
          * @param args Arguments to forward to the constructor of the component family.
          * @return Pointer to the newly inserted family if one didn't exist. Pointer to the existing item if one did exist.
          */
         template<typename component_type, typename... Args>
         static component_pool<component_type>* tryEmplaceFamily(Args&&... args);
+
+        L_NODISCARD static id_type getNextEntityId();
 
     public:
         static void clear();
@@ -83,6 +87,8 @@ namespace legion::core::ecs
          */
         L_NODISCARD static component_pool_base* getFamily(id_type typeId);
 
+        L_NODISCARD static std::string getFamilyName(id_type id);
+
         /**@brief Gets the container with all the component storage families.
          */
         L_NODISCARD static std::unordered_map<id_type, std::unique_ptr<component_pool_base>>& getFamilies();
@@ -91,10 +97,14 @@ namespace legion::core::ecs
          */
         L_NODISCARD static entity createEntity();
 
+        L_NODISCARD static entity createEntity(const std::string& name);
+
         /**@brief Creates empty entity with a specific entity as its parent.
          * @param parent Entity to assign as the parent of the new entity.
          */
         L_NODISCARD static entity createEntity(entity parent);
+
+        L_NODISCARD static entity createEntity(const std::string& name, entity parent);
 
         /**@brief Creates empty entity with a specific entity as its parent. Entity is serialized from a prototype.
          *        This function will also create any components or child entities in the prototype structure.

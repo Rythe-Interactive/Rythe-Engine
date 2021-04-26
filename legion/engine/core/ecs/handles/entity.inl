@@ -134,7 +134,7 @@ namespace legion::core::ecs
     template<typename archetype_type, typename component_type0, typename component_type1, typename... component_typeN>
     inline L_ALWAYS_INLINE typename archetype_type::handle_group entity::add_component(component_type0&& value0, component_type1&& value1, component_typeN&&... valueN)
     {
-        Registry::createComponent<archetype_type>(std::forward<component_type0>(value0), std::forward<component_type1>(value1), std::forward<component_typeN>(valueN)...);
+        Registry::createComponent<archetype_type>(*this, std::forward<component_type0>(value0), std::forward<component_type1>(value1), std::forward<component_typeN>(valueN)...);
         return std::make_tuple(component<remove_cvr_t<component_type0>>{ {}, entity{ data } }, component<remove_cvr_t<component_type1>>{ {}, entity{ data } }, component<remove_cvr_t<component_typeN>>{ {}, entity{ data } }...);
     }
 

@@ -263,6 +263,31 @@ namespace fmt
     };
 
     template <>
+    struct fmt::formatter<velocity> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const velocity& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+
+                presentation == 'f' ? "{:f}" : "{:e}",
+                static_cast<math::vec3>(p));
+        }
+    };
+
+    template <>
     struct fmt::formatter<rotation> {
         char presentation = 'f';
 

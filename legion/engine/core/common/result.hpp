@@ -121,15 +121,13 @@ namespace legion::core::common {
     }
 
 
-    template <class T, class...Any
-        CNDOXY(std::enable_if_t<!(std::is_base_of_v<result_ident, T> && sizeof...(Any) == 0), int> = 0)>
+    template <class T, class...Any CNDOXY(std::enable_if_t<!(std::is_base_of_v<result_ident, T> && sizeof...(Any) == 0), int> = 0)>
     inline ok_proxy<T, Any...> Ok(T&& t, Any&& ... any)
     {
         return ok_proxy<T, Any...>(std::move(t), std::forward<Any>(any)...);
     }
 
-    template <class T, class...Any
-        CNDOXY(std::enable_if_t<!(std::is_base_of_v<result_ident, T> && sizeof...(Any) == 0), int> = 0)>
+    template <class T, class...Any CNDOXY(std::enable_if_t<!(std::is_base_of_v<result_ident, T> && sizeof...(Any) == 0), int> = 0)>
     inline ok_proxy<T, Any...> Ok(T& t, Any&& ... any)
     {
         return ok_proxy<T, Any...>(t, std::forward<Any>(any)...);
@@ -214,15 +212,13 @@ namespace legion::core::common {
         return err_proxy<void>{};
     }
 
-    template <class T, class...Any
-        CNDOXY(std::enable_if_t<!(std::is_base_of_v<result_ident, std::remove_reference<T>> && sizeof...(Any) == 0), int> = 0)>
+    template <class T, class...Any CNDOXY(std::enable_if_t<!(std::is_base_of_v<result_ident, std::remove_reference<T>> && sizeof...(Any) == 0), int> = 0)>
     inline err_proxy<T, Any...> Err(T&& t, Any&& ... any)
     {
         return err_proxy<T, Any...>(std::move(t), std::forward<Any>(any)...);
     }
 
-    template <class T, class...Any
-        CNDOXY(std::enable_if_t<!(std::is_base_of_v<result_ident, std::remove_reference<T>> && sizeof...(Any) == 0), int> = 0)>
+    template <class T, class...Any CNDOXY(std::enable_if_t<!(std::is_base_of_v<result_ident, std::remove_reference<T>> && sizeof...(Any) == 0), int> = 0)>
     inline err_proxy<T, Any...> Err(T& t, Any&& ... any)
     {
         return err_proxy<T, Any...>(t, std::forward<Any>(any)...);

@@ -37,6 +37,62 @@ namespace legion::physics
 
         bool isColliding;
 
+        /*void DEBUG_checkIDAndBreak(std::string firstID,std::string secondID) const
+        {
+            auto idHA = entityA.get_component_handle<identifier>();
+            auto idHB = entityB.get_component_handle<identifier>();
+
+            if (idHA && idHB)
+            {
+                auto str1 = idHA.read().id;
+                auto str2 = idHB.read().id;
+
+                if ((str1 == firstID && str2 == secondID)
+                    || (str2 == firstID && str1 == secondID))
+                {
+                    DebugBreak();
+                }
+            }
+        }*/
+
+        bool DEBUG_checkID(std::string firstID, std::string secondID) const
+        {
+
+            std::string str1, str2;
+            GetPairID(str1, str2);
+
+            if ((str1 == firstID && str2 == secondID)
+                || (str2 == firstID && str1 == secondID))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+              
+
+        }
+
+        void GetPairID(std::string& str1, std::string& str2) const
+        {
+            auto idHA = entityA.get_component_handle<identifier>();
+            auto idHB = entityB.get_component_handle<identifier>();
+
+            str1 = "" ;
+            str2 = "" ;
+
+            if (idHA)
+            {
+                str1 = idHA.read().id;
+            }
+
+            if (idHB)
+            {
+                str2 = idHB.read().id;
+            }
+
+        }
 
     };
 }

@@ -6,7 +6,32 @@ namespace legion::core::ecs
     std::unordered_map<id_type, entity_data> Registry::m_entities;
     std::queue<id_type> Registry::m_recyclableEntities;
 
-    L_NODISCARD entity Registry::getWorld()
+    std::unordered_map<id_type, std::string>& Registry::familyNames()
+    {
+        static std::unordered_map<id_type, std::string> m_familyNames;
+        return m_familyNames;
+    }
+
+    id_type Registry::getNextEntityId()
+    {
+        // Keep track of what the next new entity ID should be.
+        static id_type m_nextEntityId = world_entity_id + 1; // First entity should have ID 2; 0 is invalid and 1 is world.
+
+        // Get the current entity ID by recycling or generating a new one.
+        return m_recyclableEntities.empty() ? // If there are no recyclable entityIDs
+            m_nextEntityId++ :               // Then we increase the next entityID and use that.
+            []()
+        {   // Lanbda to handle recycling case.
+            id_type temp = m_recyclableEntities.front(); // Copy out first item.
+            m_recyclableEntities.pop();                  // Remove first item from queue.
+            return temp;
+        }();
+
+        // The above code could be improved with a custom threadsafe queue that wouldn't have to use the lambda.
+        // Making this function threadsafe using atomics and locks could be very benificial.
+    }
+
+    entity Registry::getWorld()
     {
         OPTICK_EVENT();
         // Create entity data.
@@ -14,6 +39,7 @@ namespace legion::core::ecs
         data.alive = true;
         data.active = true;
         data.id = world_entity_id;
+        data.name = "World";
         data.parent = entity{ nullptr };
 
         // Create component composition.
@@ -38,13 +64,23 @@ namespace legion::core::ecs
         world = getWorld();
     }
 
-    L_NODISCARD component_pool_base* Registry::getFamily(id_type typeId)
+    component_pool_base* Registry::getFamily(id_type typeId)
     {
         OPTICK_EVENT();
         return getFamilies().at(typeId).get();
     }
 
-    L_NODISCARD std::unordered_map<id_type, std::unique_ptr<component_pool_base>>& Registry::getFamilies()
+    std::string Registry::getFamilyName(id_type id)
+    {
+        if (const auto itr = familyNames().find(id); itr != familyNames().end())
+        {
+            return itr->second;
+        }
+
+        return "Component type " + std::to_string(id);
+    }
+
+    std::unordered_map<id_type, std::unique_ptr<component_pool_base>>& Registry::getFamilies()
     {
         // The reason this isn't a private static variable of the class is because of static lifetimes interfering.
         static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
@@ -57,24 +93,16 @@ namespace legion::core::ecs
         return createEntity(world);
     }
 
+    entity Registry::createEntity(const std::string& name)
+    {
+        return createEntity(name, world);
+    }
+
     entity Registry::createEntity(entity parent)
     {
         OPTICK_EVENT();
-        // Keep track of what the next new entity ID should be.
-        static id_type nextEntityId = world_entity_id + 1; // First entity should have ID 2; 0 is invalid and 1 is world.
 
-        // Get the current entity ID by recycling or generating a new one.
-        const id_type currentEntityId =
-            m_recyclableEntities.empty() ? // If there are no recyclable entityIDs
-            nextEntityId++ :               // Then we increase the next entityID and use that.
-            []()
-        {   // Lanbda to handle recycling case.
-            id_type temp = m_recyclableEntities.front(); // Copy out first item.
-            m_recyclableEntities.pop();                  // Remove first item from queue.
-            return temp;
-        }();
-        // The above code could be improved with a custom threadsafe queue that wouldn't have to use the lambda.
-        // Making this function threadsafe using atomics and locks could be very benificial.
+        const id_type currentEntityId = getNextEntityId();
 
         // We use try_emplace in order to preserve the memory pooling that the children set might have.
         // This way recycled entities might not have to do as much reallocation when new children are added.
@@ -82,6 +110,33 @@ namespace legion::core::ecs
         data.alive = true;
         data.active = true;
         data.id = currentEntityId;
+        data.name = std::to_string(currentEntityId);
+        data.parent = parent;
+
+        if (parent) // If our parent is a valid entity we want to add the new entity as a child to the parent.
+            parent->children.insert(entity{ &data });
+
+        // We try to insert another set for entity composition, if one already exists then we can recycle it.
+        entityCompositions().try_emplace(entity{ &data });
+
+        // We create an identical entity handle multiple times in this function but it's fine because it only holds a pointer.
+        // By keeping these identical entity handles inline rvalues the compiler is allowed to optimize them away.
+        return entity{ &data };
+    }
+
+    entity Registry::createEntity(const std::string& name, entity parent)
+    {
+        OPTICK_EVENT();
+
+        const id_type currentEntityId = getNextEntityId();
+
+        // We use try_emplace in order to preserve the memory pooling that the children set might have.
+        // This way recycled entities might not have to do as much reallocation when new children are added.
+        auto& [_, data] = *m_entities.try_emplace(currentEntityId).first;
+        data.alive = true;
+        data.active = true;
+        data.id = currentEntityId;
+        data.name = name;
         data.parent = parent;
 
         if (parent) // If our parent is a valid entity we want to add the new entity as a child to the parent.
@@ -99,7 +154,7 @@ namespace legion::core::ecs
     {
         OPTICK_EVENT();
         // Call to create a new blank entity. No need to duplicate this logic.
-        auto ent = createEntity(parent);
+        auto ent = createEntity(prototype.name, parent);
 
         // Recursively serialize all child prototypes.
         for (auto& childPrototype : prototype.children)
@@ -183,34 +238,34 @@ namespace legion::core::ecs
         return m_entities.count(target) && m_entities.at(target).alive;
     }
 
-    L_NODISCARD std::unordered_map<id_type, std::unordered_set<id_type>>& Registry::entityCompositions() noexcept
+    std::unordered_map<id_type, std::unordered_set<id_type>>& Registry::entityCompositions() noexcept
     {
         // The reason this isn't a private static variable of the class is because of static lifetimes interfering.
         static std::unordered_map<id_type, std::unordered_set<id_type>> m_entityCompositions;
         return m_entityCompositions;
     }
 
-    L_NODISCARD std::unordered_map<id_type, entity_data>& Registry::entityData()
+    std::unordered_map<id_type, entity_data>& Registry::entityData()
     {
         return m_entities;
     }
 
-    L_NODISCARD std::unordered_set<id_type>& Registry::entityComposition(entity target)
+    std::unordered_set<id_type>& Registry::entityComposition(entity target)
     {
         return entityCompositions().at(target);
     }
 
-    L_NODISCARD std::unordered_set<id_type>& Registry::entityComposition(id_type target)
+    std::unordered_set<id_type>& Registry::entityComposition(id_type target)
     {
         return entityCompositions().at(target);
     }
 
-    L_NODISCARD entity_data& Registry::entityData(id_type target)
+    entity_data& Registry::entityData(id_type target)
     {
         return m_entities.at(target);
     }
 
-    L_NODISCARD entity Registry::getEntity(id_type target)
+    entity Registry::getEntity(id_type target)
     {
         return entity{ &entityData(target) };
     }

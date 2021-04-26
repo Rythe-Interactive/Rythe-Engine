@@ -20,6 +20,7 @@ namespace legion::core::ecs
 
         id_type id = invalid_id;
 
+        std::string name;
         entity parent = { nullptr };
         entity_set children;
     };

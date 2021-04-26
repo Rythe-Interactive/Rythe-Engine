@@ -19,6 +19,7 @@ namespace legion::core::serialization
     template<>
     struct prototype<ecs::entity> : public prototype_base
     {
+        std::string name;
         bool active;
         std::vector<prototype<ecs::entity>> children;
         std::unordered_map<id_type, std::unique_ptr<component_prototype_base>> composition;

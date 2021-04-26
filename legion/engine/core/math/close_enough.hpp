@@ -21,6 +21,8 @@
 #include <cmath>
 #include <type_traits>
 
+#include <core/math/glm/glm_include.hpp>
+
 namespace legion::core::math {
 
     //get the highest epsilon for N amount of floats
@@ -47,21 +49,42 @@ namespace legion::core::math {
 
     //check if two types are nearly equal
     template <class NUM_TYPE1,class NUM_TYPE2>
-    bool close_enough(NUM_TYPE1 lhs, NUM_TYPE2 rhs)
+    constexpr bool close_enough(NUM_TYPE1 lhs, NUM_TYPE2 rhs)
     {
         if constexpr(std::numeric_limits<NUM_TYPE1>::is_integer &&
                      std::numeric_limits<NUM_TYPE2>::is_integer)
             return lhs == rhs;
 
         else if constexpr(std::numeric_limits<NUM_TYPE1>::is_integer)
-            return std::abs(NUM_TYPE2(lhs) - rhs) <= std::numeric_limits<NUM_TYPE2>::epsilon();
+            return abs(NUM_TYPE2(lhs) - rhs) <= std::numeric_limits<NUM_TYPE2>::epsilon();
 
         else if constexpr(std::numeric_limits<NUM_TYPE2>::is_integer)
-            return std::abs(lhs - NUM_TYPE1(rhs)) <= std::numeric_limits<NUM_TYPE1>::epsilon();
+            return abs(lhs - NUM_TYPE1(rhs)) <= std::numeric_limits<NUM_TYPE1>::epsilon();
 
         else {
             using lowest_t = typename lowest_precision<NUM_TYPE1,NUM_TYPE2>::type;
-            return std::abs(lowest_t(lhs) - lowest_t(rhs)) <= get_highest_epsilon(lhs,rhs);
+            return abs(lowest_t(lhs) - lowest_t(rhs)) <= get_highest_epsilon(lhs,rhs);
         }
+    }
+
+    namespace detail
+    {
+        template <>
+        struct compute_equal<float, true>
+        {
+            GLM_FUNC_QUALIFIER GLM_CONSTEXPR static bool call(float a, float b)
+            {
+                return close_enough(a, b);
+            }
+        };
+
+        template <typename T>
+        struct compute_equal<T, true>
+        {
+            GLM_FUNC_QUALIFIER GLM_CONSTEXPR static bool call(T a, T b)
+            {
+                return close_enough(a, b);
+            }
+        };
     }
 }

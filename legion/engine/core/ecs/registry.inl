@@ -10,6 +10,8 @@ namespace legion::core::ecs
         if (getFamilies().count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
             return static_cast<component_pool<component_type>*>(getFamilies().at(make_hash<component_type>()).get());
 
+        familyNames().emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
+
         // Allocate and emplace if no item was found.
         return static_cast<component_pool<component_type>*>(
             getFamilies().emplace(
@@ -27,6 +29,7 @@ namespace legion::core::ecs
             make_hash<component_type>(),
             std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
         );
+        familyNames().emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
     }
 
     template<typename component_type0, typename component_type1, typename... component_types, typename... Args>

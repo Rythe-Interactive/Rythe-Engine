@@ -173,8 +173,10 @@ namespace legion::core::filesystem
         std::array<view&,S> m_views;
     };
 
+#if !defined(DOXY_EXCLUDE)
     template<class... Views>
     combined_view(Views...) -> combined_view<sizeof...(Views)>;
+#endif
 
     template <std::size_t S>
     view combined_view<S>::find(std::string_view identifier)

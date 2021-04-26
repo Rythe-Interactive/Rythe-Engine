@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <unordered_set>
 
 #include <core/types/types.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
@@ -191,6 +192,9 @@ namespace legion::core::ecs
          */
         L_NODISCARD entity_data* operator->() noexcept;
         L_NODISCARD const entity_data* operator->() const noexcept;
+
+        L_NODISCARD std::unordered_set<id_type>& component_composition();
+        L_NODISCARD const std::unordered_set<id_type>& component_composition() const;
 
         /**@brief Replaces current parent with a new one.
          */

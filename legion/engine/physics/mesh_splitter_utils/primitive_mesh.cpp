@@ -65,9 +65,8 @@ namespace legion::physics
         m_ecs = ecs;
     }
 
-
-
-    void PrimitiveMesh::populateMesh(mesh& mesh, const math::mat4& originalTransform , math::vec3& outOffset,math::vec3& scale)
+    void PrimitiveMesh::populateMesh(mesh& mesh,
+        const math::mat4& originalTransform , math::vec3& outOffset,math::vec3& scale)
     {
         std::vector<uint>& indices = mesh.indices;
         std::vector<math::vec3>& vertices = mesh.vertices;
@@ -147,7 +146,7 @@ namespace legion::physics
         for (auto& vertex : vertices)
         {
             vertex -= localOffset;
-            //vertex *= scale;
+            vertex *= scale;
         }
 
 
@@ -156,10 +155,15 @@ namespace legion::physics
             indices.push_back(i);
         }
 
-        //TODO stop generating fake normals
-        for (int i = 0; i < vertices.size(); i++)
+        for (int i = 0; i < vertices.size(); i+=3)
         {
-            normals.push_back(math::vec3(0, 1,0));
+            math::vec3& v1 = vertices.at(i);
+            math::vec3& v2 = vertices.at(i+1);
+            math::vec3& v3 = vertices.at(i+2);
+
+            math::vec3 normal = math::cross(v2 - v1, v3 - v1);
+
+            normals.push_back(normal);
         }
     }
 }

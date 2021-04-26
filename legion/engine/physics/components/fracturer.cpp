@@ -11,68 +11,164 @@ namespace legion::physics
 
     void Fracturer::HandleFracture(physics_manifold& manifold, bool& manifoldValid,bool isfracturingA)
     {
+        return;
         OPTICK_EVENT();
-        if (!IsFractureConditionMet()) { return; }
+        if (!IsFractureConditionMet(manifold,isfracturingA) || manifold.contacts.empty()) { return; }
+        
         //log::debug("manifold invalidated");
         manifoldValid = false;
 
-        //-----------------------------------------------------------------------------------------------------------------------------//
-        //------------------------ create a voronoi diagram with a  set of positions for now the diagram-------------------------------//
-        //------------------------------- is always as big as the colliders of the physicsComponent------------------------------------//
-        //-----------------------------------------------------------------------------------------------------------------------------//
+        math::vec3 impactPoint = GetImpactPointFromManifold(manifold);
+        float impactRadius = 0.2f;
+        
+        auto fracturedEnt = isfracturingA ? manifold.entityA : manifold.entityB;
+        auto collider = isfracturingA ? manifold.colliderA : manifold.colliderB;
 
-        auto collider = isfracturingA ? manifold.colliderA: manifold.colliderB;
-        auto fractureInstigatorEnt = isfracturingA ? manifold.entityA : manifold.entityB;
+        FractureParams params(impactPoint, 0.0f);
+        ExplodeEntity(fracturedEnt, params, collider);
+    }
 
-        auto [min,max] = collider->GetMinMaxWorldAABB();
+    void Fracturer::ExplodeEntity(ecs::entity_handle ownerEntity, const FractureParams& fractureParams, PhysicsCollider* entityCollider)
+    {
+        log::debug("------------------------------------- ExplodeEntity ---------------------------------------");
 
-        math::vec3 difference = max - min;
-        math::vec3 differenceQuadrant = difference / 4.0f;
+        if (!entityCollider)
+        {
+            log::debug("colliders size {} "
+                , ownerEntity.read_component<physicsComponent>().colliders.size());
+
+            auto physicsComp = ownerEntity.get_component_handle<physicsComponent>().read();
+            entityCollider = physicsComp.colliders.at(0).get();
+
+        }
+        
+        //ownerEntity.read_component<physicsComponent>().colliders.at(0)
+        auto [min, max] = entityCollider->GetMinMaxWorldAABB();
 
         //-----------------------------------------------------------------------------------------------------------------------------//
                                 //Generate a Voronoi Diagram, for now, the points are manually generated //
         //-----------------------------------------------------------------------------------------------------------------------------//
 
-        std::vector<math::vec3> VoronoiPoints;
+        std::vector<math::vec3> voronoiPoints;
 
-        math::vec3 first = min + differenceQuadrant ;
-        VoronoiPoints.push_back(first);
+        QuadrantVoronoi(min, max, voronoiPoints);
 
-        math::vec3 second = max - differenceQuadrant;
-        VoronoiPoints.push_back(second);
+        //math::vec3 six = third + math::vec3(-0.2f, 0.0f, -0.0f);
+        //voronoiPoints.push_back(six);
 
-        math::vec3 third = max - (differenceQuadrant * 2);
-        VoronoiPoints.push_back(third);
-
-        //math::vec3 fourth = third + math::vec3(0.1f,0,0);
-        //VoronoiPoints.push_back(fourth);
-
-        //math::vec3 fifth = third + math::vec3(0.1f, 0, -0.0f);
-        //VoronoiPoints.push_back(fifth);
-
-        /*math::vec3 fourth = max - (differenceQuadrant * 2) + math::vec3(0,0.1f,0);
-        VoronoiPoints.push_back(fourth);*/
-
-        math::vec3 fifth = min + differenceQuadrant - math::vec3(0, 0.0f, -0.2f);
-        VoronoiPoints.push_back(fifth);
-
-        for (auto point : VoronoiPoints)
-        {
+        for (auto point : voronoiPoints)
+        {/*
             debug::drawLine(point,
-                point + math::vec3(0, 0.1f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);
+                point + math::vec3(0, 0.1f, 0), math::colors::magenta, 8.0f, FLT_MAX, true);*/
         }
 
-        auto vectorList = PhysicsStatics::GenerateVoronoi(VoronoiPoints, min.x, max.x, min.y, max.y, min.z, max.z,1,1,1);
+        std::vector<std::vector<math::vec3>> groupedPoints(voronoiPoints.size());
+
+        GetVoronoiPoints(groupedPoints,
+            voronoiPoints, min, max);
+
+        //-----------------------------------------------------------------------------------------------------------------------------//
+                                //Using the voronoi points, generate a set of colliders  //
+        //-----------------------------------------------------------------------------------------------------------------------------//
+
+        std::vector<std::shared_ptr<ConvexCollider>> voronoiColliders;
+
+        InstantiateVoronoiColliders(voronoiColliders, groupedPoints);
+
+        std::vector< FracturerColliderToMeshPairing> colliderToMeshPairings;
+
+        //-----------------------------------------------------------------------------------------------------------------------------//
+                                //From the mesh about to be fractured, get the pairs of colliders to Mesh  //
+        //-----------------------------------------------------------------------------------------------------------------------------//
+
+        InstantiateColliderMeshPairingWithEntity(ownerEntity,
+            colliderToMeshPairings);
+
+        for (size_t i = 0; i < ownerEntity.child_count(); i++)
+        {
+            auto child = ownerEntity.get_child(i);
+
+            InstantiateColliderMeshPairingWithEntity(child,
+                colliderToMeshPairings);
+        }
+
+        std::vector<ecs::entity_handle> entitiesGenerated;
+
+        //-----------------------------------------------------------------------------------------------------------------------------//
+                                //From the mesh about to be fractured, get the pairs of colliders to Mesh  //
+        //-----------------------------------------------------------------------------------------------------------------------------//
+
+        GenerateFractureFragments(entitiesGenerated, colliderToMeshPairings,
+            voronoiColliders, ownerEntity);
+
+
+        auto originalRB = ownerEntity.get_component_handle<rigidbody>().read();
+        float fragmentMass = 1.0f / originalRB.inverseMass;
+        fragmentMass /= entitiesGenerated.size();
+
+        int colliderIter = 0;
+        for (auto ent : entitiesGenerated)
+        {
+            auto [posH, rotH, scaleH] = ent.get_component_handles<transform>();
+            math::mat4 trans = math::compose(scaleH.read(), rotH.read(), posH.read());
+            //generate hull
+            auto physicsCompHandle = ent.add_component<physicsComponent>();
+            auto physicsComp = physicsCompHandle.read();
+            auto meshFilter = ent.read_component<mesh_filter>();
+            auto convexCollider = physicsComp.ConstructConvexHull(meshFilter);
+            physicsCompHandle.write(physicsComp);
+
+            //add rigidbody 
+            auto posHandle = ent.get_component_handle<position>();
+            auto rbH = ent.add_component<rigidbody>();
+            auto fragmentRB = rbH.read();
+            fragmentRB.globalCentreOfMass = posH.read();
+
+            //add force based on distance from explosion point
+            math::vec3 distanceFromCentroid = posH.read() - fractureParams.explosionCentroid ;
+            math::vec3 forceDir = math::normalize(distanceFromCentroid);
+            float forceAmount = (1.0f / (math::length(distanceFromCentroid))) * fractureParams.strength;
+
+            //crude estimation of explosion point
+            float smallestDot = std::numeric_limits<float>::max();
+            HalfEdgeFace* chosenFace = nullptr;
+
+            for (auto face : convexCollider->GetHalfEdgeFaces())
+            {
+                float currentDot = math::dot(forceDir, face->normal);
+
+                if (currentDot < smallestDot)
+                {
+                    smallestDot = currentDot;
+                    chosenFace = face;
+                }
+            }
+
+            math::vec3 explosionPoint = trans * math::vec4(chosenFace->centroid, 1);
+
+            fragmentRB.addForceAt(explosionPoint,forceDir * forceAmount);
+            rbH.write(fragmentRB);
+           
+            colliderIter++;
+        }
+
+        registry->destroyEntity(ownerEntity );
+
+
+        fractureCount++;
+    }
+
+
+    void Fracturer::GetVoronoiPoints(std::vector<std::vector<math::vec3>>& groupedPoints,
+        std::vector<math::vec3>& voronoiPoints,math::vec3 min,math::vec3 max)
+    {
+        time::timer tick;
+
+        auto vectorList = PhysicsStatics::GenerateVoronoi(voronoiPoints, min.x, max.x, min.y, max.y, min.z, max.z, 1, 1, 1);
 
         vectorList.pop_back();
 
-        debug::drawLine(min,
-            min + math::vec3(0, 0.5f, 0), math::colors::red, 8.0f, FLT_MAX, true);
-
-        debug::drawLine(max,
-            max + math::vec3(0, 0.5f, 0), math::colors::blue, 8.0f, FLT_MAX, true);
-
-        std::vector<std::vector<math::vec3>> groupedPoints(VoronoiPoints.size());
+        //groupedPoints.reserve( voronoiPoints.size() );
 
         for (std::vector<math::vec4>& vector : vectorList)
         {
@@ -86,22 +182,23 @@ namespace legion::physics
             }
         }
 
-        //-----------------------------------------------------------------------------------------------------------------------------//
-                                //Using the voronoi points, generate a set of colliders  //
-        //-----------------------------------------------------------------------------------------------------------------------------//
+    }
 
-        std::vector<std::shared_ptr<ConvexCollider>> voronoiColliders;
+    void Fracturer::InstantiateVoronoiColliders(std::vector<std::shared_ptr<ConvexCollider>>& voronoiColliders
+        ,std::vector<std::vector<math::vec3>>& groupedPoints)
+    {
+        time::timer tick;
         int i = 1;
 
-        for ( std::vector<math::vec3>& vector : groupedPoints)
+        for (std::vector<math::vec3>& vector : groupedPoints)
         {
-           // if (i != 1) { continue; }
-            math::color debugColor = 
-                math::color(math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f));
-            // i * 2.0f, 0, 0
+            //// if (i != 1) { continue; }
+            //math::color debugColor =
+            //    math::color(math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f), math::linearRand(0.0f, 0.3f));
+            //// i * 2.0f, 0, 0
             math::vec3 debugOffset = math::vec3();
-            math::mat4 transform =
-                math::compose(math::vec3(1.0f), math::identity<math::quat>(), debugOffset);
+            //math::mat4 transform =
+            //    math::compose(math::vec3(1.0f), math::identity<math::quat>(), debugOffset);
 
             for (math::vec3 vertex : vector)
             {
@@ -124,39 +221,17 @@ namespace legion::physics
             //newCollider->DrawColliderRepresentation(transform,math::colors::green,6.0f,FLT_MAX);
             i++;
         }
+    }
 
-        std::vector< FracturerColliderToMeshPairing> colliderToMeshPairings;
+    void Fracturer::GenerateFractureFragments(std::vector<ecs::entity_handle>& entitiesGenerated
+        , std::vector< FracturerColliderToMeshPairing>& colliderToMeshPairings
+        ,std::vector< std::shared_ptr<ConvexCollider>>& voronoiColliders
+        ,ecs::entity_handle fracturedEnt)
+    {
+        
+        fast_time totalMeshSplitting = 0;
 
-        //-----------------------------------------------------------------------------------------------------------------------------//
-                                //From the mesh about to be fractured, get the pairs of colliders to Mesh  //
-        //-----------------------------------------------------------------------------------------------------------------------------//
-
-        //make sure fractureInstigatorEnt is a direct child of the world, the initial instigator will always
-        //be either a direct parent of the world, or a grandchild of the world
-        bool isInstigatorDirectParent = fractureInstigatorEnt.get_parent() == registry->world;
-
-        if (!isInstigatorDirectParent)
-        {
-            //log::debug("instigator is not direct parent");
-            fractureInstigatorEnt = fractureInstigatorEnt.get_parent();
-        }
-
-
-
-        InstantiateColliderMeshPairingWithEntity(fractureInstigatorEnt,
-            colliderToMeshPairings);
-
-        hierarchy hry = fractureInstigatorEnt.read_component<hierarchy>();
-
-        for (auto& child : hry.children)
-        {
-            InstantiateColliderMeshPairingWithEntity(child,
-                colliderToMeshPairings);
-        }
-
-        //log::debug("colliderToMeshPairings size {} ", colliderToMeshPairings.size());
-        //log::debug("voronoiColliderssize {} ", voronoiColliders.size());
-        std::vector<ecs::entity_handle> entitiesGenerated;
+        fast_time totalCollisionDetection = 0;
 
         int fractureID = 0;
         //for each instantiated convex collider
@@ -171,22 +246,20 @@ namespace legion::physics
 
                 auto ownerEntity = meshToColliderPairing.meshSplitterPairing.
                     entity;
-                auto [posH,rotH,scaleH] = ownerEntity.get_component_handles<transform>();
-                
-     /*           if (!ownerEntity)
-                {
-                    DebugBreak();
-                }*/
+                auto [posH, rotH, scaleH] = ownerEntity.get_component_handles<transform>();
 
                 auto transformB = math::compose(scaleH.read(), rotH.read(), posH.read());
 
-                PhysicsStatics::DetectConvexConvexCollision(instantiatedVoronoiCollider.get()
-                    , meshToColliderPairing.colliderPair.get(), math::mat4(1.0f), transformB, collisionInfo, manifold);
-                
+                time::timer convexConvexCollision;
+ /*               PhysicsStatics::DetectConvexConvexCollision(instantiatedVoronoiCollider.get()
+                    , meshToColliderPairing.colliderPair.get(), math::mat4(1.0f), transformB, collisionInfo, manifold);*/
+                manifold.isColliding = true;
+                totalCollisionDetection += convexConvexCollision.elapsedTime().milliseconds();
+
                 if (manifold.isColliding)
                 {
-                    //if (fractureID != 3 || fractureID != 2) { continue; }
-                    //{
+                    if (fractureID < 999) //2
+                    {
                         //log::debug("-> Collision Found");
 
                         std::vector<MeshSplitParams> splittingParams;
@@ -205,68 +278,90 @@ namespace legion::physics
                         }
 
                         auto splitter = meshToColliderPairing.meshSplitterPairing.read();
+                        time::timer meshSplitting;
                         splitter.MultipleSplitMesh(splittingParams, entitiesGenerated, true, -1);
+                        totalMeshSplitting += meshSplitting.elapsedTime().milliseconds();
+
                         meshToColliderPairing.meshSplitterPairing.write(splitter);
 
-                    //}
-                    fractureID++;
+                    }
+
                 }
-                
-            
+                fractureID++;
+
             }
         }
-            
-        registry->destroyEntity(fractureInstigatorEnt);
-        /*registry->destroyEntity(manifold.physicsCompA.entity);
-        registry->destroyEntity(manifold.physicsCompB.entity);*/
 
-        //log::debug("entities generated {} ", entitiesGenerated.size());
-        int colliderIter = 0;
-        for (auto ent : entitiesGenerated)
-        {
-            
-            auto physicsCompHandle = ent.add_component<physicsComponent>();
-            auto physicsComp = physicsCompHandle.read();
+        registry->destroyEntity(fracturedEnt);
 
-            auto meshFilter = ent.read_component<mesh_filter>();
-
-            auto vertices = meshFilter.get().second.vertices;
-
-            //log::debug("cch");
-            bool debug = colliderIter == entitiesGenerated.size() - 1;
-            //log::debug("debug {} ", debug);
-            physicsComp.ConstructConvexHull(meshFilter, debug);
-            colliderIter++;
-
-            auto posHandle = ent.get_component_handle<position>();
-
-           /* debug::user_projectDrawLine(posHandle.read(),
-                posHandle.read() + math::vec3(0,0.2f,0),math::colors::red,15.0f,FLT_MAX,true);*/
-
-            ent.add_component<rigidbody>();
-        }
-
-        log::debug("all fragments have convex hulls");
-        //for each pair list
-            
-
-             //invalidate original collider
-
-
-        //for each generated collider paired with a newly generated mesh
-            //if the collider is in the impact sphere, create a new entity
-                
-            //else,add it back in the original collider
-                
-        fractureCount++;
+       
     }
 
-    bool Fracturer::IsFractureConditionMet()
+    void Fracturer::QuadrantVoronoi(math::vec3& min,math::vec3& max, std::vector<math::vec3>& voronoiPoints)
+    {
+        math::vec3 difference = max - min;
+        math::vec3 differenceQuadrant = difference / 4.0f;
+
+        math::vec3 first = min + differenceQuadrant;
+        voronoiPoints.push_back(first);
+
+        math::vec3 second = max - differenceQuadrant;
+        voronoiPoints.push_back(second);
+
+        math::vec3 third = max - (differenceQuadrant * 2);
+        voronoiPoints.push_back(third);
+
+        math::vec3 fourth = third + math::vec3(0.2f, 0, 0);
+        voronoiPoints.push_back(fourth);
+
+        math::vec3 fifth = third + math::vec3(0, -0.1f, 0);
+        voronoiPoints.push_back(fifth);
+
+        //math::vec3 sixth = min + differenceQuadrant + math::vec3(0.1, 0.25f, 0.1);
+        //voronoiPoints.push_back(sixth);
+
+        math::vec3 centroid = (min + max) / 2.0f;
+        int rand = math::linearRand(0, 5);
+        //log::debug("rand {} ",rand );
+        for (math::vec3& point : voronoiPoints)
+        {
+            math::vec3 vecFromCentroid = point - centroid;
+
+            vecFromCentroid = math::rotateY(vecFromCentroid, math::deg2rad(90.0f * rand));
+
+            point = centroid + vecFromCentroid;
+
+        }
+
+    }
+
+    void Fracturer::BalancedVoronoi(math::vec3& min, math::vec3& max, std::vector<math::vec3>& voronoiPoints)
+    {
+        math::vec3 difference = max - min;
+
+        math::vec3 first = min + difference * 0.1f;
+        voronoiPoints.push_back(first);
+    }
+
+    bool Fracturer::IsFractureConditionMet(physics_manifold& manifold, bool isfracturingA)
     {
         //TODO the user should be able to create their own fracture condition, but for now
         //, limit it so something can only be fractured once
-        log::debug("fractureCount {} ", fractureCount);
-        return fractureCount == 0;
+
+        auto fractureInstigator = isfracturingA ? manifold.entityB : manifold.entityA;
+
+        bool isAtMomentumThreshold = false;
+
+        auto rbH =fractureInstigator.get_component_handle<rigidbody>();
+
+        if (rbH)
+        {
+            auto rb = rbH.read();
+            auto mass = (1.0f / rb.inverseMass);
+            isAtMomentumThreshold = math::length(rbH.read().velocity * mass) > 5.0f;
+        }
+
+        return fractureCount == 0 && isAtMomentumThreshold;
     }
 
     void Fracturer::InitializeVoronoi(ecs::component<physicsComponent> physicsComponent)
@@ -289,6 +384,7 @@ namespace legion::physics
         //the fracturer is setup in a way that fragments are all stored in a different entity
         auto physicsCompHandle = ent.get_component_handle<physics::physicsComponent>();
         std::shared_ptr<ConvexCollider> convexCollider = nullptr;
+        assert(physicsCompHandle);
 
         auto physicsCollider = physicsCompHandle.read().colliders.at(0);
 
@@ -300,18 +396,6 @@ namespace legion::physics
         auto meshSplitterHandle = ent.get_component_handle<MeshSplitter>();
         //assert(meshSplitterHandle);
 
-        if (auto idH = ent.get_component_handle<physics::identifier>())
-        {
-            auto id = idH.read();
-            log::debug("id found {} ", id.id);
-
-        }
-        else
-        {
-            log::debug("NO ID");
-        }
-
-
         if (meshSplitterHandle && convexCollider)
         {
             FracturerColliderToMeshPairing colliderToMeshPairing(convexCollider, meshSplitterHandle);
@@ -321,9 +405,26 @@ namespace legion::physics
 
     }
 
+    math::vec3 Fracturer::GetImpactPointFromManifold(physics_manifold& manifold)
+    {
+        math::vec3 impactPoint = math::vec3();
+   
+        for (auto& contact : manifold.contacts)
+        {
+            impactPoint += contact.RefWorldContact;
+            impactPoint += contact.IncWorldContact;
+        }
+
+        float numberOfContacts = manifold.contacts.size() * 2;
+        float mult = (1.0f / numberOfContacts);
+
+        impactPoint *= mult;
+        return impactPoint;
+    }
+
     void FracturerColliderToMeshPairing::GenerateSplittingParamsFromCollider(std::shared_ptr<ConvexCollider> instantiatedCollider, std::vector<physics::MeshSplitParams>& meshSplitParams)
     {
-        int until = 5;
+        int until = 5;//convex bug at 3
         int count = 0;
         for (auto face : instantiatedCollider->GetHalfEdgeFaces())
         {

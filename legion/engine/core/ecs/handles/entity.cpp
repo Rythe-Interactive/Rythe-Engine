@@ -60,6 +60,16 @@ namespace legion::core::ecs
         return data;
     }
 
+    std::unordered_set<id_type>& entity::component_composition()
+    {
+        return Registry::entityComposition(data->id);
+    }
+
+    const std::unordered_set<id_type>& entity::component_composition() const
+    {
+        return Registry::entityComposition(data->id);
+    }
+
     void entity::set_parent(id_type parent)
     {
         if (data->parent)
