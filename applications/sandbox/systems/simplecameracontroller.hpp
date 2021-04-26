@@ -1,6 +1,6 @@
 #pragma once
 #include <core/core.hpp>
-//#include <audio/audio.hpp>
+#include <audio/audio.hpp>
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
 #include "gui_test.hpp"
@@ -105,7 +105,7 @@ public:
 
         camera = createEntity("Camera");
         camera.add_component<transform>(position(0.f, 3.f, -30.f), rotation::lookat(math::vec3::zero, math::vec3::forward), scale());
-        //camera.add_component<audio::audio_listener>();
+        camera.add_component<audio::audio_listener>();
 
         rendering::camera cam;
         cam.set_projection(22.5f, 0.001f, 1000.f);

@@ -48,9 +48,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="systems\audiosystem.inl">
-      <Filter>Header Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>

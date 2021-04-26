@@ -68,7 +68,7 @@ namespace std
             std::size_t hash = 0;
 
             legion::core::math::detail::hash_combine(hash,
-                std::hash<legion::core::id_type>{}(handle.entity));
+                std::hash<legion::core::id_type>{}(handle.owner->id));
             legion::core::math::detail::hash_combine(hash,
                 legion::core::typeHash<component_type>());
 

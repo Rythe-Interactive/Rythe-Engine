@@ -9,6 +9,7 @@ namespace legion::audio
 {
     struct audio_source
     {
+        Reflectable;
         friend class AudioSystem;
     public:
         enum sound_properties
@@ -257,3 +258,5 @@ namespace legion::audio
         byte m_changes = 0;
     };
 }
+
+ManualReflector(legion::audio::audio_source, m_sourceId, m_audio_handle, m_pitch, m_gain, m_looping, m_playState, m_nextPlayState, m_rolloffFactor, m_changes);
