@@ -50,6 +50,7 @@ namespace legion::physics
 
     float HalfEdgeFace::CalculateFaceArea() 
     {
+        static bool notfirstTime = true;
         float sum = 0;
         math::vec3& faceCentroidPos = centroid;
 
@@ -76,9 +77,16 @@ namespace legion::physics
             float triangleHeight = math::length(closestPointToCentroid - faceCentroidPos);
             //multiply length of direction with length of centroid-interpolant point divide by 2
             sum += (triangleHeight * dirVeclength * 0.5f);
+
+            if (notfirstTime)
+            {
+                notfirstTime = false;
+                debug::drawLine(currentEdgePos, edge->nextEdge->edgePosition, math::colors::black, 5.0f, FLT_MAX, true);
+                debug::drawLine(closestPointToCentroid, faceCentroidPos, math::colors::red, 5.0f, FLT_MAX, true);
+            }
         };
 
-        forEachEdge(CalculateFaceArea);
+        forEachEdge(caculateEdgeArea);
 
         return sum;
     }

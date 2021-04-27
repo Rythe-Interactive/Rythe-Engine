@@ -482,6 +482,13 @@ namespace legion::physics
         GetSupportPoint(vertices, math::vec3(0, 0, 1), supportVertices.at(4));
         GetSupportPoint(vertices, math::vec3(0, 0, -1), supportVertices.at(5));
 
+        float x = math::abs(supportVertices.at(0).x - supportVertices.at(1).x);
+        float y = math::abs(supportVertices.at(2).y - supportVertices.at(3).y);
+        float z = math::abs(supportVertices.at(4).z - supportVertices.at(5).z);
+
+        //merge volume threshold is equal a certain small fraction of the volume of the bounding box 
+        float mergeVolumeThreshold = x * y * z * (1.0f/1000.0f);
+
         //[2] Build Initial Hull
         if (!qHBuildInitialHull(vertices, supportVertices, faces,DEBUG_transform))
         {
@@ -513,7 +520,7 @@ namespace legion::physics
                 //if (currentDraw >= maxDraw) { break; }
                 currentDraw++;
 
-                bool atDebug = currentDraw == DEBUG_at + 1;
+                bool atDebug = false;//currentDraw == DEBUG_at + 1;
 
                 //find furhtest vertex of last face
                 auto [furthestVert, distanceFromFace] = currentFaceToVert.ptr->GetFurthestOutsideVert();
@@ -524,8 +531,13 @@ namespace legion::physics
                 //check if we should merge this vertex
                 if (distanceFromFace > scaledEpsilon)
                 {
-                    mergeVertexToHull(furthestVert, facesWithOutsideVerts,
-                        scaledEpsilon, DEBUG_transform, atDebug);
+                    bool sucess = mergeVertexToHull(furthestVert, facesWithOutsideVerts,
+                        scaledEpsilon, mergeVolumeThreshold, DEBUG_transform, atDebug);
+
+                    if (!sucess)
+                    {
+                        currentFaceToVert.ptr->outsideVerts.clear();
+                    }
                 }
                 else
                 {
@@ -928,16 +940,17 @@ namespace legion::physics
 
     }
 
-    void PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts,
-        float scalingEpsilon,math::mat4 DEBUG_transform, bool atDebug)
+    bool PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts,
+        float scalingEpsilon, float hullMinimumVolume, math::mat4 DEBUG_transform, bool atDebug)
     {
         std::vector<math::vec3> unmergedVertices;
         std::vector<HalfEdgeFace*> facesToBeRemoved;
 
         //TODO we are doing the point to distance thing twice here, would be better if we reused the results somehow
-
+        float totalVolume = 0.0f;
+        std::vector<HalfEdgeFace*> visibleFaces;
         //[1] Calculate volume created if this particular vertex was merged
-        for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
+        for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end(); listIter++)
         {
             HalfEdgeFace* face = listIter->face;
 
@@ -948,17 +961,36 @@ namespace legion::physics
 
             if (distanceToPlane > scalingEpsilon)
             {
-                ////face can see vertex, we must remove it from list
-                //facesToBeRemoved.push_back(face);
-                //listIter->populateVectorWithVerts(unmergedVertices);
-                //listIter = facesWithOutsideVerts.erase(listIter);
+                float faceArea = listIter->face->CalculateFaceArea();
 
-
-
+                totalVolume += faceArea * distanceToPlane * (1.0f/3.0f);
+                visibleFaces.push_back(face);
             }
         }
 
         //[2] Only continue if volume is above a given threshold
+        if (totalVolume < hullMinimumVolume)
+        {
+            static bool notFirstCancelledHull = true;
+
+            if (notFirstCancelledHull)
+            {
+                notFirstCancelledHull = false;
+                log::debug("First Cancelled HUll");
+
+                for (auto face : visibleFaces)
+                {
+                    face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+                }
+
+                math::vec3 worldPos = DEBUG_transform * math::vec4(eyePoint, 1);
+                debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, true);
+
+            }
+
+            return false;
+        }
+
 
         //identify faces that can see vertex and remove them from list
         for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
@@ -990,7 +1022,7 @@ namespace legion::physics
                 face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
             }
             log::debug(" facesToBeRemoved {0} ", facesToBeRemoved.size());
-            return;
+            return true;
         }
         
         //identify horizon edges and put them into list
@@ -1005,7 +1037,7 @@ namespace legion::physics
                 edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX);
             }*/
             log::debug("at debug horizon edges {0} ", horizonEdges.size());
-            //return;
+            return true;
         }
 
         //reverse iterate the list to find their pairings, add them to new list
@@ -1080,6 +1112,7 @@ namespace legion::physics
             delete face;
         }
 
+        return true;
     }
 
     bool PhysicsStatics::isFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second)

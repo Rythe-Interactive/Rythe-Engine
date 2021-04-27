@@ -575,8 +575,8 @@ namespace legion::physics
             std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges,float scalingEpsilon,
             math::mat4 DEBUG_transform = math::mat4(1.0f),bool atDebug =false);
 
-        static void mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts,
-            float scalingEpsilon, math::mat4 DEBUG_transform,bool atDebug);
+        static bool mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts,
+            float scalingEpsilon,float hullMinimumVolume, math::mat4 DEBUG_transform,bool atDebug);
 
         static bool isFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second);
 
