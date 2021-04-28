@@ -12,6 +12,8 @@ namespace legion::audio
         Reflectable;
         friend class AudioSystem;
     public:
+        constexpr static ALuint invalid_source_id = -1;
+
         enum sound_properties
         {
             pitch = 1 << 0,
@@ -29,6 +31,14 @@ namespace legion::audio
             playing,
             paused,
         };
+
+        audio_source() = default;
+
+        audio_source(const audio_segment_handle& handle)
+        {
+            m_changes |= sound_properties::audioHandle;
+            m_audio_handle = handle;
+        }
 
         /**
          * @brief Function to set the pitch for the audio source

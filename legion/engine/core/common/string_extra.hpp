@@ -41,8 +41,10 @@ namespace legion::core::common {
         OPTICK_EVENT();
         size_t count = 0;
         auto it = source.begin();
-
-        while ((it = std::search(it, source.end(), item.begin(), item.end())) != source.end()) // While there's items to be found, keep replacing them with value.
+        auto end = source.end();
+        auto itemBegin = item.begin();
+        auto itemEnd = item.end();
+        while ((it = std::search(it, end, itemBegin, itemEnd)) != end) // While there's items to be found, keep replacing them with value.
         {
             count++;
             source.erase(it, it + item.size());

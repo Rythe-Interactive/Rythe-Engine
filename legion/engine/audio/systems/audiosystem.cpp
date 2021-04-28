@@ -1,3 +1,5 @@
+#include <regex>
+
 #include <audio/systems/audiosystem.hpp>
 
 namespace legion::audio
@@ -7,6 +9,14 @@ namespace legion::audio
     ALCcontext* AudioSystem::alcContext = nullptr;
     unsigned int AudioSystem::sourceCount = 0;
     unsigned int AudioSystem::listenerCount = 0;
+
+    ALCint AudioSystem::frequency = 0;
+    ALCint AudioSystem::refresh = 0;
+    ALCint AudioSystem::sync = 0;
+    ALCint AudioSystem::monoSources = 0;
+    ALCint AudioSystem::stereoSources = 0;
+    ALCint AudioSystem::maxAux = 0;
+
 
     void AudioSystem::setup()
     {
@@ -87,22 +97,70 @@ namespace legion::audio
         // This function is called from setup()
         // In setup everything is still single threaded and therefore no lock is required
 
-        const ALchar* vendor = alGetString(AL_VENDOR);
-        const ALchar* version = alGetString(AL_VERSION);
-        const ALchar* renderer = alGetString(AL_RENDERER);
-        const ALchar* openALExtensions = alGetString(AL_EXTENSIONS);
-        const ALchar* ALCExtensions = alcGetString(alDevice, ALC_EXTENSIONS);
+        cstring vendor = alGetString(AL_VENDOR);
+        cstring version = alGetString(AL_VERSION);
+        cstring renderer = alGetString(AL_RENDERER);
+        std::string openALExtensions = alGetString(AL_EXTENSIONS);
+        std::regex match(" ");
+        openALExtensions = std::regex_replace(openALExtensions, match, "\n\t\t");
+
+        std::string ALCExtensions = alcGetString(alDevice, ALC_EXTENSIONS);
+        ALCExtensions = std::regex_replace(ALCExtensions, match, "\n\t\t");
+
         ALCint srate;
         alcGetIntegerv(alDevice, ALC_FREQUENCY, 1, &srate);
+
+        ALCint size;
+        alcGetIntegerv(alDevice, ALC_ATTRIBUTES_SIZE, 1, &size);
+        std::vector<ALCint> attrs(size);
+        alcGetIntegerv(alDevice, ALC_ALL_ATTRIBUTES, size, &attrs[0]);
+
+        for (size_t i = 0; i < attrs.size(); i++)
+        {
+            switch (attrs[i])
+            {
+            case ALC_FREQUENCY:
+                frequency = attrs[++i];
+                break;
+            case ALC_REFRESH:
+                refresh = attrs[++i];
+                break;
+            case ALC_SYNC:
+                sync = attrs[++i];
+                break;
+            case ALC_MONO_SOURCES:
+                monoSources = attrs[++i];
+                break;
+            case ALC_STEREO_SOURCES:
+                stereoSources = attrs[++i];
+                break;
+            case ALC_MAX_AUXILIARY_SENDS:
+                maxAux = attrs[++i];
+                break;
+            }
+        }
+
         log::info(
-            "Initialized OpenAL\n\tCONTEXT INFO\n\t"\
-            "----------------------------------\n\t"\
-            "Vendor:\t\t\t{}\n\tVersion:\t\t{}\n\t"\
-            "Renderer:\t\t{}\n\tDevice samplerate:\t{}\n\t"\
-            "OpenAl Extensions:\n\t\t{}\n\n\t"\
-            "ALC Extensions:\n\t\t{}\n\t"\
-            "----------------------------------\n",
-            vendor, version, renderer, srate, openALExtensions, ALCExtensions);
+            "Initialized OpenAL\n"\
+            "\tCONTEXT INFO\n"\
+            "\t----------------------------------\n"\
+            "\tVendor:\t\t\t{}\n"\
+            "\tVersion:\t\t{}\n"\
+            "\tRenderer:\t\t{}\n"\
+            "\tDevice samplerate:\t{}\n"\
+            "\tFrequency:\t\t{}\n"\
+            "\tRefresh rate:\t\t{}\n"\
+            "\tSync:\t\t\t{}\n"\
+            "\tMono sources:\t\t{}\n"\
+            "\tStereo sources:\t\t{}\n"\
+            "\tMax Auxiliary sends:\t{}\n"\
+            "\tOpenAl Extensions:\n"\
+            "\t\t{}\n"\
+            "\n"\
+            "\tALC Extensions:\n"\
+            "\t\t{}\n"\
+            "\t----------------------------------\n",
+            vendor, version, renderer, srate, frequency, refresh, sync, monoSources, stereoSources, maxAux, openALExtensions, ALCExtensions);
     }
 
     void AudioSystem::update(time::span deltatime)
@@ -116,6 +174,10 @@ namespace legion::audio
             auto sourceHandle = entity.get_component<audio_source>();
 
             audio_source& source = sourceHandle.get();
+
+            if (source.m_sourceId == audio_source::invalid_source_id)
+                continue;
+
             const position& p = entity.get_component<position>();
             position& previousP = m_sourcePositions.at(sourceHandle);
             const math::vec3 vel = previousP - p;
@@ -156,6 +218,22 @@ namespace legion::audio
                 // Gain has changed
                 alSourcef(source.m_sourceId, AL_GAIN, source.getGain());
             }
+
+            if (source.m_changes & change::doRewind)
+            {
+                alSourceRewind(source.m_sourceId);
+            }
+
+            if (source.m_changes & change::rollOffFactor)
+            {
+                alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, source.m_rolloffFactor);
+            }
+
+            if (source.m_changes & change::looping)
+            {
+                alSourcei(source, AL_LOOPING, static_cast<int>(source.m_looping));
+            }
+
             if (source.m_changes & change::playState)
             {
                 using state = audio::audio_source::playstate;
@@ -182,18 +260,6 @@ namespace legion::audio
                 {
                     source.m_nextPlayState = state::stopped;
                 }
-            }
-            if (source.m_changes & change::doRewind)
-            {
-                alSourceRewind(source.m_sourceId);
-            }
-            if (source.m_changes & change::rollOffFactor)
-            {
-                alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, source.m_rolloffFactor);
-            }
-            if (source.m_changes & change::looping)
-            {
-                alSourcei(source, AL_LOOPING, static_cast<int>(source.m_looping));
             }
 
             source.clearChanges();
@@ -232,6 +298,12 @@ namespace legion::audio
         // do something with a.
         initSource(a);
 
+        if (a.m_sourceId == audio_source::invalid_source_id)
+        {
+            handle.destroy();
+            return;
+        }
+
         m_sourcePositions.emplace(handle, event.entity.get_component<position>().get());
 
         ++sourceCount;
@@ -241,8 +313,12 @@ namespace legion::audio
     void AudioSystem::onAudioSourceComponentDestroy(events::component_destruction<audio_source>& event)
     {
         auto handle = event.entity.get_component<audio_source>();
-        m_sourcePositions.erase(handle);
         const audio_source& a = handle.get();
+
+        if (a.m_sourceId == audio_source::invalid_source_id)
+            return;
+
+        m_sourcePositions.erase(handle);
 
         if (a.m_playState != audio_source::playstate::stopped)
             alSourceStop(a.m_sourceId);
@@ -294,6 +370,13 @@ namespace legion::audio
 
     void AudioSystem::initSource(audio_source& source)
     {
+        static size_type i = 0;
+        if (++i >= monoSources)
+        {
+            source.m_sourceId = audio_source::invalid_source_id;
+            return;
+        }
+
         std::lock_guard guard(contextLock);
         alcMakeContextCurrent(alcContext);
 

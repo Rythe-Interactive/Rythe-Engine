@@ -2,6 +2,7 @@
 #include <core/core.hpp>
 #include <application/application.hpp>
 #include <rendering/rendering.hpp>
+#include <audio/audio.hpp>
 
 struct example_comp
 {
@@ -16,10 +17,6 @@ public:
         using namespace legion;
         log::filter(log::severity_debug);
         log::debug("ExampleSystem setup");
-
-        (void)schd::Scheduler::reserveThread([]() {
-            log::info("Thread {} assigned.", std::this_thread::get_id());
-            });
 
         app::window& win = ecs::world.get_component<app::window>();
         app::context_guard guard(win);
@@ -38,9 +35,11 @@ public:
         auto material = gfx::MaterialCache::create_material("Default", fs::view("assets://shaders/texture.shs"));
         material.set_param("_texture", gfx::TextureCache::create_texture(fs::view("engine://resources/default/albedo")));
 
+        auto audioSegment = audio::AudioSegmentCache::createAudioSegment("Beep", fs::view("assets://audio/kilogram-of-scotland_mono.mp3"));
+
         {
             auto ent = createEntity("Sun");
-            ent.add_component(gfx::light::directional());
+            ent.add_component(gfx::light::directional(math::color(1, 1, 0.8f), 10.f));
             auto [pos, rot, scal] = ent.add_component<transform>();
             rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
         }
@@ -55,47 +54,68 @@ public:
 
             ent.add_component<example_comp, velocity>();
             ent.add_component(gfx::mesh_renderer(material, model));
+
+            audio::audio_source source;
+            source.setAudioHandle(audioSegment);
+            source.setLooping(true);
+            source.play();
+            ent.add_component(source);
+
         }
     }
 
     void update(legion::time::span deltaTime)
     {
         using namespace legion;
+
         ecs::filter<position, velocity, example_comp> filter;
 
         float dt = deltaTime;
         if (dt > 0.07f)
             return;
 
-        queueJobs(filter.size(), [&](id_type jobId)
-            //for (size_type jobId = 0; jobId < filter.size(); jobId++)
-            {
-                auto& pos = filter[jobId].get_component<position>().get();
-                auto& vel = filter[jobId].get_component<velocity>().get();
+        if (filter.size())
+        {
+            auto poolSize = (schd::Scheduler::jobPoolSize() + 1);
+            size_type jobSize = math::iround(math::ceil(filter.size() / static_cast<float>(poolSize)));
 
-                if (vel == math::vec3::zero)
-                    vel = math::normalize(pos);
-
-                math::vec3 perp;                
-
-                perp = math::normalize(math::cross(vel, math::vec3::up));
-
-                math::vec3 rotated = (math::axisAngleMatrix(vel, math::perlin(pos) * math::pi<float>()) * math::vec4(perp.x, perp.y, perp.z, 0)).xyz();
-                rotated.y -= 0.5f;
-                rotated = math::normalize(rotated);
-
-                vel = math::normalize(vel + rotated * dt);
-
-                if (math::abs(vel.y) >= 0.9f)
+            queueJobs(poolSize, [&](id_type jobId)
                 {
-                    auto rand = math::circularRand(1.f);
-                    vel.y = 0.9f;
-                    vel = math::normalize(vel + math::vec3(rand.x, 0.f, rand.y));
-                }
+                    auto start = jobId * jobSize;
+                    auto end = start + jobSize;
+                    if (end > filter.size())
+                        end = filter.size();
 
-                pos += vel * 0.3f * dt;
-            }
-        ).wait();
+                    for (size_type i = start; i < end; i++)
+                    {
+                        auto& pos = filter[i].get_component<position>().get();
+                        auto& vel = filter[i].get_component<velocity>().get();
+
+                        if (vel == math::vec3::zero)
+                            vel = math::normalize(pos);
+
+                        math::vec3 perp;
+
+                        perp = math::normalize(math::cross(vel, math::vec3::up));
+
+                        math::vec3 rotated = (math::axisAngleMatrix(vel, math::perlin(pos) * math::pi<float>()) * math::vec4(perp.x, perp.y, perp.z, 0)).xyz();
+                        rotated.y -= 0.5f;
+                        rotated = math::normalize(rotated);
+
+                        vel = math::normalize(vel + rotated * dt);
+
+                        if (math::abs(vel.y) >= 0.9f)
+                        {
+                            auto rand = math::circularRand(1.f);
+                            vel.y = 0.9f;
+                            vel = math::normalize(vel + math::vec3(rand.x, 0.f, rand.y));
+                        }
+
+                        pos += vel * 0.3f * dt;
+                    }
+                }
+            ).wait();
+        }
 
         static fast_time buffer = 0;
         static fast_time avgTime = deltaTime;

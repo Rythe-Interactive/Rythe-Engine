@@ -81,6 +81,7 @@ namespace legion::audio
 
         position m_listenerPosition;
         std::unordered_map<ecs::component<audio_source>, position> m_sourcePositions;
+        static ALCint frequency, refresh, sync, monoSources, stereoSources, maxAux;
 
         static ALCdevice* alDevice;
         static unsigned int sourceCount;

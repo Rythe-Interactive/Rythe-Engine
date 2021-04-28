@@ -25,7 +25,7 @@ namespace legion::rendering
         // static id_type sceneDepthId = nameHash("scene depth history");
 
         //auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::unordered_set<ecs::entity>>>>(batchesId);
-        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::vector<math::mat4>>>>(batchesId);
+        auto* batches = get_meta<sparse_map<material_handle, sparse_map<model_handle, std::pair<std::vector<ecs::entity>, std::vector<math::mat4>>>>>(batchesId);
         if (!batches)
             return;
 
@@ -123,7 +123,12 @@ namespace legion::rendering
             for (auto [modelHandle, instances] : instancesPerMaterial)
             {
                 if (modelHandle.id == invalid_id)
-                    return;
+                {
+                    for (auto& ent : instances.first)
+                        log::warn("Invalid mesh found on entity {}.", ent->name);
+
+                    continue;
+                }
 
                 ModelCache::create_model(modelHandle.id);
                 auto modelName = ModelCache::get_model_name(modelHandle.id);
@@ -142,7 +147,7 @@ namespace legion::rendering
                 }
 
                 {
-                    OPTICK_EVENT("Calculating matrices");
+                    OPTICK_EVENT("Buffering matrices");
                     /*m_matrices.resize(instances.size());
                     int i = 0;
                     for (auto& ent : instances)
@@ -151,7 +156,7 @@ namespace legion::rendering
                         i++;
                     }*/
 
-                    modelMatrixBuffer->bufferData(instances);
+                    modelMatrixBuffer->bufferData(instances.second);
                 }
 
                 {
@@ -160,7 +165,7 @@ namespace legion::rendering
                     mesh.indexBuffer.bind();
                     lightsBuffer->bind();
                     for (auto submesh : mesh.submeshes)
-                        glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.size());
+                        glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.second.size());
 
                     lightsBuffer->release();
                     mesh.indexBuffer.release();
@@ -170,7 +175,6 @@ namespace legion::rendering
 
             material.release();
         }
-
         fbo->release();
     }
 
