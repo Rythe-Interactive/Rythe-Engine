@@ -187,18 +187,18 @@ namespace legion::core::detail
      * @param offset - The mesh Indices offset. ( e.g. For the first submesh 0, for the second submesh submesh[0].indices.size() )
      * @param data - The std::vector to copy the indices data into
      */
-    static void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, size_type offset, size_type vertexCount, std::vector<uint>* data)
+    static void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, size_type offset, size_type vertexCount, std::vector<uint>& data)
     {
-        size_t size = data->size();
+        size_t size = data.size();
         //indices in glft are in int16
-        data->reserve(size + bufferView.byteLength / sizeof(int16));
+        data.reserve(size + bufferView.byteLength / sizeof(int16));
 
         std::vector<int16> origin;
         origin.resize(bufferView.byteLength / sizeof(int16));
         memcpy(origin.data(), buffer.data.data() + bufferView.byteOffset, bufferView.byteLength);
 
         for (size_type i = 0; i < origin.size(); ++i)
-            data->push_back(static_cast<uint>((static_cast<size_type>(static_cast<int>(vertexCount) + static_cast<int>(origin[i])) % vertexCount) + offset));
+            data.push_back(static_cast<uint>((static_cast<size_type>(static_cast<int>(vertexCount) + static_cast<int>(origin[i])) % vertexCount) + offset));
     }
 
     static math::mat4 getGltfNodeTransform(const tinygltf::Node& node)
@@ -235,6 +235,9 @@ namespace legion::core::detail
         sub_mesh m;
         m.name = mesh.name;
         m.indexOffset = meshData.indices.size();
+
+        if (mesh.primitives.size())
+            m.materialIndex = mesh.primitives[0].material;
 
         for (auto primitive : mesh.primitives)
         {
@@ -286,7 +289,7 @@ namespace legion::core::detail
             const tinygltf::Accessor& indexAccessor = model.accessors.at(static_cast<size_type>(primitive.indices));
             const tinygltf::BufferView& indexBufferView = model.bufferViews.at(static_cast<size_type>(indexAccessor.bufferView));
             const tinygltf::Buffer& indexBuffer = model.buffers.at(static_cast<size_type>(indexBufferView.buffer));
-            detail::handleGltfIndices(indexBuffer, indexBufferView, vertexOffset, vertexCount, &(meshData.indices));
+            detail::handleGltfIndices(indexBuffer, indexBufferView, vertexOffset, vertexCount, meshData.indices);
         }
 
         // Calculate size of submesh
@@ -393,52 +396,49 @@ namespace legion::core
             log::trace(warnings.c_str());
         }
 
-        if (settings.materials)
+        // Create the mesh
+        mesh data;
+
+        std::vector<tinyobj::material_t> srcMaterials = reader.GetMaterials();
+
+        for (auto& srcMat : srcMaterials)
         {
-            std::vector<tinyobj::material_t> srcMaterials = reader.GetMaterials();
+            auto& material = data.materials.emplace_back();
+            material.name = srcMat.name;
+            material.opaque = math::close_enough(srcMat.dissolve, 1);
+            material.alphaCutoff = 0.5f;
+            material.doubleSided = false;
 
-            for (auto& srcMat : srcMaterials)
-            {
-                auto& material = settings.materials->emplace_back();
-                material.name = srcMat.name;
-                material.opaque = math::close_enough(srcMat.dissolve, 1);
-                material.alphaCutoff = 0.5f;
-                material.doubleSided = false;
+            material.albedoValue = math::color(srcMat.diffuse[0], srcMat.diffuse[1], srcMat.diffuse[2]);
+            if (!srcMat.diffuse_texname.empty())
+                material.albedoMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.diffuse_texname));
 
-                material.albedoValue = math::color(srcMat.diffuse[0], srcMat.diffuse[1], srcMat.diffuse[2]);
-                if (!srcMat.diffuse_texname.empty())
-                    material.albedoMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.diffuse_texname));
+            material.metallicValue = srcMat.metallic;
+            if (!srcMat.metallic_texname.empty())
+                material.metallicMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.metallic_texname));
 
-                material.metallicValue = srcMat.metallic;
-                if (!srcMat.metallic_texname.empty())
-                    material.metallicMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.metallic_texname));
+            material.roughnessValue = srcMat.roughness;
+            if (!srcMat.roughness_texname.empty())
+                material.roughnessMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.roughness_texname));
 
-                material.roughnessValue = srcMat.roughness;
-                if (!srcMat.roughness_texname.empty())
-                    material.roughnessMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.roughness_texname));
+            material.metallicRoughnessMap = invalid_image_handle;
 
-                material.metallicRoughnessMap = invalid_image_handle;
+            material.emissiveValue = math::color(srcMat.emission[0], srcMat.emission[1], srcMat.emission[2]);
+            if (!srcMat.emissive_texname.empty())
+                material.emissiveMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.emissive_texname));
 
-                material.emissiveValue = math::color(srcMat.emission[0], srcMat.emission[1], srcMat.emission[2]);
-                if (!srcMat.emissive_texname.empty())
-                    material.emissiveMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.emissive_texname));
+            if (!srcMat.normal_texname.empty())
+                material.normalMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.normal_texname));
 
-                if (!srcMat.normal_texname.empty())
-                    material.normalMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.normal_texname));
+            material.aoMap = invalid_image_handle;
 
-                material.aoMap = invalid_image_handle;
-
-                if (!srcMat.bump_texname.empty())
-                    material.heightMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.bump_texname));
-            }
+            if (!srcMat.bump_texname.empty())
+                material.heightMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.bump_texname));
         }
 
         // Get all the vertex and composition data.
         tinyobj::attrib_t attributes = reader.GetAttrib();
         std::vector<tinyobj::shape_t> shapes = reader.GetShapes();
-
-        // Create the mesh
-        mesh data;
 
         // Sparse map like constructs to map both vertices and indices.
         std::vector<detail::vertex_hash> vertices;
@@ -451,6 +451,8 @@ namespace legion::core
             submesh.name = shape.name;
             submesh.indexOffset = data.indices.size();
             submesh.indexCount = shape.mesh.indices.size();
+            if (shape.mesh.material_ids.size())
+                submesh.materialIndex = shape.mesh.material_ids[0];
 
             for (auto& indexData : shape.mesh.indices)
             {
@@ -558,77 +560,74 @@ namespace legion::core
             return decay(Err(legion_fs_error("Failed to parse GLTF")));
         }
 
-        if (settings.materials)
-        {
-            for (auto& srcMat : model.materials)
-            {
-                auto& material = settings.materials->emplace_back();
-                auto& pbrData = srcMat.pbrMetallicRoughness;
-
-                material.name = srcMat.name;
-                material.opaque = srcMat.alphaMode == "OPAQUE" || srcMat.alphaMode == "MASK";
-                material.alphaCutoff = static_cast<float>(srcMat.alphaCutoff);
-                material.doubleSided = srcMat.doubleSided;
-
-                material.albedoValue = math::color(
-                    static_cast<float>(pbrData.baseColorFactor[0]),
-                    static_cast<float>(pbrData.baseColorFactor[1]),
-                    static_cast<float>(pbrData.baseColorFactor[2]),
-                    static_cast<float>(pbrData.baseColorFactor[3]));
-
-                if (pbrData.baseColorTexture.index >= 0)
-                    material.albedoMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(pbrData.baseColorTexture.index)
-                            ].source)
-                        ]);
-
-                material.metallicValue = static_cast<float>(pbrData.metallicFactor);
-                material.roughnessValue = static_cast<float>(pbrData.roughnessFactor);
-
-                if (pbrData.metallicRoughnessTexture.index >= 0)
-                    material.metallicRoughnessMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(pbrData.metallicRoughnessTexture.index)
-                            ].source)
-                        ]);
-
-                material.emissiveValue = math::color(
-                    static_cast<float>(srcMat.emissiveFactor[0]),
-                    static_cast<float>(srcMat.emissiveFactor[1]),
-                    static_cast<float>(srcMat.emissiveFactor[2]));
-
-                if (srcMat.emissiveTexture.index >= 0)
-                    material.emissiveMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(srcMat.emissiveTexture.index)
-                            ].source)
-                        ]);
-
-                if (srcMat.normalTexture.index >= 0)
-                    material.normalMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(srcMat.normalTexture.index)
-                            ].source)
-                        ]);
-
-                if (srcMat.occlusionTexture.index >= 0)
-                    material.aoMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(srcMat.occlusionTexture.index)
-                            ].source)
-                        ]);
-
-                material.heightMap = invalid_image_handle;
-            }
-        }
-
         core::mesh meshData;
+
+        for (auto& srcMat : model.materials)
+        {
+            auto& material = meshData.materials.emplace_back();
+            auto& pbrData = srcMat.pbrMetallicRoughness;
+
+            material.name = srcMat.name;
+            material.opaque = srcMat.alphaMode == "OPAQUE" || srcMat.alphaMode == "MASK";
+            material.alphaCutoff = static_cast<float>(srcMat.alphaCutoff);
+            material.doubleSided = srcMat.doubleSided;
+
+            material.albedoValue = math::color(
+                static_cast<float>(pbrData.baseColorFactor[0]),
+                static_cast<float>(pbrData.baseColorFactor[1]),
+                static_cast<float>(pbrData.baseColorFactor[2]),
+                static_cast<float>(pbrData.baseColorFactor[3]));
+
+            if (pbrData.baseColorTexture.index >= 0)
+                material.albedoMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(pbrData.baseColorTexture.index)
+                        ].source)
+                    ]);
+
+            material.metallicValue = static_cast<float>(pbrData.metallicFactor);
+            material.roughnessValue = static_cast<float>(pbrData.roughnessFactor);
+
+            if (pbrData.metallicRoughnessTexture.index >= 0)
+                material.metallicRoughnessMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(pbrData.metallicRoughnessTexture.index)
+                        ].source)
+                    ]);
+
+            material.emissiveValue = math::color(
+                static_cast<float>(srcMat.emissiveFactor[0]),
+                static_cast<float>(srcMat.emissiveFactor[1]),
+                static_cast<float>(srcMat.emissiveFactor[2]));
+
+            if (srcMat.emissiveTexture.index >= 0)
+                material.emissiveMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(srcMat.emissiveTexture.index)
+                        ].source)
+                    ]);
+
+            if (srcMat.normalTexture.index >= 0)
+                material.normalMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(srcMat.normalTexture.index)
+                        ].source)
+                    ]);
+
+            if (srcMat.occlusionTexture.index >= 0)
+                material.aoMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(srcMat.occlusionTexture.index)
+                        ].source)
+                    ]);
+
+            material.heightMap = invalid_image_handle;
+        }
 
         if (model.scenes.size() <= 0)
         {
@@ -735,77 +734,74 @@ namespace legion::core
             return decay(Err(legion_fs_error("Failed to parse glTF")));
         }
 
-        if (settings.materials)
-        {
-            for (auto& srcMat : model.materials)
-            {
-                auto& material = settings.materials->emplace_back();
-                auto& pbrData = srcMat.pbrMetallicRoughness;
-
-                material.name = srcMat.name;
-                material.opaque = srcMat.alphaMode == "OPAQUE" || srcMat.alphaMode == "MASK";
-                material.alphaCutoff = static_cast<float>(srcMat.alphaCutoff);
-                material.doubleSided = srcMat.doubleSided;
-
-                material.albedoValue = math::color(
-                    static_cast<float>(pbrData.baseColorFactor[0]),
-                    static_cast<float>(pbrData.baseColorFactor[1]),
-                    static_cast<float>(pbrData.baseColorFactor[2]),
-                    static_cast<float>(pbrData.baseColorFactor[3]));
-
-                if (pbrData.baseColorTexture.index >= 0)
-                    material.albedoMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(pbrData.baseColorTexture.index)
-                            ].source)
-                        ]);
-
-                material.metallicValue = static_cast<float>(pbrData.metallicFactor);
-                material.roughnessValue = static_cast<float>(pbrData.roughnessFactor);
-
-                if (pbrData.metallicRoughnessTexture.index >= 0)
-                    material.metallicRoughnessMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(pbrData.metallicRoughnessTexture.index)
-                            ].source)
-                        ]);
-
-                material.emissiveValue = math::color(
-                    static_cast<float>(srcMat.emissiveFactor[0]),
-                    static_cast<float>(srcMat.emissiveFactor[1]),
-                    static_cast<float>(srcMat.emissiveFactor[2]));
-
-                if (srcMat.emissiveTexture.index >= 0)
-                    material.emissiveMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(srcMat.emissiveTexture.index)
-                            ].source)
-                        ]);
-
-                if (srcMat.normalTexture.index >= 0)
-                    material.normalMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(srcMat.normalTexture.index)
-                            ].source)
-                        ]);
-
-                if (srcMat.occlusionTexture.index >= 0)
-                    material.aoMap = detail::loadGLTFImage(
-                        model.images[
-                            static_cast<size_type>(model.textures[
-                                static_cast<size_type>(srcMat.occlusionTexture.index)
-                            ].source)
-                        ]);
-
-                material.heightMap = invalid_image_handle;
-            }
-        }
-
         core::mesh meshData;
+
+        for (auto& srcMat : model.materials)
+        {
+            auto& material = meshData.materials.emplace_back();
+            auto& pbrData = srcMat.pbrMetallicRoughness;
+
+            material.name = srcMat.name;
+            material.opaque = srcMat.alphaMode == "OPAQUE" || srcMat.alphaMode == "MASK";
+            material.alphaCutoff = static_cast<float>(srcMat.alphaCutoff);
+            material.doubleSided = srcMat.doubleSided;
+
+            material.albedoValue = math::color(
+                static_cast<float>(pbrData.baseColorFactor[0]),
+                static_cast<float>(pbrData.baseColorFactor[1]),
+                static_cast<float>(pbrData.baseColorFactor[2]),
+                static_cast<float>(pbrData.baseColorFactor[3]));
+
+            if (pbrData.baseColorTexture.index >= 0)
+                material.albedoMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(pbrData.baseColorTexture.index)
+                        ].source)
+                    ]);
+
+            material.metallicValue = static_cast<float>(pbrData.metallicFactor);
+            material.roughnessValue = static_cast<float>(pbrData.roughnessFactor);
+
+            if (pbrData.metallicRoughnessTexture.index >= 0)
+                material.metallicRoughnessMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(pbrData.metallicRoughnessTexture.index)
+                        ].source)
+                    ]);
+
+            material.emissiveValue = math::color(
+                static_cast<float>(srcMat.emissiveFactor[0]),
+                static_cast<float>(srcMat.emissiveFactor[1]),
+                static_cast<float>(srcMat.emissiveFactor[2]));
+
+            if (srcMat.emissiveTexture.index >= 0)
+                material.emissiveMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(srcMat.emissiveTexture.index)
+                        ].source)
+                    ]);
+
+            if (srcMat.normalTexture.index >= 0)
+                material.normalMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(srcMat.normalTexture.index)
+                        ].source)
+                    ]);
+
+            if (srcMat.occlusionTexture.index >= 0)
+                material.aoMap = detail::loadGLTFImage(
+                    model.images[
+                        static_cast<size_type>(model.textures[
+                            static_cast<size_type>(srcMat.occlusionTexture.index)
+                        ].source)
+                    ]);
+
+            material.heightMap = invalid_image_handle;
+        }
 
         if (model.scenes.size() <= 0)
         {
