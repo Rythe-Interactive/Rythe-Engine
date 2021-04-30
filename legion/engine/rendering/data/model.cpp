@@ -599,7 +599,7 @@ namespace legion::rendering
                 {
                     static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
 
-                    material_handle material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
+                    material_handle material = MaterialCache::create_material(meshName + "/" + mat.name, defaultLitShader);
 
                     if (mat.doubleSided)
                         material.set_variant("double_sided");
@@ -692,7 +692,7 @@ namespace legion::rendering
 
                     material.setLoadOrSaveBit(false);
                     model.materials.push_back(material);
-                    log::debug("Loaded embedded material {}/{}", name, mat.name);
+                    log::debug("Loaded embedded material {}/{}", meshName, mat.name);
                 }
             }
 
@@ -899,7 +899,7 @@ namespace legion::rendering
                 {
                     static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
 
-                    material_handle material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
+                    material_handle material = MaterialCache::create_material(meshName + "/" + mat.name, defaultLitShader);
 
                     if (mat.doubleSided)
                         material.set_variant("double_sided");
@@ -992,7 +992,7 @@ namespace legion::rendering
 
                     material.setLoadOrSaveBit(false);
                     model.materials.push_back(material);
-                    log::debug("Loaded embedded material {}/{}", name, mat.name);
+                    log::debug("Loaded embedded material {}/{}", meshName, mat.name);
                 }
             }
 
