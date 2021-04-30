@@ -228,6 +228,12 @@ namespace legion::audio
             {
                 alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, source.m_rolloffFactor);
             }
+            
+            if (source.m_changes & change::rollOffDistance)
+            {
+                alSourcef(source.m_sourceId, AL_REFERENCE_DISTANCE, source.m_referenceDistance);
+                alSourcef(source.m_sourceId, AL_MAX_DISTANCE, source.m_maxDistance);
+            }
 
             if (source.m_changes & change::looping)
             {
@@ -381,14 +387,14 @@ namespace legion::audio
         alcMakeContextCurrent(alcContext);
 
         alGenSources((ALuint)1, &source.m_sourceId);
-        alSourcef(source.m_sourceId, AL_PITCH, 1);
-        alSourcef(source.m_sourceId, AL_GAIN, 1);
-        alSourcei(source.m_sourceId, AL_LOOPING, AL_FALSE);
+        alSourcef(source.m_sourceId, AL_PITCH, source.m_pitch);
+        alSourcef(source.m_sourceId, AL_GAIN, source.m_gain);
+        alSourcei(source.m_sourceId, AL_LOOPING, source.m_looping ? AL_TRUE : AL_FALSE);
 
         // 3D audio stuffs
-        alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, 1.0f);
-        alSourcef(source.m_sourceId, AL_REFERENCE_DISTANCE, 5);
-        alSourcef(source.m_sourceId, AL_MAX_DISTANCE, 15);
+        alSourcef(source.m_sourceId, AL_ROLLOFF_FACTOR, source.m_pitch);
+        alSourcef(source.m_sourceId, AL_REFERENCE_DISTANCE, source.m_referenceDistance);
+        alSourcef(source.m_sourceId, AL_MAX_DISTANCE, source.m_maxDistance);
 
         // NOTE TO SELF:
         //      Set position and velocity to entity position and velocty
@@ -400,6 +406,34 @@ namespace legion::audio
             auto [segmentLock, segment] = source.m_audio_handle.get();
             async::readwrite_guard segmentGuard(segmentLock);
             alSourcei(source.m_sourceId, AL_BUFFER, segment.audioBufferId);
+
+            if (source.m_changes & audio_source::sound_properties::playState)
+            {
+                using state = audio_source::playstate;
+                if (source.m_audio_handle)
+                {
+                    // Playstate has changed
+                    if (source.m_nextPlayState == state::playing)
+                    {
+                        source.m_playState = state::playing;
+                        alSourcePlay(source.m_sourceId);
+                    }
+                    else if (source.m_nextPlayState == state::paused)
+                    {
+                        source.m_playState = state::paused;
+                        alSourcePause(source.m_sourceId);
+                    }
+                    else if (source.m_nextPlayState == state::stopped)
+                    {
+                        source.m_playState = state::stopped;
+                        alSourceStop(source.m_sourceId);
+                    }
+                }
+                else
+                {
+                    source.m_nextPlayState = state::stopped;
+                }
+            }
         }
         source.clearChanges();
         alcMakeContextCurrent(nullptr);

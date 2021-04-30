@@ -108,13 +108,12 @@ namespace legion::core
     struct mesh_import_settings
     {
         bool triangulate = true;
-        bool vertex_color = false;
         filesystem::view contextFolder = filesystem::view(std::string_view(""));
     };
 
     /**@brief Default mesh import settings.
      */
-    const mesh_import_settings default_mesh_settings{ true, false, filesystem::view(std::string_view("")) };
+    const mesh_import_settings default_mesh_settings{ true, filesystem::view(std::string_view("")) };
 
     /**@class MeshCache
      * @brief Data cache for loading, storing and managing raw meshes.

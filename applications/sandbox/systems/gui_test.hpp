@@ -186,7 +186,7 @@ namespace legion
                     ImGui::SameLine();
                     if (ImGui::Button("Add child"))
                     {
-                        auto child = createEntity(handle);
+                        (void)createEntity(handle);
                     }
 
                     std::vector<ecs::entity> toErase;
@@ -568,7 +568,7 @@ namespace legion
             return false;
         }
 
-        void onGUI(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
+        void onGUI(L_MAYBEUNUSED app::window& context, camera& cam, const camera::camera_input& camInput, L_MAYBEUNUSED time::span deltaTime)
         {
             //if (!SceneManager::currentScene)
               //  SceneManager::currentScene = SceneManager::create_scene();

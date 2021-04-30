@@ -35,13 +35,23 @@ public:
         auto material = gfx::MaterialCache::create_material("Default", fs::view("assets://shaders/texture.shs"));
         material.set_param("_texture", gfx::TextureCache::create_texture(fs::view("engine://resources/default/albedo")));
 
-        auto audioSegment = audio::AudioSegmentCache::createAudioSegment("Beep", fs::view("assets://audio/kilogram-of-scotland_mono.mp3"));
+        auto audioSegment = audio::AudioSegmentCache::createAudioSegment("Beep", fs::view("assets://audio/beep4.mp3"));
 
         {
             auto ent = createEntity("Sun");
             ent.add_component(gfx::light::directional(math::color(1, 1, 0.8f), 10.f));
             auto [pos, rot, scal] = ent.add_component<transform>();
             rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
+
+            ent.add_component(gfx::mesh_renderer(model.get_model().materials[0], model));
+
+            //audio::audio_source source;
+            //source.setAudioHandle(audioSegment);
+            //source.setRollOffDistances(0.1f, 15.f);
+            //source.setRollOffFactor(0.1f);
+            //source.setLooping(true);
+            //source.play();
+            //ent.add_component(source);
         }
 
         for (int i = 0; i < 20000; i++)
@@ -57,10 +67,12 @@ public:
 
             audio::audio_source source;
             source.setAudioHandle(audioSegment);
+            source.setRollOffDistances(0.1f, 15.f);
+            source.setRollOffFactor(0.1f);
             source.setLooping(true);
+            source.setGain(0.1f);
             source.play();
             ent.add_component(source);
-
         }
     }
 
