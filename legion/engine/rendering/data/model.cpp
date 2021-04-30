@@ -127,7 +127,6 @@ namespace legion::rendering
         // Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
 
         model model{};
-        std::string meshName;
 
         if (settings.contextFolder.get_virtual_path().empty())
         {
@@ -141,75 +140,11 @@ namespace legion::rendering
             return invalid_model_handle;
         }
 
-        // Copy the sub-mesh data.
         auto [lock, data] = handle.get();
-        async::readonly_guard guard(lock);
-        meshName = data.filePath;
 
-        for (auto& submeshData : data.submeshes)
-            model.submeshes.push_back(submeshData);
-
-        // The model still needs to be buffered on the rendering thread.
-        model.buffered = false;
-
-        { // Insert the model into the model list.
-            async::readwrite_guard guard(m_modelLock);
-            m_models.insert(id, model);
-        }
-
+        if (!data.materials.empty())
         {
-            async::readwrite_guard guard(m_modelNameLock);
-            m_modelNames[id] = name;
-        }
-
-        log::debug("Created model {} with mesh: {}", name, meshName);
-
-        return { id };
-    }
-
-    model_handle ModelCache::create_model(const std::string& name, const fs::view& file, std::vector<material_handle>& materials, mesh_import_settings settings)
-    {
-        id_type id = nameHash(name);
-
-        {// Check if the model already exists.
-            async::readonly_guard guard(m_modelLock);
-            if (m_models.contains(id))
-                return { id };
-        }
-
-        // Check if the file is valid to load.
-        if (!file.is_valid() || !file.file_info().is_file)
-            return invalid_model_handle;
-        // Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
-
-        model model{};
-        std::string meshName;
-
-        material_list matList;
-        material_list* loadedMaterials;
-        if (settings.materials)
-            loadedMaterials = settings.materials;
-        else
-        {
-            loadedMaterials = &matList;
-            settings.materials = &matList;
-        }
-
-        if (settings.contextFolder.get_virtual_path().empty())
-        {
-            settings.contextFolder = file.parent();
-        }
-
-        auto handle = MeshCache::create_mesh(name, file, settings);
-        if (handle == invalid_mesh_handle)
-        {
-            log::error("Failed to load model {}", name);
-            return invalid_model_handle;
-        }
-
-        if (loadedMaterials && !loadedMaterials->empty())
-        {
-            for (auto& mat : *loadedMaterials)
+            for (auto& mat : data.materials)
             {
                 static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
 
@@ -305,20 +240,14 @@ namespace legion::rendering
                 }
 
                 material.setLoadOrSaveBit(false);
-                materials.push_back(material);
+                model.materials.push_back(material);
                 log::debug("Loaded embedded material {}/{}", name, mat.name);
             }
         }
 
-        // Copy the sub-mesh data.
-        {
-            auto [lock, data] = handle.get();
-            async::readonly_guard guard(lock);
-            meshName = data.filePath;
 
-            for (auto& submeshData : data.submeshes)
-                model.submeshes.push_back(submeshData);
-        }
+        for (auto& submeshData : data.submeshes)
+            model.submeshes.push_back(submeshData);
 
         // The model still needs to be buffered on the rendering thread.
         model.buffered = false;
@@ -333,7 +262,7 @@ namespace legion::rendering
             m_modelNames[id] = name;
         }
 
-        log::debug("Created model {} with mesh: {}", name, meshName);
+        log::debug("Created model {} with mesh: {}", name, data.filePath);
 
         return { id };
     }
@@ -363,6 +292,109 @@ namespace legion::rendering
             auto [lock, data] = handle.get();
             async::readonly_guard guard(lock);
             meshName = data.filePath;
+
+            if (!data.materials.empty())
+            {
+                for (auto& mat : data.materials)
+                {
+                    static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
+
+                    material_handle material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
+
+                    if (mat.doubleSided)
+                        material.set_variant("double_sided");
+
+                    material.set_param("alphaCutoff", mat.alphaCutoff);
+
+                    if (mat.albedoMap)
+                    {
+                        material.set_param("useAlbedoTex", true);
+                        material.set_param("albedoTex", TextureCache::create_texture_from_image(mat.albedoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAlbedoTex", false);
+                        material.set_param("albedoColor", mat.albedoValue);
+                    }
+
+                    if (mat.metallicRoughnessMap)
+                    {
+                        material.set_param("useMetallicRoughness", true);
+                        material.set_param("metallicRoughness", TextureCache::create_texture_from_image(mat.metallicRoughnessMap));
+                    }
+                    else
+                    {
+                        material.set_param("useMetallicRoughness", false);
+
+                        if (mat.metallicMap)
+                        {
+                            material.set_param("useMetallicTex", true);
+                            material.set_param("metallicTex", TextureCache::create_texture_from_image(mat.metallicMap));
+                        }
+                        else
+                        {
+                            material.set_param("useMetallicTex", false);
+                            material.set_param("metallicValue", mat.metallicValue);
+                        }
+
+                        if (mat.roughnessMap)
+                        {
+                            material.set_param("useRoughnessTex", true);
+                            material.set_param("roughnessTex", TextureCache::create_texture_from_image(mat.roughnessMap));
+                        }
+                        else
+                        {
+                            material.set_param("useRoughnessTex", false);
+                            material.set_param("roughnessValue", mat.roughnessValue);
+                        }
+                    }
+
+                    if (mat.emissiveMap)
+                    {
+                        material.set_param("useEmissiveTex", true);
+                        material.set_param("emissiveTex", TextureCache::create_texture_from_image(mat.emissiveMap));
+                    }
+                    else
+                    {
+                        material.set_param("useEmissiveTex", false);
+                        material.set_param("emissiveColor", mat.emissiveValue);
+                    }
+
+                    if (mat.normalMap)
+                    {
+                        material.set_param("useNormal", true);
+                        material.set_param("normalTex", TextureCache::create_texture_from_image(mat.normalMap));
+                    }
+                    else
+                    {
+                        material.set_param("useNormal", false);
+                    }
+
+                    if (mat.aoMap)
+                    {
+                        material.set_param("useAmbientOcclusion", true);
+                        material.set_param("ambientOcclusionTex", TextureCache::create_texture_from_image(mat.aoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAmbientOcclusion", false);
+                    }
+
+                    if (mat.heightMap)
+                    {
+                        material.set_param("useHeight", true);
+                        material.set_param("heightTex", TextureCache::create_texture_from_image(mat.heightMap));
+                    }
+                    else
+                    {
+                        material.set_param("useHeight", false);
+                    }
+
+                    material.setLoadOrSaveBit(false);
+                    model.materials.push_back(material);
+                    log::debug("Loaded embedded material {}/{}", name, mat.name);
+                }
+            }
 
             for (auto& submeshData : data.submeshes)
                 model.submeshes.push_back(submeshData);
@@ -412,6 +444,109 @@ namespace legion::rendering
             async::readonly_guard guard(lock);
             meshName = data.filePath;
 
+            if (!data.materials.empty())
+            {
+                for (auto& mat : data.materials)
+                {
+                    static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
+
+                    material_handle material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
+
+                    if (mat.doubleSided)
+                        material.set_variant("double_sided");
+
+                    material.set_param("alphaCutoff", mat.alphaCutoff);
+
+                    if (mat.albedoMap)
+                    {
+                        material.set_param("useAlbedoTex", true);
+                        material.set_param("albedoTex", TextureCache::create_texture_from_image(mat.albedoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAlbedoTex", false);
+                        material.set_param("albedoColor", mat.albedoValue);
+                    }
+
+                    if (mat.metallicRoughnessMap)
+                    {
+                        material.set_param("useMetallicRoughness", true);
+                        material.set_param("metallicRoughness", TextureCache::create_texture_from_image(mat.metallicRoughnessMap));
+                    }
+                    else
+                    {
+                        material.set_param("useMetallicRoughness", false);
+
+                        if (mat.metallicMap)
+                        {
+                            material.set_param("useMetallicTex", true);
+                            material.set_param("metallicTex", TextureCache::create_texture_from_image(mat.metallicMap));
+                        }
+                        else
+                        {
+                            material.set_param("useMetallicTex", false);
+                            material.set_param("metallicValue", mat.metallicValue);
+                        }
+
+                        if (mat.roughnessMap)
+                        {
+                            material.set_param("useRoughnessTex", true);
+                            material.set_param("roughnessTex", TextureCache::create_texture_from_image(mat.roughnessMap));
+                        }
+                        else
+                        {
+                            material.set_param("useRoughnessTex", false);
+                            material.set_param("roughnessValue", mat.roughnessValue);
+                        }
+                    }
+
+                    if (mat.emissiveMap)
+                    {
+                        material.set_param("useEmissiveTex", true);
+                        material.set_param("emissiveTex", TextureCache::create_texture_from_image(mat.emissiveMap));
+                    }
+                    else
+                    {
+                        material.set_param("useEmissiveTex", false);
+                        material.set_param("emissiveColor", mat.emissiveValue);
+                    }
+
+                    if (mat.normalMap)
+                    {
+                        material.set_param("useNormal", true);
+                        material.set_param("normalTex", TextureCache::create_texture_from_image(mat.normalMap));
+                    }
+                    else
+                    {
+                        material.set_param("useNormal", false);
+                    }
+
+                    if (mat.aoMap)
+                    {
+                        material.set_param("useAmbientOcclusion", true);
+                        material.set_param("ambientOcclusionTex", TextureCache::create_texture_from_image(mat.aoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAmbientOcclusion", false);
+                    }
+
+                    if (mat.heightMap)
+                    {
+                        material.set_param("useHeight", true);
+                        material.set_param("heightTex", TextureCache::create_texture_from_image(mat.heightMap));
+                    }
+                    else
+                    {
+                        material.set_param("useHeight", false);
+                    }
+
+                    material.setLoadOrSaveBit(false);
+                    model.materials.push_back(material);
+                    log::debug("Loaded embedded material {}/{}", name, mat.name);
+                }
+            }
+
             for (auto& submeshData : data.submeshes)
                 model.submeshes.push_back(submeshData);
         }
@@ -457,6 +592,109 @@ namespace legion::rendering
             auto [lock, data] = handle.get();
             async::readonly_guard guard(lock);
             meshName = data.filePath;
+
+            if (!data.materials.empty())
+            {
+                for (auto& mat : data.materials)
+                {
+                    static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
+
+                    material_handle material = MaterialCache::create_material(meshName + "/" + mat.name, defaultLitShader);
+
+                    if (mat.doubleSided)
+                        material.set_variant("double_sided");
+
+                    material.set_param("alphaCutoff", mat.alphaCutoff);
+
+                    if (mat.albedoMap)
+                    {
+                        material.set_param("useAlbedoTex", true);
+                        material.set_param("albedoTex", TextureCache::create_texture_from_image(mat.albedoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAlbedoTex", false);
+                        material.set_param("albedoColor", mat.albedoValue);
+                    }
+
+                    if (mat.metallicRoughnessMap)
+                    {
+                        material.set_param("useMetallicRoughness", true);
+                        material.set_param("metallicRoughness", TextureCache::create_texture_from_image(mat.metallicRoughnessMap));
+                    }
+                    else
+                    {
+                        material.set_param("useMetallicRoughness", false);
+
+                        if (mat.metallicMap)
+                        {
+                            material.set_param("useMetallicTex", true);
+                            material.set_param("metallicTex", TextureCache::create_texture_from_image(mat.metallicMap));
+                        }
+                        else
+                        {
+                            material.set_param("useMetallicTex", false);
+                            material.set_param("metallicValue", mat.metallicValue);
+                        }
+
+                        if (mat.roughnessMap)
+                        {
+                            material.set_param("useRoughnessTex", true);
+                            material.set_param("roughnessTex", TextureCache::create_texture_from_image(mat.roughnessMap));
+                        }
+                        else
+                        {
+                            material.set_param("useRoughnessTex", false);
+                            material.set_param("roughnessValue", mat.roughnessValue);
+                        }
+                    }
+
+                    if (mat.emissiveMap)
+                    {
+                        material.set_param("useEmissiveTex", true);
+                        material.set_param("emissiveTex", TextureCache::create_texture_from_image(mat.emissiveMap));
+                    }
+                    else
+                    {
+                        material.set_param("useEmissiveTex", false);
+                        material.set_param("emissiveColor", mat.emissiveValue);
+                    }
+
+                    if (mat.normalMap)
+                    {
+                        material.set_param("useNormal", true);
+                        material.set_param("normalTex", TextureCache::create_texture_from_image(mat.normalMap));
+                    }
+                    else
+                    {
+                        material.set_param("useNormal", false);
+                    }
+
+                    if (mat.aoMap)
+                    {
+                        material.set_param("useAmbientOcclusion", true);
+                        material.set_param("ambientOcclusionTex", TextureCache::create_texture_from_image(mat.aoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAmbientOcclusion", false);
+                    }
+
+                    if (mat.heightMap)
+                    {
+                        material.set_param("useHeight", true);
+                        material.set_param("heightTex", TextureCache::create_texture_from_image(mat.heightMap));
+                    }
+                    else
+                    {
+                        material.set_param("useHeight", false);
+                    }
+
+                    material.setLoadOrSaveBit(false);
+                    model.materials.push_back(material);
+                    log::debug("Loaded embedded material {}/{}", meshName, mat.name);
+                }
+            }
 
             for (auto& submeshData : data.submeshes)
                 model.submeshes.push_back(submeshData);
@@ -505,6 +743,109 @@ namespace legion::rendering
             async::readonly_guard guard(lock);
             meshName = data.filePath;
 
+            if (!data.materials.empty())
+            {
+                for (auto& mat : data.materials)
+                {
+                    static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
+
+                    material_handle material = MaterialCache::create_material(name + "/" + mat.name, defaultLitShader);
+
+                    if (mat.doubleSided)
+                        material.set_variant("double_sided");
+
+                    material.set_param("alphaCutoff", mat.alphaCutoff);
+
+                    if (mat.albedoMap)
+                    {
+                        material.set_param("useAlbedoTex", true);
+                        material.set_param("albedoTex", TextureCache::create_texture_from_image(mat.albedoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAlbedoTex", false);
+                        material.set_param("albedoColor", mat.albedoValue);
+                    }
+
+                    if (mat.metallicRoughnessMap)
+                    {
+                        material.set_param("useMetallicRoughness", true);
+                        material.set_param("metallicRoughness", TextureCache::create_texture_from_image(mat.metallicRoughnessMap));
+                    }
+                    else
+                    {
+                        material.set_param("useMetallicRoughness", false);
+
+                        if (mat.metallicMap)
+                        {
+                            material.set_param("useMetallicTex", true);
+                            material.set_param("metallicTex", TextureCache::create_texture_from_image(mat.metallicMap));
+                        }
+                        else
+                        {
+                            material.set_param("useMetallicTex", false);
+                            material.set_param("metallicValue", mat.metallicValue);
+                        }
+
+                        if (mat.roughnessMap)
+                        {
+                            material.set_param("useRoughnessTex", true);
+                            material.set_param("roughnessTex", TextureCache::create_texture_from_image(mat.roughnessMap));
+                        }
+                        else
+                        {
+                            material.set_param("useRoughnessTex", false);
+                            material.set_param("roughnessValue", mat.roughnessValue);
+                        }
+                    }
+
+                    if (mat.emissiveMap)
+                    {
+                        material.set_param("useEmissiveTex", true);
+                        material.set_param("emissiveTex", TextureCache::create_texture_from_image(mat.emissiveMap));
+                    }
+                    else
+                    {
+                        material.set_param("useEmissiveTex", false);
+                        material.set_param("emissiveColor", mat.emissiveValue);
+                    }
+
+                    if (mat.normalMap)
+                    {
+                        material.set_param("useNormal", true);
+                        material.set_param("normalTex", TextureCache::create_texture_from_image(mat.normalMap));
+                    }
+                    else
+                    {
+                        material.set_param("useNormal", false);
+                    }
+
+                    if (mat.aoMap)
+                    {
+                        material.set_param("useAmbientOcclusion", true);
+                        material.set_param("ambientOcclusionTex", TextureCache::create_texture_from_image(mat.aoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAmbientOcclusion", false);
+                    }
+
+                    if (mat.heightMap)
+                    {
+                        material.set_param("useHeight", true);
+                        material.set_param("heightTex", TextureCache::create_texture_from_image(mat.heightMap));
+                    }
+                    else
+                    {
+                        material.set_param("useHeight", false);
+                    }
+
+                    material.setLoadOrSaveBit(false);
+                    model.materials.push_back(material);
+                    log::debug("Loaded embedded material {}/{}", name, mat.name);
+                }
+            }
+
             for (auto& submeshData : data.submeshes)
                 model.submeshes.push_back(submeshData);
         }
@@ -551,6 +892,109 @@ namespace legion::rendering
             auto [lock, data] = mesh.get();
             async::readonly_guard guard(lock);
             meshName = data.filePath;
+
+            if (!data.materials.empty())
+            {
+                for (auto& mat : data.materials)
+                {
+                    static auto defaultLitShader = ShaderCache::create_shader("default lit", fs::view("engine://shaders/default_lit.shs"));
+
+                    material_handle material = MaterialCache::create_material(meshName + "/" + mat.name, defaultLitShader);
+
+                    if (mat.doubleSided)
+                        material.set_variant("double_sided");
+
+                    material.set_param("alphaCutoff", mat.alphaCutoff);
+
+                    if (mat.albedoMap)
+                    {
+                        material.set_param("useAlbedoTex", true);
+                        material.set_param("albedoTex", TextureCache::create_texture_from_image(mat.albedoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAlbedoTex", false);
+                        material.set_param("albedoColor", mat.albedoValue);
+                    }
+
+                    if (mat.metallicRoughnessMap)
+                    {
+                        material.set_param("useMetallicRoughness", true);
+                        material.set_param("metallicRoughness", TextureCache::create_texture_from_image(mat.metallicRoughnessMap));
+                    }
+                    else
+                    {
+                        material.set_param("useMetallicRoughness", false);
+
+                        if (mat.metallicMap)
+                        {
+                            material.set_param("useMetallicTex", true);
+                            material.set_param("metallicTex", TextureCache::create_texture_from_image(mat.metallicMap));
+                        }
+                        else
+                        {
+                            material.set_param("useMetallicTex", false);
+                            material.set_param("metallicValue", mat.metallicValue);
+                        }
+
+                        if (mat.roughnessMap)
+                        {
+                            material.set_param("useRoughnessTex", true);
+                            material.set_param("roughnessTex", TextureCache::create_texture_from_image(mat.roughnessMap));
+                        }
+                        else
+                        {
+                            material.set_param("useRoughnessTex", false);
+                            material.set_param("roughnessValue", mat.roughnessValue);
+                        }
+                    }
+
+                    if (mat.emissiveMap)
+                    {
+                        material.set_param("useEmissiveTex", true);
+                        material.set_param("emissiveTex", TextureCache::create_texture_from_image(mat.emissiveMap));
+                    }
+                    else
+                    {
+                        material.set_param("useEmissiveTex", false);
+                        material.set_param("emissiveColor", mat.emissiveValue);
+                    }
+
+                    if (mat.normalMap)
+                    {
+                        material.set_param("useNormal", true);
+                        material.set_param("normalTex", TextureCache::create_texture_from_image(mat.normalMap));
+                    }
+                    else
+                    {
+                        material.set_param("useNormal", false);
+                    }
+
+                    if (mat.aoMap)
+                    {
+                        material.set_param("useAmbientOcclusion", true);
+                        material.set_param("ambientOcclusionTex", TextureCache::create_texture_from_image(mat.aoMap));
+                    }
+                    else
+                    {
+                        material.set_param("useAmbientOcclusion", false);
+                    }
+
+                    if (mat.heightMap)
+                    {
+                        material.set_param("useHeight", true);
+                        material.set_param("heightTex", TextureCache::create_texture_from_image(mat.heightMap));
+                    }
+                    else
+                    {
+                        material.set_param("useHeight", false);
+                    }
+
+                    material.setLoadOrSaveBit(false);
+                    model.materials.push_back(material);
+                    log::debug("Loaded embedded material {}/{}", meshName, mat.name);
+                }
+            }
 
             for (auto& submeshData : data.submeshes)
                 model.submeshes.push_back(submeshData);

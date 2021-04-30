@@ -14,32 +14,36 @@ namespace legion::core::filesystem {
         std::string root_domain;
         std::string to_process;
 
-        if(!opt_root_domain.empty())
+        if (!opt_root_domain.empty())
         {
             root_domain = opt_root_domain;
             to_process = m_path;
-        } else {
-            
+        }
+        else {
+
             //find root domain
             // the syntax for inline root-domains has to be <root-domain>:[/\\]+<rest-of-the-path>
             const auto rdIndex = m_path.find_first_of(':');
-            if(rdIndex == std::string::npos) return Err(legion_fs_error("invalid syntax for path string, no domain delimiter"));
+            if (rdIndex == std::string::npos) return Err(legion_fs_error("invalid syntax for path string, no domain delimiter"));
 
-            root_domain = m_path.substr(0,rdIndex);
+            root_domain = m_path.substr(0, rdIndex);
 
             //find the rest of the path ... technically this will resolve //////////lol/test.bin to lol/test.bin just fine,
             //but hopefully no one is actually insane enough to mess with such paths
             //
             //if he/she does, congrats you found a ... "feature"
-            const auto pIndex = m_path.find_first_not_of("/\\",rdIndex+1);
-            if(pIndex == std::string::npos) return Err(legion_fs_error("invalid sytax for path string, last domain delimiter not found"));
-            
-            to_process = m_path.substr(pIndex,std::string::npos); 
-
-            to_process = strpath_manip::sanitize(to_process);
+            const auto pIndex = m_path.find_first_not_of("/\\", rdIndex + 1);
+            if (pIndex == std::string::npos)
+            {
+                to_process = std::string();
+            }
+            else {
+                to_process = m_path.substr(pIndex, std::string::npos);
+                to_process = strpath_manip::sanitize(to_process);
+            }
         }
 
-        if(root_domain.empty() || to_process.empty()) return Err(legion_fs_error("invalid syntax for path string, one or more properties empty"));
+        if(root_domain.empty()) return Err(legion_fs_error("invalid syntax for path string, one or more properties empty"));
         root_domain += std::string(":") + strpath_manip::separator() + strpath_manip::separator();
         if(!provider_registry::has_domain(root_domain)) return Err(legion_fs_error(("no start! no such domain: " + root_domain).c_str()));
 
@@ -56,6 +60,11 @@ namespace legion::core::filesystem {
         //get first resolver
         //TODO support multiple resolvers 
         resolver = *provider_registry::domain_get_first_resolver(domain);
+        if (to_process.empty())
+        {
+            steps.emplace_back(resolver, "");
+            return Ok(steps);
+        }
 
         for (auto& token : tokens) {
 
