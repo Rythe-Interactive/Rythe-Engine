@@ -187,7 +187,7 @@ namespace legion::core::detail
      * @param offset - The mesh Indices offset. ( e.g. For the first submesh 0, for the second submesh submesh[0].indices.size() )
      * @param data - The std::vector to copy the indices data into
      */
-    static void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int offset, std::vector<unsigned int>* data)
+    static void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, size_type offset, size_type vertexCount, std::vector<uint>* data)
     {
         size_t size = data->size();
         //indices in glft are in int16
@@ -198,10 +198,7 @@ namespace legion::core::detail
         memcpy(origin.data(), buffer.data.data() + bufferView.byteOffset, bufferView.byteLength);
 
         for (size_type i = 0; i < origin.size(); ++i)
-        {
-            if (origin[i] >= 0)
-                data->push_back(static_cast<uint>(origin[i]) + static_cast<uint>(offset));
-        }
+            data->push_back(static_cast<uint>((static_cast<size_type>(static_cast<int>(vertexCount) + static_cast<int>(origin[i])) % vertexCount) + offset));
     }
 
     static math::mat4 getGltfNodeTransform(const tinygltf::Node& node)
@@ -247,11 +244,7 @@ namespace legion::core::detail
             if (primitive.indices < 0)
                 continue;
 
-            // Find the indices of our mesh and copy them into meshData.indices
-            const tinygltf::Accessor& indexAccessor = model.accessors.at(static_cast<size_type>(primitive.indices));
-            const tinygltf::BufferView& indexBufferView = model.bufferViews.at(static_cast<size_type>(indexAccessor.bufferView));
-            const tinygltf::Buffer& indexBuffer = model.buffers.at(static_cast<size_type>(indexBufferView.buffer));
-            detail::handleGltfIndices(indexBuffer, indexBufferView, static_cast<int>(meshData.vertices.size()), &(meshData.indices));
+            size_type vertexOffset = meshData.vertices.size();
 
             for (auto& attrib : primitive.attributes)
             {
@@ -286,6 +279,14 @@ namespace legion::core::detail
                     log::warn("More data to be found in .gbl. Data can be accesed through: {}", attrib.first);
                 }
             }
+
+            size_type vertexCount = meshData.vertices.size() - vertexOffset;
+
+            // Find the indices of our mesh and copy them into meshData.indices
+            const tinygltf::Accessor& indexAccessor = model.accessors.at(static_cast<size_type>(primitive.indices));
+            const tinygltf::BufferView& indexBufferView = model.bufferViews.at(static_cast<size_type>(indexAccessor.bufferView));
+            const tinygltf::Buffer& indexBuffer = model.buffers.at(static_cast<size_type>(indexBufferView.buffer));
+            detail::handleGltfIndices(indexBuffer, indexBufferView, vertexOffset, vertexCount, &(meshData.indices));
         }
 
         // Calculate size of submesh
@@ -453,17 +454,19 @@ namespace legion::core
 
             for (auto& indexData : shape.mesh.indices)
             {
-                if (indexData.vertex_index < 0)
-                    continue;
-
                 // Get the indices into the tinyobj attributes.
-                uint vertexIndex = static_cast<uint>(indexData.vertex_index) * 3;
+
+                int vertexCount = static_cast<int>(attributes.vertices.size());
+                uint vertexIndex = static_cast<uint>((vertexCount + (indexData.vertex_index * 3)) % vertexCount);
 
                 if (vertexIndex + 3 > attributes.vertices.size())
                     continue;
 
-                uint normalIndex = static_cast<uint>(indexData.normal_index) * 3;
-                uint uvIndex = static_cast<uint>(indexData.texcoord_index) * 2;
+                int normalCount = static_cast<int>(attributes.normals.size());
+                uint normalIndex = static_cast<uint>((normalCount + (indexData.normal_index * 3)) % normalCount);
+
+                int uvCount = static_cast<int>(attributes.texcoords.size());
+                uint uvIndex = static_cast<uint>((uvCount + (indexData.texcoord_index * 2)) % uvCount);
 
                 // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
                 math::vec3 vertex(-attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
@@ -473,11 +476,11 @@ namespace legion::core
                     color = math::color(attributes.colors[vertexIndex + 0], attributes.colors[vertexIndex + 1], attributes.colors[vertexIndex + 2]);
 
                 math::vec3 normal = math::vec3::up;
-                if (indexData.normal_index >= 0 && normalIndex + 2 < attributes.normals.size())
+                if (normalIndex + 2 < attributes.normals.size())
                     normal = math::vec3(-attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
 
                 math::vec2 uv{};
-                if (indexData.texcoord_index >= 0 && uvIndex + 1 < attributes.texcoords.size())
+                if (uvIndex + 1 < attributes.texcoords.size())
                     uv = math::vec2(attributes.texcoords[uvIndex + 0], attributes.texcoords[uvIndex + 1]);
 
                 // Create a hash to check for doubles.
