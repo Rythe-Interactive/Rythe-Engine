@@ -77,15 +77,23 @@ namespace legion::core
         for (auto& submesh : data->submeshes)
             for (size_type i = submesh.indexOffset; i < submesh.indexOffset + submesh.indexCount; i += 3)
             {
+                if (i + 2 > data->indices.size())
+                    break;
+
+                math::uvec3 indices{ data->indices[i], data->indices[i + 1], data->indices[i + 2] };
+
+                if (indices[0] > data->vertices.size() || indices[1] > data->vertices.size() || indices[2] > data->vertices.size())
+                    continue;
+
                 // Get vertices of the triangle.
-                math::vec3 vtx0 = data->vertices[data->indices[i]];
-                math::vec3 vtx1 = data->vertices[data->indices[i + 1]];
-                math::vec3 vtx2 = data->vertices[data->indices[i + 2]];
+                math::vec3 vtx0 = data->vertices[indices[0]];
+                math::vec3 vtx1 = data->vertices[indices[1]];
+                math::vec3 vtx2 = data->vertices[indices[2]];
 
                 // Get UVs of the triangle.
-                math::vec2 uv0 = data->uvs[data->indices[i]];
-                math::vec2 uv1 = data->uvs[data->indices[i + 1]];
-                math::vec2 uv2 = data->uvs[data->indices[i + 2]];
+                math::vec2 uv0 = data->uvs[indices[0]];
+                math::vec2 uv1 = data->uvs[indices[1]];
+                math::vec2 uv2 = data->uvs[indices[2]];
 
                 // Get primary edges
                 math::vec3 edge0 = vtx1 - vtx0;
@@ -123,14 +131,14 @@ namespace legion::core
                 tangent = math::normalize(tangent);
 
                 // Accumulate the tangent in order to be able to smooth it later.
-                data->tangents[data->indices[i]] += tangent;
-                data->tangents[data->indices[i + 1]] += tangent;
-                data->tangents[data->indices[i + 2]] += tangent;
+                data->tangents[indices[0]] += tangent;
+                data->tangents[indices[1]] += tangent;
+                data->tangents[indices[2]] += tangent;
             }
 
         // Smooth all tangents.
-        for (unsigned i = 0; i < data->tangents.size(); i++)
-            if (data->tangents[i] != math::vec3(0, 0, 0))
+        for (size_type i = 0; i < data->tangents.size(); i++)
+            if (data->tangents[i] != math::vec3::zero)
                 data->tangents[i] = math::normalize(data->tangents[i]);
     }
 

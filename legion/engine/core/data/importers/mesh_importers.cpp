@@ -73,7 +73,23 @@ namespace legion::core::detail
     {
         size_t size = data->size();
         data->resize(size + bufferView.byteLength / sizeof(T));
-        memcpy(data->data() + size, &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
+        memcpy(data->data() + size, buffer.data.data() + bufferView.byteOffset, bufferView.byteLength);
+    }
+
+    static void handleGltfBuffer(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, std::vector<math::vec3>* data, const math::mat4 transform, bool normal = false)
+    {
+        size_t size = data->size();
+        data->resize(size + bufferView.byteLength / sizeof(math::vec3));
+        memcpy(data->data() + size, buffer.data.data() + bufferView.byteOffset, bufferView.byteLength);
+
+        for (size_type i = size; i < data->size(); i++)
+        {
+            auto& item = data->at(i);
+            if (normal)
+                item = math::normalize((transform * math::vec4(item.x, item.y, item.z, 0)).xyz());
+            else
+                item = (transform * math::vec4(item.x, item.y, item.z, 1)).xyz();
+        }
     }
 
     /**
@@ -185,6 +201,116 @@ namespace legion::core::detail
         {
             if (origin[i] >= 0)
                 data->push_back(static_cast<uint>(origin[i]) + static_cast<uint>(offset));
+        }
+    }
+
+    static math::mat4 getGltfNodeTransform(const tinygltf::Node& node)
+    {
+        if (node.matrix.size() == 16) {
+            // Use `matrix' attribute
+            return math::mat4(
+                static_cast<float>(node.matrix[0]), static_cast<float>(node.matrix[1]), static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
+                static_cast<float>(node.matrix[4]), static_cast<float>(node.matrix[5]), static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
+                static_cast<float>(node.matrix[8]), static_cast<float>(node.matrix[9]), static_cast<float>(node.matrix[10]), static_cast<float>(node.matrix[11]),
+                static_cast<float>(node.matrix[12]), static_cast<float>(node.matrix[13]), static_cast<float>(node.matrix[14]), static_cast<float>(node.matrix[15]));
+        }
+        else {
+            math::vec3 pos{ 0,0,0 };
+            math::quat rot{ 0,0,0,1 };
+            math::vec3 scale{ 1,1,1 };
+
+            // Assume Trans x Rotate x Scale order
+            if (node.scale.size() == 3)
+                scale = math::vec3(static_cast<float>(node.scale[0]), static_cast<float>(node.scale[1]), static_cast<float>(node.scale[2]));
+
+            if (node.rotation.size() == 4)
+                rot = math::quat(static_cast<float>(node.rotation[0]), static_cast<float>(node.rotation[1]), static_cast<float>(node.rotation[2]), static_cast<float>(node.rotation[3]));
+
+            if (node.translation.size() == 3)
+                pos = math::vec3(static_cast<float>(node.translation[0]), static_cast<float>(node.translation[1]), static_cast<float>(node.translation[2]));
+
+            return math::compose(scale, rot, pos);
+        }
+    }
+
+    static void handleGltfMesh(mesh& meshData, const tinygltf::Model& model, const tinygltf::Mesh& mesh, const math::mat4& transform)
+    {
+        sub_mesh m;
+        m.name = mesh.name;
+        m.indexOffset = meshData.indices.size();
+
+        for (auto primitive : mesh.primitives)
+        {
+            // Loop through all primitives in the mesh
+            // Primitives can be vertex position, normal, texcoord (uv) and vertex colors
+
+            if (primitive.indices < 0)
+                continue;
+
+            // Find the indices of our mesh and copy them into meshData.indices
+            const tinygltf::Accessor& indexAccessor = model.accessors.at(static_cast<size_type>(primitive.indices));
+            const tinygltf::BufferView& indexBufferView = model.bufferViews.at(static_cast<size_type>(indexAccessor.bufferView));
+            const tinygltf::Buffer& indexBuffer = model.buffers.at(static_cast<size_type>(indexBufferView.buffer));
+            detail::handleGltfIndices(indexBuffer, indexBufferView, static_cast<int>(meshData.vertices.size()), &(meshData.indices));
+
+            for (auto& attrib : primitive.attributes)
+            {
+                // Loop through the attributes of the primitive
+                // Depending on the attribute the data is copied into a different std::vector in meshData
+
+                const tinygltf::Accessor& accessor = model.accessors.at(static_cast<size_type>(attrib.second));
+                const tinygltf::BufferView& view = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
+                const tinygltf::Buffer& buff = model.buffers.at(static_cast<size_type>(view.buffer));
+                if (attrib.first.compare("POSITION") == 0)
+                {
+                    // Position data
+                    detail::handleGltfBuffer(buff, view, &(meshData.vertices), transform);
+                }
+                else if (attrib.first.compare("NORMAL") == 0)
+                {
+                    // Normal data
+                    detail::handleGltfBuffer(buff, view, &(meshData.normals), transform, true);
+                }
+                else if (attrib.first.compare("TEXCOORD_0") == 0)
+                {
+                    // UV data
+                    detail::handleGltfBuffer(buff, view, &(meshData.uvs));
+                }
+                else if (attrib.first.compare("COLOR_0") == 0)
+                {
+                    // Vertex color data
+                    detail::handleGltfVertexColor(buff, view, accessor.type, accessor.componentType, &(meshData.colors));
+                }
+                else
+                {
+                    log::warn("More data to be found in .gbl. Data can be accesed through: {}", attrib.first);
+                }
+            }
+        }
+
+        // Calculate size of submesh
+        m.indexCount = meshData.indices.size() - m.indexOffset;
+        meshData.submeshes.push_back(m);
+    }
+
+    static void handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node)
+    {
+        auto transf = detail::getGltfNodeTransform(node);
+
+        if (node.mesh >= 0 && static_cast<size_type>(node.mesh) < model.meshes.size())
+        {
+            handleGltfMesh(meshData, model, model.meshes[static_cast<size_type>(node.mesh)], transf);
+        }
+
+        for (auto& nodeIdx : node.children)
+        {
+            if (static_cast<size_type>(nodeIdx) >= model.nodes.size())
+            {
+                log::warn("invalid node in GLTF");
+                continue;
+            }
+
+            handleGltfNode(meshData, model, model.nodes[static_cast<size_type>(nodeIdx)]);
         }
     }
 }
@@ -426,7 +552,7 @@ namespace legion::core
         if (!ret)
         {
             // If the return failed, return error
-            return decay(Err(legion_fs_error("Failed to parse glTF")));
+            return decay(Err(legion_fs_error("Failed to parse GLTF")));
         }
 
         if (settings.materials)
@@ -499,65 +625,18 @@ namespace legion::core
             }
         }
 
-        size_t offset = 0;
         core::mesh meshData;
-        for (auto& mesh : model.meshes)
+
+        if (model.scenes.size() <= 0)
         {
-            // Loop through all the meshes (submeshes)
+            return decay(Err(legion_fs_error("GLTF model contained 0 scenes")));
+        }
 
-            sub_mesh m;
-            m.name = mesh.name;
-            for (auto primitive : mesh.primitives)
-            {
-                // Loop through all primitives in the mesh
-                // Primitives can be vertex position, normal, texcoord (uv) and vertex colors
+        size_type sceneToLoad = model.defaultScene > -1 ? static_cast<size_type>(model.defaultScene) : 0;
 
-                // Find the indices of our mesh and copy them into meshData.indices
-                const tg::Accessor& indexAccessor = model.accessors.at(static_cast<size_type>(primitive.indices));
-                tg::BufferView& indexBufferView = model.bufferViews.at(static_cast<size_type>(indexAccessor.bufferView));
-                tg::Buffer& indexBuffer = model.buffers.at(static_cast<size_type>(indexBufferView.buffer));
-                detail::handleGltfIndices(indexBuffer, indexBufferView, static_cast<int>(meshData.vertices.size()), &(meshData.indices));
-
-                for (auto& attrib : primitive.attributes)
-                {
-                    // Loop through the attributes of the primitive
-                    // Depending on the attribute the data is copied into a different std::vector in meshData
-
-                    const tg::Accessor& accessor = model.accessors.at(static_cast<size_type>(attrib.second));
-                    tg::BufferView& view = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
-                    tg::Buffer& buff = model.buffers.at(static_cast<size_type>(view.buffer));
-                    if (attrib.first.compare("POSITION") == 0)
-                    {
-                        // Position data
-                        detail::handleGltfBuffer<math::vec3>(buff, view, &(meshData.vertices));
-                    }
-                    else if (attrib.first.compare("NORMAL") == 0)
-                    {
-                        // Normal data
-                        detail::handleGltfBuffer<math::vec3>(buff, view, &(meshData.normals));
-                    }
-                    else if (attrib.first.compare("TEXCOORD_0") == 0)
-                    {
-                        // UV data
-                        detail::handleGltfBuffer<math::vec2>(buff, view, &(meshData.uvs));
-                    }
-                    else if (attrib.first.compare("COLOR_0") == 0)
-                    {
-                        // Vertex color data
-                        detail::handleGltfVertexColor(buff, view, accessor.type, accessor.componentType, &(meshData.colors));
-                    }
-                    else
-                    {
-                        log::warn("More data to be found in .gbl. Data can be accesed through: {}", attrib.first);
-                    }
-                }
-            }
-
-            // Calculate size of submesh and offset of submesh to sure in meshData
-            m.indexCount = meshData.indices.size() - offset;
-            m.indexOffset = meshData.indices.size() - m.indexCount;
-            offset += m.indexCount;
-            meshData.submeshes.push_back(m);
+        for (auto& nodeIdx : model.scenes[sceneToLoad].nodes)
+        {
+            detail::handleGltfNode(meshData, model, model.nodes[static_cast<size_type>(nodeIdx)]);
         }
 
         // Convert to left handed coord system
@@ -723,64 +802,18 @@ namespace legion::core
             }
         }
 
-        size_t offset = 0;
         core::mesh meshData;
-        for (auto& mesh : model.meshes)
+
+        if (model.scenes.size() <= 0)
         {
-            // Loop through all the meshes (submeshes)
+            return decay(Err(legion_fs_error("GLTF model contained 0 scenes")));
+        }
 
-            sub_mesh m;
-            m.name = mesh.name;
-            for (auto primitive : mesh.primitives)
-            {
-                // Loop through all primitives in the mesh
-                // Primitives can be vertex position, normal, texcoord (uv) and vertex colors
+        size_type sceneToLoad = model.defaultScene > -1 ? static_cast<size_type>(model.defaultScene) : 0;
 
-                const tg::Accessor& indexAccessor = model.accessors.at(static_cast<size_type>(primitive.indices));
-                tg::BufferView& indexBufferView = model.bufferViews.at(static_cast<size_type>(indexAccessor.bufferView));
-                tg::Buffer& indexBuffer = model.buffers.at(static_cast<size_type>(indexBufferView.buffer));
-                detail::handleGltfIndices(indexBuffer, indexBufferView, static_cast<int>(meshData.vertices.size()), &(meshData.indices));
-
-                for (auto& attrib : primitive.attributes)
-                {
-                    // Loop through the attributes of the primitive
-                    // Depending on the attribute the data is copied into a different std::vector in meshData
-
-                    const tg::Accessor& accessor = model.accessors.at(static_cast<size_type>(attrib.second));
-                    tg::BufferView& view = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
-                    tg::Buffer& buff = model.buffers.at(static_cast<size_type>(view.buffer));
-                    if (attrib.first.compare("POSITION") == 0)
-                    {
-                        // Position data
-                        detail::handleGltfBuffer<math::vec3>(buff, view, &(meshData.vertices));
-                    }
-                    else if (attrib.first.compare("NORMAL") == 0)
-                    {
-                        // Normal data
-                        detail::handleGltfBuffer<math::vec3>(buff, view, &(meshData.normals));
-                    }
-                    else if (attrib.first.compare("TEXCOORD_0") == 0)
-                    {
-                        // UV data
-                        detail::handleGltfBuffer<math::vec2>(buff, view, &(meshData.uvs));
-                    }
-                    else if (attrib.first.compare("COLOR_0") == 0)
-                    {
-                        // Vertex color data
-                        detail::handleGltfVertexColor(buff, view, accessor.type, accessor.componentType, &(meshData.colors));
-                    }
-                    else
-                    {
-                        log::warn("More data to be found in .gbl. Data can be accesed through: {}", attrib.first);
-                    }
-                }
-            }
-
-            // Calculate size of submesh and offset of submesh to sure in meshData
-            m.indexCount = meshData.indices.size() - offset;
-            m.indexOffset = meshData.indices.size() - m.indexCount;
-            offset += m.indexCount;
-            meshData.submeshes.push_back(m);
+        for (auto& nodeIdx : model.scenes[sceneToLoad].nodes)
+        {
+            detail::handleGltfNode(meshData, model, model.nodes[static_cast<size_type>(nodeIdx)]);
         }
 
         // Convert to left handed coord system
