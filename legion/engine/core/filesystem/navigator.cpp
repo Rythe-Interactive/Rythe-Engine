@@ -63,6 +63,7 @@ namespace legion::core::filesystem {
         if (to_process.empty())
         {
             steps.emplace_back(resolver, "");
+            return Ok(steps);
         }
 
         for (auto& token : tokens) {
