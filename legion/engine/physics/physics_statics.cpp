@@ -486,8 +486,15 @@ namespace legion::physics
         float y = math::abs(supportVertices.at(2).y - supportVertices.at(3).y);
         float z = math::abs(supportVertices.at(4).z - supportVertices.at(5).z);
 
+        math::vec3 start ( supportVertices.at(1).x, supportVertices.at(3).y, supportVertices.at(5).z);
+        start = DEBUG_transform * math::vec4(start, 1);
+
+       /* debug::drawLine(start, start + math::vec3(x, 0, 0), math::colors::red, 20.0f, FLT_MAX, true);
+        debug::drawLine(start, start + math::vec3(0, y, 0), math::colors::blue, 20.0f, FLT_MAX, true);
+        debug::drawLine(start, start + math::vec3(0, 0, z), math::colors::green, 20.0f, FLT_MAX, true);*/
+
         //merge volume threshold is equal a certain small fraction of the volume of the bounding box 
-        float mergeVolumeThreshold = x * y * z * (1.0f/1000.0f);
+        float mergeVolumeThreshold = x * y * z * (1.0f/2000.0f);
 
         //[2] Build Initial Hull
         if (!qHBuildInitialHull(vertices, supportVertices, faces,DEBUG_transform))
@@ -520,7 +527,7 @@ namespace legion::physics
                 //if (currentDraw >= maxDraw) { break; }
                 currentDraw++;
 
-                bool atDebug = false;//currentDraw == DEBUG_at + 1;
+                bool atDebug = currentDraw == DEBUG_at + 1;
 
                 //find furhtest vertex of last face
                 auto [furthestVert, distanceFromFace] = currentFaceToVert.ptr->GetFurthestOutsideVert();
@@ -835,7 +842,6 @@ namespace legion::physics
 
     void PhysicsStatics::partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces, std::list<ColliderFaceToVert>& outFacesWithOutsideVerts)
     {
-
         for (HalfEdgeFace* face : faces)
         {
             outFacesWithOutsideVerts.emplace_back(face);
@@ -887,48 +893,66 @@ namespace legion::physics
         assert(initialHorizon);
 
         //[2] Loop through the collider to collect the other horizon edges
-
+       
         HalfEdgeEdge* currentEdge = initialHorizon;
         //outHorizonEdges.push_back(currentEdge);
         if (atDebug)
         {
             initialHorizon->DEBUG_drawEdge(DEBUG_transform, math::colors::orange, FLT_MAX, 5.0f);
+            //return;
         }
         
-        
+        int iter = 0;
         do
         {
-            //if (atDebug) { log::debug("-> Iteration"); }
+            
+            
 
             currentEdge = currentEdge->nextEdge;
 
+            if (atDebug) { log::debug("-> Iteration"); currentEdge->DEBUG_drawEdge(DEBUG_transform, math::colors::cyan, FLT_MAX, 5.0f); }
+
+            
+
+
             if (!currentEdge->isEdgeHorizonFromVertex(eyePoint, scalingEpsilon))
             {
-                //if (atDebug) { log::debug("Next edge was not a horizon, finding horizon now"); }
+                if (atDebug) { log::debug("Next edge was not a horizon, finding horizon now"); }
                 int safetyCount = 0;
                 auto stuckEdge = currentEdge;
                 do
                 {
-                    //if (atDebug) { log::debug("getting pairingEdge->nextEdge"); }
-
+                    if (atDebug) { log::debug("getting pairingEdge->nextEdge"); }
+                    auto pairing = currentEdge->pairingEdge;
+                    assert(pairing != currentEdge);
                     currentEdge = currentEdge->pairingEdge->nextEdge;
-
-                    safetyCount++;
+               
+                    if (iter == 2 && atDebug)
+                    {
+                        pairing->DEBUG_directionDrawEdge(DEBUG_transform, math::colors::blue, FLT_MAX, 40.0f);
+                        currentEdge->DEBUG_directionDrawEdge(DEBUG_transform, math::colors::blue, FLT_MAX, 40.0f);
+                        //currentEdge->pairingEdge->DEBUG_directionDrawEdge(DEBUG_transform, math::colors::blue, FLT_MAX, 40.0f);
+                        //DebugBreak();
+                        return;
+                    }
+                    assert(currentEdge);
+                   /* safetyCount++;
 
                     if (safetyCount > 10)
                     {
                         stuckEdge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX, 5.0f);
                         return;
-                    }
+                    }*/
+                    
                 }
-                while (!currentEdge->isEdgeHorizonFromVertex(eyePoint));
+                while (!currentEdge->isEdgeHorizonFromVertex(eyePoint, scalingEpsilon));
 
             }
 
             //if (atDebug) { log::debug("getting nextEdge"); }
 
             outHorizonEdges.push_back(currentEdge);
-
+            iter++;
 
         } while (currentEdge != initialHorizon);
 
@@ -976,15 +1000,15 @@ namespace legion::physics
             if (notFirstCancelledHull)
             {
                 notFirstCancelledHull = false;
-                log::debug("First Cancelled HUll");
+                //log::debug("First Cancelled HUll");
 
-                for (auto face : visibleFaces)
+                /*for (auto face : visibleFaces)
                 {
                     face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
                 }
 
                 math::vec3 worldPos = DEBUG_transform * math::vec4(eyePoint, 1);
-                debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, true);
+                debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, true);*/
 
             }
 
@@ -1017,27 +1041,27 @@ namespace legion::physics
 
         if (atDebug)
         {
-            for (auto face : facesToBeRemoved)
+            /*for (auto face : facesToBeRemoved)
             {
                 face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
-            }
+            }*/
             log::debug(" facesToBeRemoved {0} ", facesToBeRemoved.size());
-            return true;
+            //return true;
         }
         
         //identify horizon edges and put them into list
         std::vector<HalfEdgeEdge*> horizonEdges;
-        findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges,scalingEpsilon, DEBUG_transform,atDebug);
+        findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges,scalingEpsilon, DEBUG_transform,false);
 
         if (atDebug)
         {
             //return;
-           /* for (auto edge : horizonEdges)
+            for (auto edge : horizonEdges)
             {
-                edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX);
-            }*/
+                //edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX);
+            }
             log::debug("at debug horizon edges {0} ", horizonEdges.size());
-            return true;
+            //return true;
         }
 
         //reverse iterate the list to find their pairings, add them to new list
@@ -1052,9 +1076,31 @@ namespace legion::physics
             }
         }
 
+        if (atDebug)
+        {
+           /* for (auto face : facesToBeRemoved)
+            {
+                face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+            }
+            log::debug(" facesToBeRemoved {0} ", facesToBeRemoved.size());*/
+            //return true;
+        }
+
+
         std::vector<HalfEdgeFace*> newFaces;
         newFaces.reserve(horizonEdges.size());
         createHalfEdgeFaceFromEyePoint(eyePoint, horizonEdges, newFaces);
+
+        if (atDebug)
+        {
+            //433
+            for (auto face : newFaces)
+            {
+                //face->DEBUG_DrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
+            }
+            log::debug(" newFaces {0} ", newFaces.size());
+            //return true;
+        }
         
         for (int i = 0; i < horizonEdges.size(); i++)
         {
@@ -1103,6 +1149,20 @@ namespace legion::physics
                     newFaces.push_back(face);
                 }
             }
+        }
+
+        if (atDebug)
+        {
+            ////433
+           /* for (auto face : newFaces)
+            {
+                face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+            }*/
+
+           /* newFaces.at(0)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+            newFaces.at(1)->DEBUG_DrawFace(DEBUG_transform, math::colors::blue, FLT_MAX);*/
+            log::debug(" final newFaces {0} ", newFaces.size());
+            //return true;
         }
 
         partitionVerticesToList(unmergedVertices, newFaces, facesWithOutsideVerts);

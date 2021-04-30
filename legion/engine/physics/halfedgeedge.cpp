@@ -3,6 +3,17 @@
 
 namespace legion::physics
 {
+    HalfEdgeEdge::HalfEdgeEdge(math::vec3 newEdgePositionPtr) : edgePosition{ newEdgePositionPtr }
+    {
+        static int idCount = 0;
+        identifier = idCount;
+
+        if (identifier == 433)
+        {
+            //DebugBreak();
+        }
+        idCount++;
+    }
     void HalfEdgeEdge::setNextAndPrevEdge(HalfEdgeEdge* newPrevEdge, HalfEdgeEdge* newNextEdge)
     {
         nextEdge = newNextEdge;
