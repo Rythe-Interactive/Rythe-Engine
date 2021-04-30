@@ -348,7 +348,7 @@ namespace legion::core
 
         // Configure settings.
         config.triangulate = settings.triangulate;
-        config.vertex_color = settings.vertex_color;
+        config.vertex_color = true;
 
         std::string baseDir = "";
 
@@ -541,8 +541,34 @@ namespace legion::core
         std::string err;
         std::string warn;
 
+        filesystem::navigator navigator(settings.contextFolder.get_virtual_path());
+        auto solution = navigator.find_solution();
+        if (solution.has_err())
+        {
+            log::warn(std::string("Invalid gltf context path, ") + solution.get_error().what());
+        }
+
+        auto s = solution.get();
+        if (s.size() != 1)
+        {
+            log::warn("Invalid gltf context path, fs::view was not fully local");
+        }
+
+        filesystem::basic_resolver* resolver = dynamic_cast<filesystem::basic_resolver*>(s[0].first);
+        if (!resolver)
+        {
+            log::warn("Invalid gltf context path, fs::view was not local");
+        }
+
+        resolver->set_target(s[0].second);
+
+        if (!resolver->is_valid_path())
+        {
+            log::warn("Invalid gltf context path");
+        }
+
         // Load gltf mesh data into model
-        bool ret = loader.LoadBinaryFromMemory(&model, &err, &warn, resource.data(), static_cast<uint>(resource.size()));
+        bool ret = loader.LoadBinaryFromMemory(&model, &err, &warn, resource.data(), static_cast<uint>(resource.size()), resolver->get_absolute_path());
 
         if (!err.empty())
         {

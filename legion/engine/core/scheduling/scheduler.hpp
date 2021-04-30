@@ -41,6 +41,7 @@ namespace legion::core::scheduling
 
         static per_thread_map<async::rw_lock_pair<async::runnables_queue>> m_commands;
         static async::rw_lock_pair<async::job_queue> m_jobs;
+        static size_type m_jobPoolSize;
 
         static std::atomic<bool> m_exit;
         static std::atomic<bool> m_start;
@@ -63,6 +64,8 @@ namespace legion::core::scheduling
 
         template<typename functor>
         static auto sendCommand(std::thread::id id, functor&& function, float taskSize = 1.f);
+
+        static size_type jobPoolSize() noexcept;
 
         template<typename Func>
         static auto queueJobs(size_type count, Func&& func);

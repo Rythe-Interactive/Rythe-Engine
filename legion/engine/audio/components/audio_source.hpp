@@ -9,8 +9,11 @@ namespace legion::audio
 {
     struct audio_source
     {
+        Reflectable;
         friend class AudioSystem;
     public:
+        constexpr static ALuint invalid_source_id = -1;
+
         enum sound_properties
         {
             pitch = 1 << 0,
@@ -19,7 +22,8 @@ namespace legion::audio
             doRewind = 1 << 3,
             audioHandle = 1 << 4,
             rollOffFactor = 1 << 5,
-            looping = 1 << 6
+            looping = 1 << 6,
+            rollOffDistance = 1 << 7
         };
 
         enum playstate
@@ -28,6 +32,14 @@ namespace legion::audio
             playing,
             paused,
         };
+
+        audio_source() = default;
+
+        audio_source(const audio_segment_handle& handle)
+        {
+            m_changes |= sound_properties::audioHandle;
+            m_audio_handle = handle;
+        }
 
         /**
          * @brief Function to set the pitch for the audio source
@@ -42,6 +54,24 @@ namespace legion::audio
          * @brief Function to get the current pitch
          */
         float getPitch() const noexcept { return m_pitch; }
+
+        /**
+         * @brief Function to set the pitch for the audio source
+         * @param pitch new pitch value
+         */
+        void setRollOffDistances(float refDist, float maxDist) noexcept
+        {
+            m_changes |= sound_properties::rollOffDistance; // set b0
+            m_referenceDistance = math::max(0.0f, refDist);
+            m_maxDistance = math::max(0.0f, maxDist);
+        }
+
+        /**
+         * @brief Function to get the current pitch
+         */
+        float getReferenceDistance() const noexcept { return m_referenceDistance; }
+        float getMaxDistance() const noexcept { return m_maxDistance; }
+
         /**
          * @brief Function to set the gain for the audio source
          * @param gain new gain value
@@ -238,6 +268,8 @@ namespace legion::audio
 
         float m_pitch = 1.0f;
         float m_gain = 1.0f;
+        float m_referenceDistance = 5.f;
+        float m_maxDistance = 15.f;
 
         bool m_looping = false;
 
@@ -257,3 +289,5 @@ namespace legion::audio
         byte m_changes = 0;
     };
 }
+
+ManualReflector(legion::audio::audio_source, m_sourceId, m_audio_handle, m_pitch, m_gain, m_looping, m_playState, m_nextPlayState, m_rolloffFactor, m_changes);

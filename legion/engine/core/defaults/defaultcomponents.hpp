@@ -135,7 +135,8 @@ namespace legion::core
             if (owner->parent)
             {
                 transform parentTrans = owner->parent.get_component<transform>();
-                return parentTrans.to_world_matrix() * to_parent_matrix();
+                if (parentTrans)
+                    return parentTrans.to_world_matrix() * to_parent_matrix();
             }
             return to_parent_matrix();
         }

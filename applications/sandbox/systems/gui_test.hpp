@@ -54,7 +54,7 @@ namespace legion
             {
                 application::context_guard guard(window);
 
-                cubeModel = ModelCache::create_model("cube", "assets://models/cube.obj"_view);
+                cubeModel = ModelCache::create_model("cube", "assets://models/Cube.obj"_view);
                 decalMaterial = MaterialCache::create_material("decal", "assets://shaders/decal.shs"_view);
                 decalMaterial.set_param(SV_ALBEDO, TextureCache::create_texture("engine://resources/default/albedo"_view));
                 decalMaterial.set_param(SV_NORMALHEIGHT, TextureCache::create_texture("engine://resources/default/normalHeight"_view));
@@ -73,7 +73,8 @@ namespace legion
             model = compose(scal, rot, pos);
 
             decalEntity.add_component<transform>(pos, rot, scal);
-            decalEntity.add_component<mesh_renderable>(mesh_filter(cubeModel.get_mesh()), mesh_renderer(decalMaterial));
+            decalEntity.add_component(gfx::mesh_renderer(decalMaterial, cubeModel));
+
         }
 
         // BuildTree creates a rudimentary Entity View, as entities do currently not have the ability to be named
@@ -173,7 +174,7 @@ namespace legion
                     }
                 }
 
-                 ImGui::Separator();
+                ImGui::Separator();
 
                 if (ImGui::TreeNode("Children"))
                 {
@@ -185,7 +186,7 @@ namespace legion
                     ImGui::SameLine();
                     if (ImGui::Button("Add child"))
                     {
-                        auto child = createEntity(handle);
+                        (void)createEntity(handle);
                     }
 
                     std::vector<ecs::entity> toErase;
@@ -567,7 +568,7 @@ namespace legion
             return false;
         }
 
-        void onGUI(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
+        void onGUI(L_MAYBEUNUSED app::window& context, camera& cam, const camera::camera_input& camInput, L_MAYBEUNUSED time::span deltaTime)
         {
             //if (!SceneManager::currentScene)
               //  SceneManager::currentScene = SceneManager::create_scene();
@@ -720,9 +721,14 @@ namespace legion
                         }
                     }
 
+                    auto currentVariant = renderer.material.current_variant();
+                    if (currentVariant == 0)
+                        currentVariant = nameHash("default");
+
+
                     for (auto& [variantId, variantInfo] : shader.get_uniform_info())
                     {
-                        if (variantId != renderer.material.current_variant())
+                        if (variantId != currentVariant)
                             continue;
 
                         for (auto& [name, location, type] : variantInfo)
