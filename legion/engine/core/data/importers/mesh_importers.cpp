@@ -174,16 +174,17 @@ namespace legion::core::detail
     static void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int offset, std::vector<unsigned int>* data)
     {
         size_t size = data->size();
-        //indices in glft are in uin16
-        data->resize(size + bufferView.byteLength / 2);
+        //indices in glft are in int16
+        data->reserve(size + bufferView.byteLength / sizeof(int16));
 
         std::vector<int16> origin;
-        origin.resize(bufferView.byteLength / 2);
-        memcpy(origin.data(), &buffer.data.at(0) + bufferView.byteOffset, bufferView.byteLength);
+        origin.resize(bufferView.byteLength / sizeof(int16));
+        memcpy(origin.data(), buffer.data.data() + bufferView.byteOffset, bufferView.byteLength);
 
         for (size_type i = 0; i < origin.size(); ++i)
         {
-            data->at(i + size) = static_cast<uint>(origin[i]) + static_cast<uint>(offset);
+            if (origin[i] >= 0)
+                data->push_back(static_cast<uint>(origin[i]) + static_cast<uint>(offset));
         }
     }
 }
