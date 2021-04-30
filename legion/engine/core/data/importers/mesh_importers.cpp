@@ -406,29 +406,29 @@ namespace legion::core
 
                 material.albedoValue = math::color(srcMat.diffuse[0], srcMat.diffuse[1], srcMat.diffuse[2]);
                 if (!srcMat.diffuse_texname.empty())
-                    material.albedoMap = ImageCache::create_image(filesystem::view(srcMat.diffuse_texname));
+                    material.albedoMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.diffuse_texname));
 
                 material.metallicValue = srcMat.metallic;
                 if (!srcMat.metallic_texname.empty())
-                    material.metallicMap = ImageCache::create_image(filesystem::view(srcMat.metallic_texname));
+                    material.metallicMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.metallic_texname));
 
                 material.roughnessValue = srcMat.roughness;
                 if (!srcMat.roughness_texname.empty())
-                    material.roughnessMap = ImageCache::create_image(filesystem::view(srcMat.roughness_texname));
+                    material.roughnessMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.roughness_texname));
 
                 material.metallicRoughnessMap = invalid_image_handle;
 
                 material.emissiveValue = math::color(srcMat.emission[0], srcMat.emission[1], srcMat.emission[2]);
                 if (!srcMat.emissive_texname.empty())
-                    material.emissiveMap = ImageCache::create_image(filesystem::view(srcMat.emissive_texname));
+                    material.emissiveMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.emissive_texname));
 
                 if (!srcMat.normal_texname.empty())
-                    material.normalMap = ImageCache::create_image(filesystem::view(srcMat.normal_texname));
+                    material.normalMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.normal_texname));
 
                 material.aoMap = invalid_image_handle;
 
                 if (!srcMat.bump_texname.empty())
-                    material.heightMap = ImageCache::create_image(filesystem::view(srcMat.bump_texname));
+                    material.heightMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.bump_texname));
             }
         }
 
