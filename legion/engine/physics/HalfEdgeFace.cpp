@@ -1,5 +1,6 @@
 #include <physics/halfedgeface.hpp>
 #include <rendering/debugrendering.hpp>
+#include <physics/physics_statics.hpp>
 
 namespace legion::physics
 {
@@ -26,6 +27,16 @@ namespace legion::physics
         forEachEdge(calculateFaceCentroid);
 
         centroid = faceCenter / static_cast<float>(edgeCount);
+
+        math::vec3& planeCentroid = centroid;
+        math::vec3& planeNormal = normal;
+
+        auto centerVerticesToCentroid = [&planeCentroid, &planeNormal](HalfEdgeEdge* edge)
+        {
+            float distanceToPlane = PhysicsStatics::PointDistanceToPlane(planeNormal, planeCentroid, edge->edgePosition);
+            edge->edgePosition += distanceToPlane * planeNormal;
+        };
+        forEachEdge(calculateFaceCentroid);
 
         int currentEdgeId = 0;
 

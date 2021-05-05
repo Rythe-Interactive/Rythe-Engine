@@ -596,6 +596,24 @@ namespace legion::physics
         return convexCollider;
     }
 
+    void PhysicsStatics::CalculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid)
+    {
+        math::vec3 centroid;
+        outPlaneNormal = math::vec3();
+
+        for (int i = v.size() - 1, j = 0; j < v.size(); i = j, j++)
+        {
+            outPlaneNormal.x += (v[i].y - v[j].y) * (v[i].z + v[j].z); // projection on yz
+            outPlaneNormal.y += (v[i].z - v[j].z) * (v[i].x + v[j].x); // projection on xz
+            outPlaneNormal.z += (v[i].x - v[j].x) * (v[i].y + v[j].y); // projection on xy
+            centroid += v[j];
+        }
+           
+        // Normalize normal and fill in the plane equation fields
+        outPlaneNormal = math::normalize(outPlaneNormal);
+        distToCentroid = math::dot(centroid, outPlaneNormal) / v.size(); // “centroid / n” is the true centroid point
+    }
+
     bool PhysicsStatics::qHBuildInitialHull(const std::vector<math::vec3>& vertices,
         std::array<math::vec3,6>& supportVertices, std::vector<HalfEdgeFace*>& faces, math::mat4 DEBUG_transform )
     {
@@ -967,6 +985,12 @@ namespace legion::physics
     bool PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts,
         float scalingEpsilon, float hullMinimumVolume, math::mat4 DEBUG_transform, bool atDebug)
     {
+        //if (atDebug) { return true; }
+        auto testPairings = [](HalfEdgeEdge* edge)
+        {
+            math::vec3 x = edge->pairingEdge->edgePosition;
+        };
+
         std::vector<math::vec3> unmergedVertices;
         std::vector<HalfEdgeFace*> facesToBeRemoved;
 
@@ -1041,10 +1065,10 @@ namespace legion::physics
 
         if (atDebug)
         {
-            /*for (auto face : facesToBeRemoved)
+            for (auto face : facesToBeRemoved)
             {
-                face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
-            }*/
+                //face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
+            }
             log::debug(" facesToBeRemoved {0} ", facesToBeRemoved.size());
             //return true;
         }
@@ -1093,11 +1117,15 @@ namespace legion::physics
 
         if (atDebug)
         {
-            //433
-            for (auto face : newFaces)
+            //433type 
+            /*for (size_t i = 0; i < newFaces.size(); i++)
             {
-                //face->DEBUG_DrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
-            }
+                newFaces.at(i)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+            }*/
+            //newFaces.at(0)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+            //newFaces.at(1)->DEBUG_DrawFace(DEBUG_transform, math::colors::blue, FLT_MAX);
+            //newFaces.at(2)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+
             log::debug(" newFaces {0} ", newFaces.size());
             //return true;
         }
@@ -1111,12 +1139,15 @@ namespace legion::physics
 
             if (isFacesCoplanar(establishedFace, newFace))
             {
+                
+
                 //assert(establishedFace != horizonEdges.at(i)->face);
                 horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform);
 
                 faceToVertEstablished.populateVectorWithVerts(unmergedVertices);
                 newFaces.at(i) = nullptr;
                 horizonEdges.at(i) = nullptr;
+
             }
         }
 
@@ -1130,9 +1161,31 @@ namespace legion::physics
 
             if (newFaces.at(i) && newFaces.at(next))
             {
+                HalfEdgeEdge* connectingEdgeFromFirst = nextEdge->pairingEdge->prevEdge;
+
+                if (atDebug)
+                {
+                    if (i == 1)
+                    {
+                        log::debug("attempting to merge no {0} and {1} ", i, i + 1);
+
+                        log::debug("merging with newell ", i, i + 1);
+
+
+                        if (isNewellFacesCoplanar(newFaces.at(i), newFaces.at(next), connectingEdgeFromFirst, scalingEpsilon))
+                        {
+                            log::debug("would have been merged with newell");
+                        }
+                    }
+                   
+
+                }
+              
+
                 if (isFacesCoplanar(newFaces.at(i), newFaces.at(next)))
                 {
-                    nextEdge->pairingEdge->prevEdge->suicidalMergeWithPairing(DEBUG_transform);
+                    if (atDebug) { log::debug("-> merged"); }
+                    connectingEdgeFromFirst->suicidalMergeWithPairing(DEBUG_transform);
                     newFaces.at(i) = nullptr;
                 }
             }
@@ -1154,11 +1207,16 @@ namespace legion::physics
         if (atDebug)
         {
             ////433
-           /* for (auto face : newFaces)
+            for (auto face : newFaces)
             {
-                face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-            }*/
+                //face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+            }
 
+           /* newFaces.at(0)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+            newFaces.at(0)->forEachEdge(testPairings);*/
+            //newFaces.at(1)->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
+            //newFaces.at(1)->forEachEdge(testPairings); 
+            //newFaces.at(1)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
            /* newFaces.at(0)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
             newFaces.at(1)->DEBUG_DrawFace(DEBUG_transform, math::colors::blue, FLT_MAX);*/
             log::debug(" final newFaces {0} ", newFaces.size());
@@ -1181,6 +1239,41 @@ namespace legion::physics
 
         float dotResult = math::dot(math::normalize(first->normal), math::normalize(second->normal));
         return dotResult > angle;
+    }
+
+    bool PhysicsStatics::isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second, HalfEdgeEdge* connectingEdge, float scalingEpsilon)
+    {
+        //each face will at least have 3 vertices
+        std::vector<math::vec3> NewellPolygon;
+        NewellPolygon.reserve(6);
+
+        first->startEdge = connectingEdge->nextEdge;
+        second->startEdge = connectingEdge->pairingEdge->nextEdge;
+
+        auto collectVerticesOfFace = [&NewellPolygon](HalfEdgeEdge* edge)
+        {
+            NewellPolygon.emplace_back(edge->edgePosition);
+        };
+
+        first->forEachEdge(collectVerticesOfFace);
+        NewellPolygon.pop_back();
+
+        second->forEachEdge(collectVerticesOfFace);
+        NewellPolygon.pop_back();
+
+        math::vec3 planeNormal; float distToCentroid;
+        CalculateNewellPlane(NewellPolygon, planeNormal, distToCentroid);
+
+        for (int i = 0; i < NewellPolygon.size(); i++) {
+            float dist = math::dot(planeNormal, NewellPolygon[i]) - distToCentroid;
+
+            if (math::abs(dist) > scalingEpsilon)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 };

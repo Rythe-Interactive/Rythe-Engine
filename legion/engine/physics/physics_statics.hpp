@@ -470,6 +470,8 @@ namespace legion::physics
 
         static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices,int maxDraw = INT_MAX,int DEBUG_at = INT_MAX,math::mat4 DEBUG_transform = math::mat4(1.0f));
 
+        static void CalculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid);
+
     private:
 
         /** @brief Given 2 HalfEdgeEdges and their respective transforms, transforms their normals and checks if they create a minkowski face
@@ -580,7 +582,7 @@ namespace legion::physics
 
         static bool isFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second);
 
-        
+        static bool isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second,HalfEdgeEdge* connectingEdge,float scalingEpsilon);
 
     };
 }
