@@ -582,7 +582,7 @@ namespace legion::physics
 
         static bool isFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second);
 
-        static bool isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second,HalfEdgeEdge* connectingEdge,float scalingEpsilon);
+        static bool isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second,HalfEdgeEdge* connectingEdge,float scalingEpsilon,math::mat4 DEBUG_transform,bool atDebug);
 
     };
 }
