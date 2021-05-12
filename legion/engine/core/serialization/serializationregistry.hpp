@@ -7,14 +7,16 @@
 namespace legion::core::serialization
 {
 
-    class SerializationRegistry
+    class Registry
     {
     private:
-        static std::map<id_type, std::unique_ptr<serializer_base>> serializers;
+        static std::map<id_type, std::unique_ptr<serializer<void>>> serializers;
 
     public:
         template<typename type>
-        static void register_component();
-        static std::unique_ptr<component_prototype_base> getPrototype(json j);
+        static void register_type();
+
+        template<typename type>
+        static std::unique_ptr<serializer<type>> get_serializer();
     };
 }

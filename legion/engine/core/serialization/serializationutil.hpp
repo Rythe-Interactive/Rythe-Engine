@@ -1,4 +1,5 @@
 #pragma once
+#include <core/filesystem/filesystem.hpp>
 #include <core/platform/platform.hpp>
 #include <core/ecs/handles/component.hpp>
 #include <core/ecs/prototypes/component_prototype.hpp>
@@ -32,31 +33,55 @@ namespace legion::core::serialization
     };
 #pragma endregion
 
-    struct serializer_base
-    {
-    public:
-        serializer_base() = default;
-        virtual std::unique_ptr<component_prototype_base> deserialize(json j) LEGION_PURE;
-    };
+    //struct serializer_base
+    //{
+    //public:
+    //    serializer_base() = default;
+    //    virtual void read(legion::core::fs::view filePath) LEGION_PURE;
+    //    virtual void write(legion::core::fs::view filePath) LEGION_PURE;
+
+    //    virtual void store() LEGION_PURE;
+    //    virtual std::unique_ptr<component_prototype_base> load(json j) LEGION_PURE;
+    //};
 
     template<typename type>
-    struct serializer : serializer_base
+    struct serializer/* : serializer_base*/
     {
+    private:
+        type data;
+
     public:
         serializer() = default;
-        virtual std::unique_ptr<component_prototype_base> deserialize(json j)
+        
+        void read(fs::view filePath)
         {
-            return json_serializer::deserialize<type>(j);
+            data = json_view::deserialize<type>(filePath);
+        }
+
+        void write(fs::view filePath)
+        {
+            std::ofstream os(filePath.get_virtual_path());
+            os << json_view::serialize<type>(data).dump();
+        }
+
+        void store(type t)
+        {
+            data = t;
+        }
+
+        std::unique_ptr<component_prototype<type>> load()
+        {
+            return std::unique_ptr<component_prototype<type>>(ecs::component<type>(data));
         }
     };
 
-    struct json_serializer
+    struct json_view
     {
     public:
         /**@brief JSON serialization to a string
          * @param serializable template type that represents the object that needs to be serialized
          */
-        template<size_t I = 0, typename type>
+        template<typename type>
         static json serialize(type t)
         {
             component_prototype<type> temp = component_prototype<type>(t);
@@ -70,10 +95,10 @@ namespace legion::core::serialization
          * @returns the the deserialized object as type
          */
         template<typename type>
-        static std::unique_ptr<component_prototype<type>> deserialize(json j)
+        static type deserialize(fs::view filePath)
         {
-            component_prototype<type> prototype(out_type);
-            return std::make_unique<component_prototype<type>>(prototype);
+            type t;
+            return t;
         }
     };
 

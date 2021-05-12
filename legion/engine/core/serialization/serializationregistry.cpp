@@ -3,17 +3,17 @@
 
 namespace legion::core::serialization
 {
-    std::map<id_type, std::unique_ptr<serializer_base>> SerializationRegistry::serializers;
+    std::map<id_type, std::unique_ptr<serializer<void>>> Registry::serializers;
 
     template<typename type>
-    void SerializationRegistry::register_component()
+    void Registry::register_type()
     {
-        SerializationRegistry::serializers.emplace(type_hash<type>().local(), std::make_unique<serializer<type>>());
+        Registry::serializers.emplace(type_hash<type>().local(), std::make_unique<serializer<type>>());
     }
 
-    std::unique_ptr<component_prototype_base> SerializationRegistry::getPrototype(json j)
+    template<typename type>
+    std::unique_ptr<serializer<type>> Registry::get_serializer()
     {
-       
-        return  serializers[j["Type ID"]]->deserialize(j);
+        return serializers[type_hash<type>().local()];
     }
 }
