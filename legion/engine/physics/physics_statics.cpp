@@ -494,7 +494,7 @@ namespace legion::physics
         debug::drawLine(start, start + math::vec3(0, 0, z), math::colors::green, 20.0f, FLT_MAX, true);*/
 
         //merge volume threshold is equal a certain small fraction of the volume of the bounding box 
-        float mergeVolumeThreshold = x * y * z * (1.0f/2000.0f);
+        float mergeVolumeThreshold = x * y * z * (1.0f/3000.0f);
 
         //[2] Build Initial Hull
         if (!qHBuildInitialHull(vertices, supportVertices, faces,DEBUG_transform))
@@ -507,7 +507,7 @@ namespace legion::physics
 
         //[3] populate list with faces of initial hull
         std::list<ColliderFaceToVert> facesWithOutsideVerts;
-        partitionVerticesToList(vertices, faces, facesWithOutsideVerts);
+        partitionVerticesToList(vertices, faces, facesWithOutsideVerts,false);
 
         //[4] loop through faces until there are no faces with unmerged vertices
         if (!facesWithOutsideVerts.empty())
@@ -792,7 +792,6 @@ namespace legion::physics
         return true;
     }
 
-
     void PhysicsStatics::createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint, const std::vector<HalfEdgeEdge*>& reversedEdges, std::vector<HalfEdgeFace*>& createdFaces)
     {
         HalfEdgeEdge* pairingToConnectTo = nullptr;
@@ -858,8 +857,58 @@ namespace legion::physics
         return false;
     }
 
-    void PhysicsStatics::partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces, std::list<ColliderFaceToVert>& outFacesWithOutsideVerts)
+    void PhysicsStatics::partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces,
+        std::list<ColliderFaceToVert>& outFacesWithOutsideVerts, bool shouldFindFirstMatch )
     {
+
+        auto findFirstMatch = [&outFacesWithOutsideVerts](const math::vec3& vertex)
+        {
+            for (ColliderFaceToVert& faceToVert : outFacesWithOutsideVerts)
+            {
+                if (IsPointAbovePlane(faceToVert.face->normal, faceToVert.face->centroid, vertex))
+                {
+                    faceToVert.outsideVerts.push_back(vertex);
+                    return;
+                }
+            }
+        };
+
+        auto findBestMatch = [&outFacesWithOutsideVerts]( const math::vec3& vertex)
+        {
+            ColliderFaceToVert* bestFaceToVert = nullptr;
+            float bestMatchDistance = std::numeric_limits<float>::lowest();
+           
+
+            for (ColliderFaceToVert& faceToVert : outFacesWithOutsideVerts)
+            {
+                auto face = faceToVert.face;
+                float currentDistance = PointDistanceToPlane(face->normal, face->centroid, vertex);
+
+                if (currentDistance > bestMatchDistance)
+                {
+                    bestMatchDistance = currentDistance;
+                    bestFaceToVert = &faceToVert;
+
+                }
+            }
+
+            if (bestFaceToVert && bestMatchDistance > 0.0f)
+            {
+                bestFaceToVert->outsideVerts.push_back(vertex);
+            }
+        };
+
+        legion::core::delegate<void(const math::vec3& vertex)> partioningStrategyFunc = nullptr;
+
+        if (shouldFindFirstMatch)
+        {
+            partioningStrategyFunc = findFirstMatch;
+        }
+        else
+        {
+            partioningStrategyFunc = findBestMatch;
+        }
+
         for (HalfEdgeFace* face : faces)
         {
             outFacesWithOutsideVerts.emplace_back(face);
@@ -868,19 +917,7 @@ namespace legion::physics
         //for each vertex in vertices
         for (const math::vec3& vertex : vertices)
         {
-            bool foundInList = false;
-
-            for (ColliderFaceToVert& faceToVert : outFacesWithOutsideVerts)
-            {
-                if (IsPointAbovePlane(faceToVert.face->normal, faceToVert.face->centroid, vertex))
-                {
-                    faceToVert.outsideVerts.push_back(vertex);
-                    foundInList = true;
-                    break;
-                }
-            }
-
-
+            partioningStrategyFunc(vertex);
         }
     }
 
@@ -923,15 +960,10 @@ namespace legion::physics
         int iter = 0;
         do
         {
-            
-            
 
             currentEdge = currentEdge->nextEdge;
 
             if (atDebug) { log::debug("-> Iteration"); currentEdge->DEBUG_drawEdge(DEBUG_transform, math::colors::cyan, FLT_MAX, 5.0f); }
-
-            
-
 
             if (!currentEdge->isEdgeHorizonFromVertex(eyePoint, scalingEpsilon))
             {
@@ -1216,7 +1248,7 @@ namespace legion::physics
             //return true;
         }
 
-        partitionVerticesToList(unmergedVertices, newFaces, facesWithOutsideVerts);
+        partitionVerticesToList(unmergedVertices, newFaces, facesWithOutsideVerts,false);
 
         for (auto face : facesToBeRemoved)
         {
