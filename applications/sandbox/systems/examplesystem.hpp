@@ -129,15 +129,56 @@ public:
             ).wait();
         }
 
-        static fast_time buffer = 0;
-        static fast_time avgTime = deltaTime;
-        avgTime = (avgTime + deltaTime) / 2.f;
-        buffer += deltaTime;
+        static size_type frames = 0;
+        static time64 totalTime = 0;
+        static time::stopwatch<time64> timer;
+        time64 delta = schd::Clock::lastTickDuration();
 
-        if (buffer >= 1.f)
+        static std::array<time64, 1800> times;
+
+        if (frames < times.size())
         {
-            buffer--;
-            log::debug("dt: {}s fps: {} poll: {}%", avgTime, 1.f / avgTime, schd::Scheduler::m_pollTime * 100.f);
+            times[frames] = delta;
+            frames++;
+            totalTime += delta;
+        }
+        else
+        {
+            time64 avg0 = totalTime / frames;
+            time64 avg1 = timer.elapsed_time() / frames;
+
+            std::set<time64, std::greater<time64>> orderedTimes;
+
+            for (auto& time : times)
+                orderedTimes.insert(time);
+
+            time64 onePcLow = 0;
+            time64 pointOnePcLow = 0;
+
+            size_type i = 0;
+            for (auto& time : orderedTimes)
+            {
+                i++;
+                onePcLow += time;
+
+                if (i <= math::max<size_type>(frames / 1000, 1))
+                {
+                    pointOnePcLow += time;
+                }
+
+                if (i >= frames / 100)
+                {
+                    break;
+                }
+            }
+
+            pointOnePcLow /= frames / 1000;
+            onePcLow /= frames / 100;
+
+            log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", onePcLow, pointOnePcLow, avg0, avg1);
+            log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", 1.0/onePcLow, 1.0/pointOnePcLow, 1.0/avg0, 1.0/avg1);
+
+            raiseEvent<events::exit>();
         }
     }
 };

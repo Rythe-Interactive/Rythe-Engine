@@ -189,8 +189,8 @@ namespace legion::core::scheduling
             if (fps < avg)
             {
                 m_pollTime.store(math::clamp(((prevPolltime * static_cast<float>(solidness)) + math::linearRand(-0.1f, 0.1f)) / static_cast<float>(solidness + 1), 0.f, 1.f), std::memory_order_relaxed);
-                solidness = 0;// math::max<size_type>(solidness - 1, 0);
-                log::debug("BELOW {} {} {}", fps, avg, solidness);
+                solidness = math::max<size_type>(solidness - 1, 0);
+
                 timeSpentAboveAvg = 0.f;
             }
             else if (fps > avg)
@@ -200,7 +200,6 @@ namespace legion::core::scheduling
                 solidness = math::min(solidness + 1, std::numeric_limits<size_type>::max());
 
                 prevPolltime = m_pollTime.load(std::memory_order_relaxed);
-                log::debug("ABOVE {} {} {}", fps, avg, solidness);
             }
 
             if (timeSpentAboveAvg > 0.5f)
