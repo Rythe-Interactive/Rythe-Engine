@@ -13,7 +13,10 @@ namespace legion::core
 
     void Engine::init()
     {
-        log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
+        {
+            async::readwrite_guard guard(log::impl::thread_names_lock);
+            log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
+        }
 
         for (const auto& [priority, moduleList] : m_modules)
             for (auto& module : moduleList)

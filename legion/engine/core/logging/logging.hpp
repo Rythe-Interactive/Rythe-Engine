@@ -16,6 +16,7 @@
 #include <thread>
 #include <core/math/math.hpp>
 #include <core/common/exception.hpp>
+#include <core/async/rw_spinlock.hpp>
 
 /** @file logging.hpp */
 #if !defined(DOXY_EXCLUDE)
@@ -271,6 +272,7 @@ namespace legion::core::log
         static std::shared_ptr<spdlog::logger> logger;
         static std::shared_ptr<spdlog::logger> file_logger;
         static std::shared_ptr<spdlog::logger> console_logger;
+        static async::rw_spinlock thread_names_lock;
         static std::unordered_map<std::thread::id, std::string> thread_names;
     };
 
@@ -313,23 +315,33 @@ namespace legion::core::log
     {
         void format(const spdlog::details::log_msg& msg, const std::tm& tm_time, spdlog::memory_buf_t& dest) override
         {
-            std::string thread_ident;
+            //std::string thread_ident;
+            thread_local static std::string* thread_ident;
 
-            if (const auto it = impl::thread_names.find(std::this_thread::get_id()); it != impl::thread_names.end())
+            if (!thread_ident)
             {
-                thread_ident = it->second;
-            }
-            else
-            {
-                std::ostringstream oss;
-                oss << std::this_thread::get_id();
-                thread_ident = oss.str();
+                async::readonly_guard guard(impl::thread_names_lock);
 
-                //NOTE(algo-ryth-mix): this conversion is not portable 
-                //thread_ident = std::to_string(legion::core::force_value_cast<uint>(std::this_thread::get_id()));
+                if (impl::thread_names.count(std::this_thread::get_id()))
+                {
+                    thread_ident = &impl::thread_names.at(std::this_thread::get_id());
+                }
+                else
+                {
+                    std::ostringstream oss;
+                    oss << std::this_thread::get_id();
+                    {
+                        async::readwrite_guard wguard(impl::thread_names_lock);
+                        thread_ident = &impl::thread_names[std::this_thread::get_id()];
+                    }
+                    *thread_ident = oss.str();
+
+                    //NOTE(algo-ryth-mix): this conversion is not portable 
+                    //thread_ident = std::to_string(legion::core::force_value_cast<uint>(std::this_thread::get_id()));
+                }
             }
 
-            dest.append(thread_ident.data(), thread_ident.data() + thread_ident.size());
+            dest.append(thread_ident->data(), thread_ident->data() + thread_ident->size());
         }
         std::unique_ptr<custom_flag_formatter> clone() const override
         {

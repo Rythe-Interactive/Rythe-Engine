@@ -77,8 +77,11 @@ namespace legion::core::scheduling
                 timeBuffer += clock.restart();
 
                 if (lowPower || LEGION_CONFIGURATION == LEGION_DEBUG_VALUE)
+                {
+                    OPTICK_EVENT("Sleep");
                     std::this_thread::sleep_for(std::chrono::microseconds(1));
-                else if (timeBuffer >= sleepTime * 0.1f)
+                }
+                else if (timeBuffer >= sleepTime * 0.2f)
                 {
                     OPTICK_EVENT("Sleep");
                     timeBuffer -= sleepTime;
@@ -144,17 +147,22 @@ namespace legion::core::scheduling
 
         pointer<std::thread> ptr;
         std::string name = "Worker ";
-        while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(m_jobPoolSize))) != nullptr)
+
         {
-            log::impl::thread_names[ptr->get_id()] = name + std::to_string(m_jobPoolSize++);
-            m_commands.try_emplace(ptr->get_id());
+            async::readwrite_guard guard(log::impl::thread_names_lock);
+            while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(m_jobPoolSize))) != nullptr)
+            {
+                log::impl::thread_names[ptr->get_id()] = name + std::to_string(m_jobPoolSize++);
+                m_commands.try_emplace(ptr->get_id());
+            }
+            log::impl::thread_names[std::this_thread::get_id()] = "Main thread";
         }
 
         m_start.store(true, std::memory_order_release);
 
         Clock::subscribeToTick(doTick);
 
-        log::impl::thread_names[std::this_thread::get_id()] = "Main thread";
+
         while (!m_exit.load(std::memory_order_relaxed))
         {
             Clock::update();
