@@ -22,6 +22,8 @@ namespace legion::core::scheduling
     std::atomic<bool> Scheduler::m_start = { false };
     int Scheduler::m_exitCode = 0;
 
+    std::atomic<float> Scheduler::m_pollTime = { 0.1f };
+
     void Scheduler::threadMain(bool lowPower, std::string name)
     {
         log::info("Thread {} assigned.", std::this_thread::get_id());
@@ -81,7 +83,7 @@ namespace legion::core::scheduling
                     OPTICK_EVENT("Sleep");
                     std::this_thread::sleep_for(std::chrono::microseconds(1));
                 }
-                else if (timeBuffer >= sleepTime * 0.2f)
+                else if (timeBuffer >= sleepTime * m_pollTime.load(std::memory_order_relaxed))
                 {
                     OPTICK_EVENT("Sleep");
                     timeBuffer -= sleepTime;
@@ -162,10 +164,53 @@ namespace legion::core::scheduling
 
         Clock::subscribeToTick(doTick);
 
+        float prevPolltime = m_pollTime.load(std::memory_order_relaxed);
+
+        size_type solidness = 1;
 
         while (!m_exit.load(std::memory_order_relaxed))
         {
             Clock::update();
+
+            float deltaTime = static_cast<float>(Clock::lastTickDuration());
+            static float avgDeltaTime = deltaTime;
+            static size_type framecount = 1;
+            static float totalTime = deltaTime;
+            static float timeSpentAboveAvg = 0;
+
+            uint fps = math::uround(1.f / deltaTime);
+
+            totalTime += deltaTime;
+            framecount++;
+            avgDeltaTime = totalTime / static_cast<float>(framecount);
+
+            uint avg = math::uround(1.f / avgDeltaTime);
+
+            if (fps < avg)
+            {
+                m_pollTime.store(math::clamp(((prevPolltime * static_cast<float>(solidness)) + math::linearRand(-0.1f, 0.1f)) / static_cast<float>(solidness + 1), 0.f, 1.f), std::memory_order_relaxed);
+                solidness = 0;// math::max<size_type>(solidness - 1, 0);
+                log::debug("BELOW {} {} {}", fps, avg, solidness);
+                timeSpentAboveAvg = 0.f;
+            }
+            else if (fps > avg)
+            {
+                timeSpentAboveAvg += deltaTime;
+
+                solidness = math::min(solidness + 1, std::numeric_limits<size_type>::max());
+
+                prevPolltime = m_pollTime.load(std::memory_order_relaxed);
+                log::debug("ABOVE {} {} {}", fps, avg, solidness);
+            }
+
+            if (timeSpentAboveAvg > 0.5f)
+            {
+                framecount = 1;
+                totalTime = deltaTime;
+                timeSpentAboveAvg = 0.f;
+            }
+
+            //log::debug("trend {: f}, poll percentage {:6f}, fps {}", m_pollTime.load(std::memory_order_relaxed) - prevPolltime, m_pollTime.load(std::memory_order_relaxed), avg);
 
             if (m_lowPower)
                 std::this_thread::yield();

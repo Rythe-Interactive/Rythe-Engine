@@ -137,7 +137,7 @@ public:
         if (buffer >= 1.f)
         {
             buffer--;
-            log::debug("dt: {}s fps: {}", avgTime, 1.f / avgTime);
+            log::debug("dt: {}s fps: {} poll: {}%", avgTime, 1.f / avgTime, schd::Scheduler::m_pollTime * 100.f);
         }
     }
 };
