@@ -11,6 +11,7 @@
 
 #include <utility>
 #include <memory>
+#include <optional>
 #include <unordered_map>
 
 /**
@@ -44,13 +45,15 @@ namespace legion::core::ecs
 
         mutable async::rw_spinlock m_familyLock;
         std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_families;
-        std::unordered_map<id_type, std::string> m_prettyNames;
+        std::unordered_map<id_type, std::string> m_componentNames;
+
 
         mutable async::rw_spinlock m_entityDataLock;
         std::unordered_map<id_type, entity_data> m_entityData;
 
         mutable async::rw_spinlock m_entityLock;
         entity_set m_entities;
+        sparse_map<id_type, std::string> m_entityNames;
 
         QueryRegistry m_queryRegistry;
         events::EventBus* m_eventBus;
@@ -75,13 +78,19 @@ namespace legion::core::ecs
          *		 - The * operator needs to be defined.
          */
         template<typename component_type>
-        void reportComponentType()
+        void reportComponentType(std::optional<std::string> name = std::nullopt)
         {
             OPTICK_EVENT();
             async::readwrite_guard guard(m_familyLock);
             if (!m_families.count(typeHash<component_type>())) {
                 m_families[typeHash<component_type>()] = std::make_unique<component_pool<component_type>>(this, m_eventBus);
-                m_prettyNames[typeHash<component_type>()] = std::string(nameOfType<component_type>());
+                if (name.has_value())
+                {
+                    m_componentNames[typeHash<component_type>()] = name.value();
+                }
+                else {
+                    m_componentNames[typeHash<component_type>()] = std::string(nameOfType<component_type>());
+                }
             }
         }
 
@@ -104,7 +113,7 @@ namespace legion::core::ecs
         /**@brief  TODO*/
         std::string getFamilyName(id_type id)
         {
-            if (const auto itr = m_prettyNames.find(id); itr != m_prettyNames.end())
+            if (const auto itr = m_componentNames.find(id); itr != m_componentNames.end())
             {
                 return itr->second;
             }
@@ -319,7 +328,7 @@ namespace legion::core::ecs
          */
         L_NODISCARD entity_handle createEntity(bool worldChild = true, id_type entityId = invalid_id);
 
-        L_NODISCARD entity_handle createEntity(id_type entityId,bool worldChild = true);
+        L_NODISCARD entity_handle createEntity(id_type entityId, bool worldChild = true);
 
         /**@brief Destroys entity and all of its components.
          * @param entityId Id of entity you wish to destroy.
@@ -368,6 +377,27 @@ namespace legion::core::ecs
         {
             return m_queryRegistry.createQuery(componentTypes);
         }
+        void setComponentName(id_type c, const std::string& n)
+        {
+            m_componentNames[c] = n;
+        }
+
+        L_NODISCARD std::string getComponentName(id_type c) noexcept
+        {
+            auto itr = m_componentNames.find(c);
+
+            if (itr != m_componentNames.end())
+            {
+                return itr->second;
+            }
+            else
+            {
+                m_componentNames[c] = "Component (not reported!)  " + std::to_string(c);
+                return "Component (not reported!)  " + std::to_string(c);
+            }
+
+        }
+
     };
 }
 

@@ -1,21 +1,10 @@
 #pragma once
+#include "../systems/gui_test.hpp"
+
 #include <core/core.hpp>
 #include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
-
-//#include "../systems/testsystem2.hpp"
 #include "../systems/simplecameracontroller.hpp"
-#include "../systems/gui_test.hpp"
-
-#include <physics/systems/physics_fracture_test_system.hpp>
-
-
-#include "../data/animation.hpp"
-#include "../systems/animation_editor.hpp"
-#include "../systems/animator.hpp"
-#include "../systems/event_based_explosion_system.hpp"
-#include "../systems/testsystemconvexhull.hpp"
-#include "../systems/final_presentation_system.hpp"
 
 
 using namespace legion;
@@ -25,7 +14,6 @@ class TestModule : public Module
 public:
     virtual void setup() override
     {
-
         // Create the request for the main window.
         app::WindowSystem::requestWindow(
             world_entity_id,

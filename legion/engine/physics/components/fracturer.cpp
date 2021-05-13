@@ -282,19 +282,7 @@ namespace legion::physics
                         splitter.MultipleSplitMesh(splittingParams, entitiesGenerated, true, -1);
                         totalMeshSplitting += meshSplitting.elapsedTime().milliseconds();
 
-
                         meshToColliderPairing.meshSplitterPairing.write(splitter);
-
-                        if (fractureID == 0)
-                        {
-                            auto ent = entitiesGenerated.back();
-                            auto idH = ent.add_component<identifier>();
-                            auto id = idH.read();
-                            id.id = "problem";
-                            idH.write(id);
-
-                        }
-
 
                     }
 

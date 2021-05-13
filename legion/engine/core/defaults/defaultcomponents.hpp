@@ -101,6 +101,7 @@ namespace legion::core
 
     struct hierarchy
     {
+        std::string name;
         ecs::entity_handle parent = world_entity_id;
         ecs::entity_set children;
     };

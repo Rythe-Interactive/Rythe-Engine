@@ -260,4 +260,21 @@ namespace legion::core
             return { id };
         return invalid_mesh_handle;
     }
+
+    void MeshCache::destroy_mesh(id_type id)
+    {
+        bool erased = false;
+
+        {
+            async::readwrite_guard guard(MeshCache::m_meshesLock);
+
+            if (!m_meshes.count(id))
+                return;
+
+            erased = m_meshes.erase(id);
+        }
+
+        if (erased)
+            log::debug("Destroyed mesh {}", id);
+    }
 }

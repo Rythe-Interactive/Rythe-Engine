@@ -80,6 +80,8 @@ namespace legion::rendering
         static mesh_handle get_mesh(const std::string& name);
         static mesh_handle get_mesh(id_type id);
 
+        static void destroy_model(const std::string& name);
+
     };
 }
 

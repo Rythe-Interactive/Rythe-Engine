@@ -1,11 +1,11 @@
 name: analyze-action
 on:
   pull_request:
-    branches: [main, develop, develop/* ]
+    branches: [main, develop, develop/*, develop* ]
 
 jobs:
   analyze:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 
@@ -16,10 +16,10 @@ jobs:
        xargs -I"{}" sudo mv {} /usr/bin
 
     - name: get cppcheck
-      run: sudo apt-get update -yqq && sudo apt-get install -yqq cppcheck
+      run: DEBIAN_FRONTEND=noninteractive sudo apt-get update -yqq --allow-releaseinfo-change -o::Dpkg::Use-Pty=0 && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 cppcheck
 
     - name: get dependencies
-      run: sudo apt-get install -yqq libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev
+      run: DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev libc++abi-dev
 
     - name: get intercept-build
       run: pip install scan-build

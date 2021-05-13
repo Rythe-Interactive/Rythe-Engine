@@ -10,7 +10,12 @@ shader(vertex)
 {
     void main(void)
     {
-        gl_Position = ModelToScreenSpacePosition(position);
+        vec3 worldPos = vec3(
+            position.x*1000.0 + lgn_cmr_in.posnearz.x,
+            position.y*1000.0 + lgn_cmr_in.posnearz.y,
+            position.z*1000.0 + lgn_cmr_in.posnearz.z
+            );
+        gl_Position = WorldToScreenSpacePosition(vec4(worldPos, 1.0));
         stdout(position) = stdin(position);
     }
 }

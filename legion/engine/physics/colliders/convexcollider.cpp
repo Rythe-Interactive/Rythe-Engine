@@ -37,7 +37,7 @@ namespace legion::physics
         //'this' is colliderB and 'convexCollider' is colliderA
         
 
-        log::debug("-------------------- SAT CHECK -----------------");
+        //log::debug("-------------------- SAT CHECK -----------------");
         PointerEncapsulator < HalfEdgeFace> ARefFace;
 
         ////log::debug("Face Check A");
@@ -127,7 +127,7 @@ namespace legion::physics
         }
 
         manifold.isColliding = true;
-        log::debug("---- chosen penetration {0}", manifold.penetrationInformation->penetration);
+        //log::debug("---- chosen penetration {0}", manifold.penetrationInformation->penetration);
 
         //keeping this here so i can copy pasta when i need it again
 

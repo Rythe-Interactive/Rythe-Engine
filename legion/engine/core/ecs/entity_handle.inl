@@ -78,4 +78,11 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         return m_registry->destroyComponents<archetype_type>(m_id);
     }
+
+    template <class component_type, class Func,typename>
+    void entity_handle::modify_component(Func&& f)
+    {
+        OPTICK_EVENT();
+        get_component_handle<component_type>().read_modify_write(std::forward<Func&&>(f)); 
+    }
 }

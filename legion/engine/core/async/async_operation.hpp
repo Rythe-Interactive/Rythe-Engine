@@ -84,6 +84,8 @@ namespace legion::core::async
         }
     };
 
+#if !defined(DOXY_EXCLUDE)
     template<typename Func>
     async_operation(const std::shared_ptr<async_progress>&, const Func&)->async_operation<Func>;
+#endif
 }
