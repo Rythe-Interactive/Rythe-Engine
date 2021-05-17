@@ -161,19 +161,19 @@ public:
                 i++;
                 onePcLow += time;
 
-                if (i <= math::max<size_type>(frames / 1000, 1))
+                if (i <= math::max<size_type>(math::uround(frames / 1000.0), 1))
                 {
                     pointOnePcLow += time;
                 }
 
-                if (i >= frames / 100)
+                if (i >= math::max<size_type>(math::uround(frames / 100.0), 1))
                 {
                     break;
                 }
             }
 
-            pointOnePcLow /= frames / 1000;
-            onePcLow /= frames / 100;
+            pointOnePcLow /= math::max<size_type>(math::uround(frames / 1000.0), 1);
+            onePcLow /= math::max<size_type>(math::uround(frames / 100.0), 1);
 
             log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", onePcLow, pointOnePcLow, avg0, avg1);
             log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", 1.0/onePcLow, 1.0/pointOnePcLow, 1.0/avg0, 1.0/avg1);

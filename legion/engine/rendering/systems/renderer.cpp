@@ -377,11 +377,14 @@ namespace legion::rendering
         for (auto ent : cameraQuery)
         {
             camera& cam = ent.get_component<camera>();
-            app::window& win = cam.targetWindow;
-            if (!win)
-                win = ecs::world.get_component<app::window>();
-            if (!win)
+
+            auto targetWin = cam.targetWindow;
+            if (!targetWin)
+                targetWin = ecs::world.get_component<app::window>();
+            if (!targetWin)
                 continue;
+
+            app::window& win = targetWin.get();
 
             math::ivec2 viewportSize;
             {
