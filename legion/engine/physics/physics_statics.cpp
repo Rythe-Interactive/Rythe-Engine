@@ -582,16 +582,7 @@ namespace legion::physics
 
         //populate list of vertices in collider list
 
-        auto& verticesVec = convexCollider->GetVertices();
-        auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
-        {
-            verticesVec.push_back(edge->edgePosition);
-        };
-
-        for (auto face : convexCollider->GetHalfEdgeFaces())
-        {
-            face->forEachEdge(collectVertices);
-        }
+        convexCollider->PopulateVertexListWithHalfEdges();
 
         return convexCollider;
     }

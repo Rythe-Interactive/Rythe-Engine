@@ -74,6 +74,9 @@ namespace legion::physics
             return;
         }
 
+       /* ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::red, 0.01f);
+        BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::blue, 0.01f);*/
+
 
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
 
@@ -669,6 +672,40 @@ namespace legion::physics
         //log::debug("-> Finish ConstructConvexHullWithMesh ----------------------------------");
     }
     
+    void ConvexCollider::AssignVertexOwnership()
+    {
+        vertexOwnerIndex.reserve(vertices.size());
+
+        
+
+    }
+
+    void ConvexCollider::PopulateVertexListWithHalfEdges()
+    {
+        auto& ownerIndexVert = vertexOwnerIndex;
+        auto& verticesVec = vertices;
+
+        int reserveSize = halfEdgeFaces.size() * 3;
+
+        verticesVec.reserve(reserveSize);
+        ownerIndexVert.reserve(reserveSize);
+
+        int i = 0;
+
+        auto collectVertices = [&verticesVec,&ownerIndexVert,&i](HalfEdgeEdge* edge)
+        {
+            verticesVec.push_back(edge->edgePosition);
+            ownerIndexVert.push_back(i);
+        };
+
+        for (auto face : halfEdgeFaces)
+        {
+            face->forEachEdge(collectVertices);
+            i++;
+        }
+
+
+    }
 
     void ConvexCollider::convexHullConstructHorizon(math::vec3 vert, HalfEdgeFace& face, std::deque<HalfEdgeEdge*>& edges, HalfEdgeEdge* originEdge,
         std::shared_ptr<std::unordered_set<HalfEdgeFace*>> visited)

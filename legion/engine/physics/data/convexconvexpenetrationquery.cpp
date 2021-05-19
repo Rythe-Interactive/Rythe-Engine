@@ -22,7 +22,7 @@ namespace legion::physics
 
         //------------------------------- find face that is touching refFace -------------------------------------------------//
 
-        for (auto face : incCollider->GetHalfEdgeFaces())
+        /*for (auto face : incCollider->GetHalfEdgeFaces())
         {
             math::vec3 worldFaceNormal = incTransform * math::vec4(face->normal, 0);
 
@@ -32,10 +32,10 @@ namespace legion::physics
                 largestDotResult = currentDotResult;
                 incFace = face;
             }
-        }
+        }*/
 
-       /* incFace->DEBUG_DrawFace(incTransform, math::colors::red, 3.0f);
-        refFace->DEBUG_DrawFace(refTransform, math::colors::blue, 3.0f);*/
+        incFace->DEBUG_DrawFace(incTransform, math::colors::magenta, 1.01f);
+        refFace->DEBUG_DrawFace(refTransform, math::colors::cyan, 1.01f);
 
         //------------------------------- get all world vertex positions in incFace -------------------------------------------------//
         std::vector<ContactVertex> outputContactPoints;

@@ -172,7 +172,7 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::colliderDraw(time::span dt)
     {
-        drawPhysicsColliders();
+        //drawPhysicsColliders();
 
         math::vec3 start = math::vec3(0, 2, 0);
         math::vec3 end = math::vec3(0, 5, 5);
@@ -653,9 +653,6 @@ namespace legion::physics
 
             physics::physicsComponent physicsComponent2;
             
-
-
-
             physicsComponent2.AddBox(staticBlockParams);
             physicsComponent2.isTrigger = false;
             entPhyHande.write(physicsComponent2);
@@ -680,8 +677,6 @@ namespace legion::physics
 
             physics::physicsComponent physicsComponent2;
             
-
-
             physicsComponent2.AddBox(cubeParams);
             entPhyHande.write(physicsComponent2);
 
@@ -779,20 +774,20 @@ namespace legion::physics
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
         //cube
-        //createQuickhullTestObject
-        //(math::vec3(0,5.0f,0),cubeH, wireFrameH);
+        createQuickhullTestObject
+        (math::vec3(0,5.0f, -0.8f),cubeH, wireFrameH);
 
         ////cup
         createQuickhullTestObject
-        (math::vec3(5.0f, 5.0f, 0), colaH, wireFrameH);
+        (math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH);
 
         ////hammer
-        //createQuickhullTestObject
-        //(math::vec3(10.0f, 5.0f, 0), hammerH, wireFrameH);
+        createQuickhullTestObject
+        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, wireFrameH);
 
         ////////suzanne
-        //createQuickhullTestObject
-        //(math::vec3(15.0f, 5.0f, 0), suzzaneH, wireFrameH);
+        createQuickhullTestObject
+        (math::vec3(15.0f, 5.0f, -0.0f), suzzaneH, wireFrameH);
 
         ////ohio teapot
         //createQuickhullTestObject
@@ -800,9 +795,12 @@ namespace legion::physics
         
 
         addStaircase(math::vec3(8, 2, 0));
-        /*addStaircase(math::vec3(8, 1, -1));
+        addStaircase(math::vec3(8, 1, -1));
         addStaircase(math::vec3(8, 0, -2));
-        addStaircase(math::vec3(8, -1, -3));*/
+        addStaircase(math::vec3(8, -1, -3));
+
+        addStaircase(math::vec3(8, -2, -5),5.0f);
+
 
         for (size_t i = 0; i < registeredColliderColorDraw.size(); i++)
         {
@@ -810,10 +808,10 @@ namespace legion::physics
         }
     }
 
-    void PhysicsFractureTestSystem::addStaircase(math::vec3 position)
+    void PhysicsFractureTestSystem::addStaircase(math::vec3 position, float breadthMult)
     {
         physics::cube_collider_params cubeParams;
-        cubeParams.breadth = 1.0f;
+        cubeParams.breadth = breadthMult;
         cubeParams.width = 23.0f;
         cubeParams.height = 1.0f;
 
@@ -836,7 +834,7 @@ namespace legion::physics
 
         auto [position2H, rotation2H, scale2H] = m_ecs->createComponents<transform>(ent2);
         position2H.write(position);
-        scale2H.write(math::vec3(23.0f, 1.0f, 1.0f));
+        scale2H.write(math::vec3(23.0f, 1.0f, breadthMult));
     }
 
     void PhysicsFractureTestSystem::createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH)

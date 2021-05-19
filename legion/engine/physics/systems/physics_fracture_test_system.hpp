@@ -53,7 +53,7 @@ namespace legion::physics
 
         void PopulateFollowerList(ecs::entity_handle physicsEnt,int index);
        
-        void addStaircase(math::vec3 position);
+        void addStaircase(math::vec3 position,float breadthMult = 1.0f);
         //FUNCTION BINDED ACTIONS
         void prematureExplosion(explosion* action);
 
