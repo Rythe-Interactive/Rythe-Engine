@@ -42,6 +42,7 @@
     <ClCompile Include="data\loaders\gltfmeshloader.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
     <ClCompile Include="serialization\serializationregistry.cpp" />
+    <ClCompile Include="serialization\serializationutil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -616,5 +617,7 @@
     <None Include="data\image.inl" />
     <None Include="engine\enginesubsystem.inl" />
     <None Include="engine\module.inl" />
+    <None Include="serialization\serializationutil.inl" />
+    <None Include="serialization\serializationregistry.inl" />
   </ItemGroup>
 </Project>

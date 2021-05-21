@@ -47,7 +47,7 @@ public:
             auto [pos, rot, scal] = ent.add_component<transform>();
             rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
 
-            ent.add_component(gfx::mesh_renderer(model.get_model().materials[0], model));
+            //ent.add_component(gfx::mesh_renderer(model.get_model().materials[0], model));
 
             //audio::audio_source source;
             //source.setAudioHandle(audioSegment);
@@ -69,7 +69,6 @@ public:
         serializer->write(fs::view("assets://scenes/test.json"));
         serializer->read(fs::view("assets://scenes/test.json"));
         auto output = serializer->load();
-        log::debug(output->type.local());
     }
 
     void update(legion::time::span deltaTime)
