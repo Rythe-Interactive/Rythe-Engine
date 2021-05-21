@@ -11,6 +11,11 @@ struct example_comp
 
 class ExampleSystem final : public legion::System<ExampleSystem>
 {
+    lgn::size_type frames = 0;
+    lgn::time64 totalTime = 0;
+    lgn::time::stopwatch<lgn::time64> timer;
+    std::array<lgn::time64, 18000> times;
+
 public:
     void setup()
     {
@@ -23,35 +28,13 @@ public:
 
         auto model = gfx::ModelCache::create_model("Sphere", fs::view("assets://models/sphere.obj"));
 
-        //auto material = gfx::MaterialCache::create_material("Default", fs::view("assets://shaders/pbr.shs"));
-        //material.set_param(SV_ALBEDO, gfx::TextureCache::create_texture(fs::view("engine://resources/default/albedo")));
-        //material.set_param(SV_NORMALHEIGHT, gfx::TextureCache::create_texture(fs::view("engine://resources/default/normalHeight")));
-        //material.set_param(SV_MRDAO, gfx::TextureCache::create_texture(fs::view("engine://resources/default/MRDAo")));
-        //material.set_param(SV_EMISSIVE, gfx::TextureCache::create_texture(fs::view("engine://resources/default/emissive")));
-        //material.set_param(SV_HEIGHTSCALE, 1.f);
-        //material.set_param("discardExcess", false);
-        //material.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-
         auto material = gfx::MaterialCache::create_material("Default", fs::view("assets://shaders/texture.shs"));
         material.set_param("_texture", gfx::TextureCache::create_texture(fs::view("engine://resources/default/albedo")));
-
-        //auto audioSegment = audio::AudioSegmentCache::createAudioSegment("Beep", fs::view("assets://audio/beep4.mp3"));
-
         {
             auto ent = createEntity("Sun");
             ent.add_component(gfx::light::directional(math::color(1, 1, 0.8f), 10.f));
             auto [pos, rot, scal] = ent.add_component<transform>();
             rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
-
-            //ent.add_component(gfx::mesh_renderer(model.get_model().materials[0], model));
-
-            //audio::audio_source source;
-            //source.setAudioHandle(audioSegment);
-            //source.setRollOffDistances(0.1f, 15.f);
-            //source.setRollOffFactor(0.1f);
-            //source.setLooping(true);
-            //source.play();
-            //ent.add_component(source);
         }
 
         for (int i = 0; i < 20000; i++)
@@ -64,21 +47,59 @@ public:
 
             ent.add_component<example_comp, velocity>();
             ent.add_component(gfx::mesh_renderer(material, model));
-
-            //audio::audio_source source;
-            //source.setAudioHandle(audioSegment);
-            //source.setRollOffDistances(0.1f, 15.f);
-            //source.setRollOffFactor(0.1f);
-            //source.setLooping(true);
-            //source.setGain(0.1f);
-            //source.play();
-            //ent.add_component(source);
         }
+
+        bindToEvent<events::exit, &ExampleSystem::onExit>();
+    }
+
+    void onExit(lgn::events::exit& event)
+    {
+        using namespace legion;
+
+        time64 avg0 = totalTime / frames;
+        time64 avg1 = timer.elapsed_time() / frames;
+
+        std::set<time64, std::greater<time64>> orderedTimes;
+
+        for (auto& time : times)
+            orderedTimes.insert(time);
+
+        time64 onePcLow = 0;
+        time64 pointOnePcLow = 0;
+
+        size_type i = 0;
+        for (auto& time : orderedTimes)
+        {
+            i++;
+            onePcLow += time;
+
+            if (i <= math::max<size_type>(math::uround(frames / 1000.0), 1))
+            {
+                pointOnePcLow += time;
+            }
+
+            if (i >= math::max<size_type>(math::uround(frames / 100.0), 1))
+            {
+                break;
+            }
+        }
+
+        pointOnePcLow /= math::max<size_type>(math::uround(frames / 1000.0), 1);
+        onePcLow /= math::max<size_type>(math::uround(frames / 100.0), 1);
+
+        log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", onePcLow, pointOnePcLow, avg0, avg1);
+        log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", 1.0 / onePcLow, 1.0 / pointOnePcLow, 1.0 / avg0, 1.0 / avg1);
     }
 
     void update(legion::time::span deltaTime)
     {
         using namespace legion;
+        static bool firstFrame = true;
+        if (firstFrame)
+        {
+            timer.start();
+            firstFrame = false;
+        }
 
         ecs::filter<position, velocity, example_comp> filter;
 
@@ -129,12 +150,7 @@ public:
             ).wait();
         }
 
-        static size_type frames = 0;
-        static time64 totalTime = 0;
-        static time::stopwatch<time64> timer;
         time64 delta = schd::Clock::lastTickDuration();
-
-        static std::array<time64, 1800> times;
 
         if (frames < times.size())
         {
@@ -144,39 +160,6 @@ public:
         }
         else
         {
-            time64 avg0 = totalTime / frames;
-            time64 avg1 = timer.elapsed_time() / frames;
-
-            std::set<time64, std::greater<time64>> orderedTimes;
-
-            for (auto& time : times)
-                orderedTimes.insert(time);
-
-            time64 onePcLow = 0;
-            time64 pointOnePcLow = 0;
-
-            size_type i = 0;
-            for (auto& time : orderedTimes)
-            {
-                i++;
-                onePcLow += time;
-
-                if (i <= math::max<size_type>(math::uround(frames / 1000.0), 1))
-                {
-                    pointOnePcLow += time;
-                }
-
-                if (i >= math::max<size_type>(math::uround(frames / 100.0), 1))
-                {
-                    break;
-                }
-            }
-
-            pointOnePcLow /= math::max<size_type>(math::uround(frames / 1000.0), 1);
-            onePcLow /= math::max<size_type>(math::uround(frames / 100.0), 1);
-
-            log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", onePcLow, pointOnePcLow, avg0, avg1);
-            log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", 1.0/onePcLow, 1.0/pointOnePcLow, 1.0/avg0, 1.0/avg1);
 
             raiseEvent<events::exit>();
         }
