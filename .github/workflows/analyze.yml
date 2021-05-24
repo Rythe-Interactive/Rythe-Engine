@@ -30,11 +30,11 @@ jobs:
        premake5 --file=premake5.lua vs2019
 
     - name: build legion dependencies
-      run: make CXX=clang++-9 config=debug64 legion-core
+      run: make CXX=clang++-11 config=debug64 legion-core
 
     - name: intercept-build & analyze-build
       run: |
-       /home/runner/.local/bin/intercept-build make --dry-run CXX=clang++-9 config=debug64 all && \
+       /home/runner/.local/bin/intercept-build make --dry-run CXX=clang++-11 config=debug64 all && \
        /home/runner/.local/bin/analyze-build --status-bugs
 
     - name: cppcheck
