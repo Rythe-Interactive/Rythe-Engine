@@ -520,7 +520,8 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationregistry.hpp" />
-    <ClInclude Include="serialization\serializationutil.hpp" />
+    <ClInclude Include="serialization\serializer.hpp" />
+    <ClInclude Include="serialization\view_type.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
     <ClInclude Include="time\utils.hpp" />
     <ClInclude Include="types\prototype.hpp" />
@@ -576,7 +577,10 @@ del /q ".\xcopyexclude"</Command>
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
     <ClCompile Include="serialization\serializationregistry.cpp" />
-    <ClCompile Include="serialization\serializationutil.cpp" />
+    <ClCompile Include="serialization\serializer.cpp" />
+    <ClCompile Include="serialization\view_type.inl">
+      <FileType>CppHeader</FileType>
+    </ClCompile>
     <ClCompile Include="types\type_util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -746,7 +750,7 @@ del /q ".\xcopyexclude"</Command>
     <None Include="serialization\serializationregistry.inl">
       <FileType>CppHeader</FileType>
     </None>
-    <None Include="serialization\serializationutil.inl">
+    <None Include="serialization\serializer.inl">
       <FileType>CppHeader</FileType>
     </None>
   </ItemGroup>

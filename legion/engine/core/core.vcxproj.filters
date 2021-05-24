@@ -42,7 +42,8 @@
     <ClCompile Include="data\loaders\gltfmeshloader.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
     <ClCompile Include="serialization\serializationregistry.cpp" />
-    <ClCompile Include="serialization\serializationutil.cpp" />
+    <ClCompile Include="serialization\serializer.cpp" />
+    <ClCompile Include="serialization\view_type.inl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -424,7 +425,7 @@
     <ClInclude Include="common\string_literal.hpp" />
     <ClInclude Include="ecs\handles\filter.hpp" />
     <ClInclude Include="ecs\filters\filter_info.hpp" />
-    <ClInclude Include="serialization\serializationutil.hpp" />
+    <ClInclude Include="serialization\serializer.hpp" />
     <ClInclude Include="scheduling\scheduling.hpp" />
     <ClInclude Include="scheduling\clock.hpp" />
     <ClInclude Include="containers\delegate.hpp" />
@@ -450,7 +451,7 @@
     <ClInclude Include="data\loaders\gltfmeshloader.hpp" />
     <ClInclude Include="engine\enginesubsystem.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
-    <ClInclude Include="serialization\serializationregistry.hpp" />
+    <ClInclude Include="serialization\view_type.hpp" />
     <ClInclude Include="types\prototype.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -617,7 +618,7 @@
     <None Include="data\image.inl" />
     <None Include="engine\enginesubsystem.inl" />
     <None Include="engine\module.inl" />
-    <None Include="serialization\serializationutil.inl" />
+    <None Include="serialization\serializer.inl" />
     <None Include="serialization\serializationregistry.inl" />
   </ItemGroup>
 </Project>

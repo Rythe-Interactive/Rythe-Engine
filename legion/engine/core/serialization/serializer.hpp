@@ -11,8 +11,6 @@
 #include <memory>
 #include <any>
 
-
-
 namespace legion::core::serialization
 {
     using json = nlohmann::json;
@@ -41,33 +39,13 @@ namespace legion::core::serialization
     template<typename type>
     struct serializer : public serializer_base
     {
-    private:
-        type data;
     public:
-        void read(fs::view filePath);
-        void write(fs::view filePath);
-        void store(const type& t);
-        std::unique_ptr<prototype_base> load();
-    };
+        void serialize(fs::view filePath);
+        prototype_base deserialize(fs::view filePath);
 
-    struct json_view
-    {
-    public:
-        /**@brief JSON serialization to a string
-         * @param serializable template type that represents the object that needs to be serialized
-         */
-        template<typename type>
-        static json serialize(type t);
-
-        /**@brief JSON deserialization from a string
-         * @param json the input JSON string
-         * @returns the the deserialized object as type
-         */
-        template<typename type>
-        static type deserialize(fs::view filePath);
     };
 }
 
-#include <core/serialization/serializationutil.inl>
+#include <core/serialization/serializer.inl>
 
 
