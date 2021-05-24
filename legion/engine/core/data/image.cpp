@@ -320,6 +320,8 @@ namespace legion::core
 
     image_handle ImageCache::create_image(const filesystem::view& file, image_import_settings settings)
     {
+        if (!file.file_info().is_file)
+            return invalid_image_handle;
         return create_image(file.get_filename(), file, settings);
     }
 
