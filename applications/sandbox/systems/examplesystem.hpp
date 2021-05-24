@@ -35,7 +35,7 @@ public:
         auto material = gfx::MaterialCache::create_material("Default", fs::view("assets://shaders/texture.shs"));
         material.set_param("_texture", gfx::TextureCache::create_texture(fs::view("engine://resources/default/albedo")));
 
-        auto audioSegment = audio::AudioSegmentCache::createAudioSegment("Beep", fs::view("assets://audio/beep4.mp3"));
+        //auto audioSegment = audio::AudioSegmentCache::createAudioSegment("Beep", fs::view("assets://audio/beep4.mp3"));
 
         {
             auto ent = createEntity("Sun");
@@ -43,7 +43,7 @@ public:
             auto [pos, rot, scal] = ent.add_component<transform>();
             rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
 
-            ent.add_component(gfx::mesh_renderer(model.get_model().materials[0], model));
+            //ent.add_component(gfx::mesh_renderer(model.get_model().materials[0], model));
 
             //audio::audio_source source;
             //source.setAudioHandle(audioSegment);
@@ -65,14 +65,14 @@ public:
             ent.add_component<example_comp, velocity>();
             ent.add_component(gfx::mesh_renderer(material, model));
 
-            audio::audio_source source;
-            source.setAudioHandle(audioSegment);
-            source.setRollOffDistances(0.1f, 15.f);
-            source.setRollOffFactor(0.1f);
-            source.setLooping(true);
-            source.setGain(0.1f);
-            source.play();
-            ent.add_component(source);
+            //audio::audio_source source;
+            //source.setAudioHandle(audioSegment);
+            //source.setRollOffDistances(0.1f, 15.f);
+            //source.setRollOffFactor(0.1f);
+            //source.setLooping(true);
+            //source.setGain(0.1f);
+            //source.play();
+            //ent.add_component(source);
         }
     }
 

@@ -26,6 +26,16 @@ namespace legion::core::time
             m_start = clock_type::now();
         }
 
+        void fast_forward(span_type time)
+        {
+            m_start -= std::chrono::duration_cast<typename clock_type::duration>(time.duration);
+        }
+
+        void rewind(span_type time)
+        {
+            m_start += std::chrono::duration_cast<typename clock_type::duration>(time.duration);
+        }
+
         span_type start_point() const noexcept
         {
             return span_type(m_start.time_since_epoch());

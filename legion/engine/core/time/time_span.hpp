@@ -92,39 +92,38 @@ namespace legion::core::time
             return time_span(duration--);
         }
 
-        constexpr time_span& operator+=(const time_span& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
+        template<typename OtherPrecision>
+        constexpr time_span& operator+=(const time_span<OtherPrecision>& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
         {
-            duration += rhs.duration;
+            duration += std::chrono::duration_cast<duration_type>(rhs.duration);
             return *this;
         }
 
-        constexpr time_span& operator-=(const time_span& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
+        template<typename OtherPrecision>
+        constexpr time_span& operator-=(const time_span<OtherPrecision>& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
         {
-            duration -= rhs.duration;
+            duration -= std::chrono::duration_cast<duration_type>(rhs.duration);
             return *this;
         }
 
-        constexpr time_span& operator*=(const time_type& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
+        template<typename OtherPrecision>
+        constexpr time_span& operator*=(const time_span<OtherPrecision>& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
         {
-            duration *= rhs;
+            duration *= std::chrono::duration_cast<duration_type>(rhs.duration);
             return *this;
         }
 
-        constexpr time_span& operator/=(const time_type& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
+        template<typename OtherPrecision>
+        constexpr time_span& operator/=(const time_span<OtherPrecision>& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
         {
-            duration /= rhs;
+            duration /= std::chrono::duration_cast<duration_type>(rhs.duration);
             return *this;
         }
 
-        constexpr time_span& operator%=(const time_type& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
+        template<typename OtherPrecision>
+        constexpr time_span& operator%=(const time_span<OtherPrecision>& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */
         {
-            duration %= rhs;
-            return *this;
-        }
-
-        constexpr time_span& operator%=(const std::chrono::duration<time_type>& rhs) noexcept(std::is_arithmetic_v<time_type>) /* strengthened */ 
-        {
-            duration %= rhs.count();
+            duration %= std::chrono::duration_cast<duration_type>(rhs.duration);
             return *this;
         }
 

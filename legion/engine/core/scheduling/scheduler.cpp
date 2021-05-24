@@ -32,6 +32,10 @@ namespace legion::core::scheduling
         while (!m_start.load(std::memory_order_relaxed))
             std::this_thread::yield();
 
+        time::timer clock;
+        time::span timeBuffer;
+        time::span sleepTime;
+
         while (!m_exit.load(std::memory_order_relaxed))
         {
             bool noWork = true;
@@ -70,14 +74,27 @@ namespace legion::core::scheduling
 
             if (noWork)
             {
-#if defined(LEGION_DEBUG)
-                std::this_thread::sleep_for(std::chrono::microseconds(1));
-#else
-                if (lowPower)
+                timeBuffer += clock.restart();
+
+                if (lowPower || LEGION_CONFIGURATION == LEGION_DEBUG_VALUE)
                     std::this_thread::sleep_for(std::chrono::microseconds(1));
-                else
+                else if (timeBuffer >= sleepTime * 0.1f)
+                {
+                    OPTICK_EVENT("Sleep");
+                    timeBuffer -= sleepTime;
+
+                    time::timer sleepTimer;
+                    sleepTimer.start();
                     std::this_thread::sleep_for(std::chrono::nanoseconds(1));
-#endif
+                    sleepTime = sleepTimer.elapsed_time();
+                }
+                else
+                    std::this_thread::yield();
+            }
+            else
+            {
+                timeBuffer = 0.f;
+                clock.start();
             }
         }
     }
