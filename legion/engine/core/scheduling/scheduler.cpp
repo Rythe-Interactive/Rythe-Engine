@@ -22,6 +22,8 @@ namespace legion::core::scheduling
     std::atomic<bool> Scheduler::m_start = { false };
     int Scheduler::m_exitCode = 0;
 
+    std::atomic<float> Scheduler::m_pollTime = { 0.2f };
+
     void Scheduler::threadMain(bool lowPower, std::string name)
     {
         log::info("Thread {} assigned.", std::this_thread::get_id());
@@ -31,6 +33,10 @@ namespace legion::core::scheduling
 
         while (!m_start.load(std::memory_order_relaxed))
             std::this_thread::yield();
+
+        time::timer clock;
+        time::span timeBuffer;
+        time::span sleepTime;
 
         while (!m_exit.load(std::memory_order_relaxed))
         {
@@ -70,14 +76,30 @@ namespace legion::core::scheduling
 
             if (noWork)
             {
-#if defined(LEGION_DEBUG)
-                std::this_thread::sleep_for(std::chrono::microseconds(1));
-#else
-                if (lowPower)
+                timeBuffer += clock.restart();
+
+                if (lowPower || LEGION_CONFIGURATION == LEGION_DEBUG_VALUE)
+                {
+                    OPTICK_EVENT("Sleep");
                     std::this_thread::sleep_for(std::chrono::microseconds(1));
-                else
+                }
+                else if (timeBuffer >= sleepTime * m_pollTime.load(std::memory_order_relaxed))
+                {
+                    OPTICK_EVENT("Sleep");
+                    timeBuffer -= sleepTime;
+
+                    time::timer sleepTimer;
+                    sleepTimer.start();
                     std::this_thread::sleep_for(std::chrono::nanoseconds(1));
-#endif
+                    sleepTime = sleepTimer.elapsed_time();
+                }
+                else
+                    std::this_thread::yield();
+            }
+            else
+            {
+                timeBuffer = 0.f;
+                clock.start();
             }
         }
     }
@@ -127,20 +149,63 @@ namespace legion::core::scheduling
 
         pointer<std::thread> ptr;
         std::string name = "Worker ";
-        while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(m_jobPoolSize))) != nullptr)
+
         {
-            log::impl::thread_names[ptr->get_id()] = name + std::to_string(m_jobPoolSize++);
-            m_commands.try_emplace(ptr->get_id());
+            async::readwrite_guard guard(log::impl::thread_names_lock);
+            while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(m_jobPoolSize))) != nullptr)
+            {
+                log::impl::thread_names[ptr->get_id()] = name + std::to_string(m_jobPoolSize++);
+                m_commands.try_emplace(ptr->get_id());
+            }
+            log::impl::thread_names[std::this_thread::get_id()] = "Main thread";
         }
 
         m_start.store(true, std::memory_order_release);
 
         Clock::subscribeToTick(doTick);
 
-        log::impl::thread_names[std::this_thread::get_id()] = "Main thread";
         while (!m_exit.load(std::memory_order_relaxed))
         {
             Clock::update();
+
+            float deltaTime = static_cast<float>(Clock::lastTickDuration());
+            static size_type framecount = 0;
+            static float totalTime = 0;
+            static uint bestAvg = 0;
+            static float bestPollTime = 0.2f;
+
+            totalTime += deltaTime;
+            framecount++;
+
+            if (totalTime > 5.f)
+            {
+                uint avg = math::uround(1.f / (totalTime / static_cast<float>(framecount)));
+                totalTime = 0.f;
+                framecount = 0;
+                float pollTime = m_pollTime.load(std::memory_order_relaxed);
+
+                log::debug("avg: {} poll: {:3f}\tbAvg: {} bPoll: {:3f}", avg, pollTime, bestAvg, bestPollTime);
+
+                if (avg > bestAvg)
+                {
+                    bestPollTime = pollTime;
+                    bestAvg = avg;
+                    pollTime += (math::linearRand(0, 1) ? 0.001f : -0.001f);
+                }
+                else if (math::close_enough(bestPollTime, pollTime))
+                {
+                    if (avg < static_cast<uint>(bestAvg * 0.9f))
+                        bestAvg = 0;
+
+                    pollTime += (math::linearRand(0, 1) ? 0.001f : -0.001f);
+                }
+                else
+                {
+                    pollTime = bestPollTime;
+                }
+
+                m_pollTime.store(pollTime, std::memory_order_relaxed);
+            }
 
             if (m_lowPower)
                 std::this_thread::yield();

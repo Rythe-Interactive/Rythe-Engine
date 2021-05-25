@@ -13,10 +13,17 @@ namespace legion::rendering
             return;
 
         OPTICK_EVENT();
-        if (!log::impl::thread_names.count(std::this_thread::get_id()))
+
+        static bool checkedNames = false;
+
+        if (!checkedNames)
         {
-            log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
-            async::set_thread_name("OpenGL");
+            async::readonly_guard guard(log::impl::thread_names_lock);
+            if (!log::impl::thread_names.count(std::this_thread::get_id()))
+            {
+                log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
+                async::set_thread_name("OpenGL");
+            }
         }
 
         cstring s;
@@ -101,10 +108,16 @@ namespace legion::rendering
     void Renderer::debugCallbackARB(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED const void* userParam)
     {
         OPTICK_EVENT();
-        if (!log::impl::thread_names.count(std::this_thread::get_id()))
+        static bool checkedNames = false;
+
+        if (!checkedNames)
         {
-            log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
-            async::set_thread_name("OpenGL");
+            async::readonly_guard guard(log::impl::thread_names_lock);
+            if (!log::impl::thread_names.count(std::this_thread::get_id()))
+            {
+                log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
+                async::set_thread_name("OpenGL");
+            }
         }
 
         cstring s;
@@ -180,10 +193,16 @@ namespace legion::rendering
     void Renderer::debugCallbackAMD(GLuint id, GLenum category, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED void* userParam)
     {
         OPTICK_EVENT();
-        if (!log::impl::thread_names.count(std::this_thread::get_id()))
+        static bool checkedNames = false;
+
+        if (!checkedNames)
         {
-            log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
-            async::set_thread_name("OpenGL");
+            async::readonly_guard guard(log::impl::thread_names_lock);
+            if (!log::impl::thread_names.count(std::this_thread::get_id()))
+            {
+                log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
+                async::set_thread_name("OpenGL");
+            }
         }
 
         cstring c;
@@ -358,11 +377,14 @@ namespace legion::rendering
         for (auto ent : cameraQuery)
         {
             camera& cam = ent.get_component<camera>();
-            app::window& win = cam.targetWindow;
-            if (!win)
-                win = ecs::world.get_component<app::window>();
-            if (!win)
+
+            auto targetWin = cam.targetWindow;
+            if (!targetWin)
+                targetWin = ecs::world.get_component<app::window>();
+            if (!targetWin)
                 continue;
+
+            app::window& win = targetWin.get();
 
             math::ivec2 viewportSize;
             {
