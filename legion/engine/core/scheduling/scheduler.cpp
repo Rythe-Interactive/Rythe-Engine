@@ -22,7 +22,7 @@ namespace legion::core::scheduling
     std::atomic<bool> Scheduler::m_start = { false };
     int Scheduler::m_exitCode = 0;
 
-    std::atomic<float> Scheduler::m_pollTime = { 0.2f };
+    std::atomic<float> Scheduler::m_pollTime = { 0.1f };
 
     void Scheduler::threadMain(bool lowPower, std::string name)
     {
@@ -172,7 +172,7 @@ namespace legion::core::scheduling
             static size_type framecount = 0;
             static float totalTime = 0;
             static uint bestAvg = 0;
-            static float bestPollTime = 0.2f;
+            static float bestPollTime = 0.1f;
 
             totalTime += deltaTime;
             framecount++;
@@ -190,14 +190,16 @@ namespace legion::core::scheduling
                 {
                     bestPollTime = pollTime;
                     bestAvg = avg;
-                    pollTime += (math::linearRand(0, 1) ? 0.001f : -0.001f);
+                    pollTime += (math::linearRand<int8>(0, 1) ? 0.05f : -0.05f);
+                    pollTime = math::mod(pollTime + 1.f, 1.f);
                 }
                 else if (math::close_enough(bestPollTime, pollTime))
                 {
                     if (avg < static_cast<uint>(bestAvg * 0.9f))
                         bestAvg = 0;
 
-                    pollTime += (math::linearRand(0, 1) ? 0.001f : -0.001f);
+                    pollTime += (math::linearRand<int8>(0, 1) ? 0.05f : -0.05f);
+                    pollTime = math::mod(pollTime + 1.f, 1.f);
                 }
                 else
                 {
