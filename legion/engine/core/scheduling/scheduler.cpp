@@ -184,7 +184,7 @@ namespace legion::core::scheduling
                 framecount = 0;
                 float pollTime = m_pollTime.load(std::memory_order_relaxed);
 
-                log::debug("avg: {} poll: {:3f}\tbAvg: {} bPoll: {:3f}", avg, pollTime, bestAvg, bestPollTime);
+                log::debug("avg: {} poll: {:.3f}\tbAvg: {} bPoll: {:.3f}", avg, pollTime, bestAvg, bestPollTime);
 
                 if (avg > bestAvg)
                 {

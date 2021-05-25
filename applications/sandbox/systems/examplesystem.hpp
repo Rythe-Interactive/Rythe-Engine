@@ -87,8 +87,8 @@ public:
         pointOnePcLow /= math::max<size_type>(math::uround(frames / 1000.0), 1);
         onePcLow /= math::max<size_type>(math::uround(frames / 100.0), 1);
 
-        log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", onePcLow, pointOnePcLow, avg0, avg1);
-        log::debug("1%Low {} 0.1%Low {} Avg {} Measured Avg {}", 1.0 / onePcLow, 1.0 / pointOnePcLow, 1.0 / avg0, 1.0 / avg1);
+        log::info("1%Low {:.3f} 0.1%Low {:.3f} Avg {:.3f} Measured Avg {:.3f}", onePcLow, pointOnePcLow, avg0, avg1);
+        log::info("1%Low {:.3f} 0.1%Low {:.3f} Avg {:.3f} Measured Avg {:.3f}", 1.0 / onePcLow, 1.0 / pointOnePcLow, 1.0 / avg0, 1.0 / avg1);
     }
 
     void update(legion::time::span deltaTime)
