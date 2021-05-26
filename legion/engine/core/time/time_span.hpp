@@ -19,13 +19,15 @@ namespace legion::core::time
 
         constexpr time_span(time_type other) noexcept : duration(other) {}
 
-        template<typename other_time>
-        constexpr explicit time_span(const std::chrono::duration<other_time>& other) noexcept : duration(other) {}
+        template<typename other_time, typename ratio>
+        constexpr explicit time_span(const std::chrono::duration<other_time, ratio>& other) noexcept
+            : duration(std::chrono::duration_cast<duration_type>(other)) {}
         template<typename other_time CNDOXY(std::enable_if_t<!std::is_same_v<other_time, time_type>, int> = 0)>
         constexpr explicit time_span(const time_span<other_time>& other) noexcept : duration(other.duration) {}
 
-        template<typename other_time>
-        constexpr explicit time_span(std::chrono::duration<other_time>&& other) noexcept : duration(other) {}
+        template<typename other_time, typename ratio>
+        constexpr explicit time_span(std::chrono::duration<other_time, ratio>&& other) noexcept
+            : duration(std::chrono::duration_cast<duration_type>(other)) {}
         template<typename other_time CNDOXY(std::enable_if_t<!std::is_same_v<other_time, time_type>, int> = 0)>
         constexpr explicit time_span(time_span<other_time>&& other) noexcept : duration(std::move(other.duration)) {}
 

@@ -37,7 +37,7 @@ public:
             rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
         }
 
-        for (int i = 0; i < 20000; i++)
+        for (int i = 0; i < 100000; i++)
         {
             auto ent = createEntity();
 
@@ -46,7 +46,7 @@ public:
             scal = scale(0.1f, 0.1f, 0.1f);
 
             ent.add_component<example_comp, velocity>();
-            ent.add_component(gfx::mesh_renderer(material, model));
+            //ent.add_component(gfx::mesh_renderer(material, model));
         }
 
         bindToEvent<events::exit, &ExampleSystem::onExit>();

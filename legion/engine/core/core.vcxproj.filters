@@ -439,6 +439,7 @@
     <ClInclude Include="defaults\defaultcomponents.hpp" />
     <ClInclude Include="ecs\archetype\archetype.hpp" />
     <ClInclude Include="ecs\meta\meta.hpp" />
+    <ClInclude Include="time\utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -596,5 +597,6 @@
     <None Include="engine\system.inl" />
     <None Include="events\eventbus.inl" />
     <None Include="ecs\archetype\archetype.inl" />
+    <None Include="time\utils.inl" />
   </ItemGroup>
 </Project>
