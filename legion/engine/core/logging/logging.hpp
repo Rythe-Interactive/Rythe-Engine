@@ -350,19 +350,8 @@ namespace legion::core::log
         }
     };
 
-
-#define logger impl::logger
-
-
-    /** @brief sets up logging (do not call, invoked by engine) */
-    inline void setup()
+    inline void initLogger(std::shared_ptr<spdlog::logger>& logger)
     {
-#if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
-        logger = impl::console_logger;
-#else
-        impl::file_logger = spdlog::rotating_logger_mt(impl::log_file, impl::log_file, 1'048'576, 5);
-        logger = impl::file_logger;
-#endif
         auto f = std::make_unique<spdlog::pattern_formatter>();
 
         f->add_flag<thread_name_formatter_flag>('f');
@@ -370,6 +359,22 @@ namespace legion::core::log
         f->set_pattern("T+ %* [%^%=7l%$] [%=13!f] : %v");
 
         logger->set_formatter(std::move(f));
+    }
+
+#define logger impl::logger
+
+    /** @brief sets up logging (do not call, invoked by engine) */
+    inline void setup()
+    {
+        impl::file_logger = spdlog::rotating_logger_mt(impl::log_file, impl::log_file, 1'048'576, 5);
+        initLogger(impl::console_logger);
+        initLogger(impl::file_logger);
+
+#if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
+        logger = impl::console_logger;
+#else
+        logger = impl::file_logger;
+#endif
     }
 
     /** @brief selects the severity you want to filter for or print with */
