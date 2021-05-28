@@ -14,11 +14,3 @@
 #include <physics/data/physics_manifold_precursor.hpp>
 #include <physics/data/pointer_encapsulator.hpp>
 #include <physics/systems/physicssystem.hpp>
-
-namespace legion::physics
-{
-    struct collider
-    {
-        static collider sphere(float radius, math::vec3 center = math::vec3::zero);
-    };
-}
