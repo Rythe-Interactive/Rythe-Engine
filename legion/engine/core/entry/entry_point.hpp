@@ -19,7 +19,7 @@
   * @ref legion::core::Engine::reportModule<T,...>()
   */
 extern void reportModules(legion::core::Engine* engine);
-
+//#define LEGION_ENTRY
 #if defined(LEGION_ENTRY)
 
 #if (defined(LEGION_HIGH_PERFORMANCE) && defined(LEGION_WINDOWS))
@@ -29,24 +29,36 @@ __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 
 int main(int argc, char** argv)
 {
+    using namespace legion::core;
+
 #if defined(LEGION_WINDOWS) && (!(defined(LEGION_KEEP_CONSOLE) || defined(LEGION_SHOW_CONSOLE) || defined(LEGION_DEBUG)) || defined(LEGION_HIDE_CONSOLE))
     ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
 #endif
+
+    log::setup();
+
+#if defined(LEGION_DEBUG)
+    log::filter(log::severity::debug);
+#else
+    log::filter(log::severity::info);
+#endif    
+
+    Engine::cliargs.parse(argc, argv);
 
 #if defined(LEGION_HIGH_PERFORMANCE)
 #if defined(LEGION_WINDOWS)
     if (!SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS))
     {
         DWORD error = GetLastError();
-        std::cout << "==============================================================" << std::endl;
-        std::cout << "| Failed to enter real-time performance mode, error: " << error << " |" << std::endl;
-        std::cout << "==============================================================" << std::endl;
+        log::undecoratedLogger->info("==============================================================\n"
+                                     "| Failed to enter real-time performance mode, error: {} |\n"
+                                     "==============================================================", error);
     }
     else
     {
-        std::cout << "=======================================" << std::endl;
-        std::cout << "| Entered real-time performance mode. |" << std::endl;
-        std::cout << "=======================================" << std::endl;
+        log::undecoratedLogger->info("=======================================\n"
+                                     "| Entered real-time performance mode. |\n"
+                                     "=======================================");
     }
 
 #elif defined(LEGION_LINUX)
@@ -75,46 +87,39 @@ int main(int argc, char** argv)
             break;
         }
 
-        std::cout << "=============================================================" << std::endl;
-        std::cout << "| Failed to enter real-time performance mode, error: " << error << " |" << std::endl;
-        std::cout << "=============================================================" << std::endl;
+        log::undecoratedLogger->info("=============================================================\n"
+                                     "| Failed to enter real-time performance mode, error: {} |\n"
+                                     "=============================================================", error);
     }
     else
     {
-        std::cout << "=======================================" << std::endl;
-        std::cout << "| Entered real-time performance mode. |" << std::endl;
-        std::cout << "=======================================" << std::endl;
+        log::undecoratedLogger->info("=======================================\n"
+                                     "| Entered real-time performance mode. |\n"
+                                     "=======================================");
     }
 #endif
 #else
-    std::cout << "========================================" << std::endl;
-    std::cout << "| Engine will start in low power mode. |" << std::endl;
-    std::cout << "========================================" << std::endl;
-#endif
-    legion::core::Engine::cliargs.parse(argc, argv);
-    legion::core::log::setup();
-
-#if defined(LEGION_DEBUG)
-    legion::core::log::filter(legion::core::log::severity::debug);
-#else
-    legion::core::log::filter(legion::core::log::severity::info);
+    log::undecoratedLogger->info("========================================\n"
+                                 "| Engine will start in low power mode. |\n"
+                                 "========================================");
 #endif
 
-    legion::core::Engine engine;
+    Engine engine;
 
     reportModules(&engine);
-    std::cout << "==========================" << std::endl;
-    std::cout << "| Initializing engine... |" << std::endl;
-    std::cout << "==========================" << std::endl;
+
+    log::undecoratedLogger->info("==========================\n"
+                                 "| Initializing engine... |\n"
+                                 "==========================");
     engine.init();
 
-    std::cout << "==============================" << std::endl;
-    std::cout << "| Entering main engine loop. |" << std::endl;
-    std::cout << "==============================" << std::endl;
+    log::undecoratedLogger->info("==============================\n"
+                                 "| Entering main engine loop. |\n"
+                                 "==============================");
     engine.run();
 
 #if defined(LEGION_KEEP_CONSOLE)
-    std::cout << "Press enter to exit." << std::endl;
+    log::undecoratedLogger->info("Press enter to exit.");
     std::cin.ignore();
 #endif
     return engine.exitCode;
