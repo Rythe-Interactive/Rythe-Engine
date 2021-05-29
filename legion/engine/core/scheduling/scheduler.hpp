@@ -77,6 +77,8 @@ namespace legion::core::scheduling
 
         static void exit(int exitCode);
 
+        static bool isExiting();
+
         /**@brief Create a new process-chain.
          */
         template<size_type charc>

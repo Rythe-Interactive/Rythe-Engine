@@ -266,14 +266,17 @@ namespace fmt
 
 namespace legion::core::log
 {
+    using logger_ptr = std::shared_ptr<spdlog::logger>;
+
     /** @brief Holds the non const static data of logging. */
     struct impl {
-        static cstring log_file;
-        static std::shared_ptr<spdlog::logger> logger;
-        static std::shared_ptr<spdlog::logger> file_logger;
-        static std::shared_ptr<spdlog::logger> console_logger;
-        static async::rw_spinlock thread_names_lock;
-        static std::unordered_map<std::thread::id, std::string> thread_names;
+        static cstring logFile;
+        static logger_ptr logger;
+        static logger_ptr fileLogger;
+        static logger_ptr consoleLogger;
+        static logger_ptr undecoratedLogger;
+        static async::rw_spinlock threadNamesLock;
+        static std::unordered_map<std::thread::id, std::string> threadNames;
     };
 
 
@@ -320,19 +323,19 @@ namespace legion::core::log
 
             if (!thread_ident)
             {
-                async::readonly_guard guard(impl::thread_names_lock);
+                async::readonly_guard guard(impl::threadNamesLock);
 
-                if (impl::thread_names.count(std::this_thread::get_id()))
+                if (impl::threadNames.count(std::this_thread::get_id()))
                 {
-                    thread_ident = &impl::thread_names.at(std::this_thread::get_id());
+                    thread_ident = &impl::threadNames.at(std::this_thread::get_id());
                 }
                 else
                 {
                     std::ostringstream oss;
                     oss << std::this_thread::get_id();
                     {
-                        async::readwrite_guard wguard(impl::thread_names_lock);
-                        thread_ident = &impl::thread_names[std::this_thread::get_id()];
+                        async::readwrite_guard wguard(impl::threadNamesLock);
+                        thread_ident = &impl::threadNames[std::this_thread::get_id()];
                     }
                     *thread_ident = oss.str();
 
@@ -361,19 +364,31 @@ namespace legion::core::log
         logger->set_formatter(std::move(f));
     }
 
-#define logger impl::logger
+    inline static logger_ptr& logger = impl::logger;
+    inline static logger_ptr& consoleLogger = impl::consoleLogger;
+    inline static logger_ptr& fileLogger = impl::fileLogger;
+    inline static logger_ptr& undecoratedLogger = impl::undecoratedLogger;
+
+    inline void setLogger(const logger_ptr& newLogger)
+    {
+        logger = newLogger;
+    }
 
     /** @brief sets up logging (do not call, invoked by engine) */
     inline void setup()
     {
-        impl::file_logger = spdlog::rotating_logger_mt(impl::log_file, impl::log_file, 1'048'576, 5);
-        initLogger(impl::console_logger);
-        initLogger(impl::file_logger);
+        auto f = std::make_unique<spdlog::pattern_formatter>();
+        f->set_pattern("%v");
+        impl::undecoratedLogger->set_formatter(std::move(f));
+
+        impl::fileLogger = spdlog::rotating_logger_mt(impl::logFile, impl::logFile, 1'048'576, 5);
+        initLogger(impl::consoleLogger);
+        initLogger(impl::fileLogger);
 
 #if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
-        logger = impl::console_logger;
+        logger = impl::consoleLogger;
 #else
-        logger = impl::file_logger;
+        logger = impl::fileLogger;
 #endif
     }
 
@@ -419,7 +434,6 @@ namespace legion::core::log
     template <class... Args, class FormatString>
     void println(severity s, const FormatString& format, Args&&... a)
     {
-        OPTICK_EVENT();
         logger->log(args2spdlog(s), format, std::forward<Args>(a)...);
     }
 
