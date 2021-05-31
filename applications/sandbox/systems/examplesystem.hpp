@@ -37,7 +37,11 @@ public:
             rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
         }
 
-        for (int i = 0; i < 100000; i++)
+#if defined(LEGION_DEBUG)
+        for (int i = 0; i < 2000; i++)
+#else
+        for (int i = 0; i < 20000; i++)
+#endif
         {
             auto ent = createEntity();
 

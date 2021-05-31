@@ -151,13 +151,13 @@ namespace legion::core::scheduling
         std::string name = "Worker ";
 
         {
-            async::readwrite_guard guard(log::impl::thread_names_lock);
+            async::readwrite_guard guard(log::impl::threadNamesLock);
             while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(m_jobPoolSize))) != nullptr)
             {
-                log::impl::thread_names[ptr->get_id()] = name + std::to_string(m_jobPoolSize++);
+                log::impl::threadNames[ptr->get_id()] = name + std::to_string(m_jobPoolSize++);
                 m_commands.try_emplace(ptr->get_id());
             }
-            log::impl::thread_names[std::this_thread::get_id()] = "Main thread";
+            log::impl::threadNames[std::this_thread::get_id()] = "Main thread";
         }
 
         m_start.store(true, std::memory_order_release);
@@ -226,6 +226,11 @@ namespace legion::core::scheduling
     {
         m_exitCode = exitCode;
         m_exit.store(true, std::memory_order_release);
+    }
+
+    bool Scheduler::isExiting()
+    {
+        return m_exit.load(std::memory_order_relaxed);
     }
 
     size_type Scheduler::jobPoolSize() noexcept
