@@ -183,6 +183,21 @@ namespace legion::physics
   /*      debug::drawLine(start, end, math::colors::darkgrey, 5.0f);
         debug::drawLine(point, start + (end - start) * interpolant, math::colors::green, 5.0f);*/
 
+        auto query = createQuery<ObjectToFollow>();
+        query.queryEntities();
+
+        for (auto ent : query)
+        {
+            auto objToFollow = ent.read_component<ObjectToFollow>();
+
+            auto [posH,rotH,scaleH] = ent.get_component_handles<transform>();
+            auto [posH2, rotH2, scaleH2] = objToFollow.ent.get_component_handles<transform>();
+
+            posH.write(posH2.read());
+            rotH.write(rotH2.read());
+            scaleH.write(scaleH2.read());
+        }
+
     }
 
     void PhysicsFractureTestSystem::meshSplittingTest(rendering::model_handle planeH, rendering::model_handle cubeH
@@ -774,20 +789,20 @@ namespace legion::physics
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
         //cube
-        createQuickhullTestObject
-        (math::vec3(0,5.0f, -0.8f),cubeH, wireFrameH);
+        /*createQuickhullTestObject
+        (math::vec3(0,5.0f, -0.8f),cubeH, wireFrameH);*/
 
-        ////cup
+        //cup
         createQuickhullTestObject
         (math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH);
 
         ////hammer
-        createQuickhullTestObject
-        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, wireFrameH);
+       /* createQuickhullTestObject
+        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, wireFrameH);*/
 
-        ////////suzanne
-        createQuickhullTestObject
-        (math::vec3(15.0f, 5.0f, -0.0f), suzzaneH, wireFrameH);
+        //////////suzanne
+       /* createQuickhullTestObject
+        (math::vec3(15.0f, 5.0f, -0.0f), suzzaneH, wireFrameH);*/
 
         ////ohio teapot
         //createQuickhullTestObject
@@ -950,11 +965,16 @@ namespace legion::physics
             //mesh_filter(cubeH.get_mesh()),
             newEnt.add_components<rendering::mesh_renderable>(meshFilter, rendering::mesh_renderer(newMat));
 
-
+            
             auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(newEnt);
             positionH.write(posH.read());
             count++;
 
+            ObjectToFollow followObj;
+            followObj.ent = physicsEnt;
+            newEnt.add_component(followObj);
+
+            //newEnt.set_parent(physicsEnt);
             currentContainer.push_back(newEnt);
 
         }
@@ -1024,7 +1044,7 @@ namespace legion::physics
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + worldNormal * 0.1f;
 
-                        debug::drawLine(faceStart, faceEnd, math::colors::green, 2.0f);
+                        //debug::drawLine(faceStart, faceEnd, math::colors::green, 2.0f);
 
                         if (!currentEdge) { return; }
 

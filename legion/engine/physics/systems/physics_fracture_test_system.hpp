@@ -17,9 +17,16 @@ struct explosion : public app::input_action<explosion> {};
 
 struct QHULL : public app::input_action<QHULL>{};
 struct AddRigidbody : public app::input_action<AddRigidbody> {};
+struct ObjectToFollow
+{
+    ecs::entity_handle ent;
+};
 
 namespace legion::physics
 {
+
+
+
     class PhysicsFractureTestSystem final : public System<PhysicsFractureTestSystem>
     {
     public:

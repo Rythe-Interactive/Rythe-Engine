@@ -21,12 +21,12 @@ namespace legion::physics
 
         //---------------------------------------------------------------- Collision Detection ----------------------------------------------------------------------------//
 
-        /** @brief Given 2 ConvexCollider and their respective transforms, checks if 
-        * the colliders are colliding. The result is recorded in the physics_manifold
-        */
-        static void DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB
-            , const math::mat4& transformA, const math::mat4& transformB,
-            ConvexConvexCollisionInfo& outCollisionInfo,  physics_manifold& manifold);
+        ///** @brief Given 2 ConvexCollider and their respective transforms, checks if 
+        //* the colliders are colliding. The result is recorded in the physics_manifold
+        //*/
+        //static void DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB
+        //    , const math::mat4& transformA, const math::mat4& transformB,
+        //    ConvexConvexCollisionInfo& outCollisionInfo,  physics_manifold& manifold);
 
         /** @brief Given a transformed ConvexCollider and a direction, Gets the vertex furthest in the given direction
          * @param planePosition The position of the support plane in world space
@@ -65,7 +65,7 @@ namespace legion::physics
         * @return returns true if a seperating axis was found
         */
         static void GetSupportPointNoTransform(math::vec3 planePosition, math::vec3 direction, ConvexCollider* collider, const math::mat4& colliderTransform
-            , math::vec3& worldSupportPoint);
+            , math::vec3& worldSupportPoint,PointerEncapsulator<HalfEdgeFace>& faceOwner);
        
 
 
@@ -84,7 +84,9 @@ namespace legion::physics
          * @return returns true if a seperating axis was found
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
-            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB, PointerEncapsulator<HalfEdgeFace>& refFace, float& maximumSeperation, bool shouldDebug = false);
+            , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB,
+            PointerEncapsulator<HalfEdgeFace>& refFace, PointerEncapsulator<HalfEdgeFace>& incFace,
+            float& maximumSeperation, bool shouldDebug = false);
       
 
         /** @brief Given 2 ConvexColliders, Goes through every single possible edge combination in order to check for a valid seperating axis. This is done
@@ -478,34 +480,8 @@ namespace legion::physics
          * @return returns true if a minkowski face was succesfully constructed
          */
         static bool attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::mat4& transformA,
-            const math::mat4& transformB)
-        {
-            //TODO the commmented parts are technically more robust and should work but somehow dont, figure out why.
-
-            const math::vec3 transformedA1 = transformA *
-                math::vec4(edgeA->getLocalNormal(), 0);
-
-            const math::vec3 transformedA2 = transformA *
-                math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
-
-            const math::vec3 transformedEdgeDirectionA = math::cross(transformedA1, transformedA2);
-            //transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
-           
-            const math::vec3 transformedB1 = transformB *
-                math::vec4(edgeB->getLocalNormal(), 0);
-
-            const math::vec3 transformedB2 = transformB *
-                math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
-
-            const math::vec3 transformedEdgeDirectionB = math::cross(-transformedB1, -transformedB2);
-            //transformB *math::vec4(edgeB->getLocalEdgeDirection(), 0);
-                
-
-            math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
-
-            return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2
-                , transformedEdgeDirectionA, transformedEdgeDirectionB);
-        }
+            const math::mat4& transformB);
+        
 
         /** @brief Given 2 arcs, one that starts from transformedA1 and ends at transformedA2 and another arc
          * that starts at transformedB1 and ends at transformedB2, checks if the given arcs collider each other
@@ -513,53 +489,8 @@ namespace legion::physics
          */
         static bool isMinkowskiFace(const math::vec3& transformedA1, const math::vec3& transformedA2,
             const math::vec3& transformedB1, const math::vec3& transformedB2
-            ,const math::vec3& planeANormal, const math::vec3& planeBNormal)
-        {
-            //------------------------ Check if normals created by arcA seperate normals of B --------------------------------------//
-            //CBA
-            float planeADotB1 = math::dot(planeANormal, transformedB1);
-            //DBA
-            float planeADotB2 = math::dot(planeANormal, transformedB2);
-
-            float dotMultiplyResultA =
-                planeADotB1 * planeADotB2;
-
-            //log::debug("dotMultiplyResultA {}", dotMultiplyResultA);
-
-            if (dotMultiplyResultA > 0.0f )
-            {
-                return false;
-            }
-
-            //------------------------ Check if normals created by arcB seperate normals of A --------------------------------------//
-
-            //ADC
-            float planeBDotA1 = math::dot(planeBNormal, transformedA1);
-            //BDC
-            float planeBDotA2 = math::dot(planeBNormal, transformedA2);
-
-            float  dotMultiplyResultB = planeBDotA1 * planeBDotA2;
-
-            //log::debug("dotMultiplyResultB {}", dotMultiplyResultB);
-
-            if (dotMultiplyResultB > 0.0f )
-            {
-                return false;
-            }
-
-            //------------------------ Check if arcA and arcB are in the same hemisphere --------------------------------------------//
-
-            float dotMultiplyResultAB = planeADotB1 * planeBDotA2;
-
-            //log::debug("dotMultiplyResultAB {}", dotMultiplyResultAB);
-
-            if (planeADotB1  * planeBDotA2  < 0.0f)
-            {
-                return false;
-            }
-
-            return true;
-        }
+            , const math::vec3& planeANormal, const math::vec3& planeBNormal);
+        
 
         //------------------------------------------------------------ Quickhull Helpers-----------------------------------------------------------------------//
 

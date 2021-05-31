@@ -5,7 +5,7 @@
 #include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
 #include "../systems/simplecameracontroller.hpp"
-
+#include <physics/systems/physics_fracture_test_system.hpp>
 
 using namespace legion;
 
@@ -25,21 +25,9 @@ public:
             1
         );
 
-        reportComponentType<sah>();
         //reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
-        //reportSystem<pointcloudtestsystem2>();
-        reportComponentType<ext::animation>();
-        reportComponentType<ext::evt::particle_receiver>();
-        reportComponentType<ext::evt::explosion_receiver>();
-        reportComponentType<ext::evt::decal_receiver>();
-        reportSystem<ext::Animator>();
-        reportSystem<ext::AnimationEditor>();
-        //reportSystem<GuiTestSystem>();
-        //reportSystem<final_presentation_system>();
         reportSystem<physics::PhysicsFractureTestSystem>();
-        //reportSystem<TestSystemConvexHull>();
-        reportSystem<ext::BigBoom>();
 
     }
 

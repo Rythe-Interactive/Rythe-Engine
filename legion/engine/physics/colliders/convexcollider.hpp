@@ -334,9 +334,17 @@ namespace legion::physics
             ac->id = "ac";   dc->id = "dc";
             cg->id = "cg";   ca->id = "ca";
 
+            vertices.clear();
+            PopulateVertexListWithHalfEdges();
+
             //check if halfEdge data structure was initialized correctly. this will be commented when I know it always works
             AssertEdgeValidity();
             CalculateLocalColliderCentroid();
+        }
+
+        const std::vector<int>& GetVertexOwnerIndex()
+        {
+            return vertexOwnerIndex;
         }
 
         std::vector<HalfEdgeFace*>& GetHalfEdgeFaces() override
