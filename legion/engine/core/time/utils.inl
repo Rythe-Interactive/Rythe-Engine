@@ -124,62 +124,62 @@ namespace legion::core::time
 
     namespace literals
     {
-        constexpr span operator""_hr(f80 amount) noexcept
+        constexpr span operator""_hr(float_max amount) noexcept
         {
             return hours<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_hr(uint64 amount) noexcept
+        constexpr span operator""_hr(uint_max amount) noexcept
         {
             return hours<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_min(f80 amount) noexcept
+        constexpr span operator""_min(float_max amount) noexcept
         {
             return minutes<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_min(uint64 amount) noexcept
+        constexpr span operator""_min(uint_max amount) noexcept
         {
             return minutes<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_s(f80 amount) noexcept
+        constexpr span operator""_s(float_max amount) noexcept
         {
             return seconds<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_s(uint64 amount) noexcept
+        constexpr span operator""_s(uint_max amount) noexcept
         {
             return seconds<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_ms(f80 amount) noexcept
+        constexpr span operator""_ms(float_max amount) noexcept
         {
             return milliseconds<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_ms(uint64 amount) noexcept
+        constexpr span operator""_ms(uint_max amount) noexcept
         {
             return milliseconds<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_us(f80 amount) noexcept
+        constexpr span operator""_us(float_max amount) noexcept
         {
             return microseconds<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_us(uint64 amount) noexcept
+        constexpr span operator""_us(uint_max amount) noexcept
         {
             return microseconds<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_ns(f80 amount) noexcept
+        constexpr span operator""_ns(float_max amount) noexcept
         {
             return nanoseconds<time32>(static_cast<time32>(amount));
         }
 
-        constexpr span operator""_ns(uint64 amount) noexcept
+        constexpr span operator""_ns(uint_max amount) noexcept
         {
             return nanoseconds<time32>(static_cast<time32>(amount));
         }

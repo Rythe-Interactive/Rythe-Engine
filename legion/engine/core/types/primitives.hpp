@@ -27,10 +27,9 @@ namespace legion::core
     using index_type = std::size_t;
     using diff_type = std::ptrdiff_t;
 
-    using f32 = float;
-    using f64 = double;
-
-    using f80 = long double;
+    using float32 = float;
+    using float64 = double;
+    using float_max = long double;
     
     using time32 = float;
     using time64 = double;
