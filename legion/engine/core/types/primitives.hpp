@@ -51,7 +51,7 @@ namespace legion::core
 #define PRIORITY_MAX CHAR_MAX
 #define PRIORITY_MIN CHAR_MIN
 
-    using id_type = uint_max;
+    using id_type = size_type;
 
 #define invalid_id 0
 
