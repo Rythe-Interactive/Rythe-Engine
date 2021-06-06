@@ -15,22 +15,21 @@ namespace legion::core
     using uint16 = std::uint16_t;
     using uint32 = std::uint32_t;
     using uint64 = std::uint64_t;
-    using uint_max = std::uintmax_t;
+    using uint_max = unsigned long long;
 
     using int8 = std::int8_t;
     using int16 = std::int16_t;
     using int32 = std::int32_t;
     using int64 = std::int64_t;
-    using int_max = std::intmax_t;
+    using int_max = long long;
 
     using size_type = std::size_t;
     using index_type = std::size_t;
     using diff_type = std::ptrdiff_t;
 
-    using f32 = float;
-    using f64 = double;
-
-    using f80 = long double;
+    using float32 = float;
+    using float64 = double;
+    using float_max = long double;
     
     using time32 = float;
     using time64 = double;
@@ -52,7 +51,7 @@ namespace legion::core
 #define PRIORITY_MAX CHAR_MAX
 #define PRIORITY_MIN CHAR_MIN
 
-    using id_type = uint_max;
+    using id_type = size_type;
 
 #define invalid_id 0
 

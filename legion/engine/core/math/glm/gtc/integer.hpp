@@ -45,7 +45,7 @@ namespace legion::core::math
     /// @see <a href="http://www.opengl.org/sdk/docs/manglsl/xhtml/round.xml">GLSL round man page</a>
     /// @see gtc_integer
     template<length_t L, typename T, qualifier Q>
-    GLM_FUNC_DECL vec<L, int, Q> iround(vec<L, T, Q> const& x);
+    GLM_FUNC_DECL GLM_CONSTEXPR vec<L, int, Q> iround(vec<L, T, Q> const& x);
 
     /// Returns a value equal to the nearest integer to x.
     /// The fraction 0.5 will round in a direction chosen by the
@@ -57,7 +57,7 @@ namespace legion::core::math
     /// @see <a href="http://www.opengl.org/sdk/docs/manglsl/xhtml/round.xml">GLSL round man page</a>
     /// @see gtc_integer
     template<length_t L, typename T, qualifier Q>
-    GLM_FUNC_DECL vec<L, uint, Q> uround(vec<L, T, Q> const& x);
+    GLM_FUNC_DECL GLM_CONSTEXPR vec<L, uint, Q> uround(vec<L, T, Q> const& x);
 
     /// @}
 } //namespace legion::core::math

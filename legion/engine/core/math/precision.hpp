@@ -17,9 +17,9 @@ namespace legion::core::math
     struct precision_chooser
     {
         using type = 
-        /*if*/      std::conditional_t<p == data_precision::bit32,f32,
-        /*elseif*/  std::conditional_t<p == data_precision::bit64,f64,
-        /*elseif*/  std::conditional_t<p == data_precision::lots, f80,
+        /*if*/      std::conditional_t<p == data_precision::bit32,float32,
+        /*elseif*/  std::conditional_t<p == data_precision::bit64,float64,
+        /*elseif*/  std::conditional_t<p == data_precision::lots, float_max,
                     int32>>>;
     };
 

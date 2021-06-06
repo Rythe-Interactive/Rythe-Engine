@@ -513,6 +513,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
+    <ClInclude Include="time\utils.hpp" />
     <ClInclude Include="types\reflector.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="time\stopwatch.hpp" />
@@ -723,6 +724,7 @@ del ".\xcopyexclude"</Command>
     <None Include="scheduling\process.inl" />
     <None Include="scheduling\processchain.inl" />
     <None Include="scheduling\scheduler.inl" />
+    <None Include="time\utils.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
