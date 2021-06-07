@@ -227,23 +227,18 @@ namespace legion::physics
 
                             math::vec3 edgeBDirection = transformB * math::vec4(edgeB->getLocalEdgeDirection(), 0);
 
-                            edgeADirection = math::normalize(edgeADirection);
-                            edgeBDirection = math::normalize(edgeBDirection);
+                            edgeADirection = math::normalize( edgeADirection );
+                            edgeBDirection = math::normalize( edgeBDirection );
 
-                            //get the seperating axis
-                            math::vec3 seperatingAxis = math::cross(edgeADirection, edgeBDirection);
+                            static float angleThres = math::cos(math::deg2rad(3.0f));
+                            float angle = math::abs( math::dot(edgeADirection, edgeBDirection) );
 
-                            float length = math::length(seperatingAxis);
-                            float lengthThres = math::sqrt( math::epsilon<float>() );
-
-                            
-
-                            if (math::epsilonEqual( length, 0.0f, lengthThres ) )
+                            if ( angle > angleThres )
                             {
                                 continue;
                             }
 
-                            seperatingAxis = math::normalize(seperatingAxis);
+                            math::vec3 seperatingAxis = math::normalize(math::cross(edgeADirection, edgeBDirection));
 
                             //get world edge position
                             math::vec3 edgeAtransformedPosition = transformA * math::vec4(edgeA->edgePosition, 1);
@@ -257,13 +252,6 @@ namespace legion::physics
                                 seperatingAxis = -seperatingAxis;
                             }
 
-                            if (edgeA->identifier == 49 && edgeB->identifier == 488)
-                            {
-                                debug::drawLine(
-                                    edgeAtransformedPosition,
-                                    edgeAtransformedPosition + seperatingAxis,
-                                    math::colors::blue, 5.0f, FLT_MAX, true);
-                            }
 
                             //check if given edges create a seperating axis
                             float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
@@ -573,7 +561,7 @@ namespace legion::physics
    
             while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
             {
-                log::debug("Iter {0}", currentDraw);
+                //log::debug("Iter {0}", currentDraw);
 
                /* if (currentDraw == 29)
                 {
@@ -741,7 +729,7 @@ namespace legion::physics
 
         float dotMultiplyResultAB = planeABDotA1 * planeABDotB1;
 
-        if (dotMultiplyResultAB < 0.0f )
+        if (dotMultiplyResultAB <= 0.0f )
         {
             return false;
         }

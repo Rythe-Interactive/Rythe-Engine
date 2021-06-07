@@ -71,33 +71,28 @@ namespace legion::physics
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck( this, convexCollider, manifold.transformB, manifold.transformA,
             edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation,true ) || !edgeRef.ptr )
         {
-            if (edgeRef.ptr->identifier == 49 && edgeInc.ptr->identifier == 488)
-            {
-                log::debug("edgeRef.ptr->identifier {0} ", edgeRef.ptr->identifier);
-                log::debug("edgeInc.ptr->identifier  {0} ", edgeInc.ptr->identifier);
-                log::debug("seperation {0} ", aToBEdgeSeperation);
-                edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::red, FLT_MAX, 7.0f);
-                edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::blue, FLT_MAX, 7.0f);
-                
-            }
 
-
+            //log::debug("edgeRef.ptr->identifier {0} ", edgeRef.ptr->identifier);
+            //log::debug("edgeInc.ptr->identifier  {0} ", edgeInc.ptr->identifier);
+            //log::debug("seperation {0} ", aToBEdgeSeperation);
+            //edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::red, FLT_MAX, 7.0f);
+            //edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::blue, FLT_MAX, 7.0f);
 
             manifold.isColliding = false;
             return;
         }
 
-        ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::red, 5.01f);
+        //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::red, 5.01f);
         //AIncFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::blue, 5.01f);*/
 
-        BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::blue, 5.01f);
+        //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::blue, 5.01f);
         //BIncFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::cyan, 5.01f);
 
        /* ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::red, 0.01f);
         BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::blue, 0.01f);*/
 
-        edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::cyan, 5.0f,7.0f);
-        edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::magenta, 5.0f, 7.0f);
+       /* edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::cyan, 5.0f,7.0f);
+        edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::magenta, 5.0f, 7.0f);*/
 
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
 
@@ -128,10 +123,10 @@ namespace legion::physics
         //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
 
 
-        log::debug("---- PENETRATION INFO");
+       /* log::debug("---- PENETRATION INFO");
         log::debug("---- abPenetrationQuery {0}", abPenetrationQuery->penetration);
         log::debug("---- baPenetrationQuery {0}", baPenetrationQuery->penetration);
-        log::debug("---- abEdgePenetrationQuery {0}", abEdgePenetrationQuery->penetration);
+        log::debug("---- abEdgePenetrationQuery {0}", abEdgePenetrationQuery->penetration);*/
 
         if (abPenetrationQuery->penetration + physics::constants::faceToFacePenetrationBias >
             baPenetrationQuery->penetration)
@@ -151,7 +146,7 @@ namespace legion::physics
         }
 
         manifold.isColliding = true;
-        log::debug("---- chosen penetration {0}", manifold.penetrationInformation->penetration);
+        //log::debug("---- chosen penetration {0}", manifold.penetrationInformation->penetration);
 
         //keeping this here so i can copy pasta when i need it again
 

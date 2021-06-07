@@ -789,20 +789,20 @@ namespace legion::physics
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
         //cube
-        /*createQuickhullTestObject
-        (math::vec3(0,5.0f, -0.8f),cubeH, wireFrameH);*/
+        createQuickhullTestObject
+        (math::vec3(0,5.0f, -0.8f),cubeH, concreteH);
 
         //cup
         createQuickhullTestObject
-        (math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH);
+        (math::vec3(5.0f, 5.0f, -0.8f), colaH,woodTextureH);
 
         ////hammer
-       /* createQuickhullTestObject
-        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, wireFrameH);*/
+        createQuickhullTestObject
+        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, rockTextureH);
 
         //////////suzanne
-       /* createQuickhullTestObject
-        (math::vec3(15.0f, 5.0f, -0.0f), suzzaneH, wireFrameH);*/
+        createQuickhullTestObject
+        (math::vec3(15.0f, 5.0f, -0.0f), suzzaneH, tileH);
 
         ////ohio teapot
         //createQuickhullTestObject
@@ -1123,7 +1123,7 @@ namespace legion::physics
                 //[3] quickhull until step
 
                 //[4] use collider to generate follower objects
-                PopulateFollowerList(ent,i);
+                //PopulateFollowerList(ent,i);
                 i++;
             }
 
