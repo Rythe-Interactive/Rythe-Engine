@@ -27,9 +27,6 @@ namespace legion::physics
             return;
         }
 
-       /* debug::drawLine(low0, high0, math::colors::blue, 3.0f, FLT_MAX);
-        debug::drawLine(low1, high1, math::colors::red, 3.0f, FLT_MAX);*/
-
         //auto compIDA = manifold.entityA.get_component_handle<identifier>();
         //auto compIDB = manifold.entityB.get_component_handle<identifier>();
 
@@ -39,11 +36,10 @@ namespace legion::physics
 
         //log::debug("-------------------- SAT CHECK -----------------");
         PointerEncapsulator < HalfEdgeFace> ARefFace;
-        PointerEncapsulator < HalfEdgeFace> AIncFace;
-        ////log::debug("Face Check A");
+
         float ARefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(
-            this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, AIncFace, ARefSeperation) || !ARefFace.ptr)
+            this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation) || !ARefFace.ptr)
         {
             //log::debug("Not Found on A ");
             manifold.isColliding = false;
@@ -51,13 +47,11 @@ namespace legion::physics
         }
 
         PointerEncapsulator < HalfEdgeFace> BRefFace;
-        PointerEncapsulator < HalfEdgeFace> BIncFace;
-        //log::debug("Face Check B");
+
         float BRefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
-            this, manifold.transformA, manifold.transformB, BRefFace, BIncFace, BRefSeperation) || !BRefFace.ptr)
+            this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
-            //log::debug("Not Found on B ");
             manifold.isColliding = false;
             return;
         }
@@ -67,32 +61,13 @@ namespace legion::physics
 
         math::vec3 edgeNormal;
         float aToBEdgeSeperation;
-        //log::debug("Edge Check");
+
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck( this, convexCollider, manifold.transformB, manifold.transformA,
             edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation,true ) || !edgeRef.ptr )
         {
-
-            //log::debug("edgeRef.ptr->identifier {0} ", edgeRef.ptr->identifier);
-            //log::debug("edgeInc.ptr->identifier  {0} ", edgeInc.ptr->identifier);
-            //log::debug("seperation {0} ", aToBEdgeSeperation);
-            //edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::red, FLT_MAX, 7.0f);
-            //edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::blue, FLT_MAX, 7.0f);
-
             manifold.isColliding = false;
             return;
         }
-
-        //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::red, 5.01f);
-        //AIncFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::blue, 5.01f);*/
-
-        //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::blue, 5.01f);
-        //BIncFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::cyan, 5.01f);
-
-       /* ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::red, 0.01f);
-        BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::blue, 0.01f);*/
-
-       /* edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::cyan, 5.0f,7.0f);
-        edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::magenta, 5.0f, 7.0f);*/
 
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
 
@@ -687,37 +662,24 @@ namespace legion::physics
         AssertEdgeValidity();
         //log::debug("-> Finish ConstructConvexHullWithMesh ----------------------------------");
     }
-    
-    void ConvexCollider::AssignVertexOwnership()
-    {
-        vertexOwnerIndex.reserve(vertices.size());
-
-        
-
-    }
 
     void ConvexCollider::PopulateVertexListWithHalfEdges()
     {
-        auto& ownerIndexVert = vertexOwnerIndex;
         auto& verticesVec = vertices;
 
         int reserveSize = halfEdgeFaces.size() * 3;
 
         verticesVec.reserve(reserveSize);
-        ownerIndexVert.reserve(reserveSize);
 
-        int i = 0;
 
-        auto collectVertices = [&verticesVec,&ownerIndexVert,&i](HalfEdgeEdge* edge)
+        auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
         {
             verticesVec.push_back(edge->edgePosition);
-            ownerIndexVert.push_back(i);
         };
 
         for (auto face : halfEdgeFaces)
         {
             face->forEachEdge(collectVertices);
-            i++;
         }
 
 

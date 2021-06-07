@@ -1115,13 +1115,6 @@ namespace legion::physics
                 physComp.ConstructConvexHull(meshFilter, step, transform);
                 physicsComponentH.write(physComp);
 
-                //physComp.ConstructConvexHull
-
-
-                //[2] add step
-
-                //[3] quickhull until step
-
                 //[4] use collider to generate follower objects
                 //PopulateFollowerList(ent,i);
                 i++;

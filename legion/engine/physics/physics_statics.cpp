@@ -45,45 +45,27 @@ namespace legion::physics
 
     bool PhysicsStatics::FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
         , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB,
-        PointerEncapsulator<HalfEdgeFace>& refFace, PointerEncapsulator<HalfEdgeFace>& incFace,
+        PointerEncapsulator<HalfEdgeFace>& refFace,
         float& maximumSeperation, bool shouldDebug )
     {
-        //shouldDebug = false;
-
         float currentMaximumSeperation = std::numeric_limits<float>::lowest();
-        int i = 0;
-        int wantDebug = 12;
-
-       
 
         for (auto face : convexB->GetHalfEdgeFaces())
         {
-            if (i < wantDebug && shouldDebug)
-            {
-                //face->DEBUG_DrawFace(transformB, math::colors::red, 3.0f);
-            }
-            //log::debug("face->normal {} ", math::to_string( face->normal));
-            //get inverse normal
+
             math::vec3 seperatingAxis = math::normalize(transformB * math::vec4((face->normal), 0));
 
             math::vec3 transformedPositionB = transformB * math::vec4(face->centroid, 1);
 
             //get extreme point of other face in normal direction
-            math::vec3 worldSupportPoint; PointerEncapsulator<HalfEdgeFace> incidentFace;
+            math::vec3 worldSupportPoint; 
             GetSupportPointNoTransform(transformedPositionB, -seperatingAxis,
-                convexA, transformA, worldSupportPoint, incidentFace);
+                convexA, transformA, worldSupportPoint);
 
             float seperation = math::dot(worldSupportPoint - transformedPositionB, seperatingAxis);
 
-            /*if (i == wantDebug && shouldDebug)
-            {
-                debug::drawLine(worldSupportPoint, worldSupportPoint + math::vec3(0, 0.1f, 0), math::colors::grey, 3.0f, 3.0f, true);
-                log::debug("seperation {}", seperation);
-            }*/
-
             if (seperation > currentMaximumSeperation)
             {
-                incFace = incidentFace;
                 currentMaximumSeperation = seperation;
                 refFace.ptr = face;
             }
@@ -94,13 +76,10 @@ namespace legion::physics
                 maximumSeperation = currentMaximumSeperation;
                 return true;
             }
-
-            i++;
-
         }
+
         //no seperating axis was found
         maximumSeperation = currentMaximumSeperation;
-        //log::debug("maximumSeperation {}", maximumSeperation);
 
         return false;
     }
@@ -124,15 +103,13 @@ namespace legion::physics
     }
 
     void PhysicsStatics::GetSupportPointNoTransform(math::vec3 planePosition, math::vec3 direction, ConvexCollider* collider, const math::mat4& colliderTransform
-        , math::vec3& worldSupportPoint, PointerEncapsulator<HalfEdgeFace>& faceOwner)
+        , math::vec3& worldSupportPoint)
     {
         float largestDistanceInDirection = std::numeric_limits<float>::lowest();
         planePosition = math::inverse(colliderTransform) * math::vec4(planePosition, 1);
         direction = math::inverse(colliderTransform) * math::vec4(direction, 0);
 
-        int faceIndex = -1;
         const auto& vertices = collider->GetVertices();
-        const auto& vertexOwnerVec = collider->GetVertexOwnerIndex();
 
         for (int vertexIndex = 0 ; vertexIndex < vertices.size(); ++vertexIndex)
         {
@@ -142,14 +119,10 @@ namespace legion::physics
 
             if (dotResult > largestDistanceInDirection)
             {
-                faceIndex = vertexIndex;
                 largestDistanceInDirection = dotResult;
                 worldSupportPoint = transformedVert;
             }
         }
-
-        int vertexOwnerIndex = vertexOwnerVec.at(faceIndex);
-        faceOwner.ptr = collider->GetHalfEdgeFaces().at(vertexOwnerIndex);
 
         worldSupportPoint = colliderTransform * math::vec4(worldSupportPoint, 1);
     }

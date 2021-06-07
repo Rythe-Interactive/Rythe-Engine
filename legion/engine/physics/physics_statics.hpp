@@ -65,7 +65,7 @@ namespace legion::physics
         * @return returns true if a seperating axis was found
         */
         static void GetSupportPointNoTransform(math::vec3 planePosition, math::vec3 direction, ConvexCollider* collider, const math::mat4& colliderTransform
-            , math::vec3& worldSupportPoint,PointerEncapsulator<HalfEdgeFace>& faceOwner);
+            , math::vec3& worldSupportPoint);
        
 
 
@@ -85,7 +85,7 @@ namespace legion::physics
          */
         static bool FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
             , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB,
-            PointerEncapsulator<HalfEdgeFace>& refFace, PointerEncapsulator<HalfEdgeFace>& incFace,
+            PointerEncapsulator<HalfEdgeFace>& refFace,
             float& maximumSeperation, bool shouldDebug = false);
       
 
