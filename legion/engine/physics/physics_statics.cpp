@@ -4,45 +4,6 @@
 
 namespace legion::physics
 {
-    //void PhysicsStatics::DetectConvexConvexCollision(ConvexCollider* convexA, ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB
-    //    , ConvexConvexCollisionInfo& outCollisionInfo,physics_manifold& manifold)
-    //{
-    //    //'this' is colliderB and 'convexCollider' is colliderA
-
-    //    outCollisionInfo.ARefSeperation = 0.0f;
-    //    if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(
-    //        convexB, convexA, transformB, transformA, outCollisionInfo.ARefFace, outCollisionInfo.ARefSeperation) || !outCollisionInfo.ARefFace.ptr)
-    //    {
-    //        //log::debug("Not Found on A ");
-    //        return;
-    //    }
-
-
-    //    //log::debug("Face Check B");
-    //    outCollisionInfo.BRefSeperation = 0.0f;
-    //    if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexA,
-    //        convexB, transformA,transformB, outCollisionInfo.BRefFace, outCollisionInfo.BRefSeperation) || !outCollisionInfo.BRefFace.ptr)
-    //    {
-    //        //log::debug("Not Found on B ");
-    //        return;
-    //    }
-
-    //    PointerEncapsulator< HalfEdgeEdge> edgeRef;
-    //    PointerEncapsulator< HalfEdgeEdge> edgeInc;
-
-
-    //    outCollisionInfo.aToBEdgeSeperation =0.0f;
-    //    //log::debug("Edge Check");
-    //    if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck(convexB, convexA, transformB,transformA,
-    //        edgeRef, edgeInc, outCollisionInfo.edgeNormal, outCollisionInfo.aToBEdgeSeperation))
-    //    {
-    //        //log::debug("aToBEdgeSeperation {} " );
-    //        return;
-    //    }
-
-    //    manifold.isColliding = true;
-    //}
-
     bool PhysicsStatics::FindSeperatingAxisByExtremePointProjection(ConvexCollider* convexA
         , ConvexCollider* convexB, const math::mat4& transformA, const math::mat4& transformB,
         PointerEncapsulator<HalfEdgeFace>& refFace,
@@ -131,7 +92,7 @@ namespace legion::physics
         const math::mat4& transformB, PointerEncapsulator<HalfEdgeEdge>& refEdge, PointerEncapsulator<HalfEdgeEdge>& incEdge,
         math::vec3& seperatingAxisFound, float& maximumSeperation, bool shouldDebug)
     {
-        float currentMinimumSeperation = std::numeric_limits<float>::lowest();
+        float currentMaximumSeperation = std::numeric_limits<float>::lowest();
 
         math::vec3 centroidDir = transformA * math::vec4(convexA->GetLocalCentroid(), 0);
         math::vec3 positionA = math::vec3(transformA[3]) + centroidDir;
@@ -229,13 +190,18 @@ namespace legion::physics
                             //check if given edges create a seperating axis
                             float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
                             //log::debug("distance {} , currentMinimumSeperation {}", distance, currentMinimumSeperation);
-                            if (distance > currentMinimumSeperation)
+                            if (distance > currentMaximumSeperation)
                             {
                                 refEdge.ptr = edgeA;
                                 incEdge.ptr = edgeB;
 
                                 seperatingAxisFound = seperatingAxis;
-                                currentMinimumSeperation = distance;
+                                currentMaximumSeperation = distance;
+                            }
+
+                            if (distance > 0)
+                            {
+                                return true;
                             }
 
                         }
@@ -249,8 +215,8 @@ namespace legion::physics
             facei++;
         }
 
-        maximumSeperation = currentMinimumSeperation;
-        return currentMinimumSeperation > 0.0;
+        maximumSeperation = currentMaximumSeperation;
+        return false;
     }
 
     bool PhysicsStatics::DetectConvexSphereCollision(ConvexCollider* convexA, const math::mat4& transformA, math::vec3 sphereWorldPosition, float sphereRadius,

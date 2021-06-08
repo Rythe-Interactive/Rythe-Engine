@@ -24,9 +24,6 @@ struct ObjectToFollow
 
 namespace legion::physics
 {
-
-
-
     class PhysicsFractureTestSystem final : public System<PhysicsFractureTestSystem>
     {
     public:

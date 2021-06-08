@@ -12,6 +12,7 @@ namespace legion::physics
     void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
     {
         OPTICK_EVENT();
+
         // Middle-phase collision detection
         // Do AABB collision to check whether collision is possible
         auto aabbThis = this->GetMinMaxWorldAABB();
@@ -27,21 +28,15 @@ namespace legion::physics
             return;
         }
 
-        //auto compIDA = manifold.entityA.get_component_handle<identifier>();
-        //auto compIDB = manifold.entityB.get_component_handle<identifier>();
-
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA
         
-
-        //log::debug("-------------------- SAT CHECK -----------------");
         PointerEncapsulator < HalfEdgeFace> ARefFace;
 
         float ARefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(
             this, convexCollider, manifold.transformB,manifold.transformA,  ARefFace, ARefSeperation) || !ARefFace.ptr)
         {
-            //log::debug("Not Found on A ");
             manifold.isColliding = false;
             return;
         }
@@ -121,37 +116,6 @@ namespace legion::physics
         }
 
         manifold.isColliding = true;
-        //log::debug("---- chosen penetration {0}", manifold.penetrationInformation->penetration);
-
-        //keeping this here so i can copy pasta when i need it again
-
-       // log::debug("Collision FOUND between {} and {}!" , compIDA.read().id, compIDB.read().id);
-
-        //physics::PhysicsSystem::penetrationQueries.push_back(manifold.penetrationInformation);
-
-        //convexCollisionInfo
-        //math::vec3 worldFaceCentroidA = manifold.transformA * math::vec4(convexCollisionInfo.ARefFace.ptr->centroid, 1);
-        //math::vec3 worldFaceNormalA = manifold.transformA * math::vec4(convexCollisionInfo.ARefFace.ptr->normal, 0);
-
-        //math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4(convexCollisionInfo.BRefFace.ptr->centroid, 1);
-        //math::vec3 worldFaceNormalB = manifold.transformB * math::vec4(convexCollisionInfo.BRefFace.ptr->normal, 0);
-
-
-        //math::vec3 worldEdgeAPosition = convexCollisionInfo.edgeRef.ptr ? manifold.transformB * math::vec4(convexCollisionInfo.edgeRef.ptr->edgePosition, 1) : math::vec3();
-        //math::vec3 worldEdgeNormal = convexCollisionInfo.edgeNormal;
-
-        //auto abPenetrationQuery =
-        //    std::make_shared< ConvexConvexPenetrationQuery>(convexCollisionInfo.ARefFace.ptr
-        //        , convexCollisionInfo.BRefFace.ptr, worldFaceCentroidA, worldFaceNormalA, convexCollisionInfo.ARefSeperation, true);
-
-        //auto baPenetrationQuery =
-        //    std::make_shared < ConvexConvexPenetrationQuery>(convexCollisionInfo.BRefFace.ptr, convexCollisionInfo.ARefFace.ptr,
-        //        worldFaceCentroidB, worldFaceNormalB, convexCollisionInfo.BRefSeperation, false);
-
-        //auto abEdgePenetrationQuery =
-        //    std::make_shared < EdgePenetrationQuery>(convexCollisionInfo.edgeRef.ptr, convexCollisionInfo.edgeInc.ptr, worldEdgeAPosition, worldEdgeNormal,
-        //        convexCollisionInfo.aToBEdgeSeperation, false);
-   
     }
 
     void ConvexCollider::PopulateContactPointsWith(ConvexCollider* convexCollider, physics_manifold& manifold)
