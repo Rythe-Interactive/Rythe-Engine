@@ -366,8 +366,6 @@ namespace legion::physics
             }
         }
 
-        void AssignVertexOwnership();
-
         void PopulateVertexListWithHalfEdges();
 
     private:
@@ -661,7 +659,6 @@ namespace legion::physics
             }
         }
 
-        std::vector<int> vertexOwnerIndex;
         std::vector<HalfEdgeFace*> halfEdgeFaces;
 
         // Convex hull generation debug stuffs
