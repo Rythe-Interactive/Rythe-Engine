@@ -578,6 +578,7 @@ del /q ".\xcopyexclude"</Command>
     <ClCompile Include="time\main_clock.cpp" />
     <ClCompile Include="serialization\serializationregistry.cpp" />
     <ClCompile Include="serialization\serializer.cpp" />
+    <ClCompile Include="serialization\view_type.cpp" />
     <ClCompile Include="serialization\view_type.inl">
       <FileType>CppHeader</FileType>
     </ClCompile>

@@ -40,9 +40,11 @@ namespace legion::core::serialization
     struct serializer : public serializer_base
     {
     public:
-        void serialize(fs::view filePath);
-        prototype_base deserialize(fs::view filePath);
+        json serialize(type data);
+        prototype_base deserialize(json j);
 
+        void write(fs::view filePath, type data);
+        prototype_base read(fs::view filePath);
     };
 }
 

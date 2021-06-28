@@ -1,21 +1,38 @@
 #include <core/serialization/serializer.hpp>
+#include <core/serialization/view_type.hpp>
 #pragma once
 
 
 namespace legion::core::serialization
 {
     template<typename type>
-    inline std::unique_ptr<prototype_base> serialization::serializer<type>::deserialize(fs::view filePath)
+    inline json serializer<type>::serialize(type data)
     {
-        return  json_view::deserialize<type>(filePath);
+        return json_view<type>().serialize(data);
     }
 
     template<typename type>
-    inline void serialization::serializer<type>::serialize(fs::view filePath)
+    inline prototype_base serializer<type>::deserialize(json j)
+    {
+        return json_view<type>().deserialize(j);
+    }
+
+    template<typename type>
+    inline void serialization::serializer<type>::write(fs::view filePath, type data)
     {
         std::ofstream os;
         os.open(filePath.get_virtual_path());
-        os << json_view::serialize<type>(data).dump();
+        json j = serialize(data);
+        os << j.dump();
         os.close();
-    }   
+    }
+
+    template<typename type>
+    inline prototype_base serialization::serializer<type>::read(fs::view filePath)
+    {
+        //std::ifstream is;
+        //is.open(filePath.get_virtual_path());
+        //json_view::deserialize<type>(filePath);
+        return prototype<type>();
+    }
 }

@@ -6,32 +6,14 @@ namespace legion::core::serialization
     using json = nlohmann::json;
 
     template<typename type>
-    static inline json serialization::json_view::serialize(type t)
+    inline json json_view<type>::serialize(type object)
     {
-        prototype<type> temp = prototype<type>(t);
-        json j;
-        j["Type ID"] = type_hash<type>().local();
-        return j;
+        return json();
     }
 
     template<typename type>
-    static inline std::unique_ptr<prototype<type>> serialization::json_view::deserialize(fs::view filePath)
+    inline prototype_base json_view<type>::deserialize(json j)
     {
-        std::unique_ptr<prototype<type>> t;
-        return t;
+        return prototype<type>();
     }
-
-    template<typename type>
-    inline void serialization::json_view::store(type t)
-    {
-
-    }
-
-    template<typename type>
-    inline type serialization::json_view::load()
-    {
-        type t;
-        return t;
-    }
-
 }

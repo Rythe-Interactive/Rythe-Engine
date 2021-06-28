@@ -1,5 +1,5 @@
 #include <core/scenemanagement/components/scene.hpp>
-#include <core/serialization/serializationutil.hpp>
+//#include <core/serialization/serializationutil.hpp>
 #include <core/logging/logging.hpp>
 #include <core/common/string_extra.hpp>
 //#include <core/defaults/defaultcomponents.hpp>

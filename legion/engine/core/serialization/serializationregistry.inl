@@ -8,7 +8,6 @@ namespace legion::core::serialization
     template<typename type>
     inline void Registry::register_type()
     {
-        //Registry::serializers.emplace(type_hash<type>().local(), std::unique_ptr<serializer<type>>());
         Registry::serializers.emplace(type_hash<type>().local(), std::make_unique<serializer<type>>());
     }
 

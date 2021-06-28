@@ -44,6 +44,7 @@
     <ClCompile Include="serialization\serializationregistry.cpp" />
     <ClCompile Include="serialization\serializer.cpp" />
     <ClCompile Include="serialization\view_type.inl" />
+    <ClCompile Include="serialization\view_type.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />

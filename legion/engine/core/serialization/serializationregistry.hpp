@@ -1,5 +1,5 @@
 #pragma once
-#include <core/serialization/serializationutil.hpp>
+#include <core/serialization/serializer.hpp>
 #include <core/common/hash.hpp>
 #include <core/containers/pointer.hpp>
 

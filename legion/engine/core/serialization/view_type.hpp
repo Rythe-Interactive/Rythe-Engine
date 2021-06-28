@@ -12,42 +12,29 @@ namespace legion::core::serialization
 {
     using json = nlohmann::json;
 
-    struct view_type : fs::view
+    template<typename type>
+    struct serializer_view : fs::view
     {
     public:
-        view_type() = default;
-        ~view_type() = default;
+        serializer_view() = default;
+        ~serializer_view() = default;
+        serializer_view(std::string_view filePath) : fs::view(filePath) {}
 
-        view_type(std::string_view filePath) : fs::view(filePath) {}
-        static 
+    protected:
+        virtual json serialize(type object) LEGION_PURE;
+        virtual prototype_base deserialize(json j) LEGION_PURE;
     };
 
-    struct json_view : view_type
+    template<typename type>
+    struct json_view : serializer_view<type>
     {
     public:
         json_view() = default;
         ~json_view() = default;
+        json_view(std::string_view filePath) : serializer_view(filePath) {}
 
-        json_view(std::string_view filePath) : view_type(filePath) {}
-
-        /**@brief JSON serialization
-         * @param TODO
-         */
-        template<typename type>
-        json serialize(type t);
-
-        /**@brief JSON deserialization
-         * @param TODO
-         * @returns TODO
-         */
-        template<typename type>
-        std::unique_ptr<prototype<type>> deserialize(fs::view filePath);
-
-        template<typename type>
-        void store(type t);
-
-        template<typename type>
-        type load();
+        virtual json serialize(type object) override;
+        virtual prototype_base deserialize(json j) override;
     };
 }
 

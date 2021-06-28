@@ -65,10 +65,7 @@ public:
         example_comp test;
         test.value = 10;
         auto serializer = serialization::Registry::get_serializer<example_comp>();
-        serializer->store(test);
-        serializer->write(fs::view("assets://scenes/test.json"));
-        serializer->read(fs::view("assets://scenes/test.json"));
-        auto output = serializer->load();
+        serializer->write(fs::view("assets://scenes/scene1.json"),test);
     }
 
     void update(legion::time::span deltaTime)
