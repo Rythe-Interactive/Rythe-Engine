@@ -146,7 +146,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Authors
 
-* **Glyn Leine** - *Core architecture, ECS, scheduling, import pipeline, and renderer* - [[Website](https://glynleine.com)] [[Github](https://github.com/GlynLeine)] [[LinkedIn](https://www.linkedin.com/in/glyn-leine-7140a8167/)]
+* **Glyn Leine** - *Technical director, core architecture, ECS, scheduling, import pipeline, and renderer* - [[Website](https://glynleine.com)] [[Github](https://github.com/GlynLeine)] [[LinkedIn](https://www.linkedin.com/in/glyn-leine-7140a8167/)]
 * **Raphael Baier** - *Filesystem, build pipeline, GPGPU compute, input system, meta nonsense* - [[Website](https://rbaier.me)] [[Github](https://github.com/Algo-ryth-mix)] [[LinkedIn](https://www.linkedin.com/in/raphael-baier-26800a188/)]
 * **Raphael Priatama** - *Physics* - [[Website](https://developer-the-great.github.io)] [[Github](https://github.com/Developer-The-Great)] [[LinkedIn](https://www.linkedin.com/in/raphael-priatama-78a0a7189/?originalSubdomain=nl)]
 * **Jelle Vrieze** - *Audio/3D audio* - [[Website](http://jellevrieze.nl)] [[Github](https://github.com/Jelled1st)] [[LinkedIn](https://www.linkedin.com/in/jelle-vrieze-2467661a7/)]
