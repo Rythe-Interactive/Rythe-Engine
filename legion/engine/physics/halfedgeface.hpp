@@ -27,7 +27,7 @@ namespace legion::physics
         math::color DEBUG_color;
         HalfEdgeEdge* startEdge = nullptr;
         ColliderFaceToVert* faceToVert = nullptr; //only used for initialization of quickhull, unfortunately cant find a better solution
-      
+        bool isSeen = false;
         
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 

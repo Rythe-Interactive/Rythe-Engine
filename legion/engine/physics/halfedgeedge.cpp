@@ -98,7 +98,8 @@ namespace legion::physics
         math::vec3 pointStart = worldStart + startDifference;
         math::vec3 diff = worldEnd + endDifference - (worldStart + startDifference);
 
-        debug::user_projectDrawLine(pointStart + diff * 0.75f, pointStart + diff * 0.75f + math::vec3(-0.1f,0,0), math::colors::red, width, time, true);
+
+        debug::user_projectDrawLine(pointStart + diff * 0.75f, worldCentroid, math::colors::red, width, time, true);
     }
 
     void HalfEdgeEdge::suicidalMergeWithPairing(math::mat4 transform,  bool shouldDebug)

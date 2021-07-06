@@ -101,7 +101,7 @@ namespace legion::physics
         colaH = rendering::ModelCache::create_model("cola", "assets://models/cola.glb"_view);
         hammerH = rendering::ModelCache::create_model("hammer", "assets://models/hammer.obj"_view);
         suzzaneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.glb"_view);
-
+        teapotH = rendering::ModelCache::create_model("sah", "assets://models/gnomecentered.obj"_view);
 
         #pragma endregion
 
@@ -172,16 +172,7 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::colliderDraw(time::span dt)
     {
-        //drawPhysicsColliders();
-
-        math::vec3 start = math::vec3(0, 2, 0);
-        math::vec3 end = math::vec3(0, 5, 5);
-        math::vec3 point = math::vec3(3, 2, 3);
-
-        float interpolant = physics::PhysicsStatics::FindClosestPointToLineInterpolant(start, end - start, point);
-
-  /*      debug::drawLine(start, end, math::colors::darkgrey, 5.0f);
-        debug::drawLine(point, start + (end - start) * interpolant, math::colors::green, 5.0f);*/
+        drawPhysicsColliders();
 
         auto query = createQuery<ObjectToFollow>();
         query.queryEntities();
@@ -789,24 +780,24 @@ namespace legion::physics
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
         //cube
-        createQuickhullTestObject
-        (math::vec3(0,5.0f, -0.8f),cubeH, concreteH);
+        //createQuickhullTestObject
+        //(math::vec3(0,5.0f, -0.8f),cubeH, concreteH);
 
-        //cup
-        createQuickhullTestObject
-        (math::vec3(5.0f, 5.0f, -0.8f), colaH,woodTextureH);
+        ////cup
+        //createQuickhullTestObject
+        //(math::vec3(5.0f, 5.0f, -0.8f), colaH,woodTextureH);
 
-        ////hammer
-        createQuickhullTestObject
-        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, rockTextureH);
+        //////hammer
+        //createQuickhullTestObject
+        //(math::vec3(10.0f, 5.0f, -0.8f), hammerH, rockTextureH);
 
-        //////////suzanne
-        createQuickhullTestObject
-        (math::vec3(15.0f, 5.0f, -0.0f), suzzaneH, tileH);
+        ////////////suzanne
+        //createQuickhullTestObject
+        //(math::vec3(15.0f, 5.0f, -0.0f), suzzaneH, tileH);
 
         ////ohio teapot
-        //createQuickhullTestObject
-        //(math::vec3(20.0f, 5.0f, 0), cubeH, wireFrameH);
+        createQuickhullTestObject
+        (math::vec3(20.0f, 5.0f, 0), teapotH, wireFrameH);
         
 
         addStaircase(math::vec3(8, 2, 0));
@@ -1044,7 +1035,7 @@ namespace legion::physics
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + worldNormal * 0.1f;
 
-                        //debug::drawLine(faceStart, faceEnd, math::colors::green, 2.0f);
+                        debug::drawLine(faceStart, faceEnd, math::colors::green, 2.0f);
 
                         if (!currentEdge) { return; }
 
@@ -1080,14 +1071,7 @@ namespace legion::physics
                 }
 
             }
-
         }
-
-
-
-
-
-
     }
 
     int step = 0;
@@ -1116,7 +1100,7 @@ namespace legion::physics
                 physicsComponentH.write(physComp);
 
                 //[4] use collider to generate follower objects
-                //PopulateFollowerList(ent,i);
+                PopulateFollowerList(ent,i);
                 i++;
             }
 

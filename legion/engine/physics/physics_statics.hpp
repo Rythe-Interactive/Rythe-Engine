@@ -512,7 +512,7 @@ namespace legion::physics
         static bool mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts,
             float scalingEpsilon,float hullMinimumVolume, math::mat4 DEBUG_transform,bool atDebug);
 
-        static bool isFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second);
+        static bool isFacesConcave(HalfEdgeFace* first, HalfEdgeFace* second);
 
         static bool isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second,HalfEdgeEdge* connectingEdge,float scalingEpsilon,math::mat4 DEBUG_transform,bool atDebug);
 
