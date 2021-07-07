@@ -1278,7 +1278,7 @@ namespace legion::physics
             ColliderFaceToVert& faceToVertEstablished = *establishedFace->faceToVert;
             HalfEdgeFace* newFace = newFaces.at(i);
 
-            if (isNewellFacesCoplanar(establishedFace, newFace, horizonEdges.at(i)->pairingEdge,scalingEpsilon,DEBUG_transform,false)
+            if (isNewellFacesCoplanar(establishedFace, newFace, horizonEdges.at(i),scalingEpsilon,DEBUG_transform,false)
                 || isFacesConcave(establishedFace, newFace))
             {
                 horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform);
@@ -1290,54 +1290,48 @@ namespace legion::physics
             }
         }
 
-        
         int mergeCount = 0;
-        std::vector<size_t> removalIndices;
-        removalIndices.reserve(horizonEdges.size());
-
         //for each edge in horizon edge
             //if edge is available
         for (size_t i = 0; i < horizonEdges.size(); i++)
         {
             size_t next = (i+1) % horizonEdges.size();
 
-            auto nextEdge = horizonEdges.at(next);
+            auto currentEdge = horizonEdges.at(i);
 
             if (newFaces.at(i) && newFaces.at(next))
             {
-                HalfEdgeEdge* connectingEdgeFromSecond = nextEdge->pairingEdge->prevEdge;
+                HalfEdgeEdge* connectingEdgeToSecond = currentEdge->pairingEdge->nextEdge;
 
-                if (isNewellFacesCoplanar(newFaces.at(i), newFaces.at(next), connectingEdgeFromSecond, scalingEpsilon, DEBUG_transform, false)
+                if (isNewellFacesCoplanar(newFaces.at(i), newFaces.at(next), connectingEdgeToSecond, scalingEpsilon, DEBUG_transform, false)
                     || isFacesConcave(newFaces.at(i), newFaces.at(next) ) )
                 {
-                    if (atDebug && mergeCount == 1)
+                    /*if (atDebug && mergeCount == 1)
                     {
                         newFaces.at(i)->DEBUG_DrawFace(DEBUG_transform, math::colors::green, FLT_MAX);
                         newFaces.at(next)->DEBUG_DrawFace(DEBUG_transform, math::colors::cyan, FLT_MAX);
 
-                        connectingEdgeFromSecond->DEBUG_directionDrawEdge(DEBUG_transform, math::colors::magenta, FLT_MAX, 4.0f);
-                        nextEdge->DEBUG_directionDrawEdge(DEBUG_transform, math::colors::blue, FLT_MAX, 4.0f);
+                        connectingEdgeToSecond->DEBUG_directionDrawEdge(DEBUG_transform, math::colors::magenta, FLT_MAX, 4.0f);
+                        currentEdge->DEBUG_directionDrawEdge(DEBUG_transform, math::colors::blue, FLT_MAX, 4.0f);
                         log::debug("-> merged");
                         break;
-                    }
+                    }*/
 
 
-                    newFaces.at(i) = newFaces.at(next);
-                    connectingEdgeFromSecond->suicidalMergeWithPairing(DEBUG_transform);
+                    newFaces.at(next) = newFaces.at(i);//newFaces.at(next);
+                    connectingEdgeToSecond->suicidalMergeWithPairing(DEBUG_transform);
 
-                    if (atDebug && mergeCount == 1)
-                    {
-                        
-                        newFaces.at(next)->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::green, FLT_MAX);
-                        /*newFaces.at(next) = nullptr;
-                        newFaces.at(i) = nullptr;*/
-                       
-                    }
+                    //if (atDebug && mergeCount == 1)
+                    //{
+                    //    newFaces.at(next)->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::green, FLT_MAX);
+                    //    /*newFaces.at(next) = nullptr;
+                    //    newFaces.at(i) = nullptr;*/
+                    //   
+                    //}
                     mergeCount++;
                 }
             }
         }
-
 
         {
             std::vector<HalfEdgeFace*> tempNewFaces = std::move(newFaces);
@@ -1347,6 +1341,14 @@ namespace legion::physics
                 if (face)
                 {
                     newFaces.push_back(face);
+                }
+            }
+
+            if (newFaces.size() > 1)
+            {
+                if (newFaces.at(newFaces.size() - 1) == newFaces.at(0))
+                {
+                    newFaces.pop_back();
                 }
             }
 
@@ -1363,15 +1365,6 @@ namespace legion::physics
                 //face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
                 //face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
             }
-
-           /* newFaces.at(0)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-            newFaces.at(0)->forEachEdge(testPairings);*/
-            //newFaces.at(1)->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-            //newFaces.at(1)->forEachEdge(testPairings); 
-            //newFaces.at(1)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-           /* newFaces.at(0)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-            newFaces.at(1)->DEBUG_DrawFace(DEBUG_transform, math::colors::blue, FLT_MAX);*/
-            //log::debug(" final newFaces {0} ", newFaces.size());
             //return true;
         }
 
@@ -1401,8 +1394,10 @@ namespace legion::physics
         auto firstOriginal = first->startEdge;
         auto secondOriginal = second->startEdge;
 
-        first->startEdge = connectingEdge->pairingEdge->nextEdge;
-        second->startEdge = connectingEdge->nextEdge;
+        assert(first == connectingEdge->face);
+
+        first->startEdge = connectingEdge->nextEdge; 
+        second->startEdge = connectingEdge->pairingEdge->nextEdge;
 
         auto collectVerticesOfFace = [&NewellPolygon](HalfEdgeEdge* edge)
         {

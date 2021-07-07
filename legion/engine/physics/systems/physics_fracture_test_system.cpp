@@ -172,7 +172,7 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::colliderDraw(time::span dt)
     {
-        drawPhysicsColliders();
+        //drawPhysicsColliders();
 
         auto query = createQuery<ObjectToFollow>();
         query.queryEntities();
@@ -779,25 +779,25 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
-        //cube
+        ////cube
         //createQuickhullTestObject
         //(math::vec3(0,5.0f, -0.8f),cubeH, concreteH);
 
         ////cup
         //createQuickhullTestObject
-        //(math::vec3(5.0f, 5.0f, -0.8f), colaH,woodTextureH);
+        //(math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH);
 
         //////hammer
         //createQuickhullTestObject
         //(math::vec3(10.0f, 5.0f, -0.8f), hammerH, rockTextureH);
 
-        ////////////suzanne
+        //////suzanne
         //createQuickhullTestObject
         //(math::vec3(15.0f, 5.0f, -0.0f), suzzaneH, tileH);
 
         ////ohio teapot
         createQuickhullTestObject
-        (math::vec3(20.0f, 5.0f, 0), teapotH, wireFrameH);
+        (math::vec3(20.0f, 5.0f, -0.5f), teapotH, wireFrameH);
         
 
         addStaircase(math::vec3(8, 2, 0));
@@ -818,7 +818,7 @@ namespace legion::physics
     {
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = breadthMult;
-        cubeParams.width = 23.0f;
+        cubeParams.width = 27.0f;
         cubeParams.height = 1.0f;
 
         auto ent = m_ecs->createEntity();
@@ -840,7 +840,7 @@ namespace legion::physics
 
         auto [position2H, rotation2H, scale2H] = m_ecs->createComponents<transform>(ent2);
         position2H.write(position);
-        scale2H.write(math::vec3(23.0f, 1.0f, breadthMult));
+        scale2H.write(math::vec3(cubeParams.width, 1.0f, breadthMult));
     }
 
     void PhysicsFractureTestSystem::createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH)
