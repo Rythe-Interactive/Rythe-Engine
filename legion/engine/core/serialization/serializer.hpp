@@ -1,15 +1,10 @@
 #pragma once
 #include <core/filesystem/filesystem.hpp>
-#include <core/platform/platform.hpp>
-#include <core/ecs/handles/component.hpp>
 #include <core/ecs/prototypes/component_prototype.hpp>
 #include <nlohmann/json.hpp>
 
 #include <sstream>
 #include <fstream>
-#include <string>
-#include <memory>
-#include <any>
 
 namespace legion::core::serialization
 {

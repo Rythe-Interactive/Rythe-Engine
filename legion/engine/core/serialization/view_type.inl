@@ -3,8 +3,6 @@
 
 namespace legion::core::serialization
 {
-    using json = nlohmann::json;
-
     template<typename type>
     inline json json_view<type>::serialize(type object)
     {

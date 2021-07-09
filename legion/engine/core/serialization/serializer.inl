@@ -2,7 +2,6 @@
 #include <core/serialization/view_type.hpp>
 #pragma once
 
-
 namespace legion::core::serialization
 {
     template<typename type>
@@ -18,7 +17,7 @@ namespace legion::core::serialization
     }
 
     template<typename type>
-    inline void serialization::serializer<type>::write(fs::view filePath, type data)
+    inline void serializer<type>::write(fs::view filePath, type data)
     {
         std::ofstream os;
         os.open(filePath.get_virtual_path());
@@ -28,7 +27,7 @@ namespace legion::core::serialization
     }
 
     template<typename type>
-    inline prototype_base serialization::serializer<type>::read(fs::view filePath)
+    inline prototype_base serializer<type>::read(fs::view filePath)
     {
         //std::ifstream is;
         //is.open(filePath.get_virtual_path());

@@ -1,12 +1,10 @@
 #pragma once
 #include <core/filesystem/filesystem.hpp>
-#include <core/ecs/handles/component.hpp>
 #include <core/ecs/prototypes/component_prototype.hpp>
 #include <nlohmann/json.hpp>
 
 #include <sstream>
 #include <fstream>
-#include <string>
 
 namespace legion::core::serialization
 {
@@ -26,12 +24,12 @@ namespace legion::core::serialization
     };
 
     template<typename type>
-    struct json_view : serializer_view<type>
+    struct json_view : public serializer_view<type>
     {
     public:
         json_view() = default;
         ~json_view() = default;
-        json_view(std::string_view filePath) : serializer_view(filePath) {}
+        json_view(std::string_view filePath) : serializer_view<type>(filePath) {}
 
         virtual json serialize(type object) override;
         virtual prototype_base deserialize(json j) override;
