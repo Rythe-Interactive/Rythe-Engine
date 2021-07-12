@@ -20,8 +20,8 @@ namespace legion::physics
     std::shared_ptr<ConvexCollider> physicsComponent::ConstructConvexHull(legion::core::mesh_handle meshHandle, int DEBUG_stepMax,
         math::mat4 DEBUG_transform)
     {
-        const auto& vertices = meshHandle.get().second.vertices;//44//73//19
-        auto collider = PhysicsStatics::GenerateConvexHull(vertices, DEBUG_stepMax,90, DEBUG_transform);
+        const auto& vertices = meshHandle.get().second.vertices;//44//73//19//300
+        auto collider = PhysicsStatics::GenerateConvexHull(vertices, DEBUG_stepMax,35, DEBUG_transform);
 
         if (collider)
         {

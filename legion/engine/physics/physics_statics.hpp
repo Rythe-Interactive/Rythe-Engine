@@ -503,7 +503,7 @@ namespace legion::physics
         static bool foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, PointerEncapsulator< ColliderFaceToVert>& outChosenFace);
         
         static void partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces,
-            std::list<ColliderFaceToVert>& outFacesWithOutsideVerts,bool shouldFindFirstMatch = true);
+            std::list<ColliderFaceToVert>& outFacesWithOutsideVerts);
 
         static void findHorizonEdgesFromFaces(const math::vec3& eyePoint,
             std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges,float scalingEpsilon,
