@@ -110,21 +110,21 @@ namespace legion::physics
 
         //next-pairing->next
         HalfEdgeEdge* prevFromCurrentConnection = prevFromCurrent->nextEdge->pairingEdge->nextEdge;
-        prevFromCurrent->setNext(prevFromCurrentConnection);
+        if (!shouldDebug) { prevFromCurrent->setNext(prevFromCurrentConnection); }
 
         HalfEdgeEdge* nextFromCurrent = pairingEdge->nextEdge->pairingEdge->face == this->face ? pairingEdge->prevEdge : pairingEdge->nextEdge;
         HalfEdgeEdge* nextFromCurrentConnection = nextFromCurrent->prevEdge->pairingEdge->prevEdge;
 
-        nextFromCurrent->setPrev(nextFromCurrentConnection);
+        if (!shouldDebug) { nextFromCurrent->setPrev(nextFromCurrentConnection); }
 
         if (shouldDebug)
         {
-            prevFromCurrent->DEBUG_drawEdge(transform, math::colors::red,FLT_MAX);
-            prevFromCurrentConnection->DEBUG_drawEdge(transform, math::colors::blue, FLT_MAX);
+            prevFromCurrent->DEBUG_directionDrawEdge(transform, math::colors::red,FLT_MAX,5.0f);
+            prevFromCurrentConnection->DEBUG_directionDrawEdge(transform, math::colors::blue, FLT_MAX, 5.0f);
 
-            nextFromCurrent->DEBUG_drawEdge(transform, math::colors::green, FLT_MAX);
-            nextFromCurrentConnection->DEBUG_drawEdge(transform, math::colors::magenta, FLT_MAX);
-
+            nextFromCurrent->DEBUG_directionDrawEdge(transform, math::colors::green, FLT_MAX, 5.0f);
+            nextFromCurrentConnection->DEBUG_directionDrawEdge(transform, math::colors::magenta, FLT_MAX, 5.0f);
+            return;
         }
 
         face->startEdge = prevFromCurrent;
