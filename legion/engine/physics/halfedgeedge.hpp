@@ -62,8 +62,7 @@ namespace legion::physics
 
         void DEBUG_directionDrawEdge(const math::mat4& transform, const math::color& debugColor, float time, float width);
 
-        void suicidalMergeWithPairing(math::mat4 transform,bool shouldDebug = false);
-       
+        void suicidalMergeWithPairing(std::vector<math::vec3>&unmergedVertices,math::vec3& normal,float scalingEpsilon, math::mat4 transform = math::mat4(1.0),bool shouldDebug = false);
 
 
 	};

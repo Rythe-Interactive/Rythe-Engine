@@ -474,6 +474,9 @@ namespace legion::physics
 
         static void CalculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid);
 
+        static bool isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second, HalfEdgeEdge* connectingEdge, float scalingEpsilon, math::vec3& outNormal, int skipCount, math::mat4 DEBUG_transform = math::mat4(1.0f), bool atDebug = false);
+
+
     private:
 
         /** @brief Given 2 HalfEdgeEdges and their respective transforms, transforms their normals and checks if they create a minkowski face
@@ -502,7 +505,7 @@ namespace legion::physics
 
         static bool foundFaceWithOutsideVert(std::list<ColliderFaceToVert>& facesWithOutsideVerts, PointerEncapsulator< ColliderFaceToVert>& outChosenFace);
         
-        static void partitionVerticesToList(const std::vector<math::vec3> vertices, const std::vector<HalfEdgeFace*>& faces,
+        static void partitionVerticesToList(const std::vector<math::vec3> vertices, 
             std::list<ColliderFaceToVert>& outFacesWithOutsideVerts);
 
         static void findHorizonEdgesFromFaces(const math::vec3& eyePoint,
@@ -514,7 +517,6 @@ namespace legion::physics
 
         static bool isFacesConcave(HalfEdgeFace* first, HalfEdgeFace* second);
 
-        static bool isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second,HalfEdgeEdge* connectingEdge,float scalingEpsilon,math::mat4 DEBUG_transform,bool atDebug);
 
     };
 }

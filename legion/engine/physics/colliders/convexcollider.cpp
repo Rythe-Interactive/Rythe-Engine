@@ -30,6 +30,9 @@ namespace legion::physics
 
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA
+
+        log::debug("col with {0} {1}", this->GetColliderID(), convexCollider->GetColliderID());
+        bool atDebug = this->GetColliderID() == 4 && convexCollider->GetColliderID() == 5;
         
         PointerEncapsulator < HalfEdgeFace> ARefFace;
 
@@ -40,13 +43,14 @@ namespace legion::physics
             manifold.isColliding = false;
             return;
         }
-
+        //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::blue, FLT_MAX);
         PointerEncapsulator < HalfEdgeFace> BRefFace;
 
         float BRefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
             this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
+            
             manifold.isColliding = false;
             return;
         }
@@ -56,12 +60,25 @@ namespace legion::physics
 
         math::vec3 edgeNormal;
         float aToBEdgeSeperation;
-
+        //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, FLT_MAX);
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck( this, convexCollider, manifold.transformB, manifold.transformA,
             edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation,true ) || !edgeRef.ptr )
         {
+            if (atDebug)
+            {
+                edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::blue, FLT_MAX, 5.0f);
+                edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::red, FLT_MAX, 5.0f);
+              
+            }
+
             manifold.isColliding = false;
             return;
+        }
+
+        if (atDebug)
+        {
+            edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::magenta, FLT_MAX, 5.0f);
+            edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::cyan, FLT_MAX, 5.0f);
         }
 
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
@@ -638,7 +655,8 @@ namespace legion::physics
 
         auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
         {
-            verticesVec.push_back(edge->edgePosition);
+            //edge->edgePosition -= PhysicsStatics::PointDistanceToPlane(edge->face->normal, edge->face->centroid, edge->edgePosition);
+            verticesVec.push_back(edge->edgePosition -= PhysicsStatics::PointDistanceToPlane(edge->face->normal, edge->face->centroid, edge->edgePosition));
         };
 
         for (auto face : halfEdgeFaces)

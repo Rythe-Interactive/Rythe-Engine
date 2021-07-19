@@ -35,6 +35,8 @@ namespace legion::physics
 
         float CalculateFaceArea();
 
+        float CalculateFaceExtents(bool atDebug = false,math::mat4 DEBUG_transform =math::mat4(1.0f));
+
         /**@brief Deletes all the edges of this face
          * Warning: pairing edges are not deleted because their face may still exist
          */

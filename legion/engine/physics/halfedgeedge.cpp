@@ -1,5 +1,7 @@
 #include <physics/halfedgeedge.hpp>
 #include <physics/halfedgeface.hpp>
+#include <physics/data/collider_face_to_vert.hpp>
+#include <physics/physics_statics.hpp>
 
 namespace legion::physics
 {
@@ -102,48 +104,97 @@ namespace legion::physics
         debug::user_projectDrawLine(pointStart + diff * 0.75f, worldCentroid, math::colors::red, width, time, true);
     }
 
-    void HalfEdgeEdge::suicidalMergeWithPairing(math::mat4 transform,  bool shouldDebug)
+    void HalfEdgeEdge::suicidalMergeWithPairing(std::vector<math::vec3>& unmergedVertices, math::vec3& normal, float scalingEpsilon, math::mat4 transform, bool shouldDebug)
     {
+        auto releaseFaceToVert = [&unmergedVertices](HalfEdgeFace* face)
+        {
+            ColliderFaceToVert* otherFaceToVert = face->faceToVert;
+            otherFaceToVert->populateVectorWithVerts(unmergedVertices);
+            otherFaceToVert->face = nullptr;
+        };
+
         //----//
         HalfEdgeFace* mergeFace = pairingEdge->face;
-        HalfEdgeEdge* prevFromCurrent = pairingEdge->prevEdge->pairingEdge->face == this->face ? pairingEdge->nextEdge : pairingEdge->prevEdge;
-
-        //next-pairing->next
+        releaseFaceToVert(mergeFace);
+        
+        HalfEdgeEdge* prevFromCurrent =  pairingEdge->prevEdge;
         HalfEdgeEdge* prevFromCurrentConnection = prevFromCurrent->nextEdge->pairingEdge->nextEdge;
-        if (!shouldDebug) { prevFromCurrent->setNext(prevFromCurrentConnection); }
+        prevFromCurrent->setNext(prevFromCurrentConnection); 
 
-        HalfEdgeEdge* nextFromCurrent = pairingEdge->nextEdge->pairingEdge->face == this->face ? pairingEdge->prevEdge : pairingEdge->nextEdge;
+        HalfEdgeEdge* nextFromCurrent =  pairingEdge->nextEdge;
         HalfEdgeEdge* nextFromCurrentConnection = nextFromCurrent->prevEdge->pairingEdge->prevEdge;
 
-        if (!shouldDebug) { nextFromCurrent->setPrev(nextFromCurrentConnection); }
-
-        if (shouldDebug)
-        {
-            prevFromCurrent->DEBUG_directionDrawEdge(transform, math::colors::red,FLT_MAX,5.0f);
-            prevFromCurrentConnection->DEBUG_directionDrawEdge(transform, math::colors::blue, FLT_MAX, 5.0f);
-
-            nextFromCurrent->DEBUG_directionDrawEdge(transform, math::colors::green, FLT_MAX, 5.0f);
-            nextFromCurrentConnection->DEBUG_directionDrawEdge(transform, math::colors::magenta, FLT_MAX, 5.0f);
-            return;
-        }
+        nextFromCurrent->setPrev(nextFromCurrentConnection); 
 
         face->startEdge = prevFromCurrent;
-        face->initializeFace();
-
-        if (prevEdge->pairingEdge->face == mergeFace)
-        {
-            delete prevEdge->pairingEdge;
-            delete prevEdge;
-        }
-
-        if (nextEdge->pairingEdge->face == mergeFace)
-        {
-            delete nextEdge->pairingEdge;
-            delete nextEdge;
-        }
+        face->normal = normal;
 
         mergeFace->startEdge = nullptr;
         delete mergeFace;
+
+        //-------------------------------- handle topological invariant ------------------------------------------------------//
+
+        auto handleDoubleAdjacentMergeResult = [this,releaseFaceToVert](HalfEdgeEdge* prevFromCurrent, HalfEdgeEdge* prevFromCurrentConnection)
+        {
+            HalfEdgeFace* invariantMergeFace = prevFromCurrent->pairingEdge->face;
+            releaseFaceToVert(invariantMergeFace);
+
+            HalfEdgeEdge* prevFromPFC = prevFromCurrent->prevEdge;
+            HalfEdgeEdge* newNextFromPFC = prevFromCurrent->pairingEdge->nextEdge;
+            prevFromPFC->setNext(newNextFromPFC); 
+
+            HalfEdgeEdge* nextFromFCC = prevFromCurrentConnection->nextEdge;
+            HalfEdgeEdge* newPrevFromFCC = prevFromCurrentConnection->pairingEdge->prevEdge;
+            nextFromFCC->setPrev(newPrevFromFCC); 
+
+            delete prevFromCurrent->pairingEdge;
+            delete prevFromCurrent;
+
+            delete prevFromCurrentConnection->pairingEdge;
+            delete prevFromCurrentConnection;
+
+            face->startEdge = prevFromPFC;
+
+            std::vector<math::vec3> vertices;
+            auto collectVertices = [&vertices](HalfEdgeEdge* currentEdge) { vertices.push_back(currentEdge->edgePosition); };
+            face->forEachEdge(collectVertices);
+
+            float tempDis;
+            PhysicsStatics::CalculateNewellPlane(vertices, face->normal, tempDis);
+
+            invariantMergeFace->startEdge = nullptr;
+            delete invariantMergeFace;
+        };
+
+        HalfEdgeFace* currentFace = face;
+        auto setEdgeFace = [&currentFace](HalfEdgeEdge* edge) {edge->face = currentFace; };
+
+        if (prevFromCurrent->pairingEdge->face == prevFromCurrentConnection->pairingEdge->face)
+        {
+            
+            face->forEachEdge(setEdgeFace);
+
+            math::vec3 norm;
+            if (PhysicsStatics::isNewellFacesCoplanar(face, prevFromCurrent->pairingEdge->face, prevFromCurrent, scalingEpsilon, norm,2))
+            {
+                handleDoubleAdjacentMergeResult(prevFromCurrent, prevFromCurrentConnection);
+                log::debug("handleDoubleAdjacentMergeResult ");
+            }
+        }
+
+        if (nextFromCurrent->pairingEdge->face == nextFromCurrentConnection->pairingEdge->face)
+        {
+            face->forEachEdge(setEdgeFace);
+
+            math::vec3 norm;
+            if (PhysicsStatics::isNewellFacesCoplanar(face, nextFromCurrent->pairingEdge->face, nextFromCurrentConnection, scalingEpsilon, norm,2))
+            {
+                handleDoubleAdjacentMergeResult(nextFromCurrentConnection, nextFromCurrent);
+                log::debug("handleDoubleAdjacentMergeResult ");
+            }
+        }
+
+        face->initializeFace();
 
         delete pairingEdge;
         delete this;
