@@ -33,8 +33,6 @@ namespace legion::physics
 
             if (seperation > 0)
             {
-                /*debug::drawLine(worldSupportPoint, worldSupportPoint + math::vec3(0, 0.1f, 0), math::colors::magenta, 5.0f, FLT_MAX, true);
-                debug::drawLine(transformedPositionB, transformedPositionB + seperatingAxis * 0.1f, math::colors::cyan, 5.0f, FLT_MAX, true);*/
                 //we have found a seperating axis, we can exit early
                 maximumSeperation = currentMaximumSeperation;
                 return true;
@@ -159,9 +157,9 @@ namespace legion::physics
                         {
                             //get world edge direction
                             
-                            math::vec3 edgeADirection = transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0);
+                            math::vec3 edgeADirection = transformA * math::vec4(edgeA->getRobustEdgeDirection(), 0);
 
-                            math::vec3 edgeBDirection = transformB * math::vec4(math::cross(edgeB->getLocalNormal(),edgeB->pairingEdge->getLocalNormal()), 0);
+                            math::vec3 edgeBDirection = transformB * math::vec4(edgeB->getRobustEdgeDirection(), 0);
 
                             edgeADirection = math::normalize( edgeADirection );
                             edgeBDirection = math::normalize( edgeBDirection );
@@ -638,7 +636,7 @@ namespace legion::physics
         const math::vec3 transformedA2 = transformA *
             math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
 
-        const math::vec3 transformedEdgeDirectionA =  math::normalize(math::cross(transformedA1, transformedA2));//math::normalize(transformA * math::vec4(edgeA->getLocalEdgeDirection(), 0));//
+        const math::vec3 transformedEdgeDirectionA =  math::normalize(transformA * math::vec4(edgeA->getRobustEdgeDirection(), 0));//
         //
 
         const math::vec3 transformedB1 = transformB *
@@ -647,7 +645,7 @@ namespace legion::physics
         const math::vec3 transformedB2 = transformB *
             math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
 
-        const math::vec3 transformedEdgeDirectionB = math::normalize(math::cross(-transformedB1, -transformedB2));//math::normalize(transformB * math::vec4(edgeB->getLocalEdgeDirection(), 0));//
+        const math::vec3 transformedEdgeDirectionB = math::normalize(transformB * math::vec4(edgeB->getRobustEdgeDirection(), 0));//
         //
         //if (edgeA->identifier == 27 && edgeB->identifier == 436)
         //{

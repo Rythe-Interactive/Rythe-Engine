@@ -19,7 +19,6 @@ namespace legion::physics
         auto aabbOther = convexCollider->GetMinMaxWorldAABB();
         auto& [low0, high0] = aabbThis;
         auto& [low1, high1] = aabbOther;
-
        
         if (!physics::PhysicsStatics::CollideAABB(low0, high0, low1, high1))
         {
@@ -30,9 +29,6 @@ namespace legion::physics
 
         //--------------------- Check for a collision by going through the edges and faces of both polyhedrons  --------------//
         //'this' is colliderB and 'convexCollider' is colliderA
-
-        log::debug("col with {0} {1}", this->GetColliderID(), convexCollider->GetColliderID());
-        bool atDebug = this->GetColliderID() == 4 && convexCollider->GetColliderID() == 5;
         
         PointerEncapsulator < HalfEdgeFace> ARefFace;
 
@@ -43,14 +39,13 @@ namespace legion::physics
             manifold.isColliding = false;
             return;
         }
-        //ARefFace.ptr->DEBUG_DrawFace(manifold.transformA, math::colors::blue, FLT_MAX);
+        
         PointerEncapsulator < HalfEdgeFace> BRefFace;
 
         float BRefSeperation;
         if (PhysicsStatics::FindSeperatingAxisByExtremePointProjection(convexCollider,
             this, manifold.transformA, manifold.transformB, BRefFace, BRefSeperation) || !BRefFace.ptr)
         {
-            
             manifold.isColliding = false;
             return;
         }
@@ -60,25 +55,12 @@ namespace legion::physics
 
         math::vec3 edgeNormal;
         float aToBEdgeSeperation;
-        //BRefFace.ptr->DEBUG_DrawFace(manifold.transformB, math::colors::red, FLT_MAX);
+
         if (PhysicsStatics::FindSeperatingAxisByGaussMapEdgeCheck( this, convexCollider, manifold.transformB, manifold.transformA,
             edgeRef, edgeInc, edgeNormal, aToBEdgeSeperation,true ) || !edgeRef.ptr )
         {
-            if (atDebug)
-            {
-                edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::blue, FLT_MAX, 5.0f);
-                edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::red, FLT_MAX, 5.0f);
-              
-            }
-
             manifold.isColliding = false;
             return;
-        }
-
-        if (atDebug)
-        {
-            edgeRef.ptr->DEBUG_drawEdge(manifold.transformB, math::colors::magenta, FLT_MAX, 5.0f);
-            edgeInc.ptr->DEBUG_drawEdge(manifold.transformA, math::colors::cyan, FLT_MAX, 5.0f);
         }
 
         //--------------------- A Collision has been found, find the most shallow penetration  ------------------------------------//
@@ -91,7 +73,6 @@ namespace legion::physics
         math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4(BRefFace.ptr->centroid, 1);
         math::vec3 worldFaceNormalB = manifold.transformB * math::vec4(BRefFace.ptr->normal, 0);
 
-    
         math::vec3 worldEdgeAPosition = edgeRef.ptr? manifold.transformB * math::vec4(edgeRef.ptr->edgePosition, 1) : math::vec3();
         math::vec3 worldEdgeNormal = edgeNormal;
 
@@ -108,12 +89,6 @@ namespace legion::physics
                 aToBEdgeSeperation, false);
 
         //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
-
-
-       /* log::debug("---- PENETRATION INFO");
-        log::debug("---- abPenetrationQuery {0}", abPenetrationQuery->penetration);
-        log::debug("---- baPenetrationQuery {0}", baPenetrationQuery->penetration);
-        log::debug("---- abEdgePenetrationQuery {0}", abEdgePenetrationQuery->penetration);*/
 
         if (abPenetrationQuery->penetration + physics::constants::faceToFacePenetrationBias >
             baPenetrationQuery->penetration)
@@ -655,7 +630,7 @@ namespace legion::physics
 
         auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
         {
-            //edge->edgePosition -= PhysicsStatics::PointDistanceToPlane(edge->face->normal, edge->face->centroid, edge->edgePosition);
+            edge->calculateRobustEdgeDirection();
             verticesVec.push_back(edge->edgePosition -= PhysicsStatics::PointDistanceToPlane(edge->face->normal, edge->face->centroid, edge->edgePosition));
         };
 

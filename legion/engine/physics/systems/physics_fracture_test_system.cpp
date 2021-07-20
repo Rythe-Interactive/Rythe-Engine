@@ -172,7 +172,7 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::colliderDraw(time::span dt)
     {
-        //drawPhysicsColliders();
+        drawPhysicsColliders();
 
         auto query = createQuery<ObjectToFollow>();
         query.queryEntities();
@@ -779,26 +779,28 @@ namespace legion::physics
 
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
-        //cube
-        /*createQuickhullTestObject
-        (math::vec3(0,5.0f, -0.8f),cubeH, concreteH);*/
+        math::mat3 elongatedBlockInertia = math::mat3(math::vec3(6.0f, 0, 0), math::vec3(0.0f, 18.0f, 0), math::vec3(0, 0, 6.0f));
 
-        //cup
-        createQuickhullTestObject
-        (math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH);
-
-        //////hammer
+        ////cube
         //createQuickhullTestObject
-        //(math::vec3(10.0f, 5.0f, -0.8f), hammerH, wireFrameH);
+        //(math::vec3(0,5.0f, -0.8f),cubeH, concreteH);
+
+        ////cup
+        //createQuickhullTestObject
+        //(math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH, elongatedBlockInertia);
+
+        ////////hammer
+        //createQuickhullTestObject
+        //(math::vec3(10.0f, 5.0f, -0.8f), hammerH, rockTextureH);
 
         ////suzanne
-        //createQuickhullTestObject
-        //(math::vec3(15.0f, 5.0f, -0.0f), suzzaneH, tileH);
+        createQuickhullTestObject
+        (math::vec3(15.0f, 5.0f, -0.8f), suzzaneH, tileH);
 
-        ////ohio teapot
+        //////ohio teapot
         //createQuickhullTestObject
-        //(math::vec3(20.0f, 5.0f, -0.5f), teapotH, wireFrameH);
-        //
+        //(math::vec3(20.0f, 5.0f, -0.5f), teapotH, wireFrameH,elongatedBlockInertia);
+        
 
         addStaircase(math::vec3(8, 2, 0));
         addStaircase(math::vec3(8, 1, -1));
@@ -833,8 +835,6 @@ namespace legion::physics
         physicsComponent2.AddBox(cubeParams);
         entPhyHande.write(physicsComponent2);
 
-
-
         auto ent2 = m_ecs->createEntity();
         ent2.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
 
@@ -843,7 +843,7 @@ namespace legion::physics
         scale2H.write(math::vec3(cubeParams.width, 1.0f, breadthMult));
     }
 
-    void PhysicsFractureTestSystem::createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH)
+    void PhysicsFractureTestSystem::createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH, math::mat3 inertia )
     {
         physics::cube_collider_params cubeParams;
         cubeParams.breadth = 1.0f;
@@ -858,6 +858,11 @@ namespace legion::physics
         ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(TextureH));
 
         auto entPhyHande = ent.add_component<physics::physicsComponent>();
+
+        auto rbH = ent.add_component<rigidbody>();
+        auto rb = rbH.read();
+        rb.localInverseInertiaTensor = inertia;
+        rbH.write(rb);
 
         registeredColliderColorDraw.push_back(ent);
     }
@@ -1035,7 +1040,7 @@ namespace legion::physics
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + worldNormal * 0.1f;
 
-                        debug::drawLine(faceStart, faceEnd, math::colors::green, 2.0f);
+                        //debug::drawLine(faceStart, faceEnd, math::colors::green, 2.0f);
 
                         if (!currentEdge) { return; }
 
@@ -1048,7 +1053,7 @@ namespace legion::physics
                             math::vec3 worldStart = (localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1)) ;
                             math::vec3 worldEnd = (localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1)) ;
 
-                            debug::drawLine(worldStart + shift, worldEnd + shift, usedColor, 2.0f, 0.0f, useDepth);
+                            //debug::drawLine(worldStart + shift, worldEnd + shift, usedColor, 2.0f, 0.0f, useDepth);
 
                             if (auto pairing = edgeToExecuteOn->pairingEdge)
                             {

@@ -53,7 +53,7 @@ namespace legion::physics
             rendering::material_handle wireframeH);
 
         //SCENE HELPERS
-        void createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH);
+        void createQuickhullTestObject(math::vec3 position, rendering::model_handle cubeH, rendering::material_handle TextureH,math::mat3 inertia = math::mat3(6.0f));
 
         void PopulateFollowerList(ecs::entity_handle physicsEnt,int index);
        

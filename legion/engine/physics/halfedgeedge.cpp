@@ -10,10 +10,6 @@ namespace legion::physics
         static int idCount = 0;
         identifier = idCount;
 
-        if (identifier == 433)
-        {
-            //DebugBreak();
-        }
         idCount++;
     }
     void HalfEdgeEdge::setNextAndPrevEdge(HalfEdgeEdge* newPrevEdge, HalfEdgeEdge* newNextEdge)
@@ -46,9 +42,12 @@ namespace legion::physics
         return face->normal;
     }
 
-    math::vec3 HalfEdgeEdge::getLocalEdgeDirection() const
+    void HalfEdgeEdge::calculateRobustEdgeDirection() 
     {
-        return nextEdge->edgePosition - edgePosition;
+        math::vec3 firstNormal = face->normal;
+        math::vec3 secondNormal = pairingEdge->face->normal;
+
+        robustEdgeDirection = math::cross(firstNormal, secondNormal);
     }
 
     bool HalfEdgeEdge::isVertexVisible(const math::vec3& vert,float epsilon)
