@@ -415,7 +415,16 @@ namespace legion::physics
 
     std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices)
     {
-        //[1] Calculate scaled epsilon
+        //[1] Calculated a scaled epsilon based on the extents of the hull. This ensures that epsilon takes the size of the hull into account.
+        //[2] Calculate a visibility epsilon that determines if a vertex should be merged to the hull or not.
+        //[3] Calculate the support points in x,y,z axis of the given vertices in order to create the initial hull
+        //[4] Create the initial hull given the calculated support points
+        //[5] Given the vector of vertices called 'vertices', partition them to the initial hull
+        //[6] While there is still a face in the constructed hull with a vertex that is not merged, merge the vertex
+        //[7] Populate the new ConvexCollider's face vector with the faces generated from the previous step
+        //[8] Populate the new ConvexCollider's vertex vector with the vertices merged from the previous step
+
+        //[1] Calculated a scaled epsilon based on the extents of the hull. This ensures that epsilon takes the size of the hull into account.
         const static float initialEpsilon = math::sqrt( math::epsilon<float>() );
 
         math::vec3 maxInDimension(std::numeric_limits<float>::lowest());
@@ -441,33 +450,35 @@ namespace legion::physics
         //epsilon must take into account span of vertices
         float dimensionSum = 3 * ( maxInDimension.x + maxInDimension.y + maxInDimension.z );
         const float scaledEpsilon = dimensionSum * initialEpsilon;
+
+        //[2] Calculate a visibility epsilon that determines if a vertex should be merged to the hull or not.
         const float visibilityEpsilon = dimensionSum * math::pow(math::epsilon<float>(), 1.0f / 2.5f);
 
         std::vector<HalfEdgeFace*> faces;
         faces.reserve(4);
 
-        //[3] Measure extents of mesh
+        //[3] Calculate the support points in x,y,z,-x,-y,-z axis of the given vertices in order to create the initial hull
         std::array<math::vec3, 6> supportVertices;
 
-        //(1.1) Get support points in -x and x
+        //Get support points in -x and x
         GetSupportPoint(vertices, math::vec3(1, 0, 0), supportVertices.at(0));
         GetSupportPoint(vertices, math::vec3(-1, 0, 0), supportVertices.at(1));
 
-        //(1.2) Get support points in -y and y
+        //Get support points in -y and y
         GetSupportPoint(vertices, math::vec3(0, 1, 0), supportVertices.at(2));
         GetSupportPoint(vertices, math::vec3(0, -1, 0), supportVertices.at(3));
 
-        //(1.3) Get support points in -z and z
+        //Get support points in -z and z
         GetSupportPoint(vertices, math::vec3(0, 0, 1), supportVertices.at(4));
         GetSupportPoint(vertices, math::vec3(0, 0, -1), supportVertices.at(5));
 
-        //[2] Build Initial Hull
+        //[4] Create the initial hull given the calculated support points
         if (!qHBuildInitialHull(vertices, supportVertices, faces,math::mat4(1.0f)))
         {
             return nullptr;
         }
         
-        //[3] populate list with faces of initial hull
+        //[5] Given the vector of vertices called 'vertices', partition them to the initial hull
         std::list<ColliderFaceToVert> facesWithOutsideVerts;
         for (HalfEdgeFace* face : faces)
         {
@@ -476,7 +487,7 @@ namespace legion::physics
 
         partitionVerticesToList(vertices, facesWithOutsideVerts);
 
-        //[4] loop through faces until there are no faces with unmerged vertices
+        //[6] While there is still a face in the constructed hull with a vertex that is not merged, merge the vertex
         if (!facesWithOutsideVerts.empty())
         {
             PointerEncapsulator< ColliderFaceToVert> currentFaceToVert;
@@ -506,6 +517,7 @@ namespace legion::physics
 
         }
 
+        //[7] Populate the new ConvexCollider's face vector with the faces generated from the previous step
         auto convexCollider = std::make_shared<ConvexCollider>();
         auto& halfEdgesVector = convexCollider->GetHalfEdgeFaces();
 
@@ -514,7 +526,7 @@ namespace legion::physics
             halfEdgesVector.push_back(faceToVert.face);
         }
         
-        //populate list of vertices in collider list
+        //[8] Populate the new ConvexCollider's vertex vector with the vertices merged from the previous step
         convexCollider->PopulateVertexListWithHalfEdges();
 
         return convexCollider;
@@ -650,14 +662,6 @@ namespace legion::physics
             }
         }
 
-        //DEBUG draw most distant
-      /*  {
-            math::vec3 transformFirst = DEBUG_transform * math::vec4(firstDistant, 1);
-            math::vec3 transformSecond = DEBUG_transform * math::vec4(secondDistant, 1);
-
-            debug::drawLine(transformFirst, transformSecond,math::colors::red,5.0f,FLT_MAX,true);
-        }*/
-
         //[2] Find the vertex most distant from the line created by the 2 most distance vertices
 
         math::vec3 firstToSecond = math::normalize(secondDistant - firstDistant);
@@ -693,13 +697,6 @@ namespace legion::physics
         {
             return false;
         }
-
-        //DEBUG draw most distant
-      /*  {
-            math::vec3 transformFirst = DEBUG_transform * math::vec4(*thirdDistant, 1);
-
-            debug::drawLine(transformFirst, transformFirst + math::vec3(0,0.1f,0), math::colors::blue, 5.0f, FLT_MAX, true);
-        }*/
 
         //[3] Create first collider face using that line and the vertex most distant to it
 
@@ -748,7 +745,6 @@ namespace legion::physics
 
         math::color drawC = math::colors::blue;
        
-
         //[5] invert face if distant vertex is in front of face
 
         float eyePointDistance =
@@ -760,14 +756,6 @@ namespace legion::physics
             initialFace->inverse();
             drawC = math::colors::red;
         }
-
-        //DEBUG draw most distant
-        /*{
-            math::vec3 transformFirst = DEBUG_transform * math::vec4(*firstEyePoint, 1);
-
-            debug::drawLine(transformFirst, transformFirst + math::vec3(0, 0.1f, 0), drawC, 5.0f, FLT_MAX, true);
-
-        }*/
 
         //[5] Create a set of faces connecting the first collider face to the most distant vertex
 
