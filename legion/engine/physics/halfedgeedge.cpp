@@ -104,6 +104,12 @@ namespace legion::physics
 
     void HalfEdgeEdge::suicidalMergeWithPairing(std::vector<math::vec3>& unmergedVertices, math::vec3& normal, float scalingEpsilon)
     {
+        //[1] identify connecting edges of this face and merge face and connect them together
+        //[2] Handle possible issue where merging this face and merge faces causes the new face to have 2 edges with the same neighbors
+        //[3] re-Initialize to account for new edges
+        //[4] delete pairing and 'this' edge. These edges are no longer part of this face
+
+
         auto releaseFaceToVert = [&unmergedVertices](HalfEdgeFace* face)
         {
             ColliderFaceToVert* otherFaceToVert = face->faceToVert;
@@ -111,7 +117,23 @@ namespace legion::physics
             otherFaceToVert->face = nullptr;
         };
 
-        //----//
+        //[1] identify connecting edges of this face and merge face and connect them together
+        //------------------------------------------------------------------//
+        //                                                                  //
+        // prevFromCurrentConnection    prevFromCurrent                     //
+        //       ___|_______________   ___|_______________                  //
+        //                          | |                                     //
+        //                         -| |                                     //
+        //                   'this' | | pairingEdge                         //
+        //                          | |-                                    //
+        //                          | |                                     //
+        //       _____________|_____| |____________|______                  //
+        // nextFromCurrentConnection    nextFromCurrent                     //
+        //                                                                  //
+        //       [face of 'this']           [merge face]                    //
+        //                                                                  //
+        //------------------------------------------------------------------//
+
         HalfEdgeFace* mergeFace = pairingEdge->face;
         releaseFaceToVert(mergeFace);
         
@@ -130,7 +152,27 @@ namespace legion::physics
         mergeFace->startEdge = nullptr;
         delete mergeFace;
 
-        //-------------------------------- handle topological invariant ------------------------------------------------------//
+        //[2] Handle possible issue where merging this face and merge faces causes the new face to have 2 edges that neighbor the same face
+
+        //----------------------------------------------------------------------//
+        //                        [invariantMergeFace]                          //
+        //   |                                                  |               //
+        //   |newPrevFromFCC                      newNextFromPFC| -             //
+        //   |                                                  |               //
+        //  -|                                                  |               //
+        //   |_________________________|_   _________________|__|               //
+        //    ___|________________________   ___|_______________                //
+        //   |  prevFromCurrentConnection | | prevFromCurrent   |               //
+        //   |                           -| |                   |-              //
+        //   |                     'this' | | pairingEdge       | prevFromPFC   //
+        //   | nextFromFCC                | |-                  |               //
+        //  -|                            | |                   |               //
+        //   |______________________|_____| |____________|______|               //
+        //       nextFromCurrentConnection    nextFromCurrent                   //
+        //                                                                      //
+        //             [face of 'this']           [merge face]                  //
+        //                                                                      //
+        //----------------------------------------------------------------------//
 
         auto handleDoubleAdjacentMergeResult = [this,releaseFaceToVert](HalfEdgeEdge* prevFromCurrent, HalfEdgeEdge* prevFromCurrentConnection)
         {
@@ -189,8 +231,10 @@ namespace legion::physics
             }
         }
 
+        //[3] re-Initialize to account for new edges
         face->initializeFace();
 
+        //[4] delete pairing and 'this' edge. These edges are no longer part of this face
         delete pairingEdge;
         delete this;
 
