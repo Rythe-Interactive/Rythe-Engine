@@ -156,9 +156,7 @@ namespace legion::physics
                         if (attemptBuildMinkowskiFace(edgeA, edgeB, transformA, transformB))
                         {
                             //get world edge direction
-                            
                             math::vec3 edgeADirection = transformA * math::vec4(edgeA->getRobustEdgeDirection(), 0);
-
                             math::vec3 edgeBDirection = transformB * math::vec4(edgeB->getRobustEdgeDirection(), 0);
 
                             edgeADirection = math::normalize( edgeADirection );
@@ -184,23 +182,6 @@ namespace legion::physics
                                 seperatingAxis = -seperatingAxis;
                             }
 
-                            if (edgeA->identifier == 27 && edgeB->identifier == 436)
-                            {
-                                debug::drawLine(edgeAtransformedPosition, edgeAtransformedPosition + math::vec3(0, 0.1f, 0), math::colors::red, 5.0f, FLT_MAX, true);
-                                debug::drawLine(edgeBtransformedPosition, edgeBtransformedPosition + math::vec3(0, 0.1f, 0), math::colors::blue, 5.0f, FLT_MAX, true);
-                                debug::drawLine(edgeAtransformedPosition, edgeAtransformedPosition + seperatingAxis, math::colors::magenta, 5.0f, FLT_MAX, true);
-
-                                float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
-                                log::debug("normal dist {0}" , distance);
-                                math::vec3 edgeBNext = transformB * math::vec4(edgeB->nextEdge->edgePosition, 1);
-                                distance = math::dot(seperatingAxis, edgeBNext - edgeAtransformedPosition);
-                                log::debug("next dist {0}", distance);
-
-                                math::vec3 support;
-                                GetSupportPoint(convexB->GetVertices(), math::inverse(transformB) * math::vec4(-seperatingAxis, 0), support);
-                                support = transformB * math::vec4(support, 1);
-                                debug::drawLine(support, support + math::vec3(0, 0.1f, 0), math::colors::cyan, 5.0f, FLT_MAX, true);
-                            }
                             //check if given edges create a seperating axis
                             float distance = math::dot(seperatingAxis, edgeBtransformedPosition - edgeAtransformedPosition);
                             //log::debug("distance {} , currentMinimumSeperation {}", distance, currentMinimumSeperation);
@@ -432,10 +413,10 @@ namespace legion::physics
         return start + (end - start) * interpolant;
     }
 
-    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices, int maxDraw, int DEBUG_at, math::mat4 DEBUG_transform)
+    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices)
     {
         //[1] Calculate scaled epsilon
-        const static float initialEpsilon = math::pow(math::epsilon<float>(), 1.0f / 2.0f);//math::sqrt(math::epsilon<float>()); //
+        const static float initialEpsilon = math::sqrt( math::epsilon<float>() );
 
         math::vec3 maxInDimension(std::numeric_limits<float>::lowest());
 
@@ -480,32 +461,14 @@ namespace legion::physics
         GetSupportPoint(vertices, math::vec3(0, 0, 1), supportVertices.at(4));
         GetSupportPoint(vertices, math::vec3(0, 0, -1), supportVertices.at(5));
 
-        float x = math::abs(supportVertices.at(0).x - supportVertices.at(1).x);
-        float y = math::abs(supportVertices.at(2).y - supportVertices.at(3).y);
-        float z = math::abs(supportVertices.at(4).z - supportVertices.at(5).z);
-
-        math::vec3 start ( supportVertices.at(1).x, supportVertices.at(3).y, supportVertices.at(5).z);
-        start = DEBUG_transform * math::vec4(start, 1);
-
-        //debug::drawLine(start, start + math::vec3(x, 0, 0), math::colors::red, 20.0f, FLT_MAX, true);
-        //debug::drawLine(start, start + math::vec3(0, y, 0), math::colors::blue, 20.0f, FLT_MAX, true);
-        //debug::drawLine(start, start + math::vec3(0, 0, z), math::colors::green, 20.0f, FLT_MAX, true);
-
-        //merge volume threshold is equal a certain small fraction of the volume of the bounding box 
-        float mergeVolumeThreshold = x * y * z * (1.0f/3000.0f);
-
         //[2] Build Initial Hull
-        if (!qHBuildInitialHull(vertices, supportVertices, faces,DEBUG_transform))
+        if (!qHBuildInitialHull(vertices, supportVertices, faces,math::mat4(1.0f)))
         {
             return nullptr;
         }
-
-        int currentDraw = 0;
-        
         
         //[3] populate list with faces of initial hull
         std::list<ColliderFaceToVert> facesWithOutsideVerts;
-
         for (HalfEdgeFace* face : faces)
         {
             facesWithOutsideVerts.emplace_back(face);
@@ -521,35 +484,13 @@ namespace legion::physics
    
             while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
             {
-                log::debug("Iter {0}", currentDraw);
-
-               /* if (currentDraw == 29)
-                {
-                    DebugBreak();
-                }*/
-
-                //if (currentDraw >= maxDraw) { break; }
-                currentDraw++;
-
-                bool atDebug = currentDraw == DEBUG_at + 1;
-
                 //find furhtest vertex of last face
                 auto [furthestVert, distanceFromFace] = currentFaceToVert.ptr->GetFurthestOutsideVert();
-                math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVert, 1);
-
-                /*if (atDebug)
-                {
-                    currentFaceToVert.ptr->face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, 20.0f);
-                    debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, false);
-                    currentFaceToVert.ptr->outsideVerts.clear();
-                    break;
-                }*/
 
                 //check if we should merge this vertex
                 if (distanceFromFace > visibilityEpsilon)
                 {
-                    bool sucess = mergeVertexToHull(furthestVert, facesWithOutsideVerts,
-                        scaledEpsilon, mergeVolumeThreshold, DEBUG_transform, atDebug);
+                    bool sucess = mergeVertexToHull(furthestVert, facesWithOutsideVerts,scaledEpsilon);
 
                     if (!sucess)
                     {
@@ -561,49 +502,19 @@ namespace legion::physics
                     //this face has no mergable vertices
                     currentFaceToVert.ptr->outsideVerts.clear();
                 }
-
-                if (currentDraw == DEBUG_at)
-                {
-                    PointerEncapsulator< ColliderFaceToVert> debugFaceToVert;
-                    foundFaceWithOutsideVert(facesWithOutsideVerts, debugFaceToVert);
-                    auto [furthestVert, distanceFromFace] = debugFaceToVert.ptr->GetFurthestOutsideVert();
-                    math::vec3 worldPos = DEBUG_transform * math::vec4(furthestVert, 1);
-                    debug::drawLine(worldPos, worldPos + math::vec3(0, 0.05f, 0), math::colors::magenta, 5.0f, FLT_MAX, true);
-                }
-
-                if (atDebug)
-                {
-                    break;
-                }
             }
 
         }
 
-
         auto convexCollider = std::make_shared<ConvexCollider>();
         auto& halfEdgesVector = convexCollider->GetHalfEdgeFaces();
-        int drawCurrent = 0;
-        int drawMax = 3;
-
-        std::vector<HalfEdgeFace*> firstThree;
 
         for (auto& faceToVert : facesWithOutsideVerts)
         {
             halfEdgesVector.push_back(faceToVert.face);
-
-            /*if (drawCurrent == drawMax)
-            {
-                faceToVert.face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
-                firstThree.push_back(faceToVert.face);
-            }*/
-
-            drawCurrent++;
-
         }
         
-
         //populate list of vertices in collider list
-
         convexCollider->PopulateVertexListWithHalfEdges();
 
         return convexCollider;
@@ -921,16 +832,8 @@ namespace legion::physics
             pairing->setPairingEdge(edge);
 
             //initialize new face
-            
-
             math::vec3 faceNormal = math::normalize(math::cross(nextPairing->edgePosition - pairing->edgePosition,
                 prevPairing->edgePosition - pairing->edgePosition));
-            //float tempDist;
-            //CalculateNewellPlane(
-            //    { pairing->edgePosition,nextPairing->edgePosition,  prevPairing->edgePosition },
-            //    faceNormal,
-            //    tempDist
-            //);
 
             HalfEdgeFace* face = new HalfEdgeFace(pairing, faceNormal);
 
@@ -1000,12 +903,10 @@ namespace legion::physics
     }
 
     void PhysicsStatics::findHorizonEdgesFromFaces(const math::vec3& eyePoint, std::vector<HalfEdgeFace*>& faces,
-        std::vector<HalfEdgeEdge*>& outHorizonEdges, float scalingEpsilon, math::mat4 DEBUG_transform, bool atDebug)
+        std::vector<HalfEdgeEdge*>& outHorizonEdges, float scalingEpsilon)
     {
         //[1] Find first horizon edge
         HalfEdgeEdge* initialHorizon = nullptr;
-
-        //if (atDebug) { return; }
         
         auto findFirstHorizon = [&eyePoint,&initialHorizon,scalingEpsilon](HalfEdgeEdge*edge)
         {
@@ -1030,172 +931,38 @@ namespace legion::physics
         //[2] Loop through the collider to collect the other horizon edges
        
         HalfEdgeEdge* currentEdge = initialHorizon;
-        //outHorizonEdges.push_back(currentEdge);
-        if (atDebug)
-        {
-            initialHorizon->DEBUG_drawEdge(DEBUG_transform, math::colors::orange, FLT_MAX, 5.0f);
-            return;
-        }
-        
-        int iter = 0;
+
         do
         {
-
             currentEdge = currentEdge->nextEdge;
-
-            if (atDebug) { log::debug("-> Iteration"); currentEdge->DEBUG_drawEdge(DEBUG_transform, math::colors::cyan, FLT_MAX, 5.0f); }
 
             if (!currentEdge->isEdgeHorizonFromVertex(eyePoint, scalingEpsilon))
             {
-                if (atDebug) { log::debug("Next edge was not a horizon, finding horizon now"); }
-                int safetyCount = 0;
                 auto stuckEdge = currentEdge;
                 do
                 {
-                    if (atDebug) { log::debug("getting pairingEdge->nextEdge"); }
                     auto pairing = currentEdge->pairingEdge;
-                    //assert(pairing != currentEdge);
                     currentEdge = currentEdge->pairingEdge->nextEdge;
-              
                 }
                 while (!currentEdge->isEdgeHorizonFromVertex(eyePoint, scalingEpsilon));
-
             }
 
-            //if (atDebug) { log::debug("getting nextEdge"); }
-
             outHorizonEdges.push_back(currentEdge);
-            iter++;
 
         } while (currentEdge != initialHorizon);
-
-        if (atDebug)
-        {
-            /*for (auto edge : outHorizonEdges)
-            {
-                edge->DEBUG_drawEdge(DEBUG_transform, math::colors::red, FLT_MAX, 5.0f);
-            }*/
-        }
-      
 
     }
 
     bool PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts,
-        float scalingEpsilon, float hullMinimumVolume, math::mat4 DEBUG_transform, bool atDebug)
+        float scalingEpsilon)
     {
         std::vector<math::vec3> unmergedVertices;
         std::vector<HalfEdgeFace*> facesToBeRemoved;
-
-        ////TODO we are doing the point to distance thing twice here, would be better if we reused the results somehow
-        //float totalVolume = 0.0f;
-        ////std::vector<HalfEdgeFace*> visibleFaces;
-
-        //if (atDebug)
-        //{
-        //    //return false;
-        //    //DebugBreak();
-        //}
-
-        //HalfEdgeFace* firstVisibleFace = nullptr;
-
-        ////[1] Calculate volume created if this particular vertex was merged
-        //for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end(); listIter++)
-        //{
-        //    HalfEdgeFace* face = listIter->face;
-
-        //    const math::vec3& planeCentroid = face->centroid;
-        //    const math::vec3& planeNormal = face->normal;
-
-        //    float distanceToPlane = PointDistanceToPlane(planeNormal, planeCentroid, eyePoint);
-
-        //    if (distanceToPlane > scalingEpsilon)
-        //    {
-        //        float faceArea = listIter->face->CalculateFaceArea();
-
-        //        totalVolume += faceArea * distanceToPlane * (1.0f/3.0f);
-        //        //visibleFaces.push_back(face);
-
-        //        firstVisibleFace = face;
-        //    }
-        //}
-
-        ////[2] Only continue if volume is above a given threshold
-        //if (totalVolume < hullMinimumVolume)
-        //{
-        //    static bool notFirstCancelledHull = true;
-
-        //    if (notFirstCancelledHull)
-        //    {
-        //        notFirstCancelledHull = false;
-        //        //log::debug("First Cancelled HUll");
-
-        //        /*for (auto face : visibleFaces)
-        //        {
-        //            face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-        //        }
-
-        //        math::vec3 worldPos = DEBUG_transform * math::vec4(eyePoint, 1);
-        //        debug::drawLine(worldPos, worldPos + math::vec3(0, 0.1, 0), math::colors::magenta, 5.0f, FLT_MAX, true);*/
-
-        //    }
-
-        //    return false;
-        //}
-
-        ////edgequeue
-        //std::stack<HalfEdgeEdge*> edgeStack;
-        //std::vector<HalfEdgeFace*> visibleFaces;
-        //std::vector<HalfEdgeEdge*> horizonEdgesFromDFS;
-
-        ////find first face that can see eyePoint
-        //edgeStack.push(firstVisibleFace->startEdge->pairingEdge);
-
-        ////add edge to stack
-        //while (!edgeStack.empty())
-        //{
-        //    HalfEdgeEdge* pairingOfCurrent = edgeStack.top()->pairingEdge;
-        //    edgeStack.pop();
-
-        //    HalfEdgeFace* pairingFace = pairingOfCurrent->face;
-        //    visibleFaces.push_back(pairingFace);
-
-        //    if ( false == pairingFace->isSeen )
-        //    {
-        //        pairingFace->isSeen = true;
-
-        //        auto collectEdges = [&eyePoint, &scalingEpsilon,&edgeStack,&horizonEdgesFromDFS](HalfEdgeEdge* current)
-        //        {
-        //            if (false == current->isEdgeHorizonFromVertex(eyePoint, scalingEpsilon))
-        //            {
-        //                edgeStack.push(current);
-        //            }
-        //            else
-        //            {
-        //               
-        //                horizonEdgesFromDFS.push_back(current);
-        //            }
-
-
-        //        };
-
-        //        pairingFace->forEachEdgeReverse(collectEdges);
-
-        //    }
-        //}
-
-        //if (atDebug)
-        //{
-        //    for (auto face : visibleFaces)
-        //    {
-        //        //face->DEBUG_DrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
-        //    }
-        //}
           
         //identify faces that can see vertex and remove them from list
         for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
         {
             HalfEdgeFace* face = listIter->face;
-            face->isSeen = false;
 
             const math::vec3& planeCentroid = face->centroid;
             const math::vec3& planeNormal = face->normal;
@@ -1214,32 +981,10 @@ namespace legion::physics
                 listIter++;
             }
         }
-
-        if (atDebug)
-        {
-            
-            for (auto face : facesToBeRemoved)
-            {
-                //face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::grey, FLT_MAX);
-            }
-            log::debug(" facesToBeRemoved {0} ", facesToBeRemoved.size());
-            //return true;
-        }
         
         //identify horizon edges and put them into list
         std::vector<HalfEdgeEdge*> horizonEdges;
-        findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges,scalingEpsilon, DEBUG_transform, false);
-
-        if (atDebug)
-        {
-            //return;
-            for (auto edge : horizonEdges)
-            {
-                //edge->DEBUG_drawEdge(DEBUG_transform, math::colors::blue, FLT_MAX);
-            }
-            log::debug("at debug horizon edges {0} ", horizonEdges.size());
-            //return true;
-        }
+        findHorizonEdgesFromFaces(eyePoint, facesToBeRemoved, horizonEdges,scalingEpsilon);
 
         //reverse iterate the list to find their pairings, add them to new list
         {
@@ -1253,145 +998,11 @@ namespace legion::physics
             }
         }
 
-        if (atDebug)
-        {
-            //for (auto face : facesToBeRemoved)
-            //{
-            //    //face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-            //}
-
-            //facesToBeRemoved.at(1)->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-
-            //auto distanceFromCentroid = [](HalfEdgeEdge* edge)
-            //{
-            //    log::debug(" facesToBeRemoved dist {0} ", PointDistanceToPlane(edge->face->normal, edge->face->centroid, edge->edgePosition));
-            //};
-
-            //facesToBeRemoved.at(1)->forEachEdge(distanceFromCentroid);
-
-            //log::debug(" facesToBeRemoved {0} ", facesToBeRemoved.size());
-            //return true;
-        }
-
-
         std::vector<HalfEdgeFace*> newFaces;
         newFaces.reserve(horizonEdges.size());
         createHalfEdgeFaceFromEyePoint(eyePoint, horizonEdges, newFaces);
 
-        if (atDebug)
-        {
-            //433type 
-            /*for (size_t i = 0; i < newFaces.size(); i++)
-            {
-                if (newFaces.at(i)->startEdge->identifier == 335)
-                {
-                    newFaces.at(i)->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-                }
-                
-            }*/
-            for (auto face : newFaces)
-            {
-                //face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-            }
-            log::debug(" newFaces {0} ", newFaces.size());
-            //return true;
-        }
-
-        //-------------------------------------------- New Merging -------------------------------------------------------//
-        
-        //for (int i = 0; i < horizonEdges.size(); i++)
-        //{
-        //    //horizon is now 
-        //    HalfEdgeFace* establishedFace = horizonEdges.at(i)->face;
-        //    ColliderFaceToVert& faceToVertEstablished = *establishedFace->faceToVert;
-        //    HalfEdgeFace* newFace = newFaces.at(i);
-
-        //    bool bIsConcave = isFacesConcave(establishedFace, newFace);
-
-        //    math::vec3 newNormal;
-        //    if (isNewellFacesCoplanar(establishedFace, newFace, horizonEdges.at(i),scalingEpsilon, newNormal,DEBUG_transform,false)
-        //        || bIsConcave)
-        //    {
-
-        //        horizonEdges.at(i)->suicidalMergeWithPairing(DEBUG_transform);
-
-        //        faceToVertEstablished.populateVectorWithVerts(unmergedVertices);
-        //        faceToVertEstablished.face->normal = newNormal;
-
-        //        newFaces.at(i) = nullptr;
-        //        horizonEdges.at(i) = nullptr;
-
-        //    }
-        //}
-
-        //if (atDebug)
-        //{
-        //    //return true;
-        //}
-
-        //int mergeCount = 0;
-        ////for each edge in horizon edge
-        //    //if edge is available
-        //for (size_t i = 0; i < horizonEdges.size(); i++)
-        //{
-        //    size_t next = (i+1) % horizonEdges.size();
-
-        //    auto currentEdge = horizonEdges.at(i);
-
-        //    if (newFaces.at(i) && newFaces.at(next))
-        //    {
-        //        HalfEdgeEdge* connectingEdgeToSecond = currentEdge->pairingEdge->nextEdge;
-
-        //        math::vec3 newNormal;
-        //        if (isNewellFacesCoplanar(newFaces.at(i), newFaces.at(next), connectingEdgeToSecond, scalingEpsilon, newNormal, DEBUG_transform, false)
-        //            || isFacesConcave(newFaces.at(i), newFaces.at(next) ) )
-        //        {
-        //            newFaces.at(next) = newFaces.at(i);//newFaces.at(next);
-        //            connectingEdgeToSecond->suicidalMergeWithPairing(DEBUG_transform);
-        //            newFaces.at(i)->normal = newNormal;
-
-        //            mergeCount++;
-        //        }
-        //    }
-        //}
-
-         //-------------------------------------------- End New Merging -------------------------------------------------------//
-
-       /* {
-            std::vector<HalfEdgeFace*> tempNewFaces = std::move(newFaces);
-
-            for (auto face : tempNewFaces)
-            {
-                if (face)
-                {
-                    newFaces.push_back(face);
-                }
-            }
-
-            if (newFaces.size() > 1)
-            {
-                if (newFaces.at(newFaces.size() - 1) == newFaces.at(0))
-                {
-                    newFaces.pop_back();
-                }
-            }
-
-            auto last = std::unique(newFaces.begin(), newFaces.end());
-            newFaces.resize(std::distance(newFaces.begin(), last));
-
-        }*/
-
-        if (atDebug)
-        {
-            ////433
-            for (auto face : newFaces)
-            {
-                //face->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-                //face->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-            }
-            log::debug("final newFaces {0} ", newFaces.size());
-            //return true;
-        }
+        //merge all new edges until no coplanarity/concavity can be detected
 
         auto oldEndIter = facesWithOutsideVerts.end();
         oldEndIter--;
@@ -1401,9 +1012,7 @@ namespace legion::physics
             facesWithOutsideVerts.emplace_back(face);
         }
 
-        int iterCount = 0;
-        int count = 0;
-        for (auto listIter = oldEndIter; listIter != facesWithOutsideVerts.end(); listIter++,iterCount++)
+        for (auto listIter = oldEndIter; listIter != facesWithOutsideVerts.end(); listIter++)
         {
             bool mergedInIteration = false;
             if (!listIter->face) {  continue; }
@@ -1419,7 +1028,6 @@ namespace legion::physics
 
                 listIter->face->forEachEdge(edgeCollect);
 
-                int eCount = 0;
                 for (auto edge : faceEdges)
                 {
                     HalfEdgeEdge* pairingEdge = edge->pairingEdge;
@@ -1428,38 +1036,11 @@ namespace legion::physics
                     math::vec3 newNormal;
 
                     if (isNewellFacesCoplanar(currentFace, pairingEdge->face, edge,
-                        scalingEpsilon, newNormal,1, math::mat4(1.0f), false) || isFacesConcave(edge->face, pairingEdge->face))
+                        scalingEpsilon, newNormal,1) || isFacesConcave(edge->face, pairingEdge->face))
                     {
-                        count++;
-
-                        //if (count ==3 && atDebug)
-                        //{
-                        //    //edge->DEBUG_directionDrawEdge(DEBUG_transform, math::colors::red, FLT_MAX, 5.0f);
-                        //    currentFace->DEBUG_DrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-                        //    pairingEdge->face->DEBUG_DrawFace(DEBUG_transform, math::colors::magenta, FLT_MAX);
-                        //     //edge->suicidalMergeWithPairing(unmergedVertices,newNormal ,DEBUG_transform, false);
-
-                        //    isNewellFacesCoplanar(currentFace, pairingEdge->face, edge,
-                        //        scalingEpsilon, newNormal,1, DEBUG_transform, true);
-                        //  
-                        //    mergedInIteration = false;
-                        //    listIter = facesWithOutsideVerts.end();
-                        //    listIter--;
-                        //    break;
-                        //}
-                       
-                        edge->suicidalMergeWithPairing(unmergedVertices,newNormal,scalingEpsilon, DEBUG_transform, count == 4 && atDebug);
+                        edge->suicidalMergeWithPairing(unmergedVertices,newNormal,scalingEpsilon);
 
                         mergedInIteration = true;
-
-                        //if (count == 3 && atDebug)
-                        //{
-                        //    //currentFace->DEBUG_DirectionDrawFace(DEBUG_transform, math::colors::red, FLT_MAX);
-                        //    mergedInIteration = false;
-                        //    listIter = facesWithOutsideVerts.end();
-                        //    listIter--;
-                        //}
-                        log::debug("merged in post");
                         break;
                     }
                     else
@@ -1482,24 +1063,20 @@ namespace legion::physics
 
                             delete oldNextEdge;
                             delete oldPairingNextEdge;
-                            log::debug("handled double adjacent invariant");
+
                             mergedInIteration = true;
                             break;
                         }
                     }
-
-                    eCount++;
                 }
             } while (mergedInIteration);
-            
-
         }
 
+        //duplicate faces are generated while face merging, remove them here
         std::set<HalfEdgeFace*> uniqueFaces;
-
         for (auto listIter = facesWithOutsideVerts.begin(); listIter != facesWithOutsideVerts.end();)
         {
-            if (!listIter->face ) { listIter = facesWithOutsideVerts.erase(listIter); continue; } //DEBUG
+            if (!listIter->face ) { listIter = facesWithOutsideVerts.erase(listIter); continue; } 
             auto iter = uniqueFaces.find(listIter->face);
 
             if (iter != uniqueFaces.end())
@@ -1533,7 +1110,7 @@ namespace legion::physics
     }
 
     bool PhysicsStatics::isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second,
-        HalfEdgeEdge* connectingEdge, float scalingEpsilon,  math::vec3& outNormal,int skipCount, math::mat4 DEBUG_transform, bool atDebug)
+        HalfEdgeEdge* connectingEdge, float scalingEpsilon,  math::vec3& outNormal,int skipCount)
     {
         //each face will at least have 3 vertices
         std::vector<math::vec3> NewellPolygon;
@@ -1555,7 +1132,6 @@ namespace legion::physics
 
         auto collectVerticesOfFace = [&NewellPolygon](HalfEdgeEdge* edge)
         {
-            //float correctionDistance = PointDistanceToPlane(edge->face->normal, edge->face->centroid, edge->edgePosition);
             NewellPolygon.emplace_back(edge->edgePosition );
         };
 
@@ -1566,48 +1142,12 @@ namespace legion::physics
         NewellPolygon.pop_back();
 
 
-
          float distToCentroid;
         CalculateNewellPlane(NewellPolygon, outNormal, distToCentroid);
 
-        if (atDebug)
-        {
-            math::vec3 pos;
-
-           /* pos = DEBUG_transform * math::vec4(NewellPolygon.at(0), 1);
-            debug::drawLine(pos, pos + math::vec3(0, 0.1f, 0), math::colors::red, 4.0f, FLT_MAX, true);
-
-            pos = DEBUG_transform * math::vec4(NewellPolygon.at(1), 1);
-            debug::drawLine(pos, pos + math::vec3(0, 0.1f, 0), math::colors::green, 4.0f, FLT_MAX, true);
-
-            pos = DEBUG_transform * math::vec4(NewellPolygon.at(2), 1);
-            debug::drawLine(pos, pos + math::vec3(0, 0.1f, 0), math::colors::blue, 4.0f, FLT_MAX, true);
-
-            pos = DEBUG_transform * math::vec4(NewellPolygon.at(3), 1);
-            debug::drawLine(pos, pos + math::vec3(0, 0.1f, 0), math::colors::magenta, 4.0f, FLT_MAX, true);
-
-            pos = DEBUG_transform * math::vec4(NewellPolygon.at(4), 1);
-            debug::drawLine(pos, pos + math::vec3(0, 0.1f, 0), math::colors::cyan, 4.0f, FLT_MAX, true);
-
-            pos = DEBUG_transform * math::vec4(first->centroid, 1);
-            debug::drawLine(pos, pos + outNormal * 0.2f, math::colors::white, 4.0f, FLT_MAX, true);*/
-        }
-        //
-        float x = first->CalculateFaceExtents(atDebug, DEBUG_transform);
-        float y = second->CalculateFaceExtents(atDebug, DEBUG_transform);
+        float x = first->CalculateFaceExtents();
+        float y = second->CalculateFaceExtents();
         float epsilonMultiplier = (x + y) * 0.5f;
-        if(atDebug)
-        {
-            log::debug(" scalingEpsilon {0} , suggestedEpsilon {1} ", scalingEpsilon, (x + y) * 0.5f * scalingEpsilon);
-            log::debug(" x {0}  y {1} ", x,y);
-            log::debug("final mult {0}", epsilonMultiplier);
-           /* x = first->CalculateFaceArea();
-            y = second->CalculateFaceArea();
-
-            log::debug("area x {0}  y {0} ", x, y);*/
-        }
-
-        
 
         for (int i = 0; i < NewellPolygon.size(); i++) {
             float dist = math::dot(outNormal, NewellPolygon[i]) - distToCentroid;

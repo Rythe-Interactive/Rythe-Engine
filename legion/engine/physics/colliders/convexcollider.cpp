@@ -39,7 +39,7 @@ namespace legion::physics
             manifold.isColliding = false;
             return;
         }
-        
+
         PointerEncapsulator < HalfEdgeFace> BRefFace;
 
         float BRefSeperation;

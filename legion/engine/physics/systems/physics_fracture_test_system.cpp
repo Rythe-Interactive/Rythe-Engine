@@ -781,31 +781,31 @@ namespace legion::physics
     {
         math::mat3 elongatedBlockInertia = math::mat3(math::vec3(6.0f, 0, 0), math::vec3(0.0f, 18.0f, 0), math::vec3(0, 0, 6.0f));
 
-        ////cube
-        //createQuickhullTestObject
-        //(math::vec3(0,5.0f, -0.8f),cubeH, concreteH);
+        //cube
+        createQuickhullTestObject
+        (math::vec3(0,5.0f, -0.8f),cubeH, concreteH);
 
-        ////cup
-        //createQuickhullTestObject
-        //(math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH, elongatedBlockInertia);
+        //cup
+        createQuickhullTestObject
+        (math::vec3(5.0f, 5.0f, -0.8f), colaH, wireFrameH, elongatedBlockInertia);
 
-        ////////hammer
-        //createQuickhullTestObject
-        //(math::vec3(10.0f, 5.0f, -0.8f), hammerH, rockTextureH);
+        //////hammer
+        createQuickhullTestObject
+        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, rockTextureH);
 
         ////suzanne
         createQuickhullTestObject
-        (math::vec3(15.0f, 5.0f, -0.8f), suzzaneH, tileH);
+        (math::vec3(15.0f, 5.0f, -0.8f), suzzaneH, wireFrameH);
 
-        //////ohio teapot
-        //createQuickhullTestObject
-        //(math::vec3(20.0f, 5.0f, -0.5f), teapotH, wireFrameH,elongatedBlockInertia);
+        ////ohio teapot
+        createQuickhullTestObject
+        (math::vec3(20.0f, 5.0f, -0.5f), teapotH, wireFrameH,elongatedBlockInertia);
         
 
         addStaircase(math::vec3(8, 2, 0));
         addStaircase(math::vec3(8, 1, -1));
         addStaircase(math::vec3(8, 0, -2));
-        addStaircase(math::vec3(8, -1, -3));
+        addStaircase(math::vec3(8, -1, -3.1f));
 
         addStaircase(math::vec3(8, -2, -5),5.0f);
 

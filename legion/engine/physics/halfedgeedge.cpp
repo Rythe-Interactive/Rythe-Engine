@@ -99,11 +99,10 @@ namespace legion::physics
         math::vec3 pointStart = worldStart + startDifference;
         math::vec3 diff = worldEnd + endDifference - (worldStart + startDifference);
 
-
         debug::user_projectDrawLine(pointStart + diff * 0.75f, worldCentroid, math::colors::red, width, time, true);
     }
 
-    void HalfEdgeEdge::suicidalMergeWithPairing(std::vector<math::vec3>& unmergedVertices, math::vec3& normal, float scalingEpsilon, math::mat4 transform, bool shouldDebug)
+    void HalfEdgeEdge::suicidalMergeWithPairing(std::vector<math::vec3>& unmergedVertices, math::vec3& normal, float scalingEpsilon)
     {
         auto releaseFaceToVert = [&unmergedVertices](HalfEdgeFace* face)
         {
@@ -170,14 +169,12 @@ namespace legion::physics
 
         if (prevFromCurrent->pairingEdge->face == prevFromCurrentConnection->pairingEdge->face)
         {
-            
             face->forEachEdge(setEdgeFace);
 
             math::vec3 norm;
             if (PhysicsStatics::isNewellFacesCoplanar(face, prevFromCurrent->pairingEdge->face, prevFromCurrent, scalingEpsilon, norm,2))
             {
                 handleDoubleAdjacentMergeResult(prevFromCurrent, prevFromCurrentConnection);
-                log::debug("handleDoubleAdjacentMergeResult ");
             }
         }
 
@@ -189,7 +186,6 @@ namespace legion::physics
             if (PhysicsStatics::isNewellFacesCoplanar(face, nextFromCurrent->pairingEdge->face, nextFromCurrentConnection, scalingEpsilon, norm,2))
             {
                 handleDoubleAdjacentMergeResult(nextFromCurrentConnection, nextFromCurrent);
-                log::debug("handleDoubleAdjacentMergeResult ");
             }
         }
 

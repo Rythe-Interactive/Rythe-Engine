@@ -26,16 +26,13 @@ namespace legion::physics
 		math::vec3 centroid;
         math::color DEBUG_color;
         HalfEdgeEdge* startEdge = nullptr;
-        ColliderFaceToVert* faceToVert = nullptr; //only used for initialization of quickhull, unfortunately cant find a better solution
-        bool isSeen = false;
+        ColliderFaceToVert* faceToVert = nullptr; 
         
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
         void initializeFace();
 
-        float CalculateFaceArea();
-
-        float CalculateFaceExtents(bool atDebug = false,math::mat4 DEBUG_transform =math::mat4(1.0f));
+        float CalculateFaceExtents();
 
         /**@brief Deletes all the edges of this face
          * Warning: pairing edges are not deleted because their face may still exist

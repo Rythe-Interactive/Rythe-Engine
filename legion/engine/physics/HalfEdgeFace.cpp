@@ -18,16 +18,9 @@ namespace legion::physics
         math::vec3 faceCenter{ 0.0f };
         int edgeCount = 0;
 
-        std::vector<math::vec3> faceVertices;
-        faceVertices.reserve(4);
-
-        auto calculateFaceCentroid = [&faceCenter, &edgeCount,&faceVertices](HalfEdgeEdge* edge)
+        auto calculateFaceCentroid = [&faceCenter, &edgeCount](HalfEdgeEdge* edge)
         {
-            math::vec3 pos = edge->edgePosition;
-
-            faceVertices.push_back(pos);
-            faceCenter += pos;
-
+            faceCenter += edge->edgePosition;
             edgeCount++;
         };
         forEachEdge(calculateFaceCentroid);
@@ -55,50 +48,7 @@ namespace legion::physics
         faceCount++;
     }
 
-    float HalfEdgeFace::CalculateFaceArea() 
-    {
-        static bool notfirstTime = true;
-        float sum = 0;
-        math::vec3& faceCentroidPos = centroid;
-
-        auto caculateEdgeArea = [&faceCentroidPos,&sum](HalfEdgeEdge* edge)
-        {
-            const math::vec3& currentEdgePos = edge->edgePosition;
-
-            //get vector of current and next position
-            math::vec3 direction = edge->nextEdge->edgePosition - currentEdgePos;
-            math::vec3 directionNorm = math::normalize(direction);
-
-            //get length of direction
-            float dirVeclength = math::length(direction);
-      
-            //dot (centroid - current) with normalized direction
-            float interpolant = math::dot(faceCentroidPos - currentEdgePos, directionNorm);
-
-            //divide by length,this is the interpolant of the vector
-            interpolant /= dirVeclength;
-
-            //use interpolant to get closest point to centroid
-            math::vec3 closestPointToCentroid = currentEdgePos + direction * interpolant;
-
-            float triangleHeight = math::length(closestPointToCentroid - faceCentroidPos);
-            //multiply length of direction with length of centroid-interpolant point divide by 2
-            sum += (triangleHeight * dirVeclength * 0.5f);
-
-            if (notfirstTime)
-            {
-                notfirstTime = false;
-                debug::drawLine(currentEdgePos, edge->nextEdge->edgePosition, math::colors::black, 5.0f, FLT_MAX, true);
-                debug::drawLine(closestPointToCentroid, faceCentroidPos, math::colors::red, 5.0f, FLT_MAX, true);
-            }
-        };
-
-        forEachEdge(caculateEdgeArea);
-
-        return sum;
-    }
-
-    float HalfEdgeFace::CalculateFaceExtents(bool atDebug , math::mat4 DEBUG_transform)
+    float HalfEdgeFace::CalculateFaceExtents()
     {
         //get vector of vertices of face
         std::vector<math::vec3> vertices;
@@ -126,22 +76,7 @@ namespace legion::physics
         float maxRightLength = math::dot(maxRight - centroid, right);
         float minRightLength = math::dot(minRight - centroid, -right);
 
-        if (atDebug)
-        {
-            math::vec3 pos = DEBUG_transform * math::vec4(centroid, 1.0f);
-
-            /*debug::drawLine(pos, pos + forward * maxForwardLength, math::colors::red, 5.0f, FLT_MAX, false);
-            debug::drawLine(pos, pos - forward * minForwardLength, math::colors::blue, 5.0f, FLT_MAX, false);
-
-            debug::drawLine(pos, pos + right * maxRightLength, math::colors::green, 5.0f, FLT_MAX, false);
-            debug::drawLine(pos, pos - right * minRightLength, math::colors::magenta, 5.0f, FLT_MAX, false);*/
-            /*log::debug("Results");
-            log::debug("maxForwardLength {0} minForwardLength {1}",maxForwardLength,minForwardLength);
-            log::debug("maxRightLength {0} minRightLength {1}", maxRightLength, minRightLength);*/
-
-        }
-
-        return (maxForwardLength + minForwardLength) + (maxRightLength * minRightLength);
+        return (maxForwardLength + minForwardLength) + (maxRightLength + minRightLength);
     }
 
     void HalfEdgeFace::deleteEdges()

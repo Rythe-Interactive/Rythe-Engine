@@ -470,11 +470,11 @@ namespace legion::physics
 
         //------------------------------------------------------------ Quickhull -----------------------------------------------------------------------//
 
-        static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices,int maxDraw = INT_MAX,int DEBUG_at = INT_MAX,math::mat4 DEBUG_transform = math::mat4(1.0f));
+        static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices);
 
         static void CalculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid);
 
-        static bool isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second, HalfEdgeEdge* connectingEdge, float scalingEpsilon, math::vec3& outNormal, int skipCount, math::mat4 DEBUG_transform = math::mat4(1.0f), bool atDebug = false);
+        static bool isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second, HalfEdgeEdge* connectingEdge, float scalingEpsilon, math::vec3& outNormal, int skipCount);
 
 
     private:
@@ -509,11 +509,10 @@ namespace legion::physics
             std::list<ColliderFaceToVert>& outFacesWithOutsideVerts);
 
         static void findHorizonEdgesFromFaces(const math::vec3& eyePoint,
-            std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges,float scalingEpsilon,
-            math::mat4 DEBUG_transform = math::mat4(1.0f),bool atDebug =false);
+            std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges,float scalingEpsilon);
 
         static bool mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts,
-            float scalingEpsilon,float hullMinimumVolume, math::mat4 DEBUG_transform,bool atDebug);
+            float scalingEpsilon);
 
         static bool isFacesConcave(HalfEdgeFace* first, HalfEdgeFace* second);
 
