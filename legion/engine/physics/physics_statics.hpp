@@ -511,7 +511,7 @@ namespace legion::physics
         static void findHorizonEdgesFromFaces(const math::vec3& eyePoint,
             std::vector<HalfEdgeFace*>& faces, std::vector<HalfEdgeEdge*>& outHorizonEdges,float scalingEpsilon);
 
-        static bool mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts,
+        static void mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts,
             float scalingEpsilon);
 
         static bool isFacesConcave(HalfEdgeFace* first, HalfEdgeFace* second);

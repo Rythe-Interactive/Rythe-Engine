@@ -490,12 +490,7 @@ namespace legion::physics
                 //check if we should merge this vertex
                 if (distanceFromFace > visibilityEpsilon)
                 {
-                    bool sucess = mergeVertexToHull(furthestVert, facesWithOutsideVerts,scaledEpsilon);
-
-                    if (!sucess)
-                    {
-                        currentFaceToVert.ptr->outsideVerts.clear();
-                    }
+                    mergeVertexToHull(furthestVert, facesWithOutsideVerts,scaledEpsilon);
                 }
                 else
                 {
@@ -936,7 +931,7 @@ namespace legion::physics
 
     }
 
-    bool PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts,
+    void PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts,
         float scalingEpsilon)
     {
         std::vector<math::vec3> unmergedVertices;
@@ -1083,7 +1078,6 @@ namespace legion::physics
             delete face;
         }
 
-        return true;
     }
 
     bool PhysicsStatics::isFacesConcave(HalfEdgeFace* first, HalfEdgeFace* second)
