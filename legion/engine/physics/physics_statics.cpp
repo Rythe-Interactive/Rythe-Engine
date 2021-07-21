@@ -540,15 +540,13 @@ namespace legion::physics
 
     bool PhysicsStatics::attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::mat4& transformA, const math::mat4& transformB)
     {
-        //11 , 745
         const math::vec3 transformedA1 = transformA *
             math::vec4(edgeA->getLocalNormal(), 0);
 
         const math::vec3 transformedA2 = transformA *
             math::vec4(edgeA->pairingEdge->getLocalNormal(), 0);
 
-        const math::vec3 transformedEdgeDirectionA =  math::normalize(transformA * math::vec4(edgeA->getRobustEdgeDirection(), 0));//
-        //
+        const math::vec3 transformedEdgeDirectionA =  math::normalize(transformA * math::vec4(edgeA->getRobustEdgeDirection(), 0));
 
         const math::vec3 transformedB1 = transformB *
             math::vec4(edgeB->getLocalNormal(), 0);
@@ -556,22 +554,7 @@ namespace legion::physics
         const math::vec3 transformedB2 = transformB *
             math::vec4(edgeB->pairingEdge->getLocalNormal(), 0);
 
-        const math::vec3 transformedEdgeDirectionB = math::normalize(transformB * math::vec4(edgeB->getRobustEdgeDirection(), 0));//
-        //
-        //if (edgeA->identifier == 27 && edgeB->identifier == 436)
-        //{
-        //    math::vec3 positionA = transformA * math::vec4(edgeA->edgePosition, 1);
-        //    debug::drawLine(positionA, positionA + transformedA1, math::colors::green, 5.0f, FLT_MAX, true);
-        //    debug::drawLine(positionA, positionA + transformedA2, math::colors::green, 5.0f, FLT_MAX, true);
-
-        //    debug::drawLine(positionA, positionA - transformedB1, math::colors::red, 5.0f, FLT_MAX, true);
-        //    debug::drawLine(positionA, positionA - transformedB2, math::colors::red, 5.0f, FLT_MAX, true);
-
-        //    debug::drawLine(positionA, positionA - transformedEdgeDirectionB, math::colors::cyan, 5.0f, FLT_MAX, true);
-        //    debug::drawLine(positionA, positionA - transformedEdgeDirectionA, math::colors::magenta, 5.0f, FLT_MAX, true);
-
-        //    //debug::drawLine(positionA, positionA - math::normalize(math::cross(transformedA2, transformedB2)), math::colors::blue, 5.0f, FLT_MAX, true);
-        //}
+        const math::vec3 transformedEdgeDirectionB = math::normalize(transformB * math::vec4(edgeB->getRobustEdgeDirection(), 0));
 
         return isMinkowskiFace(transformedA1, transformedA2, -transformedB1, -transformedB2
             , (transformedEdgeDirectionA), (transformedEdgeDirectionB));
