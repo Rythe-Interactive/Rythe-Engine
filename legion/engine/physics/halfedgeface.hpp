@@ -30,8 +30,13 @@ namespace legion::physics
         
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
+        /**@brief Given that the face has a startEdge,a normal, and a centroid,
+         * initializes the face so that it can be used for collision detection in a convex hull
+         */
         void initializeFace();
 
+        /**@brief Calculates the sum of the width and height of the rectangle that envelops this face
+         */
         float CalculateFaceExtents();
 
         /**@brief Deletes all the edges of this face

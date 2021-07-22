@@ -50,7 +50,7 @@ namespace legion::physics
 
     float HalfEdgeFace::CalculateFaceExtents()
     {
-        //get vector of vertices of face
+        //put the position of all edges of this face into a vector
         std::vector<math::vec3> vertices;
         vertices.reserve(6);
 
@@ -63,13 +63,13 @@ namespace legion::physics
 
         math::vec3 maxForward, minForward, maxRight, minRight;
 
+        //get support point for the tangents and inverse tangents of this face 
         PhysicsStatics::GetSupportPoint(vertices, forward, maxForward);
         PhysicsStatics::GetSupportPoint(vertices, -forward, minForward);
 
         PhysicsStatics::GetSupportPoint(vertices, right, maxRight);
         PhysicsStatics::GetSupportPoint(vertices, -right, minRight);
 
-        //get support point of both directions
         float maxForwardLength = math::dot(maxForward - centroid, forward);
         float minForwardLength = math::dot(minForward - centroid, -forward);
 
