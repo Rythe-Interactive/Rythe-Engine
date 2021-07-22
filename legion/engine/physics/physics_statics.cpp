@@ -413,7 +413,7 @@ namespace legion::physics
         return start + (end - start) * interpolant;
     }
 
-    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices)
+    std::shared_ptr<ConvexCollider> PhysicsStatics::generateConvexHull(const std::vector<math::vec3>& vertices)
     {
         //[1] Calculate scaled epsilon
         const static float initialEpsilon = math::sqrt( math::epsilon<float>() );
@@ -462,7 +462,7 @@ namespace legion::physics
         GetSupportPoint(vertices, math::vec3(0, 0, -1), supportVertices.at(5));
 
         //[2] Build Initial Hull
-        if (!qHBuildInitialHull(vertices, supportVertices, faces,math::mat4(1.0f)))
+        if (!buildInitialHull(vertices, supportVertices, faces,math::mat4(1.0f)))
         {
             return nullptr;
         }
@@ -485,7 +485,7 @@ namespace legion::physics
             while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
             {
                 //find furhtest vertex of last face
-                auto [furthestVert, distanceFromFace] = currentFaceToVert.ptr->GetFurthestOutsideVert();
+                auto [furthestVert, distanceFromFace] = currentFaceToVert.ptr->getFurthestOutsideVert();
 
                 //check if we should merge this vertex
                 if (distanceFromFace > visibilityEpsilon)
@@ -515,7 +515,7 @@ namespace legion::physics
         return convexCollider;
     }
 
-    void PhysicsStatics::CalculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid)
+    void PhysicsStatics::calculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid)
     {
         math::vec3 centroid{0,0,0};
         outPlaneNormal = math::vec3();
@@ -607,7 +607,7 @@ namespace legion::physics
         return true;
     }
 
-    bool PhysicsStatics::qHBuildInitialHull(const std::vector<math::vec3>& vertices,
+    bool PhysicsStatics::buildInitialHull(const std::vector<math::vec3>& vertices,
         std::array<math::vec3,6>& supportVertices, std::vector<HalfEdgeFace*>& faces, math::mat4 DEBUG_transform )
     {
         //Summary:
@@ -1120,11 +1120,9 @@ namespace legion::physics
 
 
          float distToCentroid;
-        CalculateNewellPlane(NewellPolygon, outNormal, distToCentroid);
+        calculateNewellPlane(NewellPolygon, outNormal, distToCentroid);
 
-        float x = first->CalculateFaceExtents();
-        float y = second->CalculateFaceExtents();
-        float epsilonMultiplier = (x + y) * 0.5f;
+        float epsilonMultiplier = (first->calculateFaceExtents() + second->calculateFaceExtents()) * 0.5f;
 
         for (int i = 0; i < NewellPolygon.size(); i++) {
             float dist = math::dot(outNormal, NewellPolygon[i]) - distToCentroid;

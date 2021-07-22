@@ -27,7 +27,7 @@ namespace legion::physics
             face = other.face;
         }
 
-        std::pair<math::vec3,float> GetFurthestOutsideVert() const;
+        std::pair<math::vec3,float> getFurthestOutsideVert() const;
         
         void populateVectorWithVerts(std::vector<math::vec3>& vertVector);
 

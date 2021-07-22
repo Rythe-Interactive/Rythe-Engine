@@ -470,9 +470,9 @@ namespace legion::physics
 
         //------------------------------------------------------------ Quickhull -----------------------------------------------------------------------//
 
-        static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices);
+        static std::shared_ptr<ConvexCollider> generateConvexHull(const std::vector<math::vec3>& vertices);
 
-        static void CalculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid);
+        static void calculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid);
 
         static bool isNewellFacesCoplanar(HalfEdgeFace* first, HalfEdgeFace* second, HalfEdgeEdge* connectingEdge, float scalingEpsilon, math::vec3& outNormal, int skipCount);
 
@@ -497,7 +497,7 @@ namespace legion::physics
 
         //------------------------------------------------------------ Quickhull Helpers-----------------------------------------------------------------------//
 
-        static bool qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::array<math::vec3,6>& supportPoints,  std::vector<HalfEdgeFace*>& outFaces,
+        static bool buildInitialHull(const std::vector<math::vec3>& vertices, std::array<math::vec3,6>& supportPoints,  std::vector<HalfEdgeFace*>& outFaces,
             math::mat4 DEBUG_transform = math::mat4(1.0f));
 
         static void createHalfEdgeFaceFromEyePoint(const math::vec3 eyePoint,

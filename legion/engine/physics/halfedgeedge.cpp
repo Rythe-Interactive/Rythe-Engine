@@ -200,7 +200,7 @@ namespace legion::physics
             face->forEachEdge(collectVertices);
 
             float tempDis;
-            PhysicsStatics::CalculateNewellPlane(vertices, face->normal, tempDis);
+            PhysicsStatics::calculateNewellPlane(vertices, face->normal, tempDis);
 
             invariantMergeFace->startEdge = nullptr;
             delete invariantMergeFace;
