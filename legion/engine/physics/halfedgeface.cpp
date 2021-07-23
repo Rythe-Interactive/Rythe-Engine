@@ -20,23 +20,12 @@ namespace legion::physics
 
         auto calculateFaceCentroid = [&faceCenter, &edgeCount](HalfEdgeEdge* edge)
         {
-            math::vec3 pos = edge->edgePosition;
-            faceCenter += pos;
+            faceCenter += edge->edgePosition;
             edgeCount++;
         };
         forEachEdge(calculateFaceCentroid);
 
         centroid = faceCenter / static_cast<float>(edgeCount);
-
-        math::vec3& planeCentroid = centroid;
-        math::vec3& planeNormal = normal;
-
-        auto centerVerticesToCentroid = [&planeCentroid, &planeNormal](HalfEdgeEdge* edge)
-        {
-            float distanceToPlane = PhysicsStatics::PointDistanceToPlane(planeNormal, planeCentroid, edge->edgePosition);
-            edge->edgePosition += distanceToPlane * planeNormal;
-        };
-        forEachEdge(calculateFaceCentroid);
 
         int currentEdgeId = 0;
 
@@ -59,47 +48,35 @@ namespace legion::physics
         faceCount++;
     }
 
-    float HalfEdgeFace::CalculateFaceArea() 
+    float HalfEdgeFace::calculateFaceExtents()
     {
-        static bool notfirstTime = true;
-        float sum = 0;
-        math::vec3& faceCentroidPos = centroid;
+        //get vector of vertices of face
+        std::vector<math::vec3> vertices;
+        vertices.reserve(6);
 
-        auto caculateEdgeArea = [&faceCentroidPos,&sum](HalfEdgeEdge* edge)
-        {
-            const math::vec3& currentEdgePos = edge->edgePosition;
+        auto collectVertices = [&vertices](HalfEdgeEdge* edge) {vertices.push_back(edge->edgePosition); };
+        forEachEdge(collectVertices);
 
-            //get vector of current and next position
-            math::vec3 direction = edge->nextEdge->edgePosition - currentEdgePos;
-            math::vec3 directionNorm = math::normalize(direction);
+        //get tangents of normals
+        math::vec3 forward = math::normalize(centroid - startEdge->edgePosition);
+        math::vec3 right = math::cross(normal, forward);
 
-            //get length of direction
-            float dirVeclength = math::length(direction);
-      
-            //dot (centroid - current) with normalized direction
-            float interpolant = math::dot(faceCentroidPos - currentEdgePos, directionNorm);
+        math::vec3 maxForward, minForward, maxRight, minRight;
 
-            //divide by length,this is the interpolant of the vector
-            interpolant /= dirVeclength;
+        PhysicsStatics::GetSupportPoint(vertices, forward, maxForward);
+        PhysicsStatics::GetSupportPoint(vertices, -forward, minForward);
 
-            //use interpolant to get closest point to centroid
-            math::vec3 closestPointToCentroid = currentEdgePos + direction * interpolant;
+        PhysicsStatics::GetSupportPoint(vertices, right, maxRight);
+        PhysicsStatics::GetSupportPoint(vertices, -right, minRight);
 
-            float triangleHeight = math::length(closestPointToCentroid - faceCentroidPos);
-            //multiply length of direction with length of centroid-interpolant point divide by 2
-            sum += (triangleHeight * dirVeclength * 0.5f);
+        //get support point of both directions
+        float maxForwardLength = math::dot(maxForward - centroid, forward);
+        float minForwardLength = math::dot(minForward - centroid, -forward);
 
-            if (notfirstTime)
-            {
-                notfirstTime = false;
-                debug::drawLine(currentEdgePos, edge->nextEdge->edgePosition, math::colors::black, 5.0f, FLT_MAX, true);
-                debug::drawLine(closestPointToCentroid, faceCentroidPos, math::colors::red, 5.0f, FLT_MAX, true);
-            }
-        };
+        float maxRightLength = math::dot(maxRight - centroid, right);
+        float minRightLength = math::dot(minRight - centroid, -right);
 
-        forEachEdge(caculateEdgeArea);
-
-        return sum;
+        return (maxForwardLength + minForwardLength) + (maxRightLength + minRightLength);
     }
 
     void HalfEdgeFace::deleteEdges()
@@ -482,6 +459,11 @@ namespace legion::physics
 
         };
 
+        math::vec3 worldStart = transform * math::vec4(centroid, 1);
+        math::vec3 worldEnd = transform * math::vec4(centroid + normal * 0.1f, 1);
+
+        //debug::user_projectDrawLine(worldStart, worldEnd, debugColor, 3.0f, time, false);
+
         forEachEdge(drawFunc);
     }
 
@@ -491,6 +473,11 @@ namespace legion::physics
         {
             edge->DEBUG_directionDrawEdge(transform, debugColor, time, 5.0f);
         };
+
+        math::vec3 worldStart = transform * math::vec4(centroid, 1);
+        math::vec3 worldEnd = transform * math::vec4(centroid + normal * 0.1f, 1);
+
+        debug::user_projectDrawLine(worldStart, worldEnd, math::colors::green, 3.0f, time, false);
 
         forEachEdge(drawFunc);
     }

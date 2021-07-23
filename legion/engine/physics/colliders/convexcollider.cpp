@@ -19,7 +19,6 @@ namespace legion::physics
         auto aabbOther = convexCollider->GetMinMaxWorldAABB();
         auto& [low0, high0] = aabbThis;
         auto& [low1, high1] = aabbOther;
-
        
         if (!physics::PhysicsStatics::CollideAABB(low0, high0, low1, high1))
         {
@@ -74,7 +73,6 @@ namespace legion::physics
         math::vec3 worldFaceCentroidB = manifold.transformB * math::vec4(BRefFace.ptr->centroid, 1);
         math::vec3 worldFaceNormalB = manifold.transformB * math::vec4(BRefFace.ptr->normal, 0);
 
-    
         math::vec3 worldEdgeAPosition = edgeRef.ptr? manifold.transformB * math::vec4(edgeRef.ptr->edgePosition, 1) : math::vec3();
         math::vec3 worldEdgeNormal = edgeNormal;
 
@@ -91,12 +89,6 @@ namespace legion::physics
                 aToBEdgeSeperation, false);
 
         //-------------------------------------- Choose which PenetrationQuery to use for contact population --------------------------------------------------//
-
-
-       /* log::debug("---- PENETRATION INFO");
-        log::debug("---- abPenetrationQuery {0}", abPenetrationQuery->penetration);
-        log::debug("---- baPenetrationQuery {0}", baPenetrationQuery->penetration);
-        log::debug("---- abEdgePenetrationQuery {0}", abEdgePenetrationQuery->penetration);*/
 
         if (abPenetrationQuery->penetration + physics::constants::faceToFacePenetrationBias >
             baPenetrationQuery->penetration)
@@ -203,7 +195,7 @@ namespace legion::physics
   /*  void ConvexCollider::ConstructConvexHullWithMesh(legion::core::mesh_handle meshHandle, math::mat4 DEBUG_transform)
     {
         meshHandle.
-        return PhysicsStatics::GenerateConvexHull()
+        return PhysicsStatics::generateConvexHull()
     }*/
 
     void ConvexCollider::ConstructConvexHullWithMesh(mesh& mesh, math::vec3 spacingAmount,bool shouldDebug)
@@ -638,7 +630,8 @@ namespace legion::physics
 
         auto collectVertices = [&verticesVec](HalfEdgeEdge* edge)
         {
-            verticesVec.push_back(edge->edgePosition);
+            edge->calculateRobustEdgeDirection();
+            verticesVec.push_back(edge->edgePosition -= PhysicsStatics::PointDistanceToPlane(edge->face->normal, edge->face->centroid, edge->edgePosition));
         };
 
         for (auto face : halfEdgeFaces)

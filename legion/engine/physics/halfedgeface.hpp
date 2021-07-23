@@ -26,14 +26,18 @@ namespace legion::physics
 		math::vec3 centroid;
         math::color DEBUG_color;
         HalfEdgeEdge* startEdge = nullptr;
-        ColliderFaceToVert* faceToVert = nullptr; //only used for initialization of quickhull, unfortunately cant find a better solution
-      
+        ColliderFaceToVert* faceToVert = nullptr; 
         
 		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
+        /**@brief Given that the face has a startEdge,a normal, and a centroid,
+         * initializes the face so that it can be used for collision detection in a convex hull
+         */
         void initializeFace();
 
-        float CalculateFaceArea();
+        /**@brief Calculates the sum of the width and height of the rectangle that envelops this face
+         */
+        float calculateFaceExtents();
 
         /**@brief Deletes all the edges of this face
          * Warning: pairing edges are not deleted because their face may still exist

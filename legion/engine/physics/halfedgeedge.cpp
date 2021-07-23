@@ -1,5 +1,7 @@
 #include <physics/halfedgeedge.hpp>
 #include <physics/halfedgeface.hpp>
+#include <physics/data/collider_face_to_vert.hpp>
+#include <physics/physics_statics.hpp>
 
 namespace legion::physics
 {
@@ -8,10 +10,6 @@ namespace legion::physics
         static int idCount = 0;
         identifier = idCount;
 
-        if (identifier == 433)
-        {
-            //DebugBreak();
-        }
         idCount++;
     }
     void HalfEdgeEdge::setNextAndPrevEdge(HalfEdgeEdge* newPrevEdge, HalfEdgeEdge* newNextEdge)
@@ -44,9 +42,12 @@ namespace legion::physics
         return face->normal;
     }
 
-    math::vec3 HalfEdgeEdge::getLocalEdgeDirection() const
+    void HalfEdgeEdge::calculateRobustEdgeDirection() 
     {
-        return nextEdge->edgePosition - edgePosition;
+        math::vec3 firstNormal = face->normal;
+        math::vec3 secondNormal = pairingEdge->face->normal;
+
+        robustEdgeDirection = math::cross(firstNormal, secondNormal);
     }
 
     bool HalfEdgeEdge::isVertexVisible(const math::vec3& vert,float epsilon)
@@ -98,52 +99,142 @@ namespace legion::physics
         math::vec3 pointStart = worldStart + startDifference;
         math::vec3 diff = worldEnd + endDifference - (worldStart + startDifference);
 
-        debug::user_projectDrawLine(pointStart + diff * 0.75f, pointStart + diff * 0.75f + math::vec3(-0.1f,0,0), math::colors::red, width, time, true);
+        debug::user_projectDrawLine(pointStart + diff * 0.75f, worldCentroid, math::colors::red, width, time, true);
     }
 
-    void HalfEdgeEdge::suicidalMergeWithPairing(math::mat4 transform,  bool shouldDebug)
+    void HalfEdgeEdge::suicidalMergeWithPairing(std::vector<math::vec3>& unmergedVertices, math::vec3& normal, float scalingEpsilon)
     {
-        //----//
+        //[1] identify connecting edges of this face and merge face and connect them together
+        //[2] Handle possible issue where merging this face and merge faces causes the new face to have 2 edges with the same neighbors
+        //[3] re-Initialize to account for new edges
+        //[4] delete pairing and 'this' edge. These edges are no longer part of this face
+
+
+        auto releaseFaceToVert = [&unmergedVertices](HalfEdgeFace* face)
+        {
+            ColliderFaceToVert* otherFaceToVert = face->faceToVert;
+            otherFaceToVert->populateVectorWithVerts(unmergedVertices);
+            otherFaceToVert->face = nullptr;
+        };
+
+        //[1] identify connecting edges of this face and merge face and connect them together
+        //------------------------------------------------------------------//
+        //                                                                  //
+        // prevFromCurrentConnection    prevFromCurrent                     //
+        //       ___|_______________   ___|_______________                  //
+        //                          | |                                     //
+        //                         -| |                                     //
+        //                   'this' | | pairingEdge                         //
+        //                          | |-                                    //
+        //                          | |                                     //
+        //       _____________|_____| |____________|______                  //
+        // nextFromCurrentConnection    nextFromCurrent                     //
+        //                                                                  //
+        //       [face of 'this']           [merge face]                    //
+        //                                                                  //
+        //------------------------------------------------------------------//
+
         HalfEdgeFace* mergeFace = pairingEdge->face;
-        HalfEdgeEdge* prevFromCurrent = pairingEdge->prevEdge->pairingEdge->face == this->face ? pairingEdge->nextEdge : pairingEdge->prevEdge;
-
-        //next-pairing->next
+        releaseFaceToVert(mergeFace);
+        
+        HalfEdgeEdge* prevFromCurrent =  pairingEdge->prevEdge;
         HalfEdgeEdge* prevFromCurrentConnection = prevFromCurrent->nextEdge->pairingEdge->nextEdge;
-        prevFromCurrent->setNext(prevFromCurrentConnection);
+        prevFromCurrent->setNext(prevFromCurrentConnection); 
 
-        HalfEdgeEdge* nextFromCurrent = pairingEdge->nextEdge->pairingEdge->face == this->face ? pairingEdge->prevEdge : pairingEdge->nextEdge;
+        HalfEdgeEdge* nextFromCurrent =  pairingEdge->nextEdge;
         HalfEdgeEdge* nextFromCurrentConnection = nextFromCurrent->prevEdge->pairingEdge->prevEdge;
 
-        nextFromCurrent->setPrev(nextFromCurrentConnection);
-
-        if (shouldDebug)
-        {
-            prevFromCurrent->DEBUG_drawEdge(transform, math::colors::red,FLT_MAX);
-            prevFromCurrentConnection->DEBUG_drawEdge(transform, math::colors::blue, FLT_MAX);
-
-            nextFromCurrent->DEBUG_drawEdge(transform, math::colors::green, FLT_MAX);
-            nextFromCurrentConnection->DEBUG_drawEdge(transform, math::colors::magenta, FLT_MAX);
-
-        }
+        nextFromCurrent->setPrev(nextFromCurrentConnection); 
 
         face->startEdge = prevFromCurrent;
-        face->initializeFace();
-
-        if (prevEdge->pairingEdge->face == mergeFace)
-        {
-            delete prevEdge->pairingEdge;
-            delete prevEdge;
-        }
-
-        if (nextEdge->pairingEdge->face == mergeFace)
-        {
-            delete nextEdge->pairingEdge;
-            delete nextEdge;
-        }
+        face->normal = normal;
 
         mergeFace->startEdge = nullptr;
         delete mergeFace;
 
+        //[2] Handle possible issue where merging this face and merge faces causes the new face to have 2 edges that neighbor the same face
+
+        //----------------------------------------------------------------------//
+        //                        [invariantMergeFace]                          //
+        //   |                                                  |               //
+        //   |newPrevFromFCC                      newNextFromPFC| -             //
+        //   |                                                  |               //
+        //  -|                                                  |               //
+        //   |_________________________|_   _________________|__|               //
+        //    ___|________________________   ___|_______________                //
+        //   |  prevFromCurrentConnection | | prevFromCurrent   |               //
+        //   |                           -| |                   |-              //
+        //   |                     'this' | | pairingEdge       | prevFromPFC   //
+        //   | nextFromFCC                | |-                  |               //
+        //  -|                            | |                   |               //
+        //   |______________________|_____| |____________|______|               //
+        //       nextFromCurrentConnection    nextFromCurrent                   //
+        //                                                                      //
+        //             [face of 'this']           [merge face]                  //
+        //                                                                      //
+        //----------------------------------------------------------------------//
+
+        auto handleDoubleAdjacentMergeResult = [this,releaseFaceToVert](HalfEdgeEdge* prevFromCurrent, HalfEdgeEdge* prevFromCurrentConnection)
+        {
+            HalfEdgeFace* invariantMergeFace = prevFromCurrent->pairingEdge->face;
+            releaseFaceToVert(invariantMergeFace);
+
+            HalfEdgeEdge* prevFromPFC = prevFromCurrent->prevEdge;
+            HalfEdgeEdge* newNextFromPFC = prevFromCurrent->pairingEdge->nextEdge;
+            prevFromPFC->setNext(newNextFromPFC); 
+
+            HalfEdgeEdge* nextFromFCC = prevFromCurrentConnection->nextEdge;
+            HalfEdgeEdge* newPrevFromFCC = prevFromCurrentConnection->pairingEdge->prevEdge;
+            nextFromFCC->setPrev(newPrevFromFCC); 
+
+            delete prevFromCurrent->pairingEdge;
+            delete prevFromCurrent;
+
+            delete prevFromCurrentConnection->pairingEdge;
+            delete prevFromCurrentConnection;
+
+            face->startEdge = prevFromPFC;
+
+            std::vector<math::vec3> vertices;
+            auto collectVertices = [&vertices](HalfEdgeEdge* currentEdge) { vertices.push_back(currentEdge->edgePosition); };
+            face->forEachEdge(collectVertices);
+
+            float tempDis;
+            PhysicsStatics::calculateNewellPlane(vertices, face->normal, tempDis);
+
+            invariantMergeFace->startEdge = nullptr;
+            delete invariantMergeFace;
+        };
+
+        HalfEdgeFace* currentFace = face;
+        auto setEdgeFace = [&currentFace](HalfEdgeEdge* edge) {edge->face = currentFace; };
+
+        if (prevFromCurrent->pairingEdge->face == prevFromCurrentConnection->pairingEdge->face)
+        {
+            face->forEachEdge(setEdgeFace);
+
+            math::vec3 norm;
+            if (PhysicsStatics::isNewellFacesCoplanar(face, prevFromCurrent->pairingEdge->face, prevFromCurrent, scalingEpsilon, norm,2))
+            {
+                handleDoubleAdjacentMergeResult(prevFromCurrent, prevFromCurrentConnection);
+            }
+        }
+
+        if (nextFromCurrent->pairingEdge->face == nextFromCurrentConnection->pairingEdge->face)
+        {
+            face->forEachEdge(setEdgeFace);
+
+            math::vec3 norm;
+            if (PhysicsStatics::isNewellFacesCoplanar(face, nextFromCurrent->pairingEdge->face, nextFromCurrentConnection, scalingEpsilon, norm,2))
+            {
+                handleDoubleAdjacentMergeResult(nextFromCurrentConnection, nextFromCurrent);
+            }
+        }
+
+        //[3] re-Initialize to account for new edges
+        face->initializeFace();
+
+        //[4] delete pairing and 'this' edge. These edges are no longer part of this face
         delete pairingEdge;
         delete this;
 

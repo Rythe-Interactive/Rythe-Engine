@@ -31,9 +31,12 @@ namespace legion::physics
        */
         void AddConverganceIdentifier(const physics_contact& contact) override
         {
-            converganceIdentifiers.push_back(
-                std::make_unique<ConvexConverganceIdentifier>(contact.label, contact.totalLambda,
-                    contact.tangent1Lambda, contact.tangent2Lambda, GetColliderID()));
+            if (contact.label.IsSet())
+            {
+                converganceIdentifiers.push_back(
+                    std::make_unique<ConvexConverganceIdentifier>(contact.label, contact.totalLambda,
+                        contact.tangent1Lambda, contact.tangent2Lambda, GetColliderID()));
+            }
         }
 
         void CheckCollision(PhysicsCollider* physicsCollider, physics_manifold& manifold) override
@@ -312,6 +315,14 @@ namespace legion::physics
             ac->pairingEdge = ca;   dc->pairingEdge = cd;
             cg->pairingEdge = gc;   ca->pairingEdge = ac;
 
+            //edge pairings have been set, we can calculate edge directions now
+            for (HalfEdgeFace* face : halfEdgeFaces)
+            {
+                auto calculateDirection = [](HalfEdgeEdge* edge) {edge->calculateRobustEdgeDirection(); };
+
+                face->forEachEdge(calculateDirection);
+
+            }
 
             //initialize the ID of the edges, this is done mostly for debugging reasons and will be removed when it
             //is no longer needed
