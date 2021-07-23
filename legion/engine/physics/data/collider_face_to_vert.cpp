@@ -3,7 +3,7 @@
 
 namespace legion::physics
 {
-    std::pair<math::vec3, float> legion::physics::ColliderFaceToVert::GetFurthestOutsideVert() const
+    std::pair<math::vec3, float> legion::physics::ColliderFaceToVert::getFurthestOutsideVert() const
     {
         const math::vec3& faceCentroid = face->centroid;
         const math::vec3& faceNormal = face->normal;

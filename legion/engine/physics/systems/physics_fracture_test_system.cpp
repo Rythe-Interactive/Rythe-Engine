@@ -1073,7 +1073,7 @@ namespace legion::physics
                             math::vec3 worldStart = (localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1)) ;
                             math::vec3 worldEnd = (localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1)) ;
 
-                            debug::drawLine(worldStart + shift, worldEnd + shift, usedColor, 2.0f, 0.0f, useDepth);
+                            //debug::drawLine(worldStart + shift, worldEnd + shift, usedColor, 2.0f, 0.0f, useDepth);
 
                             if (auto pairing = edgeToExecuteOn->pairingEdge)
                             {
@@ -1125,7 +1125,7 @@ namespace legion::physics
                 physicsComponentH.write(physComp);
 
                 //[4] use collider to generate follower objects
-                //PopulateFollowerList(ent,i);
+                PopulateFollowerList(ent,i);
                 i++;
             }
 

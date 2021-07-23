@@ -501,12 +501,7 @@ namespace legion::physics
                 //check if we should merge this vertex
                 if (distanceFromFace > visibilityEpsilon)
                 {
-                    bool sucess = mergeVertexToHull(furthestVert, facesWithOutsideVerts,scaledEpsilon);
-
-                    if (!sucess)
-                    {
-                        currentFaceToVert.ptr->outsideVerts.clear();
-                    }
+                    mergeVertexToHull(furthestVert, facesWithOutsideVerts,scaledEpsilon);
                 }
                 else
                 {
@@ -532,7 +527,7 @@ namespace legion::physics
         return convexCollider;
     }
 
-    void PhysicsStatics::CalculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid)
+    void PhysicsStatics::calculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid)
     {
         math::vec3 centroid{0,0,0};
         outPlaneNormal = math::vec3();
@@ -547,7 +542,7 @@ namespace legion::physics
            
         // Normalize normal and fill in the plane equation fields
         outPlaneNormal = math::normalize(outPlaneNormal);
-        distToCentroid = math::dot(centroid, outPlaneNormal) / v.size(); // “centroid / n” is the true centroid point
+        distToCentroid = math::dot(centroid, outPlaneNormal) / v.size(); // ï¿½centroid / nï¿½ is the true centroid point
     }
 
     bool PhysicsStatics::attemptBuildMinkowskiFace(HalfEdgeEdge* edgeA, HalfEdgeEdge* edgeB, const math::mat4& transformA, const math::mat4& transformB)
@@ -624,8 +619,8 @@ namespace legion::physics
         return true;
     }
 
-    bool PhysicsStatics::qHBuildInitialHull(const std::vector<math::vec3>& vertices,
-        std::array<math::vec3,6>& supportVertices, std::vector<HalfEdgeFace*>& faces)
+    bool PhysicsStatics::buildInitialHull(const std::vector<math::vec3>& vertices,
+        std::array<math::vec3,6>& supportVertices, std::vector<HalfEdgeFace*>& faces, math::mat4 DEBUG_transform )
     {
         //Summary:
         //[1] Find the 2 most distant vertices in 'support Vertices'
@@ -1083,7 +1078,6 @@ namespace legion::physics
             delete face;
         }
 
-        return true;
     }
 
     bool PhysicsStatics::isFacesConcave(HalfEdgeFace* first, HalfEdgeFace* second)
@@ -1126,11 +1120,9 @@ namespace legion::physics
 
 
          float distToCentroid;
-        CalculateNewellPlane(NewellPolygon, outNormal, distToCentroid);
+        calculateNewellPlane(NewellPolygon, outNormal, distToCentroid);
 
-        float x = first->CalculateFaceExtents();
-        float y = second->CalculateFaceExtents();
-        float epsilonMultiplier = (x + y) * 0.5f;
+        float epsilonMultiplier = (first->calculateFaceExtents() + second->calculateFaceExtents()) * 0.5f;
 
         for (int i = 0; i < NewellPolygon.size(); i++) {
             float dist = math::dot(outNormal, NewellPolygon[i]) - distToCentroid;

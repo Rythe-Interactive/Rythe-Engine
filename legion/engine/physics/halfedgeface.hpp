@@ -37,7 +37,7 @@ namespace legion::physics
 
         /**@brief Calculates the sum of the width and height of the rectangle that envelops this face
          */
-        float CalculateFaceExtents();
+        float calculateFaceExtents();
 
         /**@brief Deletes all the edges of this face
          * Warning: pairing edges are not deleted because their face may still exist

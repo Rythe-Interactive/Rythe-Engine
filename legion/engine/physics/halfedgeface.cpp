@@ -48,9 +48,9 @@ namespace legion::physics
         faceCount++;
     }
 
-    float HalfEdgeFace::CalculateFaceExtents()
+    float HalfEdgeFace::calculateFaceExtents()
     {
-        //put the position of all edges of this face into a vector
+        //get vector of vertices of face
         std::vector<math::vec3> vertices;
         vertices.reserve(6);
 
