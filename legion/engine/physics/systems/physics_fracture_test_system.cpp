@@ -171,8 +171,8 @@ namespace legion::physics
         //sceneDelegates.sceneRuntime = nullptr;
         //
         //sceneDelegates.sceneInit();
-        //quickhullTestScene();
-        BoxStackScene();
+        quickhullTestScene();
+        //BoxStackScene();
 
         Fracturer::registry = m_ecs;
     }

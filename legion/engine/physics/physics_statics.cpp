@@ -413,7 +413,7 @@ namespace legion::physics
         return start + (end - start) * interpolant;
     }
 
-    std::shared_ptr<ConvexCollider> PhysicsStatics::GenerateConvexHull(const std::vector<math::vec3>& vertices)
+    std::shared_ptr<ConvexCollider> PhysicsStatics::generateConvexHull(const std::vector<math::vec3>& vertices)
     {
         //[1] Calculated a scaled epsilon based on the extents of the hull. This ensures that epsilon takes the size of the hull into account.
         //[2] Calculate a visibility epsilon that determines if a vertex should be merged to the hull or not.
@@ -473,7 +473,7 @@ namespace legion::physics
         GetSupportPoint(vertices, math::vec3(0, 0, -1), supportVertices.at(5));
 
         //[4] Create the initial hull given the calculated support points
-        if (!qHBuildInitialHull(vertices, supportVertices, faces))
+        if (!buildInitialHull(vertices, supportVertices, faces))
         {
             return nullptr;
         }
@@ -496,7 +496,7 @@ namespace legion::physics
             while (foundFaceWithOutsideVert(facesWithOutsideVerts, currentFaceToVert))
             {
                 //find furhtest vertex of last face
-                auto [furthestVert, distanceFromFace] = currentFaceToVert.ptr->GetFurthestOutsideVert();
+                auto [furthestVert, distanceFromFace] = currentFaceToVert.ptr->getFurthestOutsideVert();
 
                 //check if we should merge this vertex
                 if (distanceFromFace > visibilityEpsilon)
@@ -620,7 +620,7 @@ namespace legion::physics
     }
 
     bool PhysicsStatics::buildInitialHull(const std::vector<math::vec3>& vertices,
-        std::array<math::vec3,6>& supportVertices, std::vector<HalfEdgeFace*>& faces, math::mat4 DEBUG_transform )
+        std::array<math::vec3,6>& supportVertices, std::vector<HalfEdgeFace*>& faces )
     {
         //Summary:
         //[1] Find the 2 most distant vertices in 'support Vertices'
@@ -916,7 +916,7 @@ namespace legion::physics
 
     }
 
-    bool PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts,
+    void PhysicsStatics::mergeVertexToHull(const math::vec3& eyePoint,std::list<ColliderFaceToVert>& facesWithOutsideVerts,
         float scalingEpsilon)
     {
         //[1] identify faces that can see the 'eyePoint' and remove them from list

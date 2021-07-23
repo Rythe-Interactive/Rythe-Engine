@@ -472,11 +472,11 @@ namespace legion::physics
 
         /** @brief Generates a ConvexHull that encapsulates the given vertices through the Quickhull algorithm.
          */
-        static std::shared_ptr<ConvexCollider> GenerateConvexHull(const std::vector<math::vec3>& vertices);
+        static std::shared_ptr<ConvexCollider> generateConvexHull(const std::vector<math::vec3>& vertices);
 
         /** @brief Generates a best fit plane that encapsulates the given vertices 'v' using the Newell Algorithm
          */
-        static void CalculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid);
+        static void calculateNewellPlane(const std::vector<math::vec3>& v, math::vec3& outPlaneNormal, float& distToCentroid);
 
         /** @brief Determines if 2 faces are coplanar using the Newell Algorithm and an epsilon
          * @param first the first face that will be checked for coplanarity
@@ -517,7 +517,7 @@ namespace legion::physics
          * @param outFaces the faces generated
          * @return returns true if the hull construction was succesfull
          */
-        static bool qHBuildInitialHull(const std::vector<math::vec3>& vertices, std::array<math::vec3,6>& supportPoints,  std::vector<HalfEdgeFace*>& outFaces);
+        static bool buildInitialHull(const std::vector<math::vec3>& vertices, std::array<math::vec3,6>& supportPoints,  std::vector<HalfEdgeFace*>& outFaces);
 
         /** @brief Given an 'eyePoint' and a vector of edges that represent the horizon of a convex hull from 'eyePoint'
          * , creates a number of new faces that merge 'eyePoint' into the convex hull
@@ -548,7 +548,7 @@ namespace legion::physics
         /** @brief Given an eyePoint, and a convex hull represented by 'facesWithOutsideVerts', merged the eyePoint
          * into the hull. 
          */
-        static bool mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts,
+        static void mergeVertexToHull(const math::vec3& eyePoint, std::list<ColliderFaceToVert>& facesWithOutsideVerts,
             float scalingEpsilon);
 
         /** @brief Given 2 faces, determines if they are concave based on their normals and centroids
