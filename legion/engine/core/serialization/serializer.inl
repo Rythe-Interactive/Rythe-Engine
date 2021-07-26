@@ -1,5 +1,4 @@
 #include <core/serialization/serializer.hpp>
-#include <core/serialization/view_type.hpp>
 #pragma once
 
 namespace legion::core::serialization
@@ -20,7 +19,8 @@ namespace legion::core::serialization
     inline void serializer<type>::write(fs::view filePath, type data)
     {
         std::ofstream os;
-        os.open(filePath.get_virtual_path());
+        os.open(filePath.get_filename().decay());
+        log::debug(filePath.get_domain());
         json j = serialize(data);
         os << j.dump();
         os.close();

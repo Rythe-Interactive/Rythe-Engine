@@ -6,7 +6,9 @@ namespace legion::core::serialization
     template<typename type>
     inline json json_view<type>::serialize(type object)
     {
-        return json();
+        json j;
+        j["value"] = 10;
+        return j;
     }
 
     template<typename type>
@@ -15,3 +17,4 @@ namespace legion::core::serialization
         return prototype<type>();
     }
 }
+

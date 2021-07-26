@@ -1,10 +1,11 @@
 #pragma once
+#include <map>
+#include <any>
+
 #include <core/serialization/serializer.hpp>
 #include <core/common/hash.hpp>
 #include <core/containers/pointer.hpp>
-
-#include <map>
-#include <any>
+#include <core/serialization/view_type.hpp>
 
 namespace legion::core::serialization
 {
