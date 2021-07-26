@@ -20,7 +20,7 @@ namespace legion::core::serialization
 
     protected:
         virtual json serialize(type object) LEGION_PURE;
-        virtual prototype_base deserialize(json j) LEGION_PURE;
+        virtual component_prototype<type> deserialize(json j) LEGION_PURE;
     };
 
     template<typename type>
@@ -32,7 +32,7 @@ namespace legion::core::serialization
         json_view(std::string_view filePath) : serializer_view<type>(filePath) {}
 
         virtual json serialize(type object) override;
-        virtual prototype_base deserialize(json j) override;
+        virtual component_prototype<type> deserialize(json j) override;
     };
 }
 

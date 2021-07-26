@@ -36,10 +36,10 @@ namespace legion::core::serialization
     {
     public:
         json serialize(type data);
-        prototype_base deserialize(json j);
+        component_prototype<type> deserialize(json j);
 
         void write(fs::view filePath, type data);
-        prototype_base read(fs::view filePath);
+        component_prototype<type> read(fs::view filePath);
     };
 }
 

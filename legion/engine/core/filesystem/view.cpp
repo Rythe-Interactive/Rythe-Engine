@@ -324,7 +324,6 @@ namespace legion::core::filesystem
 
     }
 
-
     void view::make_inheritance() const
     {
         OPTICK_EVENT();
@@ -421,5 +420,52 @@ namespace legion::core::filesystem
         }
         //return empty ok
         return common::success;
+    }
+
+
+    std::string view_util::get_view_path(const view& view, bool mustBeFile)
+    {
+
+        OPTICK_EVENT();
+        using severity = log::severity;
+
+        navigator navigator(view.get_virtual_path());
+        auto solution = navigator.find_solution();
+        if (solution.has_err())
+        {
+            log::error(std::string("View util error: ") + solution.get_error().what());
+            return "";
+        }
+
+        auto s = solution.get();
+        if (s.size() != 1)
+        {
+            log::error("View util error: invalid file, fs::view was not fully local");
+            return "";
+        }
+
+        basic_resolver* resolver = dynamic_cast<basic_resolver*>(s[0].first);
+        if (!resolver)
+        {
+            log::error("View util error: invalid file, fs::view was not local");
+            return "";
+        }
+
+        resolver->set_target(s[0].second);
+
+        if (!resolver->is_valid_path())
+        {
+            log::error("View util error: invalid path");
+            return "";
+        }
+
+        if (mustBeFile && !resolver->is_file())
+        {
+            log::error("View util error: not a file");
+            return "";
+        }
+
+        return resolver->get_absolute_path();
+
     }
 }

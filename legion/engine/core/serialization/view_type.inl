@@ -7,14 +7,25 @@ namespace legion::core::serialization
     inline json json_view<type>::serialize(type object)
     {
         json j;
-        j["value"] = 10;
+        for_each(object,
+            [&j](auto& name, auto& value)
+            {
+                j[name] = value;
+            });
         return j;
     }
 
     template<typename type>
-    inline prototype_base json_view<type>::deserialize(json j)
+    inline component_prototype<type> json_view<type>::deserialize(json j)
     {
-        return prototype<type>();
+        component_prototype<type> prot;
+        for_each(prot,
+            [&j](auto& name, auto& value)
+            {
+                value = j[name];
+            });
+
+        return prot;
     }
 }
 
