@@ -118,6 +118,10 @@
     <ClInclude Include="data\pp_edgedetect.hpp" />
     <ClInclude Include="module\examplemodule.hpp" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="systems\CustomSystem.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="systems\examplesystem.hpp" />
     <ClInclude Include="systems\gui_test.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />

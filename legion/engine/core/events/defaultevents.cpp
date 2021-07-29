@@ -6,7 +6,9 @@ namespace legion::core::events
 {
     exit::exit(int exitCode) : exitcode(exitCode)
     {
-        log::undecoratedInfo("=========================\n| Shutting down engine. |\n=========================");
+        log::undecoratedInfo("=========================\n"
+        					 "| Shutting down engine. |\n"
+        					 "=========================");
         scheduling::Scheduler::exit(exitCode);
     }
 }

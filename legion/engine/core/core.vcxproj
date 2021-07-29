@@ -50,7 +50,6 @@
     <IntDir>$(SolutionDir)intermediates\$(Platform)\$(Configuration)\engine\$(ProjectName)\</IntDir>
     <TargetName>legion-$(ProjectName)-d</TargetName>
     <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
-    <ClangTidyChecks>-clang-diagnostic-c++17-extensions</ClangTidyChecks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -58,7 +57,6 @@
     <IntDir>$(SolutionDir)intermediates\$(Platform)\$(Configuration)\engine\$(ProjectName)\</IntDir>
     <TargetName>legion-$(ProjectName)</TargetName>
     <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
-    <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -83,11 +81,12 @@
 copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
 
 xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
 
-del ".\xcopyexclude"</Command>
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -117,11 +116,12 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib />
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
 
 xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
 
-del ".\xcopyexclude"</Command>
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -513,6 +513,7 @@ del ".\xcopyexclude"</Command>
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationutil.hpp" />
+    <ClInclude Include="time\utils.hpp" />
     <ClInclude Include="types\reflector.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
     <ClInclude Include="time\stopwatch.hpp" />
@@ -723,6 +724,7 @@ del ".\xcopyexclude"</Command>
     <None Include="scheduling\process.inl" />
     <None Include="scheduling\processchain.inl" />
     <None Include="scheduling\scheduler.inl" />
+    <None Include="time\utils.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

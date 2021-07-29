@@ -111,11 +111,12 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
       </AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
 
 xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
 
-del ".\xcopyexclude"</Command>
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,11 +153,12 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
       </AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
 
 xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
 
-del ".\xcopyexclude"</Command>
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
