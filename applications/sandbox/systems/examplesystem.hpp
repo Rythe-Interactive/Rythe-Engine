@@ -7,19 +7,29 @@
 #include <core/serialization/serializationregistry.hpp>
 #include <core/ecs/handles/entity.hpp>
 
+struct data
+{
+    std::string name;
+    std::string description;
+};
 
 struct example_comp
 {
-    int value;
-    int value2;
-    int value3;
-    float value4;
-    std::string str;
-    bool b;
+public:
+    int id = -1;
+    bool alive = false;
+    data comp_data;
 
+    void print()
+    {
+        legion::core::log::debug(id);
+        legion::core::log::debug(alive);
+        legion::core::log::debug(comp_data.name);
+        legion::core::log::debug(comp_data.description);
+    }
 };
 
-ManualReflector(example_comp, value, value2, value3, value4, str, b);
+ManualReflector(example_comp, id, alive);
 
 class ExampleSystem final : public legion::System<ExampleSystem>
 {
@@ -69,25 +79,22 @@ public:
         //for (int i = 0; i < 20000; i++)
         //    createEntity().add_component<example_comp>();
 
+        //Serialization Test
+        std::string filePath = "assets://scenes/scene1.json";
         serialization::Registry::register_type<example_comp>();
-        example_comp test;
-        test.value = 10;
-        test.value2 = 15;
-        test.value3 = 1;
-        test.value4 = 0.0f;
-        test.str = "Hello world";
-        test.b = false;
         auto serializer = serialization::Registry::get_serializer<example_comp>();
-        serializer->write(fs::view("assets://scenes/scene1.json"),test);
+        auto component = example_comp();
 
-        auto compprot = serializer->read(fs::view("assets://scenes/scene1.json"));
-        auto comp = from_reflector(compprot);
-        log::debug(comp.value);
-        log::debug(comp.value2);
-        log::debug(comp.value3);
-        log::debug(comp.value4);
-        log::debug(comp.str);
-        log::debug(comp.b);
+        component.id = 1;
+        component.alive = true;
+        auto d = data();
+        d.name = "Example Component";
+        d.description = "Serialization Test object";
+        component.comp_data = d;
+        serializer->write(fs::view(filePath),component);
+        auto compprot = serializer->read(fs::view(filePath));
+        component = from_reflector(compprot);
+        component.print();
     }
 
     void update(legion::time::span deltaTime)

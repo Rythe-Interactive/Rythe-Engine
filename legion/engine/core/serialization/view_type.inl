@@ -3,8 +3,8 @@
 
 namespace legion::core::serialization
 {
-    template<typename type>
-    inline json json_view<type>::serialize(type object)
+    template<typename comp_prototype>
+    inline json json_view<comp_prototype>::serialize(const comp_prototype object)
     {
         json j;
         for_each(object,
@@ -15,16 +15,15 @@ namespace legion::core::serialization
         return j;
     }
 
-    template<typename type>
-    inline component_prototype<type> json_view<type>::deserialize(json j)
+    template<typename comp_prototype>
+    inline comp_prototype json_view<comp_prototype>::deserialize(const json j)
     {
-        component_prototype<type> prot;
+        comp_prototype prot;
         for_each(prot,
             [&j](auto& name, auto& value)
             {
                 value = j[name];
             });
-
         return prot;
     }
 }

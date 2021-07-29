@@ -3,20 +3,20 @@
 
 namespace legion::core::serialization
 {
-    template<typename type>
-    inline json serializer<type>::serialize(type data)
+    template<typename component_type>
+    inline json serializer<component_type>::serialize(component_type data)
     {
-        return json_view<component_prototype<type>>().serialize(component_prototype<type>(data));
+        return json_view<component_prototype<component_type>>().serialize(component_prototype<component_type>(data));
     }
 
-    template<typename type>
-    inline component_prototype<type> serializer<type>::deserialize(json j)
+    template<typename component_type>
+    inline component_prototype<component_type> serializer<component_type>::deserialize(json j)
     {
-        return json_view<type>().deserialize(j);
+        return json_view<component_prototype<component_type>>().deserialize(j);
     }
 
-    template<typename type>
-    inline void serializer<type>::write(fs::view filePath, type data)
+    template<typename component_type>
+    inline void serializer<component_type>::write(fs::view filePath, component_type data)
     {
         std::ofstream os;
         os.open(fs::view_util::get_view_path(filePath,true));
@@ -25,8 +25,8 @@ namespace legion::core::serialization
         os.close();
     }
 
-    template<typename type>
-    inline component_prototype<type> serializer<type>::read(fs::view filePath)
+    template<typename component_type>
+    inline component_prototype<component_type> serializer<component_type>::read(fs::view filePath)
     {
         json j;
         std::ifstream is;
