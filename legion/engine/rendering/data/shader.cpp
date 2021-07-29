@@ -360,25 +360,23 @@ namespace legion::rendering
         }
         else
         {
-            switch (settings.usePrecompiledIfAvailable) // Clean up this monster function...
+            do
             {
-            case true:
-            {
-                auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
-
-                if (precompiled.is_valid(true))
+                if (settings.usePrecompiledIfAvailable) // Clean up this monster function...
                 {
-                    auto traits = precompiled.file_info();
-                    if (traits.is_file && traits.can_be_read)
+                    auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
+
+                    if (precompiled.is_valid(true))
                     {
-                        if (load_precompiled(precompiled, shaders, state))
-                            break;
+                        auto traits = precompiled.file_info();
+                        if (traits.is_file && traits.can_be_read)
+                        {
+                            if (load_precompiled(precompiled, shaders, state))
+                                break;
+                        }
                     }
                 }
-            }
-            L_FALLTHROUGH;
-            default:
-            {
+
                 byte compilerSettings = 0;
                 compilerSettings |= settings.api;
                 if (settings.debug)
@@ -390,9 +388,8 @@ namespace legion::rendering
                     return invalid_shader_handle;
 
                 compiledFromScratch = true;
-            }
-            break;
-            }
+
+            } while (false);
         }
 
         if (shaders.empty())
@@ -651,25 +648,23 @@ namespace legion::rendering
         }
         else
         {
-            switch (settings.usePrecompiledIfAvailable)
+            do
             {
-            case true:
-            {
-                auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
-
-                if (precompiled.is_valid(true))
+                if (settings.usePrecompiledIfAvailable)
                 {
-                    auto traits = precompiled.file_info();
-                    if (traits.is_file && traits.can_be_read)
+                    auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
+
+                    if (precompiled.is_valid(true))
                     {
-                        if (load_precompiled(precompiled, shaders, state))
-                            break;
+                        auto traits = precompiled.file_info();
+                        if (traits.is_file && traits.can_be_read)
+                        {
+                            if (load_precompiled(precompiled, shaders, state))
+                                break;
+                        }
                     }
                 }
-            }
-            L_FALLTHROUGH;
-            default:
-            {
+
                 byte compilerSettings = 0;
                 compilerSettings |= settings.api;
                 if (settings.debug)
@@ -681,9 +676,8 @@ namespace legion::rendering
                     return invalid_shader_handle;
 
                 compiledFromScratch = true;
-            }
-            break;
-            }
+
+            } while (false);
         }
 
         if (shaders.empty())

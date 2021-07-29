@@ -195,7 +195,7 @@ namespace legion::core::scheduling
                 }
                 else if (math::close_enough(bestPollTime, pollTime))
                 {
-                    if (avg < static_cast<uint>(bestAvg * 0.9f))
+                    if (avg < static_cast<uint>(static_cast<float>(bestAvg) * 0.9f))
                         bestAvg = 0;
 
                     pollTime += (math::linearRand<int8>(0, 1) ? 0.05f : -0.05f);
