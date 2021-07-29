@@ -41,32 +41,25 @@ int main(int argc, char** argv)
     log::filter(log::severity::debug);
 #else
     log::filter(log::severity::info);
-#endif    
+#endif
 
     Engine::cliargs.parse(argc, argv);
 
 #if defined(LEGION_HIGH_PERFORMANCE)
-#if defined(LEGION_WINDOWS)
+#   if defined(LEGION_WINDOWS)
     if (!SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS))
     {
         DWORD error = GetLastError();
-        log::undecoratedLogger->info("==============================================================\n"
-                                     "| Failed to enter real-time performance mode, error: {} |\n"
-                                     "==============================================================", error);
+        log::undecoratedInfo("==============================================================\n"
+                             "| Failed to enter real-time performance mode, error: {} |\n"
+                             "==============================================================", error);
     }
-    else
-    {
-        log::undecoratedLogger->info("=======================================\n"
-                                     "| Entered real-time performance mode. |\n"
-                                     "=======================================");
-    }
-
-#elif defined(LEGION_LINUX)
+#   elif defined(LEGION_LINUX)
     pid_t pid = getpid();
     if (setpriority(PRIO_PROCESS, pid, sched_get_priority_max(sched_getscheduler(pid))) == -1)
     {
         int errornum = errno;
-        const char* error;
+        std::string error;
 
         switch (errornum)
         {
@@ -83,43 +76,43 @@ int main(int argc, char** argv)
             error = "EACCES";
             break;
         default:
-            error = std::to_string(errornum).c_str();
+            error = std::to_string(errornum);
             break;
         }
 
-        log::undecoratedLogger->info("=============================================================\n"
-                                     "| Failed to enter real-time performance mode, error: {} |\n"
-                                     "=============================================================", error);
+        log::undecoratedInfo("=============================================================\n"
+                             "| Failed to enter real-time performance mode, error: {} |\n"
+                             "=============================================================", error);
     }
+#   endif
     else
     {
-        log::undecoratedLogger->info("=======================================\n"
-                                     "| Entered real-time performance mode. |\n"
-                                     "=======================================");
+        log::undecoratedInfo("=======================================\n"
+                             "| Entered real-time performance mode. |\n"
+                             "=======================================");
     }
-#endif
 #else
-    log::undecoratedLogger->info("========================================\n"
-                                 "| Engine will start in low power mode. |\n"
-                                 "========================================");
+    log::undecoratedInfo("========================================\n"
+                         "| Engine will start in low power mode. |\n"
+                         "========================================");
 #endif
 
     Engine engine;
 
     reportModules(&engine);
 
-    log::undecoratedLogger->info("==========================\n"
-                                 "| Initializing engine... |\n"
-                                 "==========================");
+    log::undecoratedInfo("==========================\n"
+                         "| Initializing engine... |\n"
+                         "==========================");
     engine.init();
 
-    log::undecoratedLogger->info("==============================\n"
-                                 "| Entering main engine loop. |\n"
-                                 "==============================");
+    log::undecoratedInfo("==============================\n"
+                         "| Entering main engine loop. |\n"
+                         "==============================");
     engine.run();
 
 #if defined(LEGION_KEEP_CONSOLE)
-    log::undecoratedLogger->info("Press enter to exit.");
+    log::undecoratedInfo("Press enter to exit.");
     std::cin.ignore();
 #endif
     return engine.exitCode;
