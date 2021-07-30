@@ -7,29 +7,26 @@
 #include <core/serialization/serializationregistry.hpp>
 #include <core/ecs/handles/entity.hpp>
 
-struct data
+using json = nlohmann::json;
+namespace legion::core
 {
-    std::string name;
-    std::string description;
-};
-
-struct example_comp
-{
-public:
-    int id = -1;
-    bool alive = false;
-    data comp_data;
-
-    void print()
+    struct example_comp
     {
-        legion::core::log::debug(id);
-        legion::core::log::debug(alive);
-        legion::core::log::debug(comp_data.name);
-        legion::core::log::debug(comp_data.description);
-    }
-};
+        int value = 1;
+    };
 
-ManualReflector(example_comp, id, alive);
+    struct scene_comp
+    {
+        id_type id = -1;
+        std::vector<ecs::entity> entities;
+    };
+}
+
+
+ManualReflector(example_comp, value);
+ManualReflector(scene_comp, id, entities);
+ManualReflector(ecs::entity, data);
+ManualReflector(ecs::entity_data,id,name,alive,active,parent,children);
 
 class ExampleSystem final : public legion::System<ExampleSystem>
 {
@@ -64,37 +61,26 @@ public:
             ent.add_component(gfx::light::directional(math::color(1, 1, 0.8f), 10.f));
             auto [pos, rot, scal] = ent.add_component<transform>();
             rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
-
-            //ent.add_component(gfx::mesh_renderer(model.get_model().materials[0], model));
-
-            //audio::audio_source source;
-            //source.setAudioHandle(audioSegment);
-            //source.setRollOffDistances(0.1f, 15.f);
-            //source.setRollOffFactor(0.1f);
-            //source.setLooping(true);
-            //source.play();
-            //ent.add_component(source);
         }
 
-        //for (int i = 0; i < 20000; i++)
-        //    createEntity().add_component<example_comp>();
+
 
         //Serialization Test
-        std::string filePath = "assets://scenes/scene1.json";
-        serialization::Registry::register_type<example_comp>();
-        auto serializer = serialization::Registry::get_serializer<example_comp>();
-        auto component = example_comp();
+        std::string filePath = "assets://scenes/scene.json";
 
-        component.id = 1;
-        component.alive = true;
-        auto d = data();
-        d.name = "Example Component";
-        d.description = "Serialization Test object";
-        component.comp_data = d;
-        serializer->write(fs::view(filePath),component);
-        auto compprot = serializer->read(fs::view(filePath));
-        component = from_reflector(compprot);
-        component.print();
+        auto serializer = serialization::Registry::register_serializer<scene_comp>();
+        auto scene = scene_comp();
+        scene.id = 1;
+        for (int i = 0; i < 2; i++)
+        {
+            auto ent = createEntity();
+            ent.add_component<example_comp>();
+            scene.entities.push_back(ent);
+        }
+
+        serializer->write(fs::view(filePath), scene);
+        scene = serializer->read(fs::view(filePath));
+        log::debug(scene.id);
     }
 
     void update(legion::time::span deltaTime)

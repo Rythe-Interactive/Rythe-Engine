@@ -1,6 +1,8 @@
 #pragma once
 #include <core/filesystem/filesystem.hpp>
 #include <core/ecs/prototypes/component_prototype.hpp>
+#include <core/ecs/handles/entity.hpp>
+
 #include <nlohmann/json.hpp>
 
 #include <sstream>
@@ -23,17 +25,27 @@ namespace legion::core::serialization
         virtual type deserialize(json j) LEGION_PURE;
     };
 
-    template<typename type>
-    struct json_view : public serializer_view<type>
+    template<typename prototype>
+    struct json_view : public serializer_view<prototype>
     {
     public:
         json_view() = default;
         ~json_view() = default;
-        json_view(std::string_view filePath) : serializer_view<type>(filePath) {}
+        json_view(std::string_view filePath) : serializer_view<prototype>(filePath) {}
 
-        virtual json serialize(type object) override;
-        virtual type deserialize(json j) override;
+        virtual json serialize(const prototype object) override;
+        virtual prototype deserialize(const json j) override;
     };
+
+    struct serialization_util
+    {
+        template<typename property_type>
+        static json serialize_property(const property_type prop);
+
+        template<typename property_type>
+        static property_type deserialize_property(const json j);
+    };
+
 }
 
 #include <core/serialization/view_type.inl>

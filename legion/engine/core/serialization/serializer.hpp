@@ -39,7 +39,7 @@ namespace legion::core::serialization
         component_prototype<type> deserialize(json j);
 
         void write(fs::view filePath, type data);
-        component_prototype<type> read(fs::view filePath);
+        type read(fs::view filePath);
     };
 }
 

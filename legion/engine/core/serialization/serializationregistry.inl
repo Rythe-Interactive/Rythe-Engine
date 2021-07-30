@@ -6,9 +6,10 @@ namespace legion::core::serialization
     std::map<id_type, std::unique_ptr<serializer_base>> Registry::serializers;
 
     template<typename type>
-    inline void Registry::register_type()
+    inline pointer<serializer<type>> Registry::register_serializer()
     {
         Registry::serializers.emplace(type_hash<type>().local(), std::make_unique<serializer<type>>());
+        return get_serializer<type>();
     }
 
     template<typename type>

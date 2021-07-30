@@ -15,7 +15,7 @@ namespace legion::core::serialization
         static std::map<id_type, std::unique_ptr<serializer_base>> serializers;
     public:
         template<typename type>
-        static void register_type();
+        static pointer<serializer<type>> register_serializer();
 
         template<typename type>
         static pointer<serializer<type>> get_serializer();

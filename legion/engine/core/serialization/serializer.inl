@@ -21,18 +21,18 @@ namespace legion::core::serialization
         std::ofstream os;
         os.open(fs::view_util::get_view_path(filePath,true));
         json j = serialize(data);
-        os << j.dump();
+        os << j.dump(4);
         os.close();
     }
 
     template<typename component_type>
-    inline component_prototype<component_type> serializer<component_type>::read(fs::view filePath)
+    inline component_type serializer<component_type>::read(fs::view filePath)
     {
         json j;
         std::ifstream is;
         is.open(fs::view_util::get_view_path(filePath, true));
         is >> j;
         is.close();
-        return deserialize(j);
+        return from_reflector(deserialize(j));
     }
 }
