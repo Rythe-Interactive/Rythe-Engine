@@ -27,7 +27,7 @@ public:
 
         //reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
-        reportSystem<physics::PhysicsFractureTestSystem>();
+        reportSystem<physics::PhysicsTestSystem>();
 
     }
 
