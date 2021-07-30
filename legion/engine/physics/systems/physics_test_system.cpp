@@ -1,4 +1,4 @@
-#include <physics/systems/physics_fracture_test_system.hpp>
+#include <physics/systems/physics_test_system.hpp>
 #include <physics/mesh_splitter_utils/mesh_splitter.hpp>
 #include <physics/mesh_splitter_utils/splittable_polygon.hpp>
 #include <physics/components/physics_component.hpp>
@@ -252,7 +252,7 @@ namespace legion::physics
         //add a physics component and run quickhull
         physics::physicsComponent physicsComponent;
         auto entPhyHande = ent.add_component<physics::physicsComponent>();
-        physicsComponent.ConstructConvexHullFromVertices(quickhullVertices);
+        physicsComponent.constructConvexHullFromVertices(quickhullVertices);
         entPhyHande.write(physicsComponent);
 
         //using vertices of convex hull, create a rendering mesh out of it
@@ -752,7 +752,7 @@ namespace legion::physics
                 auto physicsComponentH = ent.get_component_handle<physics::physicsComponent>();
                 auto physComp = physicsComponentH.read();
                 physComp.colliders.clear();
-                physComp.ConstructConvexHull(meshFilter);
+                physComp.constructConvexHull(meshFilter);
                 physicsComponentH.write(physComp);
 
                 //[4] use collider to generate follower objects
@@ -890,7 +890,7 @@ namespace legion::physics
 
         if (useQuickhull)
         {
-            physicsComponent.ConstructConvexHull(cubeH.get_mesh());
+            physicsComponent.constructConvexHull(cubeH.get_mesh());
         }
         else
         {

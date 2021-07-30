@@ -207,14 +207,14 @@ namespace legion::physics
 
             initializeManifolds(manifoldsToSolve, manifoldValidity);
 
-            auto sorter = [](const physics_contact& contact1, const physics_contact& contact2)
+            auto largestPenetration = [](const physics_contact& contact1, const physics_contact& contact2)
             -> bool {
             return math::dot(contact1.RefWorldContact - contact1.IncWorldContact, -contact1.collisionNormal)
             > math::dot(contact2.RefWorldContact - contact2.IncWorldContact, -contact2.collisionNormal);};
 
             for (auto& manifold : manifoldsToSolve)
             {
-                std::sort(manifold.contacts.begin(), manifold.contacts.end(), sorter);
+                std::sort(manifold.contacts.begin(), manifold.contacts.end(), largestPenetration);
             }
 
             {

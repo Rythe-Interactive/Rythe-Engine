@@ -522,7 +522,7 @@ namespace legion::physics
         }
         
         //[8] Populate the new ConvexCollider's vertex vector with the vertices merged from the previous step
-        convexCollider->PopulateVertexListWithHalfEdges();
+        convexCollider->populateVertexListWithHalfEdges();
 
         return convexCollider;
     }

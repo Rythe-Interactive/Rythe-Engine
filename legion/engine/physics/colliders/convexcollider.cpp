@@ -629,7 +629,7 @@ namespace legion::physics
         //log::debug("-> Finish ConstructConvexHullWithMesh ----------------------------------");
     }
 
-    void ConvexCollider::PopulateVertexListWithHalfEdges()
+    void ConvexCollider::populateVertexListWithHalfEdges()
     {
         auto& verticesVec = vertices;
 
