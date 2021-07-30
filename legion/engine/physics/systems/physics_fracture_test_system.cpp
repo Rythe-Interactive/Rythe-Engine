@@ -52,7 +52,7 @@ namespace legion::physics
 
         /////////////////
         woodTextureH = rendering::MaterialCache::create_material("texture2", "assets://shaders/texture.shs"_view);
-        woodTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/log.jpg"_view));
+        woodTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/test-albedo.png"_view));
 
         rockTextureH = rendering::MaterialCache::create_material("rock", "assets://shaders/texture.shs"_view);
         rockTextureH.set_param("_texture", rendering::TextureCache::create_texture("assets://textures/rock.png"_view));
@@ -113,6 +113,8 @@ namespace legion::physics
         app::InputSystem::createBinding<explosion>(app::inputmap::method::B);
         app::InputSystem::createBinding<QHULL>(app::inputmap::method::Q);
         app::InputSystem::createBinding<AddRigidbody>(app::inputmap::method::R);
+        app::InputSystem::createBinding<SpawnRandomHullOnCameraLoc>(app::inputmap::method::F);
+        app::InputSystem::createBinding<SpawnHullActive>(app::inputmap::method::P);
 
        /* app::InputSystem::createBinding<smallExplosion>(app::inputmap::method::NUM1);
         app::InputSystem::createBinding<mediumExplosion>(app::inputmap::method::NUM2);
@@ -137,6 +139,8 @@ namespace legion::physics
         bindToEvent<explosion, &PhysicsFractureTestSystem::prematureExplosion>();
         bindToEvent<QHULL, &PhysicsFractureTestSystem::quickHullStep>();
         bindToEvent<AddRigidbody, &PhysicsFractureTestSystem::AddRigidbodyToQuickhulls>();
+        bindToEvent< SpawnRandomHullOnCameraLoc, &PhysicsFractureTestSystem::spawnRandomConvexHullOnCameraLocation>();
+        bindToEvent< SpawnHullActive, &PhysicsFractureTestSystem::ActivateSpawnRandomHull>();
 
         #pragma endregion
 
@@ -173,6 +177,8 @@ namespace legion::physics
         //sceneDelegates.sceneInit();
         quickhullTestScene();
         //BoxStackScene();
+        //stabilityComparisonScene();
+       // monkeyStackScene();
 
         Fracturer::registry = m_ecs;
     }
@@ -195,6 +201,17 @@ namespace legion::physics
             rotH.write(rotH2.read());
             scaleH.write(scaleH2.read());
         }
+
+
+        auto cameraQuery = createQuery<rendering::camera,transform>();
+        cameraQuery.queryEntities();
+        for (auto ent : cameraQuery)
+        {
+            auto [posH, rotH, scaleH] = ent.get_component_handles<transform>();
+            //core::position newPos = posH.read() + math::vec3(0.05f, 0, 0);
+            //posH.write(newPos);
+        }
+
 
     }
 
@@ -763,6 +780,201 @@ namespace legion::physics
         CreateElongatedFloor(math::vec3(20.0, 0.5f, 5.0f), math::quat(), math::vec3(15, 1, 20), concreteH);
     }
 
+    void PhysicsFractureTestSystem::ActivateSpawnRandomHull(SpawnHullActive* action)
+    {
+        if (!action->value)
+        {
+            m_throwingHullActivated = !m_throwingHullActivated;
+            log::debug("Spawn Hull Active: {0}", m_throwingHullActivated);
+        }
+    }
+
+    void PhysicsFractureTestSystem::spawnRandomConvexHullOnCameraLocation(SpawnRandomHullOnCameraLoc* action)
+    {
+        if (!m_throwingHullActivated || action->value) { return; }
+
+        //log::debug("spawnRandomConvexHullOnCamerLocation");
+
+        //create entity
+        auto ent = m_ecs->createEntity();
+
+        //add a transform component
+        auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
+
+        //get camera position and set transform to camera postiion 
+        auto cameraQuery = createQuery<rendering::camera, transform>();
+        cameraQuery.queryEntities();
+
+        math::vec3 cameraDirection;
+
+        for (auto ent : cameraQuery)
+        {
+            auto [positionCamH, rotationCamH, scaleCamH] = ent.get_component_handles<transform>();
+            cameraDirection = rotationCamH.read() * math::vec3(0, 0, 1);
+            positionH.write(positionCamH.read() + cameraDirection * 2.5f);
+            
+        }
+
+        //randomly generated a number of vertices
+        std::vector<math::vec3> quickhullVertices;
+
+        {
+            const math::vec3 right = math::vec3(1.0f, 0.0f, 0.0f);
+            const math::vec3 up = math::vec3(0.0f, 1.0f, 0.0f);
+            const math::vec3 forward = math::vec3(0.0f, 0.0f, 1.0f);
+
+            static std::mt19937 generator;
+            std::uniform_real_distribution<double> dis(-1.0f, 1.0f);
+
+            for (size_t i = 0; i < 20; i++)
+            {
+                math::vec3 rightVal = dis(generator) * right;
+                math::vec3 upVal = dis(generator) * up;
+                math::vec3 forwardVal = dis(generator) * forward;
+
+                quickhullVertices.push_back(rightVal + upVal + forwardVal);
+
+            }
+        
+        }
+
+        {
+            //shift vertices based on centroid
+            math::vec3 centroid(1.0f);
+
+            for (auto& vert : quickhullVertices)
+            {
+                centroid += vert;
+                //debug::drawLine(positionH.read(), positionH.read() + vert, math::colors::red, 5.0f, FLT_MAX, false);
+            }
+
+            centroid /= quickhullVertices.size();
+            //debug::drawLine(positionH.read(), positionH.read() + centroid, math::colors::blue, 5.0f, FLT_MAX, false);
+
+            for (auto& vert : quickhullVertices)
+            {
+                vert -= centroid;
+            }
+        }
+      
+
+        //add a rigidbody
+        auto rbH = ent.add_component<physics::rigidbody>();
+        auto rb = rbH.read();
+
+        rb.setMass(2.5f);
+        rb.localInverseInertiaTensor = math::mat3(3.0f);
+        rb.velocity = cameraDirection * 14.0f;
+
+        rbH.write(rb);
+
+        //add a physics component and run quickhull
+        physics::physicsComponent physicsComponent;
+        auto entPhyHande = ent.add_component<physics::physicsComponent>();
+        physicsComponent.ConstructConvexHullFromVertices(quickhullVertices);
+        entPhyHande.write(physicsComponent);
+
+        //using vertices of convex hull, create a rendering mesh out of it
+        auto convexCollider = std::dynamic_pointer_cast<ConvexCollider>(physicsComponent.colliders.at(0));
+        mesh newMesh;
+
+        std::vector<uint>& indices = newMesh.indices;
+        std::vector<math::vec3>& vertices = newMesh.vertices;
+        std::vector<math::vec2>& uvs = newMesh.uvs;
+        std::vector<math::vec3>& normals = newMesh.normals;
+        int x = 0;
+        for (auto face : convexCollider->GetHalfEdgeFaces())
+        {
+            math::vec3 faceCentroid = face->centroid;
+
+            math::vec3 faceForward = math::normalize(face->startEdge->edgePosition - faceCentroid);
+            math::vec3 faceRight = math::cross(face->normal, faceForward);
+
+            std::vector<math::vec3> faceVertices;
+            auto collectVertices = [&faceVertices](HalfEdgeEdge* edge) {faceVertices.push_back(edge->edgePosition ); };
+            face->forEachEdge(collectVertices);
+
+            math::vec3 maxForward, minForward, maxRight, minRight;
+
+            //get support point for the tangents and inverse tangents of this face 
+            PhysicsStatics::GetSupportPoint(faceVertices, faceForward, maxForward);
+            PhysicsStatics::GetSupportPoint(faceVertices, -faceRight, minForward);
+
+            PhysicsStatics::GetSupportPoint(faceVertices, faceRight, maxRight);
+            PhysicsStatics::GetSupportPoint(faceVertices, -faceRight, minRight);
+
+            float maxForwardLength = math::dot(maxForward - faceCentroid, faceForward);
+            float minForwardLength = math::dot(minForward - faceCentroid, -faceForward);
+
+            float maxRightLength = math::dot(maxRight - faceCentroid, faceRight);
+            float minRightLength = math::dot(minRight - faceCentroid, -faceRight);
+
+            math::vec3 min = faceCentroid - (faceForward * minForwardLength) - (faceRight * minRightLength);
+            float forwardLength = (minForwardLength + maxForwardLength);
+            float rightLength =  (minRightLength + maxRightLength);
+
+            auto calculateUV = [&min,&faceForward,&faceRight,&forwardLength,&rightLength](math::vec3 edgePosition)->math::vec2
+            {
+                math::vec2 result;
+                result.x = math::dot(edgePosition - min, faceForward)/ forwardLength;
+                result.y = math::dot(edgePosition - min, faceRight)/ rightLength;
+
+                return result;
+            };
+
+            auto populateMesh = [&calculateUV,&vertices,&normals,&uvs](HalfEdgeEdge* edge)
+            {
+                math::vec3 normal = edge->face->normal;
+               
+                vertices.push_back(edge->edgePosition);
+                uvs.push_back(calculateUV(edge->edgePosition));
+                normals.push_back(normal);
+
+                //log::debug("")
+
+                vertices.push_back(edge->nextEdge->edgePosition);
+                uvs.push_back(calculateUV(edge->nextEdge->edgePosition));
+                normals.push_back(normal);
+
+                vertices.push_back(edge->face->centroid);
+                uvs.push_back(calculateUV(edge->face->centroid));
+                normals.push_back(normal);
+
+            };
+
+            face->forEachEdge(populateMesh);
+
+        }
+
+
+        for (int i = 0; i < vertices.size(); i++)
+        {
+            indices.push_back(i);
+        }
+
+        sub_mesh newSubMesh;
+        newSubMesh.indexCount = newMesh.indices.size();
+        newSubMesh.indexOffset = 0;
+
+        newMesh.submeshes.push_back(newSubMesh);
+
+        static int count = 0;
+        mesh_handle meshH = core::MeshCache::create_mesh("newMesh" + std::to_string(count), newMesh);
+        auto modelH = rendering::ModelCache::create_model(meshH);
+        count++;
+
+        //create renderable
+        mesh_filter meshFilter = mesh_filter(meshH);
+
+        ent.add_components<rendering::mesh_renderable>(meshFilter, rendering::mesh_renderer(concreteH));
+        //using extents of face, define uvs
+
+        //randomly select texture
+
+        //set rendering mesh
+
+    }
+
     void PhysicsFractureTestSystem::prematureExplosion(explosion* action)
     {
         if (!action->value)
@@ -784,13 +996,15 @@ namespace legion::physics
        
     }
 
+    rendering::material_handle defaultStairMaterial;
+
     void PhysicsFractureTestSystem::quickhullTestScene()
     {
-        math::mat3 elongatedBlockInertia = math::mat3(math::vec3(6.0f, 0, 0), math::vec3(0.0f, 18.0f, 0), math::vec3(0, 0, 6.0f));
+        math::mat3 elongatedBlockInertia = math::mat3(math::vec3(6.0f, 0, 0), math::vec3(0.0f, 3.0f, 0), math::vec3(0, 0, 6.0f));
 
         //cube
         createQuickhullTestObject
-        (math::vec3(0,5.0f, -0.8f),cubeH, concreteH);
+        (math::vec3(0,5.0f, -0.8f),cubeH, wireFrameH);
 
         //cup
         createQuickhullTestObject
@@ -798,7 +1012,7 @@ namespace legion::physics
 
         //////hammer
         createQuickhullTestObject
-        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, rockTextureH);
+        (math::vec3(10.0f, 5.0f, -0.8f), hammerH, wireFrameH);
 
         ////suzanne
         createQuickhullTestObject
@@ -807,21 +1021,30 @@ namespace legion::physics
         ////ohio teapot
         createQuickhullTestObject
         (math::vec3(20.0f, 5.0f, -0.5f), teapotH, wireFrameH,elongatedBlockInertia);
-        
 
+        
+        defaultStairMaterial = textureH;
         addStaircase(math::vec3(8, 2, 0));
+
+        defaultStairMaterial = tileH;
         addStaircase(math::vec3(8, 1, -1));
+
+        defaultStairMaterial = textureH;
         addStaircase(math::vec3(8, 0, -2));
+
+        defaultStairMaterial = tileH;
         addStaircase(math::vec3(8, -1, -3.1f));
 
+        defaultStairMaterial = textureH;
         addStaircase(math::vec3(8, -2, -5),5.0f);
-
 
         for (size_t i = 0; i < registeredColliderColorDraw.size(); i++)
         {
             folowerObjects.push_back(std::vector<ecs::entity_handle>());
         }
     }
+
+    
 
     void PhysicsFractureTestSystem::BoxStackScene()
     {
@@ -830,11 +1053,43 @@ namespace legion::physics
         cubeParams.height = 1.0f;
         cubeParams.width = 1.0f;
         
-        createStack(5, 5, 5, math::vec3(3.0f,0,3.0f), math::vec3(1.0f),
-            cubeH, rockTextureH, cubeParams);
+        createStack(4, 4, 4, math::vec3(3.5f,0,3.5f), math::vec3(1.0f),
+            cubeH, textureH, cubeParams,false);
 
+        defaultStairMaterial = tileH;
         addStaircase(math::vec3(5.0f, -1, 5.0f), 10.0f, 10.0f);
     }
+
+    void PhysicsFractureTestSystem::stabilityComparisonScene()
+    {
+        cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.height = 1.0f;
+        cubeParams.width = 1.0f;
+
+        createStack(1,1,10, math::vec3(0.0f, 0, 0.0f), math::vec3(1.0f),
+            cubeH, textureH, cubeParams,true,1.0f);
+
+        defaultStairMaterial = tileH;
+        addStaircase(math::vec3(0.0f, -1, 0.0f), 4.0f, 4.0f);
+
+    }
+
+    void PhysicsFractureTestSystem::monkeyStackScene()
+    {
+        cube_collider_params cubeParams;
+        cubeParams.breadth = 1.0f;
+        cubeParams.height = 1.0f;
+        cubeParams.width = 1.0f;
+
+        createStack(3, 3, 1, math::vec3(3.5f, 0.5f, 3.5f), math::vec3(2.0f),
+            suzzaneH, tileH, cubeParams, true);
+
+        defaultStairMaterial = textureH;
+        addStaircase(math::vec3(5.0f, -1, 5.0f), 10.0f, 10.0f);
+    }
+
+    
 
     void PhysicsFractureTestSystem::addStaircase(math::vec3 position, float breadthMult, float widthMult )
     {
@@ -856,7 +1111,7 @@ namespace legion::physics
         entPhyHande.write(physicsComponent2);
 
         auto ent2 = m_ecs->createEntity();
-        ent2.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(textureH));
+        ent2.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(defaultStairMaterial));
 
         auto [position2H, rotation2H, scale2H] = m_ecs->createComponents<transform>(ent2);
         position2H.write(position);
@@ -1052,6 +1307,9 @@ namespace legion::physics
 
                     for (auto face : physCollider->GetHalfEdgeFaces())
                     {
+                       
+
+
 
                         //face->forEachEdge(drawFunc);
                         physics::HalfEdgeEdge* initialEdge = face->startEdge;
@@ -1059,6 +1317,19 @@ namespace legion::physics
                         math::vec3 worldNormal = (localTransform * math::vec4(face->normal, 0));
                         math::vec3 faceStart = localTransform * math::vec4(face->centroid, 1);
                         math::vec3 faceEnd = faceStart + worldNormal * 0.1f;
+
+                        auto camQuery = createQuery<rendering::camera,transform>();
+                        camQuery.queryEntities();
+
+                        math::vec3 camPos;
+                        for (auto ent : camQuery)
+                        {
+                            camPos = ent.read_component<position>();
+                        }
+
+                        float dotResult = math::dot(camPos - faceStart, worldNormal);
+
+                        if (dotResult < 0) { continue; }
 
                         //debug::drawLine(faceStart, faceEnd, math::colors::green, 2.0f);
 
@@ -1073,7 +1344,7 @@ namespace legion::physics
                             math::vec3 worldStart = (localTransform * math::vec4(edgeToExecuteOn->edgePosition, 1)) ;
                             math::vec3 worldEnd = (localTransform * math::vec4(edgeToExecuteOn->nextEdge->edgePosition, 1)) ;
 
-                            //debug::drawLine(worldStart + shift, worldEnd + shift, usedColor, 2.0f, 0.0f, useDepth);
+                            debug::drawLine(worldStart + shift, worldEnd + shift, usedColor, 2.0f, 0.0f, useDepth);
 
                             if (auto pairing = edgeToExecuteOn->pairingEdge)
                             {
@@ -1121,11 +1392,11 @@ namespace legion::physics
                 auto physicsComponentH = ent.get_component_handle<physics::physicsComponent>();
                 auto physComp = physicsComponentH.read();
                 physComp.colliders.clear();
-                physComp.ConstructConvexHull(meshFilter, step, transform);
+                physComp.ConstructConvexHull(meshFilter);
                 physicsComponentH.write(physComp);
 
                 //[4] use collider to generate follower objects
-                PopulateFollowerList(ent,i);
+                //PopulateFollowerList(ent,i);
                 i++;
             }
 
@@ -1157,10 +1428,10 @@ namespace legion::physics
         {
             physics::PhysicsSystem::IsPaused = false;
         }
-        else
+        /*else
         {
             physics::PhysicsSystem::IsPaused = true;
-        }
+        }*/
 
     }
 
@@ -1315,9 +1586,7 @@ namespace legion::physics
 
                 CreateSplitTestBox(physics::cube_collider_params(1, 1, 1), trans[3],
                     math::quat(), textureH, false, true, dir);
-
             }
-
         }
        
 
@@ -1761,7 +2030,7 @@ namespace legion::physics
     }
 
     void PhysicsFractureTestSystem::createStack(int widthCount, int breadthCount, int heightCount, math::vec3 firstBlockPos, math::vec3 offset,
-        rendering::model_handle cubeH, rendering::material_handle materials, physics::cube_collider_params cubeParams, bool rigidbody , float mass , math::mat3 inverseInertia )
+        rendering::model_handle cubeH, rendering::material_handle materials, physics::cube_collider_params cubeParams, bool useQuickhull, bool rigidbody , float mass , math::mat3 inverseInertia )
     {
         for (size_t y = 0; y < heightCount; y++)
         {
@@ -1770,14 +2039,14 @@ namespace legion::physics
                 for (size_t z = 0; z < breadthCount; z++)
                 {
                     math::vec3 finalPos = firstBlockPos + math::vec3(offset.x * x, offset.y * y, offset.z * z);
-                    createBoxEntity(finalPos, cubeH, materials, cubeParams,rigidbody,mass,inverseInertia);
+                    createBoxEntity(finalPos, cubeH, materials, cubeParams,useQuickhull,rigidbody,mass,inverseInertia);
                 }
             }
         }
     }
 
     void PhysicsFractureTestSystem::createBoxEntity(math::vec3 position, rendering::model_handle cubeH,
-        rendering::material_handle materials, physics::cube_collider_params cubeParams, bool rigidbody , float mass , math::mat3 inverseInertia )
+        rendering::material_handle materials, physics::cube_collider_params cubeParams, bool useQuickhull, bool rigidbody , float mass , math::mat3 inverseInertia )
     {
         auto ent = m_ecs->createEntity();
 
@@ -1791,12 +2060,23 @@ namespace legion::physics
             rbH.write(rb);
         }
 
+        ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(materials));
+
         physics::physicsComponent physicsComponent;
         auto entPhyHande = ent.add_component<physics::physicsComponent>();
-        physicsComponent.AddBox(cubeParams);
+
+        if (useQuickhull)
+        {
+            physicsComponent.ConstructConvexHull(cubeH.get_mesh());
+        }
+        else
+        {
+            physicsComponent.AddBox(cubeParams);
+        }
+
         entPhyHande.write(physicsComponent);
 
-        ent.add_components<rendering::mesh_renderable>(mesh_filter(cubeH.get_mesh()), rendering::mesh_renderer(materials));
+        
 
         auto [positionH, rotationH, scaleH] = m_ecs->createComponents<transform>(ent);
         positionH.write(position);

@@ -17,8 +17,7 @@ namespace legion::physics
         localCenterOfMass /= static_cast<float>(colliders.size());
     }
 
-    std::shared_ptr<ConvexCollider> physicsComponent::ConstructConvexHull(legion::core::mesh_handle meshHandle, int DEBUG_stepMax,
-        math::mat4 DEBUG_transform)
+    std::shared_ptr<ConvexCollider> physicsComponent::ConstructConvexHull(legion::core::mesh_handle meshHandle)
     {
         const auto& vertices = meshHandle.get().second.vertices;
         auto collider = PhysicsStatics::generateConvexHull(vertices);
@@ -30,6 +29,19 @@ namespace legion::physics
             calculateNewLocalCenterOfMass();
         }
    
+        return collider;
+    }
+
+    std::shared_ptr<ConvexCollider> physicsComponent::ConstructConvexHullFromVertices(const std::vector<math::vec3>& vertices)
+    {
+        auto collider = PhysicsStatics::generateConvexHull(vertices);
+
+        if (collider)
+        {
+            colliders.push_back(collider);
+            calculateNewLocalCenterOfMass();
+        }
+
         return collider;
     }
 

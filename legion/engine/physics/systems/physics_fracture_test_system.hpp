@@ -17,6 +17,8 @@ struct explosion : public app::input_action<explosion> {};
 
 struct QHULL : public app::input_action<QHULL>{};
 struct AddRigidbody : public app::input_action<AddRigidbody> {};
+struct SpawnRandomHullOnCameraLoc : public app::input_action< SpawnRandomHullOnCameraLoc> {};
+struct SpawnHullActive : public app::input_action< SpawnHullActive> {};
 
 struct ObjectToFollow
 {
@@ -35,13 +37,7 @@ namespace legion::physics
 
     private:
 
-        struct PhysicsSceneDelegates
-        {
-            legion::core::delegate<void()> sceneInit;
-            legion::core::delegate<void()> sceneRuntime;
-        };
-
-        PhysicsSceneDelegates sceneDelegates;
+        bool m_throwingHullActivated = false;
 
         void CreateElongatedFloor(math::vec3 position,math::quat rot, math::vec3 scale, rendering::material_handle mat, bool hasCollider =true);
 
@@ -57,6 +53,10 @@ namespace legion::physics
 
         void BoxStackScene();
 
+        void stabilityComparisonScene();
+
+        void monkeyStackScene();
+
         void meshSplittingTest(rendering::model_handle planeH, rendering::model_handle cubeH
             , rendering::model_handle cylinderH, rendering::model_handle complexH, rendering::material_handle TextureH);
 
@@ -69,7 +69,13 @@ namespace legion::physics
         void PopulateFollowerList(ecs::entity_handle physicsEnt,int index);
        
         void addStaircase(math::vec3 position,float breadthMult = 1.0f,float widthMult = 27.0f);
+
         //FUNCTION BINDED ACTIONS
+
+        void ActivateSpawnRandomHull(SpawnHullActive*action);
+
+        void spawnRandomConvexHullOnCameraLocation(SpawnRandomHullOnCameraLoc*action);
+
         void prematureExplosion(explosion* action);
 
         void OnSplit(physics_split_test* action);
@@ -103,10 +109,10 @@ namespace legion::physics
 
         void createStack(int widthCount, int breadthCount, int heightCount,
             math::vec3 firstBlockPos, math::vec3 offset, rendering::model_handle cubeH,
-            rendering::material_handle materials, physics::cube_collider_params cubeParams,bool rigidbody = true, float mass = 1.0f, math::mat3 inverseInertia = math::mat3(6.f));
+            rendering::material_handle materials, physics::cube_collider_params cubeParams, bool useQuickhull = false, bool rigidbody = true, float mass = 1.0f, math::mat3 inverseInertia = math::mat3(6.f));
 
         void createBoxEntity(math::vec3 position, rendering::model_handle cubeH,
-            rendering::material_handle materials, physics::cube_collider_params cubeParams, bool rigidbody = true, float mass = 1.0f, math::mat3 inverseInertia = math::mat3(6.f));
+            rendering::material_handle materials, physics::cube_collider_params cubeParams,bool useQuickhull = false, bool rigidbody = true, float mass = 1.0f, math::mat3 inverseInertia = math::mat3(6.f));
 
         void smallExplosionTest(smallExplosion*action);
         void mediumExplosionTest(mediumExplosion*action);

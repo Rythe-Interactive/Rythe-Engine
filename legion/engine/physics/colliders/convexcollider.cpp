@@ -9,7 +9,17 @@
 
 namespace legion::physics
 {
-    void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold) 
+    void ConvexCollider::AddConverganceIdentifier(const physics_contact& contact)
+    {
+        if (contact.label.IsSet())
+        {
+            converganceIdentifiers.push_back(
+                std::make_unique<ConvexConverganceIdentifier>(contact.label, contact.totalLambda,
+                    contact.tangent1Lambda, contact.tangent2Lambda, GetColliderID()));
+        }
+    }
+
+    void ConvexCollider::CheckCollisionWith(ConvexCollider* convexCollider, physics_manifold& manifold)
     {
         OPTICK_EVENT();
 
