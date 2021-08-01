@@ -10,7 +10,14 @@ namespace legion::core::serialization
         for_each(object,
             [&j](auto& name, auto& value)
             {
-                j[name] = serialization_util::serialize_property(value);
+                if constexpr (has_size<decltype(value),std::size_t>::value)
+                {
+                    j[name] = serialization_util::serialize_container(value);
+                }
+                else
+                {
+                    j[name] = serialization_util::serialize_property(value);
+                }
             });
         return j;
     }
@@ -27,11 +34,6 @@ namespace legion::core::serialization
         return prot;
     }
 
-    template<typename property_type>
-    inline json serialization_util::serialize_property(const property_type prop)
-    {
-        return prop;
-    }
 
     template<>
     inline json serialization_util::serialize_property(const ecs::entity prop)
@@ -51,21 +53,21 @@ namespace legion::core::serialization
         return j;
     }
 
-    template<>
-    inline json serialization_util::serialize_property<std::vector<ecs::entity>>(const std::vector<ecs::entity> prop)
-    {
-        json j;
-        for (int i = 0; i < prop.size(); i++)
-        {
-            j.push_back(serialize_property<ecs::entity>(prop[i]));
-        }
-        return j;
-    }
+    //template<>
+    //inline json serialization_util::serialize_property<std::vector<ecs::entity>>(const std::vector<ecs::entity> prop)
+    //{
+    //    json j;
+    //    for (int i = 0; i < prop.size(); i++)
+    //    {
+    //        j.push_back(serialize_property<ecs::entity>(prop[i]));
+    //    }
+    //    return j;
+    //}
 
     template<typename property_type>
-    inline property_type serialization_util::deserialize_property(const json j)
+    inline json serialization_util::serialize_property(const property_type prop)
     {
-        return (property_type)j;
+        return prop;
     }
 
     template<>
@@ -75,5 +77,31 @@ namespace legion::core::serialization
         id_type id = (id_type)int_id;
         return id;
     }
+
+    template<typename property_type>
+    inline property_type serialization_util::deserialize_property(const json j)
+    {
+        return (property_type)j;
+    }
+
+
+    template<typename container_type>
+    inline json serialization_util::serialize_container(const container_type prop)
+    {
+        json j;
+        for (int i = 0; i < prop.size(); i++)
+        {
+            j.push_back(serialize_property<ecs::entity>(prop[i]));
+        }
+        return j;
+    }
+
+    template<typename container_type>
+    inline container_type serialization_util::deserialize_container(const json j)
+    {
+        return container_type();
+    }
+
+
 }
 

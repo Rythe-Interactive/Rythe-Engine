@@ -44,6 +44,12 @@ namespace legion::core::serialization
 
         template<typename property_type>
         static property_type deserialize_property(const json j);
+
+        template<typename container_type>
+        static json serialize_container(const container_type prop);
+
+        template<typename container_type>
+        static container_type deserialize_container(const json j);
     };
 
 }
