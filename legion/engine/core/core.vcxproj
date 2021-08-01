@@ -125,6 +125,10 @@ del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="assets\asset.hpp" />
+    <ClInclude Include="assets\assetloader.hpp" />
+    <ClInclude Include="assets\assetcache.hpp" />
+    <ClInclude Include="assets\import_settings.hpp" />
     <ClInclude Include="async\async.hpp" />
     <ClInclude Include="async\async_operation.hpp" />
     <ClInclude Include="async\async_runnable.hpp" />
