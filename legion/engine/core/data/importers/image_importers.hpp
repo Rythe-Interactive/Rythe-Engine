@@ -9,7 +9,7 @@ namespace legion::core
         constexpr static cstring extensions[] = { "", ".png", ".jpg", ".jpeg", ".jpe", ".jfif", ".jfi", ".jif", ".bmp", ".dib", ".raw", ".psd", ".psb", ".tga", ".icb", ".vda", ".vst", ".hdr", ".ppm", ".pgm" };
 
 
-        common::result_decay_more<image, fs_error> load_default(const filesystem::basic_resource& resource) override{ return load(resource,image_import_settings(default_image_settings)); }
-        virtual common::result_decay_more<image, fs_error> load(const filesystem::basic_resource& resource, image_import_settings&& settings) override;
+        common::result<image, fs_error> load_default(const filesystem::basic_resource& resource) override{ return load(resource,image_import_settings(default_image_settings)); }
+        virtual common::result<image, fs_error> load(const filesystem::basic_resource& resource, image_import_settings&& settings) override;
     };
 }

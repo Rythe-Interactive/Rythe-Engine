@@ -80,21 +80,21 @@ namespace legion::audio
 
     struct mp3_audio_loader : public fs::resource_converter<audio_segment, audio_import_settings>
     {
-        common::result_decay_more<audio_segment, fs_error> load_default(const filesystem::basic_resource& resource) override
+        common::result<audio_segment, fs_error> load_default(const filesystem::basic_resource& resource) override
         {
             return load(resource,audio_import_settings(default_audio_import_settings));
         }
-        virtual common::result_decay_more<audio_segment, fs_error> load(const fs::basic_resource& resource, audio_import_settings&& settings) override;
+        virtual common::result<audio_segment, fs_error> load(const fs::basic_resource& resource, audio_import_settings&& settings) override;
     };
 
     struct wav_audio_loader : public fs::resource_converter<audio_segment, audio_import_settings>
     {
 
-        common::result_decay_more<audio_segment, fs_error> load_default(const filesystem::basic_resource& resource) override
+        common::result<audio_segment, fs_error> load_default(const filesystem::basic_resource& resource) override
         {
             return load(resource,audio_import_settings(default_audio_import_settings));
         }
-        virtual common::result_decay_more<audio_segment, fs_error> load(const fs::basic_resource& resource, audio_import_settings&& settings) override;
+        virtual common::result<audio_segment, fs_error> load(const fs::basic_resource& resource, audio_import_settings&& settings) override;
 
         struct RIFF_Header // 36 Bytes of data for WAV header
         {
