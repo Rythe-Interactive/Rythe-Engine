@@ -44,7 +44,7 @@ namespace legion::core::async
     using job_queue = std::queue<std::shared_ptr<job_pool>>;
 
     template<typename Func, typename CompleteFunc>
-    struct job_operation : public async_operation<Func>
+    struct job_operation : public repeating_async_operation<Func>
     {
     private:
         CompleteFunc m_onComplete;
@@ -53,7 +53,7 @@ namespace legion::core::async
         std::shared_ptr<job_pool> jobPoolPtr;
 
         job_operation(const std::shared_ptr<async_progress>& progress, const std::shared_ptr<job_pool>& jobPool, Func&& repeater, CompleteFunc&& complete)
-            : async_operation<Func>(progress, repeater), m_onComplete(complete), jobPoolPtr(jobPool) {}
+            : repeating_async_operation<Func>(progress, repeater), m_onComplete(complete), jobPoolPtr(jobPool) {}
 
         job_operation(const job_operation&) noexcept(std::is_nothrow_copy_constructible_v<Func> && std::is_nothrow_copy_constructible_v<CompleteFunc>) = default;
         job_operation(job_operation&&) noexcept(std::is_nothrow_move_constructible_v<Func> && std::is_nothrow_move_constructible_v<CompleteFunc>) = default;
