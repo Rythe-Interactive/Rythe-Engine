@@ -7,17 +7,15 @@ namespace legion::core::serialization
     inline json json_view<prototype>::serialize(const prototype object)
     {
         json j;
+        std::vector<int> temp;
+
         for_each(object,
             [&j](auto& name, auto& value)
             {
-                if constexpr (has_size<decltype(value),std::size_t>::value)
-                {
-                    j[name] = serialization_util::serialize_container(value);
-                }
-                else
-                {
+                if constexpr (!has_size<decltype(value)>::value)
                     j[name] = serialization_util::serialize_property(value);
-                }
+                else
+                    j[name] = serialization_util::serialize_container(value);
             });
         return j;
     }
@@ -29,7 +27,22 @@ namespace legion::core::serialization
         for_each(prot,
             [&j](auto& name, auto& value)
             {
-                value = serialization_util::deserialize_property<decltype(value)>(j[name]);
+                json prop = j[name];
+                log::debug(prop.dump());
+                log::debug(prop.is_array());
+                log::debug(j[name].is_array());
+                static const bool b = j[name].is_array();
+                constexpr const bool& isArray = b;
+                if constexpr (!isArray)
+                {
+                    log::debug(std::string("j[name] dump:" + j[name].dump()));
+                    value = serialization_util::deserialize_property<decltype(value)>(j[name]);
+                }
+                else
+                {
+                    log::debug(std::string("j[name] dump:" + j[name].dump()));
+                    value = serialization_util::deserialize_container<decltype(value)>(j[name]);
+                }
             });
         return prot;
     }
@@ -99,9 +112,13 @@ namespace legion::core::serialization
     template<typename container_type>
     inline container_type serialization_util::deserialize_container(const json j)
     {
-        return container_type();
+        auto c_type = std::declval<container_type>();
+        for (json::iterator it = j.begin(); it != j.end(); ++it)
+        {
+            c_type.push_back(it.value());
+        }
+        return c_type;;
     }
-
 
 }
 
