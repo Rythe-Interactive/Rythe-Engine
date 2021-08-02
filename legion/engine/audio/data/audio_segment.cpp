@@ -145,7 +145,7 @@ namespace legion::audio
         if (result != common::valid)
         {
             //log::error("Audio file wrong!");
-            log::error("Error while loading file: {}, {}", static_cast<std::string>(file.get_filename()), result.get_error());
+            log::error("Error while loading file: {}, {}", static_cast<std::string>(file.get_filename()), result.error());
             return invalid_audio_segment_handle;
         }
 

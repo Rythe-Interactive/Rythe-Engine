@@ -335,12 +335,9 @@ namespace std
 
 namespace legion::core
 {
-    common::result_decay_more<mesh, fs_error> obj_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
+    common::result<mesh, fs_error> obj_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
         OPTICK_EVENT();
-        using common::Err, common::Ok;
-        // decay overloads the operator of ok_type and operator== for valid_t.
-        using decay = common::result_decay_more<mesh, fs_error>;
 
         // tinyobj objects
         tinyobj::ObjReader reader;
@@ -354,11 +351,11 @@ namespace legion::core
 
         filesystem::navigator navigator(settings.contextFolder.get_virtual_path());
         auto solution = navigator.find_solution();
-        if (solution.has_err())
-            log::warn(std::string("Invalid obj context path, ") + solution.get_error().what());
+        if (solution.has_error())
+            log::warn(std::string("Invalid obj context path, ") + solution.error().what());
         else
         {
-            auto s = solution.get();
+            auto s = solution.value();
             if (s.size() != 1)
                 log::warn("Invalid obj context path, fs::view was not fully local");
             else
@@ -384,7 +381,7 @@ namespace legion::core
         // Try to parse the mesh data from the text data in the file.
         if (!reader.ParseFromString(resource.to_string(), matFileReader, config))
         {
-            return decay(Err(legion_fs_error(reader.Error().c_str())));
+            return legion_fs_error(reader.Error().c_str());
         }
 
         // Print any warnings.
@@ -523,16 +520,13 @@ namespace legion::core
         mesh::calculate_tangents(&data);
 
         // Construct and return the result.
-        return decay(Ok(data));
+        return std::move(data);
     }
 
 
-    common::result_decay_more<mesh, fs_error> gltf_binary_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
+    common::result<mesh, fs_error> gltf_binary_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
         OPTICK_EVENT();
-        using common::Err, common::Ok;
-        // decay overloads the operator of ok_type and operator== for valid_t.
-        using decay = common::result_decay_more<mesh, fs_error>;
 
         namespace tg = tinygltf;
 
@@ -543,12 +537,12 @@ namespace legion::core
 
         filesystem::navigator navigator(settings.contextFolder.get_virtual_path());
         auto solution = navigator.find_solution();
-        if (solution.has_err())
+        if (solution.has_error())
         {
-            log::warn(std::string("Invalid gltf context path, ") + solution.get_error().what());
+            log::warn(std::string("Invalid gltf context path, ") + solution.error().what());
         }
 
-        auto s = solution.get();
+        auto s = solution.value();
         if (s.size() != 1)
         {
             log::warn("Invalid gltf context path, fs::view was not fully local");
@@ -583,7 +577,7 @@ namespace legion::core
         if (!ret)
         {
             // If the return failed, return error
-            return decay(Err(legion_fs_error("Failed to parse GLTF")));
+            return legion_fs_error("Failed to parse GLTF");
         }
 
         core::mesh meshData;
@@ -657,7 +651,7 @@ namespace legion::core
 
         if (model.scenes.size() <= 0)
         {
-            return decay(Err(legion_fs_error("GLTF model contained 0 scenes")));
+            return legion_fs_error("GLTF model contained 0 scenes");
         }
 
         size_type sceneToLoad = model.defaultScene > -1 ? static_cast<size_type>(model.defaultScene) : 0;
@@ -697,15 +691,11 @@ namespace legion::core
 
         mesh::calculate_tangents(&meshData);
 
-        return decay(Ok(meshData));
+        return std::move(meshData);
     }
 
-    common::result_decay_more<mesh, fs_error> gltf_ascii_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
+    common::result<mesh, fs_error> gltf_ascii_mesh_loader::load(const filesystem::basic_resource& resource, mesh_import_settings&& settings)
     {
-        using common::Err, common::Ok;
-        // decay overloads the operator of ok_type and operator== for valid_t.
-        using decay = common::result_decay_more<mesh, fs_error>;
-
         namespace tg = tinygltf;
 
         tg::Model model;
@@ -717,12 +707,12 @@ namespace legion::core
 
         filesystem::navigator navigator(settings.contextFolder.get_virtual_path());
         auto solution = navigator.find_solution();
-        if (solution.has_err())
+        if (solution.has_error())
         {
-            log::warn(std::string("Invalid gltf context path, ") + solution.get_error().what());
+            log::warn(std::string("Invalid gltf context path, ") + solution.error().what());
         }
 
-        auto s = solution.get();
+        auto s = solution.value();
         if (s.size() != 1)
         {
             log::warn("Invalid gltf context path, fs::view was not fully local");
@@ -757,7 +747,7 @@ namespace legion::core
         if (!ret)
         {
             // If the return failed, return error
-            return decay(Err(legion_fs_error("Failed to parse glTF")));
+            return legion_fs_error("Failed to parse glTF");
         }
 
         core::mesh meshData;
@@ -831,7 +821,7 @@ namespace legion::core
 
         if (model.scenes.size() <= 0)
         {
-            return decay(Err(legion_fs_error("GLTF model contained 0 scenes")));
+            return legion_fs_error("GLTF model contained 0 scenes");
         }
 
         size_type sceneToLoad = model.defaultScene > -1 ? static_cast<size_type>(model.defaultScene) : 0;
@@ -871,6 +861,6 @@ namespace legion::core
 
         mesh::calculate_tangents(&meshData);
 
-        return decay(Ok(meshData));
+        return std::move(meshData);
     }
 }

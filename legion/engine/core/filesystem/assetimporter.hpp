@@ -38,8 +38,8 @@ namespace legion::core::filesystem
 
         virtual id_type result_type() override { return typeHash<result>(); }
 
-        virtual common::result_decay_more<result, fs_error> load_default(const basic_resource& resource) LEGION_PURE;
-        virtual common::result_decay_more<result, fs_error> load(const basic_resource& resource, Settings&&...) LEGION_PURE;
+        virtual common::result<result, fs_error> load_default(const basic_resource& resource) LEGION_PURE;
+        virtual common::result<result, fs_error> load(const basic_resource& resource, Settings&&...) LEGION_PURE;
 
     };
 
@@ -48,8 +48,8 @@ namespace legion::core::filesystem
      */
     struct basic_resource_converter final : public resource_converter<basic_resource>
     {
-        common::result_decay_more<basic_resource, fs_error> load_default(const basic_resource& resource) override { return load(resource); }
-        virtual common::result_decay_more<basic_resource, fs_error> load(const basic_resource& resource) override { return common::result_decay_more<basic_resource, fs_error>(common::Ok(basic_resource(resource))); }
+        common::result<basic_resource, fs_error> load_default(const basic_resource& resource) override { return load(resource); }
+        virtual common::result<basic_resource, fs_error> load(const basic_resource& resource) override { return resource; }
     };
 
     /**@class basic_converter
@@ -59,7 +59,7 @@ namespace legion::core::filesystem
     template<typename T>
     struct basic_converter final : public resource_converter<T>
     {
-        virtual common::result_decay_more<T, fs_error> load(const basic_resource& resource) { return common::result_decay_more<T, fs_error>(common::Ok(from_resource<T>(resource))); }
+        virtual common::result<T, fs_error> load(const basic_resource& resource) { return from_resource<T>(resource); }
     };
 
     /**@class AssetImporter
@@ -87,15 +87,12 @@ namespace legion::core::filesystem
          * @param view filesystem::view to the file to load.
          * @param settings... Settings to pass to the load function of the converter.
          * @tparam T Type of the object to try to load.
-         * @return common::result_decay_more<T, fs_error> Result containing either an error or the successfully loaded object.
+         * @return common::result<T, fs_error> Result containing either an error or the successfully loaded object.
          */
         template<typename T, typename... Settings>
-        static common::result_decay_more<T, fs_error> tryLoad(const view& view, Settings&&... settings)
+        static common::result<T, fs_error> tryLoad(const view& view, Settings&&... settings)
         {
             OPTICK_EVENT();
-            using common::Err, common::Ok;
-            // Decay overloads the operator of ok_type and operator== for valid_t.
-            using decay = common::result_decay_more<T, fs_error>;
 
             // Debug log the settings used for loading the files so that you can track down why something got loaded wrong if it did.
             if constexpr (sizeof...(settings) == 0)
@@ -107,12 +104,12 @@ namespace legion::core::filesystem
 
             // Check if the view is valid to load as a file.
             if (!view.is_valid() || !view.file_info().is_file)
-                return decay(Err(legion_fs_error("requested asset load on view that isn't a valid file.")));
+                return legion_fs_error("requested asset load on view that isn't a valid file.");
 
             // Get data from file and check validity.
             auto result = view.get();
             if (result != common::valid)
-                return decay(Err(result.get_error()));
+                return result.error();
 
             for (auto& base : m_converters[nameHash(view.get_extension())])
             {
@@ -123,15 +120,11 @@ namespace legion::core::filesystem
                     auto* converter = static_cast<resource_converter<T, Settings...>*>(base.get());
 
                     // Attempt the conversion and return the result.
-                    auto loadresult = converter->load(result, std::forward<Settings>(settings)...);
-                    if (loadresult == common::valid)
-                        return decay(Ok(std::move(loadresult.decay())));
-
-                    return decay(Err(std::move(loadresult.get_error())));
+                    return converter->load(result, std::forward<Settings>(settings)...);
                 }
             }
 
-            return decay(Err(legion_fs_error("requested asset load on file that stores a different type of asset.")));
+            return legion_fs_error("requested asset load on file that stores a different type of asset.");
         }
 
     };

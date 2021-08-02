@@ -9,7 +9,6 @@ namespace legion::core::filesystem {
     common::result<navigator::solution,fs_error> navigator::find_solution(const std::string& opt_root_domain) const 
     {
         OPTICK_EVENT();
-        using common::Err,common::Ok;
 
         std::string root_domain;
         std::string to_process;
@@ -24,7 +23,7 @@ namespace legion::core::filesystem {
             //find root domain
             // the syntax for inline root-domains has to be <root-domain>:[/\\]+<rest-of-the-path>
             const auto rdIndex = m_path.find_first_of(':');
-            if (rdIndex == std::string::npos) return Err(legion_fs_error("invalid syntax for path string, no domain delimiter"));
+            if (rdIndex == std::string::npos) return legion_fs_error("invalid syntax for path string, no domain delimiter");
 
             root_domain = m_path.substr(0, rdIndex);
 
@@ -43,9 +42,9 @@ namespace legion::core::filesystem {
             }
         }
 
-        if(root_domain.empty()) return Err(legion_fs_error("invalid syntax for path string, one or more properties empty"));
+        if(root_domain.empty()) return legion_fs_error("invalid syntax for path string, one or more properties empty");
         root_domain += std::string(":") + strpath_manip::separator() + strpath_manip::separator();
-        if(!provider_registry::has_domain(root_domain)) return Err(legion_fs_error(("no start! no such domain: " + root_domain).c_str()));
+        if(!provider_registry::has_domain(root_domain)) return legion_fs_error(("no start! no such domain: " + root_domain).c_str());
 
         solution steps{};
 
@@ -63,7 +62,7 @@ namespace legion::core::filesystem {
         if (to_process.empty())
         {
             steps.emplace_back(resolver, "");
-            return Ok(steps);
+            return std::move(steps);
         }
 
         for (auto& token : tokens) {
@@ -72,14 +71,14 @@ namespace legion::core::filesystem {
             {
                 previous_domain = domain;
 
-                if(!provider_registry::has_domain(domain)) return Err(legion_fs_error(("stop! no such domain: " + domain).c_str()));
+                if(!provider_registry::has_domain(domain)) return legion_fs_error(("stop! no such domain: " + domain).c_str());
 
                 //add resolver step
                 steps.emplace_back(resolver,strpath_manip::sanitize(path_for_resolver));
 
                 //get new resolver
                 resolver = *provider_registry::domain_get_first_resolver(domain);
-                if(!dynamic_cast<memory_resolver_common_base*>(resolver)) return Err(legion_fs_error("sub domain resolver was not a mem resolver, illegal access"));
+                if(!dynamic_cast<memory_resolver_common_base*>(resolver)) return legion_fs_error("sub domain resolver was not a mem resolver, illegal access");
 
                 path_for_resolver = "";
             }
@@ -104,6 +103,6 @@ namespace legion::core::filesystem {
         //add final step
         steps.emplace_back(resolver,strpath_manip::sanitize(path_for_resolver));
 
-        return Ok(steps);
+        return std::move(steps);
     }
 }

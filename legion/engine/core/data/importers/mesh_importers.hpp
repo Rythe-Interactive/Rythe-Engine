@@ -17,11 +17,11 @@ namespace legion::core
      */
     struct obj_mesh_loader : public filesystem::resource_converter<mesh, mesh_import_settings>
     {
-        common::result_decay_more<mesh, fs_error> load_default(const filesystem::basic_resource& resource) override
+        common::result<mesh, fs_error> load_default(const filesystem::basic_resource& resource) override
         {
             return load(resource, mesh_import_settings(default_mesh_settings));
         }
-        virtual common::result_decay_more<mesh, fs_error> load(const filesystem::basic_resource& resource, mesh_import_settings&& settings) override;
+        virtual common::result<mesh, fs_error> load(const filesystem::basic_resource& resource, mesh_import_settings&& settings) override;
     };
 
     /**
@@ -32,11 +32,11 @@ namespace legion::core
      */
     struct gltf_binary_mesh_loader : public filesystem::resource_converter<mesh, mesh_import_settings>
     {
-        common::result_decay_more<mesh, fs_error> load_default(const filesystem::basic_resource& resource) override
+        common::result<mesh, fs_error> load_default(const filesystem::basic_resource& resource) override
         {
             return load(resource, mesh_import_settings(default_mesh_settings));
         }
-        virtual common::result_decay_more<mesh, fs_error> load(const filesystem::basic_resource& resource, mesh_import_settings&& settings) override;
+        virtual common::result<mesh, fs_error> load(const filesystem::basic_resource& resource, mesh_import_settings&& settings) override;
     };
 
     /**
@@ -47,10 +47,10 @@ namespace legion::core
      */
     struct gltf_ascii_mesh_loader : public filesystem::resource_converter<mesh, mesh_import_settings>
     {
-        common::result_decay_more<mesh, fs_error> load_default(const filesystem::basic_resource& resource) override
+        common::result<mesh, fs_error> load_default(const filesystem::basic_resource& resource) override
         {
             return load(resource, mesh_import_settings(default_mesh_settings));
         }
-        virtual common::result_decay_more<mesh, fs_error> load(const filesystem::basic_resource& resource, mesh_import_settings&& settings) override;
+        virtual common::result<mesh, fs_error> load(const filesystem::basic_resource& resource, mesh_import_settings&& settings) override;
     };
 }
