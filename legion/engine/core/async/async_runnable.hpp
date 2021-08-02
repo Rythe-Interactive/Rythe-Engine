@@ -17,15 +17,20 @@ namespace legion::core::async
         async_runnable_base() = default;
         async_runnable_base(float taskSize) : m_progress(new async_progress(taskSize)) {}
 
-        std::shared_ptr<async_progress> getProgress() noexcept
+        const std::shared_ptr<async_progress>& getProgress() const noexcept
         {
             return m_progress;
         }
 
         template<typename functor>
-        async_operation<functor> getOperation(functor&& then) noexcept
+        repeating_async_operation<functor> getRepeatingOperation(functor&& then) const noexcept
         {
-            return async_operation<functor>(m_progress, std::forward<functor>(then));
+            return repeating_async_operation<functor>(m_progress, std::forward<functor>(then));
+        }
+
+        async_operation getOperation() const noexcept
+        {
+            return async_operation(m_progress);
         }
 
         virtual void execute() LEGION_PURE;

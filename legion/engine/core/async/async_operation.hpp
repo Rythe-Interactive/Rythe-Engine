@@ -54,16 +54,16 @@ namespace legion::core::async
     };
 
     template<typename functor>
-    struct async_operation : public async_operation_base
+    struct repeating_async_operation : public async_operation_base
     {
     protected:
         functor m_repeater;
 
     public:
-        async_operation(const std::shared_ptr<async_progress>& progress, functor&& repeater) : async_operation_base(progress), m_repeater(repeater) {}
-        async_operation() noexcept(std::is_nothrow_default_constructible_v<functor>) = default;
-        async_operation(const async_operation&) noexcept(std::is_nothrow_copy_constructible_v<functor>) = default;
-        async_operation(async_operation&&) noexcept(std::is_nothrow_move_constructible_v<functor>) = default;
+        repeating_async_operation(const std::shared_ptr<async_progress>& progress, functor&& repeater) : async_operation_base(progress), m_repeater(repeater) {}
+        repeating_async_operation() noexcept(std::is_nothrow_default_constructible_v<functor>) = default;
+        repeating_async_operation(const repeating_async_operation&) noexcept(std::is_nothrow_copy_constructible_v<functor>) = default;
+        repeating_async_operation(repeating_async_operation&&) noexcept(std::is_nothrow_move_constructible_v<functor>) = default;
 
         template<typename... argument_types>
         auto then(argument_types... args) const
@@ -79,11 +79,36 @@ namespace legion::core::async
             return m_repeater(std::forward<argument_types>(args)...);
         }
 
-        virtual ~async_operation() = default;
+        virtual ~repeating_async_operation() = default;
     };
 
 #if !defined(DOXY_EXCLUDE)
     template<typename functor>
-    async_operation(const std::shared_ptr<async_progress>&, functor&&)->async_operation<functor>;
+    repeating_async_operation(const std::shared_ptr<async_progress>&, functor&&)->repeating_async_operation<functor>;
 #endif
+
+    struct async_operation : public async_operation_base
+    {
+    public:
+        async_operation(const std::shared_ptr<async_progress>& progress) : async_operation_base(progress) {}
+        async_operation() noexcept = default;
+        async_operation(const async_operation&) noexcept = default;
+        async_operation(async_operation&&) noexcept = default;
+
+        template<typename Functor, typename... argument_types>
+        auto then(Functor&& func, argument_types... args) const
+        {
+            wait();
+            return std::invoke(std::forward<Functor>(func), std::forward<argument_types>(args)...);
+        }
+
+        template<typename Functor, typename... argument_types>
+        auto then(wait_priority priority, Functor&& func, argument_types... args) const
+        {
+            wait(priority);
+            return std::invoke(std::forward<Functor>(func), std::forward<argument_types>(args)...);
+        }
+
+        virtual ~async_operation() = default;
+    };
 }
