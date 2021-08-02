@@ -29,15 +29,7 @@ namespace legion::physics
 
         /** @brief Given a physics_contact that has been resolved, use its label and lambdas in order to create a ConvexConverganceIdentifier
        */
-        void AddConverganceIdentifier(const physics_contact& contact) override
-        {
-            if (contact.label.IsSet())
-            {
-                converganceIdentifiers.push_back(
-                    std::make_unique<ConvexConverganceIdentifier>(contact.label, contact.totalLambda,
-                        contact.tangent1Lambda, contact.tangent2Lambda, GetColliderID()));
-            }
-        }
+        void AddConverganceIdentifier(const physics_contact& contact) override;
 
         void CheckCollision(PhysicsCollider* physicsCollider, physics_manifold& manifold) override
         {
@@ -377,7 +369,10 @@ namespace legion::physics
             }
         }
 
-        void PopulateVertexListWithHalfEdges();
+        /**@brief populates the vertices vector with the 
+         * edge positions of the each face in halfEdgeFace
+         */
+        void populateVertexListWithHalfEdges();
 
     private:
 

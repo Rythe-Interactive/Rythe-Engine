@@ -45,9 +45,6 @@
     <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="systems\physics_fracture_test_system.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="components\fracturer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -67,6 +64,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="data\collider_face_to_vert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="systems\physics_test_system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -164,9 +167,6 @@
     <ClInclude Include="components\fracturer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\physics_fracture_test_system.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="data\convex_convex_collision_info.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -207,6 +207,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\collider_face_to_vert.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgridnocaching.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\physics_test_system.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

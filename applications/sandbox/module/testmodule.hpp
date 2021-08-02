@@ -5,7 +5,7 @@
 #include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
 #include "../systems/simplecameracontroller.hpp"
-#include <physics/systems/physics_fracture_test_system.hpp>
+#include <physics/systems/physics_test_system.hpp>
 
 using namespace legion;
 
@@ -27,7 +27,7 @@ public:
 
         //reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
-        reportSystem<physics::PhysicsFractureTestSystem>();
+        reportSystem<physics::PhysicsTestSystem>();
 
     }
 

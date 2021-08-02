@@ -7,7 +7,7 @@
 #include <physics/mesh_splitter_utils/mesh_splitter.hpp>
 #include <physics/components/fracturer.hpp>
 #include <physics/components/fracturecountdown.hpp>
-#include <physics/systems/physics_fracture_test_system.hpp>
+#include <physics/systems/physics_test_system.hpp>
 
 namespace legion::physics
 {

@@ -19,7 +19,7 @@ namespace legion::physics
         //std::make_unique<BroadphaseBruteforce>();
         //std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(2, 2, 2));
 
-        m_broadPhase = std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(2, 2, 2));
+        m_broadPhase = std::make_unique<BroadphaseUniformGridNoCaching>(math::vec3(3, 3, 3));
 
     }
 
@@ -152,46 +152,46 @@ namespace legion::physics
 
         std::vector<byte> manifoldValidity(manifoldsToSolve.size(), true);
 
-        //TODO we are currently hard coding fracture, this should be an event at some point
-        {
-            OPTICK_EVENT("Fracture");
-            for (size_t i = 0; i < manifoldsToSolve.size(); i++)
-            {
-                auto& manifold = manifoldsToSolve.at(i);
+        ////TODO we are currently hard coding fracture, this should be an event at some point
+        //{
+        //    OPTICK_EVENT("Fracture");
+        //    for (size_t i = 0; i < manifoldsToSolve.size(); i++)
+        //    {
+        //        auto& manifold = manifoldsToSolve.at(i);
 
-                auto& entityHandleA = manifold.entityA;
-                auto& entityHandleB = manifold.entityB;
+        //        auto& entityHandleA = manifold.entityA;
+        //        auto& entityHandleB = manifold.entityB;
 
-                auto fracturerHandleA = entityHandleA.get_component_handle<Fracturer>();
-                auto fracturerHandleB = entityHandleB.get_component_handle<Fracturer>();
+        //        auto fracturerHandleA = entityHandleA.get_component_handle<Fracturer>();
+        //        auto fracturerHandleB = entityHandleB.get_component_handle<Fracturer>();
 
-                bool currentManifoldValidity = manifoldValidity.at(i);
+        //        bool currentManifoldValidity = manifoldValidity.at(i);
 
-                //log::debug("- A Fracture Check");
+        //        //log::debug("- A Fracture Check");
 
-                if (fracturerHandleA)
-                {
-                    auto fracturerA = fracturerHandleA.read();
-                    //log::debug(" A is fracturable");
-                    fracturerA.HandleFracture(manifold, currentManifoldValidity, true);
+        //        if (fracturerHandleA)
+        //        {
+        //            auto fracturerA = fracturerHandleA.read();
+        //            //log::debug(" A is fracturable");
+        //            fracturerA.HandleFracture(manifold, currentManifoldValidity, true);
 
-                    fracturerHandleA.write(fracturerA);
-                }
+        //            fracturerHandleA.write(fracturerA);
+        //        }
 
-                //log::debug("- B Fracture Check");
+        //        //log::debug("- B Fracture Check");
 
-                if (fracturerHandleB)
-                {
-                    auto fracturerB = fracturerHandleB.read();
-                    //log::debug(" B is fracturable");
-                    fracturerB.HandleFracture(manifold, currentManifoldValidity, false);
+        //        if (fracturerHandleB)
+        //        {
+        //            auto fracturerB = fracturerHandleB.read();
+        //            //log::debug(" B is fracturable");
+        //            fracturerB.HandleFracture(manifold, currentManifoldValidity, false);
 
-                    fracturerHandleB.write(fracturerB);
-                }
+        //            fracturerHandleB.write(fracturerB);
+        //        }
 
-                manifoldValidity.at(i) = currentManifoldValidity;
-            }
-        }
+        //        manifoldValidity.at(i) = currentManifoldValidity;
+        //    }
+        //}
         //-------------------------------------------------- Collision Solver ---------------------------------------------------//
         //for both contact and friction resolution, an iterative algorithm is used.
         //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
@@ -206,6 +206,16 @@ namespace legion::physics
             OPTICK_EVENT("Resolve collisions");
 
             initializeManifolds(manifoldsToSolve, manifoldValidity);
+
+            auto largestPenetration = [](const physics_contact& contact1, const physics_contact& contact2)
+            -> bool {
+            return math::dot(contact1.RefWorldContact - contact1.IncWorldContact, -contact1.collisionNormal)
+            > math::dot(contact2.RefWorldContact - contact2.IncWorldContact, -contact2.collisionNormal);};
+
+            for (auto& manifold : manifoldsToSolve)
+            {
+                std::sort(manifold.contacts.begin(), manifold.contacts.end(), largestPenetration);
+            }
 
             {
                 OPTICK_EVENT("Resolve contact constraints");
