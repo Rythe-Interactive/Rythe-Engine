@@ -31,15 +31,22 @@ namespace legion::core::serialization
         virtual ~serializer_base() = default;
     };
 
+    //Serializer should get the type of the thing we are serializing
     template<typename type>
     struct serializer : public serializer_base
     {
     public:
-        json serialize(type data);
-        component_prototype<type> deserialize(json j);
+        //returns the serialized json
+        json serialize(const type data);
+        //return prototype of type
+        prototype<type> deserialize(const json j);
+        //this one is for components
+       // prototype<ecs::component<type>> deserialize(const json j,int i = 0);
 
-        void write(fs::view filePath, type data);
-        type read(fs::view filePath);
+        //writes the given data to a file specified
+        void write(const fs::view filePath, const type data);
+        //reads the data from the file specified
+        type read(const fs::view filePath);
     };
 }
 
