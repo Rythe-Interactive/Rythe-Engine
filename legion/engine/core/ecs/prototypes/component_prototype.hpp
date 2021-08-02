@@ -15,6 +15,7 @@ namespace legion::core::serialization
 
     /**@struct prototype<ecs::component<component_type>>
      * @brief Prototype specialization components. Makes use of reflectors.
+     * @brief Prototypes are more user friendlay containers for reflectors that allow us to specialize reflection methods on a per data type basis
      * @ref legion::core::reflector
      */
 

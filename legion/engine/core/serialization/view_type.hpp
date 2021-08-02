@@ -2,6 +2,7 @@
 #include <core/filesystem/filesystem.hpp>
 #include <core/ecs/prototypes/component_prototype.hpp>
 #include <core/ecs/handles/entity.hpp>
+#include <core/ecs/registry.hpp>
 
 #include <nlohmann/json.hpp>
 
@@ -12,29 +13,32 @@ namespace legion::core::serialization
 {
     using json = nlohmann::json;
 
-    template<typename type>
-    struct serializer_view : fs::view
-    {
-    public:
-        serializer_view() = default;
-        ~serializer_view() = default;
-        serializer_view(std::string_view filePath) : fs::view(filePath) {}
+    //template<typename type>
+    //struct serializer_view : fs::view
+    //{
+    //public:
+    //    serializer_view() = default;
+    //    ~serializer_view() = default;
+    //    serializer_view(std::string_view filePath) : fs::view(filePath) {}
 
-    protected:
-        virtual json serialize(type object) LEGION_PURE;
-        virtual type deserialize(json j) LEGION_PURE;
-    };
+    //protected:
+    //    virtual json serialize(type object) LEGION_PURE;
+    //    virtual type deserialize(json j) LEGION_PURE;
+    //};
 
+
+    //type should be a prototype
     template<typename prototype>
-    struct json_view : public serializer_view<prototype>
+    struct json_view
     {
     public:
         json_view() = default;
         ~json_view() = default;
-        json_view(std::string_view filePath) : serializer_view<prototype>(filePath) {}
 
-        virtual json serialize(const prototype object) override;
-        virtual prototype deserialize(const json j) override;
+        //serializes the given prototype into a json string
+        json serialize(const prototype object);
+        //deserializes the given json into the approriate prototype
+        prototype deserialize(const json j);
     };
 
     struct serialization_util

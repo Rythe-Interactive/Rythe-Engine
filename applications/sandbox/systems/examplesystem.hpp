@@ -19,6 +19,7 @@ namespace legion::core
     {
         id_type id = -1;
         std::vector<ecs::entity> entities;
+        position pos = {1,1,1};
     };
 }
 
@@ -77,8 +78,11 @@ public:
             ent.add_component<example_comp>();
             scene.entities.push_back(ent);
         }
-
         serializer->write(fs::view(filePath), scene);
+        for (ecs::entity ent : scene.entities)
+        {
+            ecs::Registry::destroyEntity(ent);
+        }
         scene = serializer->read(fs::view(filePath));
         log::debug(scene.id);
     }
