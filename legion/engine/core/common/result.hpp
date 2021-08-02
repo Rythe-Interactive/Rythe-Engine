@@ -173,6 +173,9 @@ namespace legion::core::common
             throw std::runtime_error("this result would have been valid!");
         }
 
+        operator error_type() { return error(); }
+        operator const error_type& () const { return error(); }
+
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
         size_t warning_count() const noexcept { return m_warnings.size(); }
         const Warning& warning_at(size_t i) const { return m_warnings[i]; }
@@ -236,6 +239,9 @@ namespace legion::core::common
             if (m_success) return std::move(*m_success);
             throw legion_exception_msg("this result is invalid!");
         }
+
+        operator success_type() { return value(); }
+        operator const success_type& () const { return value(); }
 
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
         size_t warning_count() const noexcept { return m_warnings.size(); }
