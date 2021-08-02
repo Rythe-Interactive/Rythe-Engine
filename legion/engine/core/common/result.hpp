@@ -228,13 +228,13 @@ namespace legion::core::common
         const success_type& value() const
         {
             if (m_success) return *m_success;
-            throw legion_exception("this result is invalid!");
+            throw legion_exception_msg("this result is invalid!");
         }
 
         success_type&& value()
         {
             if (m_success) return std::move(*m_success);
-            throw legion_exception("this result is invalid!");
+            throw legion_exception_msg("this result is invalid!");
         }
 
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
