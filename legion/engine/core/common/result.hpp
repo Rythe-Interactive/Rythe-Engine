@@ -100,9 +100,9 @@ namespace legion::core::common
         }
 
         operator success_type() { return value(); }
-        operator const success_type& () const { return value(); }
+        operator success_type() const { return value(); }
         operator error_type() { return error(); }
-        operator const error_type& () const { return error(); }
+        operator error_type() const { return error(); }
 
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
         size_t warning_count() const noexcept { return m_warnings.size(); }
@@ -174,7 +174,7 @@ namespace legion::core::common
         }
 
         operator error_type() { return error(); }
-        operator const error_type& () const { return error(); }
+        operator error_type() const { return error(); }
 
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
         size_t warning_count() const noexcept { return m_warnings.size(); }
@@ -241,7 +241,7 @@ namespace legion::core::common
         }
 
         operator success_type() { return value(); }
-        operator const success_type& () const { return value(); }
+        operator success_type() const { return value(); }
 
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
         size_t warning_count() const noexcept { return m_warnings.size(); }
