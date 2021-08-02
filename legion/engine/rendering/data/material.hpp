@@ -645,7 +645,7 @@ namespace legion::rendering
         const auto shader_location = extract_string("base", "shader", file);
 
         async::readwrite_guard guard(MaterialCache::m_materialLock);
-        auto materialname = file.get_filename().decay();
+        auto materialname = file.get_filename().value();
         materialname = materialname.substr(0, materialname.find_last_of('.'));
         id = MaterialCache::create_material(materialname, fs::view(shader_location)).id;
         apply_material_conf(*this, "custom", file);
