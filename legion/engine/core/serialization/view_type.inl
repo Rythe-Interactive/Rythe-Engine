@@ -26,13 +26,9 @@ namespace legion::core::serialization
             [&j](auto& name, auto& value)
             {
                 if constexpr (!has_size<decltype(value)>::value)
-                {
                     value = serialization_util::deserialize_property<remove_cvr_t<decltype(value)>>(j[name]);
-                }
                 else
-                {
                     value = serialization_util::deserialize_container<remove_cvr_t<decltype(value)>>(j[name]);
-                }
             });
         return prot;
     }
@@ -53,6 +49,14 @@ namespace legion::core::serialization
         {
             j["children"].push_back(serialize_property<ecs::entity>(children.at(i)));
         }
+        //auto components = prop.component_composition();
+        //for (id_type comp_id : components)
+        //{
+        //    auto type_ref = type_ref_cast(comp_id);
+        //    auto component = ecs::Registry::getComponent(comp_id,prop);
+        //    j["components"].push_back(serialize_property<decltype(component)>(component));
+        //}
+        //json j = json_view<prototype<ecs::entity>>::serialize(prototype<ecs::entity>(prop));
         return j;
     }
 
@@ -73,11 +77,25 @@ namespace legion::core::serialization
     template<>
     inline ecs::entity serialization_util::deserialize_property(const json j)
     {
-        auto ent = ecs::Registry::getEntity(deserialize_property<id_type>(j["id"]));
+        ecs::entity ent;
+        if (ecs::Registry::checkEntity(deserialize_property<id_type>(j["id"])))
+            ent = ecs::Registry::getEntity(deserialize_property<id_type>(j["id"]));
+        else
+        {
+            ent = ecs::Registry::createEntity();
+            ent->id = j["id"];
+        }
         ent->name = j["name"];
         ent->alive = j["alive"];
         ent->active = j["active"];
-        ent->parent = ecs::Registry::getEntity(deserialize_property<id_type>(j["parent"]));
+        if (ecs::Registry::checkEntity(deserialize_property<id_type>(j["parent"])))
+            ent.set_parent(ecs::Registry::getEntity(deserialize_property<id_type>(j["parent"])));
+        else
+        {
+            ent.set_parent(ecs::Registry::createEntity());
+            ent->parent->id = deserialize_property<id_type>(j["parent"]);
+        }
+        ent->children = deserialize_container<remove_cvr_t<ecs::entity_set>>(j["children"]);
         return ent;
     }
 
@@ -94,7 +112,7 @@ namespace legion::core::serialization
         json j;
         for (int i = 0; i < prop.size(); i++)
         {
-            j.push_back(serialize_property<ecs::entity>(prop[i]));
+            j.push_back(serialize_property<typename container_type::value_type>(prop[i]));
         }
         return j;
     }

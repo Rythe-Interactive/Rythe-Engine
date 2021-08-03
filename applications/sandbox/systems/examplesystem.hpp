@@ -83,8 +83,8 @@ public:
         {
             ecs::Registry::destroyEntity(ent);
         }
-        scene = serializer->read(fs::view(filePath));
-        log::debug(scene.id);
+        //scene = serializer->read(fs::view(filePath));
+        //log::debug(scene.id);
     }
 
     void update(legion::time::span deltaTime)

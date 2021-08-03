@@ -36,9 +36,9 @@ namespace legion::core::serialization
         ~json_view() = default;
 
         //serializes the given prototype into a json string
-        json serialize(const prototype object);
+        static json serialize(const prototype object);
         //deserializes the given json into the approriate prototype
-        prototype deserialize(const json j);
+        static prototype deserialize(const json j);
     };
 
     struct serialization_util
