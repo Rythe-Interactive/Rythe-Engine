@@ -3,9 +3,9 @@ name: docs-action
 
 on:
   push:
-    branches: [ develop, develop/*, develop* ]
+    branches: [ develop, develop/*, develop*, feature*, feature/* ]
   pull_request:
-    branches: [ develop, develop/*, develop* ]
+    branches: [ develop, develop/*, develop*, feature*, feature/* ]
 
 jobs:
  docs:
