@@ -6,6 +6,8 @@ namespace legion::core::assets
     template<typename AssetType>
     struct asset : public pointer<AssetType>
     {
+        template<typename T>
+        friend class AssetCache;
     private:
         id_type m_id;
 
