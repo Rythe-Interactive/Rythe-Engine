@@ -13,17 +13,27 @@
 
 namespace legion::core::assets
 {
+    namespace detail
+    {
+        struct asset_info
+        {
+            std::string name;
+            size_type assetLoader;
+        };
+    }
+
     template<typename AssetType>
     class AssetCache
     {
         using asset_ptr = asset<AssetType>;
         using import_cfg = import_settings<AssetType>;
         using loader_type = AssetLoader<AssetType>;
+
     private:
         static std::unordered_map<id_type, AssetType> m_cache;
-        static std::unordered_map<id_type, std::string> m_names;
+        static std::unordered_map<id_type, detail::asset_info> m_info;
 
-        static std::std::vector<std::unique_ptr<AssetLoader> m_loaders;
+        static std::vector<std::unique_ptr<AssetLoader>> m_loaders;
 
         static bool hasLoaders() noexcept;
 

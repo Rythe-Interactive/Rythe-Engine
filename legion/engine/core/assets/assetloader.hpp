@@ -20,8 +20,9 @@ namespace legion::core::assets
         virtual common::result<void> load(asset_ptr ptr, const fs::view& file, const import_cfg& settings) LEGION_PURE;
         virtual common::result<void> loadAsync(asset_ptr ptr, const fs::view& file, const import_cfg& settings, progress_type& progress)
         {
-            load(ptr, file, settings);
+            auto res = load(ptr, file, settings);
             progress.complete(ptr);
+            return res;
         }
 
         virtual void free(asset_ptr ptr) LEGION_IMPURE;

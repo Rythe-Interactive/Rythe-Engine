@@ -11,6 +11,7 @@ namespace legion::core::assets
 
     public:
         id_type id();
+        const std::string& name();
         void destroy();
         asset copy(const std::string& name);
         asset copy(id_type nameHash);
