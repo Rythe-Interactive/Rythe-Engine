@@ -3,7 +3,7 @@
 #include <string>
 #include <utility>
 #include <iostream>
-#include <memory>
+#include <optional>
 #include <functional>
 #include <core/platform/platform.hpp>
 #include <core/common/exception.hpp>
@@ -104,6 +104,11 @@ namespace legion::core::common
         operator error_type() { return error(); }
         operator error_type() const { return error(); }
 
+        success_type& operator*() { return *m_success; }
+        const success_type& operator*() const { return *m_success; }
+        success_type* operator->() { return &*m_success; }
+        const success_type* operator->() const { return &*m_success; }
+
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
         size_t warning_count() const noexcept { return m_warnings.size(); }
         const Warning& warning_at(size_t i) const { return m_warnings[i]; }
@@ -148,18 +153,18 @@ namespace legion::core::common
         result(warning_list&& w) : m_warnings(w) {}
         result(const warning_list& w) : m_warnings(w) {}
 
-        result(error_type&& e) : m_error(std::make_unique<error_type>(e)) {}
-        result(const error_type& e) : m_error(std::make_unique<error_type>(e)) {}
-        result(error_type&& e, warning_list&& w) : m_error(std::make_unique<error_type>(e)), m_warnings(w) {}
-        result(error_type&& e, const warning_list& w) : m_error(std::make_unique<error_type>(e)), m_warnings(w) {}
-        result(const error_type& e, warning_list&& w) : m_error(std::make_unique<error_type>(e)), m_warnings(w) {}
-        result(const error_type& e, const warning_list& w) : m_error(std::make_unique<error_type>(e)), m_warnings(w) {}
+        result(error_type&& e) : m_error(e) {}
+        result(const error_type& e) : m_error(e) {}
+        result(error_type&& e, warning_list&& w) : m_error(e), m_warnings(w) {}
+        result(error_type&& e, const warning_list& w) : m_error(e), m_warnings(w) {}
+        result(const error_type& e, warning_list&& w) : m_error(e), m_warnings(w) {}
+        result(const error_type& e, const warning_list& w) : m_error(e), m_warnings(w) {}
 
-        operator bool() const noexcept { return !m_error.get(); }
-        bool operator ==(const valid_t&) const noexcept { return !m_error.get(); }
-        bool operator !=(const valid_t&) const noexcept { return m_error.get(); }
-        bool valid() const noexcept { return !m_error.get(); }
-        bool has_error() const noexcept { return m_error.get(); }
+        operator bool() const noexcept { return !m_error; }
+        bool operator ==(const valid_t&) const noexcept { return !m_error; }
+        bool operator !=(const valid_t&) const noexcept { return m_error; }
+        bool valid() const noexcept { return !m_error; }
+        bool has_error() const noexcept { return m_error; }
 
         const error_type& error() const
         {
@@ -183,16 +188,15 @@ namespace legion::core::common
         const warning_list& warnings() const { return m_warnings; }
         warning_list& warnings() { return m_warnings; }
 
-
         template<typename Func, typename... Args>
         void except(Func&& f, Args&&... args)
         {
-            if (m_error.get())
+            if (m_error)
                 std::invoke(std::forward<Func>(f), *m_error, std::forward<Args>(args)...);
         }
 
     private:
-        std::unique_ptr<error_type> m_error;
+        std::optional<error_type> m_error;
         warning_list m_warnings;
     };
 
@@ -215,18 +219,18 @@ namespace legion::core::common
         result(warning_list&& w) : m_warnings(w) {}
         result(const warning_list& w) : m_warnings(w) {}
 
-        result(success_type&& s) : m_success(std::make_unique<success_type>(s)) {}
-        result(const success_type& s) : m_success(std::make_unique<success_type>(s)) {}
-        result(success_type&& s, warning_list&& w) : m_success(std::make_unique<success_type>(s)), m_warnings(w) {}
-        result(success_type&& s, const warning_list& w) : m_success(std::make_unique<success_type>(s)), m_warnings(w) {}
-        result(const success_type& s, warning_list&& w) : m_success(std::make_unique<success_type>(s)), m_warnings(w) {}
-        result(const success_type& s, const warning_list& w) : m_success(std::make_unique<success_type>(s)), m_warnings(w) {}
+        result(success_type&& s) : m_success(s) {}
+        result(const success_type& s) : m_success(s) {}
+        result(success_type&& s, warning_list&& w) : m_success(s), m_warnings(w) {}
+        result(success_type&& s, const warning_list& w) : m_success(s), m_warnings(w) {}
+        result(const success_type& s, warning_list&& w) : m_success(s), m_warnings(w) {}
+        result(const success_type& s, const warning_list& w) : m_success(s), m_warnings(w) {}
 
-        operator bool() const noexcept { return m_success.get(); }
-        bool operator ==(const valid_t&) const noexcept { return m_success.get(); }
-        bool operator !=(const valid_t&) const noexcept { return !m_success.get(); }
-        bool valid() const noexcept { return m_success.get(); }
-        bool has_error() const noexcept { return !m_success.get(); }
+        operator bool() const noexcept { return m_success; }
+        bool operator ==(const valid_t&) const noexcept { return m_success; }
+        bool operator !=(const valid_t&) const noexcept { return !m_success; }
+        bool valid() const noexcept { return m_success; }
+        bool has_error() const noexcept { return !m_success; }
 
         const success_type& value() const
         {
@@ -243,13 +247,17 @@ namespace legion::core::common
         operator success_type() { return value(); }
         operator success_type() const { return value(); }
 
+        success_type& operator*() { return *m_success; }
+        const success_type& operator*() const { return *m_success; }
+        success_type* operator->() { return &*m_success; }
+        const success_type* operator->() const { return &*m_success; }
+
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
         size_t warning_count() const noexcept { return m_warnings.size(); }
         const Warning& warning_at(size_t i) const { return m_warnings[i]; }
         Warning& warning_at(size_t i) { return m_warnings[i]; }
         const warning_list& warnings() const { return m_warnings; }
         warning_list& warnings() { return m_warnings; }
-
 
         template<typename Func, typename... Args>
         auto except(Func&& f, Args&&... args) -> decltype(std::invoke(std::declval<Func>(), std::declval<Args>()...))
@@ -260,7 +268,7 @@ namespace legion::core::common
         }
 
     private:
-        std::unique_ptr<success_type> m_success;
+        std::optional<success_type> m_success;
         warning_list m_warnings;
     };
 
