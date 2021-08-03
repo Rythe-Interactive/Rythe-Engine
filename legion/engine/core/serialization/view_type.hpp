@@ -28,7 +28,7 @@ namespace legion::core::serialization
 
 
     //type should be a prototype
-    template<typename prototype>
+    template<typename prototype_type>
     struct json_view
     {
     public:
@@ -36,9 +36,9 @@ namespace legion::core::serialization
         ~json_view() = default;
 
         //serializes the given prototype into a json string
-        static json serialize(const prototype object);
+        static json serialize(const prototype_type object);
         //deserializes the given json into the approriate prototype
-        static prototype deserialize(const json j);
+        static prototype_type deserialize(const json j);
     };
 
     struct serialization_util
