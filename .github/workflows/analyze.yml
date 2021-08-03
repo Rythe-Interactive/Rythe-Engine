@@ -1,7 +1,7 @@
 name: analyze-action
 on:
   pull_request:
-    branches: [main, develop, develop/*, develop* ]
+    branches: [main, develop, develop/*, develop*, feature*, feature/* ]
 
 jobs:
   analyze:
