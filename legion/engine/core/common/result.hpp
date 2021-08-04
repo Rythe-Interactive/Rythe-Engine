@@ -162,9 +162,9 @@ namespace legion::core::common
 
         operator bool() const noexcept { return !m_error; }
         bool operator ==(const valid_t&) const noexcept { return !m_error; }
-        bool operator !=(const valid_t&) const noexcept { return m_error; }
+        bool operator !=(const valid_t&) const noexcept { return m_error.has_value(); }
         bool valid() const noexcept { return !m_error; }
-        bool has_error() const noexcept { return m_error; }
+        bool has_error() const noexcept { return m_error.has_value(); }
 
         const error_type& error() const
         {
