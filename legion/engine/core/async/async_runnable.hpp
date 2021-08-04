@@ -41,12 +41,12 @@ namespace legion::core::async
             return std::static_pointer_cast<async_progress<payload_type>>(m_progress);
         }
 
-        template<typename functor>
-        repeating_async_operation<functor, payload_type> getRepeatingOperation(functor&& then) const noexcept
+        template<typename func>
+        repeating_async_operation<func, payload_type> getRepeatingOperation(func&& then) const noexcept
         {
-            return repeating_async_operation<functor, payload_type>(
+            return repeating_async_operation<func, payload_type>(
                 std::static_pointer_cast<async_progress<payload_type>>(m_progress),
-                std::forward<functor>(then));
+                std::forward<func>(then));
         }
 
         async_operation<payload_type> getOperation() const noexcept
@@ -67,17 +67,17 @@ namespace legion::core::async
                 {
                     std::invoke(m_func);
                 }
-                m_progress->complete();
+                std::static_pointer_cast<async_progress<payload_type>>(m_progress)->complete();
             }
             else
             {
                 if constexpr (std::is_invocable_v<functor, async_progress_base&>)
                 {
-                    m_progress->complete(std::invoke(m_func, *m_progress));
+                    std::static_pointer_cast<async_progress<payload_type>>(m_progress)->complete(std::invoke(m_func, *m_progress));
                 }
                 else
                 {
-                    m_progress->complete(std::invoke(m_func));
+                    std::static_pointer_cast<async_progress<payload_type>>(m_progress)->complete(std::invoke(m_func));
                 }
             }
         }
