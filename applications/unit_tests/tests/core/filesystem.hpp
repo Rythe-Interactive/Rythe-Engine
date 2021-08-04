@@ -45,35 +45,29 @@ inline namespace {
         common::result<filesystem::basic_resource, fs_error>
             get(interfaces::implement_signal_t) noexcept override
         {
-
-            using common::Err, common::Ok;
-
-            if (!prewarm()) return Err(legion_fs_error("was unable to cook the data!"));
+            if (!prewarm()) return legion_fs_error("was unable to cook the data!");
 
             const auto result = get_data();
 
-            if (get_target() == "test.txt") return Ok(filesystem::basic_resource(result));
-            return Err(legion_fs_error("this mock interface does not support file access"));
+            if (get_target() == "test.txt") return filesystem::basic_resource(result);
+            return legion_fs_error("this mock interface does not support file access");
         }
 
         common::result<const filesystem::basic_resource, fs_error>
             get(interfaces::implement_signal_t) const noexcept override
         {
-
-            using common::Err, common::Ok;
-
-            if (!prewarm()) return Err(legion_fs_error("was unable to cook the data!"));
+            if (!prewarm()) return legion_fs_error("was unable to cook the data!");
 
             const auto result = get_data();
 
-            if (get_target() == "test.txt") return Ok<const filesystem::basic_resource>(filesystem::basic_resource(result));
-            return Err(legion_fs_error("this mock interface does not support file access"));
+            if (get_target() == "test.txt") return filesystem::basic_resource(result);
+            return legion_fs_error("this mock interface does not support file access");
         }
 
         common::result<void, fs_error> set(interfaces::implement_signal_t, const filesystem::basic_resource& res) override
         {
             (void)res;
-            return common::Err(legion_fs_error("not implemented for the mock interface"));
+            return legion_fs_error("not implemented for the mock interface");
         }
         void erase(interfaces::implement_signal_t) const noexcept override
         {
@@ -134,7 +128,7 @@ static void TestFS()
 
     auto result = fs::view("basic://config/test2.txt").set(contents);
 
-    L_CHECK(!result.has_err());
+    L_CHECK(!result.has_error());
 }
 
 LEGION_TEST("core::fs")

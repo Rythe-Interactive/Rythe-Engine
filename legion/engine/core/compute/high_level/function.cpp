@@ -24,7 +24,7 @@ namespace legion::core::compute
         if(!m_kernel)
         {
             log::error("something went wrong your openCL kernel is null");
-            return common::Err();
+            return common::error;
         }
         if (std::holds_alternative<std::tuple<size_type, size_type, size_type>>(global))
         {
@@ -88,6 +88,6 @@ namespace legion::core::compute
         }
         m_kernel->finish();
 
-        return common::Ok();
+        return common::success;
     }
 }

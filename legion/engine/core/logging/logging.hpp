@@ -377,13 +377,14 @@ namespace legion::core::log
     /** @brief sets up logging (do not call, invoked by engine) */
     inline void setup()
     {
-        auto f = std::make_unique<spdlog::pattern_formatter>();
-        f->set_pattern("%v");
-        impl::undecoratedLogger->set_formatter(std::move(f));
-
         impl::fileLogger = spdlog::rotating_logger_mt(impl::logFile, impl::logFile, 1'048'576, 5);
         initLogger(impl::consoleLogger);
         initLogger(impl::fileLogger);
+
+        auto f = std::make_unique<spdlog::pattern_formatter>();
+        f->set_pattern("%v");
+        undecoratedLogger->set_formatter(std::move(f));
+
 
 #if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
         logger = impl::consoleLogger;
@@ -437,6 +438,12 @@ namespace legion::core::log
         logger->log(args2spdlog(s), format, std::forward<Args>(a)...);
     }
 
+    /** @brief same as println but uses the undecorated logger */
+    template <class... Args, class FormatString>
+    void undecoratedln(severity s, const FormatString& format, Args&&... a)
+    {
+        undecoratedLogger->log(args2spdlog(s), format, std::forward<Args>(a)...);
+    }
 
     /** @brief prints a log line, using the specified `severity`
      *  @param level selects the severity level you are interested in
@@ -444,6 +451,48 @@ namespace legion::core::log
     inline void filter(severity level)
     {
         logger->set_level(args2spdlog(level));
+    }
+
+    /** @brief same as println but with severity = trace */
+    template<class... Args, class FormatString>
+    void undecoratedTrace(const FormatString& format, Args&&... a)
+    {
+        undecoratedln(severity::trace, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as println but with severity = debug */
+    template<class... Args, class FormatString>
+    void undecoratedDebug(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::debug, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as undecoratedln but with severity = info */
+    template<class... Args, class FormatString>
+    void undecoratedInfo(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::info, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as undecoratedln but with severity = warn */
+    template<class... Args, class FormatString>
+    void undecoratedWarn(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::warn, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as undecoratedln but with severity = error */
+    template<class... Args, class FormatString>
+    void undecoratedError(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::error, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as undecoratedln but with severity = fatal */
+    template<class... Args, class FormatString>
+    void undecoratedFatal(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::fatal, format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but with severity = trace */

@@ -15,7 +15,7 @@ namespace legion::core::async
         return m_progress;
     }
 
-    std::shared_ptr<async_progress> job_pool::get_progress() const noexcept
+    std::shared_ptr<async_progress<void>> job_pool::get_progress() const noexcept
     {
         return m_progress;
     }

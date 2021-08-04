@@ -219,7 +219,7 @@ namespace legion::rendering
         if (result != common::valid)
             return false;
 
-        auto resource = result.decay();
+        auto resource = result.value();
 
         if (resource.size() <= 22)
             return false;
@@ -280,10 +280,10 @@ namespace legion::rendering
             return;
 
         fs::view precompiled("");
-        if (result.decay() == ".shil" || result.decay().empty())
+        if (result.value() == ".shil" || result.value().empty())
             precompiled = file;
         else
-            precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
+            precompiled = file / ".." / (file.get_filestem().value() + ".shil");
 
         if (precompiled.is_valid(true) && precompiled.file_info().can_be_written)
         {
@@ -320,7 +320,6 @@ namespace legion::rendering
             precompiled.set(resource).except([](fs_error err)
                 {
                     log::error("error occurred in {} at {} line {}: {}", err.file(), err.func(), err.file(), err.what());
-                    return common::ok_proxy<void>();
                 });
         }
 
@@ -353,32 +352,30 @@ namespace legion::rendering
 
         bool compiledFromScratch = false;
 
-        if (result.decay().empty() || result.decay() == ".shil")
+        if (result.value().empty() || result.value() == ".shil")
         {
             if (!load_precompiled(file, shaders, state))
                 return invalid_shader_handle;
         }
         else
         {
-            switch (settings.usePrecompiledIfAvailable) // Clean up this monster function...
+            do
             {
-            case true:
-            {
-                auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
-
-                if (precompiled.is_valid(true))
+                if (settings.usePrecompiledIfAvailable) // Clean up this monster function...
                 {
-                    auto traits = precompiled.file_info();
-                    if (traits.is_file && traits.can_be_read)
+                    auto precompiled = file / ".." / (file.get_filestem().value() + ".shil");
+
+                    if (precompiled.is_valid(true))
                     {
-                        if (load_precompiled(precompiled, shaders, state))
-                            break;
+                        auto traits = precompiled.file_info();
+                        if (traits.is_file && traits.can_be_read)
+                        {
+                            if (load_precompiled(precompiled, shaders, state))
+                                break;
+                        }
                     }
                 }
-            }
-            L_FALLTHROUGH;
-            default:
-            {
+
                 byte compilerSettings = 0;
                 compilerSettings |= settings.api;
                 if (settings.debug)
@@ -390,9 +387,8 @@ namespace legion::rendering
                     return invalid_shader_handle;
 
                 compiledFromScratch = true;
-            }
-            break;
-            }
+
+            } while (false);
         }
 
         if (shaders.empty())
@@ -644,32 +640,30 @@ namespace legion::rendering
 
         bool compiledFromScratch = false;
 
-        if (result.decay().empty() || result.decay() == ".shil")
+        if (result.value().empty() || result.value() == ".shil")
         {
             if (!load_precompiled(file, shaders, state))
                 return invalid_shader_handle;
         }
         else
         {
-            switch (settings.usePrecompiledIfAvailable)
+            do
             {
-            case true:
-            {
-                auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
-
-                if (precompiled.is_valid(true))
+                if (settings.usePrecompiledIfAvailable)
                 {
-                    auto traits = precompiled.file_info();
-                    if (traits.is_file && traits.can_be_read)
+                    auto precompiled = file / ".." / (file.get_filestem().value() + ".shil");
+
+                    if (precompiled.is_valid(true))
                     {
-                        if (load_precompiled(precompiled, shaders, state))
-                            break;
+                        auto traits = precompiled.file_info();
+                        if (traits.is_file && traits.can_be_read)
+                        {
+                            if (load_precompiled(precompiled, shaders, state))
+                                break;
+                        }
                     }
                 }
-            }
-            L_FALLTHROUGH;
-            default:
-            {
+
                 byte compilerSettings = 0;
                 compilerSettings |= settings.api;
                 if (settings.debug)
@@ -681,9 +675,8 @@ namespace legion::rendering
                     return invalid_shader_handle;
 
                 compiledFromScratch = true;
-            }
-            break;
-            }
+
+            } while (false);
         }
 
         if (shaders.empty())

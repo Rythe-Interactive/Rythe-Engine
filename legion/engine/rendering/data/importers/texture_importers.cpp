@@ -6,12 +6,9 @@
 
 namespace legion::rendering
 {
-    common::result_decay_more<texture, fs_error> stbi_texture_loader::load(const fs::basic_resource& resource, texture_import_settings&& settings)
+    common::result<texture, fs_error> stbi_texture_loader::load(const fs::basic_resource& resource, texture_import_settings&& settings)
     {
         OPTICK_EVENT();
-        using common::Err, common::Ok;
-        // Decay overloads the operator of ok_type and operator== for valid_t.
-        using decay = common::result_decay_more<texture, fs_error>;
 
         // Prefetch data from the resource.
         const byte_vec& data = resource.get();
@@ -85,6 +82,6 @@ namespace legion::rendering
 
         // Cleanup and return.
         stbi_image_free(imageData);
-        return decay(Ok(texture));
+        return texture;
     }
 }

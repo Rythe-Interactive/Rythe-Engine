@@ -31,13 +31,13 @@ namespace legion::core::scenemanagement
             auto files = fileView.ls();
             if (files == common::valid)
             {
-                for (auto file : files.decay())
+                for (auto file : files.value())
                 {
                     if (file.get_extension() == common::valid)
                     {
-                        if (file.get_extension().decay() == ".cornflake")
+                        if (file.get_extension().value() == ".cornflake")
                         {
-                            auto fileName = file.get_filename().decay();
+                            auto fileName = file.get_filename().value();
                             log::debug("Added {}",fileName);
                             sceneNames.emplace(nameHash(fileName), fileName);
                         }

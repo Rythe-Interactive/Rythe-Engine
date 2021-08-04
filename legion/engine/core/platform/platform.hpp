@@ -6,7 +6,7 @@
 #pragma region //////////////////////////////////////// Utils ///////////////////////////////////////////
 
 #if !defined(PROJECT_NAME)
-#define PROJECT_NAME user_project
+#   define PROJECT_NAME user_project
 #endif
 
 #define EXPAND(x) x
@@ -154,178 +154,183 @@ type& operator=(type&&) = default;
 #define LEGION_RELEASE_VALUE 2
 
 #if defined(DOXY_EXCLUDE)
-#define NDOXY(...)
-#define CNDOXY(...)
+#   define NDOXY(...)
+#   define CNDOXY(...)
 #else
-#define NDOXY(args...) args
-#define CNDOXY(args...) , args
+#   define NDOXY(args...) args
+#   define CNDOXY(args...) , args
 #endif
 
 #if defined(_DEBUG) || defined(DEBUG)
-/**@def LEGION_DEBUG
- * @brief Defined in debug mode.
- */
-#define LEGION_DEBUG
-#define LEGION_CONFIGURATION LEGION_DEBUG_VALUE
+    /**@def LEGION_DEBUG
+     * @brief Defined in debug mode.
+     */
+#   define LEGION_DEBUG
+#   define LEGION_CONFIGURATION LEGION_DEBUG_VALUE
 #else
-/**@def LEGION_RELEASE
- * @brief Defined in release mode.
- */
-#define LEGION_RELEASE 
-#define LEGION_CONFIGURATION LEGION_RELEASE_VALUE
+    /**@def LEGION_RELEASE
+     * @brief Defined in release mode.
+     */
+#   define LEGION_RELEASE 
+#   define LEGION_CONFIGURATION LEGION_RELEASE_VALUE
 #endif
 
 #if (!defined(LEGION_LOW_POWER) && !defined(LEGION_HIGH_PERFORMANCE))
- /**@def LEGION_HIGH_PERFORMANCE
-  * @brief Automatically defined if LEGION_LOW_POWER was not defined. It makes Legion ask the hardware's full attention to run as fast as possible.
-  * @note Define LEGION_LOW_POWER to run Legion with minimal resources instead.
-  */
-#define LEGION_HIGH_PERFORMANCE
+    /**@def LEGION_HIGH_PERFORMANCE
+     * @brief Automatically defined if LEGION_LOW_POWER was not defined. It makes Legion ask the hardware's full attention to run as fast as possible.
+     * @note Define LEGION_LOW_POWER to run Legion with minimal resources instead.
+     */
+#   define LEGION_HIGH_PERFORMANCE
 #endif
 
-  /**@def LEGION_PURE
-   * @brief Marks a function as pure virtual.
-   */
+/**@def LEGION_PURE
+ * @brief Marks a function as pure virtual.
+ */
 #define LEGION_PURE =0
 
-   /**@def LEGION_IMPURE
-    * @brief Marks a function as overridable but default implemented.
-    */
+/**@def LEGION_IMPURE
+ * @brief Marks a function as overridable but default implemented.
+ */
 #define LEGION_IMPURE {}
 
-    /**@def LEGION_IMPURE_RETURN
-     * @brief Marks a function as overridable but default implemented with certain default return value.
-     * @param x value the function should return.
-     */
+/**@def LEGION_IMPURE_RETURN
+ * @brief Marks a function as overridable but default implemented with certain default return value.
+ * @param x value the function should return.
+ */
 #define LEGION_IMPURE_RETURN(x) { return (x); }
 
 #if !defined(LEGION_MIN_THREADS)
-#define LEGION_MIN_THREADS 5
+#   define LEGION_MIN_THREADS 5
 #endif
 
 #pragma endregion
 
 #pragma region /////////////////////////////////// Operating system /////////////////////////////////////
+
 #if defined(_WIN64)
- /**@def LEGION_WINDOWS
-  * @brief Defined when compiling for Windows.
-  */
-#define LEGION_WINDOWS
+    /**@def LEGION_WINDOWS
+     * @brief Defined when compiling for Windows.
+     */
+#   define LEGION_WINDOWS
 
-#define WIN32_LEAN_AND_MEAN
-#define VC_EXTRALEAN
-#define NOMINMAX
-#include <Windows.h>
-#include <shellapi.h>
-#include <shlobj.h>
-#include <shlwapi.h>
-#include <objbase.h>
+#   define WIN32_LEAN_AND_MEAN
+#   define VC_EXTRALEAN
+#   define NOMINMAX
+#   include <Windows.h>
+#   include <shellapi.h>
+#   include <shlobj.h>
+#   include <shlwapi.h>
+#   include <objbase.h>
 #elif defined(__linux__)
- /**@def LEGION_LINUX
-  * @brief Defined when compiling for Linux.
-  */
-#define LEGION_LINUX
+    /**@def LEGION_LINUX
+     * @brief Defined when compiling for Linux.
+     */
+#   define LEGION_LINUX
 
-#include <sys/prctl.h>
-#include <sys/resource.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <sched.h>
-#include <errno.h>
+#   include <sys/prctl.h>
+#   include <sys/resource.h>
+#   include <sys/types.h>
+#   include <sys/wait.h>
+#   include <unistd.h>
+#   include <sched.h>
+#   include <errno.h>
 #endif
+
 #pragma endregion
 
 #pragma region //////////////////////////////////// Detect compiler /////////////////////////////////////
+
 #if defined(__clang__)
-  // clang
-#define LEGION_CLANG
-
-#if defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
-#define LEGION_CLANG_GCC
-#elif defined(_MSC_VER)
-#define LEGION_CLANG_MSVC
-#endif
-
-#define L_PAUSE_INSTRUCTION __builtin_ia32_pause
+    // clang
+#   define LEGION_CLANG
+#   if defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
+#       define LEGION_CLANG_GCC
+#   elif defined(_MSC_VER)
+#       define LEGION_CLANG_MSVC
+#   endif
 #elif defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
-  // gcc
-#define LEGION_GCC
-#define L_PAUSE_INSTRUCTION __builtin_ia32_pause
+    // gcc
+#   define LEGION_GCC
 #elif defined(_MSC_VER)
-  // msvc
-#define LEGION_MSVC
-#define L_PAUSE_INSTRUCTION _mm_pause
+    // msvc
+#   define LEGION_MSVC
 #endif
+
 #pragma endregion
 
 #pragma region ////////////////////////////////// Compiler specifics ////////////////////////////////////
 
 #if defined(LEGION_CLANG) || defined(LEGION_GCC)
-#define L_PAUSE_INSTRUCTION __builtin_ia32_pause
+#   define L_NULLOP() asm volatile("nop");
 #elif defined(LEGION_MSVC)
-#define L_PAUSE_INSTRUCTION _mm_pause
+#   include <intrin.h>
+#   define L_NULLOP() __nop();
 #else
-#define L_PAUSE_INSTRUCTION
+#   define L_NULLOP() ;
+#endif
+
+#if defined(LEGION_CLANG) || defined(LEGION_GCC)
+#   define L_PAUSE_INSTRUCTION __builtin_ia32_pause
+#elif defined(LEGION_MSVC)
+#   define L_PAUSE_INSTRUCTION _mm_pause
+#else
+#   define L_PAUSE_INSTRUCTION L_NULLOP
 #endif
 
 #if !defined(__FULL_FUNC__)
-#if defined(LEGION_CLANG) || defined(LEGION_GCC)
-#define __FULL_FUNC__ __PRETTY_FUNCTION__
-#elif defined(LEGION_MSVC)
-#define __FULL_FUNC__ __FUNCSIG__
-#else
-#define __FULL_FUNC__ __func__
-#endif
+#   if defined(LEGION_CLANG) || defined(LEGION_GCC)
+#       define __FULL_FUNC__ __PRETTY_FUNCTION__
+#   elif defined(LEGION_MSVC)
+#       define __FULL_FUNC__ __FUNCSIG__
+#   else
+#       define __FULL_FUNC__ __func__
+#   endif
 #endif
 
 #if defined(LEGION_CLANG)
-#define LEGION_PRAGMA_TO_STR(x) _Pragma(#x)
-#define LEGION_CLANG_SUPPRESS_WARNING_PUSH _Pragma("clang diagnostic push")
-#define LEGION_CLANG_SUPPRESS_WARNING(w) LEGION_PRAGMA_TO_STR(clang diagnostic ignored w)
-#define LEGION_CLANG_SUPPRESS_WARNING_POP _Pragma("clang diagnostic pop")
-#define LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)                                                \
-    LEGION_CLANG_SUPPRESS_WARNING_PUSH LEGION_CLANG_SUPPRESS_WARNING(w)
+#   define LEGION_PRAGMA_TO_STR(x) _Pragma(#x)
+#   define LEGION_CLANG_SUPPRESS_WARNING_PUSH _Pragma("clang diagnostic push")
+#   define LEGION_CLANG_SUPPRESS_WARNING(w) LEGION_PRAGMA_TO_STR(clang diagnostic ignored w)
+#   define LEGION_CLANG_SUPPRESS_WARNING_POP _Pragma("clang diagnostic pop")
+#   define LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH(w) LEGION_CLANG_SUPPRESS_WARNING_PUSH LEGION_CLANG_SUPPRESS_WARNING(w)
 #else
-#define LEGION_CLANG_SUPPRESS_WARNING_PUSH
-#define LEGION_CLANG_SUPPRESS_WARNING(w)
-#define LEGION_CLANG_SUPPRESS_WARNING_POP
-#define LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)
+#   define LEGION_CLANG_SUPPRESS_WARNING_PUSH
+#   define LEGION_CLANG_SUPPRESS_WARNING(w)
+#   define LEGION_CLANG_SUPPRESS_WARNING_POP
+#   define LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)
 #endif
 
 #if defined(LEGION_GCC)
-#define LEGION_PRAGMA_TO_STR(x) _Pragma(#x)
-#define LEGION_GCC_SUPPRESS_WARNING_PUSH _Pragma("GCC diagnostic push")
-#define LEGION_GCC_SUPPRESS_WARNING(w) LEGION_PRAGMA_TO_STR(GCC diagnostic ignored w)
-#define LEGION_GCC_SUPPRESS_WARNING_POP _Pragma("GCC diagnostic pop")
-#define LEGION_GCC_SUPPRESS_WARNING_WITH_PUSH(w)                                                  \
-    LEGION_GCC_SUPPRESS_WARNING_PUSH LEGION_GCC_SUPPRESS_WARNING(w)
+#   define LEGION_PRAGMA_TO_STR(x) _Pragma(#x)
+#   define LEGION_GCC_SUPPRESS_WARNING_PUSH _Pragma("GCC diagnostic push")
+#   define LEGION_GCC_SUPPRESS_WARNING(w) LEGION_PRAGMA_TO_STR(GCC diagnostic ignored w)
+#   define LEGION_GCC_SUPPRESS_WARNING_POP _Pragma("GCC diagnostic pop")
+#   define LEGION_GCC_SUPPRESS_WARNING_WITH_PUSH(w) LEGION_GCC_SUPPRESS_WARNING_PUSH LEGION_GCC_SUPPRESS_WARNING(w)
 #else
-#define LEGION_GCC_SUPPRESS_WARNING_PUSH
-#define LEGION_GCC_SUPPRESS_WARNING(w)
-#define LEGION_GCC_SUPPRESS_WARNING_POP
-#define LEGION_GCC_SUPPRESS_WARNING_WITH_PUSH(w)
+#   define LEGION_GCC_SUPPRESS_WARNING_PUSH
+#   define LEGION_GCC_SUPPRESS_WARNING(w)
+#   define LEGION_GCC_SUPPRESS_WARNING_POP
+#   define LEGION_GCC_SUPPRESS_WARNING_WITH_PUSH(w)
 #endif
 
 #if defined(LEGION_MSVC)
-#define LEGION_MSVC_SUPPRESS_WARNING_PUSH __pragma(warning(push))
-#define LEGION_MSVC_SUPPRESS_WARNING(w) __pragma(warning(disable : w))
-#define LEGION_MSVC_SUPPRESS_WARNING_POP __pragma(warning(pop))
-#define LEGION_MSVC_SUPPRESS_WARNING_WITH_PUSH(w)                                                 \
-    LEGION_MSVC_SUPPRESS_WARNING_PUSH LEGION_MSVC_SUPPRESS_WARNING(w)
+#   define LEGION_MSVC_SUPPRESS_WARNING_PUSH __pragma(warning(push))
+#   define LEGION_MSVC_SUPPRESS_WARNING(w) __pragma(warning(disable : w))
+#   define LEGION_MSVC_SUPPRESS_WARNING_POP __pragma(warning(pop))
+#   define LEGION_MSVC_SUPPRESS_WARNING_WITH_PUSH(w) LEGION_MSVC_SUPPRESS_WARNING_PUSH LEGION_MSVC_SUPPRESS_WARNING(w)
 #else
-#define LEGION_MSVC_SUPPRESS_WARNING_PUSH
-#define LEGION_MSVC_SUPPRESS_WARNING(w)
-#define LEGION_MSVC_SUPPRESS_WARNING_POP
-#define LEGION_MSVC_SUPPRESS_WARNING_WITH_PUSH(w)
+#   define LEGION_MSVC_SUPPRESS_WARNING_PUSH
+#   define LEGION_MSVC_SUPPRESS_WARNING(w)
+#   define LEGION_MSVC_SUPPRESS_WARNING_POP
+#   define LEGION_MSVC_SUPPRESS_WARNING_WITH_PUSH(w)
 #endif
 
 #if defined (LEGION_MSVC)
-#define L_WARNING(desc) __pragma(message(__FILE__ "(" STRINGIFY(__LINE__) ") : warning: " #desc))
-#define L_ERROR(desc) __pragma(message(__FILE__ "(" STRINGIFY(__LINE__) ") : error: " #desc))
+#   define L_WARNING(desc) __pragma(message(__FILE__ "(" STRINGIFY(__LINE__) ") : warning: " #desc))
+#   define L_ERROR(desc) __pragma(message(__FILE__ "(" STRINGIFY(__LINE__) ") : error: " #desc))
 #elif defined(LEGION_GCC) || defined(LEGION_CLANG)
-#define L_WARNING(desc) _Pragma(STRINGIFY(GCC warning desc))
-#define L_ERROR(desc) _Pragma(STRINGIFY(GCC error desc))
+#   define L_WARNING(desc) _Pragma(STRINGIFY(GCC warning desc))
+#   define L_ERROR(desc) _Pragma(STRINGIFY(GCC error desc))
 #endif
 
 
@@ -353,22 +358,22 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 
 
 #if defined(LEGION_GCC) || defined(LEGION_CLANG)
-#define L_ALWAYS_INLINE __attribute__((always_inline))
+#   define L_ALWAYS_INLINE __attribute__((always_inline))
 #elif defined(LEGION_MSVC)
-#define L_ALWAYS_INLINE __forceinline
+#   define L_ALWAYS_INLINE __forceinline
 #else
-#define L_ALWAYS_INLINE
+#   define L_ALWAYS_INLINE
 #endif
 
 #if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
     /**@def LEGION_CCONV
      * @brief the calling convention exported functions will use in the args engine
      */
-#define LEGION_CCONV __fastcall
+#   define LEGION_CCONV __fastcall
 #elif defined(LEGION_MSVC)
-#define LEGION_CCONV __cdecl
+#   define LEGION_CCONV __cdecl
 #else
-#define LEGION_CCONV
+#   define LEGION_CCONV
 #endif
 
 #pragma endregion
@@ -396,7 +401,7 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 #define LEGION_INTERFACE NO_MANGLING LEGION_CCONV 
 
 #if !defined(__FUNC__)
-#define __FUNC__ __func__ 
+#   define __FUNC__ __func__ 
 #endif
 
 #pragma endregion
@@ -404,46 +409,47 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 #pragma region ///////////////////////////////////// Attributes /////////////////////////////////////////
 
 #if defined(__has_cpp_attribute)|| defined(DOXY_INCLUDE) 
- /**@def L_HASCPPATTRIB
-  * @brief checks if a certain attribute exists in this version of c++
-  * @param x attribute you want to test for
-  * @return true if attribute exists
-  */
-#  define L_HASCPPATTRIB(x) __has_cpp_attribute(x)
+    /**@def L_HASCPPATTRIB
+     * @brief checks if a certain attribute exists in this version of c++
+     * @param x attribute you want to test for
+     * @return true if attribute exists
+     */
+#   define L_HASCPPATTRIB(x) __has_cpp_attribute(x)
 #else
-#  define L_HASCPPATTRIB(x) 0
+#   define L_HASCPPATTRIB(x) 0
 #endif
 
 #if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(fallthrough) || defined(DOXY_INCLUDE)
-#define L_FALLTHROUGH [[fallthrough]]
+#   define L_FALLTHROUGH [[fallthrough]]
 #else
-#define L_FALLTHROUGH
+#   define L_FALLTHROUGH
 #endif
 
 #if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(maybe_unused) || defined(DOXY_INCLUDE)
- /**@def L_MAYBEUNUSED
-  * @brief [[maybe_unused]]
-  */
-#define L_MAYBEUNUSED [[maybe_unused]]
+    /**@def L_MAYBEUNUSED
+     * @brief [[maybe_unused]]
+     */
+#   define L_MAYBEUNUSED [[maybe_unused]]
 #else
-#define L_MAYBEUNUSED
+#   define L_MAYBEUNUSED
 #endif
 
 #if __cplusplus >= LEGION_CPP17V || L_HASCPPATTRIB(nodiscard) || defined(DOXY_INCLUDE)
-/**@def L_NODISCARD
- * @brief Marks a function as "nodiscard" meaning that result must be captured and should not be discarded.
- */
-#define L_NODISCARD [[nodiscard]]
+    /**@def L_NODISCARD
+     * @brief Marks a function as "nodiscard" meaning that result must be captured and should not be discarded.
+     */
+#   define L_NODISCARD [[nodiscard]]
 #else
-#define L_NODISCARD
+#   define L_NODISCARD
 #endif
 
 #if __cplusplus > LEGION_CPP17V || L_HASCPPATTRIB(noreturn) || defined(DOXY_INCLUDE)
- /**@def L_NORETURN
-  * @brief Marks a function as "noreturn" meaning that the function will never finish, or terminate the application
-  */
-#define L_NORETURN [[noreturn]]
+    /**@def L_NORETURN
+     * @brief Marks a function as "noreturn" meaning that the function will never finish, or terminate the application
+     */
+#   define L_NORETURN [[noreturn]]
 #else
-#define L_NORETURN
+#   define L_NORETURN
 #endif
+
 #pragma endregion
