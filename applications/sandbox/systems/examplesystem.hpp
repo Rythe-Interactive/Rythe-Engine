@@ -26,8 +26,6 @@ namespace legion::core
 
 ManualReflector(example_comp, value);
 ManualReflector(scene_comp, id, entities);
-ManualReflector(ecs::entity, data);
-ManualReflector(ecs::entity_data,id,name,alive,active,parent,children);
 
 class ExampleSystem final : public legion::System<ExampleSystem>
 {

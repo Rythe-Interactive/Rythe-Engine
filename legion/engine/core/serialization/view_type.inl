@@ -10,10 +10,9 @@ namespace legion::core::serialization
         for_each(prot,
             [&j](auto& name, auto& value)
             {
-                if constexpr (std::is_literal_type<remove_cvr_t<decltype(value)>>::value)
+                if constexpr (std::is_literal_type<remove_cvr_t<decltype(value)>>::value && !std::is_same<decltype(value),ecs::entity>::value)
                 {
                     log::debug(std::string("Name:" + name));
-                    log::debug(value);
                     j[name] = serialization_util::serialize_property(value);
                 }
                 else if constexpr (has_size<remove_cvr_t<decltype(value)>>::value)
@@ -52,30 +51,32 @@ namespace legion::core::serialization
     }
 
 
-    template<>
-    inline json serialization_util::serialize_property(const ecs::entity prop)
-    {
-        entity_prototype ent_prot(prop);
-        json j;
-        j["id"] = prop->id;
-        j["name"] = ent_prot.name;
-        j["alive"] = prop->alive;
-        j["active"] = ent_prot.active;
-        if (prop->parent)
-            j["parent"] = prop->parent->id;
-        auto children = prop->children;
-        for (int i = 0; i < children.size(); i++)
-        {
-            auto child_j = serialize_property(children.at(i));
-            j["children"].push_back(child_j);
-        }
-        auto& components = ent_prot.composition;
-        for (auto&[id,comp_prot] : components)
-        {
-            j["components"] = json_view<decltype(*comp_prot)>::serialize(*comp_prot);
-        }
-        return j;
-    }
+    //template<>
+    //inline json serialization_util::serialize_property(const ecs::entity prop)
+    //{
+    //    entity_prototype ent_prot(prop);
+    //    return json_view<entity_prototype>::serialize(ent_prot);
+    //    //json j;
+    //    //j["id"] = prop->id;
+    //    //j["name"] = ent_prot.name;
+    //    //j["alive"] = prop->alive;
+    //    //j["active"] = ent_prot.active;
+    //    //if (prop->parent)
+    //    //    j["parent"] = prop->parent->id;
+    //    //auto children = prop->children;
+    //    //for (int i = 0; i < children.size(); i++)
+    //    //{
+    //    //    auto child_j = json_view<entity_prototype>
+    //    //    //auto child_j = serialize_property(children.at(i));
+    //    //    j["children"].push_back(child_j);
+    //    //}
+    //    //auto& components = ent_prot.composition;
+    //    //for (auto&[id,comp_prot] : components)
+    //    //{
+    //    //    j["components"] = json_view<decltype(*comp_prot)>::serialize(*comp_prot);
+    //    //}
+    //    //return j;
+    //}
 
     template<typename property_type>
     inline json serialization_util::serialize_property(const property_type prop)
@@ -127,7 +128,7 @@ namespace legion::core::serialization
     inline json serialization_util::serialize_container(const container_type prop)
     {
         json j;
-        if(std::is_literal_type<typename container_type::value_type>::value)
+        if constexpr (std::is_literal_type<typename container_type::value_type>::value && !std::is_same<typename container_type::value_type, ecs::entity>::value)
             for (int i = 0; i < prop.size(); i++)
                 j.push_back(serialize_property<typename container_type::value_type>(prop[i]));
         else
