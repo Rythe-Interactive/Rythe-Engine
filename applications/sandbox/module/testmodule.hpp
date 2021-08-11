@@ -5,7 +5,7 @@
 #include <core/math/math.hpp>
 #include "../systems/testsystem.hpp"
 #include "../systems/simplecameracontroller.hpp"
-
+#include <physics/systems/physics_test_system.hpp>
 
 using namespace legion;
 
@@ -25,10 +25,10 @@ public:
             1
         );
 
-        reportComponentType<custom_component>();
+        //reportSystem<TestSystem>();
         reportSystem<SimpleCameraController>();
-        reportSystem<GuiTestSystem>();
-        reportSystem<CustomSystem>();
+        reportSystem<physics::PhysicsTestSystem>();
+
     }
 
     virtual priority_type priority() override
