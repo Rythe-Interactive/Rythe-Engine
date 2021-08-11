@@ -3,34 +3,20 @@
 
 namespace legion::core::serialization
 {
-    template<typename type>
-    inline json serializer<type>::serialize(const type data)
+    template<typename serializable_type>
+    inline json serializer<serializable_type>::serialize(const serializable_type data)
     {
-        return json_view<prototype<type>>().serialize(prototype<type>(data));
+        return json_view<prototype<serializable_type>>().serialize(prototype<serializable_type>(data));
     }
 
-    template<typename type>
-    inline prototype<type> serializer<type>::deserialize(json j)
+    template<typename serializable_type>
+    inline prototype<serializable_type> serializer<serializable_type>::deserialize(json j)
     {
-        return json_view<prototype<type>>().deserialize(j);
+        return json_view<prototype<serializable_type>>().deserialize(j);
     }
 
-    //template<>
-    //inline prototype<ecs::entity> serializer<ecs::entity>::deserialize(json j)
-    //{
-    //    return json_view<prototype<ecs::entity>>().deserialize(j);
-    //}
-
-    //default will be component
-    //template<typename type>
-    //inline prototype<ecs::component<type>> serializer<type>::deserialize(json j,int i)
-    //{
-    //    return json_view<ecs::component<type>>().deserialize(j);
-    //}
-
-
-    template<typename component_type>
-    inline void serializer<component_type>::write(fs::view filePath, component_type data)
+    template<typename serializable_type>
+    inline void serializer<serializable_type>::write(fs::view filePath, serializable_type data)
     {
         std::ofstream os;
         os.open(fs::view_util::get_view_path(filePath, true));
@@ -39,8 +25,8 @@ namespace legion::core::serialization
         os.close();
     }
 
-    template<typename component_type>
-    inline component_type serializer<component_type>::read(fs::view filePath)
+    template<typename serializable_type>
+    inline serializable_type serializer<serializable_type>::read(fs::view filePath)
     {
         json j;
         std::ifstream is;

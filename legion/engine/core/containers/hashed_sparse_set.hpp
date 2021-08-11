@@ -35,6 +35,7 @@ namespace legion::core
         using value_reference = value_type&;
         using value_const_reference = const value_type&;
         using value_pointer = value_type*;
+        using value_type = value_type;
 
         using sparse_container = sparse_type<value_type, size_type, hash_type>;
         using dense_container = dense_type<value_type>;

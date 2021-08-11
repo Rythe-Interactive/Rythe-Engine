@@ -25,3 +25,5 @@ namespace legion::core::ecs
         entity_set children;
     };
 }
+
+ManualReflector(ecs::entity_data, alive, active, id, name, children);

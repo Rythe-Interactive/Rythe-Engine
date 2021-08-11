@@ -7,28 +7,54 @@ namespace legion::core::serialization
     inline json json_view<prototype_type>::serialize(const prototype_type prot)
     {
         json j;
+        log::debug("Started Serializing prototype");
         for_each(prot,
             [&j](auto& name, auto& value)
             {
-                if constexpr (std::is_literal_type<remove_cvr_t<decltype(value)>>::value && !std::is_same<decltype(value),ecs::entity>::value)
+                using value_type = remove_cvr_t<decltype(value)>;
+                if constexpr (std::is_literal_type<value_type>::value && !is_pointer<value_type>::value && !std::is_same<value_type, ecs::entity>::value)
                 {
-                    log::debug(std::string("Name:" + name));
-                    j[name] = serialization_util::serialize_property(value);
+                    j[name] = serialization_util::serialize_property<value_type>(value);
                 }
-                else if constexpr (has_size<remove_cvr_t<decltype(value)>>::value)
+                else if constexpr (has_size<value_type>::value)
                 {
-                    log::debug(std::string("Name:" + name));
                     int size = value.size();
-                    log::debug(std::string("Size:" + std::to_string(size)));
-                    j[name] = serialization_util::serialize_container(value);
+                    if constexpr (std::is_same<value_type, std::string>::value)
+                        j[name] = value;
+                    else
+                        j[name] = serialization_util::serialize_container<value_type>(value);
                 }
                 else
                 {
-                    log::debug(std::string("Name:" + name));
-                    log::debug(value->id);
-                    j[name] = json_view<prototype<remove_cvr_t<decltype(value)>>>::serialize(prototype<remove_cvr_t<decltype(value)>>(value));
+                    using value_type_ptr = remove_cvr_t<decltype(*value)>;
+                    if constexpr (is_pointer<value_type>::value)
+                        j[name] = json_view<prototype<value_type_ptr>>::serialize(prototype<value_type_ptr>(*value));
+                    else
+                        j[name] = json_view<prototype<value_type>>::serialize(prototype<value_type>(value));
                 }
+                log::debug("\t Done serializing \n");
             });
+        log::debug("Finished Serializing prototype");
+        return j;
+    }
+
+    template<>
+    inline json json_view<prototype<ecs::entity>>::serialize(const prototype<ecs::entity> ent_prot)
+    {
+        json j;
+        log::debug("Started serializing entity prototype");
+        for_each(ent_prot,
+            [&j](auto& name, auto& value)
+            {
+                j = json_view<prototype<ecs::entity_data>>::serialize(prototype<ecs::entity_data>(*value));
+            });
+
+        for (auto& [id,base] : ent_prot.composition)
+        {
+            //j["components"].push_back();
+        }
+        //j["components"] = serialization_util::serialize_container(ent_prot.composition);
+        log::debug("Finished serializing entity prototype");
         return j;
     }
 
@@ -39,44 +65,16 @@ namespace legion::core::serialization
         for_each(prot,
             [&j](auto& name, auto& value)
             {
-
-                if constexpr (std::is_literal_type<decltype(value)>::value)
-                    value = serialization_util::deserialize_property<remove_cvr_t<decltype(value)>>(j[name]);
-                else if constexpr (has_size<decltype(value)>::value)
-                    value = serialization_util::deserialize_container<remove_cvr_t<decltype(value)>>(j[name]);
+                using value_type = remove_cvr_t<decltype(value)>;
+                if constexpr (std::is_literal_type<value_type>::value && !is_pointer<value_type>::value && !std::is_same<value_type, ecs::entity>::value)
+                    value = serialization_util::deserialize_property<value_type>(j[name]);
+                else if constexpr (has_size<value_type>::value)
+                    value = serialization_util::deserialize_container<value_type>(j[name]);
                 else
-                    value = json_view<prototype<decltype(value)>>::deserialize(j[name]);
+                    value = json_view<prototype<value_type>>::deserialize<prototype<value_type>>(j[name]);
             });
         return prot;
     }
-
-
-    //template<>
-    //inline json serialization_util::serialize_property(const ecs::entity prop)
-    //{
-    //    entity_prototype ent_prot(prop);
-    //    return json_view<entity_prototype>::serialize(ent_prot);
-    //    //json j;
-    //    //j["id"] = prop->id;
-    //    //j["name"] = ent_prot.name;
-    //    //j["alive"] = prop->alive;
-    //    //j["active"] = ent_prot.active;
-    //    //if (prop->parent)
-    //    //    j["parent"] = prop->parent->id;
-    //    //auto children = prop->children;
-    //    //for (int i = 0; i < children.size(); i++)
-    //    //{
-    //    //    auto child_j = json_view<entity_prototype>
-    //    //    //auto child_j = serialize_property(children.at(i));
-    //    //    j["children"].push_back(child_j);
-    //    //}
-    //    //auto& components = ent_prot.composition;
-    //    //for (auto&[id,comp_prot] : components)
-    //    //{
-    //    //    j["components"] = json_view<decltype(*comp_prot)>::serialize(*comp_prot);
-    //    //}
-    //    //return j;
-    //}
 
     template<typename property_type>
     inline json serialization_util::serialize_property(const property_type prop)
@@ -92,30 +90,6 @@ namespace legion::core::serialization
         return id;
     }
 
-    template<>
-    inline ecs::entity serialization_util::deserialize_property(const json j)
-    {
-        ecs::entity ent;
-        //if (ecs::Registry::checkEntity(deserialize_property<id_type>(j["id"])))
-        //    ent = ecs::Registry::getEntity(deserialize_property<id_type>(j["id"]));
-        //else
-        //{
-        //    ent = ecs::Registry::createEntity();
-        //    ent->id = j["id"];
-        //}
-        //ent->name = j["name"];
-        //ent->alive = j["alive"];
-        //ent->active = j["active"];
-        //if (ecs::Registry::checkEntity(deserialize_property<id_type>(j["parent"])))
-        //    ent.set_parent(ecs::Registry::getEntity(deserialize_property<id_type>(j["parent"])));
-        //else
-        //{
-        //    ent.set_parent(ecs::Registry::createEntity());
-        //    ent->parent->id = deserialize_property<id_type>(j["parent"]);
-        //}
-        //ent->children = deserialize_container<remove_cvr_t<ecs::entity_set>>(j["children"]);
-        return ent;
-    }
 
     template<typename property_type>
     inline property_type serialization_util::deserialize_property(const json j)
@@ -123,18 +97,24 @@ namespace legion::core::serialization
         return (property_type)j;
     }
 
-
     template<typename container_type>
     inline json serialization_util::serialize_container(const container_type prop)
     {
         json j;
-        if constexpr (std::is_literal_type<typename container_type::value_type>::value && !std::is_same<typename container_type::value_type, ecs::entity>::value)
-            for (int i = 0; i < prop.size(); i++)
-                j.push_back(serialize_property<typename container_type::value_type>(prop[i]));
-        else
-            for (int i = 0; i < prop.size(); i++)
-                j.push_back(json_view<prototype<typename container_type::value_type>>::serialize(prototype<typename container_type::value_type>(prop[i])));
-        return j;
+        if constexpr (!std::is_same<container_type, ecs::entity_data*>::value)
+        {
+            if constexpr (std::is_same<typename container_type::value_type, ecs::entity>::value || !std::is_literal_type<typename container_type::value_type>::value)
+            {
+                for (int i = 0; i < prop.size(); i++)
+                    j.push_back(json_view<prototype<typename container_type::value_type>>::serialize(prototype<typename container_type::value_type>(prop[i])));
+            }
+            else if constexpr (std::is_literal_type<typename container_type::value_type>::value)
+            {
+                for (int i = 0; i < prop.size(); i++)
+                    j.push_back(serialize_property<typename container_type::value_type>(prop[i]));
+            }
+            return j;
+        }
     }
 
     template<typename container_type>

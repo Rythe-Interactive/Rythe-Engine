@@ -30,6 +30,8 @@ namespace legion::core
     }
 }
 
+
+
 #if !defined(DOXY_EXCLUDE)
 namespace std
 {
@@ -339,3 +341,5 @@ namespace legion::core::ecs
         void remove_component();
     };
 }
+ManualReflector(ecs::entity, data);
+

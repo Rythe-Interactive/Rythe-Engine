@@ -121,9 +121,6 @@ namespace legion::core
         static constexpr bool value = std::is_same<decltype(test<T>(0)), yes>::value;
     };
 
-
-
-
     template <class T>
     struct is_vector
         : public std::false_type
@@ -187,6 +184,12 @@ namespace legion::core
 
     template<class T, typename... Args>
     inline constexpr bool is_brace_constructible_v = is_brace_constructible<T, Args...>::value;
+
+    template<typename T>
+    struct is_pointer { static const bool value = false; };
+
+    template<typename T>
+    struct is_pointer<T*> { static const bool value = true; };
 
 
     template <class T>
