@@ -78,7 +78,7 @@ public:
             ent.add_component<example_comp>();
             scene.entities.push_back(ent);
         }
-        serializer->write(fs::view(filePath), scene);
+        serializer->write(fs::view(filePath), scene,serialization::JSON);
         //scene = serializer->read(fs::view(filePath));
         //log::debug(scene.id);
     }

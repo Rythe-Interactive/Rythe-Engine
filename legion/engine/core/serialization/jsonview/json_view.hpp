@@ -10,7 +10,7 @@ namespace legion::core::serialization
 
     //type should be a prototype
     template<typename prototype_type>
-    struct json_view : serializer_view
+    struct json_view
     {
     public:
         json_view() = default;

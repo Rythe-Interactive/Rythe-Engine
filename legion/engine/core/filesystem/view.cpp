@@ -431,13 +431,13 @@ namespace legion::core::filesystem
 
         navigator navigator(view.get_virtual_path());
         auto solution = navigator.find_solution();
-        if (solution.has_err())
+        if (solution.has_error())
         {
-            log::error(std::string("View util error: ") + solution.get_error().what());
+            log::error(std::string("View util error: ") + solution.error().what());
             return "";
         }
 
-        auto s = solution.get();
+        auto s = solution.value();
         if (s.size() != 1)
         {
             log::error("View util error: invalid file, fs::view was not fully local");

@@ -56,7 +56,7 @@ namespace legion::core::serialization
 
         for (auto& [key, value] : ent_prot.composition)
         {
-            auto val = Serialization_Registry::get_serializer(key);
+            auto val = *Serialization_Registry::get_serializer(key);
             j["components"].emplace(value.get()->type.global_name().data(), json_view<decltype(val)>::serialize(val));
         }
         return j;
