@@ -94,7 +94,7 @@ namespace legion::core::ecs
         L_NODISCARD static component_pool<component_type>* getFamily(Args&&... args);
 
         /**@brief Non templated way to get a pointer to the family of a certain component type.
-         * @note Will throw an exception if non of the templated functions have been called
+         * @note Will throw an exception if none of the templated functions have been called
          *       before for this component type due to the type not being registered yet.
          * @param typeId Local type hash of the component type.
          */

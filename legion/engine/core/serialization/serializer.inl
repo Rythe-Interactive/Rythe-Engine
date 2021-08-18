@@ -1,4 +1,5 @@
 #include <core/serialization/serializer.hpp>
+#include <core/serialization/serializer_view.hpp>
 #pragma once
 
 namespace legion::core::serialization
@@ -6,13 +7,13 @@ namespace legion::core::serialization
     template<typename serializable_type>
     inline json serializer<serializable_type>::serialize(const serializable_type data)
     {
-        return json_view<prototype<serializable_type>>().serialize(prototype<serializable_type>(data));
+        return serializer_view<prototype<serializable_type>>().serialize(prototype<serializable_type>(data));
     }
 
     template<typename serializable_type>
     inline prototype<serializable_type> serializer<serializable_type>::deserialize(json j)
     {
-        return json_view<prototype<serializable_type>>().deserialize(j);
+        return serializer_view<prototype<serializable_type>>().deserialize(j);
     }
 
     template<typename serializable_type>

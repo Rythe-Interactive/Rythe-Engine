@@ -1,19 +1,39 @@
 {
+    "id": 1,
     "entities": [
         {
+            "id": 6,
+            "name": "6",
             "active": true,
             "alive": true,
-            "children": null,
-            "id": 6,
-            "name": "6"
+            "children": [
+                {
+                    "id": 7,
+                    "name": "7",
+                    "active": true,
+                    "alive": true
+                }
+            ],
+            "components": {
+                "11949557849597501724": "legion::core::example_comp"
+            }
         },
         {
+            "id": 8,
+            "name": "8",
             "active": true,
             "alive": true,
-            "children": null,
-            "id": 7,
-            "name": "7"
+            "children": [
+                {
+                    "id": 9,
+                    "name": "9",
+                    "active": true,
+                    "alive": true
+                }
+            ],
+            "components": {
+                "11949557849597501724": "legion::core::example_comp"
+            }
         }
-    ],
-    "id": 1
+    ]
 }

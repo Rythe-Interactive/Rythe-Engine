@@ -41,10 +41,6 @@
     <ClCompile Include="data\loaders\objmeshloader.cpp" />
     <ClCompile Include="data\loaders\gltfmeshloader.cpp" />
     <ClCompile Include="time\main_clock.cpp" />
-    <ClCompile Include="serialization\serializationregistry.cpp" />
-    <ClCompile Include="serialization\serializer.cpp" />
-    <ClCompile Include="serialization\view_type.inl" />
-    <ClCompile Include="serialization\view_type.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -452,7 +448,9 @@
     <ClInclude Include="data\loaders\gltfmeshloader.hpp" />
     <ClInclude Include="engine\enginesubsystem.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
-    <ClInclude Include="serialization\view_type.hpp" />
+    <ClInclude Include="serialization\serializer_view.hpp" />
+    <ClInclude Include="ecs\prototypes\entity_data_prototype.hpp" />
+    <ClInclude Include="serialization\jsonview\json_view.hpp" />
     <ClInclude Include="types\prototype.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -621,5 +619,7 @@
     <None Include="engine\module.inl" />
     <None Include="serialization\serializer.inl" />
     <None Include="serialization\serializationregistry.inl" />
+    <None Include="serialization\serializer_view.inl" />
+    <None Include="serialization\jsonview\json_view.inl" />
   </ItemGroup>
 </Project>

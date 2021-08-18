@@ -3,21 +3,28 @@
 
 namespace legion::core::serialization
 {
-    std::map<id_type, std::unique_ptr<serializer_base>> Registry::serializers;
+    std::map<id_type, std::unique_ptr<serializer_base>> Serialization_Registry::serializers;
 
     template<typename type>
-    inline pointer<serializer<type>> Registry::register_serializer()
+    inline pointer<serializer<type>> Serialization_Registry::register_serializer()
     {
-        Registry::serializers.emplace(type_hash<type>().local(), std::make_unique<serializer<type>>());
+        Serialization_Registry::serializers.emplace(type_hash<type>().local(), std::make_unique<serializer<type>>());
         return get_serializer<type>();
     }
 
     template<typename type>
-    inline pointer<serializer<type>> Registry::get_serializer()
+    inline pointer<serializer<type>> Serialization_Registry::get_serializer()
     {
         id_type typeId = type_hash<type>().local();
         if (serializers.count(typeId))
             return { dynamic_cast<serializer<type>*>(serializers.at(typeId).get()) };
+        return { nullptr };
+    }
+
+    inline pointer<serializer_base> legion::core::serialization::Serialization_Registry::get_serializer(id_type id)
+    {
+        if (serializers.count(id))
+            return { dynamic_cast<decltype(serializers.at(id).get())>(serializers.at(id).get()) };
         return { nullptr };
     }
 }

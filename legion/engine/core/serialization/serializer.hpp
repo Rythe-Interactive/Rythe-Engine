@@ -8,29 +8,13 @@
 
 namespace legion::core::serialization
 {
-    using json = nlohmann::json;
-    //Some testing objects for serialization
-#pragma region TestObjects
-    struct MyRecord
-    {
-    public:
-        uint8_t x;
-        uint8_t y;
-        float z;
-        MyRecord() = default;
-    };
-    struct Records
-    {
-        MyRecord records[20];
-
-    };
-#pragma endregion
+    using json = nlohmann::ordered_json;
 
     struct serializer_base
     {
         virtual ~serializer_base() = default;
     };
-
+    
     //Serializer should get the type of the thing we are serializing
     template<typename serializable_type>
     struct serializer : public serializer_base
@@ -45,6 +29,8 @@ namespace legion::core::serialization
         void write(const fs::view filePath, const serializable_type data);
         //reads the data from the file specified
         serializable_type read(const fs::view filePath);
+
+        using value_type = serializable_type;
     };
 }
 

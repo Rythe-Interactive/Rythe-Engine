@@ -1,35 +1,16 @@
 #pragma once
-#include <core/filesystem/filesystem.hpp>
-#include <core/ecs/prototypes/component_prototype.hpp>
 #include <core/ecs/handles/entity.hpp>
 #include <core/ecs/registry.hpp>
 
 #include <nlohmann/json.hpp>
 
-#include <sstream>
-#include <fstream>
-
 namespace legion::core::serialization
 {
-    using json = nlohmann::json;
-
-    //template<typename type>
-    //struct serializer_view : fs::view
-    //{
-    //public:
-    //    serializer_view() = default;
-    //    ~serializer_view() = default;
-    //    serializer_view(std::string_view filePath) : fs::view(filePath) {}
-
-    //protected:
-    //    virtual json serialize(type object) LEGION_PURE;
-    //    virtual type deserialize(json j) LEGION_PURE;
-    //};
-
+    using json = nlohmann::ordered_json;
 
     //type should be a prototype
     template<typename prototype_type>
-    struct json_view
+    struct json_view : serializer_view
     {
     public:
         json_view() = default;
@@ -37,6 +18,7 @@ namespace legion::core::serialization
 
         //serializes the given prototype into a json string
         static json serialize(const prototype_type object);
+
         //deserializes the given json into the approriate prototype
         static prototype_type deserialize(const json j);
     };
@@ -55,7 +37,6 @@ namespace legion::core::serialization
         template<typename container_type>
         static container_type deserialize_container(const json j);
     };
-
 }
 
-#include <core/serialization/view_type.inl>
+#include <core/serialization/jsonview/json_view.inl>

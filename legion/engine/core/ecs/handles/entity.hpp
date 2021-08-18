@@ -25,6 +25,7 @@ namespace legion::core
 
     namespace serialization
     {
+
         template<typename T>
         struct prototype;
     }

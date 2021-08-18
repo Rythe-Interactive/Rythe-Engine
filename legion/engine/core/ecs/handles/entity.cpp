@@ -1,5 +1,4 @@
 #include <core/ecs/handles/entity.hpp>
-
 #include <core/ecs/registry.hpp>
 
 namespace legion::core::ecs
