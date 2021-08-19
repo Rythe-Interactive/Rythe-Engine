@@ -4,7 +4,7 @@
 namespace legion::core::assets
 {
     template<typename AssetType>
-    inline L_ALWAYS_INLINE common::result<asset<AssetType>> legion::core::assets::load(const fs::view& file)
+    inline L_ALWAYS_INLINE common::result<asset<AssetType>> load(const fs::view& file)
     {
         return AssetCache<AssetType>::load(file);
     }
@@ -124,13 +124,13 @@ namespace legion::core::assets
     }
 
     template<typename AssetType>
-    inline L_ALWAYS_INLINE asset<AssetType> exists(const std::string& name)
+    inline L_ALWAYS_INLINE bool exists(const std::string& name)
     {
         return AssetCache<AssetType>::has(name);
     }
 
     template<typename AssetType>
-    inline L_ALWAYS_INLINE asset<AssetType> exists(id_type nameHash)
+    inline L_ALWAYS_INLINE bool exists(id_type nameHash)
     {
         return AssetCache<AssetType>::has(nameHash);
     }
@@ -157,5 +157,11 @@ namespace legion::core::assets
     inline L_ALWAYS_INLINE void destroy(id_type nameHash)
     {
         AssetCache<AssetType>::destroy(nameHash);
+    }
+
+    template<typename AssetType>
+    void destroy(asset<AssetType> asset)
+    {
+        AssetCache<AssetType>::destroy(asset);
     }
 }

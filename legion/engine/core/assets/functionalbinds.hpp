@@ -46,9 +46,9 @@ namespace legion::core::assets
     asset<AssetType> create(id_type nameHash, const std::string& name, Arguments&&... args);
 
     template<typename AssetType>
-    asset<AssetType> exists(const std::string& name);
+    bool exists(const std::string& name);
     template<typename AssetType>
-    asset<AssetType> exists(id_type nameHash);
+    bool exists(id_type nameHash);
 
     template<typename AssetType>
     asset<AssetType> get(const std::string& name);
@@ -59,6 +59,8 @@ namespace legion::core::assets
     void destroy(const std::string& name);
     template<typename AssetType>
     void destroy(id_type nameHash);
+    template<typename AssetType>
+    void destroy(asset<AssetType> asset);
 }
 
 #include <core/assets/functionalbinds.inl>

@@ -26,6 +26,9 @@ namespace legion::core::assets
     template<typename AssetType>
     class AssetCache
     {
+        template<typename Asset>
+        friend class AssetLoader<Asset>;
+
         using asset_ptr = asset<AssetType>;
         using import_cfg = import_settings<AssetType>;
         using loader_type = AssetLoader<AssetType>;
@@ -37,6 +40,9 @@ namespace legion::core::assets
         static std::vector<std::unique_ptr<loader_type>> m_loaders;
 
         static bool hasLoaders() noexcept;
+
+        template<typename... Args>
+        static common::result<asset_ptr> createInternal(id_type nameHash, const std::string& name, id_type loaderId, Args&&... args);
 
     public:
         static void addLoader(std::unique_ptr<loader_type>&& loader);
@@ -57,23 +63,22 @@ namespace legion::core::assets
         static async::async_operation<common::result<asset_ptr>> loadAsync(id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
 
         static asset_ptr create(const std::string& name);
+        static asset_ptr create(id_type nameHash, const std::string& name);
         static asset_ptr create(const std::string& name, const AssetType& src);
+        static asset_ptr create(id_type nameHash, const std::string& name, const AssetType& src);
         template<typename... Arguments>
         static asset_ptr create(const std::string& name, Arguments&&... args);
-        static asset_ptr create(id_type nameHash, const std::string& name);
-        static asset_ptr create(id_type nameHash, const std::string& name, const AssetType& src);
         template<typename... Arguments>
         static asset_ptr create(id_type nameHash, const std::string& name, Arguments&&... args);
 
-        static asset_ptr has(const std::string& name);
-        static asset_ptr has(id_type nameHash);
+        static bool has(const std::string& name);
+        static bool has(id_type nameHash);
 
         static asset_ptr get(const std::string& name);
         static asset_ptr get(id_type nameHash);
 
         static void destroy(const std::string& name);
         static void destroy(id_type nameHash);
+        static void destroy(asset_ptr asset);
     };
 }
-
-#include <core/assets/assets.inl>
