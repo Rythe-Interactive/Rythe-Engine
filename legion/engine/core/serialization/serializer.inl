@@ -28,11 +28,11 @@ namespace legion::core::serialization
         case JSON:
             return json_view<prototype<serializable_type>>().deserialize(j);
         case BINARY:
-            return nullptr;
+            break;
         case YAML:
-            return nullptr;
+            break;
         }
-        return nullptr;
+        return prototype<serializable_type>();
     }
 
     template<typename serializable_type>

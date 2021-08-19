@@ -17,23 +17,22 @@ namespace legion::core::serialization
         YAML
     };
 
-    template<typename serializable_type>
     struct serializer_base
     {
+        virtual json serialize(const std::any data, SerializeFormat format);
+        virtual prototype_base deserialize(const json j, SerializeFormat format);
         virtual ~serializer_base() = default;
-
-        using value_type = serializable_type;
     };
-    
+
     //Serializer should get the type of the thing we are serializing
     template<typename serializable_type>
-    struct serializer : public serializer_base<serializable_type>
+    struct serializer : public serializer_base
     {
     public:
         //returns the serialized json
-        json serialize(const serializable_type data, SerializeFormat format);
+        virtual json serialize(const serializable_type data, SerializeFormat format);
         //return prototype of type
-        prototype<serializable_type> deserialize(const json j, SerializeFormat format);
+        virtual prototype<serializable_type> deserialize(const json j, SerializeFormat format);
 
         //writes the given data to a file specified
         void write(const fs::view filePath, const serializable_type data, SerializeFormat format);

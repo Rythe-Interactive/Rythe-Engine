@@ -56,8 +56,9 @@ namespace legion::core::serialization
 
         for (auto& [key, value] : ent_prot.composition)
         {
+            Serialization_Registry::register_serializer<decltype(value.get())>();
             auto val = *Serialization_Registry::get_serializer(key);
-            j["components"].emplace(value.get()->type.global_name().data(), json_view<decltype(val)>::serialize(val));
+            j["components"].emplace(value.get()->type.global_name().data(), val.serialize(value.get(),JSON));
         }
         return j;
     }
@@ -70,13 +71,25 @@ namespace legion::core::serialization
             [&j](auto& name, auto& value)
             {
                 using value_type = remove_cvr_t<decltype(value)>;
-                if constexpr (std::is_literal_type<value_type>::value && !is_pointer<value_type>::value && !std::is_same<value_type, ecs::entity>::value)
+                if constexpr (std::is_literal_type<value_type>::value)
                     value = serialization_util::deserialize_property<value_type>(j[name]);
                 else if constexpr (has_size<value_type>::value)
                     value = serialization_util::deserialize_container<value_type>(j[name]);
                 else
                     value = json_view<prototype<value_type>>::deserialize<prototype<value_type>>(j[name]);
             });
+        return prot;
+    }
+
+    template<>
+    inline prototype<ecs::entity> json_view< prototype<ecs::entity>>::deserialize(const json j)
+    {
+        prototype<ecs::entity> prot;
+        //for_each(prot,
+        //    [&j](auto& name, auto& value)
+        //    {
+        //        
+        //    });
         return prot;
     }
 
