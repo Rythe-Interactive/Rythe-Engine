@@ -19,25 +19,28 @@ namespace legion::core::serialization
 
     struct serializer_base
     {
-        virtual json serialize(const std::any data, SerializeFormat format);
-        virtual prototype_base deserialize(const json j, SerializeFormat format);
         virtual ~serializer_base() = default;
+
+        //virtual json serialize(const std::any data, SerializeFormat format);
+        //virtual prototype_base deserialize(const json j, SerializeFormat format);
     };
 
     //Serializer should get the type of the thing we are serializing
     template<typename serializable_type>
     struct serializer : public serializer_base
     {
-    public:
         //returns the serialized json
-        virtual json serialize(const serializable_type data, SerializeFormat format);
+        json serialize(const serializable_type &data, const SerializeFormat format);
+
+        json serialize_prototype(const serializable_type data, const SerializeFormat format);
+
         //return prototype of type
-        virtual prototype<serializable_type> deserialize(const json j, SerializeFormat format);
+        prototype<serializable_type> deserialize(const json j, const SerializeFormat format);
 
         //writes the given data to a file specified
-        void write(const fs::view filePath, const serializable_type data, SerializeFormat format);
+        void write(const fs::view filePath, const serializable_type &data, const SerializeFormat format);
         //reads the data from the file specified
-        serializable_type read(const fs::view filePath, SerializeFormat format);
+        serializable_type read(const fs::view filePath, const SerializeFormat format);
 
         using value_type = serializable_type;
     };

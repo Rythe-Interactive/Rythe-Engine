@@ -21,10 +21,11 @@ namespace legion::core::serialization
         return { nullptr };
     }
 
-    inline pointer<serializer_base> legion::core::serialization::Serialization_Registry::get_serializer(id_type id)
+    template<typename type>
+    inline pointer<serializer<type>> legion::core::serialization::Serialization_Registry::get_serializer(id_type id)
     {
         if (serializers.count(id))
-            return { dynamic_cast<decltype(serializers.at(id).get())>(serializers.at(id).get()) };
+            return { dynamic_cast<serializer<type>*>(serializers.at(id).get()) };
         return { nullptr };
     }
 }

@@ -56,9 +56,9 @@ namespace legion::core::serialization
 
         for (auto& [key, value] : ent_prot.composition)
         {
-            Serialization_Registry::register_serializer<decltype(value.get())>();
-            auto val = *Serialization_Registry::get_serializer(key);
-            j["components"].emplace(value.get()->type.global_name().data(), val.serialize(value.get(),JSON));
+            auto name = value.get()->type.global_name().data();
+            auto val = Serialization_Registry::register_serializer<decltype(*value.get())>();
+            j["components"].emplace(name, val->serialize_prototype(*value.get(),JSON));
         }
         return j;
     }
@@ -82,14 +82,9 @@ namespace legion::core::serialization
     }
 
     template<>
-    inline prototype<ecs::entity> json_view< prototype<ecs::entity>>::deserialize(const json j)
+    inline prototype<ecs::entity> json_view<prototype<ecs::entity>>::deserialize(const json j)
     {
         prototype<ecs::entity> prot;
-        //for_each(prot,
-        //    [&j](auto& name, auto& value)
-        //    {
-        //        
-        //    });
         return prot;
     }
 

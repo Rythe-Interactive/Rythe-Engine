@@ -70,12 +70,13 @@ public:
         auto serializer = serialization::Serialization_Registry::register_serializer<scene_comp>();
         auto scene = scene_comp();
         scene.id = 1;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 200; i++)
         {
             auto ent = createEntity();
             auto child = createEntity();
-            ent.add_child(child);
             ent.add_component<example_comp>();
+            ent.add_component<position>();
+            ent.add_component<velocity>();
             scene.entities.push_back(ent);
         }
         serializer->write(fs::view(filePath), scene,serialization::JSON);
