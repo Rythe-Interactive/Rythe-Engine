@@ -3,12 +3,12 @@
 
 namespace legion::core::ecs
 {
-    template<typename component_type, typename ...component_types>
+    template<typename component_type, typename... component_types>
     inline archetype<component_type, component_types...>::archetype(const archetype& src) noexcept : owner(src.owner), underlying(src.underlying)
     {
     }
 
-    template<typename component_type, typename ...component_types>
+    template<typename component_type, typename... component_types>
     inline archetype<component_type, component_types...>::archetype(archetype&& src) noexcept : owner(std::move(src.owner)), underlying(std::move(src.underlying))
     {
     }

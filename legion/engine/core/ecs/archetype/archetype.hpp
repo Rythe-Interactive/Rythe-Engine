@@ -35,10 +35,13 @@ namespace legion::core::ecs
     {
         friend class legion::core::ecs::Registry;
         friend struct legion::core::ecs::entity;
-        template<typename X>
-        friend X& std::get(archetype&);
-        template<size_type I>
-        friend element_at_t<I, component_type, component_types...>& std::get(archetype&);
+
+        template<typename X, typename... Args>
+        friend X& std::get(archetype<Args...>&);
+
+        template<size_type I, typename Arg, typename... Args>
+        friend element_at_t<I, Arg, Args...>& std::get(archetype<Arg, Args...>&);
+
     public:
         using handle_group = std::tuple<component<component_type>, component<component_types>...>;
         using const_handle_group = std::tuple<const component<component_type>, const component<component_types>...>;
@@ -64,7 +67,7 @@ namespace legion::core::ecs
 
         L_NODISCARD ref_group get();
 
-        template<std::size_t I>
+        template<size_type I>
         L_NODISCARD element_at_t<I, component_type, component_types...>& get();
 
         L_NODISCARD handle_group handles();
@@ -131,7 +134,7 @@ namespace std // NOLINT(cert-dcl58-cpp)
         return std::get<I>(std::get<0>(val.underlying));
     }
 
-    template <class X, class ... Args>
+    template <class X, class... Args>
     X& get(legion::core::ecs::archetype<Args...>& val)
     {
         return std::get<legion::core::ecs::component<X>>(std::get<0>(val.underlying));
