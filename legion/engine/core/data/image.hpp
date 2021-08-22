@@ -1,10 +1,9 @@
 #pragma once
-#include <core/types/primitives.hpp>
-#include <core/containers/sparse_map.hpp>
-#include <core/math/color.hpp>
-#include <core/async/rw_spinlock.hpp>
-#include <core/filesystem/view.hpp>
-#include <mutex>
+#include <core/types/types.hpp>
+#include <core/containers/containers.hpp>
+#include <core/filesystem/filesystem.hpp>
+#include <core/assets/assets.hpp>
+#include <core/math/math.hpp>
 
 /**
  * @file image.hpp
@@ -40,32 +39,27 @@ namespace legion::core
      */
     struct image final
     {
-        friend class ImageCache;
+        image(math::ivec2 res, channel_format format, image_components comp, data_view<byte> data);
 
-        std::string name;
-        math::ivec2 size;
-        channel_format format;
-        image_components components;
-        size_type dataSize;
-
-        std::shared_ptr<byte_vec> data = nullptr;
+        const math::ivec2& resolution() const noexcept;
+        const channel_format& format() const noexcept;
+        const image_components& components() const noexcept;
 
         /**@brief Get the binary representation of the image with different pointer types.
          *        Each pointer type is only enabled if the channel format is the same.
          *        The void* type is always enabled.
          */
         template<typename T>
-        T* get_raw_data();
+        data_view<T> raw_data();
 
-        /**@brief Apply changes made to the binary data gotten with get_raw_data() to the colors read with read_colors().
-         * @param lazyApply Apply immediately if false, otherwise the changes will only actually be applied when read_colors() is called.
-         */
-        void apply_raw(bool lazyApply = true);
+        template<typename T>
+        const data_view<T> raw_data() const;
 
         /**@brief Convert the binary image representation to a more usable representation if it hasn't been converted before and return the new representation.
          * @return const std::vector<math::color>& List with all the colors in the image.
          */
-        const std::vector<math::color>& read_colors();
+        const std::vector<math::color>& read_colors() const;
+        void write_colors(const std::vector<math::color>& colors);
 
         /**@brief Get the data size of the binary data.
          */
@@ -73,50 +67,109 @@ namespace legion::core
 
         bool operator==(const image& other)
         {
-            return m_id == other.m_id;
+            return m_data == other.m_data;
         }
 
+        byte* data() noexcept { return m_data.data(); }
+
     private:
+        math::ivec2 m_resolution;
+        channel_format m_format;
+        image_components m_components;
 
-        static std::unordered_map<id_type, uint> m_refs;
-        static std::mutex m_refsLock;
-
-        id_type m_id;
+        mutable data_view<byte> m_data = nullptr;
     };
 
+    namespace assets
+    {
+        /**@class import_settings<image>
+         * @brief Data structure to parameterize the image import process.
+         */
+        template<>
+        struct import_settings<image>
+        {
+            bool detectFormat : 1;
+            bool detectComponents : 1;
+            bool flipVertical : 1;
+            channel_format fileFormat;
+            image_components components;
+        };
+    }
+
+
     template<typename T>
-    T* image::get_raw_data()
+    data_view<T> image::raw_data()
     {
+        if (m_data.size() % sizeof(T) == 0)
+            return { reinterpret_cast<T*>(m_data.data()), m_data.size() / sizeof(T) };
         return nullptr;
     }
 
     template<>
-    inline void* image::get_raw_data<void>()
+    inline data_view<void> image::raw_data<void>()
     {
-        return reinterpret_cast<void*>(data->data());
+        return { reinterpret_cast<void*>(m_data.data()) };
     }
 
     template<>
-    inline byte* image::get_raw_data<byte>()
+    inline data_view<byte> image::raw_data<byte>()
     {
-        if (format == channel_format::eight_bit)
-            return data->data();
+        if (m_format == channel_format::eight_bit)
+            return m_data;
         return nullptr;
     }
 
     template<>
-    inline uint16* image::get_raw_data<uint16>()
+    inline data_view<uint16> image::raw_data<uint16>()
     {
-        if (format == channel_format::sixteen_bit)
-            return reinterpret_cast<uint16*>(data->data());
+        if (m_format == channel_format::sixteen_bit && m_data.size() % sizeof(uint16) == 0)
+            return { reinterpret_cast<uint16*>(m_data.data()), m_data.size() / sizeof(uint16) };
         return nullptr;
     }
 
     template<>
-    inline float* image::get_raw_data<float>()
+    inline data_view<float> image::raw_data<float>()
     {
-        if (format == channel_format::float_hdr)
-            return reinterpret_cast<float*>(data->data());
+        if (m_format == channel_format::float_hdr && m_data.size() % sizeof(float) == 0)
+            return { reinterpret_cast<float*>(m_data.data()), m_data.size() / sizeof(float) };
+        return nullptr;
+    }
+
+    template<typename T>
+    const data_view<T> image::raw_data() const
+    {
+        if (m_data.size() % sizeof(T) == 0)
+            return { reinterpret_cast<T*>(m_data.data()), m_data.size() / sizeof(T) };
+        return nullptr;
+    }
+
+    template<>
+    inline const data_view<void> image::raw_data<void>() const
+    {
+        return { reinterpret_cast<void*>(m_data.data()) };
+    }
+
+    template<>
+    inline const data_view<byte> image::raw_data<byte>() const
+    {
+        if (m_format == channel_format::eight_bit)
+            return { m_data.data(), m_data.size(), m_data.offset() };
+        return nullptr;
+    }
+
+    template<>
+    inline const data_view<uint16> image::raw_data<uint16>() const
+    {
+        if (m_format == channel_format::sixteen_bit && m_data.size() % sizeof(uint16) == 0)
+            return { reinterpret_cast<uint16*>(m_data.data()), m_data.size() / sizeof(uint16) };
+        return nullptr;
+    }
+
+    template<>
+    inline const data_view<float> image::raw_data<float>() const
+    {
+        if (m_format == channel_format::float_hdr && m_data.size() % sizeof(float) == 0)
+            return { reinterpret_cast<float*>(m_data.data()), m_data.size() / sizeof(float) };
         return nullptr;
     }
 
@@ -147,16 +200,6 @@ namespace legion::core
     /**@brief Default invalid image handle.
      */
     constexpr image_handle invalid_image_handle{ invalid_id };
-
-    /**@class image_import_settings
-     * @brief Data structure to parameterize the image import process.
-     */
-    struct image_import_settings
-    {
-        channel_format fileFormat;
-        image_components components;
-        bool flipVertical;
-    };
 
     /**@brief Default image import settings.
      */

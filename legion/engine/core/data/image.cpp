@@ -3,9 +3,6 @@
 
 namespace legion::core
 {
-    std::unordered_map<id_type, uint> image::m_refs;
-    std::mutex image::m_refsLock;
-
     const std::vector<math::color> ImageCache::m_nullColors;
     async::rw_spinlock ImageCache::m_nullLock;
 
