@@ -27,6 +27,7 @@ namespace legion::editor
         }
     };
 
+#if !defined(DOXY_EXCLUDE)
     namespace detail
     {
         class EditorEngineModule : public Module
@@ -37,6 +38,7 @@ namespace legion::editor
             virtual void setup();
         };
     }
+#endif
 }
 
 /**@brief Reports editor modules to the editor, must be implemented by you.
