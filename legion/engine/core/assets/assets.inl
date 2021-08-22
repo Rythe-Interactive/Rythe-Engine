@@ -24,6 +24,12 @@ namespace legion::core::assets
     }
 
     template<typename AssetType>
+    inline L_ALWAYS_INLINE const detail::asset_info& AssetCache<AssetType>::info(id_type nameHash)
+    {
+        return m_info.at(nameHash);
+    }
+
+    template<typename AssetType>
     inline L_ALWAYS_INLINE void AssetCache<AssetType>::addLoader(std::unique_ptr<AssetLoader<AssetType>>&& loader)
     {
         loader->m_loaderId = m_loaders.size() + 1;
@@ -271,4 +277,35 @@ namespace legion::core::assets
     {
         return AssetCache<AssetType>::createInternal(nameHash, name, m_loaderId, std::forward<Args>(args)...);
     }
+
+    template<typename AssetType>
+    inline L_ALWAYS_INLINE id_type asset<AssetType>::id() const noexcept
+    {
+        return m_id;
+    }
+
+    template<typename AssetType>
+    inline L_ALWAYS_INLINE const std::string& asset<AssetType>::name() const
+    {
+        return AssetCache<AssetType>::info(m_id).name;
+    }
+
+    template<typename AssetType>
+    inline L_ALWAYS_INLINE void asset<AssetType>::destroy()
+    {
+        AssetCache<AssetType>::destoy(m_id);
+    }
+
+    template<typename AssetType>
+    inline L_ALWAYS_INLINE asset<AssetType> asset<AssetType>::copy(const std::string& name) const
+    {
+        return AssetCache<AssetType>::create(name, *ptr);
+    }
+
+    template<typename AssetType>
+    inline L_ALWAYS_INLINE asset<AssetType> asset<AssetType>::copy(id_type nameHash, const std::string& name) const
+    {
+        return AssetCache<AssetType>::create(nameHash, name, *ptr);
+    }
+
 }

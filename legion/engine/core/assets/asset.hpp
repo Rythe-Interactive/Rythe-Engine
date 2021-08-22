@@ -16,6 +16,6 @@ namespace legion::core::assets
         const std::string& name() const;
         void destroy();
         asset copy(const std::string& name) const;
-        asset copy(id_type nameHash) const;
+        asset copy(id_type nameHash, const std::string& name) const;
     };
 }

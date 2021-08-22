@@ -29,6 +29,9 @@ namespace legion::core::assets
         template<typename Asset>
         friend class AssetLoader<Asset>;
 
+        template<typename Asset>
+        friend struct asset<Asset>;
+
         using asset_ptr = asset<AssetType>;
         using import_cfg = import_settings<AssetType>;
         using loader_type = AssetLoader<AssetType>;
@@ -43,6 +46,8 @@ namespace legion::core::assets
 
         template<typename... Args>
         static common::result<asset_ptr> createInternal(id_type nameHash, const std::string& name, id_type loaderId, Args&&... args);
+
+        static const detail::asset_info& info(id_type nameHash);
 
     public:
         static void addLoader(std::unique_ptr<loader_type>&& loader);

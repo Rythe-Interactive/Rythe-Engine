@@ -12,6 +12,7 @@ namespace legion::core::assets
     template<typename AssetType>
     class AssetLoader
     {
+    public:
         using asset_ptr = asset<AssetType>;
         using import_cfg = import_settings<AssetType>;
         using progress_type = async::async_progress<common::result<asset_ptr>>;
@@ -19,6 +20,7 @@ namespace legion::core::assets
     private:
         id_type m_loaderId;
 
+    protected:
         template<typename... Args>
         asset_ptr create(id_type nameHash, const std::string& name, Args&&... args) const;
 
