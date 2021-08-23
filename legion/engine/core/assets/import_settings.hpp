@@ -3,5 +3,5 @@
 namespace legion::core::assets
 {
     template<typename AssetType>
-    struct import_settings;
+    struct import_settings {};
 }

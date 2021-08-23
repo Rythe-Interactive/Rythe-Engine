@@ -29,7 +29,7 @@ namespace legion::core::async
 
     public:
         constexpr async_progress_base() noexcept : m_size(100 * precision_scale<size_type>), m_progress(0) {}
-        constexpr explicit async_progress_base(float size) noexcept : m_size(static_cast<size_type>(size)* precision_scale<size_type>), m_progress(0) {}
+        constexpr explicit async_progress_base(float size) noexcept : m_size(static_cast<size_type>(size) * precision_scale<size_type>), m_progress(0) {}
 
         float size() const noexcept;
         size_type rawSize() const noexcept;
@@ -56,6 +56,14 @@ namespace legion::core::async
         {
             std::lock_guard guard(m_payloadLock);
             m_payload = std::move(value);
+            complete_impl();
+        }
+
+        template<typename... Args>
+        void complete(Args&&... args) noexcept
+        {
+            std::lock_guard guard(m_payloadLock);
+            new(&*m_payload) ReturnType(std::forward<Args>(args)...);
             complete_impl();
         }
 
