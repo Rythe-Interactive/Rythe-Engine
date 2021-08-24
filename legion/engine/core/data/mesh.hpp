@@ -27,18 +27,18 @@ namespace legion::core
         bool doubleSided;
 
         math::color albedoValue;
-        image_handle albedoMap;
+        assets::asset<image> albedoMap;
         float metallicValue;
-        image_handle metallicMap;
+        assets::asset<image> metallicMap;
         float roughnessValue;
-        image_handle roughnessMap;
-        image_handle metallicRoughnessMap;
+        assets::asset<image> roughnessMap;
+        assets::asset<image> metallicRoughnessMap;
         math::color emissiveValue;
-        image_handle emissiveMap;
+        assets::asset<image> emissiveMap;
 
-        image_handle normalMap;
-        image_handle aoMap;
-        image_handle heightMap;
+        assets::asset<image> normalMap;
+        assets::asset<image> aoMap;
+        assets::asset<image> heightMap;
     };
 
     using material_list = std::vector<material_data>;

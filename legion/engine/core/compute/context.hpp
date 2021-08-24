@@ -71,16 +71,16 @@ public:
         return Buffer(m_context,data,size,type,std::forward<std::string>(name));
     }
 
-    static Buffer createImage(image& img,buffer_type type, std::string name ="")
+    static Buffer createImage(image& img, buffer_type type, std::string name ="")
     {
         OPTICK_EVENT();
-        size_type width = static_cast<size_type>(img.size.x);
-        size_type height = static_cast<size_type>(img.size.y);
+        size_type width = static_cast<size_type>(img.resolution().x);
+        size_type height = static_cast<size_type>(img.resolution().y);
         size_type depth = 0;
 
         cl_image_format fmt;
 
-        switch(img.format){
+        switch(img.format()){
         case channel_format::eight_bit: fmt.image_channel_data_type = CL_UNORM_INT8; break;
         case channel_format::sixteen_bit: fmt.image_channel_data_type = CL_UNORM_INT16; break;
         case channel_format::float_hdr: fmt.image_channel_data_type = CL_FLOAT;break;
@@ -92,7 +92,7 @@ public:
             }
         }
 
-        switch(img.components)
+        switch(img.components())
         {
         case image_components::grey: fmt.image_channel_order = CL_R; break;
         case image_components::grey_alpha: fmt.image_channel_order = CL_RA; break;
@@ -108,7 +108,7 @@ public:
             }
         }
 
-        return Buffer(m_context,img.get_raw_data<byte>(),width,height,depth,CL_MEM_OBJECT_IMAGE2D,&fmt,type,name);
+        return Buffer(m_context,img.data(),width,height,depth,CL_MEM_OBJECT_IMAGE2D,&fmt,type,name);
     }
 
     static Buffer createImageFromOpenGLImage(uint target,uint texture,buffer_type type, std::string name ="",uint mip_level = 0)

@@ -40,14 +40,32 @@ namespace legion::core
     }
 
     template<typename DataType>
-    inline L_NODISCARD DataType& shared_data_view<DataType>::at(size_type idx)
+    inline shared_data_view<DataType>::operator bool() const noexcept
+    {
+        return m_data ? true : false;
+    }
+
+    template<typename DataType>
+    inline bool shared_data_view<DataType>::operator==(const shared_data_view& other) const noexcept
+    {
+        return m_data == other.m_data && m_offset == other.m_offset && m_size == other.m_size;
+    }
+
+    template<typename DataType>
+    inline bool shared_data_view<DataType>::operator!=(const shared_data_view& other) const noexcept
+    {
+        return !operator==(other);
+    }
+
+    template<typename DataType>
+    inline DataType& shared_data_view<DataType>::at(size_type idx)
     {
         if (idx > m_size) throw std::out_of_range("shared_data_view subscript out of range");
         return *(m_data.get() + m_offset + static_cast<ptrdiff_t>(idx));
     }
 
     template<typename DataType>
-    inline L_NODISCARD const DataType& shared_data_view<DataType>::at(size_type idx) const
+    inline const DataType& shared_data_view<DataType>::at(size_type idx) const
     {
         if (idx > m_size) throw std::out_of_range("shared_data_view subscript out of range");
         return *(m_data.get() + m_offset + static_cast<ptrdiff_t>(idx));
@@ -60,61 +78,61 @@ namespace legion::core
     }
 
     template<typename DataType>
-    inline L_NODISCARD const DataType& shared_data_view<DataType>::operator[](size_type idx) const
+    inline const DataType& shared_data_view<DataType>::operator[](size_type idx) const
     {
         return at(idx);
     }
 
     template<typename DataType>
-    inline L_NODISCARD shared_data_view<DataType>::iterator shared_data_view<DataType>::begin()
+    inline typename shared_data_view<DataType>::iterator shared_data_view<DataType>::begin()
     {
         return m_data.get() + m_offset;
     }
 
     template<typename DataType>
-    inline L_NODISCARD shared_data_view<DataType>::iterator shared_data_view<DataType>::end()
+    inline typename shared_data_view<DataType>::iterator shared_data_view<DataType>::end()
     {
         return begin() + m_size;
     }
 
     template<typename DataType>
-    inline L_NODISCARD DataType* shared_data_view<DataType>::data()
+    inline DataType* shared_data_view<DataType>::data()
     {
         return begin();
     }
 
     template<typename DataType>
-    L_NODISCARD shared_data_view<DataType>::const_iterator shared_data_view<DataType>::begin() const
+    typename shared_data_view<DataType>::const_iterator shared_data_view<DataType>::begin() const
     {
         return m_data.get() + m_offset;
     }
 
     template<typename DataType>
-    L_NODISCARD shared_data_view<DataType>::const_iterator shared_data_view<DataType>::end() const
+    typename shared_data_view<DataType>::const_iterator shared_data_view<DataType>::end() const
     {
         return begin() + m_size;
     }
 
     template<typename DataType>
-    L_NODISCARD const DataType* shared_data_view<DataType>::data() const
+    const DataType* shared_data_view<DataType>::data() const
     {
         return begin();
     }
 
     template<typename DataType>
-    inline L_NODISCARD size_type shared_data_view<DataType>::size() const noexcept
+    inline size_type shared_data_view<DataType>::size() const noexcept
     {
         return m_size;
     }
 
     template<typename DataType>
-    inline L_NODISCARD diff_type shared_data_view<DataType>::offset() const noexcept
+    inline diff_type shared_data_view<DataType>::offset() const noexcept
     {
         return m_offset;
     }
 
     template<typename DataType>
-    inline L_NODISCARD size_type shared_data_view<DataType>::max_size() const noexcept
+    inline size_type shared_data_view<DataType>::max_size() const noexcept
     {
         return m_size;
     }

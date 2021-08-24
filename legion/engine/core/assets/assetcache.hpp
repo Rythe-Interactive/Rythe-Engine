@@ -27,10 +27,10 @@ namespace legion::core::assets
     class AssetCache
     {
         template<typename Asset>
-        friend class AssetLoader<Asset>;
+        friend class AssetLoader;
 
         template<typename Asset>
-        friend struct asset<Asset>;
+        friend struct asset;
 
         using asset_ptr = asset<AssetType>;
         using import_cfg = import_settings<AssetType>;

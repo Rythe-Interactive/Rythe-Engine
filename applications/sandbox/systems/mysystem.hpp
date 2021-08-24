@@ -5,50 +5,64 @@
 ///
 
 #include <core/core.hpp>
-#include <physics/physics.hpp>
 
-using namespace legion;
-using namespace legion::time::literals;
-using namespace legion::physics;
-
-struct my_component { int myVal; };
-
-class MySystem final : public System<MySystem>
+class MySystem final : public lgn::System<MySystem>
 {
 public:
+    auto to_string(lgn::channel_format format)
+    {
+        switch (format)
+        {
+        case lgn::channel_format::eight_bit:
+            return "8bit";
+        case lgn::channel_format::sixteen_bit:
+            return "16bit";
+        case lgn::channel_format::float_hdr:
+            return "hdr";
+        }
+        return "unknown";
+    }
+
+    auto to_string(lgn::image_components components)
+    {
+        switch (components)
+        {
+        case lgn::image_components::grey:
+            return "grey";
+        case lgn::image_components::grey_alpha:
+            return "grey alpha";
+        case lgn::image_components::rgb:
+            return "rgb";
+        case lgn::image_components::rgba:
+            return "rgba";
+        }
+        return "unknown";
+    }
+
     void setup()
     {
-        bindToEvent<events::exit, &MySystem::onExit>();
-        createProcess<&MySystem::physicsUpdate>("Physics", 20_ms);
-    }
+        using namespace legion;
+        auto result = assets::load<image>(fs::view("engine://resources/default/albedo"));
+        if (!result)
+            log::error("{}", result.error());
 
-    void onExit(events::exit& event)
-    {
-        log::debug("Exiting with code: {}", event.exitcode);
-    }
+        if (result.has_warnings())
+            for (auto& warn : result.warnings())
+                log::warn(warn);
 
-    void update(time::span deltaTime)
-    {
-        static ecs::filter<my_component, position> filter;
+        auto val = result.except([](exception& error) {return assets::asset<image>{}; });
 
-        for (auto ent : filter)
+        if(result)
         {
-            ent.get_component<my_component>()->myVal++;
-            position& pos = ent.get_component<position>();
-            pos.x++;
+            auto img = result.value();
+            log::debug("\nname: {}\nid: {}\nresolution: {}\nformat: {}\ncomponents: {}",
+                img.name(), img.id(), img->resolution(), to_string(img->format()), to_string(img->components()));
         }
     }
 
-    void physicsUpdate(time::span deltaTime)
+    void update(lgn::time::span deltaTime)
     {
-        static ecs::filter<my_component, rigidbody> filter;
-
-        queueJobs(filter.size(), [&](id_type jobId)
-            {
-                auto handle = filter[jobId].get_component<velocity>();
-                handle->x--;
-            }
-        ).wait();
+        raiseEvent<lgn::events::exit>();
     }
 };
 

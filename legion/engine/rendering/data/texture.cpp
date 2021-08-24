@@ -210,8 +210,8 @@ namespace legion::rendering
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
 
-        image_handle image = ImageCache::get_handle(name);
-        if (image == invalid_image_handle)
+        assets::asset<image> image = ImageCache::get_handle(name);
+        if (image == invalid_assets::asset<image>)
         {
             log::warn("Image {} doesn't exist.", name);
             return invalid_texture_handle;
@@ -220,13 +220,13 @@ namespace legion::rendering
         return create_texture_from_image(image, settings);
     }
 
-    texture_handle TextureCache::create_texture_from_image(image_handle image, texture_import_settings settings)
+    texture_handle TextureCache::create_texture_from_image(assets::asset<image> image, texture_import_settings settings)
     {
         OPTICK_EVENT();
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
 
-        if (image == invalid_image_handle)
+        if (image == invalid_assets::asset<image>)
         {
             log::warn("Tried to create a texture with an invalid image");
             return invalid_texture_handle;

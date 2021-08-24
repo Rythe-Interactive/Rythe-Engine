@@ -53,7 +53,7 @@ namespace legion::core::assets
         auto result = file.get_filename();
         if (!result)
             return { legion_exception_msg(result.error().what()), result.warnings() };
-        return load(nameHash(name), result.value(), file, import_settings<AssetType>{});
+        return load(nameHash(result.value()), result.value(), file, import_settings<AssetType>{});
     }
 
     template<typename AssetType>
@@ -62,7 +62,7 @@ namespace legion::core::assets
         auto result = file.get_filename();
         if (!result)
             return { legion_exception_msg(result.error().what()), result.warnings() };
-        return load(nameHash(name), result.value(), file, settings);
+        return load(nameHash(result.value()), result.value(), file, settings);
     }
 
     template<typename AssetType>

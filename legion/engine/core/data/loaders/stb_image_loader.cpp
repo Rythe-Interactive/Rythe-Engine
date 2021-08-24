@@ -173,5 +173,6 @@ namespace legion::core
     void stb_image_loader::free(image& asset)
     {
         stbi_image_free(asset.data());
+        detail::_destroy_impl(asset);
     }
 }

@@ -52,8 +52,10 @@ namespace legion::core
 
         data_view& operator=(data_view&& other) noexcept;
 
-        L_NODISCARD bool operator==(const data_view& other) noexcept;
-        L_NODISCARD bool operator!=(const data_view& other) noexcept;
+        L_NODISCARD operator bool() const noexcept;
+
+        L_NODISCARD bool operator==(const data_view& other) const noexcept;
+        L_NODISCARD bool operator!=(const data_view& other) const noexcept;
 
         /**@brief gets reference to the value at index idx
          * checks if the index is valid before returning and throws and std::out_of_range exception if it is not

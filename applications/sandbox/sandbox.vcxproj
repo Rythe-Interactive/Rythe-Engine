@@ -123,6 +123,7 @@
     </ClInclude>
     <ClInclude Include="systems\examplesystem.hpp" />
     <ClInclude Include="systems\gui_test.hpp" />
+    <ClInclude Include="systems\mysystem.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="data\pp_blur.hpp" />
     <ClInclude Include="systems\simplecameracontroller.hpp" />

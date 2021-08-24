@@ -611,5 +611,6 @@
     <None Include="assets\assets.inl" />
     <None Include="containers\data_view.inl" />
     <None Include="containers\shared_data_view.inl" />
+    <None Include="data\image.inl" />
   </ItemGroup>
 </Project>

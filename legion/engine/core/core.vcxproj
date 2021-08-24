@@ -584,6 +584,7 @@ del /q ".\xcopyexclude"</Command>
     <None Include="common\hash.inl" />
     <None Include="containers\data_view.inl" />
     <None Include="containers\shared_data_view.inl" />
+    <None Include="data\image.inl" />
     <None Include="ecs\archetype\archetype.inl" />
     <None Include="ecs\containers\component_pool.inl" />
     <None Include="ecs\filters\filterregistry.inl" />
