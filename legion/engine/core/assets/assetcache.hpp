@@ -37,22 +37,39 @@ namespace legion::core::assets
         using loader_type = AssetLoader<AssetType>;
 
     private:
-        static std::unordered_map<id_type, AssetType> m_cache;
-        static std::unordered_map<id_type, detail::asset_info> m_info;
+        struct data
+        {
+            std::unordered_map<id_type, AssetType> m_cache;
+            std::unordered_map<id_type, detail::asset_info> m_info;
 
-        static std::vector<std::unique_ptr<loader_type>> m_loaders;
+            std::vector<std::unique_ptr<loader_type>> m_loaders;
+            std::unordered_map<id_type, id_type> m_loaderIds;
 
-        static bool hasLoaders() noexcept;
+            data() = default;
+            ~data();
+        };
+
+        static data m_data;
 
         template<typename... Args>
         static common::result<asset_ptr> createInternal(id_type nameHash, const std::string& name, id_type loaderId, Args&&... args);
 
         static const detail::asset_info& info(id_type nameHash);
 
+        static common::result<asset_ptr> retry_load(common::result<asset<AssetType>> previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
+
     public:
+        template<typename LoaderType>
+        static bool hasLoader();
+
+        static bool hasLoaders() noexcept;
+
         static void addLoader(std::unique_ptr<loader_type>&& loader);
         template<typename LoaderType, typename... Arguments>
         static void addLoader(Arguments&&... args);
+
+        template<typename LoaderType, typename... Arguments>
+        static asset_ptr createAsLoader(id_type nameHash, const std::string& name, Arguments&&... args);
 
         static common::result<asset_ptr> load(const fs::view& file);
         static common::result<asset_ptr> load(const fs::view& file, const import_cfg& settings);

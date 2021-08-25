@@ -44,15 +44,15 @@ namespace legion::core::common
         result(const result& src) : m_handled(src.m_handled), m_succeeded(src.m_succeeded), m_warnings(src.m_warnings)
         {
             if (src.m_succeeded)
-                m_success = src.m_succeeded;
+                m_success = src.m_success;
             else
                 m_error = src.m_error;
         }
 
-        result(result&& src) : m_handled(std::move(src.m_handled)), m_succeeded(std::move(src.m_succeeded)), m_warnings(std::move(src.m_warnings))
+        result(result&& src) : m_handled(src.m_handled), m_succeeded(src.m_succeeded), m_warnings(std::move(src.m_warnings))
         {
             if (src.m_succeeded)
-                m_success = std::move(src.m_succeeded);
+                m_success = std::move(src.m_success);
             else
                 m_error = std::move(src.m_error);
         }
@@ -112,10 +112,10 @@ namespace legion::core::common
         operator error_type() { return error(); }
         operator error_type() const { return error(); }
 
-        success_type& operator*() { return *m_success; }
-        const success_type& operator*() const { return *m_success; }
-        success_type* operator->() { return &*m_success; }
-        const success_type* operator->() const { return &*m_success; }
+        success_type& operator*() { return m_success; }
+        const success_type& operator*() const { return m_success; }
+        success_type* operator->() { return &m_success; }
+        const success_type* operator->() const { return &m_success; }
 
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
         size_t warning_count() const noexcept { return m_warnings.size(); }

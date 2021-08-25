@@ -19,8 +19,9 @@ public:
             return "16bit";
         case lgn::channel_format::float_hdr:
             return "hdr";
+        default:
+            return "unknown";
         }
-        return "unknown";
     }
 
     auto to_string(lgn::image_components components)
@@ -35,8 +36,9 @@ public:
             return "rgb";
         case lgn::image_components::rgba:
             return "rgba";
+        default:
+            return "unknown";
         }
-        return "unknown";
     }
 
     void setup()
@@ -50,7 +52,7 @@ public:
             for (auto& warn : result.warnings())
                 log::warn(warn);
 
-        auto val = result.except([](exception& error) {return assets::asset<image>{}; });
+        L_MAYBEUNUSED auto val = result.except([](L_MAYBEUNUSED exception& error) {return assets::invalid_asset<image>; });
 
         if(result)
         {
@@ -60,7 +62,7 @@ public:
         }
     }
 
-    void update(lgn::time::span deltaTime)
+    void update(L_MAYBEUNUSED lgn::time::span deltaTime)
     {
         raiseEvent<lgn::events::exit>();
     }

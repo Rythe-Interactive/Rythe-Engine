@@ -189,12 +189,6 @@ namespace legion::core
     {
     }
 
-    image::~image()
-    {
-        if (m_data)
-            delete m_data.data();
-    }
-
     const math::ivec2& image::resolution() const noexcept
     {
         return m_resolution;

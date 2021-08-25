@@ -1,7 +1,7 @@
 #pragma once
 #include <core/engine/module.hpp>
 #include <core/data/importers/mesh_importers.hpp>
-#include <core/data/importers/image_importers.hpp>
+#include <core/data/loaders/stb_image_loader.hpp>
 #include <core/filesystem/provider_registry.hpp>
 #include <core/filesystem/basic_resolver.hpp>
 #include <core/compute/context.hpp>
@@ -26,8 +26,8 @@ namespace legion::core
             filesystem::AssetImporter::reportConverter<gltf_binary_mesh_loader>(".glb");
             filesystem::AssetImporter::reportConverter<gltf_ascii_mesh_loader>(".gltf");
 
-            for (cstring extension : stb_image_loader::extensions)
-                filesystem::AssetImporter::reportConverter<stb_image_loader>(extension);
+            assets::AssetCache<image>::addLoader<gltf_faux_image_loader>();
+            assets::AssetCache<image>::addLoader<stb_image_loader>();
 
             compute::Context::init();
 

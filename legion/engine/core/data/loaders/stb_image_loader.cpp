@@ -11,7 +11,7 @@ namespace legion::core
 {
     namespace detail
     {
-        bool stbi_test(const byte* ptr, size_type size)
+        static bool stbi_test(const byte* ptr, size_type size)
         {
             stbi__context s;
             stbi__start_mem(&s, ptr, static_cast<int>(size));
@@ -54,11 +54,9 @@ namespace legion::core
                 stbi__tga_test(&s) ||
 #endif
                 false;
-
-            return false;
         }
 
-        data_view<byte> load_8bit(const byte_vec& data, math::ivec2& size, image_components& components, const assets::import_settings<image>& settings)
+        static data_view<byte> load_8bit(const byte_vec& data, math::ivec2& size, image_components& components, const assets::import_settings<image>& settings)
         {
             byte* resultData = stbi_load_from_memory(
                 data.data(), static_cast<int>(data.size()),
@@ -74,7 +72,7 @@ namespace legion::core
             return { resultData, dataSize };
         }
 
-        data_view<byte> load_16bit(const byte_vec& data, math::ivec2& size, image_components& components, const assets::import_settings<image>& settings)
+        static data_view<byte> load_16bit(const byte_vec& data, math::ivec2& size, image_components& components, const assets::import_settings<image>& settings)
         {
             uint16* resultData = stbi_load_16_from_memory(
                 data.data(), static_cast<int>(data.size()),
@@ -90,7 +88,7 @@ namespace legion::core
             return { reinterpret_cast<byte*>(resultData), dataSize };
         }
 
-        data_view<byte> load_hdr(const byte_vec& data, math::ivec2& size, image_components& components, const assets::import_settings<image>& settings)
+        static data_view<byte> load_hdr(const byte_vec& data, math::ivec2& size, image_components& components, const assets::import_settings<image>& settings)
         {
             float* resultData = stbi_loadf_from_memory(
                 data.data(), static_cast<int>(data.size()),
@@ -139,12 +137,21 @@ namespace legion::core
 
         if (settings.detectFormat)
         {
-            if (stbi_is_16_bit_from_memory(data.data(), data.size()))
+            if (stbi_is_16_bit_from_memory(data.data(), static_cast<int>(data.size())))
+            {
+                format = channel_format::sixteen_bit;
                 imageData = detail::load_16bit(data, size, components, settings);
-            else if (stbi_is_hdr_from_memory(data.data(), data.size()))
+            }
+            else if (stbi_is_hdr_from_memory(data.data(), static_cast<int>(data.size())))
+            {
+                format = channel_format::float_hdr;
                 imageData = detail::load_hdr(data, size, components, settings);
+            }
             else
+            {
+                format = channel_format::eight_bit;
                 imageData = detail::load_8bit(data, size, components, settings);
+            }
         }
         else
         {
@@ -173,6 +180,5 @@ namespace legion::core
     void stb_image_loader::free(image& asset)
     {
         stbi_image_free(asset.data());
-        detail::_destroy_impl(asset);
     }
 }

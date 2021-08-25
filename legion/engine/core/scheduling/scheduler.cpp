@@ -1,4 +1,5 @@
 #include <core/scheduling/scheduler.hpp>
+#include <core/events/events.hpp>
 
 namespace legion::core::scheduling
 {
@@ -37,6 +38,11 @@ namespace legion::core::scheduling
         time::timer clock;
         time::span timeBuffer;
         time::span sleepTime;
+
+        events::EventBus::bindToEvent<events::exit>([](events::exit& evnt)
+            {
+                scheduling::Scheduler::exit(evnt.exitcode);
+            });
 
         while (!m_exit.load(std::memory_order_relaxed))
         {
@@ -224,6 +230,13 @@ namespace legion::core::scheduling
 
     void Scheduler::exit(int exitCode)
     {
+        if (m_exit.load(std::memory_order_relaxed))
+            return;
+
+        log::undecoratedInfo("=========================\n"
+            "| Shutting down engine. |\n"
+            "=========================");
+
         m_exitCode = exitCode;
         m_exit.store(true, std::memory_order_release);
     }

@@ -44,14 +44,16 @@ namespace legion::core::detail
 
     static assets::asset<image> loadGLTFImage(const tinygltf::Image& img)
     {
-        auto handle = assets::get<image>(img.name);
+        auto hash = nameHash(img.name);
+
+        auto handle = assets::get<image>(hash);
         if (handle)
             return handle;
 
         byte* imgData = new byte[img.image.size()]; // Image will delete upon destruction.
         memcpy(imgData, img.image.data(), img.image.size());
 
-        return assets::create<image>(img.name,
+        return assets::AssetCache<image>::createAsLoader<gltf_faux_image_loader>(hash, img.name,
             // Image constructor parameters.
             math::ivec2(img.width, img.height),
             img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE ? channel_format::eight_bit : img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT ? channel_format::sixteen_bit : channel_format::float_hdr,
@@ -408,35 +410,35 @@ namespace legion::core
             if (!srcMat.diffuse_texname.empty())
                 material.albedoMap = assets::load<image>(
                     filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.diffuse_texname)
-                    ).except([](exception& error) { return assets::asset<image>{}; });
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
             material.metallicValue = srcMat.metallic;
             if (!srcMat.metallic_texname.empty())
                 material.metallicMap = assets::load<image>(
                     filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.metallic_texname)
-                    ).except([](exception& error) { return assets::asset<image>{}; });
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
             material.roughnessValue = srcMat.roughness;
             if (!srcMat.roughness_texname.empty())
                 material.roughnessMap = assets::load<image>(
                     filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.roughness_texname)
-                    ).except([](exception& error) { return assets::asset<image>{}; });
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
             material.emissiveValue = math::color(srcMat.emission[0], srcMat.emission[1], srcMat.emission[2]);
             if (!srcMat.emissive_texname.empty())
                 material.emissiveMap = assets::load<image>(
                     filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.emissive_texname)
-                    ).except([](exception& error) { return assets::asset<image>{}; });
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
             if (!srcMat.normal_texname.empty())
                 material.normalMap = assets::load<image>(
                     filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.normal_texname)
-                    ).except([](exception& error) { return assets::asset<image>{}; });
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
             if (!srcMat.bump_texname.empty())
                 material.heightMap = assets::load<image>(
                     filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.bump_texname)
-                    ).except([](exception& error) { return assets::asset<image>{}; });
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
         }
 
         // Get all the vertex and composition data.

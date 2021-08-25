@@ -12,6 +12,8 @@ namespace legion::core::assets
     template<typename AssetType>
     class AssetLoader
     {
+        template<typename AssetType>
+        friend class AssetCache;
     public:
         using asset_ptr = asset<AssetType>;
         using import_cfg = import_settings<AssetType>;
@@ -30,7 +32,7 @@ namespace legion::core::assets
         virtual common::result<asset_ptr> loadAsync(id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings, progress_type& progress)
         {
             auto res = load(nameHash, name, file, settings);
-            progress.complete(ptr);
+            progress.complete(res);
             return res;
         }
 

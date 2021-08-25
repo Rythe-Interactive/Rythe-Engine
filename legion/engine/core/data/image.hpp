@@ -35,26 +35,14 @@ namespace legion::core
         depth_stencil = 7
     };
 
-    struct image;
-
-    namespace detail
-    {
-        void _destroy_impl(image& img);
-    }
-
     /**@class image
      * @brief Object encapsulating the binary representation of an image.
      */
     struct image final
     {
-        friend void detail::_destroy_impl(image& img);
-
         image(const math::ivec2& res, channel_format format, image_components comp, const data_view<byte>& data);
 
-        MOVE_FUNCS_NOEXCEPT(image);
-        COPY_FUNCS_NOEXCEPT(image);
-
-        ~image();
+        NO_DEFAULT_CTOR_RULE5_NOEXCEPT(image);
 
         const math::ivec2& resolution() const noexcept;
         const channel_format& format() const noexcept;
@@ -97,14 +85,6 @@ namespace legion::core
         mutable std::optional<std::vector<math::color>> m_colors = std::nullopt;
     };
 
-    namespace detail
-    {
-        void _destroy_impl(image& img)
-        {
-            img.m_data = data_view<byte>(nullptr);
-        }
-    }
-
     namespace assets
     {
         /**@class import_settings<image>
@@ -119,12 +99,12 @@ namespace legion::core
             channel_format fileFormat;
             image_components components;
 
-            import_settings() noexcept :
-                detectFormat(true),
-                detectComponents(true),
-                flipVertical(true),
-                fileFormat(channel_format::eight_bit),
-                components(image_components::rgba)
+            constexpr import_settings(bool dform = true, bool dcomp = true, bool flipv = true, channel_format format = channel_format::eight_bit, image_components comp = image_components::rgba) noexcept :
+                detectFormat(dform),
+                detectComponents(dcomp),
+                flipVertical(flipv),
+                fileFormat(format),
+                components(comp)
             {}
 
             NO_DEFAULT_CTOR_RULE5_NOEXCEPT(import_settings);

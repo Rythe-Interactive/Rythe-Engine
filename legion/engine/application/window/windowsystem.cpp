@@ -268,12 +268,12 @@ namespace legion::application
     void WindowSystem::setup()
     {
         using namespace filesystem::literals;
-        m_defaultIcon = ImageCache::create_image("Legion Icon", "engine://resources/legion/icon"_view, { channel_format::eight_bit, image_components::rgba, false });
+        m_defaultIcon = assets::load<image>("Legion Icon", "engine://resources/legion/icon"_view, assets::import_settings<image>{ true, true, false });
 
         bindToEvent<events::exit, &WindowSystem::onExit>();
 
         if (m_creationRequests.empty() || (std::find_if(m_creationRequests.begin(), m_creationRequests.end(), [](window_request& r) { return r.entityId == ecs::world_entity_id; }) == m_creationRequests.end()))
-            requestWindow(ecs::world, math::ivec2(1360, 768), "LEGION Engine", invalid_assets::asset<image>, nullptr, nullptr, 1); // Create the request for the main window.
+            requestWindow(ecs::world, math::ivec2(1360, 768), "LEGION Engine", assets::invalid_asset<image>, nullptr, nullptr, 1); // Create the request for the main window.
 
         if (!ContextHelper::initialized()) // Initialize context.
             if (!ContextHelper::init())
@@ -338,22 +338,18 @@ namespace legion::application
                 request.name = "LEGION Engine";
 
             assets::asset<image> icon = request.icon;
-            if (icon == invalid_assets::asset<image>)
+            if (icon == assets::invalid_asset<image>)
                 icon = m_defaultIcon;
 
             ContextHelper::windowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 
             window win = ContextHelper::createWindow(request.size, request.name.c_str(), request.monitor, request.share);
 
-            auto [lock, image] = icon.get_raw_image();
+            if (icon->components() == image_components::rgba && icon->format() == channel_format::eight_bit)
             {
-                async::readonly_guard guard(lock);
-                if (image.components == image_components::rgba && image.format == channel_format::eight_bit)
-                {
-                    GLFWimage icon{ image.size.x, image.size.y, image.get_raw_data<byte>() };
+                GLFWimage iconImg{ icon->resolution().x, icon->resolution().y, icon->data() };
 
-                    ContextHelper::setWindowIcon(win, 1, &icon);
-                }
+                ContextHelper::setWindowIcon(win, 1, &iconImg);
             }
 
             win.m_title = request.name;
@@ -502,15 +498,13 @@ namespace legion::application
                 continue;
             }
 
-            auto [lock, image] = request.icon.get_raw_image();
-            async::readonly_guard guard(lock);
-            if (image.components != image_components::rgba || image.format != channel_format::eight_bit)
+            if (request.icon->components() != image_components::rgba || request.icon->format() != channel_format::eight_bit)
             {
-                log::warn("Icon change denied, image {} has the wrong format. The needed format is 4 channels with 8 bits per channel.", request.icon.id);
+                log::warn("Icon change denied, image {} has the wrong format. The needed format is 4 channels with 8 bits per channel.", request.icon.name());
                 continue;
             }
 
-            GLFWimage icon{ image.size.x, image.size.y, image.get_raw_data<byte>() };
+            GLFWimage icon{ request.icon->resolution().x, request.icon->resolution().y, request.icon->data() };
 
             ContextHelper::setWindowIcon(handle->handle, 1, &icon);
         }
