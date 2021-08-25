@@ -168,7 +168,6 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="core.hpp" />
     <ClInclude Include="data\data.hpp" />
     <ClInclude Include="data\image.hpp" />
-    <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="data\loaders\stb_image_loader.hpp" />
     <ClInclude Include="data\mesh.hpp" />

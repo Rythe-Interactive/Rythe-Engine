@@ -394,7 +394,6 @@
     <ClInclude Include="compute\detail\cl_include.hpp" />
     <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="data\image.hpp" />
-    <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
