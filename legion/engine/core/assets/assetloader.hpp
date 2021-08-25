@@ -12,7 +12,7 @@ namespace legion::core::assets
     template<typename AssetType>
     class AssetLoader
     {
-        template<typename AssetType>
+        template<typename T>
         friend class AssetCache;
     public:
         using asset_ptr = asset<AssetType>;

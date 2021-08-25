@@ -29,7 +29,7 @@ namespace legion::core
         using const_ptr_type = const DataType*;
 
         using const_value_type = const DataType;
-        using const_iterator =  const DataType*;
+        using const_iterator = const DataType*;
 
         data_view() noexcept;
         data_view(std::nullptr_t) noexcept;
@@ -122,8 +122,17 @@ namespace legion::core
         data_view(const data_view& other) noexcept : pointer<void>({ other.ptr }) {}
         data_view(data_view&& other) noexcept : pointer<void>({ other.ptr }) {}
 
-        data_view& operator=(const data_view& other) noexcept { ptr = other.ptr; }
-        data_view& operator=(data_view&& other) noexcept { ptr = other.ptr; }
+        data_view& operator=(const data_view& other) noexcept
+        {
+            ptr = other.ptr;
+            return *this;
+        }
+
+        data_view& operator=(data_view&& other) noexcept
+        {
+            ptr = other.ptr;
+            return *this;
+        }
 
         L_NODISCARD void* data() noexcept { return ptr; }
         L_NODISCARD const void* data() const noexcept { return ptr; }
@@ -139,8 +148,17 @@ namespace legion::core
         data_view(const data_view& other) noexcept : pointer<const void>({ other.ptr }) {}
         data_view(data_view&& other) noexcept : pointer<const void>({ other.ptr }) {}
 
-        data_view& operator=(const data_view& other) noexcept { ptr = other.ptr; }
-        data_view& operator=(data_view&& other) noexcept { ptr = other.ptr; }
+        data_view& operator=(const data_view& other) noexcept
+        {
+            ptr = other.ptr;
+            return *this;
+        }
+
+        data_view& operator=(data_view&& other) noexcept
+        {
+            ptr = other.ptr;
+            return *this;
+        }
 
         L_NODISCARD const void* data() const noexcept { return ptr; }
     };

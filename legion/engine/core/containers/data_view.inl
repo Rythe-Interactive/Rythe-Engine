@@ -15,7 +15,7 @@ namespace legion::core
     inline data_view<DataType>::data_view(std::vector<value_type>& vec, diff_type offset)
         : data_view(vec.data(), vec.size() - offset, offset)
     {
-        if (offset > str.size()) throw std::out_of_range("data_view constructed with out of range offset");
+        if (offset > vec.size()) throw std::out_of_range("data_view constructed with out of range offset");
     }
 
     template<typename DataType>
@@ -23,7 +23,7 @@ namespace legion::core
     inline core::data_view<DataType>::data_view(std::array<value_type, N>& arr, diff_type offset)
         : data_view(arr.data(), arr.size() - offset, offset)
     {
-        if (offset > str.size()) throw std::out_of_range("data_view constructed with out of range offset");
+        if (offset > arr.size()) throw std::out_of_range("data_view constructed with out of range offset");
     }
 
     template<typename DataType>
@@ -112,37 +112,37 @@ namespace legion::core
     }
 
     template<typename DataType>
-    inline typename data_view<DataType>::iterator data_view<DataType>::begin()
+    inline typename data_view<DataType>::iterator data_view<DataType>::begin() noexcept
     {
         return m_data + m_offset;
     }
 
     template<typename DataType>
-    inline typename data_view<DataType>::iterator data_view<DataType>::end()
+    inline typename data_view<DataType>::iterator data_view<DataType>::end() noexcept
     {
         return begin() + m_size;
     }
 
     template<typename DataType>
-    inline L_ALWAYS_INLINE DataType* data_view<DataType>::data()
+    inline L_ALWAYS_INLINE DataType* data_view<DataType>::data() noexcept
     {
         return begin();
     }
 
     template<typename DataType>
-    inline typename data_view<DataType>::const_iterator data_view<DataType>::begin() const
+    inline typename data_view<DataType>::const_iterator data_view<DataType>::begin() const noexcept
     {
         return m_data + m_offset;
     }
 
     template<typename DataType>
-    inline typename data_view<DataType>::const_iterator data_view<DataType>::end() const
+    inline typename data_view<DataType>::const_iterator data_view<DataType>::end() const noexcept
     {
         return begin() + m_size;
     }
 
     template<typename DataType>
-    inline L_ALWAYS_INLINE const DataType* data_view<DataType>::data() const
+    inline L_ALWAYS_INLINE const DataType* data_view<DataType>::data() const noexcept
     {
         return begin();
     }

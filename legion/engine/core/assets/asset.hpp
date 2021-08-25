@@ -11,7 +11,7 @@ namespace legion::core::assets
 
         constexpr asset(AssetType* p, id_type id) noexcept : pointer<AssetType>({ p }), m_id(id) {}
 
-        constexpr bool operator==(const asset& other) const noexcept { return m_id == other.m_id && ptr == other.ptr; }
+        constexpr bool operator==(const asset& other) const noexcept { return m_id == other.m_id && this->ptr == other.ptr; }
         constexpr bool operator!=(const asset& other) const noexcept { return !operator==(other); }
 
         RULE_OF_5_NOEXCEPT(asset);

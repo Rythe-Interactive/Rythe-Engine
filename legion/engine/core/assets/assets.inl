@@ -372,13 +372,13 @@ namespace legion::core::assets
     template<typename AssetType>
     inline L_ALWAYS_INLINE asset<AssetType> asset<AssetType>::copy(const std::string& name) const
     {
-        return AssetCache<AssetType>::create(name, *ptr);
+        return AssetCache<AssetType>::create(name, *this->ptr);
     }
 
     template<typename AssetType>
     inline L_ALWAYS_INLINE asset<AssetType> asset<AssetType>::copy(id_type nameHash, const std::string& name) const
     {
-        return AssetCache<AssetType>::create(nameHash, name, *ptr);
+        return AssetCache<AssetType>::create(nameHash, name, *this->ptr);
     }
 
 }
