@@ -142,7 +142,7 @@ namespace legion::core::common
             error_type m_error;
         };
         bool m_succeeded : 1;
-        bool m_handled : 1;
+        mutable bool m_handled : 1;
         warning_list m_warnings;
     };
 
