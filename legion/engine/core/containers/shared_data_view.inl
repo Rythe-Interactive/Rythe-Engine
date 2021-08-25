@@ -84,37 +84,37 @@ namespace legion::core
     }
 
     template<typename DataType>
-    inline typename shared_data_view<DataType>::iterator shared_data_view<DataType>::begin()
+    inline typename shared_data_view<DataType>::iterator shared_data_view<DataType>::begin() noexcept
     {
         return m_data.get() + m_offset;
     }
 
     template<typename DataType>
-    inline typename shared_data_view<DataType>::iterator shared_data_view<DataType>::end()
+    inline typename shared_data_view<DataType>::iterator shared_data_view<DataType>::end() noexcept
     {
         return begin() + m_size;
     }
 
     template<typename DataType>
-    inline DataType* shared_data_view<DataType>::data()
+    inline DataType* shared_data_view<DataType>::data() noexcept
     {
         return begin();
     }
 
     template<typename DataType>
-    typename shared_data_view<DataType>::const_iterator shared_data_view<DataType>::begin() const
+    typename shared_data_view<DataType>::const_iterator shared_data_view<DataType>::begin() const noexcept
     {
         return m_data.get() + m_offset;
     }
 
     template<typename DataType>
-    typename shared_data_view<DataType>::const_iterator shared_data_view<DataType>::end() const
+    typename shared_data_view<DataType>::const_iterator shared_data_view<DataType>::end() const noexcept
     {
         return begin() + m_size;
     }
 
     template<typename DataType>
-    const DataType* shared_data_view<DataType>::data() const
+    const DataType* shared_data_view<DataType>::data() const noexcept
     {
         return begin();
     }
