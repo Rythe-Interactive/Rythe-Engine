@@ -36,7 +36,7 @@ namespace legion::core
 
         virtual common::result<asset_ptr> load(id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings) override { return legion_exception_msg("Tried to use a faux loader"); }
 
-        virtual void free(image& asset) override { delete asset.data(); }
+        virtual void free(image& asset) override { delete[] asset.data(); }
     };
 
     /**
