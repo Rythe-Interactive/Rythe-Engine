@@ -50,7 +50,7 @@ namespace legion::core::detail
         if (handle)
             return handle;
 
-        byte* imgData = new byte[img.image.size()]; // Image will delete upon destruction.
+        byte* imgData = new byte[img.image.size()]; // faux_gltf_image_loader will delete upon destruction.
         memcpy(imgData, img.image.data(), img.image.size());
 
         return assets::AssetCache<image>::createAsLoader<gltf_faux_image_loader>(hash, img.name,
@@ -424,6 +424,8 @@ namespace legion::core
                     filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.roughness_texname)
                     ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
+            material.metallicRoughnessMap = assets::invalid_asset<image>;
+
             material.emissiveValue = math::color(srcMat.emission[0], srcMat.emission[1], srcMat.emission[2]);
             if (!srcMat.emissive_texname.empty())
                 material.emissiveMap = assets::load<image>(
@@ -434,6 +436,8 @@ namespace legion::core
                 material.normalMap = assets::load<image>(
                     filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.normal_texname)
                     ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
+
+            material.aoMap = assets::invalid_asset<image>;
 
             if (!srcMat.bump_texname.empty())
                 material.heightMap = assets::load<image>(
@@ -653,6 +657,8 @@ namespace legion::core
                             static_cast<size_type>(srcMat.occlusionTexture.index)
                         ].source)
                     ]);
+
+            material.heightMap = assets::invalid_asset<image>;
         }
 
         if (model.scenes.size() <= 0)
@@ -821,6 +827,8 @@ namespace legion::core
                             static_cast<size_type>(srcMat.occlusionTexture.index)
                         ].source)
                     ]);
+
+            material.heightMap = assets::invalid_asset<image>;
         }
 
         if (model.scenes.size() <= 0)

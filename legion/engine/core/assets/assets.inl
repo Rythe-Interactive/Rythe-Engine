@@ -1,5 +1,4 @@
 #include <core/assets/assets.hpp>
-#include "assetcache.hpp"
 #pragma once
 
 namespace legion::core::assets
