@@ -67,10 +67,10 @@ namespace legion::core::common
                     throw m_error;
         }
 
-        success_type&& value()
+        success_type& value()
         {
             if (m_succeeded)
-                return std::move(m_success);
+                return m_success;
             throw m_error;
         }
 
@@ -97,12 +97,12 @@ namespace legion::core::common
             throw std::runtime_error("this result would have been valid!");
         }
 
-        error_type&& error()
+        error_type& error()
         {
             if (!m_succeeded)
             {
                 m_handled = true;
-                return std::move(m_error);
+                return m_error;
             }
             throw std::runtime_error("this result would have been valid!");
         }
@@ -166,9 +166,6 @@ namespace legion::core::common
         result(success_t, warning_list&& w) : m_warnings(w) {}
         result(success_t, const warning_list& w) : m_warnings(w) {}
 
-        result(warning_list&& w) : m_warnings(w) {}
-        result(const warning_list& w) : m_warnings(w) {}
-
         result(error_type&& e) : m_error(e) {}
         result(const error_type& e) : m_error(e) {}
         result(error_type&& e, warning_list&& w) : m_error(e), m_warnings(w) {}
@@ -192,12 +189,12 @@ namespace legion::core::common
             throw std::runtime_error("this result would have been valid!");
         }
 
-        error_type&& error()
+        error_type& error()
         {
             if (m_error)
             {
                 m_handled = true;
-                return std::move(*m_error);
+                return *m_error;
             }
             throw std::runtime_error("this result would have been valid!");
         }
@@ -244,9 +241,6 @@ namespace legion::core::common
         result(error_t, warning_list&& w) : m_warnings(w) {}
         result(error_t, const warning_list& w) : m_warnings(w) {}
 
-        result(warning_list&& w) : m_warnings(w) {}
-        result(const warning_list& w) : m_warnings(w) {}
-
         result(success_type&& s) : m_success(s) {}
         result(const success_type& s) : m_success(s) {}
         result(success_type&& s, warning_list&& w) : m_success(s), m_warnings(w) {}
@@ -266,9 +260,9 @@ namespace legion::core::common
             throw legion_exception_msg("this result is invalid!");
         }
 
-        success_type&& value()
+        success_type& value()
         {
-            if (m_success) return std::move(*m_success);
+            if (m_success) return *m_success;
             throw legion_exception_msg("this result is invalid!");
         }
 
@@ -316,8 +310,14 @@ namespace legion::core::common
         result(result&& src) = default;
         ~result() = default;
 
-        result(warning_list&& w) : m_warnings(w) {}
-        result(const warning_list& w) : m_warnings(w) {}
+        result(bool succeeded, warning_list&& w) : m_succeeded(succeeded), m_warnings(w) {}
+        result(bool succeeded, const warning_list& w) : m_succeeded(succeeded), m_warnings(w) {}
+
+        result(error_t, warning_list&& w) : m_succeeded(false), m_warnings(w) {}
+        result(error_t, const warning_list& w) : m_succeeded(false), m_warnings(w) {}
+
+        result(success_t, warning_list&& w) : m_succeeded(true), m_warnings(w) {}
+        result(success_t, const warning_list& w) : m_succeeded(true), m_warnings(w) {}
 
         operator bool() const noexcept { return m_succeeded; }
         bool operator ==(const valid_t&) const noexcept { return m_succeeded; }

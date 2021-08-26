@@ -9,6 +9,11 @@
 
 namespace legion::core
 {
+    using base = assets::AssetLoader<image>;
+    using asset_ptr = base::asset_ptr;
+    using import_cfg = base::import_cfg;
+    using progress_type = base::progress_type;
+
     namespace detail
     {
         static bool stbi_test(const byte* ptr, size_type size)
@@ -56,7 +61,7 @@ namespace legion::core
                 false;
         }
 
-        static data_view<byte> load_8bit(const byte_vec& data, math::ivec2& size, image_components& components, const assets::import_settings<image>& settings)
+        static data_view<byte> load_8bit(const byte_vec& data, math::ivec2& size, image_components& components, const import_cfg& settings)
         {
             byte* resultData = stbi_load_from_memory(
                 data.data(), static_cast<int>(data.size()),
@@ -72,7 +77,7 @@ namespace legion::core
             return { resultData, dataSize };
         }
 
-        static data_view<byte> load_16bit(const byte_vec& data, math::ivec2& size, image_components& components, const assets::import_settings<image>& settings)
+        static data_view<byte> load_16bit(const byte_vec& data, math::ivec2& size, image_components& components, const import_cfg& settings)
         {
             uint16* resultData = stbi_load_16_from_memory(
                 data.data(), static_cast<int>(data.size()),
@@ -88,7 +93,7 @@ namespace legion::core
             return { reinterpret_cast<byte*>(resultData), dataSize };
         }
 
-        static data_view<byte> load_hdr(const byte_vec& data, math::ivec2& size, image_components& components, const assets::import_settings<image>& settings)
+        static data_view<byte> load_hdr(const byte_vec& data, math::ivec2& size, image_components& components, const import_cfg& settings)
         {
             float* resultData = stbi_loadf_from_memory(
                 data.data(), static_cast<int>(data.size()),
@@ -114,7 +119,7 @@ namespace legion::core
         return detail::stbi_test(result->data(), result->size());
     }
 
-    common::result<stb_image_loader::asset_ptr> stb_image_loader::load(id_type nameHash, const std::string& name, const fs::view& file, const stb_image_loader::import_cfg& settings)
+    common::result<asset_ptr> stb_image_loader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
     {
         OPTICK_EVENT();
 
@@ -174,7 +179,7 @@ namespace legion::core
             }
         }
 
-        return create(nameHash, name, size, format, components, imageData);
+        return create(nameHash, size, format, components, imageData);
     }
 
     void stb_image_loader::free(image& asset)

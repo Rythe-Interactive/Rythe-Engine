@@ -60,6 +60,52 @@ public:
             log::debug("\nname: {}\nid: {}\nresolution: {}\nformat: {}\ncomponents: {}",
                 img.name(), img.id(), img->resolution(), to_string(img->format()), to_string(img->components()));
         }
+
+        auto objR = assets::load<mesh>(fs::view("assets://models/submeshtest.obj"));
+        if (!objR)
+            log::error("{}", objR.error());
+
+        if (objR.has_warnings())
+            for (auto& warn : objR.warnings())
+                log::warn(warn);
+
+        if (objR)
+        {
+            auto msh = objR.value();
+            log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
+                msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
+        }
+
+        auto glbR = assets::load<mesh>(fs::view("assets://models/submeshtest.glb"));
+        if (!glbR)
+            log::error("{}", glbR.error());
+
+        if (glbR.has_warnings())
+            for (auto& warn : glbR.warnings())
+                log::warn(warn);
+
+        if (glbR)
+        {
+            auto msh = glbR.value();
+            log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
+                msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
+        }
+
+        auto gltfR = assets::load<mesh>(fs::view("assets://models/submeshtest.gltf"));
+        if (!gltfR)
+            log::error("{}", gltfR.error());
+
+        if (gltfR.has_warnings())
+            for (auto& warn : gltfR.warnings())
+                log::warn(warn);
+
+        if (gltfR)
+        {
+            auto msh = gltfR.value();
+            log::debug("\nname: {}\nid: {}\nvertex count: {}\ntriangle count: {}\nmaterial count: {}",
+                msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
+        }
+
     }
 
     void update(L_MAYBEUNUSED lgn::time::span deltaTime)

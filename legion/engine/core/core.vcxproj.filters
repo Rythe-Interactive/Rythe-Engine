@@ -14,7 +14,6 @@
     <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="logging\logging.cpp" />
-    <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\Program.cpp" />
@@ -41,6 +40,8 @@
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="events\eventbus.cpp" />
     <ClCompile Include="data\loaders\stb_image_loader.cpp" />
+    <ClCompile Include="data\loaders\obj_mesh_loader.cpp" />
+    <ClCompile Include="data\loaders\gltf_mesh_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -383,7 +384,6 @@
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="data\data.hpp" />
     <ClInclude Include="logging\logging.hpp" />
-    <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
     <ClInclude Include="compute\buffer.hpp" />
     <ClInclude Include="math\color.hpp" />
@@ -447,6 +447,8 @@
     <ClInclude Include="assets\functionalbinds.hpp" />
     <ClInclude Include="data\loaders\stb_image_loader.hpp" />
     <ClInclude Include="containers\shared_data_view.hpp" />
+    <ClInclude Include="data\loaders\obj_mesh_loader.hpp" />
+    <ClInclude Include="data\loaders\gltf_mesh_loader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
