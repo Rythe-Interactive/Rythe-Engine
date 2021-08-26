@@ -21,7 +21,6 @@
     <ClCompile Include="compute\kernel.cpp" />
     <ClCompile Include="compute\high_level\function.cpp" />
     <ClCompile Include="data\image.cpp" />
-    <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="engine\system.cpp" />
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
@@ -41,6 +40,7 @@
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="events\eventbus.cpp" />
+    <ClCompile Include="data\loaders\stb_image_loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -394,7 +394,6 @@
     <ClInclude Include="compute\detail\cl_include.hpp" />
     <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="data\image.hpp" />
-    <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
@@ -446,6 +445,8 @@
     <ClInclude Include="assets\assetloader.hpp" />
     <ClInclude Include="assets\assets.hpp" />
     <ClInclude Include="assets\functionalbinds.hpp" />
+    <ClInclude Include="data\loaders\stb_image_loader.hpp" />
+    <ClInclude Include="containers\shared_data_view.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -606,5 +607,8 @@
     <None Include="time\utils.inl" />
     <None Include="assets\functionalbinds.inl" />
     <None Include="assets\assets.inl" />
+    <None Include="containers\data_view.inl" />
+    <None Include="containers\shared_data_view.inl" />
+    <None Include="data\image.inl" />
   </ItemGroup>
 </Project>

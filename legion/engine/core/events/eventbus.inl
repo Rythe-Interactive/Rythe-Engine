@@ -4,7 +4,7 @@
 namespace legion::core::events
 {
     template<typename event_type, typename... Args CNDOXY(typename)>
-    inline L_ALWAYS_INLINE void EventBus::raiseEvent(Args&&... arguments)
+    inline void EventBus::raiseEvent(Args&&... arguments)
     {
         if (m_eventCallbacks.count(event_type::id))
         {
@@ -22,7 +22,7 @@ namespace legion::core::events
     template<typename event_type CNDOXY(typename)>
     inline L_ALWAYS_INLINE void EventBus::bindToEvent(delegate<void(event_type&)>&& callback)
     {
-        m_eventCallbacks.at(event_type::id).push_back(reinterpret_cast<delegate<void(event_base&)>&&>(callback));
+        m_eventCallbacks.try_emplace(event_type::id).first->second.push_back(reinterpret_cast<delegate<void(event_base&)>&&>(callback));
     }
 
     template<typename event_type CNDOXY(typename)>

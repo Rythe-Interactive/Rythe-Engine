@@ -178,11 +178,11 @@ namespace legion::rendering
         static texture_handle create_texture_from_image(const std::string& name, texture_import_settings settings = default_texture_settings);
 
         /**@brief Create a new texture from an image if a texture with the same name doesn't exist yet.
-         * @param image_handle Image to load from. The identifying name for the texture will be the same as the name of the image.
+         * @param assets::asset<image> Image to load from. The identifying name for the texture will be the same as the name of the image.
          * @param settings Settings to pass on to the import pipeline.
          * @return texture_handle A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails.
          */
-        static texture_handle create_texture_from_image(image_handle image, texture_import_settings settings = default_texture_settings);
+        static texture_handle create_texture_from_image(assets::asset<image> image, texture_import_settings settings = default_texture_settings);
 
         /**@brief Returns a handle to a texture with a certain name. Will return invalid_texture_handle if the requested texture doesn't exist.
          */

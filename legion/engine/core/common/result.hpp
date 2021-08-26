@@ -34,37 +34,37 @@ namespace legion::core::common
         result(const success_type& s, warning_list&& w) : m_success(s), m_succeeded(true), m_warnings(w) {}
         result(const success_type& s, const warning_list& w) : m_success(s), m_succeeded(true), m_warnings(w) {}
 
-        result(error_type&& e) : m_error(e), m_succeeded(false) {}
-        result(const error_type& e) : m_error(e), m_succeeded(false) {}
-        result(error_type&& e, warning_list&& w) : m_error(e), m_succeeded(false), m_warnings(w) {}
-        result(error_type&& e, const warning_list& w) : m_error(e), m_succeeded(false), m_warnings(w) {}
-        result(const error_type& e, warning_list&& w) : m_error(e), m_succeeded(false), m_warnings(w) {}
-        result(const error_type& e, const warning_list& w) : m_error(e), m_succeeded(false), m_warnings(w) {}
+        result(error_type&& e) : m_error(e), m_handled(false), m_succeeded(false) {}
+        result(const error_type& e) : m_error(e), m_handled(false), m_succeeded(false) {}
+        result(error_type&& e, warning_list&& w) : m_error(e), m_handled(false), m_succeeded(false), m_warnings(w) {}
+        result(error_type&& e, const warning_list& w) : m_error(e), m_handled(false), m_succeeded(false), m_warnings(w) {}
+        result(const error_type& e, warning_list&& w) : m_error(e), m_handled(false), m_succeeded(false), m_warnings(w) {}
+        result(const error_type& e, const warning_list& w) : m_error(e), m_handled(false), m_succeeded(false), m_warnings(w) {}
 
-        result(const result& src) : m_succeeded(src.m_succeeded), m_warnings(src.m_warnings)
+        result(const result& src) : m_handled(src.m_handled), m_succeeded(src.m_succeeded), m_warnings(src.m_warnings)
         {
             if (src.m_succeeded)
-                m_success = src.m_succeeded;
+                m_success = src.m_success;
             else
                 m_error = src.m_error;
         }
 
-        result(result&& src) : m_succeeded(std::move(src.m_succeeded)), m_warnings(std::move(src.m_warnings))
+        result(result&& src) : m_handled(src.m_handled), m_succeeded(src.m_succeeded), m_warnings(std::move(src.m_warnings))
         {
             if (src.m_succeeded)
-                m_success = std::move(src.m_succeeded);
+                m_success = std::move(src.m_success);
             else
                 m_error = std::move(src.m_error);
         }
 
         ~result()
         {
+            m_warnings.~vector();
+
             if (m_succeeded)
                 m_success.~success_type();
-            else
-                m_error.~error_type();
-
-            m_warnings.~vector();
+            else if (!m_handled)
+                    throw m_error;
         }
 
         success_type&& value()
@@ -89,13 +89,21 @@ namespace legion::core::common
 
         const error_type& error() const
         {
-            if (!m_succeeded) return m_error;
+            if (!m_succeeded)
+            {
+                m_handled = true;
+                return m_error;
+            }
             throw std::runtime_error("this result would have been valid!");
         }
 
         error_type&& error()
         {
-            if (!m_succeeded) return std::move(m_error);
+            if (!m_succeeded)
+            {
+                m_handled = true;
+                return std::move(m_error);
+            }
             throw std::runtime_error("this result would have been valid!");
         }
 
@@ -104,10 +112,10 @@ namespace legion::core::common
         operator error_type() { return error(); }
         operator error_type() const { return error(); }
 
-        success_type& operator*() { return *m_success; }
-        const success_type& operator*() const { return *m_success; }
-        success_type* operator->() { return &*m_success; }
-        const success_type* operator->() const { return &*m_success; }
+        success_type& operator*() { return m_success; }
+        const success_type& operator*() const { return m_success; }
+        success_type* operator->() { return &m_success; }
+        const success_type* operator->() const { return &m_success; }
 
         bool has_warnings() const noexcept { return !m_warnings.empty(); }
         size_t warning_count() const noexcept { return m_warnings.size(); }
@@ -117,10 +125,13 @@ namespace legion::core::common
         warning_list& warnings() { return m_warnings; }
 
         template<typename Func, typename... Args>
-        auto except(Func&& f, Args&&... args) -> decltype(std::invoke(std::declval<Func>(), std::declval<error_type>(), std::declval<Args>()...))
+        auto except(Func&& f, Args&&... args)
         {
             if (!m_succeeded)
+            {
+                m_handled = true;
                 return std::invoke(std::forward<Func>(f), m_error, std::forward<Args>(args)...);
+            }
             return m_success;
         }
 
@@ -130,7 +141,8 @@ namespace legion::core::common
             success_type m_success;
             error_type m_error;
         };
-        bool m_succeeded;
+        bool m_succeeded : 1;
+        mutable bool m_handled : 1;
         warning_list m_warnings;
     };
 
@@ -144,7 +156,11 @@ namespace legion::core::common
 
         result(const result& src) = default;
         result(result&& src) = default;
-        ~result() = default;
+        ~result()
+        {
+            if (m_error && !m_handled)
+                throw *m_error;
+        }
 
         result(success_t) {}
         result(success_t, warning_list&& w) : m_warnings(w) {}
@@ -168,13 +184,21 @@ namespace legion::core::common
 
         const error_type& error() const
         {
-            if (m_error) return *m_error;
+            if (m_error)
+            {
+                m_handled = true;
+                return *m_error;
+            }
             throw std::runtime_error("this result would have been valid!");
         }
 
         error_type&& error()
         {
-            if (m_error) return std::move(*m_error);
+            if (m_error)
+            {
+                m_handled = true;
+                return std::move(*m_error);
+            }
             throw std::runtime_error("this result would have been valid!");
         }
 
@@ -192,10 +216,14 @@ namespace legion::core::common
         void except(Func&& f, Args&&... args)
         {
             if (m_error)
+            {
+                m_handled = true;
                 std::invoke(std::forward<Func>(f), *m_error, std::forward<Args>(args)...);
+            }
         }
 
     private:
+        mutable bool m_handled = false;
         std::optional<error_type> m_error;
         warning_list m_warnings;
     };
@@ -260,7 +288,7 @@ namespace legion::core::common
         warning_list& warnings() { return m_warnings; }
 
         template<typename Func, typename... Args>
-        auto except(Func&& f, Args&&... args) -> decltype(std::invoke(std::declval<Func>(), std::declval<Args>()...))
+        auto except(Func&& f, Args&&... args)
         {
             if (!m_success)
                 return std::invoke(std::forward<Func>(f), std::forward<Args>(args)...);

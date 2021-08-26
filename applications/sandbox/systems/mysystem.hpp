@@ -5,50 +5,66 @@
 ///
 
 #include <core/core.hpp>
-#include <physics/physics.hpp>
 
-using namespace legion;
-using namespace legion::time::literals;
-using namespace legion::physics;
-
-struct my_component { int myVal; };
-
-class MySystem final : public System<MySystem>
+class MySystem final : public lgn::System<MySystem>
 {
 public:
-    void setup()
+    auto to_string(lgn::channel_format format)
     {
-        bindToEvent<events::exit, &MySystem::onExit>();
-        createProcess<&MySystem::physicsUpdate>("Physics", 20_ms);
-    }
-
-    void onExit(events::exit& event)
-    {
-        log::debug("Exiting with code: {}", event.exitcode);
-    }
-
-    void update(time::span deltaTime)
-    {
-        static ecs::filter<my_component, position> filter;
-
-        for (auto ent : filter)
+        switch (format)
         {
-            ent.get_component<my_component>()->myVal++;
-            position& pos = ent.get_component<position>();
-            pos.x++;
+        case lgn::channel_format::eight_bit:
+            return "8bit";
+        case lgn::channel_format::sixteen_bit:
+            return "16bit";
+        case lgn::channel_format::float_hdr:
+            return "hdr";
+        default:
+            return "unknown";
         }
     }
 
-    void physicsUpdate(time::span deltaTime)
+    auto to_string(lgn::image_components components)
     {
-        static ecs::filter<my_component, rigidbody> filter;
+        switch (components)
+        {
+        case lgn::image_components::grey:
+            return "grey";
+        case lgn::image_components::grey_alpha:
+            return "grey alpha";
+        case lgn::image_components::rgb:
+            return "rgb";
+        case lgn::image_components::rgba:
+            return "rgba";
+        default:
+            return "unknown";
+        }
+    }
 
-        queueJobs(filter.size(), [&](id_type jobId)
-            {
-                auto handle = filter[jobId].get_component<velocity>();
-                handle->x--;
-            }
-        ).wait();
+    void setup()
+    {
+        using namespace legion;
+        auto result = assets::load<image>(fs::view("engine://resources/default/albedo"));
+        if (!result)
+            log::error("{}", result.error());
+
+        if (result.has_warnings())
+            for (auto& warn : result.warnings())
+                log::warn(warn);
+
+        L_MAYBEUNUSED auto val = result.except([](L_MAYBEUNUSED exception& error) {return assets::invalid_asset<image>; });
+
+        if(result)
+        {
+            auto img = result.value();
+            log::debug("\nname: {}\nid: {}\nresolution: {}\nformat: {}\ncomponents: {}",
+                img.name(), img.id(), img->resolution(), to_string(img->format()), to_string(img->components()));
+        }
+    }
+
+    void update(L_MAYBEUNUSED lgn::time::span deltaTime)
+    {
+        raiseEvent<lgn::events::exit>();
     }
 };
 

@@ -42,23 +42,23 @@ namespace legion::core::detail
         }
     };
 
-    static image_handle loadGLTFImage(const tinygltf::Image& img)
+    static assets::asset<image> loadGLTFImage(const tinygltf::Image& img)
     {
-        auto handle = ImageCache::get_handle(img.name);
+        auto hash = nameHash(img.name);
+
+        auto handle = assets::get<image>(hash);
         if (handle)
             return handle;
 
-        image image{};
-        image.name = img.name;
-        image.size.x = img.width;
-        image.size.y = img.height;
-        image.format = img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE ? channel_format::eight_bit : img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT ? channel_format::sixteen_bit : channel_format::float_hdr;
-        image.components = img.component == 1 ? image_components::grey : img.component == 2 ? image_components::grey_alpha : img.component == 3 ? image_components::rgb : image_components::rgba;
-        image.dataSize = img.image.size();
-        image.data = std::make_shared<byte_vec>(image.dataSize);
+        byte* imgData = new byte[img.image.size()]; // faux_gltf_image_loader will delete upon destruction.
+        memcpy(imgData, img.image.data(), img.image.size());
 
-        memcpy(image.data->data(), img.image.data(), img.image.size());
-        return ImageCache::insert_image(std::move(image));
+        return assets::AssetCache<image>::createAsLoader<gltf_faux_image_loader>(hash, img.name,
+            // Image constructor parameters.
+            math::ivec2(img.width, img.height),
+            img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE ? channel_format::eight_bit : img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT ? channel_format::sixteen_bit : channel_format::float_hdr,
+            img.component == 1 ? image_components::grey : img.component == 2 ? image_components::grey_alpha : img.component == 3 ? image_components::rgb : image_components::rgba,
+            data_view<byte>{ imgData, img.image.size(), 0 });
     }
 
     /**
@@ -408,29 +408,41 @@ namespace legion::core
 
             material.albedoValue = math::color(srcMat.diffuse[0], srcMat.diffuse[1], srcMat.diffuse[2]);
             if (!srcMat.diffuse_texname.empty())
-                material.albedoMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.diffuse_texname));
+                material.albedoMap = assets::load<image>(
+                    filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.diffuse_texname)
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
             material.metallicValue = srcMat.metallic;
             if (!srcMat.metallic_texname.empty())
-                material.metallicMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.metallic_texname));
+                material.metallicMap = assets::load<image>(
+                    filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.metallic_texname)
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
             material.roughnessValue = srcMat.roughness;
             if (!srcMat.roughness_texname.empty())
-                material.roughnessMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.roughness_texname));
+                material.roughnessMap = assets::load<image>(
+                    filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.roughness_texname)
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
-            material.metallicRoughnessMap = invalid_image_handle;
+            material.metallicRoughnessMap = assets::invalid_asset<image>;
 
             material.emissiveValue = math::color(srcMat.emission[0], srcMat.emission[1], srcMat.emission[2]);
             if (!srcMat.emissive_texname.empty())
-                material.emissiveMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.emissive_texname));
+                material.emissiveMap = assets::load<image>(
+                    filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.emissive_texname)
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
             if (!srcMat.normal_texname.empty())
-                material.normalMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.normal_texname));
+                material.normalMap = assets::load<image>(
+                    filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.normal_texname)
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
-            material.aoMap = invalid_image_handle;
+            material.aoMap = assets::invalid_asset<image>;
 
             if (!srcMat.bump_texname.empty())
-                material.heightMap = ImageCache::create_image(filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.bump_texname));
+                material.heightMap = assets::load<image>(
+                    filesystem::view(settings.contextFolder.get_virtual_path() + srcMat.bump_texname)
+                    ).except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
         }
 
         // Get all the vertex and composition data.
@@ -646,7 +658,7 @@ namespace legion::core
                         ].source)
                     ]);
 
-            material.heightMap = invalid_image_handle;
+            material.heightMap = assets::invalid_asset<image>;
         }
 
         if (model.scenes.size() <= 0)
@@ -816,7 +828,7 @@ namespace legion::core
                         ].source)
                     ]);
 
-            material.heightMap = invalid_image_handle;
+            material.heightMap = assets::invalid_asset<image>;
         }
 
         if (model.scenes.size() <= 0)

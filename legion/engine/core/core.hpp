@@ -21,6 +21,7 @@
 #include <core/serialization/serializationutil.hpp>
 
 #include <core/filesystem/filesystem.hpp>
+#include <core/assets/assets.hpp>
 #include <core/data/data.hpp>
 
 #include <core/defaults/defaultcomponents.hpp>

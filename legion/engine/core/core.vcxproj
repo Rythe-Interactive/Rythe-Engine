@@ -161,14 +161,15 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="containers\iterator_tricks.hpp" />
     <ClInclude Include="containers\hashed_sparse_set.hpp" />
     <ClInclude Include="containers\pointer.hpp" />
+    <ClInclude Include="containers\shared_data_view.hpp" />
     <ClInclude Include="containers\sparse_map.hpp" />
     <ClInclude Include="containers\sparse_set.hpp" />
     <ClInclude Include="containers\vector_view.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="data\data.hpp" />
     <ClInclude Include="data\image.hpp" />
-    <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="data\importers\mesh_importers.hpp" />
+    <ClInclude Include="data\loaders\stb_image_loader.hpp" />
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="common\assert.hpp" />
     <ClInclude Include="defaults\coremodule.hpp">
@@ -542,8 +543,8 @@ del /q ".\xcopyexclude"</Command>
     <ClCompile Include="compute\high_level\function.cpp" />
     <ClCompile Include="compute\kernel.cpp" />
     <ClCompile Include="data\image.cpp" />
-    <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="data\importers\mesh_importers.cpp" />
+    <ClCompile Include="data\loaders\stb_image_loader.cpp" />
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="ecs\filters\filterregistry.cpp" />
     <ClCompile Include="ecs\handles\entity.cpp" />
@@ -579,6 +580,9 @@ del /q ".\xcopyexclude"</Command>
     <None Include="assets\assets.inl" />
     <None Include="assets\functionalbinds.inl" />
     <None Include="common\hash.inl" />
+    <None Include="containers\data_view.inl" />
+    <None Include="containers\shared_data_view.inl" />
+    <None Include="data\image.inl" />
     <None Include="ecs\archetype\archetype.inl" />
     <None Include="ecs\containers\component_pool.inl" />
     <None Include="ecs\filters\filterregistry.inl" />

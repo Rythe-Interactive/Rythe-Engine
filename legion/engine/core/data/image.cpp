@@ -3,394 +3,406 @@
 
 namespace legion::core
 {
-    std::unordered_map<id_type, uint> image::m_refs;
-    std::mutex image::m_refsLock;
-
-    const std::vector<math::color> ImageCache::m_nullColors;
-    async::rw_spinlock ImageCache::m_nullLock;
-
-    std::unordered_map<id_type, std::unique_ptr<std::pair<async::rw_spinlock, image>>> ImageCache::m_images;
-    async::rw_spinlock ImageCache::m_imagesLock;
-    std::unordered_map<id_type, std::unique_ptr<std::vector<math::color>>> ImageCache::m_colors;
-    async::rw_spinlock ImageCache::m_colorsLock;
-
-    void image::apply_raw(bool lazyApply)
+    common::result<void> image::_apply_raw_impl() const
     {
-        OPTICK_EVENT();
+        m_colors->reserve(static_cast<size_type>(m_resolution.x * m_resolution.y));
+
+        size_type channelSize = static_cast<size_type>(m_format);
+        size_type colorSize = static_cast<size_type>(m_components) * channelSize;
+
+        byte* end = m_data.end();
+        for (auto colorPtr = m_data.begin(); colorPtr < end; colorPtr += colorSize)
         {
-            async::readwrite_guard guard(ImageCache::m_colorsLock);
-            ImageCache::m_colors.erase(m_id);
-        }
-        if (!lazyApply)
-            ImageCache::process_raw(m_id);
-    }
+            math::color color;
 
-    const std::vector<math::color>& image::read_colors()
-    {
-        OPTICK_EVENT();
-        return ImageCache::read_colors(m_id);
-    }
-
-    size_type image::data_size()
-    {
-        OPTICK_EVENT();
-        return dataSize;
-    }
-
-    math::ivec2 image_handle::size()
-    {
-        OPTICK_EVENT();
-        auto [lock, image] = ImageCache::get_raw_image(id);
-        async::readonly_guard guard(lock);
-        return image.size;
-    }
-
-    const std::vector<math::color>& image_handle::read_colors()
-    {
-        OPTICK_EVENT();
-        return ImageCache::read_colors(id);
-    }
-
-    std::pair<async::rw_spinlock&, image&> image_handle::get_raw_image()
-    {
-        OPTICK_EVENT();
-        return ImageCache::get_raw_image(id);
-    }
-
-    void image_handle::destroy()
-    {
-        OPTICK_EVENT();
-        ImageCache::destroy_image(id);
-    }
-
-    const std::vector<math::color>& ImageCache::process_raw(id_type id)
-    {
-        OPTICK_EVENT();
-        {
-            async::readonly_guard guard(m_imagesLock);
-            if (!m_images.count(id))
-                return m_nullColors;
-        }
-
-        auto [lock, image] = get_raw_image(id);
-
-        std::vector<math::color>* ptr = new std::vector<math::color>();
-        auto& output = *ptr;
-
-        {
-            async::readonly_guard guard(lock);
-
-            output.reserve(static_cast<size_type>(image.size.x * image.size.y));
-
-            byte* start = image.data->data();
-            byte* end = image.data->data() + image.dataSize;
-            size_type channelSize = static_cast<size_type>(image.format);
-            size_type colorSize = static_cast<size_type>(image.components) * channelSize;
-            for (byte* colorPtr = start; colorPtr < end; colorPtr += colorSize)
+            switch (m_components)
             {
-                math::color color;
-
-                switch (image.components)
+            case image_components::grey:
+            {
+                switch (m_format)
                 {
-                case image_components::grey:
+                case channel_format::eight_bit:
                 {
-                    switch (image.format)
-                    {
-                    case channel_format::eight_bit:
-                    {
-                        float grayValue = (*colorPtr / 255.f);
-                        color.r = grayValue;
-                        color.g = grayValue;
-                        color.b = grayValue;
-                        color.a = 1.f;
-                        break;
-                    }
-                    case channel_format::sixteen_bit:
-                    {
-                        float grayValue = (*reinterpret_cast<uint16*>(colorPtr) / 65535.f);
-                        color.r = grayValue;
-                        color.g = grayValue;
-                        color.b = grayValue;
-                        color.a = 1.f;
-                        break;
-                    }
-                    case channel_format::float_hdr:
-                    {
-                        float grayValue = *reinterpret_cast<float*>(colorPtr);
-                        color.r = grayValue;
-                        color.g = grayValue;
-                        color.b = grayValue;
-                        color.a = 1.f;
-                        break;
-                    }
-                    case channel_format::depth_stencil:
-                    default:
-                        log::error("invalid channel format");
-                        abort();
-                    }
+                    float grayValue = (*colorPtr / 255.f);
+                    color.r = grayValue;
+                    color.g = grayValue;
+                    color.b = grayValue;
+                    color.a = 1.f;
                     break;
                 }
-                case image_components::grey_alpha:
+                case channel_format::sixteen_bit:
                 {
-                    byte* gPtr = colorPtr + channelSize * 0;
-                    byte* aPtr = colorPtr + channelSize * 1;
-
-                    switch (image.format)
-                    {
-                    case channel_format::eight_bit:
-                    {
-                        float grayValue = (*gPtr / 255.f);
-                        color.r = grayValue;
-                        color.g = grayValue;
-                        color.b = grayValue;
-                        color.a = (*aPtr / 255.f);
-                        break;
-                    }
-                    case channel_format::sixteen_bit:
-                    {
-                        float grayValue = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
-                        color.r = grayValue;
-                        color.g = grayValue;
-                        color.b = grayValue;
-                        color.a = (*reinterpret_cast<uint16*>(aPtr) / 65535.f);
-                        break;
-                    }
-                    case channel_format::float_hdr:
-                    {
-                        float grayValue = *reinterpret_cast<float*>(gPtr);
-                        color.r = grayValue;
-                        color.g = grayValue;
-                        color.b = grayValue;
-                        color.a = *reinterpret_cast<float*>(aPtr);
-                        break;
-                    }
-                    case channel_format::depth_stencil:
-                    default:
-                        log::error("invalid channel format");
-                        abort();
-                    }
+                    float grayValue = (*reinterpret_cast<uint16*>(colorPtr) / 65535.f);
+                    color.r = grayValue;
+                    color.g = grayValue;
+                    color.b = grayValue;
+                    color.a = 1.f;
                     break;
                 }
-                case image_components::rgb:
+                case channel_format::float_hdr:
                 {
-                    byte* rPtr = colorPtr + channelSize * 0;
-                    byte* gPtr = colorPtr + channelSize * 1;
-                    byte* bPtr = colorPtr + channelSize * 2;
-
-                    switch (image.format)
-                    {
-                    case channel_format::eight_bit:
-                    {
-                        color.r = (*rPtr / 255.f);
-                        color.g = (*gPtr / 255.f);
-                        color.b = (*bPtr / 255.f);
-                        color.a = 1.f;
-                        break;
-                    }
-                    case channel_format::sixteen_bit:
-                    {
-                        color.r = (*reinterpret_cast<uint16*>(rPtr) / 65535.f);
-                        color.g = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
-                        color.b = (*reinterpret_cast<uint16*>(bPtr) / 65535.f);
-                        color.a = 1.f;
-                        break;
-                    }
-                    case channel_format::float_hdr:
-                    {
-                        color.r = *reinterpret_cast<float*>(rPtr);
-                        color.g = *reinterpret_cast<float*>(gPtr);
-                        color.b = *reinterpret_cast<float*>(bPtr);
-                        color.a = 1.f;
-                        break;
-                    }
-                    case channel_format::depth_stencil:
-                    default:
-                        log::error("invalid channel format");
-                        abort();
-                    }
+                    float grayValue = *reinterpret_cast<float*>(colorPtr);
+                    color.r = grayValue;
+                    color.g = grayValue;
+                    color.b = grayValue;
+                    color.a = 1.f;
                     break;
                 }
-                case image_components::rgba:
-                {
-                    byte* rPtr = colorPtr + channelSize * 0;
-                    byte* gPtr = colorPtr + channelSize * 1;
-                    byte* bPtr = colorPtr + channelSize * 2;
-                    byte* aPtr = colorPtr + channelSize * 3;
-
-                    switch (image.format)
-                    {
-                    case channel_format::eight_bit:
-                    {
-                        color.r = (*rPtr / 255.f);
-                        color.g = (*gPtr / 255.f);
-                        color.b = (*bPtr / 255.f);
-                        color.a = (*aPtr / 255.f);
-                        break;
-                    }
-                    case channel_format::sixteen_bit:
-                    {
-                        color.r = (*reinterpret_cast<uint16*>(rPtr) / 65535.f);
-                        color.g = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
-                        color.b = (*reinterpret_cast<uint16*>(bPtr) / 65535.f);
-                        color.a = (*reinterpret_cast<uint16*>(aPtr) / 65535.f);
-                        break;
-                    }
-                    case channel_format::float_hdr:
-                    {
-                        color.r = *reinterpret_cast<float*>(rPtr);
-                        color.g = *reinterpret_cast<float*>(gPtr);
-                        color.b = *reinterpret_cast<float*>(bPtr);
-                        color.a = *reinterpret_cast<float*>(aPtr);
-                        break;
-                    }
-                    case channel_format::depth_stencil:
-                    default:
-                        log::error("invalid channel format");
-                        abort();
-                    }
-                    break;
-                }
-                case image_components::depth:
-                case image_components::depth_stencil:
-                case image_components::stencil:
+                case channel_format::depth_stencil:
                 default:
-                    log::error("invalid channel format");
-                    abort();
+                    return legion_exception_msg("invalid channel format");
                 }
-
-                output.push_back(color);
+                break;
             }
-        }
-
-        {
-            async::readwrite_guard guard(m_colorsLock);
-            m_colors.emplace(std::make_pair(id, std::unique_ptr<std::vector<math::color>>(ptr)));
-        }
-
-        return output;
-    }
-
-    const std::vector<math::color>& ImageCache::read_colors(id_type id)
-    {
-        OPTICK_EVENT();
-        async::readonly_guard guard(m_colorsLock);
-        if (!m_colors.count(id))
-            return process_raw(id);
-        return *m_colors[id];
-    }
-
-    std::pair<async::rw_spinlock&, image&> ImageCache::get_raw_image(id_type id)
-    {
-        OPTICK_EVENT();
-        async::readonly_guard guard(m_colorsLock);
-        auto& [lock, image] = *m_images[id];
-        return std::make_pair(std::ref(lock), std::ref(image));
-    }
-
-    image_handle ImageCache::create_image(const std::string& name, const filesystem::view& file, image_import_settings settings)
-    {
-        OPTICK_EVENT();
-        id_type id = nameHash(name);
-
-        {
-            async::readonly_guard guard(m_imagesLock);
-            if (m_images.count(id))
-                return { id };
-        }
-
-        if (!file.is_valid() || !file.file_info().is_file)
-            return invalid_image_handle;
-
-        auto result = filesystem::AssetImporter::tryLoad<image>(file, settings);
-
-        if (result != common::valid)
-            return invalid_image_handle;
-
-        {
-            async::readwrite_guard guard(m_imagesLock);
-            auto* pair_ptr = new std::pair<async::rw_spinlock, image>();
-            pair_ptr->second = result.value();
-            pair_ptr->second.name = name;
-            pair_ptr->second.m_id = id;
-            m_images.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, image>>(pair_ptr)));
-        }
-
-        return { id };
-    }
-
-    image_handle ImageCache::create_image(const filesystem::view& file, image_import_settings settings)
-    {
-        if (!file.file_info().is_file)
-            return invalid_image_handle;
-        return create_image(file.get_filename(), file, settings);
-    }
-
-    image_handle ImageCache::insert_image(image&& img)
-    {
-        id_type id = nameHash(img.name);
-        async::readwrite_guard guard(m_imagesLock);
-        auto* pair_ptr = new std::pair<async::rw_spinlock, image>();
-        pair_ptr->second = img;
-        pair_ptr->second.m_id = id;
-        m_images.emplace(std::make_pair(id, std::unique_ptr<std::pair<async::rw_spinlock, image>>(pair_ptr)));
-        return { id };
-    }
-
-    image_handle ImageCache::get_handle(const std::string& name)
-    {
-        OPTICK_EVENT();
-        id_type id = nameHash(name);
-        async::readonly_guard guard(m_imagesLock);
-        if (m_images.count(id))
-            return { id };
-        return invalid_image_handle;
-    }
-
-    image_handle ImageCache::get_handle(id_type id)
-    {
-        OPTICK_EVENT();
-        async::readonly_guard guard(m_imagesLock);
-        if (m_images.count(id))
-            return { id };
-        return invalid_image_handle;
-    }
-
-    void ImageCache::destroy_image(const std::string& name)
-    {
-        OPTICK_EVENT();
-        id_type id = nameHash(name);
-
-        {
-            async::readwrite_guard guard(m_imagesLock);
-            if (m_images.count(id))
+            case image_components::grey_alpha:
             {
-                m_images.erase(id);
+                byte* gPtr = colorPtr + channelSize * 0;
+                byte* aPtr = colorPtr + channelSize * 1;
+
+                switch (m_format)
+                {
+                case channel_format::eight_bit:
+                {
+                    float grayValue = (*gPtr / 255.f);
+                    color.r = grayValue;
+                    color.g = grayValue;
+                    color.b = grayValue;
+                    color.a = (*aPtr / 255.f);
+                    break;
+                }
+                case channel_format::sixteen_bit:
+                {
+                    float grayValue = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
+                    color.r = grayValue;
+                    color.g = grayValue;
+                    color.b = grayValue;
+                    color.a = (*reinterpret_cast<uint16*>(aPtr) / 65535.f);
+                    break;
+                }
+                case channel_format::float_hdr:
+                {
+                    float grayValue = *reinterpret_cast<float*>(gPtr);
+                    color.r = grayValue;
+                    color.g = grayValue;
+                    color.b = grayValue;
+                    color.a = *reinterpret_cast<float*>(aPtr);
+                    break;
+                }
+                case channel_format::depth_stencil:
+                default:
+                    return legion_exception_msg("invalid channel format");
+                }
+                break;
             }
+            case image_components::rgb:
+            {
+                byte* rPtr = colorPtr + channelSize * 0;
+                byte* gPtr = colorPtr + channelSize * 1;
+                byte* bPtr = colorPtr + channelSize * 2;
+
+                switch (m_format)
+                {
+                case channel_format::eight_bit:
+                {
+                    color.r = (*rPtr / 255.f);
+                    color.g = (*gPtr / 255.f);
+                    color.b = (*bPtr / 255.f);
+                    color.a = 1.f;
+                    break;
+                }
+                case channel_format::sixteen_bit:
+                {
+                    color.r = (*reinterpret_cast<uint16*>(rPtr) / 65535.f);
+                    color.g = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
+                    color.b = (*reinterpret_cast<uint16*>(bPtr) / 65535.f);
+                    color.a = 1.f;
+                    break;
+                }
+                case channel_format::float_hdr:
+                {
+                    color.r = *reinterpret_cast<float*>(rPtr);
+                    color.g = *reinterpret_cast<float*>(gPtr);
+                    color.b = *reinterpret_cast<float*>(bPtr);
+                    color.a = 1.f;
+                    break;
+                }
+                case channel_format::depth_stencil:
+                default:
+                    return legion_exception_msg("invalid channel format");
+                }
+                break;
+            }
+            case image_components::rgba:
+            {
+                byte* rPtr = colorPtr + channelSize * 0;
+                byte* gPtr = colorPtr + channelSize * 1;
+                byte* bPtr = colorPtr + channelSize * 2;
+                byte* aPtr = colorPtr + channelSize * 3;
+
+                switch (m_format)
+                {
+                case channel_format::eight_bit:
+                {
+                    color.r = (*rPtr / 255.f);
+                    color.g = (*gPtr / 255.f);
+                    color.b = (*bPtr / 255.f);
+                    color.a = (*aPtr / 255.f);
+                    break;
+                }
+                case channel_format::sixteen_bit:
+                {
+                    color.r = (*reinterpret_cast<uint16*>(rPtr) / 65535.f);
+                    color.g = (*reinterpret_cast<uint16*>(gPtr) / 65535.f);
+                    color.b = (*reinterpret_cast<uint16*>(bPtr) / 65535.f);
+                    color.a = (*reinterpret_cast<uint16*>(aPtr) / 65535.f);
+                    break;
+                }
+                case channel_format::float_hdr:
+                {
+                    color.r = *reinterpret_cast<float*>(rPtr);
+                    color.g = *reinterpret_cast<float*>(gPtr);
+                    color.b = *reinterpret_cast<float*>(bPtr);
+                    color.a = *reinterpret_cast<float*>(aPtr);
+                    break;
+                }
+                case channel_format::depth_stencil:
+                default:
+                    return legion_exception_msg("invalid channel format");
+                }
+                break;
+            }
+            case image_components::depth:
+            case image_components::depth_stencil:
+            case image_components::stencil:
+            default:
+                return legion_exception_msg("invalid image components");
+            }
+
+            m_colors->push_back(color);
         }
 
-        {
-            async::readwrite_guard guard(m_colorsLock);
-            if (m_colors.count(id))
-                m_colors.erase(id);
-        }
+        return common::success;
     }
 
-    void ImageCache::destroy_image(id_type id)
+    image::image(const math::ivec2& res, channel_format format, image_components comp, const data_view<byte>& data)
+        : m_resolution(res), m_format(format), m_components(comp), m_data(data)
+    {
+    }
+
+    const math::ivec2& image::resolution() const noexcept
+    {
+        return m_resolution;
+    }
+
+    const channel_format& image::format() const noexcept
+    {
+        return m_format;
+    }
+
+    const image_components& image::components() const noexcept
+    {
+        return m_components;
+    }
+
+    common::result<void> image::apply_raw(bool lazyApply)
+    {
+        m_colors->clear();
+
+        if (lazyApply)
+            return common::success;
+
+        return _apply_raw_impl();
+    }
+
+    common::result<std::reference_wrapper<const std::vector<math::color>>> image::read_colors() const
     {
         OPTICK_EVENT();
-        {
-            async::readwrite_guard guard(m_imagesLock);
-            if (m_images.count(id))
-            {
-                m_images.erase(id);
-            }
-        }
+        if (m_colors && m_colors->size())
+            return std::cref(*m_colors);
+        else if (!m_colors)
+            m_colors.emplace();
 
-        {
-            async::readwrite_guard guard(m_colorsLock);
-            if (m_colors.count(id))
-                m_colors.erase(id);
-        }
+        auto result = _apply_raw_impl();
+        if (!result)
+            return result.error();
+
+        return std::cref(*m_colors);
     }
 
+    common::result<void> image::write_colors(const std::vector<math::color>& colors)
+    {
+        auto channelSize = static_cast<size_type>(m_format);
+        auto colorSize = static_cast<size_type>(m_components) * channelSize;
+        auto dataSize = colorSize * colors.size();
+
+        if (dataSize != m_data.size())
+            return legion_exception_msg("Image size mismatch");
+
+        byte* end = m_data.end();
+        size_type i = static_cast<size_type>(0u);
+        for (auto colorPtr = m_data.begin(); colorPtr < end; colorPtr += colorSize)
+        {
+            switch (m_components)
+            {
+            case image_components::grey:
+            {
+                switch (m_format)
+                {
+                case channel_format::eight_bit:
+                {
+                    *colorPtr = static_cast<byte>(math::iround(colors[i].r * 255.f));
+                    break;
+                }
+                case channel_format::sixteen_bit:
+                {
+                    *reinterpret_cast<uint16*>(colorPtr) = static_cast<uint16>(math::iround(colors[i].r * 65535.f));
+                    break;
+                }
+                case channel_format::float_hdr:
+                {
+                    *reinterpret_cast<float*>(colorPtr) = colors[i].r;
+                    break;
+                }
+                case channel_format::depth_stencil:
+                default:
+                    return legion_exception_msg("invalid channel format");
+                }
+                break;
+            }
+            case image_components::grey_alpha:
+            {
+                byte* gPtr = colorPtr + channelSize * 0;
+                byte* aPtr = colorPtr + channelSize * 1;
+
+                switch (m_format)
+                {
+                case channel_format::eight_bit:
+                {
+                    *gPtr = static_cast<byte>(math::iround(colors[i].r * 255.f));
+                    *aPtr = static_cast<byte>(math::iround(colors[i].a * 255.f));
+                    break;
+                }
+                case channel_format::sixteen_bit:
+                {
+                    *reinterpret_cast<uint16*>(gPtr) = static_cast<uint16>(math::iround(colors[i].r * 65535.f));
+                    *reinterpret_cast<uint16*>(aPtr) = static_cast<uint16>(math::iround(colors[i].a * 65535.f));
+                    break;
+                }
+                case channel_format::float_hdr:
+                {
+                    *reinterpret_cast<float*>(gPtr) = colors[i].r;
+                    *reinterpret_cast<float*>(aPtr) = colors[i].a;
+                    break;
+                }
+                case channel_format::depth_stencil:
+                default:
+                    return legion_exception_msg("invalid channel format");
+                }
+                break;
+            }
+            case image_components::rgb:
+            {
+                byte* rPtr = colorPtr + channelSize * 0;
+                byte* gPtr = colorPtr + channelSize * 1;
+                byte* bPtr = colorPtr + channelSize * 2;
+
+                switch (m_format)
+                {
+                case channel_format::eight_bit:
+                {
+                    *rPtr = static_cast<byte>(math::iround(colors[i].r * 255.f));
+                    *gPtr = static_cast<byte>(math::iround(colors[i].g * 255.f));
+                    *bPtr = static_cast<byte>(math::iround(colors[i].b * 255.f));
+                    break;
+                }
+                case channel_format::sixteen_bit:
+                {
+                    *reinterpret_cast<uint16*>(rPtr) = static_cast<uint16>(math::iround(colors[i].r * 65535.f));
+                    *reinterpret_cast<uint16*>(gPtr) = static_cast<uint16>(math::iround(colors[i].g * 65535.f));
+                    *reinterpret_cast<uint16*>(bPtr) = static_cast<uint16>(math::iround(colors[i].b * 65535.f));
+                    break;
+                }
+                case channel_format::float_hdr:
+                {
+                    *reinterpret_cast<float*>(rPtr) = colors[i].r;
+                    *reinterpret_cast<float*>(gPtr) = colors[i].g;
+                    *reinterpret_cast<float*>(bPtr) = colors[i].b;
+                    break;
+                }
+                case channel_format::depth_stencil:
+                default:
+                    return legion_exception_msg("invalid channel format");
+                }
+                break;
+            }
+            case image_components::rgba:
+            {
+                byte* rPtr = colorPtr + channelSize * 0;
+                byte* gPtr = colorPtr + channelSize * 1;
+                byte* bPtr = colorPtr + channelSize * 2;
+                byte* aPtr = colorPtr + channelSize * 3;
+
+                switch (m_format)
+                {
+                case channel_format::eight_bit:
+                {
+                    *rPtr = static_cast<byte>(math::iround(colors[i].r * 255.f));
+                    *gPtr = static_cast<byte>(math::iround(colors[i].g * 255.f));
+                    *bPtr = static_cast<byte>(math::iround(colors[i].b * 255.f));
+                    *aPtr = static_cast<byte>(math::iround(colors[i].a * 255.f));
+                    break;
+                }
+                case channel_format::sixteen_bit:
+                {
+                    *reinterpret_cast<uint16*>(rPtr) = static_cast<uint16>(math::iround(colors[i].r * 65535.f));
+                    *reinterpret_cast<uint16*>(gPtr) = static_cast<uint16>(math::iround(colors[i].g * 65535.f));
+                    *reinterpret_cast<uint16*>(bPtr) = static_cast<uint16>(math::iround(colors[i].b * 65535.f));
+                    *reinterpret_cast<uint16*>(aPtr) = static_cast<uint16>(math::iround(colors[i].a * 65535.f));
+                    break;
+                }
+                case channel_format::float_hdr:
+                {
+                    *reinterpret_cast<float*>(rPtr) = colors[i].r;
+                    *reinterpret_cast<float*>(gPtr) = colors[i].g;
+                    *reinterpret_cast<float*>(bPtr) = colors[i].b;
+                    *reinterpret_cast<float*>(aPtr) = colors[i].a;
+                    break;
+                }
+                case channel_format::depth_stencil:
+                default:
+                    return legion_exception_msg("invalid channel format");
+                }
+                break;
+            }
+            case image_components::depth:
+            case image_components::depth_stencil:
+            case image_components::stencil:
+            default:
+                return legion_exception_msg("invalid image components");
+            }
+            i++;
+        }
+
+        if (m_colors)
+            *m_colors = colors;
+        else
+            m_colors.emplace(colors);
+
+        return common::success;
+    }
+
+    size_type image::data_size() const
+    {
+        return m_data.size();
+    }
+
+    bool image::operator==(const image& other) const noexcept
+    {
+        return m_data == other.m_data;
+    }
+
+    byte* image::data() noexcept
+    {
+        return m_data.data();
+    }
 }
