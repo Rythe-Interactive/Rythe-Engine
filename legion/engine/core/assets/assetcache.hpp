@@ -19,6 +19,7 @@ namespace legion::core::assets
         struct asset_info
         {
             std::string name;
+            std::string path;
             size_type assetLoader;
         };
     }
@@ -52,11 +53,11 @@ namespace legion::core::assets
         static data m_data;
 
         template<typename... Args>
-        static common::result<asset_ptr> createInternal(id_type nameHash, const std::string& name, id_type loaderId, Args&&... args);
+        static common::result<asset_ptr> createInternal(id_type nameHash, Args&&... args);
 
         static const detail::asset_info& info(id_type nameHash);
 
-        static common::result<asset_ptr> retry_load(common::result<asset<AssetType>> previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
+        static common::result<asset_ptr> retry_load(const common::result<asset<AssetType>>& previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
 
     public:
         template<typename LoaderType>
@@ -69,7 +70,7 @@ namespace legion::core::assets
         static void addLoader(Arguments&&... args);
 
         template<typename LoaderType, typename... Arguments>
-        static asset_ptr createAsLoader(id_type nameHash, const std::string& name, Arguments&&... args);
+        static asset_ptr createAsLoader(id_type nameHash, const std::string& name, const std::string& path, Arguments&&... args);
 
         static common::result<asset_ptr> load(const fs::view& file);
         static common::result<asset_ptr> load(const fs::view& file, const import_cfg& settings);
@@ -86,12 +87,18 @@ namespace legion::core::assets
 
         static asset_ptr create(const std::string& name);
         static asset_ptr create(id_type nameHash, const std::string& name);
+        static asset_ptr create(id_type nameHash, const std::string& name, const std::string& path);
+
         static asset_ptr create(const std::string& name, const AssetType& src);
         static asset_ptr create(id_type nameHash, const std::string& name, const AssetType& src);
+        static asset_ptr create(id_type nameHash, const std::string& name, const std::string& path, const AssetType& src);
+
         template<typename... Arguments>
         static asset_ptr create(const std::string& name, Arguments&&... args);
         template<typename... Arguments>
         static asset_ptr create(id_type nameHash, const std::string& name, Arguments&&... args);
+        template<typename... Arguments>
+        static asset_ptr create(id_type nameHash, const std::string& name, const std::string& path, Arguments&&... args);
 
         static bool has(const std::string& name);
         static bool has(id_type nameHash);

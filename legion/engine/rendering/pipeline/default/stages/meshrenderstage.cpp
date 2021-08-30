@@ -142,7 +142,7 @@ namespace legion::rendering
 
                 if (mesh.submeshes.empty())
                 {
-                    log::warn("Empty mesh found. Model name: {},  Model ID {}", modelName, modelHandle.get_mesh().id);
+                    log::warn("Empty mesh found. Model name: {},  Model ID {}", modelName, modelHandle.get_mesh().id());
                     continue;
                 }
 

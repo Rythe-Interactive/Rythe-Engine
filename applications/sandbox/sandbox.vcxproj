@@ -110,7 +110,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp" />
-    <ClCompile Include="systems\gui_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="data\pp_bloom.hpp" />

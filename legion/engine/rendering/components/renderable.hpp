@@ -45,7 +45,7 @@ namespace legion::rendering
 
         model_handle get_model()
         {
-            id_type id = get<mesh_filter>().id;
+            id_type id = get<mesh_filter>().shared_mesh.id();
             if (id == invalid_id)
                 return { invalid_id };
             return ModelCache::create_model(id);
