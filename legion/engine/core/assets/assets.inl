@@ -41,12 +41,12 @@ namespace legion::core::assets
     }
 
     template<typename AssetType>
-    inline common::result<asset<AssetType>> AssetCache<AssetType>::retry_load(common::result<asset<AssetType>> previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings)
+    inline common::result<asset<AssetType>> AssetCache<AssetType>::retry_load(const common::result<asset<AssetType>>& previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings)
     {
         loader_type* loader = nullptr;
         size_type loaderId;
 
-        for (size_type i = previousLoader - 1; i >= 0; i--)
+        for (size_type i = previousLoader - 2; i != static_cast<size_type>(-1); i--)
             if (m_data.m_loaders[i]->canLoad(file))
             {
                 loader = m_data.m_loaders[i].get();
@@ -65,7 +65,7 @@ namespace legion::core::assets
             return retry_load(result, loaderId, nameHash, name, file, settings);
         }
 
-        return previousAttempt;
+        return legion_exception;
     }
 
     template<typename AssetType>
@@ -150,10 +150,24 @@ namespace legion::core::assets
     template<typename AssetType>
     inline common::result<asset<AssetType>> AssetCache<AssetType>::load(id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings)
     {
+        auto traits = file.file_info();
+        if (!traits.is_valid_path)
+        {
+            return legion_exception_msg("invalid file traits: not a valid path");
+        }
+        else if (!traits.exists)
+        {
+            return legion_exception_msg("invalid file traits: file does not exist");
+        }
+        else if (!traits.can_be_read)
+        {
+            return legion_exception_msg("invalid file traits: file cannot be read");
+        }
+
         loader_type* loader = nullptr;
         size_type loaderId;
 
-        for (size_type i = m_data.m_loaders.size() - 1; i >= 0; i--)
+        for (size_type i = m_data.m_loaders.size() - 1; i != static_cast<size_type>(-1); i--)
             if (m_data.m_loaders[i]->canLoad(file))
             {
                 loader = m_data.m_loaders[i].get();
@@ -169,7 +183,20 @@ namespace legion::core::assets
                 m_data.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
                 return result;
             }
-            return retry_load(result, loaderId, nameHash, name, file, settings);
+
+            if (loaderId != 1u)
+            {
+                auto retry = retry_load(result, loaderId, nameHash, name, file, settings);
+
+                if (retry)
+                {
+                    result.mark_handled();
+                    return retry;
+                }
+                else
+                    retry.mark_handled();
+            }
+            return result;
         }
 
         return legion_exception_msg("No loader found that could load file");

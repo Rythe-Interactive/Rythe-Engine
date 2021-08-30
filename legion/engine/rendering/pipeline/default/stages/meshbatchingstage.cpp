@@ -41,7 +41,7 @@ namespace  legion::rendering
             for (size_type i = 0; i < renderablesQuery.size(); i++)
             {
                 OPTICK_EVENT("instance");
-                auto& batch = (*batches)[renderers[i].get().material][model_handle{ filters[i].get().id }];
+                auto& batch = (*batches)[renderers[i].get().material][model_handle{ filters[i].get().shared_mesh.id() }];
                 if (batch.first.empty())
                     batchList.push_back(std::ref(batch));
                 batch.first.push_back(renderablesQuery[i]);

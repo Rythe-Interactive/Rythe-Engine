@@ -44,17 +44,18 @@ namespace legion::core::common
         result(const result& src) : m_handled(src.m_handled), m_succeeded(src.m_succeeded), m_warnings(src.m_warnings)
         {
             if (src.m_succeeded)
-                m_success = src.m_success;
+                new (&m_success) success_type(src.m_success);
             else
-                m_error = src.m_error;
+                new (&m_error) error_type(src.m_error);
         }
 
         result(result&& src) : m_handled(src.m_handled), m_succeeded(src.m_succeeded), m_warnings(std::move(src.m_warnings))
         {
+            src.mark_handled();
             if (src.m_succeeded)
-                m_success = std::move(src.m_success);
+                new (&m_success) success_type(std::move(src.m_success));
             else
-                m_error = std::move(src.m_error);
+                new (&m_error) error_type(std::move(src.m_error));
         }
 
         ~result()
@@ -67,27 +68,27 @@ namespace legion::core::common
                     throw m_error;
         }
 
-        success_type& value()
+        L_NODISCARD success_type& value()
         {
             if (m_succeeded)
                 return m_success;
             throw m_error;
         }
 
-        const success_type& value() const
+        L_NODISCARD const success_type& value() const
         {
             if (m_succeeded)
                 return m_success;
             throw m_error;
         }
 
-        operator bool() const noexcept { return m_succeeded; }
-        bool operator ==(const valid_t&) const noexcept { return m_succeeded; }
-        bool operator !=(const valid_t&) const noexcept { return !m_succeeded; }
-        bool valid() const noexcept { return m_succeeded; }
-        bool has_error() const noexcept { return !m_succeeded; }
+        L_NODISCARD operator bool() const noexcept { return m_succeeded; }
+        L_NODISCARD bool operator ==(const valid_t&) const noexcept { return m_succeeded; }
+        L_NODISCARD bool operator !=(const valid_t&) const noexcept { return !m_succeeded; }
+        L_NODISCARD bool valid() const noexcept { return m_succeeded; }
+        L_NODISCARD bool has_error() const noexcept { return !m_succeeded; }
 
-        const error_type& error() const
+        L_NODISCARD const error_type& error() const
         {
             if (!m_succeeded)
             {
@@ -97,7 +98,7 @@ namespace legion::core::common
             throw std::runtime_error("this result would have been valid!");
         }
 
-        error_type& error()
+        L_NODISCARD error_type& error()
         {
             if (!m_succeeded)
             {
@@ -107,22 +108,24 @@ namespace legion::core::common
             throw std::runtime_error("this result would have been valid!");
         }
 
-        operator success_type() { return value(); }
-        operator success_type() const { return value(); }
-        operator error_type() { return error(); }
-        operator error_type() const { return error(); }
+        void mark_handled() const noexcept { m_handled = true; }
 
-        success_type& operator*() { return m_success; }
-        const success_type& operator*() const { return m_success; }
-        success_type* operator->() { return &m_success; }
-        const success_type* operator->() const { return &m_success; }
+        L_NODISCARD operator success_type() { return value(); }
+        L_NODISCARD operator success_type() const { return value(); }
+        L_NODISCARD operator error_type() { return error(); }
+        L_NODISCARD operator error_type() const { return error(); }
 
-        bool has_warnings() const noexcept { return !m_warnings.empty(); }
-        size_t warning_count() const noexcept { return m_warnings.size(); }
-        const Warning& warning_at(size_t i) const { return m_warnings[i]; }
-        Warning& warning_at(size_t i) { return m_warnings[i]; }
-        const warning_list& warnings() const { return m_warnings; }
-        warning_list& warnings() { return m_warnings; }
+        L_NODISCARD success_type& operator*() { return m_success; }
+        L_NODISCARD const success_type& operator*() const { return m_success; }
+        L_NODISCARD success_type* operator->() { return &m_success; }
+        L_NODISCARD const success_type* operator->() const { return &m_success; }
+
+        L_NODISCARD bool has_warnings() const noexcept { return !m_warnings.empty(); }
+        L_NODISCARD size_t warning_count() const noexcept { return m_warnings.size(); }
+        L_NODISCARD const Warning& warning_at(size_t i) const { return m_warnings[i]; }
+        L_NODISCARD Warning& warning_at(size_t i) { return m_warnings[i]; }
+        L_NODISCARD const warning_list& warnings() const { return m_warnings; }
+        L_NODISCARD warning_list& warnings() { return m_warnings; }
 
         template<typename Func, typename... Args>
         auto except(Func&& f, Args&&... args)
@@ -173,13 +176,13 @@ namespace legion::core::common
         result(const error_type& e, warning_list&& w) : m_error(e), m_warnings(w) {}
         result(const error_type& e, const warning_list& w) : m_error(e), m_warnings(w) {}
 
-        operator bool() const noexcept { return !m_error; }
-        bool operator ==(const valid_t&) const noexcept { return !m_error; }
-        bool operator !=(const valid_t&) const noexcept { return m_error.has_value(); }
-        bool valid() const noexcept { return !m_error; }
-        bool has_error() const noexcept { return m_error.has_value(); }
+        L_NODISCARD operator bool() const noexcept { return !m_error; }
+        L_NODISCARD bool operator ==(const valid_t&) const noexcept { return !m_error; }
+        L_NODISCARD bool operator !=(const valid_t&) const noexcept { return m_error.has_value(); }
+        L_NODISCARD bool valid() const noexcept { return !m_error; }
+        L_NODISCARD bool has_error() const noexcept { return m_error.has_value(); }
 
-        const error_type& error() const
+        L_NODISCARD const error_type& error() const
         {
             if (m_error)
             {
@@ -189,7 +192,7 @@ namespace legion::core::common
             throw std::runtime_error("this result would have been valid!");
         }
 
-        error_type& error()
+        L_NODISCARD error_type& error()
         {
             if (m_error)
             {
@@ -199,15 +202,17 @@ namespace legion::core::common
             throw std::runtime_error("this result would have been valid!");
         }
 
-        operator error_type() { return error(); }
-        operator error_type() const { return error(); }
+        void mark_handled() const noexcept { m_handled = true; }
 
-        bool has_warnings() const noexcept { return !m_warnings.empty(); }
-        size_t warning_count() const noexcept { return m_warnings.size(); }
-        const Warning& warning_at(size_t i) const { return m_warnings[i]; }
-        Warning& warning_at(size_t i) { return m_warnings[i]; }
-        const warning_list& warnings() const { return m_warnings; }
-        warning_list& warnings() { return m_warnings; }
+        L_NODISCARD operator error_type() { return error(); }
+        L_NODISCARD operator error_type() const { return error(); }
+
+        L_NODISCARD bool has_warnings() const noexcept { return !m_warnings.empty(); }
+        L_NODISCARD size_t warning_count() const noexcept { return m_warnings.size(); }
+        L_NODISCARD const Warning& warning_at(size_t i) const { return m_warnings[i]; }
+        L_NODISCARD Warning& warning_at(size_t i) { return m_warnings[i]; }
+        L_NODISCARD const warning_list& warnings() const { return m_warnings; }
+        L_NODISCARD warning_list& warnings() { return m_warnings; }
 
         template<typename Func, typename... Args>
         void except(Func&& f, Args&&... args)
@@ -248,38 +253,38 @@ namespace legion::core::common
         result(const success_type& s, warning_list&& w) : m_success(s), m_warnings(w) {}
         result(const success_type& s, const warning_list& w) : m_success(s), m_warnings(w) {}
 
-        operator bool() const noexcept { return m_success; }
-        bool operator ==(const valid_t&) const noexcept { return m_success; }
-        bool operator !=(const valid_t&) const noexcept { return !m_success; }
-        bool valid() const noexcept { return m_success; }
-        bool has_error() const noexcept { return !m_success; }
+        L_NODISCARD operator bool() const noexcept { return m_success; }
+        L_NODISCARD bool operator ==(const valid_t&) const noexcept { return m_success; }
+        L_NODISCARD bool operator !=(const valid_t&) const noexcept { return !m_success; }
+        L_NODISCARD bool valid() const noexcept { return m_success; }
+        L_NODISCARD bool has_error() const noexcept { return !m_success; }
 
-        const success_type& value() const
+        L_NODISCARD const success_type& value() const
         {
             if (m_success) return *m_success;
             throw legion_exception_msg("this result is invalid!");
         }
 
-        success_type& value()
+        L_NODISCARD success_type& value()
         {
             if (m_success) return *m_success;
             throw legion_exception_msg("this result is invalid!");
         }
 
-        operator success_type() { return value(); }
-        operator success_type() const { return value(); }
+        L_NODISCARD operator success_type() { return value(); }
+        L_NODISCARD operator success_type() const { return value(); }
 
-        success_type& operator*() { return *m_success; }
-        const success_type& operator*() const { return *m_success; }
-        success_type* operator->() { return &*m_success; }
-        const success_type* operator->() const { return &*m_success; }
+        L_NODISCARD success_type& operator*() { return *m_success; }
+        L_NODISCARD const success_type& operator*() const { return *m_success; }
+        L_NODISCARD success_type* operator->() { return &*m_success; }
+        L_NODISCARD const success_type* operator->() const { return &*m_success; }
 
-        bool has_warnings() const noexcept { return !m_warnings.empty(); }
-        size_t warning_count() const noexcept { return m_warnings.size(); }
-        const Warning& warning_at(size_t i) const { return m_warnings[i]; }
-        Warning& warning_at(size_t i) { return m_warnings[i]; }
-        const warning_list& warnings() const { return m_warnings; }
-        warning_list& warnings() { return m_warnings; }
+        L_NODISCARD bool has_warnings() const noexcept { return !m_warnings.empty(); }
+        L_NODISCARD size_t warning_count() const noexcept { return m_warnings.size(); }
+        L_NODISCARD const Warning& warning_at(size_t i) const { return m_warnings[i]; }
+        L_NODISCARD Warning& warning_at(size_t i) { return m_warnings[i]; }
+        L_NODISCARD const warning_list& warnings() const { return m_warnings; }
+        L_NODISCARD warning_list& warnings() { return m_warnings; }
 
         template<typename Func, typename... Args>
         auto except(Func&& f, Args&&... args)
@@ -319,18 +324,18 @@ namespace legion::core::common
         result(success_t, warning_list&& w) : m_succeeded(true), m_warnings(w) {}
         result(success_t, const warning_list& w) : m_succeeded(true), m_warnings(w) {}
 
-        operator bool() const noexcept { return m_succeeded; }
-        bool operator ==(const valid_t&) const noexcept { return m_succeeded; }
-        bool operator !=(const valid_t&) const noexcept { return !m_succeeded; }
-        bool valid() const noexcept { return m_succeeded; }
-        bool has_error() const noexcept { return !m_succeeded; }
+        L_NODISCARD operator bool() const noexcept { return m_succeeded; }
+        L_NODISCARD bool operator ==(const valid_t&) const noexcept { return m_succeeded; }
+        L_NODISCARD bool operator !=(const valid_t&) const noexcept { return !m_succeeded; }
+        L_NODISCARD bool valid() const noexcept { return m_succeeded; }
+        L_NODISCARD bool has_error() const noexcept { return !m_succeeded; }
 
-        bool has_warnings() const noexcept { return !m_warnings.empty(); }
-        size_t warning_count() const noexcept { return m_warnings.size(); }
-        const Warning& warning_at(size_t i) const { return m_warnings[i]; }
-        Warning& warning_at(size_t i) { return m_warnings[i]; }
-        const warning_list& warnings() const { return m_warnings; }
-        warning_list& warnings() { return m_warnings; }
+        L_NODISCARD bool has_warnings() const noexcept { return !m_warnings.empty(); }
+        L_NODISCARD size_t warning_count() const noexcept { return m_warnings.size(); }
+        L_NODISCARD const Warning& warning_at(size_t i) const { return m_warnings[i]; }
+        L_NODISCARD Warning& warning_at(size_t i) { return m_warnings[i]; }
+        L_NODISCARD const warning_list& warnings() const { return m_warnings; }
+        L_NODISCARD warning_list& warnings() { return m_warnings; }
 
 
         template<typename Func, typename... Args>

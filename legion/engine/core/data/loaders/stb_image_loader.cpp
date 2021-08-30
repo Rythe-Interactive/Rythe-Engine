@@ -114,7 +114,10 @@ namespace legion::core
     {
         auto result = file.get();
         if (!result)
+        {
+            result.mark_handled();
             return false;
+        }
 
         return detail::stbi_test(result->data(), result->size());
     }

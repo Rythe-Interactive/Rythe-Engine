@@ -57,7 +57,7 @@ namespace legion::core::assets
 
         static const detail::asset_info& info(id_type nameHash);
 
-        static common::result<asset_ptr> retry_load(common::result<asset<AssetType>> previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
+        static common::result<asset_ptr> retry_load(const common::result<asset<AssetType>>& previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
 
     public:
         template<typename LoaderType>
