@@ -12,8 +12,13 @@ namespace legion::core
         using base::import_cfg;
         using base::progress_type;
 
+    private:
+        common::result<asset_ptr> load_impl(id_type nameHash, const fs::view file, const import_cfg& settings, progress_type* progress);
+
+    public:
         virtual bool canLoad(const fs::view& file) override;
 
         virtual common::result<asset_ptr> load(id_type nameHash, const fs::view& file, const import_cfg& settings) override;
+        virtual common::result<asset_ptr> loadAsync(id_type nameHash, const fs::view& file, const import_cfg& settings, L_MAYBEUNUSED progress_type& progress) override;
     };
 }

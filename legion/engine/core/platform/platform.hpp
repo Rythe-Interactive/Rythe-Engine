@@ -159,19 +159,33 @@ type& operator=(const type&) noexcept = default;\
 type& operator=(type&&) noexcept = default;\
 ~type() = default;
 
-#define NO_DEFAULT_CTOR_RULE5(type)\
+#define NO_DEF_CTOR_RULE5(type)\
 type(const type&) = default;\
 type(type&&) = default;\
 type& operator=(const type&) = default;\
 type& operator=(type&&) = default;\
 ~type() = default;
 
-#define NO_DEFAULT_CTOR_RULE5_NOEXCEPT(type)\
+#define NO_DEF_CTOR_RULE5_NOEXCEPT(type)\
 type(const type&) noexcept = default;\
 type(type&&) noexcept = default;\
 type& operator=(const type&) noexcept = default;\
 type& operator=(type&&) noexcept = default;\
 ~type() = default;
+
+#define NO_DTOR_RULE5(type)\
+type() = default;\
+type(const type&) = default;\
+type(type&&) = default;\
+type& operator=(const type&) = default;\
+type& operator=(type&&) = default;
+
+#define NO_DTOR_RULE5_NOEXCEPT(type)\
+type() noexcept = default;\
+type(const type&) noexcept = default;\
+type(type&&) noexcept = default;\
+type& operator=(const type&) noexcept = default;\
+type& operator=(type&&) noexcept = default;
 
 #define COPY_FUNCS(type)\
 type(const type&) = default;\

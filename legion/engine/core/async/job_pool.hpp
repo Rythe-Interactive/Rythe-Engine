@@ -1,5 +1,5 @@
 #pragma once
-#include <queue>
+#include <list>
 #include <memory>
 
 #include <Optick/optick.h>
@@ -36,12 +36,13 @@ namespace legion::core::async
 
         bool empty() const noexcept;
 
+        bool prime_job();
         void complete_job();
 
         bool is_done() const noexcept;
     };
 
-    using job_queue = std::queue<std::shared_ptr<job_pool>>;
+    using job_queue = std::list<std::shared_ptr<job_pool>>;
 
     template<typename Func, typename CompleteFunc>
     struct job_operation : public repeating_async_operation<Func, void>
@@ -73,6 +74,7 @@ namespace legion::core::async
                     break;
                 case wait_priority::normal:
                 {
+                    jobPoolPtr->prime_job();
                     jobPoolPtr->complete_job();
                     L_PAUSE_INSTRUCTION();
                     break;
@@ -80,6 +82,7 @@ namespace legion::core::async
                 case wait_priority::real_time:
                 default:
                 {
+                    jobPoolPtr->prime_job();
                     jobPoolPtr->complete_job();
                     break;
                 }

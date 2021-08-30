@@ -36,6 +36,7 @@ namespace legion::core::assets
         using asset_ptr = asset<AssetType>;
         using import_cfg = import_settings<AssetType>;
         using loader_type = AssetLoader<AssetType>;
+        using progress_type = async::async_progress<common::result<asset_ptr>>;
 
     private:
         struct data
@@ -57,7 +58,10 @@ namespace legion::core::assets
 
         static const detail::asset_info& info(id_type nameHash);
 
-        static common::result<asset_ptr> retry_load(const common::result<asset<AssetType>>& previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
+        static common::result<asset_ptr> retry_load(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
+        static common::result<asset_ptr> retry_load_async(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings, progress_type& progress);
+
+        static void async_load_job(id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings, const std::shared_ptr<progress_type>& progress);
 
     public:
         template<typename LoaderType>

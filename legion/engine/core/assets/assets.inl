@@ -41,7 +41,7 @@ namespace legion::core::assets
     }
 
     template<typename AssetType>
-    inline common::result<asset<AssetType>> AssetCache<AssetType>::retry_load(const common::result<asset<AssetType>>& previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings)
+    inline common::result<asset<AssetType>> AssetCache<AssetType>::retry_load(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings)
     {
         loader_type* loader = nullptr;
         size_type loaderId;
@@ -62,10 +62,85 @@ namespace legion::core::assets
                 m_data.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
                 return result;
             }
-            return retry_load(result, loaderId, nameHash, name, file, settings);
+            result.mark_handled();
+            return retry_load(loaderId, nameHash, name, file, settings);
         }
 
         return legion_exception;
+    }
+
+    template<typename AssetType>
+    inline common::result<asset<AssetType>> AssetCache<AssetType>::retry_load_async(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings, AssetCache<AssetType>::progress_type& progress)
+    {
+        loader_type* loader = nullptr;
+        size_type loaderId;
+
+        for (size_type i = previousLoader - 2; i != static_cast<size_type>(-1); i--)
+            if (m_data.m_loaders[i]->canLoad(file))
+            {
+                loader = m_data.m_loaders[i].get();
+                loaderId = i + 1;
+                break;
+            }
+
+        if (loader)
+        {
+            auto result = loader->loadAsync(nameHash, file, settings, progress);
+            if (result)
+            {
+                m_data.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                return result;
+            }
+            result.mark_handled();
+            return retry_load_async(loaderId, nameHash, name, file, settings, progress);
+        }
+
+        return legion_exception;
+    }
+
+    template<typename AssetType>
+    inline void AssetCache<AssetType>::async_load_job(id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings, const std::shared_ptr<typename AssetCache<AssetType>::progress_type>& progress)
+    {
+        loader_type* loader = nullptr;
+        size_type loaderId;
+
+        for (size_type i = m_data.m_loaders.size() - 1; i != static_cast<size_type>(-1); i--)
+            if (m_data.m_loaders[i]->canLoad(file))
+            {
+                loader = m_data.m_loaders[i].get();
+                loaderId = i + 1;
+                break;
+            }
+
+        if (loader)
+        {
+            auto result = loader->loadAsync(nameHash, file, settings, *progress);
+            if (result)
+            {
+                m_data.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                progress->complete(result);
+                return;
+            }
+
+            if (loaderId != 1u)
+            {
+                auto retry = retry_load_async(loaderId, nameHash, name, file, settings, *progress);
+
+                if (retry)
+                {
+                    result.mark_handled();
+                    progress->complete(retry);
+                    return;
+                }
+                else
+                    retry.mark_handled();
+            }
+            progress->complete(result);
+            return;
+        }
+
+        progress->complete(legion_exception_msg("No loader found that could load file"));
+        return;
     }
 
     template<typename AssetType>
@@ -186,7 +261,7 @@ namespace legion::core::assets
 
             if (loaderId != 1u)
             {
-                auto retry = retry_load(result, loaderId, nameHash, name, file, settings);
+                auto retry = retry_load(loaderId, nameHash, name, file, settings);
 
                 if (retry)
                 {
@@ -255,9 +330,35 @@ namespace legion::core::assets
     template<typename AssetType>
     inline async::async_operation<common::result<asset<AssetType>>> AssetCache<AssetType>::loadAsync(id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings)
     {
-        auto progress = std::make_shared<async::async_progress<common::result<asset<AssetType>>>>(0.f);
+        auto progress = std::make_shared<async::async_progress<common::result<asset<AssetType>>>>();
 
-        progress->complete(load(nameHash, name, file, settings));
+        auto traits = file.file_info();
+        if (!traits.is_valid_path)
+        {
+            progress->complete(legion_exception_msg("invalid file traits: not a valid path"));
+            return;
+        }
+        else if (!traits.exists)
+        {
+            progress->complete(legion_exception_msg("invalid file traits: file does not exist"));
+            return;
+        }
+        else if (!traits.can_be_read)
+        {
+            progress->complete(legion_exception_msg("invalid file traits: file cannot be read"));
+            return;
+        }
+
+        scheduling::Scheduler::queueJobs(1, [
+                nameHash = nameHash,
+                name = name,
+                file = file,
+                settings = settings,
+                progress = progress
+            ]()
+            {
+                async_load_job(nameHash, name, file, settings, progress);
+            });
 
         return async::async_operation{ progress }; // Requires ability to schedule a single task. or job system not to halt until all jobs are done.
     }

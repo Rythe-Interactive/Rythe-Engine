@@ -31,13 +31,13 @@ namespace legion::core::async
         constexpr async_progress_base() noexcept : m_size(100 * precision_scale<size_type>), m_progress(0) {}
         constexpr explicit async_progress_base(float size) noexcept : m_size(static_cast<size_type>(size) * precision_scale<size_type>), m_progress(0) {}
 
-        float size() const noexcept;
-        size_type rawSize() const noexcept;
-        size_type rawProgress() const noexcept;
+        L_NODISCARD float size() const noexcept;
+        L_NODISCARD size_type rawSize() const noexcept;
+        L_NODISCARD size_type rawProgress() const noexcept;
 
         void advance_progress(float progress = 1.f) noexcept;
-        bool is_done() const noexcept;
-        float progress() const noexcept;
+        L_NODISCARD bool is_done() const noexcept;
+        L_NODISCARD float progress() const noexcept;
     };
 
     template<typename ReturnType>
@@ -63,15 +63,15 @@ namespace legion::core::async
         void complete(Args&&... args) noexcept
         {
             std::lock_guard guard(m_payloadLock);
-            new(&*m_payload) ReturnType(std::forward<Args>(args)...);
+            m_payload.emplace(std::forward<Args>(args)...);
             complete_impl();
         }
 
-        common::result<payload_type> get_result()
+        L_NODISCARD common::result<std::reference_wrapper<payload_type>> get_result()
         {
             std::lock_guard guard(m_payloadLock);
             if (m_payload)
-                return std::move(*m_payload);
+                return std::ref(m_payload.value());
             return legion_exception_msg("Payload of async operation was not ready yet.");
         }
     };
@@ -93,17 +93,14 @@ namespace legion::core::async
 
     public:
         explicit async_operation_base(const std::shared_ptr<async_progress_base>& progress) noexcept;
-        async_operation_base() noexcept = default;
-        async_operation_base(const async_operation_base&) noexcept = default;
-        async_operation_base(async_operation_base&&) noexcept = default;
+        NO_DTOR_RULE5_NOEXCEPT(async_operation_base);
+        virtual ~async_operation_base() = default;
 
-        bool is_done() const noexcept;
+        L_NODISCARD bool is_done() const noexcept;
 
-        float progress() const noexcept;
+        L_NODISCARD float progress() const noexcept;
 
         virtual void wait(wait_priority priority = wait_priority_normal) const noexcept;
-
-        virtual ~async_operation_base() = default;
     };
 
     template<typename functor, typename payload>
@@ -117,6 +114,11 @@ namespace legion::core::async
         repeating_async_operation() noexcept(std::is_nothrow_default_constructible_v<functor>) = default;
         repeating_async_operation(const repeating_async_operation&) noexcept(std::is_nothrow_copy_constructible_v<functor>) = default;
         repeating_async_operation(repeating_async_operation&&) noexcept(std::is_nothrow_move_constructible_v<functor>) = default;
+
+        repeating_async_operation& operator=(const repeating_async_operation&) noexcept(std::is_nothrow_copy_assignable_v<functor>) = default;
+        repeating_async_operation& operator=(repeating_async_operation&&) noexcept(std::is_nothrow_move_assignable_v<functor>) = default;
+
+        virtual ~repeating_async_operation() = default;
 
         template<typename... argument_types>
         auto then(argument_types... args) const
@@ -132,13 +134,11 @@ namespace legion::core::async
             return m_repeater(std::forward<argument_types>(args)...);
         }
 
-        payload&& get_result(wait_priority priority = wait_priority_normal)
+        L_NODISCARD payload& get_result(wait_priority priority = wait_priority_normal)
         {
             wait(priority);
-            static_cast<async_progress<payload>*>(m_progress.get())->get_result();
+            return static_cast<async_progress<payload>*>(m_progress.get())->get_result().value();
         }
-
-        virtual ~repeating_async_operation() = default;
     };
 
 #if !defined(DOXY_EXCLUDE)
@@ -158,6 +158,11 @@ namespace legion::core::async
         repeating_async_operation(const repeating_async_operation&) noexcept(std::is_nothrow_copy_constructible_v<functor>) = default;
         repeating_async_operation(repeating_async_operation&&) noexcept(std::is_nothrow_move_constructible_v<functor>) = default;
 
+        repeating_async_operation& operator=(const repeating_async_operation&) noexcept(std::is_nothrow_copy_assignable_v<functor>) = default;
+        repeating_async_operation& operator=(repeating_async_operation&&) noexcept(std::is_nothrow_move_assignable_v<functor>) = default;
+
+        virtual ~repeating_async_operation() = default;
+
         template<typename... argument_types>
         auto then(argument_types... args) const
         {
@@ -171,8 +176,6 @@ namespace legion::core::async
             wait(priority);
             return m_repeater(std::forward<argument_types>(args)...);
         }
-
-        virtual ~repeating_async_operation() = default;
     };
 
     template<typename payload>
@@ -180,9 +183,9 @@ namespace legion::core::async
     {
     public:
         async_operation(const std::shared_ptr<async_progress<payload>>& progress) : async_operation_base(progress) {}
-        async_operation() noexcept = default;
-        async_operation(const async_operation&) noexcept = default;
-        async_operation(async_operation&&) noexcept = default;
+
+        NO_DTOR_RULE5_NOEXCEPT(async_operation);
+        virtual ~async_operation() = default;
 
         template<typename Functor, typename... argument_types>
         auto then(Functor&& func, argument_types... args) const
@@ -198,13 +201,11 @@ namespace legion::core::async
             return std::invoke(std::forward<Functor>(func), std::forward<argument_types>(args)...);
         }
 
-        payload&& get_result(wait_priority priority = wait_priority_normal)
+        L_NODISCARD payload& get_result(wait_priority priority = wait_priority_normal)
         {
             wait(priority);
-            static_cast<async_progress<payload>*>(m_progress.get())->get_result();
+            return static_cast<async_progress<payload>*>(m_progress.get())->get_result().value();
         }
-
-        virtual ~async_operation() = default;
     };
 
 #if !defined(DOXY_EXCLUDE)
@@ -217,9 +218,9 @@ namespace legion::core::async
     {
     public:
         async_operation(const std::shared_ptr<async_progress<void>>& progress) : async_operation_base(progress) {}
-        async_operation() noexcept = default;
-        async_operation(const async_operation&) noexcept = default;
-        async_operation(async_operation&&) noexcept = default;
+        NO_DTOR_RULE5_NOEXCEPT(async_operation);
+
+        virtual ~async_operation() = default;
 
         template<typename Functor, typename... argument_types>
         auto then(Functor&& func, argument_types... args) const
@@ -234,7 +235,5 @@ namespace legion::core::async
             wait(priority);
             return std::invoke(std::forward<Functor>(func), std::forward<argument_types>(args)...);
         }
-
-        virtual ~async_operation() = default;
     };
 }

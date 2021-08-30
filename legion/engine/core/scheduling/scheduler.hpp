@@ -39,7 +39,6 @@ namespace legion::core::scheduling
 
         static per_thread_map<std::thread> m_threads;
 
-        static per_thread_map<async::rw_lock_pair<async::runnables_queue>> m_commands;
         static async::rw_lock_pair<async::job_queue> m_jobs;
         static size_type m_jobPoolSize;
 
@@ -64,9 +63,6 @@ namespace legion::core::scheduling
         L_NODISCARD static pointer<std::thread> reserveThread(functor&& function, argument_types&&... args);
 
         L_NODISCARD static pointer<std::thread> getThread(std::thread::id id);
-
-        template<typename functor>
-        static auto sendCommand(std::thread::id id, functor&& function, float taskSize = 1.f);
 
         static size_type jobPoolSize() noexcept;
 

@@ -63,10 +63,8 @@ namespace legion::core
         return false;
     }
 
-    common::result<asset_ptr> obj_mesh_loader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
+    common::result<asset_ptr> obj_mesh_loader::load_impl(id_type nameHash, const fs::view file, const import_cfg& settings, progress_type* progress)
     {
-        OPTICK_EVENT();
-
         // tinyobj objects
         tinyobj::ObjReader reader;
         tinyobj::ObjReaderConfig config;
@@ -114,6 +112,9 @@ namespace legion::core
 
         auto text = result->to_string();
 
+        if (progress)
+            progress->advance_progress(5.f);
+
         tinyobj::MaterialFileReader matFileReader(baseDir);
 
         // Try to parse the mesh data from the text data in the file.
@@ -128,10 +129,15 @@ namespace legion::core
             warnings.insert(warnings.end(), readerWarnings.begin(), readerWarnings.end());
         }
 
+        if (progress)
+            progress->advance_progress(55.f);
+
         // Create the mesh
         mesh data;
 
         std::vector<tinyobj::material_t> srcMaterials = reader.GetMaterials();
+
+        float percentagePerMat = 25.f / static_cast<float>(srcMaterials.size());
 
         for (auto& srcMat : srcMaterials)
         {
@@ -238,6 +244,9 @@ namespace legion::core
 
                 warnings.insert(warnings.end(), imgResult.warnings().begin(), imgResult.warnings().end());
             }
+
+            if (progress)
+                progress->advance_progress(percentagePerMat);
         }
 
         // Get all the vertex and composition data.
@@ -248,6 +257,8 @@ namespace legion::core
         std::vector<detail::vertex_hash> vertices;
         std::unordered_map<detail::vertex_hash, uint> indices;
 
+        float percentagePerShape = 15.f / static_cast<float>(shapes.size());
+
         // Iterate submeshes.
         for (auto& shape : shapes)
         {
@@ -257,6 +268,8 @@ namespace legion::core
             submesh.indexCount = shape.mesh.indices.size();
             if (shape.mesh.material_ids.size())
                 submesh.materialIndex = shape.mesh.material_ids[0];
+
+            float percentagePerIndex = percentagePerShape / static_cast<float>(shape.mesh.indices.size());
 
             for (auto& indexData : shape.mesh.indices)
             {
@@ -308,6 +321,9 @@ namespace legion::core
 
                 // Append the index of the newly added vertex or whichever one was added earlier.
                 data.indices.push_back(indices[hash]);
+
+                if (progress)
+                    progress->advance_progress(percentagePerIndex);
             }
 
             // Add the sub-mesh to the mesh.
@@ -328,5 +344,17 @@ namespace legion::core
 
         // Construct and return the result.
         return { create(nameHash, data), warnings };
+    }
+
+    common::result<asset_ptr> obj_mesh_loader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
+    {
+        OPTICK_EVENT();
+        return load_impl(nameHash, file, settings, nullptr);
+    }
+
+    common::result<asset_ptr> obj_mesh_loader::loadAsync(id_type nameHash, const fs::view& file, const import_cfg& settings, progress_type& progress)
+    {
+        OPTICK_EVENT();
+        return load_impl(nameHash, file, settings, &progress);
     }
 }
