@@ -4,7 +4,7 @@
 
 namespace legion::core
 {
-    class stb_image_loader : public assets::AssetLoader<image>
+    class StbImageLoader : public assets::AssetLoader<image>
     {
     public:
         using base = assets::AssetLoader<image>;

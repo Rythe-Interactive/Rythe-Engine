@@ -1,4 +1,4 @@
-#include <core/data/loaders/obj_mesh_loader.hpp>
+#include <core/data/loaders/objmeshloader.hpp>
 
 #if !defined(DOXY_EXCLUDE)
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -55,7 +55,7 @@ namespace legion::core
     using import_cfg = base::import_cfg;
     using progress_type = base::progress_type;
 
-    bool obj_mesh_loader::canLoad(const fs::view& file)
+    bool ObjMeshLoader::canLoad(const fs::view& file)
     {
         auto result = file.get_extension();
         if (result)
@@ -63,7 +63,7 @@ namespace legion::core
         return false;
     }
 
-    common::result<asset_ptr> obj_mesh_loader::load_impl(id_type nameHash, const fs::view file, const import_cfg& settings, progress_type* progress)
+    common::result<asset_ptr> ObjMeshLoader::loadImpl(id_type nameHash, const fs::view file, const import_cfg& settings, progress_type* progress)
     {
         // tinyobj objects
         tinyobj::ObjReader reader;
@@ -137,7 +137,7 @@ namespace legion::core
 
         std::vector<tinyobj::material_t> srcMaterials = reader.GetMaterials();
 
-        float percentagePerMat = 25.f / static_cast<float>(srcMaterials.size());
+        const float percentagePerMat = 25.f / static_cast<float>(srcMaterials.size());
 
         for (auto& srcMat : srcMaterials)
         {
@@ -257,7 +257,7 @@ namespace legion::core
         std::vector<detail::vertex_hash> vertices;
         std::unordered_map<detail::vertex_hash, uint> indices;
 
-        float percentagePerShape = 15.f / static_cast<float>(shapes.size());
+        const float percentagePerShape = 10.f / static_cast<float>(shapes.size());
 
         // Iterate submeshes.
         for (auto& shape : shapes)
@@ -269,23 +269,23 @@ namespace legion::core
             if (shape.mesh.material_ids.size())
                 submesh.materialIndex = shape.mesh.material_ids[0];
 
-            float percentagePerIndex = percentagePerShape / static_cast<float>(shape.mesh.indices.size());
+            const float percentagePerIndex = percentagePerShape / static_cast<float>(shape.mesh.indices.size());
 
             for (auto& indexData : shape.mesh.indices)
             {
                 // Get the indices into the tinyobj attributes.
 
-                int vertexCount = static_cast<int>(attributes.vertices.size());
-                uint vertexIndex = static_cast<uint>((vertexCount + (indexData.vertex_index * 3)) % vertexCount);
+                const int vertexCount = static_cast<int>(attributes.vertices.size());
+                const uint vertexIndex = static_cast<uint>((vertexCount + (indexData.vertex_index * 3)) % vertexCount);
 
                 if (vertexIndex + 3 > attributes.vertices.size())
                     continue;
 
-                int normalCount = static_cast<int>(attributes.normals.size());
-                uint normalIndex = static_cast<uint>((normalCount + (indexData.normal_index * 3)) % normalCount);
+                const int normalCount = static_cast<int>(attributes.normals.size());
+                const uint normalIndex = static_cast<uint>((normalCount + (indexData.normal_index * 3)) % normalCount);
 
-                int uvCount = static_cast<int>(attributes.texcoords.size());
-                uint uvIndex = static_cast<uint>((uvCount + (indexData.texcoord_index * 2)) % uvCount);
+                const int uvCount = static_cast<int>(attributes.texcoords.size());
+                const uint uvIndex = static_cast<uint>((uvCount + (indexData.texcoord_index * 2)) % uvCount);
 
                 // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
                 math::vec3 vertex(-attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
@@ -346,15 +346,15 @@ namespace legion::core
         return { create(nameHash, data), warnings };
     }
 
-    common::result<asset_ptr> obj_mesh_loader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
+    common::result<asset_ptr> ObjMeshLoader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
     {
         OPTICK_EVENT();
-        return load_impl(nameHash, file, settings, nullptr);
+        return loadImpl(nameHash, file, settings, nullptr);
     }
 
-    common::result<asset_ptr> obj_mesh_loader::loadAsync(id_type nameHash, const fs::view& file, const import_cfg& settings, progress_type& progress)
+    common::result<asset_ptr> ObjMeshLoader::loadAsync(id_type nameHash, const fs::view& file, const import_cfg& settings, progress_type& progress)
     {
         OPTICK_EVENT();
-        return load_impl(nameHash, file, settings, &progress);
+        return loadImpl(nameHash, file, settings, &progress);
     }
 }

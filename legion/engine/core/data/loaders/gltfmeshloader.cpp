@@ -5,7 +5,7 @@
 #include <tinygltf/tiny_gltf.h> 
 #endif
 
-#include <core/data/loaders/gltf_mesh_loader.hpp>
+#include <core/data/loaders/gltfmeshloader.hpp>
 
 namespace legion::core
 {
@@ -22,7 +22,7 @@ namespace legion::core
             byte* imgData = new byte[img.image.size()]; // faux_gltf_image_loader will delete upon destruction.
             memcpy(imgData, img.image.data(), img.image.size());
 
-            return assets::AssetCache<image>::createAsLoader<gltf_faux_image_loader>(hash, img.name, "",
+            return assets::AssetCache<image>::createAsLoader<GltfFauxImageLoader>(hash, img.name, "",
                 // Image constructor parameters.
                 math::ivec2(img.width, img.height),
                 img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE ? channel_format::eight_bit : img.pixel_type == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT ? channel_format::sixteen_bit : channel_format::float_hdr,
@@ -310,19 +310,8 @@ namespace legion::core
     using import_cfg = base::import_cfg;
     using progress_type = base::progress_type;
 
-    bool gltf_mesh_loader::canLoad(const fs::view& file)
+    common::result<asset_ptr> GltfMeshLoader::loadImpl(id_type nameHash, const fs::view file, progress_type* progress)
     {
-        auto result = file.get_extension();
-        if (!result)
-            return false;
-
-        return result.value() == ".gltf" || result.value() == ".glb";
-    }
-
-    common::result<asset_ptr> gltf_mesh_loader::load(id_type nameHash, const fs::view& file, L_MAYBEUNUSED const import_cfg& settings)
-    {
-        OPTICK_EVENT();
-
         namespace tg = tinygltf;
 
         tg::Model model;
@@ -370,6 +359,10 @@ namespace legion::core
         if (!extension)
             return { legion_exception_msg(extension.error().what()), warnings };
 
+
+        if (progress)
+            progress->advance_progress(5.f);
+
         if (extension.value() == ".gltf")
         {
             auto text = result->to_string();
@@ -392,6 +385,9 @@ namespace legion::core
         else
             return { legion_exception_msg("File was not recognised as a gltf file."), warnings };
 
+        if (progress)
+            progress->advance_progress(55.f);
+
         if (!err.empty())
         {
             auto parserErrors = common::split_string_at<'\n'>(err);
@@ -404,6 +400,8 @@ namespace legion::core
         }
 
         core::mesh meshData;
+
+        const float percentagePerMat = 25.f / static_cast<float>(model.materials.size());
 
         for (auto& srcMat : model.materials)
         {
@@ -470,6 +468,9 @@ namespace legion::core
                     ]);
 
             material.heightMap = assets::invalid_asset<image>;
+
+            if (progress)
+                progress->advance_progress(percentagePerMat);
         }
 
         if (!model.scenes.size())
@@ -477,12 +478,17 @@ namespace legion::core
             return { legion_exception_msg("GLTF model contained 0 scenes"), warnings };
         }
 
-        size_type sceneToLoad = model.defaultScene < 0 ? model.scenes.size() - static_cast<size_type>(model.defaultScene * -1) : static_cast<size_type>(model.defaultScene);
+        const size_type sceneToLoad = model.defaultScene < 0 ? model.scenes.size() - static_cast<size_type>(model.defaultScene * -1) : static_cast<size_type>(model.defaultScene);
+
+        const float percentagePerNode = 10.f / static_cast<float>(model.scenes[sceneToLoad].nodes.size());
 
         for (auto& nodeIdx : model.scenes[sceneToLoad].nodes)
         {
-            size_type idx = nodeIdx < 0 ? model.nodes.size() - static_cast<size_type>(nodeIdx * -1) : static_cast<size_type>(nodeIdx);
+            const size_type idx = nodeIdx < 0 ? model.nodes.size() - static_cast<size_type>(nodeIdx * -1) : static_cast<size_type>(nodeIdx);
             detail::handleGltfNode(meshData, model, model.nodes[idx]);
+
+            if (progress)
+                progress->advance_progress(percentagePerNode);
         }
 
         // Convert to left handed coord system
@@ -516,5 +522,26 @@ namespace legion::core
         mesh::calculate_tangents(&meshData);
 
         return { create(nameHash, meshData), warnings };
+    }
+
+    bool GltfMeshLoader::canLoad(const fs::view& file)
+    {
+        auto result = file.get_extension();
+        if (!result)
+            return false;
+
+        return result.value() == ".gltf" || result.value() == ".glb";
+    }
+
+    common::result<asset_ptr> GltfMeshLoader::load(id_type nameHash, const fs::view& file, L_MAYBEUNUSED const import_cfg& settings)
+    {
+        OPTICK_EVENT();
+        return loadImpl(nameHash, file, nullptr);
+    }
+
+    common::result<asset_ptr> GltfMeshLoader::loadAsync(id_type nameHash, const fs::view& file, L_MAYBEUNUSED const import_cfg& settings, progress_type& progress)
+    {
+        OPTICK_EVENT();
+        return loadImpl(nameHash, file, &progress);
     }
 }

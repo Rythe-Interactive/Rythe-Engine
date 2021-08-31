@@ -41,11 +41,11 @@ namespace legion::core::assets
     private:
         struct data
         {
-            std::unordered_map<id_type, AssetType> m_cache;
-            std::unordered_map<id_type, detail::asset_info> m_info;
+            std::unordered_map<id_type, AssetType> cache;
+            std::unordered_map<id_type, detail::asset_info> info;
 
-            std::vector<std::unique_ptr<loader_type>> m_loaders;
-            std::unordered_map<id_type, id_type> m_loaderIds;
+            std::vector<std::unique_ptr<loader_type>> loaders;
+            std::unordered_map<id_type, id_type> loaderIds;
 
             data() = default;
             ~data();
@@ -58,10 +58,10 @@ namespace legion::core::assets
 
         static const detail::asset_info& info(id_type nameHash);
 
-        static common::result<asset_ptr> retry_load(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
-        static common::result<asset_ptr> retry_load_async(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings, progress_type& progress);
+        static common::result<asset_ptr> retryLoad(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings);
+        static common::result<asset_ptr> retryLoadAsync(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings, progress_type& progress);
 
-        static void async_load_job(id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings, const std::shared_ptr<progress_type>& progress);
+        static void asyncLoadJob(id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings, const std::shared_ptr<progress_type>& progress);
 
     public:
         template<typename LoaderType>

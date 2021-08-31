@@ -39,9 +39,9 @@
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="events\eventbus.cpp" />
-    <ClCompile Include="data\loaders\stb_image_loader.cpp" />
-    <ClCompile Include="data\loaders\obj_mesh_loader.cpp" />
-    <ClCompile Include="data\loaders\gltf_mesh_loader.cpp" />
+    <ClCompile Include="data\loaders\stbimageloader.cpp" />
+    <ClCompile Include="data\loaders\objmeshloader.cpp" />
+    <ClCompile Include="data\loaders\gltfmeshloader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -445,10 +445,10 @@
     <ClInclude Include="assets\assetloader.hpp" />
     <ClInclude Include="assets\assets.hpp" />
     <ClInclude Include="assets\functionalbinds.hpp" />
-    <ClInclude Include="data\loaders\stb_image_loader.hpp" />
+    <ClInclude Include="data\loaders\stbimageloader.hpp" />
     <ClInclude Include="containers\shared_data_view.hpp" />
-    <ClInclude Include="data\loaders\obj_mesh_loader.hpp" />
-    <ClInclude Include="data\loaders\gltf_mesh_loader.hpp" />
+    <ClInclude Include="data\loaders\objmeshloader.hpp" />
+    <ClInclude Include="data\loaders\gltfmeshloader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

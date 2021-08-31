@@ -32,10 +32,11 @@ namespace legion::core::async
         constexpr explicit async_progress_base(float size) noexcept : m_size(static_cast<size_type>(size) * precision_scale<size_type>), m_progress(0) {}
 
         L_NODISCARD float size() const noexcept;
-        L_NODISCARD size_type rawSize() const noexcept;
-        L_NODISCARD size_type rawProgress() const noexcept;
+        L_NODISCARD size_type raw_size() const noexcept;
+        L_NODISCARD size_type raw_progress() const noexcept;
 
         void advance_progress(float progress = 1.f) noexcept;
+        void reset(float progress = 0.f) noexcept;
         L_NODISCARD bool is_done() const noexcept;
         L_NODISCARD float progress() const noexcept;
     };

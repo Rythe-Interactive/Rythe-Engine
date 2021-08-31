@@ -4,7 +4,7 @@
 
 namespace legion::core
 {
-    class gltf_faux_image_loader : public assets::AssetLoader<image>
+    class GltfFauxImageLoader : public assets::AssetLoader<image>
     {
     public:
         using base = assets::AssetLoader<image>;
@@ -19,7 +19,7 @@ namespace legion::core
         virtual void free(image& asset) override { delete[] asset.data(); }
     };
 
-    class gltf_mesh_loader : public assets::AssetLoader<mesh>
+    class GltfMeshLoader : public assets::AssetLoader<mesh>
     {
     public:
         using base = assets::AssetLoader<mesh>;
@@ -27,8 +27,13 @@ namespace legion::core
         using base::import_cfg;
         using base::progress_type;
 
+    private:
+        common::result<asset_ptr> loadImpl(id_type nameHash, const fs::view file, progress_type* progress);
+
+    public:
         virtual bool canLoad(const fs::view& file) override;
 
-        virtual common::result<asset_ptr> load(id_type nameHash, const fs::view& file, const import_cfg& settings) override;
+        virtual common::result<asset_ptr> load(id_type nameHash, const fs::view& file, L_MAYBEUNUSED const import_cfg& settings) override;
+        virtual common::result<asset_ptr> loadAsync(id_type nameHash, const fs::view& file, L_MAYBEUNUSED const import_cfg& settings, progress_type& progress) override;
     };
 }
