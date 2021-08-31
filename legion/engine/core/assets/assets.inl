@@ -1,5 +1,5 @@
 #include <core/assets/assets.hpp>
-#include "assetcache.hpp"
+#include <core/scheduling/scheduling.hpp>
 #pragma once
 
 namespace legion::core::assets
@@ -350,7 +350,7 @@ namespace legion::core::assets
             return;
         }
 
-        scheduling::Scheduler::queueJobs(1, [
+        schd::Scheduler::queueJobs(1, [
                 nameHash = nameHash,
                 name = name,
                 file = file,
