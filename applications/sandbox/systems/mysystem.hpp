@@ -93,14 +93,18 @@ public:
                 msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
         }
 
-        asyncOp = assets::loadAsync<mesh>(fs::view("assets://models/wizardgnome.obj"));
     }
 
     void update(L_MAYBEUNUSED lgn::time::span deltaTime)
     {
         using namespace legion;
+        time::timer clock;
+        asyncOp = assets::loadAsync<mesh>(fs::view("assets://models/wizardgnome.glb"));
+
         while (!asyncOp.is_done())
             log::info("waiting... {:.2f}%", asyncOp.progress() * 100.f);
+
+        log::debug("waited {}s", clock.elapsed_time().seconds());
 
         auto& gltfR = asyncOp.get_result();
 
@@ -118,39 +122,39 @@ public:
                 msh.name(), msh.id(), msh->vertices.size(), msh->indices.size() / 3, msh->materials.size());
         }
 
-        queueJobs(1, []()
-            {
-                lgn::log::error("Sleep start");
-                std::this_thread::sleep_for(std::chrono::minutes(1));
-                lgn::log::error("Sleep end");
-            });
+        //queueJobs(1, []()
+        //    {
+        //        lgn::log::error("Sleep start");
+        //        std::this_thread::sleep_for(std::chrono::minutes(1));
+        //        lgn::log::error("Sleep end");
+        //    });
 
-        lgn::async::rw_spinlock lock;
-        lock.lock();
+        //lgn::async::rw_spinlock lock;
+        //lock.lock();
 
-        auto procA = queueJobs(2000, [&lock](lgn::id_type jobId)
-            {
-                lgn::async::readonly_guard guard(lock);
-                lgn::log::info("\tjob A id [{}]", jobId);
-            });
+        //auto procA = queueJobs(2000, [&lock](lgn::id_type jobId)
+        //    {
+        //        lgn::async::readonly_guard guard(lock);
+        //        lgn::log::info("\tjob A id [{}]", jobId);
+        //    });
 
-        auto procB = queueJobs(2000, [&lock](lgn::id_type jobId)
-            {
-                lgn::async::readonly_guard guard(lock);
-                lgn::log::debug("\tjob B id [{}]", jobId);
-            });
-            
+        //auto procB = queueJobs(2000, [&lock](lgn::id_type jobId)
+        //    {
+        //        lgn::async::readonly_guard guard(lock);
+        //        lgn::log::debug("\tjob B id [{}]", jobId);
+        //    });
+        //    
 
-        auto procC = queueJobs(2000, [&lock](lgn::id_type jobId)
-            {
-                lgn::async::readonly_guard guard(lock);
-                lgn::log::warn("\tjob C id [{}]", jobId);
-            });
+        //auto procC = queueJobs(2000, [&lock](lgn::id_type jobId)
+        //    {
+        //        lgn::async::readonly_guard guard(lock);
+        //        lgn::log::warn("\tjob C id [{}]", jobId);
+        //    });
 
-        lock.unlock();
-        procC.wait();
-        procB.wait();
-        procA.wait();
+        //lock.unlock();
+        //procC.wait();
+        //procB.wait();
+        //procA.wait();
 
         raiseEvent<lgn::events::exit>();
     }
