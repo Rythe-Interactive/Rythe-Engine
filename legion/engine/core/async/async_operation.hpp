@@ -28,8 +28,8 @@ namespace legion::core::async
         void complete_impl() noexcept;
 
     public:
-        constexpr async_progress_base() noexcept : m_size(100 * precision_scale<size_type>), m_progress(0) {}
-        constexpr explicit async_progress_base(float size) noexcept : m_size(static_cast<size_type>(size) * precision_scale<size_type>), m_progress(0) {}
+        constexpr async_progress_base() noexcept : m_size(100u * precision_scale<size_type>), m_progress(0) {}
+        constexpr explicit async_progress_base(float size) noexcept : m_size(static_cast<size_type>(size * precision_scale<float>)), m_progress(0) {}
 
         L_NODISCARD float size() const noexcept;
         L_NODISCARD size_type raw_size() const noexcept;

@@ -85,6 +85,7 @@ namespace legion::core::assets
 
         if (loader)
         {
+            progress.reset();
             auto result = loader->loadAsync(nameHash, file, settings, progress);
             if (result)
             {
@@ -124,7 +125,6 @@ namespace legion::core::assets
 
             if (loaderId != 1u)
             {
-                progress->
                 auto retry = retryLoadAsync(loaderId, nameHash, name, file, settings, *progress);
 
                 if (retry)

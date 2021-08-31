@@ -31,7 +31,7 @@ namespace legion::core::async
 
     void async_progress_base::reset(float progress) noexcept
     {
-        m_progress.store(progress, std::memory_order_release);
+        m_progress.store(static_cast<size_type>(progress * precision_scale<float>), std::memory_order_release);
     }
 
     bool async_progress_base::is_done() const noexcept
