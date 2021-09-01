@@ -30,7 +30,7 @@ namespace fmt
         {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (it != end && *it != '}')
+            if (!it || (it != end && *it != '}'))
                 throw format_error("invalid format");
             return it++;
         }
@@ -52,7 +52,7 @@ namespace fmt
         {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (it != end && *it != '}')
+            if (!it || (it != end && *it != '}'))
                 throw format_error("invalid format");
             return it++;
         }
@@ -72,7 +72,7 @@ namespace fmt
         {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (it != end && *it != '}')
+            if (!it || (it != end && *it != '}'))
                 throw format_error("invalid format");
             return it++;
         }
@@ -105,6 +105,10 @@ namespace fmt
 
               // Parse the presentation format and store it in the formatter:
             auto it = ctx.begin(), end = ctx.end();
+
+            if(!it)
+                throw format_error("invalid format");
+
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
             // Check if reached the end of the range:
@@ -134,7 +138,7 @@ namespace fmt
         constexpr auto parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (it != end && *it != '}')
+            if (!it || (it != end && *it != '}'))
                 throw format_error("invalid format");
             return it++;
         }
@@ -154,6 +158,10 @@ namespace fmt
 
         constexpr auto parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                throw format_error("invalid format");
+
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
             if (it != end && *it != '}')
@@ -177,7 +185,7 @@ namespace fmt
         constexpr auto parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (it != end && *it != '}')
+            if (!it || (it != end && *it != '}'))
                 throw format_error("invalid format");
             return it++;
         }
@@ -197,6 +205,10 @@ namespace fmt
 
         constexpr auto parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                throw format_error("invalid format");
+
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
             if (it != end && *it != '}')
@@ -220,6 +232,10 @@ namespace fmt
 
         constexpr auto parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                throw format_error("invalid format");
+
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
             if (it != end && *it != '}')
@@ -243,9 +259,13 @@ namespace fmt
 
         constexpr auto parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                throw format_error("invalid format");
+
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
-            if (it != end && *it != '}')
+            if (!it || it != end && *it != '}')
                 throw format_error("invalid format");
 
             return it;
