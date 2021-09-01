@@ -19,6 +19,7 @@ namespace legion::core::scheduling
     size_type Scheduler::m_jobPoolSize = 0;
 
     std::atomic<bool> Scheduler::m_exit = { false };
+    std::atomic<bool> Scheduler::m_exitFromEvent = { false };
     std::atomic<bool> Scheduler::m_start = { false };
     int Scheduler::m_exitCode = 0;
 
@@ -141,6 +142,15 @@ namespace legion::core::scheduling
         return { &m_threads.at(id) };
     }
 
+    void Scheduler::init()
+    {
+        events::EventBus::bindToEvent<events::exit>([](events::exit& evnt)
+            {
+                scheduling::Scheduler::m_exitFromEvent.store(true, std::memory_order_release);
+                scheduling::Scheduler::exit(evnt.exitcode);
+            });
+    }
+
     int Scheduler::run(bool lowPower, size_type minThreads)
     {
         bool m_lowPower = lowPower;
@@ -165,11 +175,6 @@ namespace legion::core::scheduling
         }
 
         m_start.store(true, std::memory_order_release);
-
-        events::EventBus::bindToEvent<events::exit>([](events::exit& evnt)
-            {
-                scheduling::Scheduler::exit(evnt.exitcode);
-            });
 
         Clock::subscribeToTick(doTick);
 
@@ -233,8 +238,17 @@ namespace legion::core::scheduling
 
     void Scheduler::exit(int exitCode)
     {
-        if (m_exit.load(std::memory_order_relaxed))
+        if (!m_exitFromEvent.load(std::memory_order_relaxed))
+        {
+            events::EventBus::raiseEvent<events::exit>(exitCode);
             return;
+        }
+
+        if (m_exit.load(std::memory_order_relaxed))
+        {
+            log::warn("Engine was already exiting, triggered addition exit event with code {}", exitCode);
+            return;
+        }
 
         log::undecoratedInfo("=========================\n"
             "| Shutting down engine. |\n"

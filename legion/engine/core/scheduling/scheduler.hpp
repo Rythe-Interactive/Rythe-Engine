@@ -43,6 +43,7 @@ namespace legion::core::scheduling
         static size_type m_jobPoolSize;
 
         static std::atomic<bool> m_exit;
+        static std::atomic<bool> m_exitFromEvent;
         static std::atomic<bool> m_start;
         static int m_exitCode;
 
@@ -68,6 +69,8 @@ namespace legion::core::scheduling
 
         template<typename Func>
         static auto queueJobs(size_type count, Func&& func);
+
+        static void init();
 
         static int run(bool lowPower = false, size_type minThreads = 0);
 
