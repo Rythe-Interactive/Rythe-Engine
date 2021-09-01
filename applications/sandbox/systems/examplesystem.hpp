@@ -67,7 +67,7 @@ public:
         //Serialization Test
         std::string filePath = "assets://scenes/scene.json";
 
-        auto serializer = serialization::Serialization_Registry::register_serializer<scene_comp>();
+        auto serializer = serialization::serializer_registry::register_serializer<scene_comp>();
         auto scene = scene_comp();
         scene.id = 1;
         for (int i = 0; i < 200; i++)

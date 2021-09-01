@@ -8,7 +8,7 @@
 
 namespace legion::core::serialization
 {
-    class Serialization_Registry
+    class serializer_registry
     {
     private:
         static std::map<id_type, std::unique_ptr<serializer_base>> serializers;
