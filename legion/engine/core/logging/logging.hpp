@@ -13,6 +13,7 @@
 #endif
 
 #include <core/platform/platform.hpp>
+#include <core/types/types.hpp>
 #include <thread>
 #include <core/math/math.hpp>
 #include <core/common/exception.hpp>
@@ -26,11 +27,14 @@ namespace fmt
     struct formatter<std::thread::id>
     {
 
-        constexpr auto parse(format_parse_context& ctx)
+        constexpr const char* parse(format_parse_context& ctx)
         {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (!it || (it != end && *it != '}'))
+            if (!it)
+                return nullptr;
+
+            if (it != end && *it != '}')
                 throw format_error("invalid format");
             return it++;
         }
@@ -48,11 +52,14 @@ namespace fmt
     struct formatter<legion::core::exception>
     {
 
-        constexpr auto parse(format_parse_context& ctx)
+        constexpr const char* parse(format_parse_context& ctx)
         {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (!it || (it != end && *it != '}'))
+            if (!it)
+                return nullptr;
+
+            if (it != end && *it != '}')
                 throw format_error("invalid format");
             return it++;
         }
@@ -68,11 +75,14 @@ namespace fmt
     struct formatter<legion::core::fs_error>
     {
 
-        constexpr auto parse(format_parse_context& ctx)
+        constexpr const char* parse(format_parse_context& ctx)
         {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (!it || (it != end && *it != '}'))
+            if (!it)
+                return nullptr;
+
+            if (it != end && *it != '}')
                 throw format_error("invalid format");
             return it++;
         }
@@ -90,7 +100,7 @@ namespace fmt
         char presentation = 'f';
 
         // Parses format specifications of the form ['f' | 'e'].
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             // auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) // c++11
               // [ctx.begin(), ctx.end()) is a character range that contains a part of
               // the format string starting from the format specifications to be parsed,
@@ -106,8 +116,8 @@ namespace fmt
               // Parse the presentation format and store it in the formatter:
             auto it = ctx.begin(), end = ctx.end();
 
-            if(!it)
-                throw format_error("invalid format");
+            if (!it)
+                return nullptr;
 
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
@@ -135,10 +145,13 @@ namespace fmt
     template <>
     struct formatter<legion::core::math::ivec2> {
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (!it || (it != end && *it != '}'))
+            if (!it)
+                return nullptr;
+
+            if (it != end && *it != '}')
                 throw format_error("invalid format");
             return it++;
         }
@@ -156,11 +169,11 @@ namespace fmt
     struct formatter<legion::core::math::vec3> {
         char presentation = 'f';
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
 
             if (!it)
-                throw format_error("invalid format");
+                return nullptr;
 
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
@@ -182,10 +195,13 @@ namespace fmt
     template <>
     struct formatter<legion::core::math::ivec3> {
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
 
-            if (!it || (it != end && *it != '}'))
+            if (!it)
+                return nullptr;
+
+            if (it != end && *it != '}')
                 throw format_error("invalid format");
             return it++;
         }
@@ -203,11 +219,11 @@ namespace fmt
     struct formatter<legion::core::math::vec4> {
         char presentation = 'f';
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
 
             if (!it)
-                throw format_error("invalid format");
+                return nullptr;
 
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
@@ -230,11 +246,11 @@ namespace fmt
     struct formatter<legion::core::math::color> {
         char presentation = 'f';
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
 
             if (!it)
-                throw format_error("invalid format");
+                return nullptr;
 
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
@@ -257,15 +273,15 @@ namespace fmt
     struct formatter<legion::core::math::quat> {
         char presentation = 'f';
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
 
             if (!it)
-                throw format_error("invalid format");
+                return nullptr;
 
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
-            if (!it || it != end && *it != '}')
+            if (it != end && *it != '}')
                 throw format_error("invalid format");
 
             return it;

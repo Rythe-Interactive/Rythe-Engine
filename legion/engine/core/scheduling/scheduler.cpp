@@ -38,11 +38,6 @@ namespace legion::core::scheduling
         time::span timeBuffer;
         time::span sleepTime;
 
-        events::EventBus::bindToEvent<events::exit>([](events::exit& evnt)
-            {
-                scheduling::Scheduler::exit(evnt.exitcode);
-            });
-
         while (!m_exit.load(std::memory_order_relaxed))
         {
             bool noWork = true;
@@ -170,6 +165,11 @@ namespace legion::core::scheduling
         }
 
         m_start.store(true, std::memory_order_release);
+
+        events::EventBus::bindToEvent<events::exit>([](events::exit& evnt)
+            {
+                scheduling::Scheduler::exit(evnt.exitcode);
+            });
 
         Clock::subscribeToTick(doTick);
 
