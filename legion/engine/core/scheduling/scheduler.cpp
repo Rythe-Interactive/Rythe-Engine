@@ -246,7 +246,7 @@ namespace legion::core::scheduling
 
         if (m_exit.load(std::memory_order_relaxed))
         {
-            log::warn("Engine was already exiting, triggered addition exit event with code {}", exitCode);
+            log::warn("Engine was already exiting, triggered additional exit event with code {}", exitCode);
             return;
         }
 
