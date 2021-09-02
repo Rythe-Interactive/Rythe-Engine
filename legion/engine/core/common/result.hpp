@@ -58,7 +58,7 @@ namespace legion::core::common
                 new (&m_error) error_type(std::move(src.m_error));
         }
 
-        ~result()
+        ~result() noexcept(false)
         {
             m_warnings.~vector();
 
@@ -159,7 +159,7 @@ namespace legion::core::common
 
         result(const result& src) = default;
         result(result&& src) = default;
-        ~result()
+        ~result() noexcept(false)
         {
             if (m_error && !m_handled)
                 throw *m_error;

@@ -9,12 +9,12 @@ namespace legion::core::async
         return static_cast<float>(m_size) / precision_scale<float>;
     }
 
-    size_type async_progress_base::rawSize() const noexcept
+    size_type async_progress_base::raw_size() const noexcept
     {
         return m_size;
     }
 
-    size_type async_progress_base::rawProgress() const noexcept
+    size_type async_progress_base::raw_progress() const noexcept
     {
         return m_progress.load(std::memory_order_relaxed);
     }
@@ -27,6 +27,11 @@ namespace legion::core::async
     void async_progress_base::advance_progress(float progress) noexcept
     {
         m_progress.fetch_add(static_cast<size_type>(progress * precision_scale<float>), std::memory_order_release);
+    }
+
+    void async_progress_base::reset(float progress) noexcept
+    {
+        m_progress.store(static_cast<size_type>(progress * precision_scale<float>), std::memory_order_release);
     }
 
     bool async_progress_base::is_done() const noexcept

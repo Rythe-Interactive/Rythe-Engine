@@ -5,7 +5,7 @@
 #include <stb_image.h>
 #endif
 
-#include <core/data/loaders/stb_image_loader.hpp>
+#include <core/data/loaders/stbimageloader.hpp>
 
 namespace legion::core
 {
@@ -110,7 +110,7 @@ namespace legion::core
         }
     }
 
-    bool stb_image_loader::canLoad(const fs::view& file)
+    bool StbImageLoader::canLoad(const fs::view& file)
     {
         auto result = file.get();
         if (!result)
@@ -122,7 +122,7 @@ namespace legion::core
         return detail::stbi_test(result->data(), result->size());
     }
 
-    common::result<asset_ptr> stb_image_loader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
+    common::result<asset_ptr> StbImageLoader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
     {
         OPTICK_EVENT();
 
@@ -185,7 +185,7 @@ namespace legion::core
         return create(nameHash, size, format, components, imageData);
     }
 
-    void stb_image_loader::free(image& asset)
+    void StbImageLoader::free(image& asset)
     {
         stbi_image_free(asset.data());
     }

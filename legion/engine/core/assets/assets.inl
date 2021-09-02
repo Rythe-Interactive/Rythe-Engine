@@ -1,5 +1,5 @@
 #include <core/assets/assets.hpp>
-#include "assetcache.hpp"
+#include <core/scheduling/scheduling.hpp>
 #pragma once
 
 namespace legion::core::assets
@@ -11,9 +11,9 @@ namespace legion::core::assets
     inline AssetCache<AssetType>::data::~data()
     {
         std::vector<id_type> toDestroy;
-        toDestroy.reserve(AssetCache<AssetType>::m_data.m_cache.size());
+        toDestroy.reserve(AssetCache<AssetType>::m_data.cache.size());
 
-        for (auto& [key, value] : AssetCache<AssetType>::m_data.m_cache)
+        for (auto& [key, value] : AssetCache<AssetType>::m_data.cache)
         {
             toDestroy.push_back(key);
         }
@@ -30,26 +30,26 @@ namespace legion::core::assets
     {
         static_assert(std::is_constructible_v<AssetType, Args...>, "Asset type is not constructible with given argument types.");
 
-        AssetType* ptr = &m_data.m_cache.try_emplace(nameHash, AssetType(std::forward<Args>(args)...)).first->second;
+        AssetType* ptr = &m_data.cache.try_emplace(nameHash, AssetType(std::forward<Args>(args)...)).first->second;
         return asset<AssetType>{ ptr, nameHash };
     }
 
     template<typename AssetType>
     inline L_ALWAYS_INLINE const detail::asset_info& AssetCache<AssetType>::info(id_type nameHash)
     {
-        return m_data.m_info.at(nameHash);
+        return m_data.info.at(nameHash);
     }
 
     template<typename AssetType>
-    inline common::result<asset<AssetType>> AssetCache<AssetType>::retry_load(const common::result<asset<AssetType>>& previousAttempt, id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings)
+    inline common::result<asset<AssetType>> AssetCache<AssetType>::retryLoad(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings)
     {
         loader_type* loader = nullptr;
         size_type loaderId;
 
         for (size_type i = previousLoader - 2; i != static_cast<size_type>(-1); i--)
-            if (m_data.m_loaders[i]->canLoad(file))
+            if (m_data.loaders[i]->canLoad(file))
             {
-                loader = m_data.m_loaders[i].get();
+                loader = m_data.loaders[i].get();
                 loaderId = i + 1;
                 break;
             }
@@ -59,33 +59,109 @@ namespace legion::core::assets
             auto result = loader->load(nameHash, file, settings);
             if (result)
             {
-                m_data.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                m_data.info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
                 return result;
             }
-            return retry_load(result, loaderId, nameHash, name, file, settings);
+            result.mark_handled();
+            return retryLoad(loaderId, nameHash, name, file, settings);
         }
 
         return legion_exception;
     }
 
     template<typename AssetType>
+    inline common::result<asset<AssetType>> AssetCache<AssetType>::retryLoadAsync(id_type previousLoader, id_type nameHash, const std::string& name, const fs::view& file, const import_cfg& settings, AssetCache<AssetType>::progress_type& progress)
+    {
+        loader_type* loader = nullptr;
+        size_type loaderId;
+
+        for (size_type i = previousLoader - 2; i != static_cast<size_type>(-1); i--)
+            if (m_data.loaders[i]->canLoad(file))
+            {
+                loader = m_data.loaders[i].get();
+                loaderId = i + 1;
+                break;
+            }
+
+        if (loader)
+        {
+            progress.reset();
+            auto result = loader->loadAsync(nameHash, file, settings, progress);
+            if (result)
+            {
+                m_data.info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                return result;
+            }
+            result.mark_handled();
+            return retryLoadAsync(loaderId, nameHash, name, file, settings, progress);
+        }
+
+        return legion_exception;
+    }
+
+    template<typename AssetType>
+    inline void AssetCache<AssetType>::asyncLoadJob(id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings, const std::shared_ptr<typename AssetCache<AssetType>::progress_type>& progress)
+    {
+        loader_type* loader = nullptr;
+        size_type loaderId;
+
+        for (size_type i = m_data.loaders.size() - 1; i != static_cast<size_type>(-1); i--)
+            if (m_data.loaders[i]->canLoad(file))
+            {
+                loader = m_data.loaders[i].get();
+                loaderId = i + 1;
+                break;
+            }
+
+        if (loader)
+        {
+            auto result = loader->loadAsync(nameHash, file, settings, *progress);
+            if (result)
+            {
+                m_data.info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                progress->complete(result);
+                return;
+            }
+
+            if (loaderId != 1u)
+            {
+                auto retry = retryLoadAsync(loaderId, nameHash, name, file, settings, *progress);
+
+                if (retry)
+                {
+                    result.mark_handled();
+                    progress->complete(retry);
+                    return;
+                }
+                else
+                    retry.mark_handled();
+            }
+            progress->complete(result);
+            return;
+        }
+
+        progress->complete(legion_exception_msg("No loader found that could load file"));
+        return;
+    }
+
+    template<typename AssetType>
     inline L_ALWAYS_INLINE bool AssetCache<AssetType>::hasLoaders() noexcept
     {
-        return !m_data.m_loaders.empty();
+        return !m_data.loaders.empty();
     }
 
     template<typename AssetType>
     template<typename LoaderType>
     inline bool AssetCache<AssetType>::hasLoader()
     {
-        return m_data.m_loaderIds.find(typeHash<LoaderType>()) != m_data.m_loaderIds.end();
+        return m_data.loaderIds.find(typeHash<LoaderType>()) != m_data.loaderIds.end();
     }
 
     template<typename AssetType>
     inline L_ALWAYS_INLINE void AssetCache<AssetType>::addLoader(std::unique_ptr<AssetLoader<AssetType>>&& loader)
     {
-        loader->m_loaderId = m_data.m_loaders.size() + 1;
-        m_data.m_loaders.push_back(std::move(loader));
+        loader->m_loaderId = m_data.loaders.size() + 1;
+        m_data.loaders.push_back(std::move(loader));
     }
 
     template<typename AssetType>
@@ -96,8 +172,8 @@ namespace legion::core::assets
 
         auto* ptr = new LoaderType(std::forward<Arguments>(args)...);
 
-        m_data.m_loaderIds.emplace(typeHash<LoaderType>(), m_data.m_loaders.size() + 1);
-        m_data.m_loaders.emplace_back(ptr);
+        m_data.loaderIds.emplace(typeHash<LoaderType>(), m_data.loaders.size() + 1);
+        m_data.loaders.emplace_back(ptr);
     }
 
     template<typename AssetType>
@@ -106,8 +182,8 @@ namespace legion::core::assets
     {
         static_assert(std::is_constructible_v<AssetType, Arguments...>, "Asset type is not constructible with given argument types.");
 
-        AssetType* ptr = &m_data.m_cache.try_emplace(nameHash, AssetType(std::forward<Arguments>(args)...)).first->second;
-        m_data.m_info.try_emplace(nameHash, detail::asset_info{ name, path, m_data.m_loaderIds.at(typeHash<LoaderType>()) });
+        AssetType* ptr = &m_data.cache.try_emplace(nameHash, AssetType(std::forward<Arguments>(args)...)).first->second;
+        m_data.info.try_emplace(nameHash, detail::asset_info{ name, path, m_data.loaderIds.at(typeHash<LoaderType>()) });
         return asset<AssetType>{ ptr, nameHash };
     }
 
@@ -167,10 +243,10 @@ namespace legion::core::assets
         loader_type* loader = nullptr;
         size_type loaderId;
 
-        for (size_type i = m_data.m_loaders.size() - 1; i != static_cast<size_type>(-1); i--)
-            if (m_data.m_loaders[i]->canLoad(file))
+        for (size_type i = m_data.loaders.size() - 1; i != static_cast<size_type>(-1); i--)
+            if (m_data.loaders[i]->canLoad(file))
             {
-                loader = m_data.m_loaders[i].get();
+                loader = m_data.loaders[i].get();
                 loaderId = i + 1;
                 break;
             }
@@ -180,13 +256,13 @@ namespace legion::core::assets
             auto result = loader->load(nameHash, file, settings);
             if (result)
             {
-                m_data.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                m_data.info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
                 return result;
             }
 
             if (loaderId != 1u)
             {
-                auto retry = retry_load(result, loaderId, nameHash, name, file, settings);
+                auto retry = retryLoad(loaderId, nameHash, name, file, settings);
 
                 if (retry)
                 {
@@ -255,9 +331,35 @@ namespace legion::core::assets
     template<typename AssetType>
     inline async::async_operation<common::result<asset<AssetType>>> AssetCache<AssetType>::loadAsync(id_type nameHash, const std::string& name, const fs::view& file, const AssetCache<AssetType>::import_cfg& settings)
     {
-        auto progress = std::make_shared<async::async_progress<common::result<asset<AssetType>>>>(0.f);
+        auto progress = std::make_shared<async::async_progress<common::result<asset<AssetType>>>>();
 
-        progress->complete(load(nameHash, name, file, settings));
+        auto traits = file.file_info();
+        if (!traits.is_valid_path)
+        {
+            progress->complete(legion_exception_msg("invalid file traits: not a valid path"));
+            return;
+        }
+        else if (!traits.exists)
+        {
+            progress->complete(legion_exception_msg("invalid file traits: file does not exist"));
+            return;
+        }
+        else if (!traits.can_be_read)
+        {
+            progress->complete(legion_exception_msg("invalid file traits: file cannot be read"));
+            return;
+        }
+
+        schd::Scheduler::queueJobs(1, [
+                nameHash = nameHash,
+                name = name,
+                file = file,
+                settings = settings,
+                progress = progress
+            ]()
+            {
+                asyncLoadJob(nameHash, name, file, settings, progress);
+            });
 
         return async::async_operation{ progress }; // Requires ability to schedule a single task. or job system not to halt until all jobs are done.
     }
@@ -279,8 +381,8 @@ namespace legion::core::assets
     {
         static_assert(std::is_default_constructible_v<AssetType>, "Asset type is not default constructible.");
 
-        AssetType* ptr = &(m_data.m_cache[nameHash]); // Slightly faster than try_emplace in most cases except for when using libstdc++(GNU) with Clang, with GCC or using libc++(LLVM) with Clang is no issue.
-        m_data.m_info.try_emplace(nameHash, { name, path, invalid_id });
+        AssetType* ptr = &(m_data.cache[nameHash]); // Slightly faster than try_emplace in most cases except for when using libstdc++(GNU) with Clang, with GCC or using libc++(LLVM) with Clang is no issue.
+        m_data.info.try_emplace(nameHash, { name, path, invalid_id });
         return { ptr, nameHash };
     }
 
@@ -301,8 +403,8 @@ namespace legion::core::assets
     {
         static_assert(std::is_copy_constructible_v<AssetType>, "Asset type is not copy constructible.");
 
-        AssetType* ptr = &m_data.m_cache.try_emplace(nameHash, src).first->second;
-        m_data.m_info.try_emplace(nameHash, { name, path, invalid_id });
+        AssetType* ptr = &m_data.cache.try_emplace(nameHash, src).first->second;
+        m_data.info.try_emplace(nameHash, { name, path, invalid_id });
         return { ptr, nameHash };
     }
 
@@ -326,8 +428,8 @@ namespace legion::core::assets
     {
         static_assert(std::is_constructible_v<AssetType, Arguments...>, "Asset type is not constructible with given argument types.");
 
-        AssetType* ptr = &m_data.m_cache.try_emplace(nameHash, AssetType(std::forward<Arguments>(args)...)).first->second;
-        m_data.m_info.try_emplace(nameHash, detail::asset_info{ name, path, invalid_id });
+        AssetType* ptr = &m_data.cache.try_emplace(nameHash, AssetType(std::forward<Arguments>(args)...)).first->second;
+        m_data.info.try_emplace(nameHash, detail::asset_info{ name, path, invalid_id });
         return { ptr, nameHash };
     }
 
@@ -341,13 +443,13 @@ namespace legion::core::assets
     template<typename AssetType>
     inline bool AssetCache<AssetType>::has(const std::string& name)
     {
-        return m_data.m_cache.find(nameHash(name)) != m_data.m_cache.end();
+        return m_data.cache.find(nameHash(name)) != m_data.cache.end();
     }
 
     template<typename AssetType>
     inline bool AssetCache<AssetType>::has(id_type nameHash)
     {
-        return m_data.m_cache.find(nameHash) != m_data.m_cache.end();
+        return m_data.cache.find(nameHash) != m_data.cache.end();
     }
 
     template<typename AssetType>
@@ -355,7 +457,7 @@ namespace legion::core::assets
     {
         id_type id = nameHash(name);
         if (has(id))
-            return { &m_data.m_cache.at(id), id };
+            return { &m_data.cache.at(id), id };
         return invalid_asset<AssetType>;
     }
 
@@ -363,7 +465,7 @@ namespace legion::core::assets
     inline asset<AssetType> AssetCache<AssetType>::get(id_type nameHash)
     {
         if (has(nameHash))
-            return { &m_data.m_cache.at(nameHash), nameHash };
+            return { &m_data.cache.at(nameHash), nameHash };
         return invalid_asset<AssetType>;
     }
 
@@ -372,34 +474,34 @@ namespace legion::core::assets
     {
         id_type id = nameHash(name);
 
-        auto& info = m_data.m_info.at(id);
+        auto& info = m_data.info.at(id);
         if (info.assetLoader)
-            m_data.m_loaders[info.assetLoader - 1]->free(m_data.m_cache.at(id));
+            m_data.loaders[info.assetLoader - 1]->free(m_data.cache.at(id));
 
-        m_data.m_cache.erase(id);
-        m_data.m_info.erase(id);
+        m_data.cache.erase(id);
+        m_data.info.erase(id);
     }
 
     template<typename AssetType>
     inline void AssetCache<AssetType>::destroy(id_type nameHash)
     {
-        auto& info = m_data.m_info.at(nameHash);
+        auto& info = m_data.info.at(nameHash);
         if (info.assetLoader)
-            m_data.m_loaders[info.assetLoader - 1]->free(m_data.m_cache.at(nameHash));
+            m_data.loaders[info.assetLoader - 1]->free(m_data.cache.at(nameHash));
 
-        m_data.m_cache.erase(nameHash);
-        m_data.m_info.erase(nameHash);
+        m_data.cache.erase(nameHash);
+        m_data.info.erase(nameHash);
     }
 
     template<typename AssetType>
     inline void AssetCache<AssetType>::destroy(asset_ptr asset)
     {
-        auto& info = m_data.m_info.at(asset.m_data.m_id);
+        auto& info = m_data.info.at(asset.m_data.id);
         if (info.assetLoader)
-            m_data.m_loaders[info.assetLoader - 1]->free(*asset.ptr);
+            m_data.loaders[info.assetLoader - 1]->free(*asset.ptr);
 
-        m_data.m_cache.erase(asset.m_data.m_id);
-        m_data.m_info.erase(asset.m_data.m_id);
+        m_data.cache.erase(asset.m_data.id);
+        m_data.info.erase(asset.m_data.id);
     }
 
     template<typename AssetType>

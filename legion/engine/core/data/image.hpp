@@ -42,7 +42,7 @@ namespace legion::core
     {
         image(const math::ivec2& res, channel_format format, image_components comp, const data_view<byte>& data);
 
-        NO_DEFAULT_CTOR_RULE5_NOEXCEPT(image);
+        NO_DEF_CTOR_RULE5_NOEXCEPT(image);
 
         const math::ivec2& resolution() const noexcept;
         const channel_format& format() const noexcept;
@@ -107,7 +107,7 @@ namespace legion::core
                 components(comp)
             {}
 
-            NO_DEFAULT_CTOR_RULE5_NOEXCEPT(import_settings);
+            NO_DEF_CTOR_RULE5_NOEXCEPT(import_settings);
         };
     }
 }

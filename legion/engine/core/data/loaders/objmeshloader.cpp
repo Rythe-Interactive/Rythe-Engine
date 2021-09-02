@@ -1,4 +1,4 @@
-#include <core/data/loaders/obj_mesh_loader.hpp>
+#include <core/data/loaders/objmeshloader.hpp>
 
 #if !defined(DOXY_EXCLUDE)
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -55,7 +55,7 @@ namespace legion::core
     using import_cfg = base::import_cfg;
     using progress_type = base::progress_type;
 
-    bool obj_mesh_loader::canLoad(const fs::view& file)
+    bool ObjMeshLoader::canLoad(const fs::view& file)
     {
         auto result = file.get_extension();
         if (result)
@@ -63,10 +63,8 @@ namespace legion::core
         return false;
     }
 
-    common::result<asset_ptr> obj_mesh_loader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
+    common::result<asset_ptr> ObjMeshLoader::loadImpl(id_type nameHash, const fs::view file, const import_cfg& settings, progress_type* progress)
     {
-        OPTICK_EVENT();
-
         // tinyobj objects
         tinyobj::ObjReader reader;
         tinyobj::ObjReaderConfig config;
@@ -114,6 +112,9 @@ namespace legion::core
 
         auto text = result->to_string();
 
+        if (progress)
+            progress->advance_progress(5.f);
+
         tinyobj::MaterialFileReader matFileReader(baseDir);
 
         // Try to parse the mesh data from the text data in the file.
@@ -128,10 +129,15 @@ namespace legion::core
             warnings.insert(warnings.end(), readerWarnings.begin(), readerWarnings.end());
         }
 
+        if (progress)
+            progress->advance_progress(55.f);
+
         // Create the mesh
         mesh data;
 
         std::vector<tinyobj::material_t> srcMaterials = reader.GetMaterials();
+
+        const float percentagePerMat = 25.f / static_cast<float>(srcMaterials.size());
 
         for (auto& srcMat : srcMaterials)
         {
@@ -238,6 +244,9 @@ namespace legion::core
 
                 warnings.insert(warnings.end(), imgResult.warnings().begin(), imgResult.warnings().end());
             }
+
+            if (progress)
+                progress->advance_progress(percentagePerMat);
         }
 
         // Get all the vertex and composition data.
@@ -247,6 +256,8 @@ namespace legion::core
         // Sparse map like constructs to map both vertices and indices.
         std::vector<detail::vertex_hash> vertices;
         std::unordered_map<detail::vertex_hash, uint> indices;
+
+        const float percentagePerShape = 10.f / static_cast<float>(shapes.size());
 
         // Iterate submeshes.
         for (auto& shape : shapes)
@@ -258,21 +269,23 @@ namespace legion::core
             if (shape.mesh.material_ids.size())
                 submesh.materialIndex = shape.mesh.material_ids[0];
 
+            const float percentagePerIndex = percentagePerShape / static_cast<float>(shape.mesh.indices.size());
+
             for (auto& indexData : shape.mesh.indices)
             {
                 // Get the indices into the tinyobj attributes.
 
-                int vertexCount = static_cast<int>(attributes.vertices.size());
-                uint vertexIndex = static_cast<uint>((vertexCount + (indexData.vertex_index * 3)) % vertexCount);
+                const int vertexCount = static_cast<int>(attributes.vertices.size());
+                const uint vertexIndex = static_cast<uint>((vertexCount + (indexData.vertex_index * 3)) % vertexCount);
 
                 if (vertexIndex + 3 > attributes.vertices.size())
                     continue;
 
-                int normalCount = static_cast<int>(attributes.normals.size());
-                uint normalIndex = static_cast<uint>((normalCount + (indexData.normal_index * 3)) % normalCount);
+                const int normalCount = static_cast<int>(attributes.normals.size());
+                const uint normalIndex = static_cast<uint>((normalCount + (indexData.normal_index * 3)) % normalCount);
 
-                int uvCount = static_cast<int>(attributes.texcoords.size());
-                uint uvIndex = static_cast<uint>((uvCount + (indexData.texcoord_index * 2)) % uvCount);
+                const int uvCount = static_cast<int>(attributes.texcoords.size());
+                const uint uvIndex = static_cast<uint>((uvCount + (indexData.texcoord_index * 2)) % uvCount);
 
                 // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
                 math::vec3 vertex(-attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
@@ -308,6 +321,9 @@ namespace legion::core
 
                 // Append the index of the newly added vertex or whichever one was added earlier.
                 data.indices.push_back(indices[hash]);
+
+                if (progress)
+                    progress->advance_progress(percentagePerIndex);
             }
 
             // Add the sub-mesh to the mesh.
@@ -328,5 +344,17 @@ namespace legion::core
 
         // Construct and return the result.
         return { create(nameHash, data), warnings };
+    }
+
+    common::result<asset_ptr> ObjMeshLoader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
+    {
+        OPTICK_EVENT();
+        return loadImpl(nameHash, file, settings, nullptr);
+    }
+
+    common::result<asset_ptr> ObjMeshLoader::loadAsync(id_type nameHash, const fs::view& file, const import_cfg& settings, progress_type& progress)
+    {
+        OPTICK_EVENT();
+        return loadImpl(nameHash, file, settings, &progress);
     }
 }
