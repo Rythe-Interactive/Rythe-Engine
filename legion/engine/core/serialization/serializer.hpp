@@ -1,5 +1,6 @@
 #pragma once
 #include <core/filesystem/filesystem.hpp>
+#include <core/serialization/serializer_view.hpp>
 #include <core/ecs/prototypes/component_prototype.hpp>
 #include <nlohmann/json.hpp>
 
@@ -22,29 +23,21 @@ namespace legion::core::serialization
         serializer_base() = default;
         ~serializer_base() = default;
 
-        virtual void serialize(const std::any& serializable, DataFormat format) = 0;
-        virtual prototype_base deserialize(const std::string data, DataFormat format) = 0;
+        virtual void serialize(const std::any& serializable,serializer_view& view) = 0;
+        virtual prototype_base deserialize(serializer_view& view) = 0;
     };
 
 
     template<typename serializable_type>
     struct serializer : serializer_base
     {
-        virtual void serialize(const std::any& serializable, DataFormat format = DataFormat::JSON) override
+        virtual void serialize(const std::any& serializable, serializer_view& view) override
         {
             if (!serializable.has_value())
                 return;
 
             if (serializable.type != typeid(serializable_type))
                 return;
-
-            serializer_view& view;
-            if (format == DataFormat::JSON)
-                view = json_view<serializable_type>();
-            else if (format == DataFormat::BSON)
-                view = bson_view<serializable_type>();
-            else
-                view = yaml_view<serializable_type>();
 
             if (!view.serialize<serializable_type>(std::any_cast<serializable_type>(serializable)))
             {
@@ -54,7 +47,7 @@ namespace legion::core::serialization
             }
         };
 
-        virtual prototype_base deserialize(const std::string data, DataFormat format = DataFormat::JSON) override
+        virtual prototype_base deserialize(const std::string data, serializer_view& view) override
         {
             //if(format == DataFormat::BSON)
             //	return this->deserialize_impl<bson_view<serializable_type>>(data);
