@@ -63,7 +63,7 @@ namespace legion::core
         return false;
     }
 
-    common::result<asset_ptr> ObjMeshLoader::loadImpl(id_type nameHash, const fs::view file, const import_cfg& settings, progress_type* progress)
+    common::result<asset_ptr> ObjMeshLoader::loadImpl(id_type nameHash, const fs::view& file, const import_cfg& settings, progress_type* progress)
     {
         // tinyobj objects
         tinyobj::ObjReader reader;

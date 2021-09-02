@@ -310,7 +310,7 @@ namespace legion::core
     using import_cfg = base::import_cfg;
     using progress_type = base::progress_type;
 
-    common::result<asset_ptr> GltfMeshLoader::loadImpl(id_type nameHash, const fs::view file, progress_type* progress)
+    common::result<asset_ptr> GltfMeshLoader::loadImpl(id_type nameHash, const fs::view& file, progress_type* progress)
     {
         namespace tg = tinygltf;
 

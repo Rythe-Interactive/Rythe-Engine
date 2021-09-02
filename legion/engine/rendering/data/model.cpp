@@ -120,8 +120,8 @@ namespace legion::rendering
         // Check if the file is valid to load.
         if (!file.is_valid() || !file.file_info().is_file)
             return invalid_model_handle;
-        // Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
 
+        // Load the mesh if it wasn't already. (It's called MeshCache for a reason.)
         model model{};
 
         auto result = assets::load<mesh>(name, file, settings);
