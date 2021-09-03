@@ -14,14 +14,12 @@
     <ClCompile Include="filesystem\assetimporter.cpp" />
     <ClCompile Include="data\mesh.cpp" />
     <ClCompile Include="logging\logging.cpp" />
-    <ClCompile Include="data\importers\mesh_importers.cpp" />
     <ClCompile Include="compute\buffer.cpp" />
     <ClCompile Include="compute\context.cpp" />
     <ClCompile Include="compute\Program.cpp" />
     <ClCompile Include="compute\kernel.cpp" />
     <ClCompile Include="compute\high_level\function.cpp" />
     <ClCompile Include="data\image.cpp" />
-    <ClCompile Include="data\importers\image_importers.cpp" />
     <ClCompile Include="engine\system.cpp" />
     <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
@@ -41,6 +39,9 @@
     <ClCompile Include="scheduling\processchain.cpp" />
     <ClCompile Include="scheduling\scheduler.cpp" />
     <ClCompile Include="events\eventbus.cpp" />
+    <ClCompile Include="data\loaders\stbimageloader.cpp" />
+    <ClCompile Include="data\loaders\objmeshloader.cpp" />
+    <ClCompile Include="data\loaders\gltfmeshloader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -383,7 +384,6 @@
     <ClInclude Include="data\mesh.hpp" />
     <ClInclude Include="data\data.hpp" />
     <ClInclude Include="logging\logging.hpp" />
-    <ClInclude Include="data\importers\mesh_importers.hpp" />
     <ClInclude Include="common\unit_conversion.hpp" />
     <ClInclude Include="compute\buffer.hpp" />
     <ClInclude Include="math\color.hpp" />
@@ -394,7 +394,6 @@
     <ClInclude Include="compute\detail\cl_include.hpp" />
     <ClInclude Include="compute\high_level\function.hpp" />
     <ClInclude Include="data\image.hpp" />
-    <ClInclude Include="data\importers\image_importers.hpp" />
     <ClInclude Include="scenemanagement\scene.hpp" />
     <ClInclude Include="scenemanagement\scenemanager.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
@@ -440,6 +439,16 @@
     <ClInclude Include="ecs\archetype\archetype.hpp" />
     <ClInclude Include="ecs\meta\meta.hpp" />
     <ClInclude Include="time\utils.hpp" />
+    <ClInclude Include="assets\assetcache.hpp" />
+    <ClInclude Include="assets\asset.hpp" />
+    <ClInclude Include="assets\import_settings.hpp" />
+    <ClInclude Include="assets\assetloader.hpp" />
+    <ClInclude Include="assets\assets.hpp" />
+    <ClInclude Include="assets\functionalbinds.hpp" />
+    <ClInclude Include="data\loaders\stbimageloader.hpp" />
+    <ClInclude Include="containers\shared_data_view.hpp" />
+    <ClInclude Include="data\loaders\objmeshloader.hpp" />
+    <ClInclude Include="data\loaders\gltfmeshloader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -598,5 +607,10 @@
     <None Include="events\eventbus.inl" />
     <None Include="ecs\archetype\archetype.inl" />
     <None Include="time\utils.inl" />
+    <None Include="assets\functionalbinds.inl" />
+    <None Include="assets\assets.inl" />
+    <None Include="containers\data_view.inl" />
+    <None Include="containers\shared_data_view.inl" />
+    <None Include="data\image.inl" />
   </ItemGroup>
 </Project>

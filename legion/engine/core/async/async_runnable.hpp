@@ -12,26 +12,10 @@ namespace legion::core::async
 {
     struct async_runnable_base
     {
-        std::shared_ptr<async_progress> m_progress;
+        std::shared_ptr<async_progress_base> m_progress;
 
         async_runnable_base() = default;
-        async_runnable_base(float taskSize) : m_progress(new async_progress(taskSize)) {}
-
-        const std::shared_ptr<async_progress>& getProgress() const noexcept
-        {
-            return m_progress;
-        }
-
-        template<typename functor>
-        repeating_async_operation<functor> getRepeatingOperation(functor&& then) const noexcept
-        {
-            return repeating_async_operation<functor>(m_progress, std::forward<functor>(then));
-        }
-
-        async_operation getOperation() const noexcept
-        {
-            return async_operation(m_progress);
-        }
+        async_runnable_base(const std::shared_ptr<async_progress_base>& progress) : m_progress(progress) {}
 
         virtual void execute() LEGION_PURE;
 
@@ -41,27 +25,61 @@ namespace legion::core::async
     template<typename functor>
     struct async_runnable : public async_runnable_base
     {
+        using payload_type = std::conditional_t<std::is_invocable_v<functor, async::async_progress_base&>,
+                                    decltype(std::invoke(std::declval<functor>(), std::declval<async::async_progress_base&>())),
+                                    decltype(std::invoke(std::declval<functor>()))>;
     protected:
         functor m_func;
 
     public:
         async_runnable() = default;
-        async_runnable(functor&& func) : async_runnable_base(1), m_func(func) {}
-        async_runnable(functor&& func, size_type taskSize) : async_runnable_base(taskSize), m_func(func) {}
+        async_runnable(functor&& func) : async_runnable_base(std::make_shared<async_progress<payload_type>>(1)), m_func(func) {}
+        async_runnable(functor&& func, size_type taskSize) : async_runnable_base(std::make_shared<async_progress<payload_type>>(taskSize)), m_func(func) {}
 
-        void execute()
+        const std::shared_ptr<async_progress<payload_type>>& getProgress() const noexcept
+        {
+            return std::static_pointer_cast<async_progress<payload_type>>(m_progress);
+        }
+
+        template<typename func>
+        repeating_async_operation<func, payload_type> getRepeatingOperation(func&& then) const noexcept
+        {
+            return repeating_async_operation<func, payload_type>(
+                std::static_pointer_cast<async_progress<payload_type>>(m_progress),
+                std::forward<func>(then));
+        }
+
+        async_operation<payload_type> getOperation() const noexcept
+        {
+            return async_operation<payload_type>(std::static_pointer_cast<async_progress<payload_type>>(m_progress));
+        }
+
+        auto execute()
         {
             OPTICK_EVENT();
-            if constexpr (std::is_invocable_v<functor, async::async_progress&>)
+            if constexpr (std::is_same_v<payload_type, void>)
             {
-                std::invoke(m_func, *m_progress);
+                if constexpr (std::is_invocable_v<functor, async_progress_base&>)
+                {
+                    std::invoke(m_func, *m_progress);
+                }
+                else
+                {
+                    std::invoke(m_func);
+                }
+                std::static_pointer_cast<async_progress<payload_type>>(m_progress)->complete();
             }
             else
             {
-                std::invoke(m_func);
+                if constexpr (std::is_invocable_v<functor, async_progress_base&>)
+                {
+                    std::static_pointer_cast<async_progress<payload_type>>(m_progress)->complete(std::invoke(m_func, *m_progress));
+                }
+                else
+                {
+                    std::static_pointer_cast<async_progress<payload_type>>(m_progress)->complete(std::invoke(m_func));
+                }
             }
-
-            m_progress->complete();
         }
     };
 

@@ -1,4 +1,5 @@
 #include <core/scheduling/scheduler.hpp>
+#include <core/events/events.hpp>
 
 namespace legion::core::scheduling
 {
@@ -14,11 +15,11 @@ namespace legion::core::scheduling
 
     Scheduler::per_thread_map<std::thread> Scheduler::m_threads;
 
-    Scheduler::per_thread_map<async::rw_lock_pair<async::runnables_queue>> Scheduler::m_commands;
     async::rw_lock_pair<async::job_queue> Scheduler::m_jobs;
     size_type Scheduler::m_jobPoolSize = 0;
 
     std::atomic<bool> Scheduler::m_exit = { false };
+    std::atomic<bool> Scheduler::m_exitFromEvent = { false };
     std::atomic<bool> Scheduler::m_start = { false };
     int Scheduler::m_exitCode = 0;
 
@@ -42,18 +43,7 @@ namespace legion::core::scheduling
         {
             bool noWork = true;
 
-            {
-                auto& [lock, commandQueue] = m_commands.at(std::this_thread::get_id());
-
-                async::readonly_guard guard(lock);
-
-                if (!commandQueue.empty())
-                {
-                    noWork = false;
-                    commandQueue.front()->execute();
-                    commandQueue.pop();
-                }
-            }
+            std::shared_ptr<async::job_pool> jobPoolPtr = nullptr;
 
             {
                 auto& [lock, jobQueue] = m_jobs;
@@ -62,17 +52,37 @@ namespace legion::core::scheduling
                 {
                     noWork = false;
 
-                    auto jobPoolPtr = jobQueue.front();
-                    if (jobPoolPtr->is_done())
+                    jobPoolPtr = jobQueue.front();
+                    if (!jobPoolPtr->is_done())
                     {
-                        async::readwrite_guard wguard(lock);
-                        if (!jobQueue.empty() && jobQueue.front()->is_done())
-                            jobQueue.pop();
+                        if (jobPoolPtr->prime_job()) // Returns true when this is the last job.
+                        {
+                            async::readwrite_guard wguard(lock);
+                            if (!jobQueue.empty())
+                            {
+                                if (jobQueue.front() == jobPoolPtr)
+                                    jobQueue.pop_front();
+                                else
+                                    jobQueue.remove(jobPoolPtr);
+                            }
+                        }
                     }
                     else
-                        jobPoolPtr->complete_job();
+                    {
+                        async::readwrite_guard wguard(lock);
+                        if (!jobQueue.empty())
+                        {
+                            if (jobQueue.front() == jobPoolPtr)
+                                jobQueue.pop_front();
+                            else
+                                jobQueue.remove(jobPoolPtr);
+                        }
+                        jobPoolPtr = nullptr;
+                    }
                 }
             }
+            if (jobPoolPtr)
+                jobPoolPtr->complete_job();
 
             if (noWork)
             {
@@ -108,12 +118,9 @@ namespace legion::core::scheduling
     {
         auto& [lock, jobQueue] = m_jobs;
         async::readwrite_guard wguard(lock);
-        if (!jobQueue.empty())
+        if (!jobQueue.empty() && jobQueue.front()->is_done())
         {
-            if (jobQueue.front()->is_done())
-            {
-                jobQueue.pop();
-            }
+            jobQueue.pop_front();
         }
     }
 
@@ -135,6 +142,15 @@ namespace legion::core::scheduling
         return { &m_threads.at(id) };
     }
 
+    void Scheduler::init()
+    {
+        events::EventBus::bindToEvent<events::exit>([](events::exit& evnt)
+            {
+                scheduling::Scheduler::m_exitFromEvent.store(true, std::memory_order_release);
+                scheduling::Scheduler::exit(evnt.exitcode);
+            });
+    }
+
     int Scheduler::run(bool lowPower, size_type minThreads)
     {
         bool m_lowPower = lowPower;
@@ -153,10 +169,8 @@ namespace legion::core::scheduling
         {
             async::readwrite_guard guard(log::impl::threadNamesLock);
             while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(m_jobPoolSize))) != nullptr)
-            {
                 log::impl::threadNames[ptr->get_id()] = name + std::to_string(m_jobPoolSize++);
-                m_commands.try_emplace(ptr->get_id());
-            }
+
             log::impl::threadNames[std::this_thread::get_id()] = "Main thread";
         }
 
@@ -224,6 +238,22 @@ namespace legion::core::scheduling
 
     void Scheduler::exit(int exitCode)
     {
+        if (!m_exitFromEvent.load(std::memory_order_relaxed))
+        {
+            events::EventBus::raiseEvent<events::exit>(exitCode);
+            return;
+        }
+
+        if (m_exit.load(std::memory_order_relaxed))
+        {
+            log::warn("Engine was already exiting, triggered additional exit event with code {}", exitCode);
+            return;
+        }
+
+        log::undecoratedInfo("=========================\n"
+            "| Shutting down engine. |\n"
+            "=========================");
+
         m_exitCode = exitCode;
         m_exit.store(true, std::memory_order_release);
     }

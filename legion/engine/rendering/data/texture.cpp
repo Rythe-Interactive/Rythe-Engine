@@ -210,29 +210,29 @@ namespace legion::rendering
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
 
-        image_handle image = ImageCache::get_handle(name);
-        if (image == invalid_image_handle)
+        assets::asset<image> img = assets::get<image>(name);
+        if (img == assets::invalid_asset<image>)
         {
             log::warn("Image {} doesn't exist.", name);
             return invalid_texture_handle;
         }
 
-        return create_texture_from_image(image, settings);
+        return create_texture_from_image(img, settings);
     }
 
-    texture_handle TextureCache::create_texture_from_image(image_handle image, texture_import_settings settings)
+    texture_handle TextureCache::create_texture_from_image(assets::asset<image> img, texture_import_settings settings)
     {
         OPTICK_EVENT();
         if (m_invalidTexture.id == invalid_id)
             m_invalidTexture = create_texture("invalid texture", fs::view("engine://resources/invalid/missing"));
 
-        if (image == invalid_image_handle)
+        if (img == assets::invalid_asset<image>)
         {
             log::warn("Tried to create a texture with an invalid image");
             return invalid_texture_handle;
         }
 
-        id_type id = image.id;
+        id_type id = img.id();
 
         {
             async::readonly_guard guard(m_textureLock);
@@ -259,24 +259,20 @@ namespace legion::rendering
         glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_WRAP_S, static_cast<GLint>(settings.wrapS));
         glTexParameteri(static_cast<GLenum>(settings.type), GL_TEXTURE_WRAP_T, static_cast<GLint>(settings.wrapT));
 
-        auto [lock, img] = image.get_raw_image();
-        {
-            async::readonly_guard guard(lock);
-            texture.channels = img.components;
-            texture.name = img.name;
+        texture.channels = img->components();
+        texture.name = img.name();
 
-            // Construct the texture using the loaded data.
-            glTexImage2D(
-                static_cast<GLenum>(settings.type),
-                0,
-                static_cast<GLint>(settings.intendedFormat),
-                img.size.x,
-                img.size.y,
-                0,
-                components_to_format[static_cast<int>(img.components)],
-                channels_to_glenum[static_cast<uint>(img.format)],
-                img.get_raw_data<void>());
-        }
+        // Construct the texture using the loaded data.
+        glTexImage2D(
+            static_cast<GLenum>(settings.type),
+            0,
+            static_cast<GLint>(settings.intendedFormat),
+            img->resolution().x,
+            img->resolution().y,
+            0,
+            components_to_format[static_cast<int>(img->components())],
+            channels_to_glenum[static_cast<uint>(img->format())],
+            img->data());
 
         // Generate mips.
         if (settings.generateMipmaps)

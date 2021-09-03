@@ -15,7 +15,7 @@ namespace legion::core::async
         return m_progress;
     }
 
-    std::shared_ptr<async_progress> job_pool::get_progress() const noexcept
+    std::shared_ptr<async_progress<void>> job_pool::get_progress() const noexcept
     {
         return m_progress;
     }
@@ -26,15 +26,19 @@ namespace legion::core::async
         return idx < 1 || idx > m_size;
     }
 
+    bool job_pool::prime_job()
+    {
+        size_type idx = m_index.fetch_sub(1, std::memory_order_acquire);
+        size_type id = m_size - idx;
+        this_job::m_id = id;
+        return idx == 1u;
+    }
+
     void job_pool::complete_job()
     {
         OPTICK_EVENT();
-        size_type idx = m_index.fetch_sub(1, std::memory_order_acquire);
-        if (idx < 1 || idx > m_size)
+        if (this_job::m_id >= m_size)
             return;
-
-        size_type id = m_size - idx;
-        this_job::m_id = id;
         this_job::m_progress = m_progress->progress();
         m_job();
         m_progress->advance_progress();

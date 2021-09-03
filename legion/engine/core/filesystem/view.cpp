@@ -237,7 +237,8 @@ namespace legion::core::filesystem
     {
         //get solution
         auto result = make_solution();
-        if (result.has_error()) result.error();
+        if (result.has_error())
+            return result.error();
 
         //get resolver of solution
         auto resolver = build();

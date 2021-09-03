@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include <core/filesystem/filesystem_resolver.hpp>
 
 
