@@ -50,7 +50,7 @@ public:
             scal = scale(0.1f, 0.1f, 0.1f);
 
             ent.add_component<example_comp, velocity>();
-            //ent.add_component(gfx::mesh_renderer(material, model));
+            ent.add_component(gfx::mesh_renderer(material, model));
         }
 
         bindToEvent<events::exit, &ExampleSystem::onExit>();

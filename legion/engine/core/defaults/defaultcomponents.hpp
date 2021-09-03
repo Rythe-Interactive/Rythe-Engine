@@ -1,6 +1,6 @@
 #pragma once
 #include <core/math/math.hpp>
-//#include <core/ecs/archetype.hpp>
+#include <core/ecs/ecs.hpp>
 #include <core/data/mesh.hpp>
 #include <core/logging/logging.hpp>
 

@@ -662,11 +662,9 @@ namespace legion
 
                     std::string modelPath;
 
-                    if (mesh.id != invalid_id)
+                    if (mesh.shared_mesh.id() != invalid_id)
                     {
-                        auto [lock, data] = mesh.get();
-                        async::readonly_guard guard(lock);
-                        modelPath = data.filePath;
+                        modelPath = mesh.shared_mesh.path();
                     }
 
                     ImGui::Text("Model:");
@@ -678,9 +676,7 @@ namespace legion
                         if (modelPath != modelBuffer)
                         {
                             modelPath = modelBuffer;
-                            auto copy = default_mesh_settings;
-                            copy.contextFolder = filesystem::view(modelPath).parent();
-                            mesh.id = ModelCache::create_model(modelPath, filesystem::view(modelPath), copy).id;
+                            mesh.shared_mesh = assets::get<core::mesh>(ModelCache::create_model(modelPath, filesystem::view(modelPath)).id);
                         }
                     }
 

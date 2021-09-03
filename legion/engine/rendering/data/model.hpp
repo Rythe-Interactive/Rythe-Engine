@@ -70,7 +70,7 @@ namespace legion::rendering
 
         static void overwrite_buffer(id_type id, buffer& newBuffer, uint bufferID, bool perInstance = false);
         static void buffer_model(id_type id, const buffer& matrixBuffer);
-        static model_handle create_model(const std::string& name, const fs::view& file, assets::import_settings<mesh> settings);
+        static model_handle create_model(const std::string& name, const fs::view& file, assets::import_settings<mesh> settings = {});
         static model_handle create_model(const std::string& name);
         static model_handle create_model(const std::string& name, id_type meshId);
         static model_handle create_model(id_type meshId);

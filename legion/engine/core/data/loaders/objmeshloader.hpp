@@ -13,7 +13,7 @@ namespace legion::core
         using base::progress_type;
 
     private:
-        common::result<asset_ptr> loadImpl(id_type nameHash, const fs::view file, const import_cfg& settings, progress_type* progress);
+        common::result<asset_ptr> loadImpl(id_type nameHash, const fs::view& file, const import_cfg& settings, progress_type* progress);
 
     public:
         virtual bool canLoad(const fs::view& file) override;
