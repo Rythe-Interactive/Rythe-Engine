@@ -1,74 +1,34 @@
 #include <core/serialization/serializer.hpp>
-#include <core/serialization/jsonview/json_view.hpp>
 #pragma once
 
 namespace legion::core::serialization
 {
     template<typename serializable_type>
-    inline json serializer<serializable_type>::serialize(const serializable_type &data, const SerializeFormat format)
+    inline void serialization::serializer<serializable_type>::serialize(const std::any& serializable, const serializer_view& s_view)
     {
-        json j;
-        switch (format)
+        if (!serializable.has_value())
+            return legion_exception_msg("invalid input data: serializable is null");
+
+        if (serializable.type() != typeid(serializable_type))
+            return legion_exception_msg("invalid input data: serializable is not of expected type"/*, typeid(serializable_type), typeid(serializable.type()))*/);
+
+        std::string name = typeid(serializable_type).name();
+        if (!s_view.serialize<serializable_type>(name, std::any_cast<serializable_type>(serializable)))
         {
-        case JSON:
-            return json_view<prototype<serializable_type>>().serialize(prototype<serializable_type>(data));
-        case BINARY:
-            return j;
-        case YAML:
-            return j;
+            auto reflector = make_reflector(std::any_cast<serializable_type>(serializable));
+
+            for_each(reflector,
+                [&s_view](auto& name, auto& value)
+                {
+                    //if constexpr (!std::is_same<decltype(value), serializable_type>::value)
+                    serializer_registry::get_serializer<decltype(value)>().serialize(value, s_view);
+                });
         }
-        return j;
-    }
+    };
 
     template<typename serializable_type>
-    inline json serializer<serializable_type>::serialize_prototype(const serializable_type data, const SerializeFormat format)
+    inline prototype_base serialization::serializer<serializable_type>::deserialize(const serializer_view& view)
     {
-        json j;
-        switch (format)
-        {
-        case JSON:
-            return json_view<serializable_type>().serialize(serializable_type(data));
-        case BINARY:
-            return j;
-        case YAML:
-            return j;
-        }
-        return j;
-    }
-
-    template<typename serializable_type>
-    inline prototype<serializable_type> serializer<serializable_type>::deserialize(const json j, const SerializeFormat format)
-    {
-        switch (format)
-        {
-        case JSON:
-            return json_view<prototype<serializable_type>>().deserialize(j);
-        case BINARY:
-            break;
-        case YAML:
-            break;
-        }
         return prototype<serializable_type>();
-    }
-
-    template<typename serializable_type>
-    inline void serializer<serializable_type>::write(const fs::view filePath, const serializable_type &data, const SerializeFormat format)
-    {
-        std::ofstream os;
-        os.open(fs::view_util::get_view_path(filePath, true));
-        json j = serialize(data,format);
-        os << j.dump(4);
-        os.close();
-    }
-
-    template<typename serializable_type>
-    inline serializable_type serializer<serializable_type>::read(const fs::view filePath, const SerializeFormat format)
-    {
-        json j;
-        std::ifstream is;
-        is.open(fs::view_util::get_view_path(filePath, true));
-        is >> j;
-        is.close();
-        return from_reflector(deserialize(j,format));
     }
 }

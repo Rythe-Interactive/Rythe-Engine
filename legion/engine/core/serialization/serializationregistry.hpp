@@ -4,7 +4,6 @@
 #include <core/serialization/serializer.hpp>
 
 #include <map>
-#include <any>
 
 namespace legion::core::serialization
 {
@@ -22,7 +21,6 @@ namespace legion::core::serialization
     };
 }
 
-#include <core/serialization/serializer.inl>
 #include <core/serialization/serializationregistry.inl>
 
 

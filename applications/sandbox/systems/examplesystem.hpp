@@ -65,7 +65,7 @@ public:
 
 
         //Serialization Test
-        std::string filePath = "assets://scenes/scene.json";
+        std::string_view filePath = "assets://scenes/scene.json";
 
         auto serializer = serialization::serializer_registry::register_serializer<scene_comp>();
         auto scene = scene_comp();
@@ -79,7 +79,7 @@ public:
             ent.add_component<velocity>();
             scene.entities.push_back(ent);
         }
-        serializer->write(fs::view(filePath), scene,serialization::JSON);
+        serializer->serialize(scene,serialization::json_view(filePath));
         //scene = serializer->read(fs::view(filePath));
         //log::debug(scene.id);
     }
