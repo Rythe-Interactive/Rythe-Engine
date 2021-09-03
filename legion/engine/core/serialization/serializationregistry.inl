@@ -18,7 +18,7 @@ namespace legion::core::serialization
         id_type typeId = type_hash<type>().local();
         if (serializers.count(typeId))
             return { dynamic_cast<serializer<type>*>(serializers.at(typeId).get()) };
-        return { nullptr };
+        return register_serializer<type>();
     }
 
     template<typename type>
