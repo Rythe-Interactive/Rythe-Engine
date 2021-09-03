@@ -4,6 +4,13 @@
 
 namespace legion
 {
+    struct test_info
+    {
+        static bool isBenchMarking;
+    };
+
+    inline bool test_info::isBenchMarking;
+
     template <class T>
     inline L_ALWAYS_INLINE void DoNotOptimize(const T& value)
     {
@@ -127,6 +134,7 @@ namespace legion
         std::cout << '[' << *test_data::lastDomain << "] Running benchmark: " << n << " cases\n";
         test_data::Check = &NoOpt;
         test_data::StartSubDomain = &NoPrint;
+        test_info::isBenchMarking = true;
         time::stopwatch<long double> clck;
         clck.start();
         for (size_type i = 0; i < n; i++)
@@ -166,6 +174,7 @@ namespace legion
         std::cout << '[' << *test_data::lastDomain << "] Running test\n";
         test_data::Check = &DoCheck;
         test_data::StartSubDomain = &DoPrint;
+        test_info::isBenchMarking = false;
         std::cout << '[' << *test_data::lastDomain << "] Iteration 1\n";
         std::invoke(c, std::forward<Args>(args)...);
         std::cout << '[' << *test_data::lastDomain << "] Iteration 2\n";

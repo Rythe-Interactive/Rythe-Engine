@@ -372,6 +372,10 @@ static void TestECS()
         }
 
         L_CHECK(count == 100);
+
+        if (!test_info::isBenchMarking)
+            log::info("filter size: {}", fltr.size());
+
         L_CHECK(fltr.size() == 0);
         L_CHECK(ecs::component_pool<test_comp>::m_components.empty());
     }
@@ -382,7 +386,7 @@ LEGION_TEST("core::ecs")
     Test(TestECS);
 
 #if defined(LEGION_DEBUG)
-    Benchmark(TestECS);
+    Benchmark_N(100, TestECS);
 #elif defined(LEGION_RELEASE)
     Benchmark_N(100000, TestECS);
 #else

@@ -1,5 +1,5 @@
 #pragma once
-#include <queue>
+#include <list>
 #include <memory>
 
 #include <Optick/optick.h>
@@ -24,27 +24,28 @@ namespace legion::core::async
     struct job_pool
     {
     private:
-        std::shared_ptr<async_progress> m_progress;
+        std::shared_ptr<async_progress<void>> m_progress;
         std::atomic<size_type> m_index;
         size_type m_size;
         delegate<void()> m_job;
 
     public:
-        job_pool(size_type count, const delegate<void()>& func) : m_progress(new async_progress(count)), m_index(count), m_size(count), m_job(func) {}
+        job_pool(size_type count, const delegate<void()>& func) : m_progress(new async_progress<void>(count)), m_index(count), m_size(count), m_job(func) {}
 
-        std::shared_ptr<async_progress> get_progress() const noexcept;
+        std::shared_ptr<async_progress<void>> get_progress() const noexcept;
 
         bool empty() const noexcept;
 
+        bool prime_job();
         void complete_job();
 
         bool is_done() const noexcept;
     };
 
-    using job_queue = std::queue<std::shared_ptr<job_pool>>;
+    using job_queue = std::list<std::shared_ptr<job_pool>>;
 
     template<typename Func, typename CompleteFunc>
-    struct job_operation : public repeating_async_operation<Func>
+    struct job_operation : public repeating_async_operation<Func, void>
     {
     private:
         CompleteFunc m_onComplete;
@@ -52,8 +53,8 @@ namespace legion::core::async
     public:
         std::shared_ptr<job_pool> jobPoolPtr;
 
-        job_operation(const std::shared_ptr<async_progress>& progress, const std::shared_ptr<job_pool>& jobPool, Func&& repeater, CompleteFunc&& complete)
-            : repeating_async_operation<Func>(progress, repeater), m_onComplete(complete), jobPoolPtr(jobPool) {}
+        job_operation(const std::shared_ptr<async_progress<void>>& progress, const std::shared_ptr<job_pool>& jobPool, Func&& repeater, CompleteFunc&& complete)
+            : repeating_async_operation<Func, void>(progress, repeater), m_onComplete(complete), jobPoolPtr(jobPool) {}
 
         job_operation(const job_operation&) noexcept(std::is_nothrow_copy_constructible_v<Func> && std::is_nothrow_copy_constructible_v<CompleteFunc>) = default;
         job_operation(job_operation&&) noexcept(std::is_nothrow_move_constructible_v<Func> && std::is_nothrow_move_constructible_v<CompleteFunc>) = default;
@@ -73,6 +74,7 @@ namespace legion::core::async
                     break;
                 case wait_priority::normal:
                 {
+                    jobPoolPtr->prime_job();
                     jobPoolPtr->complete_job();
                     L_PAUSE_INSTRUCTION();
                     break;
@@ -80,6 +82,7 @@ namespace legion::core::async
                 case wait_priority::real_time:
                 default:
                 {
+                    jobPoolPtr->prime_job();
                     jobPoolPtr->complete_job();
                     break;
                 }
@@ -92,7 +95,7 @@ namespace legion::core::async
 #if !defined(DOXY_EXCLUDE)
     template<typename Func, typename CompletionFunc>
     job_operation(
-        const std::shared_ptr<async_progress>&,
+        const std::shared_ptr<async_progress<void>>&,
         const std::shared_ptr<job_pool>&,
         Func&&, CompletionFunc&&)->job_operation<Func, CompletionFunc>;
 #endif

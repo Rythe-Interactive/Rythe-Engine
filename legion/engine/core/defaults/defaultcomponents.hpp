@@ -1,6 +1,6 @@
 #pragma once
 #include <core/math/math.hpp>
-//#include <core/ecs/archetype.hpp>
+#include <core/ecs/ecs.hpp>
 #include <core/data/mesh.hpp>
 #include <core/logging/logging.hpp>
 
@@ -181,13 +181,15 @@ namespace legion::core
         }
     };
 
-    struct mesh_filter : public mesh_handle
+    struct mesh_filter
     {
-        mesh_filter() = default;
-        explicit mesh_filter(const mesh_handle& src) : mesh_handle(src) {}
-        explicit mesh_filter(id_type meshId) : mesh_handle(mesh_handle{ meshId }) {}
+        assets::asset<mesh> shared_mesh;
 
-        bool operator==(const mesh_filter& other) const { return id == other.id; }
+        explicit mesh_filter(const assets::asset<mesh>& src) : shared_mesh(src) {}
+
+        RULE_OF_5_NOEXCEPT(mesh_filter);
+
+        bool operator==(const mesh_filter& other) const { return shared_mesh == other.shared_mesh; }
     };
 }
 
@@ -195,7 +197,7 @@ ManualReflector(legion::core::position, x, y, z);
 ManualReflector(legion::core::rotation, x, y, z, w);
 ManualReflector(legion::core::scale, x, y, z);
 ManualReflector(legion::core::velocity, x, y, z);
-ManualReflector(legion::core::mesh_filter, id);
+ManualReflector(legion::core::mesh_filter, shared_mesh);
 
 #if !defined(DOXY_EXCLUDE)
 namespace std // NOLINT(cert-dcl58-cpp)

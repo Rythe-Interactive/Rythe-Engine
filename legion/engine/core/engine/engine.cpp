@@ -8,6 +8,7 @@ namespace legion::core
 
     Engine::Engine()
     {
+        scheduling::Scheduler::init();
         reportModule<CoreModule>();
     }
 
