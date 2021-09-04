@@ -67,7 +67,7 @@ public:
         //Serialization Test
         std::string_view filePath = "assets://scenes/scene.json";
 
-        auto serializer = serialization::serializer_registry::register_serializer<scene_comp>();
+        auto serializer = serialization::serializer_registry::get_serializer<scene_comp>();
         auto scene = scene_comp();
         scene.id = 1;
         for (int i = 0; i < 200; i++)
@@ -79,9 +79,10 @@ public:
             ent.add_component<velocity>();
             scene.entities.push_back(ent);
         }
-        serializer->serialize(scene,serialization::json_view(filePath));
-        //scene = serializer->read(fs::view(filePath));
-        //log::debug(scene.id);
+
+        auto jsonView = serialization::json_view(filePath);
+        serializer->serialize(scene, jsonView);
+        log::debug(jsonView.data.dump());
     }
 
     void update(legion::time::span deltaTime)
