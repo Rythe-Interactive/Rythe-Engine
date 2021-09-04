@@ -16,11 +16,10 @@ namespace legion::core::serialization
         static pointer<serializer<type>> register_serializer();
         template<typename type>
         static pointer<serializer<type>> get_serializer();
-        template<typename type>
-        static pointer<serializer<type>> get_serializer(id_type id);
     };
 }
 
+#include <core/serialization/serializer.inl>
 #include <core/serialization/serializationregistry.inl>
 
 

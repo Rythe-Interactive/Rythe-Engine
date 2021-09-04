@@ -1,10 +1,11 @@
 #pragma once
+#include <core/types/meta.hpp>
 #include <core/filesystem/filesystem.hpp>
 #include <core/serialization/serializer_view.hpp>
-#include <core/ecs/prototypes/component_prototype.hpp>
+#include <core/serialization/prototype.hpp>
+
 #include <nlohmann/json.hpp>
 
-#include <sstream>
 #include <fstream>
 #include <any>
 
@@ -12,20 +13,13 @@ namespace legion::core::serialization
 {
     using json = nlohmann::ordered_json;
 
-    //enum DataFormat
-    //{
-    //    JSON,
-    //    BSON,
-    //    YAML
-    //};
-
     struct serializer_base
     {
         serializer_base() = default;
         ~serializer_base() = default;
 
-        virtual void serialize(const std::any& serializable, const serializer_view& view) = 0;
-        virtual prototype_base deserialize(const serializer_view& view) = 0;
+        virtual void serialize(const std::any& serializable, serializer_view& view) = 0;
+        virtual prototype_base deserialize(serializer_view& view) = 0;
     };
 
 
@@ -35,12 +29,21 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual void serialize(const std::any& serializable, const serializer_view& view) override;
-        virtual prototype_base deserialize(const serializer_view& view) override;
+        virtual void serialize(const std::any& serializable, serializer_view& view) override;
+        virtual prototype_base deserialize(serializer_view& view) override;
+    };
+
+    template<>
+    struct serializer<std::vector<ecs::entity>> : serializer_base
+    {
+        serializer() = default;
+        ~serializer() = default;
+
+        void serialize(std::vector<ecs::entity>&serializable, serializer_view & view);
     };
 }
 
-#include <core/serialization/serializer.inl>
+//#include <core/serialization/serializer.inl>
 
 
 
