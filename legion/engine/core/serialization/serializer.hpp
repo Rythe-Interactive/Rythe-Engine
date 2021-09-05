@@ -18,7 +18,7 @@ namespace legion::core::serialization
         serializer_base() = default;
         ~serializer_base() = default;
 
-        virtual void serialize(const std::any& serializable, serializer_view& view) = 0;
+        virtual void serialize(std::any& serializable, serializer_view& view) = 0;
         virtual prototype_base deserialize(serializer_view& view) = 0;
     };
 
@@ -29,7 +29,7 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual void serialize(const std::any& serializable, serializer_view& view) override;
+        virtual void serialize(std::any& serializable, serializer_view& view) override;
         virtual prototype_base deserialize(serializer_view& view) override;
     };
 

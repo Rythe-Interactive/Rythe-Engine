@@ -11,39 +11,42 @@ namespace legion::core::serialization
 
     struct serializer_view
     {
+        std::string val_name;
+
         virtual ~serializer_view() = default;
 
-        virtual void start_object(std::string& name, id_type typeId) = 0;
-        virtual void end_object() = 0;
+        //virtual void start_object(std::string& name, id_type typeId) = 0;
+        //virtual void end_object() = 0;
 
         template<typename Type>
         bool serialize(std::string& name, Type&& value)
         {
+            val_name = name;
             using raw_type = std::decay_t<Type>;
 
             if constexpr (std::is_same_v<raw_type, int>)
             {
-                serialize_int(value);
+                serialize_int(std::move(value));
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, float>)
             {
-                serialize_float(value);
+                serialize_float(std::move(value));
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, double>) 
             {
-                serialize_double(value);
+                serialize_double(std::move(value));
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, bool>)
             {
-                serialize_bool(value);
+                serialize_bool(std::move(value));
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, std::string>)
             {
-                serialize_string(value);
+                serialize_string(std::move(value));
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, id_type>)
@@ -53,8 +56,6 @@ namespace legion::core::serialization
             }
             return false;
         }
-
-
 
         virtual void serialize_int(int serializable) = 0;
         virtual void serialize_float( float serializable) = 0;
@@ -86,21 +87,21 @@ namespace legion::core::serialization
         json_view(std::string_view& filePath, const json&& j = json()) : filePath(filePath), data(j) { }
         ~json_view() = default;
 
-        void start_object(std::string& name, id_type typeID)
-        {
-            
-        }
-        void end_object()
-        {
+        //void start_object(std::string& name, id_type& typeID)
+        //{
+        //    
+        //}
+        //void end_object()
+        //{
 
-        }
+        //}
 
 
         template<typename Type>
         bool serialize(std::string& name, Type&& value)
         {
             using raw_type = std::decay_t<Type>;
-
+            data.
             if constexpr (std::is_same_v<raw_type, int>)
             {
                 serialize_int(value);
@@ -157,6 +158,15 @@ namespace legion::core::serialization
         bson_view() = default;
         ~bson_view() = default;
 
+        //void start_object(std::string& name, id_type& typeID)
+        //{
+
+        //}
+        //void end_object()
+        //{
+
+        //}
+
         template<typename Type>
         bool serialize(std::string& name, Type&& value)
         {
@@ -196,7 +206,6 @@ namespace legion::core::serialization
             return false;
         }
 
-
         virtual void serialize_int(int serializable) override;
         virtual void serialize_float(float serializable) override;
         virtual void serialize_double(double serializable) override;
@@ -219,6 +228,15 @@ namespace legion::core::serialization
 
         yaml_view() = default;
         ~yaml_view() = default;
+
+        //void start_object(std::string& name, id_type& typeID)
+        //{
+
+        //}
+        //void end_object()
+        //{
+
+        //}
 
         template<typename Type>
         bool serialize(std::string& name, Type&& value)
