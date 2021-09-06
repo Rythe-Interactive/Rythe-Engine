@@ -12,6 +12,7 @@
 
 namespace legion::core
 {
+
 #define HAS_FUNC(x)                                                                                                     \
     template<typename, typename T>                                                                                      \
     struct CONCAT(has_, x) {                                                                                            \
@@ -61,6 +62,46 @@ namespace legion::core
     template<typename C, typename F>                                                                                    \
     constexpr bool CONCAT_DEFINE(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value;
 
+#define  typename_1(x)                                                                    typename x
+#define  typename_2(x, x2)                                                                typename x , typename x2
+#define  typename_3(x, x2, x3)                                                            typename x , typename x2, typename x3
+#define  typename_4(x, x2, x3, x4)                                                        typename x , typename x2, typename x3, typename x4
+#define  typename_5(x, x2, x3, x4, x5)                                                    typename x , typename x2, typename x3, typename x4, typename x5
+#define  typename_6(x, x2, x3, x4, x5, x6)                                                typename x , typename x2, typename x3, typename x4, typename x5, typename x6
+#define  typename_7(x, x2, x3, x4, x5, x6, x7)                                            typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7
+#define  typename_8(x, x2, x3, x4, x5, x6, x7, x8)                                        typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7, typename x8
+#define  typename_9(x, x2, x3, x4, x5, x6, x7, x8, x9)                                    typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7, typename x8, typename x9
+#define typename_10(x, x2, x3, x4, x5, x6, x7, x8, x9, x10)                               typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7, typename x8, typename x9, typename x10
+#define typename_11(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11)                          typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7, typename x8, typename x9, typename x10, typename x11
+#define typename_12(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)                     typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7, typename x8, typename x9, typename x10, typename x11, typename x12
+#define typename_13(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13)                typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7, typename x8, typename x9, typename x10, typename x11, typename x12, typename x13
+#define typename_14(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14)           typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7, typename x8, typename x9, typename x10, typename x11, typename x12, typename x13, typename x14
+#define typename_15(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15)      typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7, typename x8, typename x9, typename x10, typename x11, typename x12, typename x13, typename x14, typename x15
+#define typename_16(x, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16) typename x , typename x2, typename x3, typename x4, typename x5, typename x6, typename x7, typename x8, typename x9, typename x10, typename x11, typename x12, typename x13, typename x14, typename x15, typename x16
+
+    // turn: a, b, ...c
+    // into: typename a, typename b, typename ...c
+#define typenames_count(count, ...) EXPAND(CONCAT_DEFINE(typename_, count)(__VA_ARGS__))
+#define typenames(...) EXPAND(CONCAT_DEFINE(typename_, NARGS(__VA_ARGS__))(__VA_ARGS__))
+
+#define COMBINE_SFINAE(name, predicate, templateArgs...)                                                                \
+    template<typenames(templateArgs)>                                                                                   \
+    struct name                                                                                                         \
+    {                                                                                                                   \
+        static constexpr bool value = predicate;                                                                        \
+    };                                                                                                                  \
+                                                                                                                        \
+    template<EXPAND(typenames(EXPAND(templateArgs)))>                                                                   \
+    constexpr bool CONCAT(name, _v) = name<EXPAND(templateArgs)>::value;
+
+    HAS_FUNC(begin);
+    HAS_FUNC(end);
+
+    COMBINE_SFINAE(is_container, has_begin_v<T COMMA typename T::iterator(void)> && has_end_v<T COMMA typename T::iterator(void)>, T);
+
+    HAS_FUNC(resize);
+
+    COMBINE_SFINAE(is_resizable_container, has_begin_v<T COMMA typename T::iterator(void)> && has_end_v<T COMMA typename T::iterator(void)> && has_resize_v<T COMMA void(size_type)>, T);
 
     HAS_FUNC(setup);
     HAS_FUNC(update);
