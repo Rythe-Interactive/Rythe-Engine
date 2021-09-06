@@ -21,8 +21,8 @@ namespace legion::core::serialization
     {
         using Reflector = decltype(make_reflector(std::declval<ecs::entity_data>()));
 
-        prototype(const ecs::entity src) : Reflector(make_reflector(src.data)) {}
-        prototype(const ecs::entity_data data) : Reflector(make_reflector(data)) {}
+        prototype(const ecs::entity& src) : Reflector(make_reflector(src.data)) {}
+        prototype(const ecs::entity_data*& data) : Reflector(make_reflector(data)) {}
         prototype() = default;
         prototype(const prototype& src);
         prototype(prototype&& src) = default;
