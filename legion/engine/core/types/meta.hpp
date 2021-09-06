@@ -112,14 +112,54 @@ namespace legion::core
         typedef std::true_type yes;
         typedef std::false_type no;
 
-        template<typename U> static auto test(int) -> decltype(std::declval<U>().size() == 1, yes());
-
-        template<typename> static no test(...);
-
+        template<typename U> static auto check(int) -> decltype(std::declval<U>().size() == 1, yes());
+        template<typename> static no check(...);
     public:
-
-        static constexpr bool value = std::is_same<decltype(test<T>(0)), yes>::value;
+        static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
     };
+
+    template<typename T>
+    struct has_begin
+    {
+    private:
+        typedef std::true_type yes;
+        typedef std::false_type no;
+
+        template<typename U> static constexpr auto check(int) -> decltype(std::is_same<decltype(std::declval<U>().begin()), typename U::const_iterator>::value, yes());
+        template<typename> static no check(...);
+    public:
+        static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
+    };
+
+    template<typename T>
+    struct has_end
+    {
+    private:
+        typedef std::true_type yes;
+        typedef std::false_type no;
+
+        template<typename U> static constexpr auto check(int) -> decltype(std::is_same<decltype(std::declval<U>().end()), typename U::const_iterator>::value, yes());
+        template<typename> static no check(...);
+    public:
+        static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
+    };
+
+
+    template<typename T>
+    struct is_container
+    {
+    private:
+        typedef std::true_type yes;
+        typedef std::false_type no;
+
+        template<typename U> static constexpr auto check(int) -> typename std::is_same<typename has_begin<U>::value, typename has_end<U>::value>::type;
+        template<typename> static no check(...);
+    public:
+        static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
+    };
+
+    template <typename T>
+    constexpr bool is_container_v = is_container<T>::value;
 
     template <class T>
     struct is_vector
@@ -192,38 +232,39 @@ namespace legion::core
     struct is_pointer<T*> { static const bool value = true; };
 
 
-    template <class T>
-    struct is_container
-        : public std::false_type
-    {};
 
-    template <class T>
-    struct is_container<std::vector<T>>
-        : public std::true_type
-    {};
+    /*  template <class T>
+      struct is_container
+          : public std::false_type
+      {};
 
-    template <class T>
-    struct is_container<std::basic_string<T>>
-        :public std::true_type
-    {};
+      template <class T>
+      struct is_container<std::vector<T>>
+          : public std::true_type
+      {};
 
-    template <class T>
-    struct is_container<std::deque<T>>
-        :public std::true_type
-    {};
+      template <class T>
+      struct is_container<std::basic_string<T>>
+          :public std::true_type
+      {};
 
-    template <class T>
-    struct is_container<std::list<T>>
-        :public std::true_type
-    {};
+      template <class T>
+      struct is_container<std::deque<T>>
+          :public std::true_type
+      {};
 
-    template <class T, size_t N>
-    struct is_container<std::array<T, N>>
-        :public std::true_type
-    {};
+      template <class T>
+      struct is_container<std::list<T>>
+          :public std::true_type
+      {};
 
-    template <class T>
-    struct is_container<std::queue<T>>
-        :public std::true_type
-    {};
+      template <class T, size_t N>
+      struct is_container<std::array<T, N>>
+          :public std::true_type
+      {};
+
+      template <class T>
+      struct is_container<std::queue<T>>
+          :public std::true_type
+      {};*/
 }

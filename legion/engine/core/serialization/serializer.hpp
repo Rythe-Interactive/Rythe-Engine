@@ -31,10 +31,12 @@ namespace legion::core::serialization
 
         virtual void serialize(const std::any& serializable, serializer_view& view) override;
         virtual prototype_base deserialize(serializer_view& view) override;
+
+        void serialize_container(const std::any& container, serializer_view& view);
     };
 
     template<>
-    struct serializer<std::vector<ecs::entity>> : serializer_base
+    struct serializer<ecs::entity> : serializer_base
     {
         serializer() = default;
         ~serializer() = default;
@@ -42,7 +44,7 @@ namespace legion::core::serialization
         virtual void serialize(const std::any& serializable, serializer_view& view) override;
         virtual prototype_base deserialize(serializer_view& view) override;
 
-        void serialize_vec(const std::vector<ecs::entity>& serializable, serializer_view & view);
+        void serialize_ent(const ecs::entity& serializable, serializer_view& view);
     };
 }
 

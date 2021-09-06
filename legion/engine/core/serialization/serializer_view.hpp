@@ -96,7 +96,6 @@ namespace legion::core::serialization
 
         //}
 
-
         template<typename Type>
         bool serialize(std::string& name, Type&& value)
         {
