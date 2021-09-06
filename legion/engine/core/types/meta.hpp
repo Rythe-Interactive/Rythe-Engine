@@ -65,6 +65,7 @@ namespace legion::core
     HAS_FUNC(setup);
     HAS_FUNC(update);
 
+
     template<typename derived_type, typename base_type>
     using inherits_from = typename std::enable_if<std::is_base_of<base_type, derived_type>::value, int>::type;
 
@@ -118,48 +119,45 @@ namespace legion::core
         static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
     };
 
-    template<typename T>
-    struct has_begin
-    {
-    private:
-        typedef std::true_type yes;
-        typedef std::false_type no;
+    //template<typename T>
+    //struct has_begin
+    //{
+    //private:
+    //    typedef std::true_type yes;
+    //    typedef std::false_type no;
 
-        template<typename U> static constexpr auto check(int) -> decltype(std::is_same<decltype(std::declval<U>().begin()), typename U::const_iterator>::value, yes());
-        template<typename> static no check(...);
-    public:
-        static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
-    };
+    //    template<typename U> static constexpr auto check(int) -> decltype(std::is_same<decltype(std::declval<U>().begin()), typename U::const_iterator>::value, yes());
+    //    template<typename> static no check(...);
+    //public:
+    //    static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
+    //};
 
-    template<typename T>
-    struct has_end
-    {
-    private:
-        typedef std::true_type yes;
-        typedef std::false_type no;
+    //template<typename T>
+    //struct has_end
+    //{
+    //private:
+    //    typedef std::true_type yes;
+    //    typedef std::false_type no;
 
-        template<typename U> static constexpr auto check(int) -> decltype(std::is_same<decltype(std::declval<U>().end()), typename U::const_iterator>::value, yes());
-        template<typename> static no check(...);
-    public:
-        static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
-    };
+    //    template<typename U> static constexpr auto check(int) -> decltype(std::is_same<decltype(std::declval<U>().end()), typename U::const_iterator>::value, yes());
+    //    template<typename> static no check(...);
+    //public:
+    //    static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
+    //};
 
 
-    template<typename T>
+    HAS_FUNC(begin);
+    HAS_FUNC(end);
+
+    template<typename ContainerType>
     struct is_container
     {
-    private:
-        typedef std::true_type yes;
-        typedef std::false_type no;
-
-        template<typename U> static constexpr auto check(int) -> typename std::is_same<typename has_begin<U>::value, typename has_end<U>::value>::type;
-        template<typename> static no check(...);
-    public:
-        static constexpr bool value = std::is_same<decltype(check<T>()), yes>::value;
+        static constexpr bool value = has_begin_v<ContainerType,begin(),void> && has_end_v<ContainerType, end(),void>;
     };
 
-    template <typename T>
-    constexpr bool is_container_v = is_container<T>::value;
+    template<typename ContainerType>
+    constexpr bool is_container_v = is_container<ContainerType>::value;
+
 
     template <class T>
     struct is_vector
@@ -230,8 +228,6 @@ namespace legion::core
 
     template<typename T>
     struct is_pointer<T*> { static const bool value = true; };
-
-
 
     /*  template <class T>
       struct is_container
