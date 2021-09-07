@@ -61,7 +61,7 @@ namespace legion::core::serialization
     template<typename type>
     inline void serializer<type>::serialize(const std::any& serializable, serializer_view& s_view)
     {
-        using serializable_type = remove_cvr_t<type>;
+       /* using serializable_type = remove_cvr_t<type>;
 
         if (!serializable.has_value())
             return legion_exception_msg("invalid input data: serializable is null");
@@ -73,7 +73,7 @@ namespace legion::core::serialization
 
         if constexpr (std::is_same<serializable_type, id_type>::value)
             s_view.serialize<unsigned long long int>(name, std::any_cast<unsigned long long int>(serializable));
-        else if constexpr (is_container<type>::value)
+        else if constexpr (is_container_v<serializable_type>)
             serialize_container(serializable, s_view);
         else if constexpr (std::is_constructible<serializable_type, const serializable_type&>::value)
         {
@@ -96,7 +96,7 @@ namespace legion::core::serialization
             pointer<serializer<serializable_type>> _serializer = serializer_registry::get_serializer<serializable_type>();
             _serializer->serialize(serializable, s_view);
             return;
-        }
+        }*/
     }
 
 

@@ -80,9 +80,15 @@ public:
             scene.entities.push_back(ent);
         }
 
-        auto jsonView = serialization::json_view(filePath);
-        serializer->serialize(scene, jsonView);
-        log::debug(jsonView.data.dump());
+        //auto jsonView = serialization::json_view(filePath);
+        //serializer->serialize(scene, jsonView);
+        //log::debug(jsonView.data.dump());
+
+        std::vector<int> vec;
+        if constexpr (is_container<std::vector<int>>::value)
+        {
+            log::debug("Its a container");
+        }
     }
 
     void update(legion::time::span deltaTime)

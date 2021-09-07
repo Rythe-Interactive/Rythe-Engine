@@ -88,20 +88,30 @@ namespace legion::core
     template<typenames(templateArgs)>                                                                                   \
     struct name                                                                                                         \
     {                                                                                                                   \
-        static constexpr bool value = predicate;                                                                        \
+    private:                                                                                                            \
+      template<typename T>                                                                                            \
+      static constexpr auto check(T*)                                                                                 \
+        -> typename std::conditional<predicate, std::true_type, std::false_type>::type;                             \
+                                                                                                                            \
+      template <typename>                                                                                             \
+      static constexpr auto check(...)                                                                                \
+        ->std::false_type;                                                                                          \
+                                                                                                                            \
+      typedef decltype(check<void>(nullptr)) type;                                                                    \
+    public:                                                                                                             \
+      static constexpr bool value = type::value;                                                                      \
     };                                                                                                                  \
-                                                                                                                        \
     template<EXPAND(typenames(EXPAND(templateArgs)))>                                                                   \
     constexpr bool CONCAT(name, _v) = name<EXPAND(templateArgs)>::value;
 
     HAS_FUNC(begin);
     HAS_FUNC(end);
 
-    COMBINE_SFINAE(is_container, has_begin_v<T COMMA typename T::iterator(void)> && has_end_v<T COMMA typename T::iterator(void)>, T);
+    COMBINE_SFINAE(is_container, has_begin_v<T _COMMA typename T::iterator(void)> && has_end_v<T _COMMA typename T::iterator(void)>, T);
 
     HAS_FUNC(resize);
 
-    COMBINE_SFINAE(is_resizable_container, has_begin_v<T COMMA typename T::iterator(void)> && has_end_v<T COMMA typename T::iterator(void)> && has_resize_v<T COMMA void(size_type)>, T);
+    COMBINE_SFINAE(is_resizable_container, has_begin_v<T _COMMA typename T::iterator(void)> && has_end_v<T _COMMA typename T::iterator(void)> && has_resize_v<T _COMMA void(size_type)>, T);
 
     HAS_FUNC(setup);
     HAS_FUNC(update);
