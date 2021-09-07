@@ -79,13 +79,13 @@ namespace legion::core::serialization
     //    static constexpr bool value = type::value;
     //};
 
-    template<typename, typename T>
-    struct is_container
-    {
-        static_assert(
-            std::integral_constant<T, false>::value,
-            "Second template param needs to be of function type.");
-    };
+    //template<typename, typename T>
+    //struct is_container
+    //{
+    //    static_assert(
+    //        std::integral_constant<T, false>::value,
+    //        "Second template param needs to be of function type.");
+    //};
 
     //template <typename C, typename Ret>
     //struct is_container<C,Ret()>
