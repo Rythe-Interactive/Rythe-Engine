@@ -60,7 +60,7 @@ namespace legion::core
     };                                                                                                                  \
                                                                                                                         \
     template<typename C, typename F>                                                                                    \
-    constexpr bool CONCAT_DEFINE(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value;
+    constexpr bool CONCAT_DEFINE(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value; 
 
 #define  typename_1(x)                                                                    typename x
 #define  typename_2(x, x2)                                                                typename x , typename x2
@@ -84,8 +84,8 @@ namespace legion::core
 #define typenames_count(count, ...) EXPAND(CONCAT_DEFINE(typename_, count)(__VA_ARGS__))
 #define typenames(...) EXPAND(CONCAT_DEFINE(typename_, NARGS(__VA_ARGS__))(__VA_ARGS__))
 
-#define COMBINE_SFINAE(name, predicate, templateArgs...)                                                                \
-    template<typenames(templateArgs)>                                                                                   \
+#define COMBINE_SFINAE(name, predicate, templateArgs...) \
+    template<typenames(templateArgs)> \
     struct name                                                                                                         \
     {                                                                                                                   \
     private:                                                                                                            \
@@ -102,16 +102,33 @@ namespace legion::core
       static constexpr bool value = type::value;                                                                      \
     };                                                                                                                  \
     template<EXPAND(typenames(EXPAND(templateArgs)))>                                                                   \
-    constexpr bool CONCAT(name, _v) = name<EXPAND(templateArgs)>::value;
+    constexpr bool CONCAT(name, _v) = name<EXPAND(templateArgs)>::value; 
 
     HAS_FUNC(begin);
     HAS_FUNC(end);
 
-    COMBINE_SFINAE(is_container, has_begin_v<T _COMMA typename T::iterator(void)> && has_end_v<T _COMMA typename T::iterator(void)>, T);
+    //COMBINE_SFINAE(is_container, has_begin_v<T _COMMA typename T::iterator()> && has_end_v<T _COMMA typename T::iterator()>, T);
+
+    template<typename T>
+    struct is_container
+    {
+    private:
+        template<typename T>
+        static constexpr auto check(T*)
+            -> typename std::conditional<has_begin<T, typename T::iterator()>::value&& has_end<T, typename T::iterator()>::value, std::true_type, std::false_type>::type;
+
+        template <typename>
+        static constexpr auto check(...)
+            ->std::false_type;
+
+        typedef decltype(check<T>(nullptr)) type;
+    public:
+        static constexpr bool value = type::value;
+    };
 
     HAS_FUNC(resize);
 
-    COMBINE_SFINAE(is_resizable_container, has_begin_v<T _COMMA typename T::iterator(void)> && has_end_v<T _COMMA typename T::iterator(void)> && has_resize_v<T _COMMA void(size_type)>, T);
+    COMBINE_SFINAE(is_resizable_container, has_begin_v<T _COMMA typename T::iterator()>&& has_end_v<T _COMMA typename T::iterator()>&& has_resize_v<T _COMMA void(size_type)>, T);
 
     HAS_FUNC(setup);
     HAS_FUNC(update);

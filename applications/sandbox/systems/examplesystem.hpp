@@ -85,9 +85,25 @@ public:
         //log::debug(jsonView.data.dump());
 
         std::vector<int> vec;
-        if constexpr (is_container<std::vector<int>>::value)
+
+        if constexpr (has_begin_v<decltype(vec),decltype(vec)::iterator()>)
         {
-            log::debug("Its a container");
+            log::debug("It has a begin");
+        }
+
+        if constexpr (has_end_v<decltype(vec), decltype(vec)::iterator()>)
+        {
+            log::debug("It has a end");
+        }
+
+        if constexpr (has_begin_v<decltype(vec), decltype(vec)::iterator()> && has_end_v<decltype(vec), decltype(vec)::iterator()>)
+        {
+            log::debug("Its a container (Long)");
+        }
+ 
+        if constexpr (is_container<decltype(vec)>::value)
+        {
+            log::debug("Its a container (Short)");
         }
     }
 

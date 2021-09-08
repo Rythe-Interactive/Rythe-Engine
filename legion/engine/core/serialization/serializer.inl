@@ -3,30 +3,38 @@
 
 namespace legion::core::serialization
 {
-    inline void serializer<ecs::entity>::serialize_ent(const ecs::entity& serializable, serializer_view& s_view)
+    inline void serializer<ecs::entity_data>::serialize_ent_data(const ecs::entity_data& ent_data, serializer_view& s_view)
     {
-        if (serializable->id < 1)
+        if (ent_data.id < 1)
         {
             log::error("invalid input data: entity is null");
             return;
         }
 
-        std::string name = typeid(ecs::entity).name();
+        s_view.serialize(std::string("alive"), ent_data.alive);
+        s_view.serialize(std::string("active"), ent_data.active);
 
-        auto reflector = make_reflector(serializable);//i should move this to a member variable that I can just reuse
+        s_view.serialize(std::string("id"), ent_data.id);
+        s_view.serialize(std::string("name"), ent_data.name);
+        if (ent_data.parent)
+            s_view.serialize(std::string("parent"), ent_data.parent->id);
 
-        for_each(reflector,
-            [&s_view](auto& name, auto& value)
-            {
-                using value_type = typename remove_cvr_t<decltype(*value)>;
-                pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
-                _serializer->serialize(*value, s_view);
-            });
+        pointer<serializer<ecs::entity_set>> _serializer = serializer_registry::get_serializer<ecs::entity_set>();
+        _serializer->serialize(ent_data.children, s_view);
+    }
+    inline void serializer<ecs::entity_data>::serialize(const std::any& ent, serializer_view& s_view)
+    {
+        serialize_ent_data(std::any_cast<ecs::entity_data>(ent), s_view);
     }
 
-    inline void serializer<ecs::entity>::serialize(const std::any& serializable, serializer_view& s_view)
+    inline void serializer<ecs::entity>::serialize_ent(const ecs::entity& ent, serializer_view& s_view)
     {
-        serialize_ent(std::any_cast<ecs::entity>(serializable), s_view);
+        auto _serializer = serializer_registry::get_serializer<serializer<ecs::entity_data>>();
+        _serializer->serialize(ent.data,s_view);
+    }
+    inline void serializer<ecs::entity>::serialize(const std::any& ent, serializer_view& s_view)
+    {
+        serialize_ent(std::any_cast<ecs::entity>(ent), s_view);
     }
 
     template<typename type>
@@ -34,7 +42,7 @@ namespace legion::core::serialization
     {
         using container_type = typename remove_cvr_t<type>;
 
-        auto& _container = std::any_cast<container_type>(container);
+        auto _container = std::any_cast<container_type>(container);
 
         if (_container.size() < 1)
         {
@@ -42,26 +50,29 @@ namespace legion::core::serialization
             return;
         }
 
-        std::string name = typeid(type).name();
-
         for (container_type::const_iterator it = _container.begin(); it != _container.end(); ++it)
         {
-            auto reflector = make_reflector(*it._Ptr);
 
-            for_each(reflector,
-                [&s_view](auto& name, auto& value)
-                {
-                    using value_type = remove_cvr_t<decltype(value)>;
-                    pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
-                    _serializer->serialize(value, s_view);
-                });
+            using value_type = remove_cvr_t<decltype(*it._Ptr)>;
+            pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
+            _serializer->serialize(*it._Ptr, s_view);
+
+            //auto reflector = make_reflector(*it._Ptr);
+
+            //for_each(reflector,
+            //    [&s_view](auto& name, auto& value)
+            //    {
+            //        using value_type = remove_cvr_t<decltype(value)>;
+            //        pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
+            //        _serializer->serialize(value, s_view);
+            //    });
         }
     }
 
     template<typename type>
     inline void serializer<type>::serialize(const std::any& serializable, serializer_view& s_view)
     {
-       /* using serializable_type = remove_cvr_t<type>;
+        using serializable_type = remove_cvr_t<type>;
 
         if (!serializable.has_value())
             return legion_exception_msg("invalid input data: serializable is null");
@@ -73,9 +84,14 @@ namespace legion::core::serialization
 
         if constexpr (std::is_same<serializable_type, id_type>::value)
             s_view.serialize<unsigned long long int>(name, std::any_cast<unsigned long long int>(serializable));
-        else if constexpr (is_container_v<serializable_type>)
+        else if constexpr (is_container<type>::value)
             serialize_container(serializable, s_view);
-        else if constexpr (std::is_constructible<serializable_type, const serializable_type&>::value)
+        else if constexpr (!std::is_constructible<serializable_type, const serializable_type&>::value)
+        {
+            pointer<serializer<serializable_type>> _serializer = serializer_registry::get_serializer<serializable_type>();
+            _serializer->serialize(serializable, s_view);
+        }
+        else
         {
             auto _serializable = std::any_cast<serializable_type>(serializable);
             if (!s_view.serialize<serializable_type>(name, std::move(_serializable)))
@@ -91,12 +107,6 @@ namespace legion::core::serialization
                     });
             }
         }
-        else
-        {
-            pointer<serializer<serializable_type>> _serializer = serializer_registry::get_serializer<serializable_type>();
-            _serializer->serialize(serializable, s_view);
-            return;
-        }*/
     }
 
 
