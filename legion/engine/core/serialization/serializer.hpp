@@ -36,6 +36,18 @@ namespace legion::core::serialization
     };
 
     template<>
+    struct serializer<ecs::entity_data> : serializer_base
+    {
+        serializer() = default;
+        ~serializer() = default;
+
+        virtual void serialize(const std::any& serializable, serializer_view& view) override;
+        virtual prototype_base deserialize(serializer_view& view) override;
+
+        void serialize_ent_data(const ecs::entity_data& serializable, serializer_view& view);
+    };
+
+    template<>
     struct serializer<ecs::entity> : serializer_base
     {
         serializer() = default;
@@ -47,17 +59,6 @@ namespace legion::core::serialization
         void serialize_ent(const ecs::entity& serializable, serializer_view& view);
     };
 
-    template<>
-    struct serializer<ecs::entity_data> : serializer_base
-    {
-        serializer() = default;
-        ~serializer() = default;
-
-        virtual void serialize(const std::any& serializable, serializer_view& view) override;
-        virtual prototype_base deserialize(serializer_view& view) override;
-
-        void serialize_ent_data(const ecs::entity_data& serializable, serializer_view& view);
-    };
 }
 
 //#include <core/serialization/serializer.inl>

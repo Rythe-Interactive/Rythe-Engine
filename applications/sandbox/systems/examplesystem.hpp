@@ -80,9 +80,9 @@ public:
             scene.entities.push_back(ent);
         }
 
-        //auto jsonView = serialization::json_view(filePath);
-        //serializer->serialize(scene, jsonView);
-        //log::debug(jsonView.data.dump());
+        auto jsonView = serialization::json_view(filePath);
+        serializer->serialize(scene, jsonView);
+        log::debug(jsonView.data.dump());
 
         std::vector<int> vec;
 
