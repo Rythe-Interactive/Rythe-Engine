@@ -8,6 +8,7 @@
 #include <core/ecs/handles/entity.hpp>
 
 using json = nlohmann::json;
+
 namespace legion::core
 {
     struct example_comp
@@ -80,31 +81,36 @@ public:
             scene.entities.push_back(ent);
         }
 
-        auto jsonView = serialization::json_view(filePath);
-        serializer->serialize(scene, jsonView);
-        log::debug(jsonView.data.dump());
+        //auto jsonView = serialization::json_view(filePath);
+        //serializer->serialize(scene, jsonView);
+        //log::debug(jsonView.data.dump());
 
-        std::vector<int> vec;
+        //std::vector<int> vec;
 
-        if constexpr (has_begin_v<decltype(vec),decltype(vec)::iterator()>)
-        {
-            log::debug("It has a begin");
-        }
+        //if constexpr (has_begin_v<decltype(vec),decltype(vec)::iterator()>)
+        //{
+        //    log::debug("It has a begin");
+        //}
 
-        if constexpr (has_end_v<decltype(vec), decltype(vec)::iterator()>)
-        {
-            log::debug("It has a end");
-        }
+        //if constexpr (has_end_v<decltype(vec), decltype(vec)::iterator()>)
+        //{
+        //    log::debug("It has a end");
+        //}
 
-        if constexpr (has_begin_v<decltype(vec), decltype(vec)::iterator()> && has_end_v<decltype(vec), decltype(vec)::iterator()>)
-        {
-            log::debug("Its a container (Long)");
-        }
- 
-        if constexpr (is_container<decltype(vec)>::value)
-        {
-            log::debug("Its a container (Short)");
-        }
+        //if constexpr (has_begin_v<decltype(vec), decltype(vec)::iterator()> && has_end_v<decltype(vec), decltype(vec)::iterator()>)
+        //{
+        //    log::debug("Its a container (Long)");
+        //}
+
+        //if constexpr (is_container<decltype(vec)>::value)
+        //{
+        //    log::debug("Its a container (Short)");
+        //}
+
+        json j = {  };
+        fs::basic_resource br(j.dump());
+        log::debug(br.to_string());
+
     }
 
     void update(legion::time::span deltaTime)

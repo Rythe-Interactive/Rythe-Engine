@@ -44,7 +44,8 @@ namespace legion::core::serialization
             s_view.serialize("parent", ent->parent->id);
 
         pointer<serializer<ecs::entity_set>> _serializer = serializer_registry::get_serializer<ecs::entity_set>();
-        _serializer->serialize(ent->children, s_view);
+         _serializer->serialize(ent->children, s_view);
+        
     }
     inline void serializer<ecs::entity>::serialize(const std::any& ent, serializer_view& s_view)
     {
@@ -84,35 +85,30 @@ namespace legion::core::serialization
             return legion_exception_msg("invalid input data: serializable is not of expected type");
 
         std::string name = typeid(serializable_type).name();
-
+        if constexpr (std::is_same<serializable_type, id_type>::value)
+            s_view.serialize<unsigned long long int>("id", std::any_cast<unsigned long long int>(serializable));
+        else if constexpr (is_container<type>::value)
+            serialize_container(serializable, s_view);
+        else if constexpr (!std::is_constructible<serializable_type, const serializable_type&>::value)
         {
-            serializer_view view(name,s_view);
-            if constexpr (std::is_same<serializable_type, id_type>::value)
-                s_view.serialize<unsigned long long int>("id", std::any_cast<unsigned long long int>(serializable));
-            else if constexpr (is_container<type>::value)
-                serialize_container(serializable, view);
-            else if constexpr (!std::is_constructible<serializable_type, const serializable_type&>::value)
+            pointer<serializer<serializable_type>> _serializer = serializer_registry::get_serializer<serializable_type>();
+             _serializer->serialize(serializable, s_view);
+        }
+        else
+        {
+            auto _serializable = std::any_cast<serializable_type>(serializable);
+            if (!s_view.serialize<serializable_type>(name, std::move(_serializable)))
             {
-                pointer<serializer<serializable_type>> _serializer = serializer_registry::get_serializer<serializable_type>();
-                _serializer->serialize(serializable, view);
-            }
-            else
-            {
-                auto _serializable = std::any_cast<serializable_type>(serializable);
-                if (!s_view.serialize<serializable_type>(name, std::move(_serializable)))
-                {
-                    auto reflector = make_reflector(_serializable);
+                auto reflector = make_reflector(_serializable);
 
-                    for_each(reflector,
-                        [&s_view](auto& name, auto& value)
-                        {
-                            using value_type = typename remove_cvr_t<decltype(value)>;
-                            auto _serializer = serializer_registry::get_serializer<value_type>();
-                            _serializer->serialize(value, s_view);
-                        });
-                }
+                for_each(reflector,
+                    [&s_view](auto& name, auto& value)
+                    {
+                        using value_type = typename remove_cvr_t<decltype(value)>;
+                        auto _serializer = serializer_registry::get_serializer<value_type>();
+                        _serializer->serialize(value, s_view);
+                    });
             }
-            s_view.add_view(view)
         }
     }
 

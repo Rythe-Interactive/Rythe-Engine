@@ -12,27 +12,27 @@ namespace legion::core::serialization
 #pragma endregion
 
 #pragma region json_view
-    void json_view::serialize_int(std::string name, int serializable)
+    void json_view::serialize_int(std::string_view& name, int serializable)
+    {
+        data[object_name][name] = serializable;
+    }
+    void json_view::serialize_float(std::string_view& name, float serializable)
     {
         data[name] = serializable;
     }
-    void json_view::serialize_float(std::string name, float serializable)
+    void json_view::serialize_double(std::string_view& name, double serializable)
     {
         data[name] = serializable;
     }
-    void json_view::serialize_double(std::string name, double serializable)
+    void json_view::serialize_bool(std::string_view& name, bool serializable)
     {
         data[name] = serializable;
     }
-    void json_view::serialize_bool(std::string name, bool serializable)
+    void json_view::serialize_string(std::string_view& name, const std::string_view& serializable)
     {
         data[name] = serializable;
     }
-    void json_view::serialize_string(std::string name, const std::string_view& serializable)
-    {
-        data[name] = serializable;
-    }
-    void json_view::serialize_id_type(std::string name, id_type serializable)
+    void json_view::serialize_id_type(std::string_view& name, id_type serializable)
     {
         data[name] = serializable;
     }
