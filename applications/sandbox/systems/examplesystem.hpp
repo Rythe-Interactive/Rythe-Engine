@@ -68,22 +68,28 @@ public:
         //Serialization Test
         std::string_view filePath = "assets://scenes/scene.json";
 
-        auto serializer = serialization::serializer_registry::get_serializer<scene_comp>();
-        auto scene = scene_comp();
-        scene.id = 1;
-        for (int i = 0; i < 200; i++)
-        {
-            auto ent = createEntity();
-            auto child = createEntity();
-            ent.add_component<example_comp>();
-            ent.add_component<position>();
-            ent.add_component<velocity>();
-            scene.entities.push_back(ent);
-        }
+        //auto serializer = serialization::serializer_registry::get_serializer<scene_comp>();
+        //auto scene = scene_comp();
+        //scene.id = 1;
+        //for (int i = 0; i < 200; i++)
+        //{
+        //    auto ent = createEntity();
+        //    auto child = createEntity();
+        //    ent.add_component<example_comp>();
+        //    ent.add_component<position>();
+        //    ent.add_component<velocity>();
+        //    scene.entities.push_back(ent);
+        //}
 
         //auto jsonView = serialization::json_view(filePath);
         //serializer->serialize(scene, jsonView);
         //log::debug(jsonView.data.dump());
+
+        auto serializer = serialization::serializer_registry::get_serializer<example_comp>();
+        auto comp = example_comp();
+        auto jsonView = serialization::json_view(filePath);
+        auto data = serializer->serialize(comp, jsonView);
+        log::debug(data.value().data());
 
         //std::vector<int> vec;
 
@@ -107,9 +113,6 @@ public:
         //    log::debug("Its a container (Short)");
         //}
 
-        json j = {  };
-        fs::basic_resource br(j.dump());
-        log::debug(br.to_string());
 
     }
 

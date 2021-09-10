@@ -18,7 +18,7 @@ namespace legion::core::serialization
         serializer_base() = default;
         ~serializer_base() = default;
 
-        virtual void serialize(const std::any& serializable, serializer_view& view) = 0;
+        virtual common::result<fs::basic_resource, exception> serialize(const std::any& serializable, serializer_view& view) = 0;
         virtual prototype_base deserialize(serializer_view& view) = 0;
     };
 
@@ -29,10 +29,10 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual void serialize(const std::any& serializable, serializer_view& view) override;
+        virtual common::result<fs::basic_resource, exception> serialize(const std::any& serializable, serializer_view& view) override;
         virtual prototype_base deserialize(serializer_view& view) override;
 
-        void serialize_container(const std::any& container, serializer_view& view);
+        common::result<fs::basic_resource, exception> serialize_container(const std::any& container, serializer_view& view);
     };
 
     template<>
@@ -41,10 +41,10 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual void serialize(const std::any& serializable, serializer_view& view) override;
+        virtual common::result<fs::basic_resource, exception> serialize(const std::any& serializable, serializer_view& view) override;
         virtual prototype_base deserialize(serializer_view& view) override;
 
-        void serialize_ent_data(const ecs::entity_data& serializable, serializer_view& view);
+        common::result<fs::basic_resource, exception> serialize_ent_data(const ecs::entity_data& serializable, serializer_view& view);
     };
 
     template<>
@@ -53,10 +53,10 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual void serialize(const std::any& serializable, serializer_view& view) override;
+        virtual common::result<fs::basic_resource, exception> serialize(const std::any& serializable, serializer_view& view) override;
         virtual prototype_base deserialize(serializer_view& view) override;
 
-        void serialize_ent(const ecs::entity& serializable, serializer_view& view);
+        common::result<fs::basic_resource, exception> serialize_ent(const ecs::entity& serializable, serializer_view& view);
     };
 
 }

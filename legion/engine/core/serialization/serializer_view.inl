@@ -14,155 +14,155 @@ namespace legion::core::serialization
 #pragma region json_view
     void json_view::serialize_int(std::string_view& name, int serializable)
     {
-        data[object_name][name] = serializable;
+        data[object_name][name.data()] = serializable;
     }
     void json_view::serialize_float(std::string_view& name, float serializable)
     {
-        data[name] = serializable;
+        data[object_name][name.data()] = serializable;
     }
     void json_view::serialize_double(std::string_view& name, double serializable)
     {
-        data[name] = serializable;
+        data[object_name][name.data()] = serializable;
     }
     void json_view::serialize_bool(std::string_view& name, bool serializable)
     {
-        data[name] = serializable;
+        data[object_name][name.data()] = serializable;
     }
     void json_view::serialize_string(std::string_view& name, const std::string_view& serializable)
     {
-        data[name] = serializable;
+        data[object_name][name.data()] = serializable;
     }
     void json_view::serialize_id_type(std::string_view& name, id_type serializable)
     {
-        data[name] = serializable;
+        data[object_name][name.data()] = serializable;
     }
 
-    common::result<int, fs_error> json_view::deserialize_int(std::string& name)
+    common::result<int, fs_error> json_view::deserialize_int(std::string_view& name)
     {
-        return data[name].get<int>();
+        return data[object_name][name.data()].get<int>();
     }
-    common::result<float, fs_error> json_view::deserialize_float(std::string& name)
+    common::result<float, fs_error> json_view::deserialize_float(std::string_view& name)
     {
-        return data[name].get<float>();
+        return data[object_name][name.data()].get<float>();
     }
-    common::result<double, fs_error> json_view::deserialize_double(std::string& name)
+    common::result<double, fs_error> json_view::deserialize_double(std::string_view& name)
     {
-        return data[name].get<double>();
+        return data[object_name][name.data()].get<double>();
     }
-    bool json_view::deserialize_bool(std::string& name)
+    bool json_view::deserialize_bool(std::string_view& name)
     {
-        return data[name].get<bool>();
+        return data[object_name][name.data()].get<bool>();
     }
-    common::result<std::string, fs_error> json_view::deserialize_string(std::string& name)
+    common::result<std::string, fs_error> json_view::deserialize_string(std::string_view& name)
     {
-        return data[name].get<std::string>();
+        return data[object_name][name.data()].get<std::string>();
     }
-    common::result<id_type, fs_error> json_view::deserialize_id_type(std::string& name)
+    common::result<id_type, fs_error> json_view::deserialize_id_type(std::string_view& name)
     {
-        auto id = data[name].get<int>();
+        auto id = data[object_name][name.data()].get<int>();
         return (id_type)id;
     }
 #pragma endregion
 
 #pragma region bson_view
-    void bson_view::serialize_int(std::string name, int serializable)
+    void bson_view::serialize_int(std::string_view& name, int serializable)
     {
 
     }
-    void bson_view::serialize_float(std::string name, float serializable)
+    void bson_view::serialize_float(std::string_view& name, float serializable)
     {
 
     }
-    void bson_view::serialize_double(std::string name, double serializable)
+    void bson_view::serialize_double(std::string_view& name, double serializable)
     {
 
     }
-    void bson_view::serialize_bool(std::string name, bool serializable)
+    void bson_view::serialize_bool(std::string_view& name, bool serializable)
     {
 
     }
-    void bson_view::serialize_string(std::string name, const std::string_view& serializable)
+    void bson_view::serialize_string(std::string_view& name, const std::string_view& serializable)
     {
 
     }
-    void bson_view::serialize_id_type(std::string name, id_type serializable)
+    void bson_view::serialize_id_type(std::string_view& name, id_type serializable)
     {
 
     }
 
-    common::result<int, fs_error> bson_view::deserialize_int(std::string& name)
+    common::result<int, fs_error> bson_view::deserialize_int(std::string_view& name)
     {
         return;
     }
-    common::result<float, fs_error> bson_view::deserialize_float(std::string& name)
+    common::result<float, fs_error> bson_view::deserialize_float(std::string_view& name)
     {
         return;
     }
-    common::result<double, fs_error> bson_view::deserialize_double(std::string& name)
+    common::result<double, fs_error> bson_view::deserialize_double(std::string_view& name)
     {
         return;
     }
-    bool bson_view::deserialize_bool(std::string& name)
+    bool bson_view::deserialize_bool(std::string_view& name)
     {
         return;
     }
-    common::result<std::string, fs_error> bson_view::deserialize_string(std::string& name)
+    common::result<std::string, fs_error> bson_view::deserialize_string(std::string_view& name)
     {
         return;
     }
-    common::result<id_type, fs_error> bson_view::deserialize_id_type(std::string& name)
+    common::result<id_type, fs_error> bson_view::deserialize_id_type(std::string_view& name)
     {
         return;
     }
 #pragma endregion
 
 #pragma region yaml_view
-    void yaml_view::serialize_int(std::string name, int serializable)
+    void yaml_view::serialize_int(std::string_view& name, int serializable)
     {
 
     }
-    void yaml_view::serialize_float(std::string name, float serializable)
+    void yaml_view::serialize_float(std::string_view& name, float serializable)
     {
 
     }
-    void yaml_view::serialize_double(std::string name, double serializable)
+    void yaml_view::serialize_double(std::string_view& name, double serializable)
     {
 
     }
-    void yaml_view::serialize_bool(std::string name, bool serializable)
+    void yaml_view::serialize_bool(std::string_view& name, bool serializable)
     {
 
     }
-    void yaml_view::serialize_string(std::string name, const std::string_view& serializable)
+    void yaml_view::serialize_string(std::string_view& name, const std::string_view& serializable)
     {
 
     }
-    void yaml_view::serialize_id_type(std::string name, id_type serializable)
+    void yaml_view::serialize_id_type(std::string_view& name, id_type serializable)
     {
 
     }
 
-    common::result<int, fs_error> yaml_view::deserialize_int(std::string& name)
+    common::result<int, fs_error> yaml_view::deserialize_int(std::string_view& name)
     {
         return;
     }
-    common::result<float, fs_error> yaml_view::deserialize_float(std::string& name)
+    common::result<float, fs_error> yaml_view::deserialize_float(std::string_view& name)
     {
         return;
     }
-    common::result<double, fs_error> yaml_view::deserialize_double(std::string& name)
+    common::result<double, fs_error> yaml_view::deserialize_double(std::string_view& name)
     {
         return;
     }
-    bool yaml_view::deserialize_bool(std::string& name)
+    bool yaml_view::deserialize_bool(std::string_view& name)
     {
         return;
     }
-    common::result<std::string, fs_error> yaml_view::deserialize_string(std::string& name)
+    common::result<std::string, fs_error> yaml_view::deserialize_string(std::string_view& name)
     {
         return;
     }
-    common::result<id_type, fs_error> yaml_view::deserialize_id_type(std::string& name)
+    common::result<id_type, fs_error> yaml_view::deserialize_id_type(std::string_view& name)
     {
         return;
     }

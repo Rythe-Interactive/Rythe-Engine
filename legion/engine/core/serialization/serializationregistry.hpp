@@ -7,6 +7,12 @@
 
 namespace legion::core::serialization
 {
+    struct serialized_data
+    {
+        fs::basic_resource data;
+        std::vector<serialized_data> nested_data;
+    };
+
     class serializer_registry
     {
     private:
