@@ -18,10 +18,9 @@ namespace legion::core::serialization
         serializer_base() = default;
         ~serializer_base() = default;
 
-        virtual common::result<fs::basic_resource, exception> serialize(const std::any& serializable, serializer_view& view) = 0;
+        virtual common::result<bool, exception> serialize(const std::any& serializable, serializer_view& view, std::string name) = 0;
         virtual prototype_base deserialize(serializer_view& view) = 0;
     };
-
 
     template<typename serializable_type>
     struct serializer : serializer_base
@@ -29,10 +28,13 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual common::result<fs::basic_resource, exception> serialize(const std::any& serializable, serializer_view& view) override;
+        virtual common::result<bool, exception> serialize(const std::any& serializable, serializer_view& view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& view) override;
 
-        common::result<fs::basic_resource, exception> serialize_container(const std::any& container, serializer_view& view);
+        common::result<bool, exception> serialize_container(const std::any& container, serializer_view& view);
+
+        common::result<bool, exception> write(const std::any& serializable, std::string name, const fs::view& file);
+        common::result<bool, exception> read(const fs::view& view);
     };
 
     template<>
@@ -41,10 +43,10 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual common::result<fs::basic_resource, exception> serialize(const std::any& serializable, serializer_view& view) override;
+        virtual common::result<bool, exception> serialize(const std::any& serializable, serializer_view& view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& view) override;
 
-        common::result<fs::basic_resource, exception> serialize_ent_data(const ecs::entity_data& serializable, serializer_view& view);
+        common::result<bool, exception> serialize_ent_data(const ecs::entity_data& serializable, serializer_view& view, std::string name);
     };
 
     template<>
@@ -53,10 +55,10 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual common::result<fs::basic_resource, exception> serialize(const std::any& serializable, serializer_view& view) override;
+        virtual common::result<bool, exception> serialize(const std::any& serializable, serializer_view& view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& view) override;
 
-        common::result<fs::basic_resource, exception> serialize_ent(const ecs::entity& serializable, serializer_view& view);
+        common::result<bool, exception> serialize_ent(const ecs::entity& serializable, serializer_view& view, std::string name);
     };
 
 }

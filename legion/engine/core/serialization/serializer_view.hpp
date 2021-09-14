@@ -12,12 +12,13 @@ namespace legion::core::serialization
     struct serializer_view
     {
         serializer_view() = default;
-        serializer_view(serializer_view& s_view) {};
-        serializer_view(std::string_view& name, serializer_view& s_view) {};
         virtual ~serializer_view() = default;
 
-        virtual void start_object(std::string_view& name) = 0;
-        virtual fs::basic_resource end_object() = 0;
+        virtual void start_object(std::string name) = 0;
+        virtual void end_object() = 0;
+
+        virtual void start_container(std::string name) = 0;
+        virtual void end_container() = 0;
 
         template<typename Type>
         bool serialize(std::string_view name, Type&& value)
@@ -68,33 +69,50 @@ namespace legion::core::serialization
 
         //virtual void load_file(fs::view& file) = 0;
 
-        //virtual id_type deserialize_object_id(std::string& name) = 0;
-        virtual common::result<int, fs_error> deserialize_int(std::string_view& name) = 0;
-        virtual common::result<float, fs_error> deserialize_float(std::string_view& name) = 0;
-        virtual common::result<double, fs_error> deserialize_double(std::string_view& name) =0;
-        virtual bool deserialize_bool(std::string_view& name)=0;
-        virtual common::result<std::string, fs_error> deserialize_string(std::string_view& name)=0;
-        virtual common::result<id_type, fs_error> deserialize_id_type(std::string_view& name)=0;
+        virtual common::result<int, exception> deserialize_int(std::string_view& name) = 0;
+        virtual common::result<float, exception> deserialize_float(std::string_view& name) = 0;
+        virtual common::result<double, exception> deserialize_double(std::string_view& name) = 0;
+        virtual bool deserialize_bool(std::string_view& name) = 0;
+        virtual common::result<std::string, exception> deserialize_string(std::string_view& name) = 0;
+        virtual common::result<id_type, exception> deserialize_id_type(std::string_view& name) = 0;
     };
 
     struct json_view : serializer_view
     {
-        json data;
-        std::string object_name;
-        std::string_view filePath;
+        std::string data;
 
         json_view() = default;
-        json_view(std::string_view& filePath, const json&& j = json()) : filePath(filePath), data(j) { }
         ~json_view() = default;
 
-        virtual void start_object(std::string_view& name) override
+        virtual void start_object(std::string name) override
         {
-            object_name = name;
+            if (name.size() > 0)
+            {
+                data.append(name);
+                data.append(":");
+            }
+            data.append("{");
+        }
+        virtual void end_object() override
+        {
+            data.pop_back();
+            data.append("},");
         }
 
-        virtual fs::basic_resource end_object() override
+        virtual void start_container(std::string name) override
         {
-            return fs::basic_resource(data.dump());
+            if (name.size() > 0)
+            {
+                data.append(name);
+                data.append(":");
+            }
+            data.append("[");
+        }
+        virtual void end_container() override
+        {
+            if (data[data.size() - 1] == ',')
+                data.pop_back();
+            data.append("],");
         }
 
         template<typename Type>
@@ -142,27 +160,34 @@ namespace legion::core::serialization
         virtual void serialize_string(std::string_view& name, const std::string_view& serializable) override;
         virtual void serialize_id_type(std::string_view& name, id_type serializable) override;
 
-        virtual common::result<int, fs_error> deserialize_int(std::string_view& name) override;
-        virtual common::result<float, fs_error> deserialize_float(std::string_view& name) override;
-        virtual common::result<double, fs_error> deserialize_double(std::string_view& name) override;
+        virtual common::result<int, exception> deserialize_int(std::string_view& name) override;
+        virtual common::result<float, exception> deserialize_float(std::string_view& name) override;
+        virtual common::result<double, exception> deserialize_double(std::string_view& name) override;
         virtual bool deserialize_bool(std::string_view& name) override;
-        virtual common::result<std::string, fs_error> deserialize_string(std::string_view& name) override;
-        virtual common::result<id_type, fs_error> deserialize_id_type(std::string_view& name) override;
+        virtual common::result<std::string, exception> deserialize_string(std::string_view& name) override;
+        virtual common::result<id_type, exception> deserialize_id_type(std::string_view& name) override;
     };
 
     struct bson_view : serializer_view
     {
-        std::string_view filePath;
 
         bson_view() = default;
         ~bson_view() = default;
 
-        virtual void start_object(std::string_view& view) override
+        virtual void start_object(std::string name) override
+        {
+
+        }
+        virtual void end_object() override
         {
 
         }
 
-        virtual fs::basic_resource end_object() override
+        virtual void start_container(std::string name) override
+        {
+
+        }
+        virtual void end_container() override
         {
 
         }
@@ -212,27 +237,34 @@ namespace legion::core::serialization
         virtual void serialize_string(std::string_view& name, const std::string_view& serializable) override;
         virtual void serialize_id_type(std::string_view& name, id_type serializable) override;
 
-        virtual common::result<int, fs_error> deserialize_int(std::string_view& name) override;
-        virtual common::result<float, fs_error> deserialize_float(std::string_view& name) override;
-        virtual common::result<double, fs_error> deserialize_double(std::string_view& name) override;
+        virtual common::result<int, exception> deserialize_int(std::string_view& name) override;
+        virtual common::result<float, exception> deserialize_float(std::string_view& name) override;
+        virtual common::result<double, exception> deserialize_double(std::string_view& name) override;
         virtual bool deserialize_bool(std::string_view& name) override;
-        virtual common::result<std::string, fs_error> deserialize_string(std::string_view& name) override;
-        virtual common::result<id_type, fs_error> deserialize_id_type(std::string_view& name) override;
+        virtual common::result<std::string, exception> deserialize_string(std::string_view& name) override;
+        virtual common::result<id_type, exception> deserialize_id_type(std::string_view& name) override;
     };
 
     struct yaml_view : serializer_view
     {
-        std::string_view filePath;
 
         yaml_view() = default;
         ~yaml_view() = default;
 
-        virtual void start_object(std::string_view& view) override
+        virtual void start_object(std::string name) override
+        {
+
+        }
+        virtual void end_object() override
         {
 
         }
 
-        virtual fs::basic_resource end_object() override
+        virtual void start_container(std::string name) override
+        {
+
+        }
+        virtual void end_container() override
         {
 
         }
@@ -282,12 +314,12 @@ namespace legion::core::serialization
         virtual void serialize_string(std::string_view& name, const std::string_view& serializable) override;
         virtual void serialize_id_type(std::string_view& name, id_type serializable) override;
 
-        virtual common::result<int, fs_error> deserialize_int(std::string_view& name) override;
-        virtual common::result<float, fs_error> deserialize_float(std::string_view& name) override;
-        virtual common::result<double, fs_error> deserialize_double(std::string_view& name) override;
+        virtual common::result<int, exception> deserialize_int(std::string_view& name) override;
+        virtual common::result<float, exception> deserialize_float(std::string_view& name) override;
+        virtual common::result<double, exception> deserialize_double(std::string_view& name) override;
         virtual bool deserialize_bool(std::string_view& name) override;
-        virtual common::result<std::string, fs_error> deserialize_string(std::string_view& name) override;
-        virtual common::result<id_type, fs_error> deserialize_id_type(std::string_view& name) override;
+        virtual common::result<std::string, exception> deserialize_string(std::string_view& name) override;
+        virtual common::result<id_type, exception> deserialize_id_type(std::string_view& name) override;
     };
 }
 

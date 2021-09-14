@@ -14,53 +14,70 @@ namespace legion::core::serialization
 #pragma region json_view
     void json_view::serialize_int(std::string_view& name, int serializable)
     {
-        data[object_name][name.data()] = serializable;
+        data.append(name);
+        data.append(":");
+        data.append(std::to_string(serializable));
+        data.append(",");
     }
     void json_view::serialize_float(std::string_view& name, float serializable)
     {
-        data[object_name][name.data()] = serializable;
+        data.append(name);
+        data.append(":");
+        data.append(std::to_string(serializable));
+        data.append(",");
     }
     void json_view::serialize_double(std::string_view& name, double serializable)
     {
-        data[object_name][name.data()] = serializable;
+        data.append(name);
+        data.append(":");
+        data.append(std::to_string(serializable));
+        data.append(",");
     }
     void json_view::serialize_bool(std::string_view& name, bool serializable)
     {
-        data[object_name][name.data()] = serializable;
+        data.append(name);
+        data.append(":");
+        data.append(std::to_string(serializable));
+        data.append(",");
     }
     void json_view::serialize_string(std::string_view& name, const std::string_view& serializable)
     {
-        data[object_name][name.data()] = serializable;
+        data.append(name);
+        data.append(":");
+        data.append(serializable);
+        data.append(",");
     }
     void json_view::serialize_id_type(std::string_view& name, id_type serializable)
     {
-        data[object_name][name.data()] = serializable;
+        data.append(name);
+        data.append(":");
+        data.append(std::to_string(serializable));
+        data.append(",");
     }
 
-    common::result<int, fs_error> json_view::deserialize_int(std::string_view& name)
+    common::result<int, exception> json_view::deserialize_int(std::string_view& name)
     {
-        return data[object_name][name.data()].get<int>();
+        return legion_exception_msg("not implemented");
     }
-    common::result<float, fs_error> json_view::deserialize_float(std::string_view& name)
+    common::result<float, exception> json_view::deserialize_float(std::string_view& name)
     {
-        return data[object_name][name.data()].get<float>();
+        return legion_exception_msg("not implemented");
     }
-    common::result<double, fs_error> json_view::deserialize_double(std::string_view& name)
+    common::result<double, exception> json_view::deserialize_double(std::string_view& name)
     {
-        return data[object_name][name.data()].get<double>();
+        return legion_exception_msg("not implemented");
     }
     bool json_view::deserialize_bool(std::string_view& name)
     {
-        return data[object_name][name.data()].get<bool>();
+        return false;
     }
-    common::result<std::string, fs_error> json_view::deserialize_string(std::string_view& name)
+    common::result<std::string, exception> json_view::deserialize_string(std::string_view& name)
     {
-        return data[object_name][name.data()].get<std::string>();
+        return legion_exception_msg("not implemented");
     }
-    common::result<id_type, fs_error> json_view::deserialize_id_type(std::string_view& name)
+    common::result<id_type, exception> json_view::deserialize_id_type(std::string_view& name)
     {
-        auto id = data[object_name][name.data()].get<int>();
-        return (id_type)id;
+        return legion_exception_msg("not implemented");
     }
 #pragma endregion
 
@@ -90,15 +107,15 @@ namespace legion::core::serialization
 
     }
 
-    common::result<int, fs_error> bson_view::deserialize_int(std::string_view& name)
+    common::result<int, exception> bson_view::deserialize_int(std::string_view& name)
     {
         return;
     }
-    common::result<float, fs_error> bson_view::deserialize_float(std::string_view& name)
+    common::result<float, exception> bson_view::deserialize_float(std::string_view& name)
     {
         return;
     }
-    common::result<double, fs_error> bson_view::deserialize_double(std::string_view& name)
+    common::result<double, exception> bson_view::deserialize_double(std::string_view& name)
     {
         return;
     }
@@ -106,11 +123,11 @@ namespace legion::core::serialization
     {
         return;
     }
-    common::result<std::string, fs_error> bson_view::deserialize_string(std::string_view& name)
+    common::result<std::string, exception> bson_view::deserialize_string(std::string_view& name)
     {
         return;
     }
-    common::result<id_type, fs_error> bson_view::deserialize_id_type(std::string_view& name)
+    common::result<id_type, exception> bson_view::deserialize_id_type(std::string_view& name)
     {
         return;
     }
@@ -142,15 +159,15 @@ namespace legion::core::serialization
 
     }
 
-    common::result<int, fs_error> yaml_view::deserialize_int(std::string_view& name)
+    common::result<int, exception> yaml_view::deserialize_int(std::string_view& name)
     {
         return;
     }
-    common::result<float, fs_error> yaml_view::deserialize_float(std::string_view& name)
+    common::result<float, exception> yaml_view::deserialize_float(std::string_view& name)
     {
         return;
     }
-    common::result<double, fs_error> yaml_view::deserialize_double(std::string_view& name)
+    common::result<double, exception> yaml_view::deserialize_double(std::string_view& name)
     {
         return;
     }
@@ -158,11 +175,11 @@ namespace legion::core::serialization
     {
         return;
     }
-    common::result<std::string, fs_error> yaml_view::deserialize_string(std::string_view& name)
+    common::result<std::string, exception> yaml_view::deserialize_string(std::string_view& name)
     {
         return;
     }
-    common::result<id_type, fs_error> yaml_view::deserialize_id_type(std::string_view& name)
+    common::result<id_type, exception> yaml_view::deserialize_id_type(std::string_view& name)
     {
         return;
     }

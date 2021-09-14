@@ -7,7 +7,7 @@
 #include <core/serialization/serializationregistry.hpp>
 #include <core/ecs/handles/entity.hpp>
 
-using json = nlohmann::json;
+using json = nlohmann::ordered_json;
 
 namespace legion::core
 {
@@ -68,52 +68,21 @@ public:
         //Serialization Test
         std::string_view filePath = "assets://scenes/scene.json";
 
-        //auto serializer = serialization::serializer_registry::get_serializer<scene_comp>();
-        //auto scene = scene_comp();
-        //scene.id = 1;
-        //for (int i = 0; i < 200; i++)
-        //{
-        //    auto ent = createEntity();
-        //    auto child = createEntity();
-        //    ent.add_component<example_comp>();
-        //    ent.add_component<position>();
-        //    ent.add_component<velocity>();
-        //    scene.entities.push_back(ent);
-        //}
+        auto serializer = serialization::serializer_registry::get_serializer<scene_comp>();
+        auto scene = scene_comp();
+        scene.id = 1;
+        for (int i = 0; i < 20; i++)
+        {
+            auto ent = createEntity();
+            auto child = createEntity();
+            ent.add_child(child);
+            ent.add_component<example_comp>();
+            ent.add_component<position>();
+            ent.add_component<velocity>();
+            scene.entities.push_back(ent);
+        }
 
-        //auto jsonView = serialization::json_view(filePath);
-        //serializer->serialize(scene, jsonView);
-        //log::debug(jsonView.data.dump());
-
-        auto serializer = serialization::serializer_registry::get_serializer<example_comp>();
-        auto comp = example_comp();
-        auto jsonView = serialization::json_view(filePath);
-        auto data = serializer->serialize(comp, jsonView);
-        log::debug(data.value().data());
-
-        //std::vector<int> vec;
-
-        //if constexpr (has_begin_v<decltype(vec),decltype(vec)::iterator()>)
-        //{
-        //    log::debug("It has a begin");
-        //}
-
-        //if constexpr (has_end_v<decltype(vec), decltype(vec)::iterator()>)
-        //{
-        //    log::debug("It has a end");
-        //}
-
-        //if constexpr (has_begin_v<decltype(vec), decltype(vec)::iterator()> && has_end_v<decltype(vec), decltype(vec)::iterator()>)
-        //{
-        //    log::debug("Its a container (Long)");
-        //}
-
-        //if constexpr (is_container<decltype(vec)>::value)
-        //{
-        //    log::debug("Its a container (Short)");
-        //}
-
-
+        serializer->write(scene,"Main",fs::view(filePath));
     }
 
     void update(legion::time::span deltaTime)
