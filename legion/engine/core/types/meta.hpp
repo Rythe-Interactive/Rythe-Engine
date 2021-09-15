@@ -85,10 +85,21 @@ namespace legion::core
 #define typenames(...) EXPAND(CONCAT_DEFINE(typename_, NARGS(__VA_ARGS__))(__VA_ARGS__))
 
 #define COMBINE_SFINAE(name, predicate, templateArgs...)                                                                \
-    template<typenames(templateArgs)>                                                                                   \
+    template<typenames(CAT_PREFIX(_, templateArgs))>                                                                    \
     struct name                                                                                                         \
     {                                                                                                                   \
-        static constexpr bool value = predicate;                                                                        \
+    private:                                                                                                            \
+        template<typenames(templateArgs)>                                                                               \
+        static constexpr auto check(void*)                                                                              \
+            -> typename std::conditional<predicate, std::true_type, std::false_type>::type;                             \
+                                                                                                                        \
+        template <typename>                                                                                             \
+        static constexpr auto check(...)                                                                                \
+            ->std::false_type;                                                                                          \
+                                                                                                                        \
+        typedef decltype(check<EXPAND(CAT_PREFIX(_, templateArgs))>(nullptr)) type;                                     \
+    public:                                                                                                             \
+        static constexpr bool value = type::value;                                                                      \
     };                                                                                                                  \
                                                                                                                         \
     template<EXPAND(typenames(EXPAND(templateArgs)))>                                                                   \
@@ -97,16 +108,14 @@ namespace legion::core
     HAS_FUNC(begin);
     HAS_FUNC(end);
 
-    COMBINE_SFINAE(is_container, has_begin_v<T COMMA typename T::iterator(void)> && has_end_v<T COMMA typename T::iterator(void)>, T);
+    COMBINE_SFINAE(is_container, has_begin_v<T L_COMMA typename T::iterator(void)> && has_end_v<T L_COMMA typename T::iterator(void)>, T);
 
     HAS_FUNC(resize);
 
-    COMBINE_SFINAE(is_resizable_container, has_begin_v<T COMMA typename T::iterator(void)> && has_end_v<T COMMA typename T::iterator(void)> && has_resize_v<T COMMA void(size_type)>, T);
+    COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)> && has_end_v<T L_COMMA typename T::iterator(void)> && has_resize_v<T L_COMMA void(size_type)>, T);
 
     HAS_FUNC(setup);
     HAS_FUNC(update);
-
-
 
     template<typename derived_type, typename base_type>
     using inherits_from = typename std::enable_if<std::is_base_of<base_type, derived_type>::value, int>::type;

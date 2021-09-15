@@ -9,7 +9,7 @@
 #   define PROJECT_NAME user_project
 #endif
 
-#define COMMA ,
+#define L_COMMA ,
 
 #define EXPAND(x) x
 #define CALL(x, y) x(y)
