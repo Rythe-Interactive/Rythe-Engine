@@ -95,7 +95,8 @@ namespace legion::core::serialization
         }
         virtual void end_object() override
         {
-            data.pop_back();
+            if (data[data.size() - 1] == ',')
+                data.pop_back();
             data.append("},");
         }
 

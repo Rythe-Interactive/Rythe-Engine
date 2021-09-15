@@ -66,7 +66,7 @@ public:
 
 
         //Serialization Test
-        std::string_view filePath = "assets://scenes/scene.json";
+        std::string_view filePath = "assets://scenes/mainscene.json";
 
         auto serializer = serialization::serializer_registry::get_serializer<scene_comp>();
         auto scene = scene_comp();

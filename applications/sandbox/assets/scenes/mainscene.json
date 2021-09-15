@@ -1,5 +1,5 @@
 {
-    "Scene": {
+    "Main": {
         "id": 1,
         "Container": [
             {
@@ -15,7 +15,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 6,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -32,7 +44,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 8,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -49,7 +73,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 10,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -66,7 +102,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 12,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -83,7 +131,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 14,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -100,7 +160,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 16,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -117,7 +189,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 18,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -134,7 +218,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 20,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -151,7 +247,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 22,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -168,7 +276,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 24,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -185,7 +305,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 26,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -202,7 +334,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 28,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -219,7 +363,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 30,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -236,7 +392,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 32,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -253,7 +421,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 34,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -270,7 +450,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 36,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -287,7 +479,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 38,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -304,7 +508,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 40,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -321,7 +537,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 42,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             },
@@ -338,7 +566,19 @@
                         "alive": 1,
                         "active": 1,
                         "parent": 44,
-                        "children": []
+                        "children": [],
+                        " components": []
+                    }
+                ],
+                " components": [
+                    {
+                        "legion::core::example_comp": {}
+                    },
+                    {
+                        "legion::core::position": {}
+                    },
+                    {
+                        "legion::core::velocity": {}
                     }
                 ]
             }

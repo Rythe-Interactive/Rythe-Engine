@@ -3,11 +3,8 @@
 
 namespace legion::core::serialization
 {
-    inline common::result<bool, exception> serializer<ecs::entity_data>::serialize_ent_data(const ecs::entity_data& ent_data, serializer_view& s_view, std::string name)
+    inline bool serializer<ecs::entity_data>::serialize_ent_data(const ecs::entity_data& ent_data, serializer_view& s_view, std::string name)
     {
-        //if (ent_data.id < 1)
-        //    return legion_exception_msg("invalid input data: entity is null");
-
         s_view.start_object(name);
         s_view.serialize("\"id\"", ent_data.id);
         s_view.serialize("\"name\"", ent_data.name);
@@ -23,19 +20,39 @@ namespace legion::core::serialization
         _serializer->serialize_container(ent_data.children, s_view);
         s_view.end_container();
 
+        s_view.start_container("\" components\"");
+        auto ent_composition = ecs::Registry::entityComposition(ent_data.id);
+
+        for (id_type typeId : ent_composition)
+        {
+            s_view.start_object("");
+            auto ent = ecs::Registry::getEntity(ent_data.id);
+            auto compFamily = ecs::Registry::getFamily(typeId);
+            auto compProt = compFamily->create_prototype(ent);
+            s_view.start_object("\"" + ecs::Registry::getFamilyName(typeId) + "\"");
+            auto reflector = make_reflector(*compProt.get());
+            for_each(reflector,
+                [&s_view](auto& name, auto& value)
+                {
+                    using value_type = typename remove_cvr_t<decltype(value)>;
+                    auto _serializer = serializer_registry::get_serializer<value_type>();
+                    _serializer->serialize(value, s_view, "\"" + name + "\"");
+                });
+            s_view.end_object();
+            s_view.end_object();
+        }
+        s_view.end_container();
+
         s_view.end_object();
         return true;
     }
-    inline common::result<bool, exception> serializer<ecs::entity_data>::serialize(const std::any& ent, serializer_view& s_view, std::string name)
+    inline bool serializer<ecs::entity_data>::serialize(const std::any& ent, serializer_view& s_view, std::string name)
     {
         return serialize_ent_data(std::any_cast<ecs::entity_data>(ent), s_view, name);
     }
 
-    inline common::result<bool, exception> serializer<ecs::entity>::serialize_ent(const ecs::entity& ent, serializer_view& s_view, std::string name)
+    inline bool serializer<ecs::entity>::serialize_ent(const ecs::entity& ent, serializer_view& s_view, std::string name)
     {
-        if (ent->id < 1)
-            return legion_exception_msg("invalid input data: entity is null");
-
         s_view.start_object("");
         s_view.serialize("\"id\"", ent->id);
         s_view.serialize("\"name\"", ent->name);
@@ -50,16 +67,38 @@ namespace legion::core::serialization
         _serializer->serialize_container(ent->children, s_view);
         s_view.end_container();
 
+        s_view.start_container("\" components\"");
+        auto ent_composition = ecs::Registry::entityComposition(ent->id);
+
+        for (id_type typeId : ent_composition)
+        {
+            s_view.start_object("");
+            auto compFamily = ecs::Registry::getFamily(typeId);
+            auto compProt = compFamily->create_prototype(ent);
+            s_view.start_object("\"" + ecs::Registry::getFamilyName(typeId) + "\"");
+            auto reflector = make_reflector(*compProt.get());
+            for_each(reflector,
+                [&s_view](auto& name, auto& value)
+                {
+                    using value_type = typename remove_cvr_t<decltype(value)>;
+                    auto _serializer = serializer_registry::get_serializer<value_type>();
+                    _serializer->serialize(value, s_view, "\"" + name + "\"");
+                });
+            s_view.end_object();
+            s_view.end_object();
+        }
+        s_view.end_container();
+
         s_view.end_object();
         return true;
     }
-    inline common::result<bool, exception> serializer<ecs::entity>::serialize(const std::any& ent, serializer_view& s_view, std::string name)
+    inline bool serializer<ecs::entity>::serialize(const std::any& ent, serializer_view& s_view, std::string name)
     {
         return serialize_ent(std::any_cast<ecs::entity>(ent), s_view, name);
     }
 
     template<typename type>
-    inline common::result<bool, exception> serializer<type>::serialize_container(const std::any& container, serializer_view& s_view)
+    inline bool serializer<type>::serialize_container(const std::any& container, serializer_view& s_view)
     {
         using container_type = typename remove_cvr_t<type>;
         auto _container = std::any_cast<container_type>(container);
@@ -75,15 +114,9 @@ namespace legion::core::serialization
     }
 
     template<typename type>
-    inline common::result<bool, exception> serializer<type>::serialize(const std::any& serializable, serializer_view& s_view, std::string name)
+    inline bool serializer<type>::serialize(const std::any& serializable, serializer_view& s_view, std::string name)
     {
         using serializable_type = typename remove_cvr_t<type>;
-
-        if (!serializable.has_value())
-            return legion_exception_msg("invalid input data: serializable is null");
-
-        //if (serializable.type() != typeid(serializable_type))
-        //    return legion_exception_msg("invalid input data: serializable is not of expected type");
 
         if constexpr (std::is_same<serializable_type, id_type>::value)
             s_view.serialize<unsigned long long int>(name, std::any_cast<unsigned long long int>(serializable));
@@ -121,28 +154,21 @@ namespace legion::core::serialization
     }
 
     template<typename type>
-    inline common::result<bool, exception> serializer<type>::write(const std::any& serializable, std::string name, const fs::view& file)
+    inline bool serializer<type>::write(const std::any& serializable, std::string name, const fs::view& file)
     {
         auto jsonView = serialization::json_view();
         jsonView.data.append("{");
-        auto result = serialize(serializable, jsonView, name);
+        auto result = serialize(serializable, jsonView, "\"" + name + "\"");
         jsonView.data.pop_back();
         jsonView.data.append("}");
 
-        //if (!result.value())
-        //    return legion_exception_msg("write error: serialization failed");
-
         json j = json::parse(jsonView.data);
-
-        //auto f_result = file.get_filename();
-        //if (!f_result)
-        //    return { legion_exception_msg(f_result.error().what()), f_result.warnings() };
 
         std::ofstream of(fs::view_util::get_view_path(file, true));
         of << j.dump(4);
         of.close();
 
-        return result.value();
+        return true;
     }
 
     inline prototype_base serializer<ecs::entity_data>::deserialize(serializer_view& view)
@@ -161,7 +187,7 @@ namespace legion::core::serialization
         return prototype_base();
     }
 
-    inline common::result<bool, exception> read(const fs::view& view)
+    inline bool read(const fs::view& view)
     {
         return false;
     }
