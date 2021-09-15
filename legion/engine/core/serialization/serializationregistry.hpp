@@ -31,6 +31,8 @@ namespace legion::core::serialization
         static pointer<serializer<type>> register_serializer();
         template<typename type>
         static pointer<serializer<type>> get_serializer();
+
+        static pointer<serializer_base> get_serializer(id_type typeId);
     };
 }
 

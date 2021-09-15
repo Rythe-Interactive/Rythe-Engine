@@ -12,6 +12,7 @@ namespace legion::core::serialization
         id_type typeId = type_hash<type>().local();
         if (serializers.count(typeId))
             return { dynamic_cast<serializer<type>*>(serializers.at(typeId).get()) };
+        return { nullptr };
     }
 
     template<typename type>
@@ -21,5 +22,12 @@ namespace legion::core::serialization
         if (serializers.count(typeId))
             return { dynamic_cast<serializer<type>*>(serializers.at(typeId).get()) };
         return register_serializer<type>();
+    }
+
+    inline pointer<serializer_base> serializer_registry::get_serializer(id_type typeId)
+    {
+        if (serializers.count(typeId))
+            return { serializers.at(typeId).get() };
+        return { nullptr };
     }
 }

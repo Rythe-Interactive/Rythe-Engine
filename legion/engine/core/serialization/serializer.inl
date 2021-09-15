@@ -28,17 +28,9 @@ namespace legion::core::serialization
             s_view.start_object("");
             auto ent = ecs::Registry::getEntity(ent_data.id);
             auto compFamily = ecs::Registry::getFamily(typeId);
-            auto compProt = compFamily->create_prototype(ent);
-            s_view.start_object("\"" + ecs::Registry::getFamilyName(typeId) + "\"");
-            auto reflector = make_reflector(*compProt.get());
-            for_each(reflector,
-                [&s_view](auto& name, auto& value)
-                {
-                    using value_type = typename remove_cvr_t<decltype(value)>;
-                    auto _serializer = serializer_registry::get_serializer<value_type>();
-                    _serializer->serialize(value, s_view, "\"" + name + "\"");
-                });
-            s_view.end_object();
+            auto _serializer = serializer_registry::get_serializer(typeId);
+            auto comp = compFamily->create_component(ent);
+            _serializer->serialize(comp, s_view, "\"" + ecs::Registry::getFamilyName(typeId) + "\"");
             s_view.end_object();
         }
         s_view.end_container();
@@ -74,17 +66,9 @@ namespace legion::core::serialization
         {
             s_view.start_object("");
             auto compFamily = ecs::Registry::getFamily(typeId);
-            auto compProt = compFamily->create_prototype(ent);
-            s_view.start_object("\"" + ecs::Registry::getFamilyName(typeId) + "\"");
-            auto reflector = make_reflector(*compProt.get());
-            for_each(reflector,
-                [&s_view](auto& name, auto& value)
-                {
-                    using value_type = typename remove_cvr_t<decltype(value)>;
-                    auto _serializer = serializer_registry::get_serializer<value_type>();
-                    _serializer->serialize(value, s_view, "\"" + name + "\"");
-                });
-            s_view.end_object();
+            auto _serializer = serializer_registry::get_serializer(typeId);
+            auto comp = compFamily->create_component(ent);
+            _serializer->serialize(comp, s_view, "\"" + ecs::Registry::getFamilyName(typeId) + "\"");
             s_view.end_object();
         }
         s_view.end_container();
