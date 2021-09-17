@@ -13,6 +13,7 @@
 namespace legion::core
 {
 
+#if !defined(DOXY_EXCLUDE)
 #define HAS_FUNC(x)                                                                                                     \
     template<typename, typename T>                                                                                      \
     struct CONCAT(has_, x) {                                                                                            \
@@ -61,6 +62,24 @@ namespace legion::core
                                                                                                                         \
     template<typename C, typename F>                                                                                    \
     constexpr bool CONCAT_DEFINE(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value;
+#else
+#define HAS_FUNC(x)                                                                                                     \
+    template<typename, typename T>                                                                                      \
+    struct CONCAT(has_, x) {                                                                                            \
+        static constexpr bool value = false;                                                                            \
+    };                                                                                                                  \
+                                                                                                                        \
+    template<typename C, typename F>                                                                                    \
+    constexpr bool CONCAT_DEFINE(has_, CONCAT(x, _v)) = CONCAT(has_, x)<C, F>::value;                                   \
+                                                                                                                        \
+    template<typename, typename T>                                                                                      \
+    struct CONCAT(has_static_, x) {                                                                                     \
+        static constexpr bool value = false;                                                                            \
+    };                                                                                                                  \
+                                                                                                                        \
+    template<typename C, typename F>                                                                                    \
+    constexpr bool CONCAT_DEFINE(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value;
+#endif
 
 #define  typename_1(x)                                                                    typename x
 #define  typename_2(x, x2)                                                                typename x , typename x2
@@ -108,11 +127,11 @@ namespace legion::core
     HAS_FUNC(begin);
     HAS_FUNC(end);
 
-    COMBINE_SFINAE(is_container, has_begin_v<T L_COMMA typename T::iterator(void)> && has_end_v<T L_COMMA typename T::iterator(void)>, T);
+    COMBINE_SFINAE(is_container, has_begin_v<T L_COMMA typename T::iterator(void)>&& has_end_v<T L_COMMA typename T::iterator(void)>, T);
 
     HAS_FUNC(resize);
 
-    COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)> && has_end_v<T L_COMMA typename T::iterator(void)> && has_resize_v<T L_COMMA void(size_type)>, T);
+    COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)>&& has_end_v<T L_COMMA typename T::iterator(void)>&& has_resize_v<T L_COMMA void(size_type)>, T);
 
     HAS_FUNC(setup);
     HAS_FUNC(update);
@@ -142,10 +161,13 @@ namespace legion::core
     };
 
     template<template<typename...>typename T, typename U, size_type I, typename... Args>
-    struct make_sequence : make_sequence<T, U, I - 1, Args..., U> {};
+    struct make_sequence
+#if !defined(DOXY_EXCLUDE)
+        : make_sequence<T, U, I - 1, Args..., U>{};
 
     template<template<typename...>typename T, typename U, typename... Args>
     struct make_sequence<T, U, 0, Args...>
+#endif
     {
         using type = T<Args...>;
     };
@@ -164,12 +186,15 @@ namespace legion::core
     inline constexpr bool do_compare_v = do_compare<Compare, T, A, B>::value;
 
     template<size_type I, typename Type, typename... Types>
-    struct element_at : element_at<I - 1, Types...>
+    struct element_at
+#if !defined(DOXY_EXCLUDE)
+        : element_at<I - 1, Types...>
     {
     };
 
     template<typename Type, typename... Types>
     struct element_at<0, Type, Types...>
+#endif
     {
         using type = Type;
     };
@@ -177,18 +202,23 @@ namespace legion::core
     template<size_type I, typename Type, typename... Types>
     using element_at_t = typename element_at<I, Type, Types...>::type;
 
-    template<class T, typename... Args>
-    decltype(void(T{ std::declval<Args>()... }), std::true_type())
-        brace_construct_test(int);
-
-    template<class T, typename... Args>
-    std::false_type
-        brace_construct_test(...);
-
-    template<class T, typename... Args>
-    struct is_brace_constructible : decltype(brace_construct_test<T, Args...>(0))
+    template<typename T, typename... Args>
+    struct is_brace_constructible
     {
+    private:
+        template<typename _T, typename... _Args>
+        static constexpr auto check(void*)
+            -> decltype(void(_T{ std::declval<_Args>()... }), std::true_type());
+
+        template <typename>
+        static constexpr auto check(...)
+            ->std::false_type;
+
+        using type = decltype(check<T, Args...>(nullptr));
+    public:
+        static constexpr bool value = type::value;
     };
+
 
     template<class T, typename... Args>
     inline constexpr bool is_brace_constructible_v = is_brace_constructible<T, Args...>::value;

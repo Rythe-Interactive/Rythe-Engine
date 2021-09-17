@@ -11,12 +11,6 @@
 
 namespace legion::core::filesystem
 {
-
-class Test {
-
-};
-
-
     /**@class basic_resource
      * @brief A handle for a basic resource type from which elements can serialize and deserialize from
      *        ideal for storing elements loaded from disk.

@@ -22,8 +22,6 @@ namespace legion::core::compute {
     class Program
     {
     public:
-
-
         Program(cl_context, cl_device_id, filesystem::basic_resource /*, bool source_is_il = false*/);
         Program(const Program& other) = default;
         Program(Program&& other) noexcept = default;
@@ -59,7 +57,7 @@ namespace legion::core::compute {
         static void from_resource(Program* value, const filesystem::basic_resource& resource);
 
     private:
-        friend filesystem::basic_resource;
+        friend class filesystem::basic_resource;
         template <class T, class C1,class C2,class C3>
         friend T filesystem::from_resource(const filesystem::basic_resource& resource);
 

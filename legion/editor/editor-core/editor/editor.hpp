@@ -33,9 +33,9 @@ namespace legion::editor
         class EditorEngineModule : public Module
         {
         public:
-            EditorEngineModule(Editor* editor);
+            EditorEngineModule(Editor* editor) {}
 
-            virtual void setup();
+            virtual void setup() {}
         };
     }
 #endif
