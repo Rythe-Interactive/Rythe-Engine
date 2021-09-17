@@ -9,6 +9,8 @@
 #   define PROJECT_NAME user_project
 #endif
 
+#define L_COMMA ,
+
 #define EXPAND(x) x
 #define CALL(x, y) x(y)
 
@@ -131,7 +133,7 @@
 // turn: 0, 1, 2
 // into: decltype(0), decltype(1), decltype(2)
 #define decltypes_count(count, ...) EXPAND(CONCAT_DEFINE(decltype_, count)(__VA_ARGS__))
-#define decltypes(...) EXPAND(CONCAT_DEFINE(decltype_, NARGS(__VA_AGRS__))(__VA_ARGS__))
+#define decltypes(...) EXPAND(CONCAT_DEFINE(decltype_, NARGS(__VA_ARGS__))(__VA_ARGS__))
 
 // turn: Foo, x, y, z
 // into: Foo::x, Foo::y, Foo::z
