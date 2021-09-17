@@ -133,6 +133,27 @@ namespace legion::core
     HAS_FUNC(setup);
     HAS_FUNC(update);
 
+    template<typename T>
+    struct is_serializable
+    {
+    private:
+        template<typename T>
+        static constexpr auto check(T*)
+            -> typename std::conditional<std::is_same_v<T, int> ||
+            std::is_same_v<T, float> ||
+            std::is_same_v<T, double> ||
+            std::is_same_v<T, bool> ||
+            std::is_same_v<T, char*> ||
+            std::is_same_v<T, id_type>, std::true_type, std::false_type > ::type;
+
+        template <typename>
+        static constexpr auto check(...)
+            ->std::false_type;
+
+        typedef decltype(check<T>(nullptr)) type;
+    public:
+        static constexpr bool value = type::value;
+    };
 
     template<typename derived_type, typename base_type>
     using inherits_from = typename std::enable_if<std::is_base_of<base_type, derived_type>::value, int>::type;

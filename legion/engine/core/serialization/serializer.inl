@@ -117,22 +117,24 @@ namespace legion::core::serialization
             _serializer->serialize(serializable, s_view, name);
             s_view.end_object();
         }
+        else if constexpr(is_serializable<serializable_type>::value)
+        {
+            auto _serializable = std::any_cast<serializable_type>(serializable);
+            s_view.serialize<serializable_type>(name, std::move(_serializable));
+        }
         else
         {
             auto _serializable = std::any_cast<serializable_type>(serializable);
-            if (!s_view.serialize<serializable_type>(name, std::move(_serializable)))
-            {
-                auto reflector = make_reflector(_serializable);
-                s_view.start_object(name);
-                for_each(reflector,
-                    [&s_view](auto& name, auto& value)
-                    {
-                        using value_type = typename remove_cvr_t<decltype(value)>;
-                        auto _serializer = serializer_registry::get_serializer<value_type>();
-                        _serializer->serialize(value, s_view, "\"" + name + "\"");
-                    });
-                s_view.end_object();
-            }
+            auto reflector = make_reflector(_serializable);
+            s_view.start_object(name);
+            for_each(reflector,
+                [&s_view](auto& name, auto& value)
+                {
+                    using value_type = typename remove_cvr_t<decltype(value)>;
+                    auto _serializer = serializer_registry::get_serializer<value_type>();
+                    _serializer->serialize(value, s_view, "\"" + name + "\"");
+                });
+            s_view.end_object();
         }
         return true;
     }
