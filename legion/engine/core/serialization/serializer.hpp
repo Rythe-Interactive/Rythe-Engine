@@ -30,11 +30,9 @@ namespace legion::core::serialization
         virtual bool serialize(const void* serializable, serializer_view& s_view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& s_view) override;
 
-        bool serialize_reflector(const void* reflector, serializer_view& s_view, std::string& name);
+        bool serialize_container(const void* container, serializer_view& s_view, std::string& name);
 
-        bool serialize_container(const void* container, serializer_view& s_view,std::string& name);
-
-        bool write(const void* serializable, std::string name, const fs::view& file);
+        bool write(const void* serializable, std::string name, fs::view& file);
         bool read(const fs::view& view);
     };
 
@@ -46,8 +44,6 @@ namespace legion::core::serialization
 
         virtual bool serialize(const void* serializable, serializer_view& view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& view) override;
-
-        bool serialize_ent_data(const ecs::entity_data& serializable, serializer_view& view, std::string& name);
     };
 
     template<>
@@ -58,8 +54,6 @@ namespace legion::core::serialization
 
         virtual bool serialize(const void* serializable, serializer_view& view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& view) override;
-
-        bool serialize_ent(const ecs::entity& serializable, serializer_view& view, std::string& name);
     };
 
 }

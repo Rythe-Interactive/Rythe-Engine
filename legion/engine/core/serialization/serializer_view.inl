@@ -14,42 +14,47 @@ namespace legion::core::serialization
 #pragma region json_view
     void json_view::serialize_int(std::string& name, int serializable)
     {
-        data.append(name);
+        data.append("\"" + name + "\"");
         data.append(":");
         data.append(std::to_string(serializable));
         data.append(",");
     }
+
     void json_view::serialize_float(std::string& name, float serializable)
     {
-        data.append(name);
+        data.append("\"" + name + "\"");
         data.append(":");
         data.append(std::to_string(serializable));
         data.append(",");
     }
+
     void json_view::serialize_double(std::string& name, double serializable)
     {
-        data.append(name);
+        data.append("\"" + name + "\"");
         data.append(":");
         data.append(std::to_string(serializable));
         data.append(",");
     }
+
     void json_view::serialize_bool(std::string& name, bool serializable)
     {
-        data.append(name);
+        data.append("\"" + name + "\"");
         data.append(":");
         data.append(std::to_string(serializable));
         data.append(",");
     }
+
     void json_view::serialize_string(std::string& name, const std::string_view& serializable)
     {
-        data.append(name);
+        data.append("\"" + name + "\"");
         data.append(":");
         data.append(serializable);
         data.append(",");
     }
+
     void json_view::serialize_id_type(std::string& name, id_type serializable)
     {
-        data.append(name);
+        data.append("\"" + name + "\"");
         data.append(":");
         data.append(std::to_string(serializable));
         data.append(",");
@@ -59,22 +64,27 @@ namespace legion::core::serialization
     {
         return legion_exception_msg("not implemented");
     }
+
     common::result<float, exception> json_view::deserialize_float(std::string_view& name)
     {
         return legion_exception_msg("not implemented");
     }
+
     common::result<double, exception> json_view::deserialize_double(std::string_view& name)
     {
         return legion_exception_msg("not implemented");
     }
+
     bool json_view::deserialize_bool(std::string_view& name)
     {
         return false;
     }
+
     common::result<std::string, exception> json_view::deserialize_string(std::string_view& name)
     {
         return legion_exception_msg("not implemented");
     }
+
     common::result<id_type, exception> json_view::deserialize_id_type(std::string_view& name)
     {
         return legion_exception_msg("not implemented");

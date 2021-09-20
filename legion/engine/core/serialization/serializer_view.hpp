@@ -1,6 +1,7 @@
 #pragma once
 #include <core/core.hpp>
 
+#include <stack>
 #include <nlohmann/json.hpp>
 
 #include <iostream>
@@ -15,9 +16,11 @@ namespace legion::core::serialization
         virtual ~serializer_view() = default;
 
         virtual void start_object(std::string name) = 0;
+        virtual void start_object() = 0;
         virtual void end_object() = 0;
 
         virtual void start_container(std::string name) = 0;
+        virtual void start_container() = 0;
         virtual void end_container() = 0;
 
         template<typename Type>
@@ -25,51 +28,52 @@ namespace legion::core::serialization
         {
             using raw_type = std::decay_t<Type>;
 
-            name = std::string("\""+name+"\"");
-
             if constexpr (std::is_same_v<raw_type, int>)
             {
-                serialize_int(name, std::move(value));
+                serialize_int(name, value);
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, float>)
             {
-                serialize_float(name, std::move(value));
+                serialize_float(name, value);
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, double>)
             {
-                serialize_double(name, std::move(value));
+                serialize_double(name, value);
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, bool>)
             {
-                serialize_bool(name, std::move(value));
+                serialize_bool(name, value);
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, std::string>)
             {
-                serialize_string(name, std::move(value));
+                serialize_string(name, value);
                 return true;
             }
             else if constexpr (std::is_same_v<raw_type, id_type>)
             {
-                serialize_id_type(name, std::move(value));
+                serialize_id_type(name, value);
                 return true;
             }
             return false;
         }
 
-        virtual void serialize_int(std::string& name, int serializable) = 0;
+        virtual void serialize_int(std::string& name, int serializable) LEGION_PURE;
         virtual void serialize_float(std::string& name, float serializable) = 0;
         virtual void serialize_double(std::string& name, double serializable) = 0;
         virtual void serialize_bool(std::string& name, bool serializable) = 0;
         virtual void serialize_string(std::string& name, const std::string_view& serializable) = 0;
         virtual void serialize_id_type(std::string& name, id_type serializable) = 0;
 
-        //virtual void write_result(fs::view& file) = 0;
+        virtual common::result<void, fs_error> write(fs::view& file) = 0;
 
-        //virtual void load_file(fs::view& file) = 0;
+        virtual bool load(fs::view& file) = 0;
+
+        template<typename Type>
+        common::result<Type> deserialize(std::string_view& name) {}
 
         virtual common::result<int, exception> deserialize_int(std::string_view& name) = 0;
         virtual common::result<float, exception> deserialize_float(std::string_view& name) = 0;
@@ -79,24 +83,60 @@ namespace legion::core::serialization
         virtual common::result<id_type, exception> deserialize_id_type(std::string_view& name) = 0;
     };
 
-    struct json_view : serializer_view
+    struct json_view : public serializer_view
     {
         std::string data;
+
+        nlohmann::json root;
+
+        std::stack<nlohmann::json> current_writing;
+
 
         json_view() = default;
         ~json_view() = default;
 
         virtual void start_object(std::string name) override
         {
+            current_writing.emplace();
+
             if (name.size() > 0)
             {
-                data.append(name);
+                data.append("\"" + name + "\"");
                 data.append(":");
             }
+
             data.append("{");
         }
+
         virtual void end_object() override
         {
+            if (current_writing.empty())
+                return;
+
+            auto cur = current_writing.top();
+
+            if (!cur.is_object())
+                return;
+
+            current_writing.pop();
+            if (current_writing.empty())
+            {
+                root.emplace(cur);
+            }
+            else
+            {
+                auto& next = current_writing.top();
+
+                if (next.is_array())
+                    next.emplace_back(cur);
+                else if (next.is_object())
+                    next.emplace(cur);
+            }
+
+            //return false;
+        //return common::error;
+
+
             if (data[data.size() - 1] == ',')
                 data.pop_back();
             data.append("},");
@@ -106,7 +146,7 @@ namespace legion::core::serialization
         {
             if (name.size() > 0)
             {
-                data.append(name);
+                data.append("\"" + name + "\"");
                 data.append(":");
             }
             data.append("[");

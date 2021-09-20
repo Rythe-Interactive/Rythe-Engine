@@ -9,6 +9,8 @@ namespace legion::core::serialization
 {
     struct serialized_data
     {
+
+
         fs::basic_resource data;
         /*
         * Object:
@@ -16,7 +18,7 @@ namespace legion::core::serialization
         *   Data: value,
         *   Nested_Data:
         [*/
-        std::map<std::string,serialized_data> nested_data;
+        std::unordered_map<std::string, serialized_data> nested_data;
         /*]
         * }
         */
@@ -25,7 +27,7 @@ namespace legion::core::serialization
     class serializer_registry
     {
     private:
-        static std::map<id_type, std::unique_ptr<serializer_base>> serializers;
+        static std::unordered_map<id_type, std::unique_ptr<serializer_base>> serializers;
     public:
         template<typename type>
         static pointer<serializer<type>> register_serializer();

@@ -73,12 +73,10 @@ public:
         //serialization::serializer_registry::register_serializer<scale>();
         //serialization::serializer_registry::register_serializer<rotation>();
         serialization::serializer_registry::register_serializer<velocity>();
-        serialization::serializer_registry::register_serializer<mesh_filter>();
-        //serialization::serializer_registry::register_serializer<int>();
-        //serialization::serializer_registry::register_serializer<float>();
-        serialization::serializer_registry::register_serializer<assets::asset<mesh>>();
+        //serialization::serializer_registry::register_serializer<mesh_filter>();
+        //serialization::serializer_registry::register_serializer<assets::asset<mesh>>();
         //serialization::serializer_registry::register_serializer<transform>();
-        serialization::serializer_registry::register_serializer<rendering::mesh_renderer>();
+        //serialization::serializer_registry::register_serializer<rendering::mesh_renderer>();
         auto serializer = serialization::serializer_registry::get_serializer<scene_comp>();
         auto scene = scene_comp();
         scene.id = 1;
@@ -93,8 +91,8 @@ public:
             auto child = createEntity();
             ent.add_child(child);
             ent.add_component<example_comp>();
-            ent.add_component<mesh_filter>(meshFilter);
-            ent.add_component<rendering::mesh_renderer>(rendering::mesh_renderer(material));
+            //ent.add_component<mesh_filter>(meshFilter);
+            //ent.add_component<rendering::mesh_renderer>(rendering::mesh_renderer(material));
             ent.add_component<position>();
             ent.add_component<velocity>();
             scene.entities.push_back(ent);
