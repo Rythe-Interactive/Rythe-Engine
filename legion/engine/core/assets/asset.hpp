@@ -28,6 +28,8 @@ namespace legion::core::assets
         asset copy(id_type nameHash, const std::string& name) const;
     };
 
+    ManualReflector(asset);
+
     template<typename AssetType>
     constexpr static asset<AssetType> invalid_asset = { nullptr, invalid_id };
 }
