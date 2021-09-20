@@ -1,5 +1,5 @@
 #pragma once
-#include <core/types/meta.hpp>
+#include<core/types/meta.hpp>
 #include <core/filesystem/filesystem.hpp>
 #include <core/serialization/serializer_view.hpp>
 #include <core/serialization/prototype.hpp>
@@ -7,7 +7,6 @@
 #include <nlohmann/json.hpp>
 
 #include <fstream>
-#include <any>
 
 namespace legion::core::serialization
 {
@@ -18,7 +17,7 @@ namespace legion::core::serialization
         serializer_base() = default;
         ~serializer_base() = default;
 
-        virtual bool serialize(const std::any& serializable, serializer_view& view, std::string name) = 0;
+        virtual bool serialize(const void* serializable, serializer_view& view, std::string name) = 0;
         virtual prototype_base deserialize(serializer_view& view) = 0;
     };
 
@@ -28,12 +27,14 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual bool serialize(const std::any& serializable, serializer_view& view, std::string name) override;
-        virtual prototype_base deserialize(serializer_view& view) override;
+        virtual bool serialize(const void* serializable, serializer_view& s_view, std::string name) override;
+        virtual prototype_base deserialize(serializer_view& s_view) override;
 
-        bool serialize_container(const std::any& container, serializer_view& view);
+        bool serialize_reflector(const void* reflector, serializer_view& s_view, std::string& name);
 
-        bool write(const std::any& serializable, std::string name, const fs::view& file);
+        bool serialize_container(const void* container, serializer_view& s_view,std::string& name);
+
+        bool write(const void* serializable, std::string name, const fs::view& file);
         bool read(const fs::view& view);
     };
 
@@ -43,10 +44,10 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual bool serialize(const std::any& serializable, serializer_view& view, std::string name) override;
+        virtual bool serialize(const void* serializable, serializer_view& view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& view) override;
 
-        bool serialize_ent_data(const ecs::entity_data& serializable, serializer_view& view, std::string name);
+        bool serialize_ent_data(const ecs::entity_data& serializable, serializer_view& view, std::string& name);
     };
 
     template<>
@@ -55,10 +56,10 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual bool serialize(const std::any& serializable, serializer_view& view, std::string name) override;
+        virtual bool serialize(const void* serializable, serializer_view& view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& view) override;
 
-        bool serialize_ent(const ecs::entity& serializable, serializer_view& view, std::string name);
+        bool serialize_ent(const ecs::entity& serializable, serializer_view& view, std::string& name);
     };
 
 }

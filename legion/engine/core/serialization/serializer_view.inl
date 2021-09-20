@@ -12,42 +12,42 @@ namespace legion::core::serialization
 #pragma endregion
 
 #pragma region json_view
-    void json_view::serialize_int(std::string_view& name, int serializable)
+    void json_view::serialize_int(std::string& name, int serializable)
     {
         data.append(name);
         data.append(":");
         data.append(std::to_string(serializable));
         data.append(",");
     }
-    void json_view::serialize_float(std::string_view& name, float serializable)
+    void json_view::serialize_float(std::string& name, float serializable)
     {
         data.append(name);
         data.append(":");
         data.append(std::to_string(serializable));
         data.append(",");
     }
-    void json_view::serialize_double(std::string_view& name, double serializable)
+    void json_view::serialize_double(std::string& name, double serializable)
     {
         data.append(name);
         data.append(":");
         data.append(std::to_string(serializable));
         data.append(",");
     }
-    void json_view::serialize_bool(std::string_view& name, bool serializable)
+    void json_view::serialize_bool(std::string& name, bool serializable)
     {
         data.append(name);
         data.append(":");
         data.append(std::to_string(serializable));
         data.append(",");
     }
-    void json_view::serialize_string(std::string_view& name, const std::string_view& serializable)
+    void json_view::serialize_string(std::string& name, const std::string_view& serializable)
     {
         data.append(name);
         data.append(":");
         data.append(serializable);
         data.append(",");
     }
-    void json_view::serialize_id_type(std::string_view& name, id_type serializable)
+    void json_view::serialize_id_type(std::string& name, id_type serializable)
     {
         data.append(name);
         data.append(":");
@@ -82,27 +82,27 @@ namespace legion::core::serialization
 #pragma endregion
 
 #pragma region bson_view
-    void bson_view::serialize_int(std::string_view& name, int serializable)
+    void bson_view::serialize_int(std::string& name, int serializable)
     {
 
     }
-    void bson_view::serialize_float(std::string_view& name, float serializable)
+    void bson_view::serialize_float(std::string& name, float serializable)
     {
 
     }
-    void bson_view::serialize_double(std::string_view& name, double serializable)
+    void bson_view::serialize_double(std::string& name, double serializable)
     {
 
     }
-    void bson_view::serialize_bool(std::string_view& name, bool serializable)
+    void bson_view::serialize_bool(std::string& name, bool serializable)
     {
 
     }
-    void bson_view::serialize_string(std::string_view& name, const std::string_view& serializable)
+    void bson_view::serialize_string(std::string& name, const std::string_view& serializable)
     {
 
     }
-    void bson_view::serialize_id_type(std::string_view& name, id_type serializable)
+    void bson_view::serialize_id_type(std::string& name, id_type serializable)
     {
 
     }
@@ -134,27 +134,27 @@ namespace legion::core::serialization
 #pragma endregion
 
 #pragma region yaml_view
-    void yaml_view::serialize_int(std::string_view& name, int serializable)
+    void yaml_view::serialize_int(std::string& name, int serializable)
     {
 
     }
-    void yaml_view::serialize_float(std::string_view& name, float serializable)
+    void yaml_view::serialize_float(std::string& name, float serializable)
     {
 
     }
-    void yaml_view::serialize_double(std::string_view& name, double serializable)
+    void yaml_view::serialize_double(std::string& name, double serializable)
     {
 
     }
-    void yaml_view::serialize_bool(std::string_view& name, bool serializable)
+    void yaml_view::serialize_bool(std::string& name, bool serializable)
     {
 
     }
-    void yaml_view::serialize_string(std::string_view& name, const std::string_view& serializable)
+    void yaml_view::serialize_string(std::string& name, const std::string_view& serializable)
     {
 
     }
-    void yaml_view::serialize_id_type(std::string_view& name, id_type serializable)
+    void yaml_view::serialize_id_type(std::string& name, id_type serializable)
     {
 
     }

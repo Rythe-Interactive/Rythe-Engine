@@ -21,9 +21,11 @@ namespace legion::core::serialization
         virtual void end_container() = 0;
 
         template<typename Type>
-        bool serialize(std::string_view name, Type&& value)
+        bool serialize(std::string name, Type&& value)
         {
             using raw_type = std::decay_t<Type>;
+
+            name = std::string("\""+name+"\"");
 
             if constexpr (std::is_same_v<raw_type, int>)
             {
@@ -58,12 +60,12 @@ namespace legion::core::serialization
             return false;
         }
 
-        virtual void serialize_int(std::string_view& name, int serializable) = 0;
-        virtual void serialize_float(std::string_view& name, float serializable) = 0;
-        virtual void serialize_double(std::string_view& name, double serializable) = 0;
-        virtual void serialize_bool(std::string_view& name, bool serializable) = 0;
-        virtual void serialize_string(std::string_view& name, const std::string_view& serializable) = 0;
-        virtual void serialize_id_type(std::string_view& name, id_type serializable) = 0;
+        virtual void serialize_int(std::string& name, int serializable) = 0;
+        virtual void serialize_float(std::string& name, float serializable) = 0;
+        virtual void serialize_double(std::string& name, double serializable) = 0;
+        virtual void serialize_bool(std::string& name, bool serializable) = 0;
+        virtual void serialize_string(std::string& name, const std::string_view& serializable) = 0;
+        virtual void serialize_id_type(std::string& name, id_type serializable) = 0;
 
         //virtual void write_result(fs::view& file) = 0;
 
@@ -154,12 +156,12 @@ namespace legion::core::serialization
             return false;
         }
 
-        virtual void serialize_int(std::string_view& name, int serializable) override;
-        virtual void serialize_float(std::string_view& name, float serializable) override;
-        virtual void serialize_double(std::string_view& name, double serializable) override;
-        virtual void serialize_bool(std::string_view& name, bool serializable) override;
-        virtual void serialize_string(std::string_view& name, const std::string_view& serializable) override;
-        virtual void serialize_id_type(std::string_view& name, id_type serializable) override;
+        virtual void serialize_int(std::string& name, int serializable) override;
+        virtual void serialize_float(std::string& name, float serializable) override;
+        virtual void serialize_double(std::string& name, double serializable) override;
+        virtual void serialize_bool(std::string& name, bool serializable) override;
+        virtual void serialize_string(std::string& name, const std::string_view& serializable) override;
+        virtual void serialize_id_type(std::string& name, id_type serializable) override;
 
         virtual common::result<int, exception> deserialize_int(std::string_view& name) override;
         virtual common::result<float, exception> deserialize_float(std::string_view& name) override;
@@ -231,12 +233,12 @@ namespace legion::core::serialization
             return false;
         }
 
-        virtual void serialize_int(std::string_view& name, int serializable) override;
-        virtual void serialize_float(std::string_view& name, float serializable) override;
-        virtual void serialize_double(std::string_view& name, double serializable) override;
-        virtual void serialize_bool(std::string_view& name, bool serializable) override;
-        virtual void serialize_string(std::string_view& name, const std::string_view& serializable) override;
-        virtual void serialize_id_type(std::string_view& name, id_type serializable) override;
+        virtual void serialize_int(std::string& name, int serializable) override;
+        virtual void serialize_float(std::string& name, float serializable) override;
+        virtual void serialize_double(std::string& name, double serializable) override;
+        virtual void serialize_bool(std::string& name, bool serializable) override;
+        virtual void serialize_string(std::string& name, const std::string_view& serializable) override;
+        virtual void serialize_id_type(std::string& name, id_type serializable) override;
 
         virtual common::result<int, exception> deserialize_int(std::string_view& name) override;
         virtual common::result<float, exception> deserialize_float(std::string_view& name) override;
@@ -308,12 +310,12 @@ namespace legion::core::serialization
             return false;
         }
 
-        virtual void serialize_int(std::string_view& name, int serializable) override;
-        virtual void serialize_float(std::string_view& name, float serializable) override;
-        virtual void serialize_double(std::string_view& name, double serializable) override;
-        virtual void serialize_bool(std::string_view& name, bool serializable) override;
-        virtual void serialize_string(std::string_view& name, const std::string_view& serializable) override;
-        virtual void serialize_id_type(std::string_view& name, id_type serializable) override;
+        virtual void serialize_int(std::string& name, int serializable) override;
+        virtual void serialize_float(std::string& name, float serializable) override;
+        virtual void serialize_double(std::string& name, double serializable) override;
+        virtual void serialize_bool(std::string& name, bool serializable) override;
+        virtual void serialize_string(std::string& name, const std::string_view& serializable) override;
+        virtual void serialize_id_type(std::string& name, id_type serializable) override;
 
         virtual common::result<int, exception> deserialize_int(std::string_view& name) override;
         virtual common::result<float, exception> deserialize_float(std::string_view& name) override;

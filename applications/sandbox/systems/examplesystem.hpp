@@ -69,10 +69,10 @@ public:
         std::string_view filePath = "assets://scenes/mainscene.json";
 
         serialization::serializer_registry::register_serializer<example_comp>();
-        //serialization::serializer_registry::register_serializer<position>();
+        serialization::serializer_registry::register_serializer<position>();
         //serialization::serializer_registry::register_serializer<scale>();
         //serialization::serializer_registry::register_serializer<rotation>();
-        //serialization::serializer_registry::register_serializer<velocity>();
+        serialization::serializer_registry::register_serializer<velocity>();
         //serialization::serializer_registry::register_serializer<mesh_filter>();
         //serialization::serializer_registry::register_serializer<int>();
         //serialization::serializer_registry::register_serializer<float>();
@@ -82,18 +82,18 @@ public:
         auto serializer = serialization::serializer_registry::get_serializer<scene_comp>();
         auto scene = scene_comp();
         scene.id = 1;
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 2000; i++)
         {
             auto ent = createEntity();
             auto child = createEntity();
             ent.add_child(child);
             ent.add_component<example_comp>();
-            //ent.add_component<position>();
-            //ent.add_component<velocity>();
+            ent.add_component<position>();
+            ent.add_component<velocity>();
             scene.entities.push_back(ent);
         }
 
-        serializer->write(scene,"Main",fs::view(filePath));
+        serializer->write(&scene, "Main", fs::view(filePath));
     }
 
     void update(legion::time::span deltaTime)
