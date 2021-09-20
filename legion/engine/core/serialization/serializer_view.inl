@@ -4,60 +4,128 @@
 namespace legion::core::serialization
 {
 #pragma region serializer_view
-    //template<typename Type>
-    //bool serializer_view::serialize(std::string& name, Type&& value)
-    //{
+    template<typename Type>
+    inline bool serializer_view::serialize(std::string name, Type&& value)
+    {
+        using raw_type = std::decay_t<Type>;
 
-    //}
+        if constexpr (std::is_same_v<raw_type, int>)
+        {
+            serialize_int(name, value);
+            return true;
+        }
+        else if constexpr (std::is_same_v<raw_type, float>)
+        {
+            serialize_float(name, value);
+            return true;
+        }
+        else if constexpr (std::is_same_v<raw_type, double>)
+        {
+            serialize_double(name, value);
+            return true;
+        }
+        else if constexpr (std::is_same_v<raw_type, bool>)
+        {
+            serialize_bool(name, value);
+            return true;
+        }
+        else if constexpr (std::is_same_v<raw_type, std::string>)
+        {
+            serialize_string(name, value);
+            return true;
+        }
+        else if constexpr (std::is_same_v<raw_type, id_type>)
+        {
+            serialize_id_type(name, value);
+            return true;
+        }
+        return false;
+    }
 #pragma endregion
 
 #pragma region json_view
+    inline void json_view::start_object(std::string name)
+    {
+        current_writing.emplace("\"name\":{}"_json);
+    }
+
+    inline void json_view::end_object()
+    {
+        if (current_writing.empty())
+            return;
+
+        auto cur = current_writing.top();
+
+        if (!cur.is_object())
+            return;
+
+        current_writing.pop();
+        if (current_writing.empty())
+        {
+            root.emplace(cur);
+        }
+        else
+        {
+            auto& next = current_writing.top();
+
+            if (next.is_array())
+                next.emplace_back(cur);
+            else if (next.is_object())
+                next.emplace(cur);
+        }
+    }
+
     void json_view::serialize_int(std::string& name, int serializable)
     {
-        data.append("\"" + name + "\"");
-        data.append(":");
-        data.append(std::to_string(serializable));
-        data.append(",");
+        json j;
+        j[name] = serializable;
+        current_writing.emplace(j);
     }
 
     void json_view::serialize_float(std::string& name, float serializable)
     {
-        data.append("\"" + name + "\"");
-        data.append(":");
-        data.append(std::to_string(serializable));
-        data.append(",");
+        json j;
+        j[name] = serializable;
+        current_writing.emplace(j);
     }
 
     void json_view::serialize_double(std::string& name, double serializable)
     {
-        data.append("\"" + name + "\"");
-        data.append(":");
-        data.append(std::to_string(serializable));
-        data.append(",");
+        json j;
+        j[name] = serializable;
+        current_writing.emplace(j);
     }
 
     void json_view::serialize_bool(std::string& name, bool serializable)
     {
-        data.append("\"" + name + "\"");
-        data.append(":");
-        data.append(std::to_string(serializable));
-        data.append(",");
+        json j;
+        j[name] = serializable;
+        current_writing.emplace(j);
     }
 
     void json_view::serialize_string(std::string& name, const std::string_view& serializable)
     {
-        data.append("\"" + name + "\"");
-        data.append(":");
-        data.append(serializable);
-        data.append(",");
+        json j;
+        j[name] = serializable;
+        current_writing.emplace(j);
     }
 
     void json_view::serialize_id_type(std::string& name, id_type serializable)
     {
-        data.append("\"" + name + "\"");
-        data.append(":");
-        data.append(std::to_string(serializable));
-        data.append(",");
+        json j;
+        j[name] = (int)serializable;
+        current_writing.emplace(j);
+    }
+
+    inline common::result<void, fs_error> json_view::write(const void* serializable,std::string name,fs::view& file)
+    {
+        auto serializer = serializer_registry::get_serializer<void*>();
+        auto result = serializer->serialize(serializable, this, name);
+
+        if (!result)
+            return legion_fs_error("Serialization failed");
+
+        return file.set(fs::basic_resource(root.dump()));
     }
 
     common::result<int, exception> json_view::deserialize_int(std::string_view& name)

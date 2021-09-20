@@ -24,42 +24,7 @@ namespace legion::core::serialization
         virtual void end_container() = 0;
 
         template<typename Type>
-        bool serialize(std::string name, Type&& value)
-        {
-            using raw_type = std::decay_t<Type>;
-
-            if constexpr (std::is_same_v<raw_type, int>)
-            {
-                serialize_int(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, float>)
-            {
-                serialize_float(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, double>)
-            {
-                serialize_double(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, bool>)
-            {
-                serialize_bool(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, std::string>)
-            {
-                serialize_string(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, id_type>)
-            {
-                serialize_id_type(name, value);
-                return true;
-            }
-            return false;
-        }
+        bool serialize(std::string name, Type&& value);
 
         virtual void serialize_int(std::string& name, int serializable) LEGION_PURE;
         virtual void serialize_float(std::string& name, float serializable) = 0;
@@ -85,116 +50,15 @@ namespace legion::core::serialization
 
     struct json_view : public serializer_view
     {
-        std::string data;
-
         nlohmann::json root;
 
         std::stack<nlohmann::json> current_writing;
 
-
         json_view() = default;
         ~json_view() = default;
 
-        virtual void start_object(std::string name) override
-        {
-            current_writing.emplace();
-
-            if (name.size() > 0)
-            {
-                data.append("\"" + name + "\"");
-                data.append(":");
-            }
-
-            data.append("{");
-        }
-
-        virtual void end_object() override
-        {
-            if (current_writing.empty())
-                return;
-
-            auto cur = current_writing.top();
-
-            if (!cur.is_object())
-                return;
-
-            current_writing.pop();
-            if (current_writing.empty())
-            {
-                root.emplace(cur);
-            }
-            else
-            {
-                auto& next = current_writing.top();
-
-                if (next.is_array())
-                    next.emplace_back(cur);
-                else if (next.is_object())
-                    next.emplace(cur);
-            }
-
-            //return false;
-        //return common::error;
-
-
-            if (data[data.size() - 1] == ',')
-                data.pop_back();
-            data.append("},");
-        }
-
-        virtual void start_container(std::string name) override
-        {
-            if (name.size() > 0)
-            {
-                data.append("\"" + name + "\"");
-                data.append(":");
-            }
-            data.append("[");
-        }
-        virtual void end_container() override
-        {
-            if (data[data.size() - 1] == ',')
-                data.pop_back();
-            data.append("],");
-        }
-
-        template<typename Type>
-        bool serialize(std::string_view name, Type&& value)
-        {
-            using raw_type = std::decay_t<Type>;
-
-            if constexpr (std::is_same_v<raw_type, int>)
-            {
-                serialize_int(name, std::move(value));
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, float>)
-            {
-                serialize_float(name, std::move(value));
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, double>)
-            {
-                serialize_double(name, std::move(value));
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, bool>)
-            {
-                serialize_bool(name, std::move(value));
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, std::string>)
-            {
-                serialize_string(name, std::move(value));
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, id_type>)
-            {
-                serialize_id_type(name, std::move(value));
-                return true;
-            }
-            return false;
-        }
+        virtual void start_object(std::string name) override;
+        virtual void end_object() override;
 
         virtual void serialize_int(std::string& name, int serializable) override;
         virtual void serialize_float(std::string& name, float serializable) override;
@@ -202,6 +66,8 @@ namespace legion::core::serialization
         virtual void serialize_bool(std::string& name, bool serializable) override;
         virtual void serialize_string(std::string& name, const std::string_view& serializable) override;
         virtual void serialize_id_type(std::string& name, id_type serializable) override;
+
+        virtual common::result<void, fs_error> write(fs::view& file) override;
 
         virtual common::result<int, exception> deserialize_int(std::string_view& name) override;
         virtual common::result<float, exception> deserialize_float(std::string_view& name) override;
@@ -233,44 +99,6 @@ namespace legion::core::serialization
         virtual void end_container() override
         {
 
-        }
-
-        template<typename Type>
-        bool serialize(std::string_view name, Type&& value)
-        {
-            using raw_type = std::decay_t<Type>;
-
-            if constexpr (std::is_same_v<raw_type, int>)
-            {
-                serialize_int(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, float>)
-            {
-                serialize_float(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, double>)
-            {
-                serialize_double(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, bool>)
-            {
-                serialize_bool(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, std::string>)
-            {
-                serialize_string(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, id_type>)
-            {
-                serialize_id_type(name, std::move(value));
-                return true;
-            }
-            return false;
         }
 
         virtual void serialize_int(std::string& name, int serializable) override;
@@ -312,44 +140,6 @@ namespace legion::core::serialization
 
         }
 
-        template<typename Type>
-        bool serialize(std::string name, Type&& value)
-        {
-            using raw_type = std::decay_t<Type>;
-
-            if constexpr (std::is_same_v<raw_type, int>)
-            {
-                serialize_int(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, float>)
-            {
-                serialize_float(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, double>)
-            {
-                serialize_double(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, bool>)
-            {
-                serialize_bool(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, std::string>)
-            {
-                serialize_string(name, value);
-                return true;
-            }
-            else if constexpr (std::is_same_v<raw_type, id_type>)
-            {
-                serialize_id_type(name, std::move(value));
-                return true;
-            }
-            return false;
-        }
-
         virtual void serialize_int(std::string& name, int serializable) override;
         virtual void serialize_float(std::string& name, float serializable) override;
         virtual void serialize_double(std::string& name, double serializable) override;
@@ -364,6 +154,8 @@ namespace legion::core::serialization
         virtual common::result<std::string, exception> deserialize_string(std::string_view& name) override;
         virtual common::result<id_type, exception> deserialize_id_type(std::string_view& name) override;
     };
+
+   
 }
 
 #include <core/serialization/serializer_view.inl>

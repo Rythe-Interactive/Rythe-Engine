@@ -29,11 +29,6 @@ namespace legion::core::serialization
 
         virtual bool serialize(const void* serializable, serializer_view& s_view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& s_view) override;
-
-        bool serialize_container(const void* container, serializer_view& s_view, std::string& name);
-
-        bool write(const void* serializable, std::string name, fs::view& file);
-        bool read(const fs::view& view);
     };
 
     template<>
