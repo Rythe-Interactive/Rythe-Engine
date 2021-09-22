@@ -81,7 +81,7 @@ namespace legion::core::serialization
         if constexpr (is_serializable<serializable_type>::value)
         {
             auto _serializable = *static_cast<const serializable_type*>(serializable);
-            s_view.serialize<serializable_type>(name, _serializable);
+            s_view.serialize<serializable_type>(name, std::move(_serializable));
         }
         else if constexpr (is_container<type>::value)
             detail::serialize_container<type>(serializable, s_view, name);

@@ -68,6 +68,7 @@ public:
         //Serialization Test
         std::string_view filePath = "assets://scenes/mainscene.json";
 
+        serialization::serializer_registry::register_serializer<scene_comp>();
         serialization::serializer_registry::register_serializer<example_comp>();
         serialization::serializer_registry::register_serializer<position>();
         //serialization::serializer_registry::register_serializer<scale>();
@@ -77,13 +78,9 @@ public:
         //serialization::serializer_registry::register_serializer<assets::asset<mesh>>();
         //serialization::serializer_registry::register_serializer<transform>();
         //serialization::serializer_registry::register_serializer<rendering::mesh_renderer>();
-        auto serializer = serialization::serializer_registry::get_serializer<scene_comp>();
+
         auto scene = scene_comp();
         scene.id = 1;
-
-
-        mesh_filter meshFilter;
-        meshFilter.shared_mesh = model.get_mesh();
 
         for (int i = 0; i < 20; i++)
         {
@@ -91,14 +88,16 @@ public:
             auto child = createEntity();
             ent.add_child(child);
             ent.add_component<example_comp>();
-            //ent.add_component<mesh_filter>(meshFilter);
-            //ent.add_component<rendering::mesh_renderer>(rendering::mesh_renderer(material));
             ent.add_component<position>();
             ent.add_component<velocity>();
             scene.entities.push_back(ent);
         }
-
-        serializer->write(&scene, "Main", fs::view(filePath));
+        auto jsonView = serialization::json_view(filePath);
+        auto result = serialization::serializer_registry::write(scene,jsonView);
+        if (result.has_error())
+            log::debug(result.error().what());
+        else
+            log::debug("Success");
     }
 
     void update(legion::time::span deltaTime)

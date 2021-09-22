@@ -44,34 +44,58 @@ namespace legion::core::serialization
 #pragma endregion
 
 #pragma region json_view
+    inline void json_view::start_object()
+    {
+        json j;
+        j["element"] = json::object();
+        write_queue.emplace(j);
+    }
+
     inline void json_view::start_object(std::string name)
     {
-        current_writing.emplace("\"name\":{}"_json);
-    }
+        json j;
+        j[name] = json::object();
+        write_queue.emplace(j);
+    } 
 
     inline void json_view::end_object()
     {
-        if (current_writing.empty())
+        if (write_queue.empty())
+        {
+            log::debug("Queue is empty");
             return;
-
-        auto cur = current_writing.top();
+        }
+        auto cur = write_queue.top();
 
         if (!cur.is_object())
-            return;
-
-        current_writing.pop();
-        if (current_writing.empty())
         {
-            root.emplace(cur);
+            log::debug("Top of queue is not an object");
+            return;
+        }
+
+
+        auto key = cur.get<json::object_t>()[0];
+
+        write_queue.pop();
+        if (write_queue.empty())
+        {
+      
+            root.emplace(key,std::move(cur));
+            log::debug("popping last item in queue and adding it to root");
         }
         else
         {
-            auto& next = current_writing.top();
+            auto& next = write_queue.top();
 
             if (next.is_array())
+            {
+                log::debug("array detected, adding to array");
                 next.emplace_back(cur);
+            }
             else if (next.is_object())
-                next.emplace(cur);
+            {
+                next.emplace(key, std::move(cur));
+            }
         }
     }
 
@@ -79,53 +103,53 @@ namespace legion::core::serialization
     {
         json j;
         j[name] = serializable;
-        current_writing.emplace(j);
+        write_queue.emplace(j);
     }
 
     void json_view::serialize_float(std::string& name, float serializable)
     {
         json j;
         j[name] = serializable;
-        current_writing.emplace(j);
+        write_queue.emplace(j);
     }
 
     void json_view::serialize_double(std::string& name, double serializable)
     {
         json j;
         j[name] = serializable;
-        current_writing.emplace(j);
+        write_queue.emplace(j);
     }
 
     void json_view::serialize_bool(std::string& name, bool serializable)
     {
         json j;
         j[name] = serializable;
-        current_writing.emplace(j);
+        write_queue.emplace(j);
     }
 
     void json_view::serialize_string(std::string& name, const std::string_view& serializable)
     {
         json j;
         j[name] = serializable;
-        current_writing.emplace(j);
+        write_queue.emplace(j);
     }
 
     void json_view::serialize_id_type(std::string& name, id_type serializable)
     {
         json j;
         j[name] = (int)serializable;
-        current_writing.emplace(j);
+        write_queue.emplace(j);
     }
 
-    inline common::result<void, fs_error> json_view::write(const void* serializable,std::string name,fs::view& file)
+    inline common::result<void, fs_error> json_view::write()
     {
-        auto serializer = serializer_registry::get_serializer<void*>();
-        auto result = serializer->serialize(serializable, this, name);
-
-        if (!result)
-            return legion_fs_error("Serialization failed");
-
+        log::debug(root.dump());
         return file.set(fs::basic_resource(root.dump()));
+    }
+
+    inline common::result<void, fs_error> json_view::load(fs::view& file)
+    {
+        return legion_fs_error("not implemented");
     }
 
     common::result<int, exception> json_view::deserialize_int(std::string_view& name)
