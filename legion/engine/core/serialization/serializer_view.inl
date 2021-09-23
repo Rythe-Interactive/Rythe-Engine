@@ -121,8 +121,7 @@ namespace legion::core::serialization
 
     inline void json_view::start_object()
     {
-        json j;
-        write_queue.emplace(j);
+        write_queue.emplace();
     }
 
     inline void json_view::start_object(std::string name)

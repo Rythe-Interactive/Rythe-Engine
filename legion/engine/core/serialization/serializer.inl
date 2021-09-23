@@ -19,7 +19,7 @@ namespace legion::core::serialization
             {
                 pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
 
-                _serializer->serialize(&*it, s_view, typeid(value_type).name());
+                _serializer->serialize(&*it, s_view, nameOfType<value_type>());
             }
 
             s_view.end_container();

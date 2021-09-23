@@ -87,6 +87,18 @@ public:
             ent.add_child(child);
         }
 
+        /// EVENTUAL API ///
+        //
+        // auto result = srl::write<srl::json_view>(ecs::Registry::getWorld(), "assets://somefile.lgn");
+        // auto result = srl::write<srl::json_view>("assets://somefile.lgn", ecs::Registry::getWorld());
+        //
+        // srl::json_view j;
+        // auto result = srl::serialize(j, ecs::Registry::getWorld());
+        //
+        // j.write("assets://somefile.lgn"_view);
+        // 
+        //////////////////////
+
         auto result = serialization::serializer_registry::write(ecs::Registry::getWorld());
         if (result.has_error())
             log::debug(result.error().what());
