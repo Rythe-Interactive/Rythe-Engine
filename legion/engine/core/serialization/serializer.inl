@@ -6,7 +6,7 @@ namespace legion::core::serialization
     namespace detail
     {
         template<typename type>
-        inline bool serialize_container(const void* container, serializer_view& s_view, std::string& name)
+        inline common::result<void, fs_error> serialize_container(const void* container, serializer_view& s_view, std::string& name)
         {
             using container_type = typename remove_cvr_t<type>;
             using value_type = remove_cvr_t<typename std::iterator_traits<container_type::const_iterator>::value_type>;
@@ -23,11 +23,9 @@ namespace legion::core::serialization
             }
 
             s_view.end_container();
-
-            return true;
         }
 
-        inline bool serialize_ent_data(const ecs::entity_data& ent_data, serializer_view& s_view, std::string& name)
+        inline common::result<void, fs_error> serialize_ent_data(const ecs::entity_data& ent_data, serializer_view& s_view, std::string& name)
         {
             s_view.start_object(name);
 
@@ -59,17 +57,16 @@ namespace legion::core::serialization
             s_view.end_container();
 
             s_view.end_object();
-            return true;
         }
 
     }
 
-    inline bool serializer<ecs::entity_data>::serialize(const void* ent, serializer_view& s_view, std::string name)
+    inline common::result<void, fs_error>  serializer<ecs::entity_data>::serialize(const void* ent, serializer_view& s_view, std::string name)
     {
         return detail::serialize_ent_data(*static_cast<const ecs::entity_data*>(ent), s_view, name);
     }
 
-    inline bool serializer<ecs::entity>::serialize(const void* ent, serializer_view& s_view, std::string name)
+    inline common::result<void, fs_error> serializer<ecs::entity>::serialize(const void* ent, serializer_view& s_view, std::string name)
     {
         return detail::serialize_ent_data(
             *static_cast<const ecs::entity_data*>(static_cast<const ecs::entity*>(ent)->data)
@@ -77,7 +74,7 @@ namespace legion::core::serialization
     }
 
     template<typename type>
-    inline bool serializer<type>::serialize(const void* serializable, serializer_view& s_view, std::string name)
+    inline common::result<void, fs_error> serializer<type>::serialize(const void* serializable, serializer_view& s_view, std::string name)
     {
         using serializable_type = typename remove_cvr_t<type>;
 
@@ -109,7 +106,6 @@ namespace legion::core::serialization
 
             s_view.end_object();
         }
-        return true;
     }
 
 

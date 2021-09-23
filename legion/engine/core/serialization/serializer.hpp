@@ -1,10 +1,11 @@
 #pragma once
+#include <core/ecs/ecs.hpp>
 #include<core/types/meta.hpp>
 #include <core/filesystem/filesystem.hpp>
-#include <core/serialization/serializer_view.hpp>
+#include <core/serialization/serializer_views/json_view.hpp>
+#include <core/serialization/serializer_views/bson_view.hpp>
+#include <core/serialization/serializer_views/yaml_view.hpp>
 #include <core/serialization/prototype.hpp>
-
-#include <nlohmann/json.hpp>
 
 #include <fstream>
 
@@ -17,7 +18,7 @@ namespace legion::core::serialization
         serializer_base() = default;
         ~serializer_base() = default;
 
-        virtual bool serialize(const void* serializable, serializer_view& view, std::string name) = 0;
+        virtual common::result<void, fs_error>  serialize(const void* serializable, serializer_view& view, std::string name) = 0;
         virtual prototype_base deserialize(serializer_view& view) = 0;
     };
 
@@ -27,7 +28,7 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual bool serialize(const void* serializable, serializer_view& s_view, std::string name) override;
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& s_view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& s_view) override;
     };
 
@@ -37,7 +38,7 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual bool serialize(const void* serializable, serializer_view& view, std::string name) override;
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& view) override;
     };
 
@@ -47,7 +48,7 @@ namespace legion::core::serialization
         serializer() = default;
         ~serializer() = default;
 
-        virtual bool serialize(const void* serializable, serializer_view& view, std::string name) override;
+        virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string name) override;
         virtual prototype_base deserialize(serializer_view& view) override;
     };
 

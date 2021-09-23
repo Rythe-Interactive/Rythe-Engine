@@ -4,10 +4,7 @@
 #include <rendering/rendering.hpp>
 #include <audio/audio.hpp>
 
-#include <core/serialization/serializationregistry.hpp>
 #include <core/ecs/handles/entity.hpp>
-
-using json = nlohmann::ordered_json;
 
 namespace legion::core
 {
@@ -64,14 +61,14 @@ public:
         }
 
 
-
         //Serialization Test
-        std::string_view filePath = "assets://scenes/mainscene.json";
-        serialization::serializer_registry::register_serializer<example_comp>();
-        serialization::serializer_registry::register_serializer<position>();
-        serialization::serializer_registry::register_serializer<rotation>();
-        serialization::serializer_registry::register_serializer<velocity>();
-        serialization::serializer_registry::register_serializer<scale>();
+        std::string_view filePath1 = "assets://scenes/scene1.json";
+        std::string_view filePath2 = "assets://scenes/scene2.json";
+        srl::serializer_registry::register_serializer<example_comp>();
+        srl::serializer_registry::register_serializer<position>();
+        srl::serializer_registry::register_serializer<rotation>();
+        srl::serializer_registry::register_serializer<velocity>();
+        srl::serializer_registry::register_serializer<scale>();
 
         for (int i = 0; i < 10; i++)
         {
@@ -99,7 +96,14 @@ public:
         // 
         //////////////////////
 
-        auto result = serialization::serializer_registry::write(ecs::Registry::getWorld());
+        auto result = srl::write<srl::json_view>(filePath1, ecs::Registry::getWorld());
+        auto result = srl::write<srl::json_view>(ecs::Registry::getWorld(), filePath2);
+
+        srl::json_view j_view;
+        auto result = srl::serialize(j_view, ecs::Registry::getWorld());
+
+        j_view.write(fs::view("assets://scenes/scene3.json"));
+
         if (result.has_error())
             log::debug(result.error().what());
         else

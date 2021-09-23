@@ -31,46 +31,6 @@ namespace legion::core::serialization
         return { nullptr };
     }
 
-    template<typename T>
-    common::result<void, fs_error> serializer_registry::write(T data, serializer_view& s_view)
-    {
-        auto serializer = get_serializer<T>();
-        serializer->serialize(&data,s_view, "");
-        return s_view.write();
-    }
-
-    template<typename T>
-    common::result<void, fs_error> serializer_registry::write(T data, std::string_view& filePath)
-    {
-        fs::view file(filePath);
-
-        auto result = file.get_extension();
-
-        if (result.has_error())
-            return legion_fs_error(result.error().what());
-
-        if (result.value() == ".json")
-        {
-            auto s_view = json_view(filePath);
-            return write(data, s_view);
-        } 
-        else if (result.value() == ".bson")
-        {
-            auto s_view = bson_view(filePath);
-            return write(data, s_view);
-        }
-        else if (result.value() == ".yaml")
-        {
-            auto s_view = yaml_view(filePath);
-            return write(data, s_view);
-        }
-    }
-
-    template<typename T>
-    common::result<void, fs_error> serializer_registry::write(T data)
-    {
-        std::string folder = "assets://serialization_output/output.json";
-        std::string_view filePath = folder;
-        return write(data, filePath);
-    }
 }
+
+

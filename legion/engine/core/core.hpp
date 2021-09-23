@@ -27,10 +27,12 @@
 
 #include <core/engine/system.inl>
 #include <core/engine/module.inl>
+#include <core/serialization/serialization.hpp>
 
 namespace legion
 {
     using namespace core;
+    namespace srl = ::legion::serialization;
 }
 
 namespace lgn = legion;
