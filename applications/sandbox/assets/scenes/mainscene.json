@@ -1,1 +1,1 @@
-null
+{"struct legion::core::scene_comp":{"id":1,"entities":{"struct legion::core::ecs::entity":{"name":"6","alive":true,"active":true,"children":{"struct legion::core::ecs::entity":{"name":"7","alive":true,"active":true,"children":{},"components":{}}},"components":{"legion::core::example_comp":{"value":1},"legion::core::position":{"x":0.0,"y":0.0,"z":0.0},"legion::core::velocity":{"x":0.0,"y":0.0,"z":0.0}}}}}}

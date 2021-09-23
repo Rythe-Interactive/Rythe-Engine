@@ -13,17 +13,16 @@ namespace legion::core::serialization
 
             auto _container = static_cast<container_type*>(const_cast<void*>(container));
 
-            s_view.start_object(name);
+            s_view.start_container(name);
 
             for (container_type::const_iterator it = _container->begin(); it != _container->end(); ++it)
             {
-
                 pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
 
-                _serializer->serialize(&*it, s_view, name);
+                _serializer->serialize(&*it, s_view, typeid(value_type).name());
             }
 
-            s_view.end_object();
+            s_view.end_container();
 
             return true;
         }
@@ -40,7 +39,7 @@ namespace legion::core::serialization
             std::string container_name = "children";
             detail::serialize_container<ecs::entity_set>(&ent_data.children, s_view, container_name);
 
-            s_view.start_object("components");
+            s_view.start_container("components");
             auto ent_composition = ecs::Registry::entityComposition(ent_data.id);
 
             for (id_type typeId : ent_composition)
@@ -49,11 +48,11 @@ namespace legion::core::serialization
                 auto _serializer = serializer_registry::get_serializer(typeId);
                 auto comp = ecs::Registry::getComponent(typeId, ent);
                 std::string compName = ecs::Registry::getFamilyName(typeId);
-                s_view.start_object();
+                //s_view.start_object();
                 _serializer->serialize(comp, s_view, compName);
-                s_view.end_object();
+                //s_view.end_object();
             }
-            s_view.end_object();
+            s_view.end_container();
 
             s_view.end_object();
             return true;
@@ -93,12 +92,12 @@ namespace legion::core::serialization
             s_view.start_object(name);
 
             for_each(reflector,
-                [&s_view](auto& name, auto& value)
+                [&s_view](auto& _name, auto& value)
                 {
                     using value_type = typename remove_cvr_t<decltype(value)>;
 
                     auto _serializer = serializer_registry::get_serializer<value_type>();
-                    _serializer->serialize(&value, s_view, name);
+                    _serializer->serialize(&value, s_view, _name);
                 });
 
             s_view.end_object();

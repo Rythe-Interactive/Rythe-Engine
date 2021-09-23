@@ -44,9 +44,8 @@ namespace legion::core::serialization
         virtual void start_object(std::string name) = 0;
         virtual void end_object() = 0;
 
-        //virtual void start_container() = 0;
-        //virtual void start_container(std::string name) = 0;
-        //virtual void end_container() = 0;
+        virtual void start_container(std::string name) = 0;
+        virtual void end_container() = 0;
     };
 
     struct json_view : public serializer_view
@@ -55,7 +54,10 @@ namespace legion::core::serialization
 
         std::stack<json> write_queue;
 
-        json_view(std::string_view filePath) : serializer_view(filePath) {};
+        json_view(std::string_view filePath) : serializer_view(filePath)
+        {
+            /*root.emplace(file.get_filename(),nullptr);*/
+        };
         ~json_view() = default;
 
         virtual void serialize_int(std::string& name, int serializable) override;
@@ -78,6 +80,9 @@ namespace legion::core::serialization
         virtual void start_object() override;
         virtual void start_object(std::string name) override;
         virtual void end_object() override;
+
+        virtual void start_container(std::string name) override;
+        virtual void end_container() override;
     };
 
     struct bson_view : public serializer_view

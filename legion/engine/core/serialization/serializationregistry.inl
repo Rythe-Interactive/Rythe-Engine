@@ -31,12 +31,19 @@ namespace legion::core::serialization
         return { nullptr };
     }
 
-
     template<typename T>
     common::result<void, fs_error> serializer_registry::write(T data, serializer_view& s_view)
     {
         auto serializer = get_serializer<T>();
-        serializer->serialize(&data,s_view, s_view.file.get_filename());
+        serializer->serialize(&data,s_view, typeid(data).name());
+        //s_view.start_object("Test");
+        //std::string name1 = "Value";
+        //s_view.serialize_int(name1,1);
+        //std::string name2 = "Value2";
+        //s_view.serialize_int(name2, 12);
+        //std::string name3 = "Value3";
+        //s_view.serialize_int(name3, 14);
+        //s_view.end_object();
         return s_view.write();
     }
 

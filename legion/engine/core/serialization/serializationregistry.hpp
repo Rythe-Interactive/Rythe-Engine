@@ -27,8 +27,6 @@ namespace legion::core::serialization
         template<typename T>
         static common::result<void, fs_error> write(T data, serializer_view& s_view);//serializer_view will be a fs::view and will be able to write to files
     };
-
-    
 }
 
 #include <core/serialization/serializer.inl>

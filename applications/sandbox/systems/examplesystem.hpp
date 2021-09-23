@@ -82,7 +82,7 @@ public:
         auto scene = scene_comp();
         scene.id = 1;
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 10; i++)
         {
             auto ent = createEntity();
             auto child = createEntity();

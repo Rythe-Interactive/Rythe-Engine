@@ -46,17 +46,23 @@ namespace legion::core::serialization
 #pragma region json_view
     inline void json_view::start_object()
     {
+        log::debug("object start");
+        log::debug("element");
+
         json j;
-        j["element"] = json::object();
         write_queue.emplace(j);
     }
 
     inline void json_view::start_object(std::string name)
     {
+        log::debug("object start");
+        log::debug(name);
+
         json j;
-        j[name] = json::object();
+        j.emplace(name,json::object());
+        log::debug(j.dump());
         write_queue.emplace(j);
-    } 
+    }
 
     inline void json_view::end_object()
     {
@@ -73,18 +79,16 @@ namespace legion::core::serialization
             return;
         }
 
-
-        auto key = cur.get<json::object_t>()[0];
-
+        auto key = cur.begin().key();
         write_queue.pop();
         if (write_queue.empty())
         {
-      
+            cur.erase(cur.begin());
             root.emplace(key,std::move(cur));
-            log::debug("popping last item in queue and adding it to root");
         }
         else
         {
+            log::debug(key);
             auto& next = write_queue.top();
 
             if (next.is_array())
@@ -94,6 +98,64 @@ namespace legion::core::serialization
             }
             else if (next.is_object())
             {
+                log::debug("adding value");
+                cur.erase(cur.begin());
+                next.emplace(key, std::move(cur));
+            }
+        }
+
+        log::debug("object end");
+        log::debug("Stack size");
+        log::debug(write_queue.size());
+    }
+
+    inline void json_view::start_container(std::string name)
+    {
+        log::debug("array start");
+        log::debug(name);
+
+        json j;
+        j.emplace(name, json::array());
+        log::debug(j.dump());
+        write_queue.emplace(j);
+    }
+
+    inline void json_view::end_container()
+    {
+        if (write_queue.empty())
+        {
+            log::debug("Queue is empty");
+            return;
+        }
+        auto cur = write_queue.top();
+
+        if (!cur.is_object())
+        {
+            log::debug("Top of queue is not an object");
+            return;
+        }
+
+        auto key = cur.begin().key();
+        write_queue.pop();
+        if (write_queue.empty())
+        {
+            cur.erase(cur.begin());
+            root.emplace(key, std::move(cur));
+        }
+        else
+        {
+            log::debug(key);
+            auto& next = write_queue.top();
+
+            if (next.is_array())
+            {
+                log::debug("array detected, adding to array");
+                next.emplace_back(cur);
+            }
+            else if (next.is_object())
+            {
+                log::debug("adding value");
+                cur.erase(cur.begin());
                 next.emplace(key, std::move(cur));
             }
         }
@@ -101,44 +163,33 @@ namespace legion::core::serialization
 
     void json_view::serialize_int(std::string& name, int serializable)
     {
-        json j;
-        j[name] = serializable;
-        write_queue.emplace(j);
+        write_queue.top().emplace(name, serializable);
     }
 
     void json_view::serialize_float(std::string& name, float serializable)
     {
-        json j;
-        j[name] = serializable;
-        write_queue.emplace(j);
+        write_queue.top().emplace(name, serializable);
     }
 
     void json_view::serialize_double(std::string& name, double serializable)
     {
-        json j;
-        j[name] = serializable;
-        write_queue.emplace(j);
+        write_queue.top().emplace(name, serializable);
     }
 
     void json_view::serialize_bool(std::string& name, bool serializable)
     {
-        json j;
-        j[name] = serializable;
-        write_queue.emplace(j);
+        write_queue.top().emplace(name, serializable);
     }
 
     void json_view::serialize_string(std::string& name, const std::string_view& serializable)
     {
-        json j;
-        j[name] = serializable;
-        write_queue.emplace(j);
+        write_queue.top().emplace(name, serializable);
     }
 
     void json_view::serialize_id_type(std::string& name, id_type serializable)
     {
-        json j;
-        j[name] = (int)serializable;
-        write_queue.emplace(j);
+        int id = (int)serializable;
+        write_queue.top().emplace(name, serializable);
     }
 
     inline common::result<void, fs_error> json_view::write()
