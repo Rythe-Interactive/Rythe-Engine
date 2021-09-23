@@ -53,10 +53,18 @@ public:
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
+        model = gfx::ModelCache::create_model("Fire place", fs::view("assets://models/flippedfireplace.glb"));
+        material = gfx::MaterialCache::create_material("Test", fs::view("assets://shaders/worldnormal.shs"));
+
+        auto ent = createEntity();
+        ent.add_component<transform>();
+        ent.add_component(gfx::mesh_renderer(material, model));
+
+
         bindToEvent<events::exit, &ExampleSystem::onExit>();
     }
 
-    void onExit(lgn::events::exit& event)
+    void onExit(L_MAYBEUNUSED lgn::events::exit& event)
     {
         using namespace legion;
 
