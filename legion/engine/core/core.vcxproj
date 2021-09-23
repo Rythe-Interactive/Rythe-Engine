@@ -747,6 +747,7 @@ del /q ".\xcopyexclude"</Command>
     <None Include="scheduling\process.inl" />
     <None Include="scheduling\processchain.inl" />
     <None Include="scheduling\scheduler.inl" />
+    <None Include="serialization\serializer_views\bson_view.inl" />
     <None Include="serialization\serializer_views\json_view.inl" />
     <None Include="serialization\serializer_views\yaml_view.inl" />
     <None Include="time\utils.inl" />

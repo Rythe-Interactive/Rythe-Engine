@@ -3,59 +3,59 @@
 
 namespace legion::core::serialization
 {
-    void yaml_view::serialize_int(std::string& name, int serializable)
+    inline void yaml_view::serialize_int(std::string& name, int serializable)
     {
 
     }
 
-    void yaml_view::serialize_float(std::string& name, float serializable)
+    inline void yaml_view::serialize_float(std::string& name, float serializable)
     {
 
     }
 
-    void yaml_view::serialize_double(std::string& name, double serializable)
+    inline void yaml_view::serialize_double(std::string& name, double serializable)
     {
 
     }
 
-    void yaml_view::serialize_bool(std::string& name, bool serializable)
+    inline void yaml_view::serialize_bool(std::string& name, bool serializable)
     {
 
     }
 
-    void yaml_view::serialize_string(std::string& name, const std::string_view& serializable)
+    inline void yaml_view::serialize_string(std::string& name, const std::string_view& serializable)
     {
 
     }
 
-    void yaml_view::serialize_id_type(std::string& name, id_type serializable)
+    inline void yaml_view::serialize_id_type(std::string& name, id_type serializable)
     {
 
     }
 
-    common::result<int, fs_error> yaml_view::deserialize_int(std::string_view& name)
-    {
-        return legion_fs_error("not implemented");
-    }
-    common::result<float, fs_error> yaml_view::deserialize_float(std::string_view& name)
+    inline common::result<int, fs_error> yaml_view::deserialize_int(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
-    common::result<double, fs_error> yaml_view::deserialize_double(std::string_view& name)
+    inline common::result<float, fs_error> yaml_view::deserialize_float(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
-    common::result<void, fs_error>  yaml_view::deserialize_bool(std::string_view& name)
+    inline common::result<double, fs_error> yaml_view::deserialize_double(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
-
-    common::result<std::string, fs_error> yaml_view::deserialize_string(std::string_view& name)
+    inline common::result<void, fs_error>  yaml_view::deserialize_bool(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
 
-    common::result<id_type, fs_error> yaml_view::deserialize_id_type(std::string_view& name)
+    inline common::result<std::string, fs_error> yaml_view::deserialize_string(std::string_view& name)
+    {
+        return legion_fs_error("not implemented");
+    }
+
+    inline common::result<id_type, fs_error> yaml_view::deserialize_id_type(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
@@ -66,6 +66,7 @@ namespace legion::core::serialization
 
     inline void yaml_view::start_object(std::string name)
     {
+
     }
 
     inline void yaml_view::end_object()
@@ -80,13 +81,14 @@ namespace legion::core::serialization
     {
     }
 
-    inline common::result<void, fs_error> yaml_view::write(const fs::view& file)
+    inline common::result<void, fs_error> yaml_view::write(fs::view& file)
     {
-        return legion_fs_error("Not yet implemented");
+        return legion_fs_error("not yet implemented");
     }
-    inline common::result<void, fs_error> yaml_view::load(const fs::view& file)
+
+    inline common::result<void, fs_error> yaml_view::load(fs::view& file)
     {
-        return legion_fs_error("Not yet implemented");
+        return legion_fs_error("not yet implemented");
     }
 
 }

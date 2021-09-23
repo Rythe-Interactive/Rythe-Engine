@@ -39,8 +39,8 @@ namespace legion::core::serialization
         virtual void start_container(std::string name) LEGION_PURE;
         virtual void end_container() LEGION_PURE;
 
-        virtual common::result<void, fs_error> write(const fs::view& file) LEGION_PURE;
-        virtual common::result<void, fs_error> load(const fs::view& file) LEGION_PURE;
+        virtual common::result<void, fs_error> write(fs::view& file) LEGION_PURE;
+        virtual common::result<void, fs_error> load(fs::view& file) LEGION_PURE;
     };
 }
 

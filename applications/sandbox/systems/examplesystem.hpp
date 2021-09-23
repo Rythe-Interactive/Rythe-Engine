@@ -4,6 +4,8 @@
 #include <rendering/rendering.hpp>
 #include <audio/audio.hpp>
 
+#include <core/serialization/serialization.hpp>
+
 #include <core/ecs/handles/entity.hpp>
 
 namespace legion::core
@@ -96,18 +98,15 @@ public:
         // 
         //////////////////////
 
-        auto result = srl::write<srl::json_view>(filePath1, ecs::Registry::getWorld());
-        auto result = srl::write<srl::json_view>(ecs::Registry::getWorld(), filePath2);
+        auto result1 = srl::write<srl::json_view>(filePath1, ecs::Registry::getWorld());
+        auto result2 = srl::write<srl::json_view>(ecs::Registry::getWorld(), filePath2);
 
         srl::json_view j_view;
-        auto result = srl::serialize(j_view, ecs::Registry::getWorld());
+        auto result3 = srl::serialize(j_view, ecs::Registry::getWorld());
 
-        j_view.write(fs::view("assets://scenes/scene3.json"));
+        auto file = fs::view("assets://scenes/scene3.json");
+        j_view.write(file);
 
-        if (result.has_error())
-            log::debug(result.error().what());
-        else
-            log::debug("Success");
     }
 
     void update(legion::time::span deltaTime)

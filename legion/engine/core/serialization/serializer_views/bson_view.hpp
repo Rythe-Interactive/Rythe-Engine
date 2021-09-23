@@ -29,8 +29,8 @@ namespace legion::core::serialization
         virtual void start_container(std::string name) override;
         virtual void end_container() override;
 
-        virtual common::result<void, fs_error> write(const fs::view& file) override;
-        virtual common::result<void, fs_error> load(const fs::view& file) override;
+        virtual common::result<void, fs_error> write(fs::view& file) override;
+        virtual common::result<void, fs_error> load(fs::view& file) override;
     };
 }
 

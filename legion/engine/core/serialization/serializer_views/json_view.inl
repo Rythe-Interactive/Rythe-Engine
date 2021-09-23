@@ -3,37 +3,37 @@
 
 namespace legion::core::serialization
 {
-    void json_view::serialize_int(std::string& name, int serializable)
+    inline void json_view::serialize_int(std::string& name, int serializable)
     {
         auto key = write_queue.top().begin().key();
         write_queue.top()[key].emplace(name, serializable);
     }
 
-    void json_view::serialize_float(std::string& name, float serializable)
+    inline void json_view::serialize_float(std::string& name, float serializable)
     {
         auto key = write_queue.top().begin().key();
         write_queue.top()[key].emplace(name, serializable);
     }
 
-    void json_view::serialize_double(std::string& name, double serializable)
+    inline void json_view::serialize_double(std::string& name, double serializable)
     {
         auto key = write_queue.top().begin().key();
         write_queue.top()[key].emplace(name, serializable);
     }
 
-    void json_view::serialize_bool(std::string& name, bool serializable)
+    inline void json_view::serialize_bool(std::string& name, bool serializable)
     {
         auto key = write_queue.top().begin().key();
         write_queue.top()[key].emplace(name, serializable);
     }
 
-    void json_view::serialize_string(std::string& name, const std::string_view& serializable)
+    inline void json_view::serialize_string(std::string& name, const std::string_view& serializable)
     {
         auto key = write_queue.top().begin().key();
         write_queue.top()[key].emplace(name, serializable);
     }
 
-    void json_view::serialize_id_type(std::string& name, id_type serializable)
+    inline void json_view::serialize_id_type(std::string& name, id_type serializable)
     {
         int id = (int)serializable;
         auto key = write_queue.top().begin().key();
@@ -41,32 +41,32 @@ namespace legion::core::serialization
     }
 
 
-    common::result<int, fs_error> json_view::deserialize_int(std::string_view& name)
+    inline common::result<int, fs_error> json_view::deserialize_int(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
 
-    common::result<float, fs_error> json_view::deserialize_float(std::string_view& name)
+    inline common::result<float, fs_error> json_view::deserialize_float(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
 
-    common::result<double, fs_error> json_view::deserialize_double(std::string_view& name)
+    inline common::result<double, fs_error> json_view::deserialize_double(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
 
-    common::result<void, fs_error>  json_view::deserialize_bool(std::string_view& name)
+    inline common::result<void, fs_error>  json_view::deserialize_bool(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
 
-    common::result<std::string, fs_error> json_view::deserialize_string(std::string_view& name)
+    inline common::result<std::string, fs_error> json_view::deserialize_string(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
 
-    common::result<id_type, fs_error> json_view::deserialize_id_type(std::string_view& name)
+    inline common::result<id_type, fs_error> json_view::deserialize_id_type(std::string_view& name)
     {
         return legion_fs_error("not implemented");
     }
@@ -143,12 +143,12 @@ namespace legion::core::serialization
         }
     }
 
-    inline common::result<void, fs_error> json_view::write(const fs::view& file)
+    inline common::result<void, fs_error> json_view::write(fs::view& file)
     {
         return file.set(fs::basic_resource(root.dump()));
     }
 
-    inline common::result<void, fs_error> json_view::load(cons tfs::view& file)
+    inline common::result<void, fs_error> json_view::load(fs::view& file)
     {
         return legion_fs_error("not implemented");
     }

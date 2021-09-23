@@ -86,12 +86,12 @@ namespace legion::core::serialization
     {
     }
 
-    inline common::result<void, fs_error> bson_view::write(const fs::view& file)
+    inline common::result<void, fs_error> bson_view::write(fs::view& file)
     {
         return legion_fs_error("not yet implemented");
     }
 
-    inline common::result<void, fs_error> bson_view::load(const fs::view& file)
+    inline common::result<void, fs_error> bson_view::load(fs::view& file)
     {
         return legion_fs_error("not yet implemented");
     }

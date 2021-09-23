@@ -15,7 +15,7 @@ namespace legion::core::serialization
         return result;
     }
 
-    template<typename view_type = serializer_view, typename Type>
+    template<typename view_type = serializer_view&, typename Type>
     common::result<void, fs_error> write(std::string_view& filePath,Type data)
     {
         auto s_view = view_type();
@@ -27,7 +27,7 @@ namespace legion::core::serialization
         return s_view.write(file);
     }
 
-    template<typename view_type = serializer_view, typename Type>
+    template<typename view_type = serializer_view&, typename Type>
     common::result<void, fs_error> write(Type data, std::string_view& filePath)
     {
         return write<view_type>(filePath,data);
