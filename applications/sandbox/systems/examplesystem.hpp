@@ -67,33 +67,27 @@ public:
 
         //Serialization Test
         std::string_view filePath = "assets://scenes/mainscene.json";
-
-        serialization::serializer_registry::register_serializer<scene_comp>();
         serialization::serializer_registry::register_serializer<example_comp>();
         serialization::serializer_registry::register_serializer<position>();
-        //serialization::serializer_registry::register_serializer<scale>();
-        //serialization::serializer_registry::register_serializer<rotation>();
+        serialization::serializer_registry::register_serializer<rotation>();
         serialization::serializer_registry::register_serializer<velocity>();
-        //serialization::serializer_registry::register_serializer<mesh_filter>();
-        //serialization::serializer_registry::register_serializer<assets::asset<mesh>>();
-        //serialization::serializer_registry::register_serializer<transform>();
-        //serialization::serializer_registry::register_serializer<rendering::mesh_renderer>();
-
-        auto scene = scene_comp();
-        scene.id = 1;
+        serialization::serializer_registry::register_serializer<scale>();
 
         for (int i = 0; i < 10; i++)
         {
             auto ent = createEntity();
-            auto child = createEntity();
-            ent.add_child(child);
             ent.add_component<example_comp>();
             ent.add_component<position>();
             ent.add_component<velocity>();
-            scene.entities.push_back(ent);
+
+            auto child = createEntity();
+            child.add_component<rotation>();
+            child.add_component<example_comp>();
+
+            ent.add_child(child);
         }
-        auto jsonView = serialization::json_view(filePath);
-        auto result = serialization::serializer_registry::write(scene,jsonView);
+
+        auto result = serialization::serializer_registry::write(ecs::Registry::getWorld());
         if (result.has_error())
             log::debug(result.error().what());
         else

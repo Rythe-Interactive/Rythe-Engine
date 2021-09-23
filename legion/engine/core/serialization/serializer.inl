@@ -30,6 +30,7 @@ namespace legion::core::serialization
         inline bool serialize_ent_data(const ecs::entity_data& ent_data, serializer_view& s_view, std::string& name)
         {
             s_view.start_object(name);
+
             s_view.serialize("name", ent_data.name);
 
             s_view.serialize("alive", ent_data.alive);
@@ -46,11 +47,14 @@ namespace legion::core::serialization
             {
                 auto ent = ecs::Registry::getEntity(ent_data.id);;
                 auto _serializer = serializer_registry::get_serializer(typeId);
-                auto comp = ecs::Registry::getComponent(typeId, ent);
                 std::string compName = ecs::Registry::getFamilyName(typeId);
-                //s_view.start_object();
+                if (!_serializer)
+                {
+                    log::error("Could not find existing serializer for "+compName);
+                    continue;
+                }
+                auto comp = ecs::Registry::getComponent(typeId, ent);
                 _serializer->serialize(comp, s_view, compName);
-                //s_view.end_object();
             }
             s_view.end_container();
 
@@ -89,7 +93,10 @@ namespace legion::core::serialization
             auto _serializable = *static_cast<const type*>(serializable);
             auto reflector = make_reflector(_serializable);
 
-            s_view.start_object(name);
+            if (name.size() < 1)
+                s_view.start_object();
+            else
+                s_view.start_object(name);
 
             for_each(reflector,
                 [&s_view](auto& _name, auto& value)

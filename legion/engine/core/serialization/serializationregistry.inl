@@ -35,15 +35,7 @@ namespace legion::core::serialization
     common::result<void, fs_error> serializer_registry::write(T data, serializer_view& s_view)
     {
         auto serializer = get_serializer<T>();
-        serializer->serialize(&data,s_view, typeid(data).name());
-        //s_view.start_object("Test");
-        //std::string name1 = "Value";
-        //s_view.serialize_int(name1,1);
-        //std::string name2 = "Value2";
-        //s_view.serialize_int(name2, 12);
-        //std::string name3 = "Value3";
-        //s_view.serialize_int(name3, 14);
-        //s_view.end_object();
+        serializer->serialize(&data,s_view, "");
         return s_view.write();
     }
 
@@ -57,26 +49,28 @@ namespace legion::core::serialization
         if (result.has_error())
             return legion_fs_error(result.error().what());
 
-        serializer_view& s_view;
-
-        //Im gonna move this is an existing array or something at some point
-        switch (result)
+        if (result.value() == ".json")
         {
-        case ".json":
-            s_view = json_view(filePath);
-            break;
-        case ".bson":
-            s_view = bson_view(filePath);
-            breal;
-        case ".yaml":
-            s_view = yaml_view(filePath);
+            auto s_view = json_view(filePath);
+            return write(data, s_view);
+        } 
+        else if (result.value() == ".bson")
+        {
+            auto s_view = bson_view(filePath);
+            return write(data, s_view);
         }
-
-        return write(data,s_view);
+        else if (result.value() == ".yaml")
+        {
+            auto s_view = yaml_view(filePath);
+            return write(data, s_view);
+        }
     }
+
     template<typename T>
     common::result<void, fs_error> serializer_registry::write(T data)
     {
-        return write(data, typeid(data).name());
+        std::string folder = "assets://serialization_output/output.json";
+        std::string_view filePath = folder;
+        return write(data, filePath);
     }
 }
