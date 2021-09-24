@@ -23,6 +23,8 @@ namespace legion::core::serialization
             }
 
             s_view.end_container();
+
+            return common::success;
         }
 
         inline common::result<void, fs_error> serialize_ent_data(const ecs::entity_data& ent_data, serializer_view& s_view, std::string& name)
@@ -57,8 +59,15 @@ namespace legion::core::serialization
             s_view.end_container();
 
             s_view.end_object();
+
+            return common::success;
         }
 
+        inline common::result<void, fs_error> deserialize_ent_data(serializer_view& s_view)
+        {
+            auto ent = ecs::Registry::createEntity();
+            return common::success;
+        }
     }
 
     inline common::result<void, fs_error>  serializer<ecs::entity_data>::serialize(const void* ent, serializer_view& s_view, std::string name)
@@ -106,21 +115,22 @@ namespace legion::core::serialization
 
             s_view.end_object();
         }
+        return common::success;
     }
 
 
-    inline prototype_base serializer<ecs::entity_data>::deserialize(serializer_view& view)
+    inline common::result<void*, fs_error> serializer<ecs::entity_data>::deserialize(serializer_view& view)
     {
-        return prototype_base();
+        return detail::deserialize_ent_data(view);
     }
 
-    inline prototype_base serializer<ecs::entity>::deserialize(serializer_view& view)
+    inline common::result<void*, fs_error> serializer<ecs::entity>::deserialize(serializer_view& view)
     {
-        return prototype_base();
+        return detail::deserialize_ent_data(view);
     }
 
     template<typename serializable_type>
-    inline prototype_base serializer<serializable_type>::deserialize(serializer_view& view)
+    inline common::result<void*, fs_error> serializer<serializable_type>::deserialize(serializer_view& view)
     {
         return prototype_base();
     }

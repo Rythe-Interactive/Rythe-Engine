@@ -1,13 +1,20 @@
 #pragma once
 #include <core/serialization/serializer_views/serializer_view.hpp>
 
+#include <nlohmann/json.hpp>
+
+#include <stack>
+
 namespace legion::core::serialization
 {
 
-    struct yaml_view : public serializer_view
+    struct json : public serializer_view
     {
-        yaml_view() = default;
-        virtual ~yaml_view() = default;
+        nlohmann::ordered_json root;
+        std::stack<nlohmann::ordered_json> write_queue;
+
+        json() = default;
+        virtual ~json() = default;
 
         virtual void serialize_int(std::string& name, int serializable) override;
         virtual void serialize_float(std::string& name, float serializable) override;
@@ -31,8 +38,10 @@ namespace legion::core::serialization
         virtual void end_container() override;
 
         virtual common::result<void, fs_error> write(fs::view& file) override;
-        virtual common::result<void, fs_error> load(fs::view& file) override;
+        virtual common::result<void, fs_error> read(fs::view& file) override;
+        virtual common::result<void, fs_error> read(byte_vec data) override;
+        virtual common::result<void, fs_error> read(byte_vec::iterator begin, byte_vec::iterator end) override;
     };
 }
-#include <core/serialization/serializer_views/yaml_view.inl>
 
+#include <core/serialization/serializer_views/json.inl>

@@ -40,7 +40,10 @@ namespace legion::core::serialization
         virtual void end_container() LEGION_PURE;
 
         virtual common::result<void, fs_error> write(fs::view& file) LEGION_PURE;
-        virtual common::result<void, fs_error> load(fs::view& file) LEGION_PURE;
+
+        virtual common::result<void, fs_error> read(fs::view& file) LEGION_PURE;
+        virtual common::result<void, fs_error> read(byte_vec data) LEGION_PURE;
+        virtual common::result<void, fs_error> read(byte_vec::iterator begin, byte_vec::iterator end) LEGION_PURE;
     };
 }
 

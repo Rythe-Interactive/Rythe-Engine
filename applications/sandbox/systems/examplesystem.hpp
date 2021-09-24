@@ -39,7 +39,7 @@ public:
         app::window& win = ecs::world.get_component<app::window>();
         app::context_guard guard(win);
 
-        auto model = gfx::ModelCache::create_model("Sphere", fs::view("assets://models/sphere.obj"));
+        //auto model = gfx::ModelCache::create_model("Sphere", fs::view("assets://models/sphere.obj"));
 
         //auto material = gfx::MaterialCache::create_material("Default", fs::view("assets://shaders/pbr.shs"));
         //material.set_param(SV_ALBEDO, gfx::TextureCache::create_texture(fs::view("engine://resources/default/albedo")));
@@ -50,10 +50,10 @@ public:
         //material.set_param("discardExcess", false);
         //material.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
 
-        auto material = gfx::MaterialCache::create_material("Default", fs::view("assets://shaders/texture.shs"));
-        material.set_param("_texture", gfx::TextureCache::create_texture(fs::view("engine://resources/default/albedo")));
+        //auto material = gfx::MaterialCache::create_material("Default", fs::view("assets://shaders/texture.shs"));
+        //material.set_param("_texture", gfx::TextureCache::create_texture(fs::view("engine://resources/default/albedo")));
 
-        auto audioSegment = audio::AudioSegmentCache::createAudioSegment("Beep", fs::view("assets://audio/beep4.mp3"));
+       //auto audioSegment = audio::AudioSegmentCache::createAudioSegment("Beep", fs::view("assets://audio/beep4.mp3"));
 
         {
             auto ent = createEntity("Sun");
@@ -62,10 +62,7 @@ public:
             rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
         }
 
-
         //Serialization Test
-        std::string_view filePath1 = "assets://scenes/scene1.json";
-        std::string_view filePath2 = "assets://scenes/scene2.json";
         srl::serializer_registry::register_serializer<example_comp>();
         srl::serializer_registry::register_serializer<position>();
         srl::serializer_registry::register_serializer<rotation>();
@@ -86,27 +83,28 @@ public:
             ent.add_child(child);
         }
 
-        /// EVENTUAL API ///
-        //
-        // auto result = srl::write<srl::json_view>(ecs::Registry::getWorld(), "assets://somefile.lgn");
-        // auto result = srl::write<srl::json_view>("assets://somefile.lgn", ecs::Registry::getWorld());
-        //
-        // srl::json_view j;
-        // auto result = srl::serialize(j, ecs::Registry::getWorld());
-        //
-        // j.write("assets://somefile.lgn"_view);
-        // 
-        //////////////////////
+        std::string_view filePath = "assets://scenes/scene1.json";
+        srl::write<srl::json>(filePath, ecs::Registry::getWorld());
 
-        auto result1 = srl::write<srl::json_view>(filePath1, ecs::Registry::getWorld());
-        auto result2 = srl::write<srl::json_view>(ecs::Registry::getWorld(), filePath2);
 
-        srl::json_view j_view;
-        auto result3 = srl::serialize(j_view, ecs::Registry::getWorld());
+        /////////////////////////////////////////////////////////
+        //                                  EXAMPLE API
+        ////////////////////////////////////////////////////////
 
-        auto file = fs::view("assets://scenes/scene3.json");
-        j_view.write(file);
+         auto result1 = srl::load<srl::json, scene_comp>("assets:://scenes/scene1.json"_view);
+         std::vector<byte> byteVec;
+         auto result2 = srl::load<srl::yaml, scene_comp>(byteVec);
+         auto result3 = srl::load<srl::bson, scene_comp>(byteVec.begin(),byteVec.end());
 
+         srl::json j_view;
+         
+         j_view.read("assets:://scenes/scene1.json"_view);
+         j_view.read(byteVec);
+         j_view.read(byteVec.begin(), byteVec.end());
+
+        auto result4 = srl::deserialize<scene_comp>(j_view);
+
+        /////////////////////////////////////////////////////////
     }
 
     void update(legion::time::span deltaTime)

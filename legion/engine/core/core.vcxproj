@@ -526,7 +526,7 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="serialization\serializationregistry.hpp" />
     <ClInclude Include="serialization\serializer.hpp" />
     <ClInclude Include="serialization\serializer_views\serializer_view.hpp" />
-    <ClInclude Include="serialization\serializer_views\yaml_view.hpp" />
+    <ClInclude Include="serialization\serializer_views\yaml.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
     <ClInclude Include="time\utils.hpp" />
     <ClInclude Include="types\prototype.hpp" />
@@ -747,9 +747,10 @@ del /q ".\xcopyexclude"</Command>
     <None Include="scheduling\process.inl" />
     <None Include="scheduling\processchain.inl" />
     <None Include="scheduling\scheduler.inl" />
-    <None Include="serialization\serializer_views\bson_view.inl" />
-    <None Include="serialization\serializer_views\json_view.inl" />
-    <None Include="serialization\serializer_views\yaml_view.inl" />
+    <None Include="serialization\serialization.inl" />
+    <None Include="serialization\serializer_views\bson.inl" />
+    <None Include="serialization\serializer_views\json.inl" />
+    <None Include="serialization\serializer_views\yaml.inl" />
     <None Include="time\utils.inl" />
     <None Include="serialization\serializationregistry.inl" />
     <None Include="serialization\serializer.inl" />

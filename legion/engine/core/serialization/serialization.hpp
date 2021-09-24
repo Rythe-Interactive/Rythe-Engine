@@ -7,31 +7,27 @@
 
 namespace legion::core::serialization
 {
-    template<typename Type, typename view_type>
-    common::result<void, fs_error> serialize(view_type& s_view, Type data)
-    {
-        auto serializer = serializer_registry::get_serializer<Type>();
-        auto result = serializer->serialize(&data, s_view, "");
-        return result;
-    }
+    template<typename Type, typename ViewType>
+    common::result<void, fs_error> serialize(ViewType& s_view, Type data);
 
-    template<typename view_type = serializer_view&, typename Type>
-    common::result<void, fs_error> write(std::string_view& filePath,Type data)
-    {
-        auto s_view = view_type();
-        auto result = serialize(s_view, data);
-        if (result.has_error())
-            return legion_fs_error(result.error().what());
+    template<typename ViewType = serializer_view&, typename Type>
+    common::result<void, fs_error> write(fs::view file, Type data);
 
-        fs::view file(filePath);
-        return s_view.write(file);
-    }
-
-    template<typename view_type = serializer_view&, typename Type>
-    common::result<void, fs_error> write(Type data, std::string_view& filePath)
-    {
-        return write<view_type>(filePath,data);
-    }
+    template<typename ViewType = serializer_view&, typename Type>
+    common::result<void, fs_error> write(Type data, fs::view file);
 
 
+    template<typename Type, typename ViewType>
+    common::result<void, fs_error> deserialize(ViewType& s_view);
+
+    template<typename ViewType = serializer_view&, typename Type>
+    common::result<void, fs_error> load(fs::view file);
+
+    template<typename ViewType = serializer_view&, typename Type>
+    common::result<void, fs_error> load(std::vector<byte> data);
+
+    template<typename ViewType = serializer_view&, typename Type, typename Iterator>
+    common::result<void, fs_error> load(Iterator begin, Iterator end);
 }
+
+#include <core/serialization/serializer.inl>
