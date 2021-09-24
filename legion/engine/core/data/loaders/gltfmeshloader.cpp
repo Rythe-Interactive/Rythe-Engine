@@ -43,7 +43,7 @@ namespace legion::core
             const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
             const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
             const size_type bufferStart = bufferView.byteOffset + accessor.byteOffset;
-            const size_type stride = accessor.ByteStride(bufferView);
+            const size_type stride = static_cast<size_type>(accessor.ByteStride(bufferView));
             const size_type bufferEnd = bufferStart + accessor.count * stride;
 
             const size_type dataStart = data.size();
@@ -60,12 +60,12 @@ namespace legion::core
 
                 const auto& indexView = model.bufferViews.at(static_cast<size_type>(indices.bufferView));
                 const auto& indexBuffer = model.buffers.at(static_cast<size_type>(indexView.buffer));
-                const size_type indexStart = indexView.byteOffset + indices.byteOffset;
+                const size_type indexStart = indexView.byteOffset + static_cast<size_type>(indices.byteOffset);
                 const size_type indexStride = (indexView.byteStride == 0 ? sizeof(uint16) : indexView.byteStride);
 
                 const auto& valueView = model.bufferViews.at(static_cast<size_type>(values.bufferView));
                 const auto& valueBuffer = model.buffers.at(static_cast<size_type>(valueView.buffer));
-                const size_type valueStart = valueView.byteOffset + values.byteOffset;
+                const size_type valueStart = valueView.byteOffset + static_cast<size_type>(values.byteOffset);
                 const size_type valueStride = (valueView.byteStride == 0 ? sizeof(T) : valueView.byteStride);
 
                 size_type indexPos = indexStart;
@@ -87,7 +87,7 @@ namespace legion::core
             const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
             const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
             const size_type bufferStart = bufferView.byteOffset + accessor.byteOffset;
-            const size_type stride = accessor.ByteStride(bufferView);
+            const size_type stride = static_cast<size_type>(accessor.ByteStride(bufferView));
             const size_type bufferEnd = bufferStart + accessor.count * stride;
 
             const size_type dataStart = data.size();
@@ -122,12 +122,12 @@ namespace legion::core
 
                 const auto& indexView = model.bufferViews.at(static_cast<size_type>(indices.bufferView));
                 const auto& indexBuffer = model.buffers.at(static_cast<size_type>(indexView.buffer));
-                const size_type indexStart = indexView.byteOffset + indices.byteOffset;
+                const size_type indexStart = indexView.byteOffset + static_cast<size_type>(indices.byteOffset);
                 const size_type indexStride = (indexView.byteStride == 0 ? sizeof(uint16) : indexView.byteStride);
 
                 const auto& valueView = model.bufferViews.at(static_cast<size_type>(values.bufferView));
                 const auto& valueBuffer = model.buffers.at(static_cast<size_type>(valueView.buffer));
-                const size_type valueStart = valueView.byteOffset + values.byteOffset;
+                const size_type valueStart = valueView.byteOffset + static_cast<size_type>(values.byteOffset);
                 const size_type valueStride = (valueView.byteStride == 0 ? 3 * sizeof(float) : valueView.byteStride);
 
                 size_type indexPos = indexStart;
@@ -177,7 +177,7 @@ namespace legion::core
             const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
             const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
             const size_type bufferStart = bufferView.byteOffset + accessor.byteOffset;
-            const size_type stride = accessor.ByteStride(bufferView);
+            const size_type stride = static_cast<size_type>(accessor.ByteStride(bufferView));
             const size_type bufferEnd = bufferStart + accessor.count * stride;
 
             const size_type dataStart = data.size();
@@ -271,12 +271,12 @@ namespace legion::core
 
                 const auto& indexView = model.bufferViews.at(static_cast<size_type>(indices.bufferView));
                 const auto& indexBuffer = model.buffers.at(static_cast<size_type>(indexView.buffer));
-                const size_type indexStart = indexView.byteOffset + indices.byteOffset;
+                const size_type indexStart = indexView.byteOffset + static_cast<size_type>(indices.byteOffset);
                 const size_type indexStride = (indexView.byteStride == 0 ? sizeof(uint16) : indexView.byteStride);
 
                 const auto& valueView = model.bufferViews.at(static_cast<size_type>(values.bufferView));
                 const auto& valueBuffer = model.buffers.at(static_cast<size_type>(valueView.buffer));
-                const size_type valueStart = valueView.byteOffset + values.byteOffset;
+                const size_type valueStart = valueView.byteOffset + static_cast<size_type>(values.byteOffset);
                 const size_type valueStride = (valueView.byteStride == 0 ? sizeof(uint16) : valueView.byteStride);
 
                 size_type indexPos = indexStart;
@@ -359,19 +359,42 @@ namespace legion::core
          * @param offset - The mesh Indices offset. ( e.g. For the first submesh 0, for the second submesh submesh[0].indices.size() )
          * @param data - The std::vector to copy the indices data into
          */
-        static void handleGltfIndices(const tinygltf::Model& model, const tinygltf::Accessor& accessor, size_type offset, std::vector<uint>& data)
+        static common::result<void, void> handleGltfIndices(const tinygltf::Model& model, const tinygltf::Accessor& accessor, size_type offset, std::vector<uint>& data)
         {
             const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
             const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
             const size_type bufferStart = bufferView.byteOffset + accessor.byteOffset;
-            const size_type stride = accessor.ByteStride(bufferView);
+            const size_type stride = static_cast<size_type>(accessor.ByteStride(bufferView));
             const size_type bufferEnd = bufferStart + accessor.count * stride;
 
             const size_type dataStart = data.size();
             data.reserve(dataStart + accessor.count);
 
-            for (size_type i = bufferStart; i < bufferEnd; i += stride)
-                data.push_back(static_cast<uint>(*reinterpret_cast<const uint16*>(&buffer.data[i]) + offset));
+            std::vector<std::string> warnings;
+
+            switch (accessor.componentType)
+            {
+            case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
+            {
+                for (size_type i = bufferStart; i < bufferEnd; i += stride)
+                    data.push_back(static_cast<uint>(buffer.data[i] + offset));
+            }
+            break;
+            case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
+            {
+                for (size_type i = bufferStart; i < bufferEnd; i += stride)
+                    data.push_back(static_cast<uint>(*reinterpret_cast<const uint16*>(&buffer.data[i]) + offset));
+            }
+            break;
+            case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
+            {
+                for (size_type i = bufferStart; i < bufferEnd; i += stride)
+                    data.push_back(*reinterpret_cast<const uint*>(&buffer.data[i]) + static_cast<uint>(offset));
+            }
+            break;
+            default:
+                warnings.push_back("Index component type not supported.");
+            }
 
             if (accessor.sparse.isSparse)
             {
@@ -381,12 +404,12 @@ namespace legion::core
 
                 const auto& indexView = model.bufferViews.at(static_cast<size_type>(indices.bufferView));
                 const auto& indexBuffer = model.buffers.at(static_cast<size_type>(indexView.buffer));
-                const size_type indexStart = indexView.byteOffset + indices.byteOffset;
+                const size_type indexStart = indexView.byteOffset + static_cast<size_type>(indices.byteOffset);
                 const size_type indexStride = (indexView.byteStride == 0 ? sizeof(uint16) : indexView.byteStride);
 
                 const auto& valueView = model.bufferViews.at(static_cast<size_type>(values.bufferView));
                 const auto& valueBuffer = model.buffers.at(static_cast<size_type>(valueView.buffer));
-                const size_type valueStart = valueView.byteOffset + values.byteOffset;
+                const size_type valueStart = valueView.byteOffset + static_cast<size_type>(values.byteOffset);
                 const size_type valueStride = (valueView.byteStride == 0 ? sizeof(uint16) : valueView.byteStride);
 
                 size_type indexPos = indexStart;
@@ -394,25 +417,58 @@ namespace legion::core
 
                 for (int i = 0; i < sparse.count; i++)
                 {
-                    const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+                    switch (accessor.componentType)
+                    {
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
+                    {
+                        const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
 
-                    data.at(dataStart + *idx) = *reinterpret_cast<const uint16*>(&valueBuffer.data[valuePos]);;
+                        data.at(dataStart + *idx) = static_cast<uint>(valueBuffer.data[valuePos] + offset);
+                    }
+                    break;
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
+                    {
+                        const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+
+                        data.at(dataStart + *idx) = static_cast<uint>(*reinterpret_cast<const uint16*>(&valueBuffer.data[valuePos]) + offset);
+                    }
+                    break;
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
+                    {
+                        const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+
+                        data.at(dataStart + *idx) = *reinterpret_cast<const uint*>(&valueBuffer.data[valuePos]) + static_cast<uint>(offset);
+                    }
+                    break;
+                    }
 
                     indexPos += indexStride;
                     valuePos += valueStride;
                 }
             }
+
+            return { common::success, warnings };
         }
 
         static math::mat4 getGltfNodeTransform(const tinygltf::Node& node)
         {
+            //return math::mat4(1.f);
+
+            //const math::mat4 convertLeftHanded{
+            //    1.f, 0.f,  0.f, 0.f,
+            //    0.f, 1.f,  0.f, 0.f,
+            //    0.f, 0.f,  1.f, 0.f,
+            //    0.f, 0.f,  0.f, 1.f
+            //};
+
             if (node.matrix.size() == 16u) {
+
                 // Use `matrix' attribute
                 return math::mat4(
                     static_cast<float>(node.matrix[0]), static_cast<float>(node.matrix[1]), static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
                     static_cast<float>(node.matrix[4]), static_cast<float>(node.matrix[5]), static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
                     static_cast<float>(node.matrix[8]), static_cast<float>(node.matrix[9]), static_cast<float>(node.matrix[10]), static_cast<float>(node.matrix[11]),
-                    static_cast<float>(node.matrix[12]), static_cast<float>(node.matrix[13]), static_cast<float>(node.matrix[14]), static_cast<float>(node.matrix[15]));
+                    static_cast<float>(node.matrix[12]), static_cast<float>(node.matrix[13]), -static_cast<float>(node.matrix[14]), static_cast<float>(node.matrix[15]));
             }
             else {
                 math::vec3 pos{ 0,0,0 };
@@ -424,10 +480,10 @@ namespace legion::core
                     scale = math::vec3(static_cast<float>(node.scale[0]), static_cast<float>(node.scale[1]), static_cast<float>(node.scale[2]));
 
                 if (node.rotation.size() == 4)
-                    rot = math::quat(static_cast<float>(node.rotation[0]), static_cast<float>(node.rotation[1]), static_cast<float>(node.rotation[2]), static_cast<float>(node.rotation[3]));
+                    rot = math::quat(static_cast<float>(node.rotation[3]), static_cast<float>(node.rotation[0]), static_cast<float>(node.rotation[1]), static_cast<float>(node.rotation[2]));
 
                 if (node.translation.size() == 3)
-                    pos = math::vec3(static_cast<float>(node.translation[0]), static_cast<float>(node.translation[1]), static_cast<float>(node.translation[2]));
+                    pos = math::vec3(static_cast<float>(node.translation[0]), static_cast<float>(node.translation[1]), -static_cast<float>(node.translation[2]));
 
                 return math::compose(scale, rot, pos);
             }
@@ -497,7 +553,8 @@ namespace legion::core
                 if (primitive.indices >= 0)
                 {
                     const tinygltf::Accessor& indexAccessor = model.accessors.at(index);
-                    detail::handleGltfIndices(model, indexAccessor, vertexOffset, meshData.indices);
+                    auto result = detail::handleGltfIndices(model, indexAccessor, vertexOffset, meshData.indices);
+                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
                 }
                 else
                 {
@@ -514,10 +571,10 @@ namespace legion::core
             return { common::success, warnings };
         }
 
-        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node)
+        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node, const math::mat4& parentTransf)
         {
             std::vector<std::string> warnings;
-            auto transf = detail::getGltfNodeTransform(node);
+            const auto transf = parentTransf * detail::getGltfNodeTransform(node);
 
             const size_type meshIdx = static_cast<size_type>(node.mesh);
 
@@ -537,7 +594,7 @@ namespace legion::core
                     continue;
                 }
 
-                auto result = handleGltfNode(meshData, model, model.nodes[idx]);
+                auto result = handleGltfNode(meshData, model, model.nodes[idx], transf);
                 warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
             }
 
@@ -728,7 +785,7 @@ namespace legion::core
                 continue;
 
             const size_type idx = static_cast<size_type>(nodeIdx);
-            detail::handleGltfNode(meshData, model, model.nodes[idx]);
+            detail::handleGltfNode(meshData, model, model.nodes[idx], math::mat4(1.f));
 
             if (progress)
                 progress->advance_progress(percentagePerNode);
