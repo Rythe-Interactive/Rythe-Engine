@@ -210,7 +210,7 @@ namespace legion::core
         static constexpr auto check(void*)
             -> decltype(void(_T{ std::declval<_Args>()... }), std::true_type());
 
-        template <typename>
+        template <typename...>
         static constexpr auto check(...)
             ->std::false_type;
 
