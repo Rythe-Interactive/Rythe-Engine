@@ -452,28 +452,21 @@ namespace legion::core
 
         static math::mat4 getGltfNodeTransform(const tinygltf::Node& node)
         {
-            //return math::mat4(1.f);
+            if (node.matrix.size() == 16u)
+            {
 
-            //const math::mat4 convertLeftHanded{
-            //    1.f, 0.f,  0.f, 0.f,
-            //    0.f, 1.f,  0.f, 0.f,
-            //    0.f, 0.f,  1.f, 0.f,
-            //    0.f, 0.f,  0.f, 1.f
-            //};
-
-            if (node.matrix.size() == 16u) {
-
-                // Use `matrix' attribute
+                // Use matrix attribute
                 return math::mat4(
-                    static_cast<float>(node.matrix[0]), static_cast<float>(node.matrix[1]), static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
-                    static_cast<float>(node.matrix[4]), static_cast<float>(node.matrix[5]), static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
+                    -static_cast<float>(node.matrix[0]), -static_cast<float>(node.matrix[1]), -static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
+                    -static_cast<float>(node.matrix[4]), -static_cast<float>(node.matrix[5]), -static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
                     static_cast<float>(node.matrix[8]), static_cast<float>(node.matrix[9]), static_cast<float>(node.matrix[10]), static_cast<float>(node.matrix[11]),
-                    static_cast<float>(node.matrix[12]), static_cast<float>(node.matrix[13]), -static_cast<float>(node.matrix[14]), static_cast<float>(node.matrix[15]));
+                    static_cast<float>(node.matrix[12]), static_cast<float>(node.matrix[13]), static_cast<float>(node.matrix[14]), static_cast<float>(node.matrix[15]));
             }
-            else {
-                math::vec3 pos{ 0,0,0 };
-                math::quat rot{ 0,0,0,1 };
-                math::vec3 scale{ 1,1,1 };
+            else
+            {
+                math::vec3 pos{ 0.f, 0.f, 0.f };
+                math::quat rot{ 1.f, 0.f, 0.f, 0.f };
+                math::vec3 scale{ 1.f, 1.f, 1.f };
 
                 // Assume Trans x Rotate x Scale order
                 if (node.scale.size() == 3)
@@ -483,9 +476,12 @@ namespace legion::core
                     rot = math::quat(static_cast<float>(node.rotation[3]), static_cast<float>(node.rotation[0]), static_cast<float>(node.rotation[1]), static_cast<float>(node.rotation[2]));
 
                 if (node.translation.size() == 3)
-                    pos = math::vec3(static_cast<float>(node.translation[0]), static_cast<float>(node.translation[1]), -static_cast<float>(node.translation[2]));
+                    pos = math::vec3(static_cast<float>(node.translation[0]), static_cast<float>(node.translation[1]), static_cast<float>(node.translation[2]));
 
-                return math::compose(scale, rot, pos);
+                auto result = math::compose(scale, rot, pos);
+                result[0] = -result[0];
+                result[1] = -result[1];
+                return result;
             }
         }
 
@@ -580,7 +576,14 @@ namespace legion::core
 
             if (node.mesh >= 0 && meshIdx < model.meshes.size())
             {
-                auto result = handleGltfMesh(meshData, model, model.meshes[meshIdx], transf);
+                const math::mat4 rhToLhMat{
+                     -1.f, 0.f, 0.f, 0.f,
+                     0.f, -1.f, 0.f, 0.f,
+                     0.f, 0.f, 1.f, 0.f,
+                     0.f, 0.f, 0.f, 1.f
+                };
+
+                auto result = handleGltfMesh(meshData, model, model.meshes[meshIdx], transf * rhToLhMat);
                 warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
             }
 
@@ -779,44 +782,37 @@ namespace legion::core
 
         const float percentagePerNode = 10.f / static_cast<float>(model.scenes[sceneToLoad].nodes.size());
 
+        const math::mat4 rootMat{
+                 -1.f, 0.f, 0.f, 0.f,
+                 0.f, -1.f, 0.f, 0.f,
+                 0.f, 0.f, 1.f, 0.f,
+                 0.f, 0.f, 0.f, 1.f
+        };
+
         for (auto& nodeIdx : model.scenes[sceneToLoad].nodes)
         {
             if (nodeIdx < 0)
                 continue;
 
             const size_type idx = static_cast<size_type>(nodeIdx);
-            detail::handleGltfNode(meshData, model, model.nodes[idx], math::mat4(1.f));
+            detail::handleGltfNode(meshData, model, model.nodes[idx], rootMat);
 
             if (progress)
                 progress->advance_progress(percentagePerNode);
         }
 
-        // Convert to left handed coord system
-        for (size_type i = 0; i < meshData.vertices.size(); ++i)
-        {
-            meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
+        const size_type smallestBufferSize = std::min(meshData.normals.size(), std::min(meshData.uvs.size(), meshData.colors.size()));
 
+        for (size_type i = smallestBufferSize; i < meshData.vertices.size(); ++i)
+        {
             if (meshData.normals.size() == i)
                 meshData.normals.push_back(math::vec3::up);
-            else
-                meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
 
             if (meshData.uvs.size() == i)
                 meshData.uvs.push_back(math::vec2(0, 0));
-            else
-                meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
 
             if (meshData.colors.size() == i)
                 meshData.colors.push_back(core::math::colors::grey);
-        }
-
-        // Because we only flip one axis we also need to flip the triangle rotation.
-        for (size_type i = 0; i < meshData.indices.size(); i += 3)
-        {
-            uint i1 = meshData.indices[i + 1];
-            uint i2 = meshData.indices[i + 2];
-            meshData.indices[i + 1] = i2;
-            meshData.indices[i + 2] = i1;
         }
 
         mesh::calculate_tangents(&meshData);
