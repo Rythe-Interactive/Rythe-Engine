@@ -86,9 +86,9 @@ shader(fragment)
         }
 
         if(useAlbedoTex)
-            material.albedo = AlbedoMap(albedoTex, material.texcoords);
+            material.albedo = AlbedoMap(albedoTex, stdio(vertexcolor), material.texcoords);
         else
-            material.albedo = pow(albedoColor, vec4(vec3(2.2), 1.0));
+            material.albedo = pow(albedoColor * stdio(vertexcolor), vec4(vec3(2.2), 1.0));
 
         if(useNormal)
             material.normal = NormalMap(normalTex, material.texcoords, material.tbn);

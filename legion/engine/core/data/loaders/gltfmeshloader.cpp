@@ -13,7 +13,7 @@ namespace legion::core
     {
         static assets::asset<image> loadGLTFImage(const tinygltf::Image& img)
         {
-            auto hash = nameHash(img.name);
+            const auto hash = nameHash(img.name);
 
             auto handle = assets::get<image>(hash);
             if (handle)
@@ -37,27 +37,129 @@ namespace legion::core
          * @param bufferView - the tinygltf::BufferView containing information about data size and offset
          * @param data - std::Vector<T> where the buffer is going to be copied into. The vector will be resized to vector.size()+(tinygltf data size)
          */
-        template <class T>
-        static void handleGltfBuffer(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, std::vector<T>* data)
+        template<typename T>
+        static void handleGltfBuffer(const tinygltf::Model& model, const tinygltf::Accessor& accessor, std::vector<T>& data)
         {
-            size_t size = data->size();
-            data->resize(size + bufferView.byteLength / sizeof(T));
-            memcpy(data->data() + size, buffer.data.data() + bufferView.byteOffset, bufferView.byteLength);
+            const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
+            const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
+            const size_type bufferStart = bufferView.byteOffset + accessor.byteOffset;
+            const size_type stride = static_cast<size_type>(accessor.ByteStride(bufferView));
+            const size_type bufferEnd = bufferStart + accessor.count * stride;
+
+            const size_type dataStart = data.size();
+            data.reserve(dataStart + accessor.count);
+
+            for (size_t i = bufferStart; i < bufferEnd; i += stride)
+                data.push_back(*reinterpret_cast<const T*>(&buffer.data[i]));
+
+            if (accessor.sparse.isSparse)
+            {
+                const auto& sparse = accessor.sparse;
+                const auto& indices = sparse.indices;
+                const auto& values = sparse.values;
+
+                const auto& indexView = model.bufferViews.at(static_cast<size_type>(indices.bufferView));
+                const auto& indexBuffer = model.buffers.at(static_cast<size_type>(indexView.buffer));
+                const size_type indexStart = indexView.byteOffset + static_cast<size_type>(indices.byteOffset);
+                const size_type indexStride = (indexView.byteStride == 0 ? sizeof(uint16) : indexView.byteStride);
+
+                const auto& valueView = model.bufferViews.at(static_cast<size_type>(values.bufferView));
+                const auto& valueBuffer = model.buffers.at(static_cast<size_type>(valueView.buffer));
+                const size_type valueStart = valueView.byteOffset + static_cast<size_type>(values.byteOffset);
+                const size_type valueStride = (valueView.byteStride == 0 ? sizeof(T) : valueView.byteStride);
+
+                size_type indexPos = indexStart;
+                size_type valuePos = valueStart;
+
+                for (int i = 0; i < sparse.count; i++)
+                {
+                    const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+                    data.at(dataStart + *idx) = *reinterpret_cast<const T*>(&valueBuffer.data[valuePos]);
+
+                    indexPos += indexStride;
+                    valuePos += valueStride;
+                }
+            }
         }
 
-        static void handleGltfBuffer(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, std::vector<math::vec3>* data, const math::mat4 transform, bool normal = false)
+        static void handleGltfBuffer(const tinygltf::Model& model, const tinygltf::Accessor& accessor, std::vector<math::vec3>& data, const math::mat4 transform, bool normal = false)
         {
-            size_t size = data->size();
-            data->resize(size + bufferView.byteLength / sizeof(math::vec3));
-            memcpy(data->data() + size, buffer.data.data() + bufferView.byteOffset, bufferView.byteLength);
+            const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
+            const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
+            const size_type bufferStart = bufferView.byteOffset + accessor.byteOffset;
+            const size_type stride = static_cast<size_type>(accessor.ByteStride(bufferView));
+            const size_type bufferEnd = bufferStart + accessor.count * stride;
 
-            for (size_type i = size; i < data->size(); i++)
+            const size_type dataStart = data.size();
+            data.reserve(dataStart + accessor.count);
+
+            if (normal)
             {
-                auto& item = data->at(i);
+                for (size_t i = bufferStart; i < bufferEnd; i += stride)
+                {
+                    const float* x = reinterpret_cast<const float*>(&buffer.data[i]);
+                    const float* y = reinterpret_cast<const float*>(&buffer.data[i + sizeof(float)]);
+                    const float* z = reinterpret_cast<const float*>(&buffer.data[i + 2 * sizeof(float)]);
+                    data.push_back(math::normalize((transform * math::vec4(*x, *y, *z, 0)).xyz()));
+                }
+            }
+            else
+            {
+                for (size_t i = bufferStart; i < bufferEnd; i += stride)
+                {
+                    const float* x = reinterpret_cast<const float*>(&buffer.data[i]);
+                    const float* y = reinterpret_cast<const float*>(&buffer.data[i + sizeof(float)]);
+                    const float* z = reinterpret_cast<const float*>(&buffer.data[i + 2 * sizeof(float)]);
+                    data.push_back((transform * math::vec4(*x, *y, *z, 1)).xyz());
+                }
+            }
+
+            if (accessor.sparse.isSparse)
+            {
+                const auto& sparse = accessor.sparse;
+                const auto& indices = sparse.indices;
+                const auto& values = sparse.values;
+
+                const auto& indexView = model.bufferViews.at(static_cast<size_type>(indices.bufferView));
+                const auto& indexBuffer = model.buffers.at(static_cast<size_type>(indexView.buffer));
+                const size_type indexStart = indexView.byteOffset + static_cast<size_type>(indices.byteOffset);
+                const size_type indexStride = (indexView.byteStride == 0 ? sizeof(uint16) : indexView.byteStride);
+
+                const auto& valueView = model.bufferViews.at(static_cast<size_type>(values.bufferView));
+                const auto& valueBuffer = model.buffers.at(static_cast<size_type>(valueView.buffer));
+                const size_type valueStart = valueView.byteOffset + static_cast<size_type>(values.byteOffset);
+                const size_type valueStride = (valueView.byteStride == 0 ? 3 * sizeof(float) : valueView.byteStride);
+
+                size_type indexPos = indexStart;
+                size_type valuePos = valueStart;
                 if (normal)
-                    item = math::normalize((transform * math::vec4(item.x, item.y, item.z, 0)).xyz());
+                {
+                    for (int i = 0; i < sparse.count; i++)
+                    {
+                        const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+                        const float* x = reinterpret_cast<const float*>(&valueBuffer.data[valuePos]);
+                        const float* y = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + sizeof(float)]);
+                        const float* z = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + 2 * sizeof(float)]);
+                        data.at(dataStart + *idx) = math::normalize((transform * math::vec4(*x, *y, *z, 0)).xyz());
+
+                        indexPos += indexStride;
+                        valuePos += valueStride;
+                    }
+                }
                 else
-                    item = (transform * math::vec4(item.x, item.y, item.z, 1)).xyz();
+                {
+                    for (int i = 0; i < sparse.count; i++)
+                    {
+                        const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+                        const float* x = reinterpret_cast<const float*>(&valueBuffer.data[valuePos]);
+                        const float* y = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + sizeof(float)]);
+                        const float* z = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + 2 * sizeof(float)]);
+                        data.at(dataStart + *idx) = (transform * math::vec4(*x, *y, *z, 1)).xyz();
+
+                        indexPos += indexStride;
+                        valuePos += valueStride;
+                    }
+                }
             }
         }
 
@@ -70,83 +172,181 @@ namespace legion::core
          * @param componentType - tinygltf componentType, Vertex color is expected to come in float, unsigned byte or unsigned short - will be handled by the function
          * @param data - std::vector<color> the destination of the data copy. The vector will be resized to vector.size()+(tinygltf vertex color size)
          */
-        static common::result<void, void> handleGltfVertexColor(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, int accessorType, int componentType, std::vector<math::color>* data)
+        static common::result<void, void> handleGltfVertexColor(const tinygltf::Model& model, const tinygltf::Accessor& accessor, int accessorType, int componentType, std::vector<math::color>& data)
         {
+            const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
+            const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
+            const size_type bufferStart = bufferView.byteOffset + accessor.byteOffset;
+            const size_type stride = static_cast<size_type>(accessor.ByteStride(bufferView));
+            const size_type bufferEnd = bufferStart + accessor.count * stride;
+
+            const size_type dataStart = data.size();
+            data.reserve(dataStart + accessor.count);
+
             std::vector<std::string> warnings;
             //colors in glft are in vec3/vec4 float/unsigned byte/unsigned short
-
-            size_t size = data->size();
-            if (accessorType == TINYGLTF_TYPE_VEC3)
+            for (size_type i = bufferStart; i < bufferEnd; i += stride)
             {
-                // Copy the vertex colors into the vector, keeping in my mind that the vertex color data is only r,g,b
-
-                size_t dataIndex = size;
-                if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
+                if (accessorType == TINYGLTF_TYPE_VEC3)
                 {
-                    // Vertex colors in unsigned byte
-                    // Currently not supported
-                    warnings.emplace_back("Vert colors for UNSIGNED BYTE not implemented");
-                }
-                else if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
-                {
-                    // Vertex colors in unsigned short
-                    // Currently not supported
-                    warnings.emplace_back("Vert colors for UNSIGNED SHORT not implemented");
-                }
-                else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
-                {
-                    // Vertex colors in float
-                    data->resize(size + bufferView.byteLength / sizeof(math::vec3));
-                    for (size_type i = 0; i < bufferView.byteLength; i += 3 * sizeof(float))
+                    // Copy the vertex colors into the vector, keeping in my mind that the vertex color data is only r,g,b
+                    switch (componentType)
                     {
-                        float r = *reinterpret_cast<const float*>(&buffer.data.at(i) + bufferView.byteOffset);
-                        float g = *reinterpret_cast<const float*>(&buffer.data.at(i + sizeof(float)) + bufferView.byteOffset);
-                        float b = *reinterpret_cast<const float*>(&buffer.data.at(i + 2 * sizeof(float)) + bufferView.byteOffset);
-                        data->at(dataIndex++) = math::color(r, g, b);
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
+                    {
+                        // Vertex colors in unsigned byte
+                        const float r = static_cast<float>(buffer.data[i]) / 255.f;
+                        const float g = static_cast<float>(buffer.data[i + sizeof(byte)]) / 255.f;
+                        const float b = static_cast<float>(buffer.data[i + 2 * sizeof(byte)]) / 255.f;
+                        data.emplace_back(r, g, b);
+                    }
+                    break;
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
+                    {
+                        // Vertex colors in unsigned short
+                        // Currently not supported
+                        warnings.emplace_back("Vert colors for UNSIGNED SHORT not implemented");
+                    }
+                    break;
+                    case TINYGLTF_COMPONENT_TYPE_FLOAT:
+                    {
+                        // Vertex colors in float
+
+                        const float* r = reinterpret_cast<const float*>(&buffer.data[i]);
+                        const float* g = reinterpret_cast<const float*>(&buffer.data[i + sizeof(float)]);
+                        const float* b = reinterpret_cast<const float*>(&buffer.data[i + 2 * sizeof(float)]);
+                        data.emplace_back(*r, *g, *b);
+                    }
+                    break;
+                    default:
+                        warnings.emplace_back("Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
+                    }
+                }
+                else if (accessorType == TINYGLTF_TYPE_VEC4)
+                {
+                    // Copy the vertex colors into the vector, keeping in my mind that the vertex color data is r,g,b,a
+                    switch (componentType)
+                    {
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
+                    {
+                        // Vertex colors in unsigned byte
+                        const float r = static_cast<float>(buffer.data[i]) / 255.f;
+                        const float g = static_cast<float>(buffer.data[i + sizeof(byte)]) / 255.f;
+                        const float b = static_cast<float>(buffer.data[i + 2 * sizeof(byte)]) / 255.f;
+                        const float a = static_cast<float>(buffer.data[i + 3 * sizeof(byte)]) / 255.f;
+                        data.emplace_back(r, g, b, a);
+                    }
+                    break;
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
+                    {
+                        // Vertex colors in unsigned short
+                        // Currently not supported
+                        warnings.emplace_back("Vert colors for UNSIGNED SHORT not implemented");
+                    }
+                    break;
+                    case TINYGLTF_COMPONENT_TYPE_FLOAT:
+                    {
+                        // Vertex colors in float
+                        const float* r = reinterpret_cast<const float*>(&buffer.data[i]);
+                        const float* g = reinterpret_cast<const float*>(&buffer.data[i + sizeof(float)]);
+                        const float* b = reinterpret_cast<const float*>(&buffer.data[i + 2 * sizeof(float)]);
+                        const float* a = reinterpret_cast<const float*>(&buffer.data[i + 3 * sizeof(float)]);
+                        data.emplace_back(*r, *g, *b, *a);
+                    }
+                    break;
+                    default:
+                        warnings.emplace_back("Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
                     }
                 }
                 else
-                {
-                    warnings.emplace_back("Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
-                }
+                    warnings.emplace_back("Vert colors were not vec3 or vec4, skipping colors");
             }
-            else if (accessorType == TINYGLTF_TYPE_VEC4)
+
+
+            if (accessor.sparse.isSparse)
             {
-                // Copy the vertex colors into the vector, keeping in my mind that the vertex color data is r,g,b,a
+                const auto& sparse = accessor.sparse;
+                const auto& indices = sparse.indices;
+                const auto& values = sparse.values;
 
-                size_t dataIndex = size;
-                if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE)
-                {
-                    // Vertex colors in unsigned byte
-                    // Currently not supported
-                    warnings.emplace_back("Vert colors for UNSIGNED BYTE not implemented");
-                }
-                else if (componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT)
-                {
-                    // Vertex colors in unsigned short
-                    // Currently not supported
-                    warnings.emplace_back("Vert colors for UNSIGNED SHORT not implemented");
-                }
-                else if (componentType == TINYGLTF_COMPONENT_TYPE_FLOAT)
-                {
-                    // Vertex colors in float
-                    data->resize(size + bufferView.byteLength / sizeof(math::vec4));
+                const auto& indexView = model.bufferViews.at(static_cast<size_type>(indices.bufferView));
+                const auto& indexBuffer = model.buffers.at(static_cast<size_type>(indexView.buffer));
+                const size_type indexStart = indexView.byteOffset + static_cast<size_type>(indices.byteOffset);
+                const size_type indexStride = (indexView.byteStride == 0 ? sizeof(uint16) : indexView.byteStride);
 
-                    for (size_type i = 0; i < bufferView.byteLength; i += 4 * sizeof(float))
+                const auto& valueView = model.bufferViews.at(static_cast<size_type>(values.bufferView));
+                const auto& valueBuffer = model.buffers.at(static_cast<size_type>(valueView.buffer));
+                const size_type valueStart = valueView.byteOffset + static_cast<size_type>(values.byteOffset);
+                const size_type valueStride = (valueView.byteStride == 0 ? sizeof(uint16) : valueView.byteStride);
+
+                size_type indexPos = indexStart;
+                size_type valuePos = valueStart;
+
+                for (int i = 0; i < sparse.count; i++)
+                {
+                    if (accessorType == TINYGLTF_TYPE_VEC3)
                     {
-                        float r = *reinterpret_cast<const float*>(&buffer.data.at(i) + bufferView.byteOffset);
-                        float g = *reinterpret_cast<const float*>(&buffer.data.at(i + sizeof(float)) + bufferView.byteOffset);
-                        float b = *reinterpret_cast<const float*>(&buffer.data.at(i + 2 * sizeof(float)) + bufferView.byteOffset);
-                        float a = *reinterpret_cast<const float*>(&buffer.data.at(i + 3 * sizeof(float)) + bufferView.byteOffset);
-                        data->at(dataIndex++) = math::color(r, g, b, a);
+                        switch (componentType)
+                        {
+                        case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
+                        {
+                            const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+                            const float r = static_cast<float>(valueBuffer.data[valuePos]) / 255.f;
+                            const float g = static_cast<float>(valueBuffer.data[valuePos + sizeof(byte)]) / 255.f;
+                            const float b = static_cast<float>(valueBuffer.data[valuePos + 2 * sizeof(byte)]) / 255.f;
+                            data.at(dataStart + *idx) = math::color(r, g, b);
+                        }
+                        break;
+                        case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
+                        {
+                        }
+                        break;
+                        case TINYGLTF_COMPONENT_TYPE_FLOAT:
+                        {
+                            const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+                            const float* r = reinterpret_cast<const float*>(&valueBuffer.data[valuePos]);
+                            const float* g = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + sizeof(float)]);
+                            const float* b = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + 2 * sizeof(float)]);
+                            data.at(dataStart + *idx) = math::color(*r, *g, *b);
+                        }
+                        break;
+                        }
                     }
-                }
-                else
-                {
-                    warnings.emplace_back("Vert colors were not stored as UNSIGNED BYTE/SHORT or float, skipping");
+                    else if (accessorType == TINYGLTF_TYPE_VEC4)
+                    {
+                        switch (componentType)
+                        {
+                        case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
+                        {
+                            const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+                            const float r = static_cast<float>(valueBuffer.data[valuePos]) / 255.f;
+                            const float g = static_cast<float>(valueBuffer.data[valuePos + sizeof(byte)]) / 255.f;
+                            const float b = static_cast<float>(valueBuffer.data[valuePos + 2 * sizeof(byte)]) / 255.f;
+                            const float a = static_cast<float>(valueBuffer.data[valuePos + 3 * sizeof(byte)]) / 255.f;
+                            data.at(dataStart + *idx) = math::color(r, g, b, a);
+                        }
+                        break;
+                        case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
+                        {
+                        }
+                        break;
+                        case TINYGLTF_COMPONENT_TYPE_FLOAT:
+                        {
+                            const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+                            const float* r = reinterpret_cast<const float*>(&valueBuffer.data[valuePos]);
+                            const float* g = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + sizeof(float)]);
+                            const float* b = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + 2 * sizeof(float)]);
+                            const float* a = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + 3 * sizeof(float)]);
+                            data.at(dataStart + *idx) = math::color(*r, *g, *b, *a);
+                        }
+                        break;
+                        }
+                    }
+
+                    indexPos += indexStride;
+                    valuePos += valueStride;
                 }
             }
-            else warnings.emplace_back("Vert colors were not vec3 or vec4, skipping colors");
 
             return { common::success, warnings };
         }
@@ -159,46 +359,129 @@ namespace legion::core
          * @param offset - The mesh Indices offset. ( e.g. For the first submesh 0, for the second submesh submesh[0].indices.size() )
          * @param data - The std::vector to copy the indices data into
          */
-        static void handleGltfIndices(const tinygltf::Buffer& buffer, const tinygltf::BufferView& bufferView, size_type offset, size_type vertexCount, std::vector<uint>& data)
+        static common::result<void, void> handleGltfIndices(const tinygltf::Model& model, const tinygltf::Accessor& accessor, size_type offset, std::vector<uint>& data)
         {
-            size_t size = data.size();
-            //indices in glft are in int16
-            data.reserve(size + bufferView.byteLength / sizeof(int16));
+            const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
+            const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
+            const size_type bufferStart = bufferView.byteOffset + accessor.byteOffset;
+            const size_type stride = static_cast<size_type>(accessor.ByteStride(bufferView));
+            const size_type bufferEnd = bufferStart + accessor.count * stride;
 
-            std::vector<int16> origin;
-            origin.resize(bufferView.byteLength / sizeof(int16));
-            memcpy(origin.data(), buffer.data.data() + bufferView.byteOffset, bufferView.byteLength);
+            const size_type dataStart = data.size();
+            data.reserve(dataStart + accessor.count);
 
-            for (size_type i = 0; i < origin.size(); ++i)
-                data.push_back(static_cast<uint>((static_cast<size_type>(static_cast<int>(vertexCount) + static_cast<int>(origin[i])) % vertexCount) + offset));
+            std::vector<std::string> warnings;
+
+            switch (accessor.componentType)
+            {
+            case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
+            {
+                for (size_type i = bufferStart; i < bufferEnd; i += stride)
+                    data.push_back(static_cast<uint>(buffer.data[i] + offset));
+            }
+            break;
+            case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
+            {
+                for (size_type i = bufferStart; i < bufferEnd; i += stride)
+                    data.push_back(static_cast<uint>(*reinterpret_cast<const uint16*>(&buffer.data[i]) + offset));
+            }
+            break;
+            case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
+            {
+                for (size_type i = bufferStart; i < bufferEnd; i += stride)
+                    data.push_back(*reinterpret_cast<const uint*>(&buffer.data[i]) + static_cast<uint>(offset));
+            }
+            break;
+            default:
+                warnings.push_back("Index component type not supported.");
+            }
+
+            if (accessor.sparse.isSparse)
+            {
+                const auto& sparse = accessor.sparse;
+                const auto& indices = sparse.indices;
+                const auto& values = sparse.values;
+
+                const auto& indexView = model.bufferViews.at(static_cast<size_type>(indices.bufferView));
+                const auto& indexBuffer = model.buffers.at(static_cast<size_type>(indexView.buffer));
+                const size_type indexStart = indexView.byteOffset + static_cast<size_type>(indices.byteOffset);
+                const size_type indexStride = (indexView.byteStride == 0 ? sizeof(uint16) : indexView.byteStride);
+
+                const auto& valueView = model.bufferViews.at(static_cast<size_type>(values.bufferView));
+                const auto& valueBuffer = model.buffers.at(static_cast<size_type>(valueView.buffer));
+                const size_type valueStart = valueView.byteOffset + static_cast<size_type>(values.byteOffset);
+                const size_type valueStride = (valueView.byteStride == 0 ? sizeof(uint16) : valueView.byteStride);
+
+                size_type indexPos = indexStart;
+                size_type valuePos = valueStart;
+
+                for (int i = 0; i < sparse.count; i++)
+                {
+                    switch (accessor.componentType)
+                    {
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE:
+                    {
+                        const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+
+                        data.at(dataStart + *idx) = static_cast<uint>(valueBuffer.data[valuePos] + offset);
+                    }
+                    break;
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT:
+                    {
+                        const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+
+                        data.at(dataStart + *idx) = static_cast<uint>(*reinterpret_cast<const uint16*>(&valueBuffer.data[valuePos]) + offset);
+                    }
+                    break;
+                    case TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT:
+                    {
+                        const uint16* idx = reinterpret_cast<const uint16*>(&indexBuffer.data[indexPos]);
+
+                        data.at(dataStart + *idx) = *reinterpret_cast<const uint*>(&valueBuffer.data[valuePos]) + static_cast<uint>(offset);
+                    }
+                    break;
+                    }
+
+                    indexPos += indexStride;
+                    valuePos += valueStride;
+                }
+            }
+
+            return { common::success, warnings };
         }
 
         static math::mat4 getGltfNodeTransform(const tinygltf::Node& node)
         {
-            if (node.matrix.size() == 16) {
-                // Use `matrix' attribute
+            if (node.matrix.size() == 16u)
+            {
+
+                // Use matrix attribute
                 return math::mat4(
-                    static_cast<float>(node.matrix[0]), static_cast<float>(node.matrix[1]), static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
-                    static_cast<float>(node.matrix[4]), static_cast<float>(node.matrix[5]), static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
+                    -static_cast<float>(node.matrix[0]), -static_cast<float>(node.matrix[1]), -static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
+                    -static_cast<float>(node.matrix[4]), -static_cast<float>(node.matrix[5]), -static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
                     static_cast<float>(node.matrix[8]), static_cast<float>(node.matrix[9]), static_cast<float>(node.matrix[10]), static_cast<float>(node.matrix[11]),
                     static_cast<float>(node.matrix[12]), static_cast<float>(node.matrix[13]), static_cast<float>(node.matrix[14]), static_cast<float>(node.matrix[15]));
             }
-            else {
-                math::vec3 pos{ 0,0,0 };
-                math::quat rot{ 0,0,0,1 };
-                math::vec3 scale{ 1,1,1 };
+            else
+            {
+                math::vec3 pos{ 0.f, 0.f, 0.f };
+                math::quat rot{ 1.f, 0.f, 0.f, 0.f };
+                math::vec3 scale{ 1.f, 1.f, 1.f };
 
                 // Assume Trans x Rotate x Scale order
                 if (node.scale.size() == 3)
                     scale = math::vec3(static_cast<float>(node.scale[0]), static_cast<float>(node.scale[1]), static_cast<float>(node.scale[2]));
 
                 if (node.rotation.size() == 4)
-                    rot = math::quat(static_cast<float>(node.rotation[0]), static_cast<float>(node.rotation[1]), static_cast<float>(node.rotation[2]), static_cast<float>(node.rotation[3]));
+                    rot = math::quat(static_cast<float>(node.rotation[3]), static_cast<float>(node.rotation[0]), static_cast<float>(node.rotation[1]), static_cast<float>(node.rotation[2]));
 
                 if (node.translation.size() == 3)
                     pos = math::vec3(static_cast<float>(node.translation[0]), static_cast<float>(node.translation[1]), static_cast<float>(node.translation[2]));
 
-                return math::compose(scale, rot, pos);
+                auto result = math::compose(scale, rot, pos);
+                result[0] = -result[0];
+                result[1] = -result[1];
+                return result;
             }
         }
 
@@ -213,12 +496,13 @@ namespace legion::core
             if (mesh.primitives.size())
                 m.materialIndex = mesh.primitives[0].material;
 
+            size_type primitiveIndex = 0;
             for (auto primitive : mesh.primitives)
             {
                 // Loop through all primitives in the mesh
                 // Primitives can be vertex position, normal, texcoord (uv) and vertex colors
 
-                size_type vertexOffset = meshData.vertices.size();
+                const size_type vertexOffset = meshData.vertices.size();
 
                 for (auto& attrib : primitive.attributes)
                 {
@@ -226,43 +510,73 @@ namespace legion::core
                     // Depending on the attribute the data is copied into a different std::vector in meshData
 
                     const tinygltf::Accessor& accessor = model.accessors.at(static_cast<size_type>(attrib.second));
-                    const tinygltf::BufferView& view = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
-                    const tinygltf::Buffer& buff = model.buffers.at(static_cast<size_type>(view.buffer));
                     if (attrib.first.compare("POSITION") == 0)
                     {
                         // Position data
-                        detail::handleGltfBuffer(buff, view, &(meshData.vertices), transform);
+                        detail::handleGltfBuffer(model, accessor, meshData.vertices, transform);
                     }
                     else if (attrib.first.compare("NORMAL") == 0)
                     {
                         // Normal data
-                        detail::handleGltfBuffer(buff, view, &(meshData.normals), transform, true);
+                        detail::handleGltfBuffer(model, accessor, meshData.normals, transform, true);
                     }
                     else if (attrib.first.compare("TEXCOORD_0") == 0)
                     {
                         // UV data
-                        detail::handleGltfBuffer(buff, view, &(meshData.uvs));
+                        detail::handleGltfBuffer(model, accessor, meshData.uvs);
                     }
                     else if (attrib.first.compare("COLOR_0") == 0)
                     {
                         // Vertex color data
-                        auto result = detail::handleGltfVertexColor(buff, view, accessor.type, accessor.componentType, &(meshData.colors));
+                        auto result = detail::handleGltfVertexColor(model, accessor, accessor.type, accessor.componentType, meshData.colors);
                         warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
                     }
                     else
                     {
-                        log::warn("More data to be found in gltf. Data can be accesed through: {}", attrib.first);
+                        warnings.push_back("More data to be found in gltf. Data can be accesed through: " + attrib.first);
                     }
                 }
 
-                size_type vertexCount = meshData.vertices.size() - vertexOffset;
+
+                const size_type smallestBufferSize = std::min(meshData.normals.size(), std::min(meshData.uvs.size(), meshData.colors.size()));
+                const size_type vertexCount = meshData.vertices.size();
+                meshData.normals.reserve(vertexCount);
+                meshData.uvs.reserve(vertexCount);
+                meshData.colors.reserve(vertexCount);
+
+                for (size_type i = smallestBufferSize; i < vertexCount; ++i)
+                {
+                    if (meshData.normals.size() == i)
+                        meshData.normals.push_back(math::vec3::up);
+
+                    if (meshData.uvs.size() == i)
+                        meshData.uvs.push_back(math::vec2(0, 0));
+
+                    if (meshData.colors.size() == i)
+                        meshData.colors.push_back(core::math::colors::white);
+                }
 
                 // Find the indices of our mesh and copy them into meshData.indices
-                size_type index = primitive.indices < 0 ? vertexCount - static_cast<size_type>(primitive.indices * -1) : static_cast<size_type>(primitive.indices);
-                const tinygltf::Accessor& indexAccessor = model.accessors.at(index);
-                const tinygltf::BufferView& indexBufferView = model.bufferViews.at(static_cast<size_type>(indexAccessor.bufferView));
-                const tinygltf::Buffer& indexBuffer = model.buffers.at(static_cast<size_type>(indexBufferView.buffer));
-                detail::handleGltfIndices(indexBuffer, indexBufferView, vertexOffset, vertexCount, meshData.indices);
+                const size_type index = static_cast<size_type>(primitive.indices);
+
+                if (index > model.accessors.size())
+                {
+                    warnings.push_back("Invalid index accessor index in primitive: " + std::to_string(primitiveIndex));
+                    return { common::error, warnings };
+                }
+
+                if (primitive.indices >= 0)
+                {
+                    const tinygltf::Accessor& indexAccessor = model.accessors.at(index);
+                    auto result = detail::handleGltfIndices(model, indexAccessor, vertexOffset, meshData.indices);
+                    warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
+                }
+                else
+                {
+                    for (uint i = static_cast<uint>(vertexOffset); i < meshData.vertices.size(); i++)
+                        meshData.indices.push_back(i);
+                }
+                primitiveIndex++;
             }
 
             // Calculate size of submesh
@@ -272,32 +586,37 @@ namespace legion::core
             return { common::success, warnings };
         }
 
-        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node)
+        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node, const math::mat4& parentTransf)
         {
             std::vector<std::string> warnings;
-            auto transf = detail::getGltfNodeTransform(node);
+            const auto transf = parentTransf * detail::getGltfNodeTransform(node);
 
-            if (static_cast<size_type>(node.mesh) < model.meshes.size())
+            const size_type meshIdx = static_cast<size_type>(node.mesh);
+
+            if (node.mesh >= 0 && meshIdx < model.meshes.size())
             {
-                size_type meshIdx = node.mesh < 0 ? model.meshes.size() - static_cast<size_type>(node.mesh * -1) : static_cast<size_type>(node.mesh);
-                auto result = handleGltfMesh(meshData, model, model.meshes[meshIdx], transf);
+                const math::mat4 rhToLhMat{
+                     -1.f, 0.f, 0.f, 0.f,
+                     0.f, -1.f, 0.f, 0.f,
+                     0.f, 0.f, 1.f, 0.f,
+                     0.f, 0.f, 0.f, 1.f
+                };
+
+                auto result = handleGltfMesh(meshData, model, model.meshes[meshIdx], transf * rhToLhMat);
                 warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
             }
 
             for (auto& nodeIdx : node.children)
             {
-                size_type idx;
-                if (static_cast<size_type>(nodeIdx) >= model.nodes.size())
+                const size_type idx = static_cast<size_type>(nodeIdx);
+
+                if (nodeIdx < 0 && idx >= model.nodes.size())
                 {
                     warnings.emplace_back("invalid node in GLTF");
                     continue;
                 }
-                else if (nodeIdx < 0)
-                    idx = model.nodes.size() - static_cast<size_type>(nodeIdx * -1);
-                else
-                    idx = static_cast<size_type>(nodeIdx);
 
-                auto result = handleGltfNode(meshData, model, model.nodes[idx]);
+                auto result = handleGltfNode(meshData, model, model.nodes[idx], transf);
                 warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
             }
 
@@ -478,45 +797,27 @@ namespace legion::core
             return { legion_exception_msg("GLTF model contained 0 scenes"), warnings };
         }
 
-        const size_type sceneToLoad = model.defaultScene < 0 ? model.scenes.size() - static_cast<size_type>(model.defaultScene * -1) : static_cast<size_type>(model.defaultScene);
+        const size_type sceneToLoad = model.defaultScene < 0 ? 0 : static_cast<size_type>(model.defaultScene);
 
         const float percentagePerNode = 10.f / static_cast<float>(model.scenes[sceneToLoad].nodes.size());
 
+        const math::mat4 rootMat{
+                 -1.f, 0.f, 0.f, 0.f,
+                 0.f, -1.f, 0.f, 0.f,
+                 0.f, 0.f, 1.f, 0.f,
+                 0.f, 0.f, 0.f, 1.f
+        };
+
         for (auto& nodeIdx : model.scenes[sceneToLoad].nodes)
         {
-            const size_type idx = nodeIdx < 0 ? model.nodes.size() - static_cast<size_type>(nodeIdx * -1) : static_cast<size_type>(nodeIdx);
-            detail::handleGltfNode(meshData, model, model.nodes[idx]);
+            if (nodeIdx < 0)
+                continue;
+
+            const size_type idx = static_cast<size_type>(nodeIdx);
+            detail::handleGltfNode(meshData, model, model.nodes[idx], rootMat);
 
             if (progress)
                 progress->advance_progress(percentagePerNode);
-        }
-
-        // Convert to left handed coord system
-        for (size_type i = 0; i < meshData.vertices.size(); ++i)
-        {
-            meshData.vertices[i] = meshData.vertices[i] * math::vec3(-1, 1, 1);
-
-            if (meshData.normals.size() == i)
-                meshData.normals.push_back(math::vec3::up);
-            else
-                meshData.normals[i] = meshData.normals[i] * math::vec3(-1, 1, 1);
-
-            if (meshData.uvs.size() == i)
-                meshData.uvs.push_back(math::vec2(0, 0));
-            else
-                meshData.uvs[i] = meshData.uvs[i] * math::vec2(1, -1);
-
-            if (meshData.colors.size() == i)
-                meshData.colors.push_back(core::math::colors::grey);
-        }
-
-        // Because we only flip one axis we also need to flip the triangle rotation.
-        for (size_type i = 0; i < meshData.indices.size(); i += 3)
-        {
-            uint i1 = meshData.indices[i + 1];
-            uint i2 = meshData.indices[i + 2];
-            meshData.indices[i + 1] = i2;
-            meshData.indices[i + 2] = i1;
         }
 
         mesh::calculate_tangents(&meshData);

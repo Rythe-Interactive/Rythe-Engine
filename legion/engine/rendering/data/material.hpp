@@ -60,7 +60,7 @@ namespace legion::rendering
             shader.get_uniform<T>(m_id).set_value(m_value);
         }
     public:
-        material_parameter(const std::string& name, GLint location) : material_parameter_base(name, location, typeHash<T>()) {}
+        material_parameter(const std::string& name, GLint location) : material_parameter_base(name, location, typeHash<T>()), m_value() {}
 
         void set_value(const T& value) { m_value = value; }
         T get_value() const { return m_value; }

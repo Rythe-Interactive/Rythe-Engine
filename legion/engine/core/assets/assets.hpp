@@ -8,3 +8,8 @@
 #include <core/assets/assets.inl>
 
 #include <core/assets/functionalbinds.hpp>
+
+namespace legion::core
+{
+    namespace ast = ::legion::core::assets;
+}
