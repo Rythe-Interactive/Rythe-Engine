@@ -47,7 +47,7 @@ namespace legion::core
             const size_type bufferEnd = bufferStart + accessor.count * stride;
 
             const size_type dataStart = data.size();
-            data.resize(dataStart + accessor.count);
+            data.reserve(dataStart + accessor.count);
 
             for (size_t i = bufferStart; i < bufferEnd; i += stride)
                 data.push_back(*reinterpret_cast<const T*>(&buffer.data[i]));
@@ -537,6 +537,25 @@ namespace legion::core
                     }
                 }
 
+
+                const size_type smallestBufferSize = std::min(meshData.normals.size(), std::min(meshData.uvs.size(), meshData.colors.size()));
+                const size_type vertexCount = meshData.vertices.size();
+                meshData.normals.reserve(vertexCount);
+                meshData.uvs.reserve(vertexCount);
+                meshData.colors.reserve(vertexCount);
+
+                for (size_type i = smallestBufferSize; i < vertexCount; ++i)
+                {
+                    if (meshData.normals.size() == i)
+                        meshData.normals.push_back(math::vec3::up);
+
+                    if (meshData.uvs.size() == i)
+                        meshData.uvs.push_back(math::vec2(0, 0));
+
+                    if (meshData.colors.size() == i)
+                        meshData.colors.push_back(core::math::colors::white);
+                }
+
                 // Find the indices of our mesh and copy them into meshData.indices
                 const size_type index = static_cast<size_type>(primitive.indices);
 
@@ -799,20 +818,6 @@ namespace legion::core
 
             if (progress)
                 progress->advance_progress(percentagePerNode);
-        }
-
-        const size_type smallestBufferSize = std::min(meshData.normals.size(), std::min(meshData.uvs.size(), meshData.colors.size()));
-
-        for (size_type i = smallestBufferSize; i < meshData.vertices.size(); ++i)
-        {
-            if (meshData.normals.size() == i)
-                meshData.normals.push_back(math::vec3::up);
-
-            if (meshData.uvs.size() == i)
-                meshData.uvs.push_back(math::vec2(0, 0));
-
-            if (meshData.colors.size() == i)
-                meshData.colors.push_back(core::math::colors::grey);
         }
 
         mesh::calculate_tangents(&meshData);

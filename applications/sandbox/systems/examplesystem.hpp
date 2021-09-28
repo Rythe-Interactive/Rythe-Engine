@@ -53,26 +53,26 @@ public:
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
-        model = gfx::ModelCache::create_model("Orientation test", fs::view("assets://models/OrientationTest.gltf"));
+        model = gfx::ModelCache::create_model("Orientation test", fs::view("assets://models/TextureCoordinateTest.gltf"));
 
 //        model = gfx::ModelCache::create_model("Fire place", fs::view("assets://models/flippedfireplace.glb"));
-        material = gfx::MaterialCache::create_material("Test", fs::view("assets://shaders/vertexcolor.shs"));
+        material = gfx::MaterialCache::create_material("Test", fs::view("assets://shaders/uv.shs"));
 
         auto ent = createEntity();
         ent.add_component<transform>();
         ent.add_component(gfx::mesh_renderer(material, model));
 
-        model = gfx::ModelCache::create_model("BB Axes", fs::view("assets://models/BoomBoxWithAxes/BoomBoxWithAxes.gltf"));
+        //model = gfx::ModelCache::create_model("BB Axes", fs::view("assets://models/BoomBoxWithAxes/BoomBoxWithAxes.gltf"));
 
-        material = gfx::MaterialCache::create_material("!Test", fs::view("engine://shaders/default_lit.shs"));
-        material.set_variant(0);
-        material.set_param("albedoColor", math::color(1.f, 1.f, 1.f));
-        material.set_param("roughnessValue", 1.f);
+        material = gfx::MaterialCache::create_material("!Test", fs::view("assets://shaders/vertexcolor.shs"));
+        //material.set_variant(0);
+        //material.set_param("albedoColor", math::color(1.f, 1.f, 1.f));
+        //material.set_param("roughnessValue", 1.f);
 
         ent = createEntity();
         auto [pos, rot, scal] = ent.add_component<transform>();
         pos->x = 20.f;
-        scal = scale(100.f);
+        //scal = scale(100.f);
         ent.add_component(gfx::mesh_renderer(material, model));
 
 

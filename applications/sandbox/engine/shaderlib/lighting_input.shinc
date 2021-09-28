@@ -69,7 +69,7 @@ Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTan
     Material material;
     material.tbn = GetTBNMatrix(worldNormal, worldTangent);
     material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn, material.height);
-    material.albedo = AlbedoMap(material_input.albedo, material.texcoords);
+    material.albedo = AlbedoMap(material_input.albedo, stdio(vertexcolor), material.texcoords);
     material.normal = NormalMap(material_input.normalHeight, material.texcoords, material.tbn);
     vec4 MRDAo = LightingData(material_input.MRDAo, material.texcoords);
     material.metallic = min(MRDAo.r, 1.0 - epsilon);

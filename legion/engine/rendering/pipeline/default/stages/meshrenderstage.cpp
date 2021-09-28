@@ -95,6 +95,98 @@ namespace legion::rendering
 
         for (auto [material, instancesPerMaterial] : *batches)
         {
+            if (material.get_name() == "Test")
+            {
+                for (auto [modelHandle, instances] : instancesPerMaterial)
+                {
+                    material_handle mater;
+
+                    if (modelHandle.id == invalid_id)
+                    {
+                        for (auto& ent : instances.first)
+                            log::warn("Invalid mesh found on entity {}.", ent->name);
+
+                        continue;
+                    }
+
+                    const model& mesh = modelHandle.get_model();
+                    for (auto submesh : mesh.submeshes)
+                    {
+                        if (mesh.materials.empty())
+                            mater = material;
+                        else
+                            mater = mesh.materials[submesh.materialIndex];
+
+                        OPTICK_EVENT("Rendering material");
+                        auto materialName = mater.get_name();
+                        OPTICK_TAG("Material", materialName.c_str());
+
+                        camInput.bind(mater);
+                        if (mater.has_param<uint>(SV_LIGHTCOUNT))
+                            mater.set_param<uint>(SV_LIGHTCOUNT, *lightCount);
+
+                        if (sceneColor && mater.has_param<texture_handle>(SV_SCENECOLOR))
+                            mater.set_param<texture_handle>(SV_SCENECOLOR, sceneColor);
+
+                        if (sceneNormal && mater.has_param<texture_handle>(SV_SCENENORMAL))
+                            mater.set_param<texture_handle>(SV_SCENENORMAL, sceneNormal);
+
+                        if (scenePosition && mater.has_param<texture_handle>(SV_SCENEPOSITION))
+                            mater.set_param<texture_handle>(SV_SCENEPOSITION, scenePosition);
+
+                        if (hdrOverdraw && mater.has_param<texture_handle>(SV_HDROVERDRAW))
+                            mater.set_param<texture_handle>(SV_HDROVERDRAW, hdrOverdraw);
+
+                        if (sceneDepth && mater.has_param<texture_handle>(SV_SCENEDEPTH))
+                            mater.set_param<texture_handle>(SV_SCENEDEPTH, sceneDepth);
+
+                        mater.bind();
+
+                        ModelCache::create_model(modelHandle.id);
+                        auto modelName = ModelCache::get_model_name(modelHandle.id);
+                        OPTICK_EVENT("Rendering instances");
+                        OPTICK_TAG("Model", modelName.c_str());
+
+                        if (!mesh.buffered)
+                            modelHandle.buffer_data(*modelMatrixBuffer);
+
+                        if (mesh.submeshes.empty())
+                        {
+                            log::warn("Empty mesh found. Model name: {},  Model ID {}", modelName, modelHandle.get_mesh().id());
+                            continue;
+                        }
+
+                        {
+                            OPTICK_EVENT("Buffering matrices");
+                            /*m_matrices.resize(instances.size());
+                            int i = 0;
+                            for (auto& ent : instances)
+                            {
+                                m_matrices[i] = transform(ent.get_component_handles<transform>()).get_local_to_world_matrix();
+                                i++;
+                            }*/
+
+                            modelMatrixBuffer->bufferData(instances.second);
+                        }
+
+                        {
+                            OPTICK_EVENT("Draw call");
+                            mesh.vertexArray.bind();
+                            mesh.indexBuffer.bind();
+                            lightsBuffer->bind();
+                            glDrawElementsInstanced(GL_TRIANGLES, (GLuint)submesh.indexCount, GL_UNSIGNED_INT, (GLvoid*)(submesh.indexOffset * sizeof(uint)), (GLsizei)instances.second.size());
+
+                            lightsBuffer->release();
+                            mesh.indexBuffer.release();
+                            mesh.vertexArray.release();
+                        }
+
+                        mater.release();
+                    }
+                }
+                continue;
+            }
+
             OPTICK_EVENT("Rendering material");
             auto materialName = material.get_name();
             OPTICK_TAG("Material", materialName.c_str());
