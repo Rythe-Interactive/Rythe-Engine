@@ -83,9 +83,9 @@ vec3 NormalMap(sampler2D map, vec2 uv, mat3 tbn)
 	return normalize(transpose(tbn) * normalize(texture(map, uv).xyz * 2.0 - 1.0));
 }
 
-vec4 AlbedoMap(sampler2D albedoMap, vec2 uv)
+vec4 AlbedoMap(sampler2D albedoMap, vec4 color, vec2 uv)
 {
-    return pow(texture(albedoMap, uv).rgba, vec4(vec3(2.2), 1.0));
+    return pow(texture(albedoMap, uv).rgba * color, vec4(vec3(2.2), 1.0));
 }
 
 vec4 LightingData(sampler2D MRDAoMap, vec2 uv)

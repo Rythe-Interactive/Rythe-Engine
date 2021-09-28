@@ -54,7 +54,7 @@ public:
             for (auto& warn : result.warnings())
                 log::warn(warn);
 
-        L_MAYBEUNUSED auto val = result.except([](L_MAYBEUNUSED exception& error) {return assets::invalid_asset<image>; });
+        L_MAYBEUNUSED auto val = result.except([](L_MAYBEUNUSED exception& error) { return assets::invalid_asset<image>; });
 
         if (result)
         {
@@ -151,7 +151,7 @@ public:
                 lgn::async::readonly_guard guard(lock);
                 lgn::log::debug("\tjob B id [{}]", jobId);
             });
-            
+
 
         auto procC = queueJobs(2000, [&lock](lgn::id_type jobId)
             {

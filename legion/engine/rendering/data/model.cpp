@@ -127,9 +127,13 @@ namespace legion::rendering
         auto result = assets::load<mesh>(name, file, settings);
         if (!result)
         {
-            log::error("Failed to load model {}", name);
+            log::error("Failed to load model {}: ", name, result.error().what());
             return invalid_model_handle;
         }
+
+        if (result.has_warnings())
+            for (auto warn : result.warnings())
+                log::warn(warn);
 
         auto& handle = result.value();
         if (!handle->materials.empty())
