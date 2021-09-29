@@ -99,7 +99,7 @@ namespace legion::core
                     if (!resolver->is_valid_path())
                         warnings.emplace_back("Invalid obj context path");
                     else
-                        baseDir = resolver->get_absolute_path();
+                        baseDir = resolver->get_absolute_path() + fs::strpath_manip::separator();
                 }
             }
         }

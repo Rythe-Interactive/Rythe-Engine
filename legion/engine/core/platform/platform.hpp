@@ -420,7 +420,7 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 #   define L_ALWAYS_INLINE
 #endif
 
-#if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined (DOXY_INCLUDE)
+#if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined(DOXY_INCLUDE)
     /**@def LEGION_CCONV
      * @brief the calling convention exported functions will use in the args engine
      */
@@ -463,7 +463,7 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 
 #pragma region ///////////////////////////////////// Attributes /////////////////////////////////////////
 
-#if defined(__has_cpp_attribute)|| defined(DOXY_INCLUDE) 
+#if defined(__has_cpp_attribute) || defined(DOXY_INCLUDE) 
     /**@def L_HASCPPATTRIB
      * @brief checks if a certain attribute exists in this version of c++
      * @param x attribute you want to test for

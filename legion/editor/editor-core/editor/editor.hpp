@@ -20,23 +20,25 @@ namespace legion::editor
          * @param args the arguments you want to pass
          * @ref legion::editor::EditorModule
          */
-        template <class ModuleType, class... Args CNDOXY(inherits_from<ModuleType, EditorModule> = 0)>
+        template <class ModuleType, class... Args>
         void reportModule(Args&&...args)
         {
-
+            static_assert(std::is_base_of_v<EditorModule, ModuleType>, "All editor modules need to inherit from EditorModule");
         }
     };
 
+#if !defined(DOXY_EXCLUDE)
     namespace detail
     {
         class EditorEngineModule : public Module
         {
         public:
-            EditorEngineModule(Editor* editor);
+            EditorEngineModule(Editor* editor) {}
 
-            virtual void setup();
+            virtual void setup() {}
         };
     }
+#endif
 }
 
 /**@brief Reports editor modules to the editor, must be implemented by you.
@@ -45,7 +47,7 @@ namespace legion::editor
  */
 extern void reportEditorModules(legion::editor::Editor* editor);
 
-#if defined(LEGION_ENTRY)
+#if defined(LEGION_ENTRY) && !defined(DOXY_EXCLUDE)
 namespace legion::editor::detail
 {
     Editor editor;

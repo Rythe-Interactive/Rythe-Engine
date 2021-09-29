@@ -43,9 +43,11 @@ namespace legion::core
             schd::Scheduler::createProcessChain<charc>(name);
         }
 
-        template<typename SystemType, typename... Args CNDOXY(inherits_from<SystemType, System<SystemType>> = 0)>
+        template<typename SystemType, typename... Args>
         void reportSystem(Args&&... args)
         {
+            static_assert(std::is_base_of_v<System<SystemType>, SystemType>, "All systems must inherit from System<SystemType>");
+
             SystemType* system = static_cast<SystemType*>(m_systems.emplace(make_hash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...)).first->second.get());
             if constexpr (has_setup_v<SystemType, void()>)
             {

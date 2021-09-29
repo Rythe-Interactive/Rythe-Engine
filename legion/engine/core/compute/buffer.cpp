@@ -121,7 +121,8 @@ namespace legion::core::compute
             log::error("clCreateFromGL(X?+)Buffer failed for Buffer: {}", m_name);
         }
     }
-    Buffer::Buffer(cl_context ctx, byte* data, size_t len, buffer_type type, std::string name) : m_name(std::move(name)), m_data(data), m_size(len)
+
+    Buffer::Buffer(cl_context ctx, byte* data, size_type len, buffer_type type, std::string name) : m_name(std::move(name)), m_data(data), m_size(len)
     {
         OPTICK_EVENT();
         if (!ctx) return;

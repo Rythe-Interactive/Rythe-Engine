@@ -87,9 +87,6 @@ namespace legion::core
 
     namespace assets
     {
-        /**@class import_settings<image>
-         * @brief Data structure to parameterize the image import process.
-         */
         template<>
         struct import_settings<image>
         {
