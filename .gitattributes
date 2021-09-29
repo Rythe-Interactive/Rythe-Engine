@@ -15,3 +15,6 @@
 *.c text=auto eol=LF
 *.cpp text=auto eol=LF
 *.cpp text=auto eol=LF
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.bin filter=lfs diff=lfs merge=lfs -text
