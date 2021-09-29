@@ -40,7 +40,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         script: |
-         rm -rf ~/public_html/docs
+         find ~/public_html/docs ! -type l -delete || true
          mkdir docs || true
          #creating the folder will fail if it already exists, but we do not care about that
         host: ${{ secrets.DOCS_HOST }}
