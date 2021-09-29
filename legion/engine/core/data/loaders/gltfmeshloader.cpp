@@ -13,7 +13,9 @@ namespace legion::core
     {
         static assets::asset<image> loadGLTFImage(const tinygltf::Image& img)
         {
-            const auto hash = nameHash(img.name);
+            std::string name = img.name + img.uri;
+
+            const auto hash = nameHash(name);
 
             auto handle = assets::get<image>(hash);
             if (handle)
@@ -457,8 +459,8 @@ namespace legion::core
 
                 // Use matrix attribute
                 return math::mat4(
-                    -static_cast<float>(node.matrix[0]), -static_cast<float>(node.matrix[1]), -static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
-                    -static_cast<float>(node.matrix[4]), -static_cast<float>(node.matrix[5]), -static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
+                    -static_cast<float>(node.matrix[0]), -static_cast<float>(node.matrix[1]), -static_cast<float>(node.matrix[2]), -static_cast<float>(node.matrix[3]),
+                    static_cast<float>(node.matrix[4]), static_cast<float>(node.matrix[5]), static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
                     static_cast<float>(node.matrix[8]), static_cast<float>(node.matrix[9]), static_cast<float>(node.matrix[10]), static_cast<float>(node.matrix[11]),
                     static_cast<float>(node.matrix[12]), static_cast<float>(node.matrix[13]), static_cast<float>(node.matrix[14]), static_cast<float>(node.matrix[15]));
             }
@@ -480,7 +482,6 @@ namespace legion::core
 
                 auto result = math::compose(scale, rot, pos);
                 result[0] = -result[0];
-                result[1] = -result[1];
                 return result;
             }
         }
@@ -489,16 +490,14 @@ namespace legion::core
         {
             std::vector<std::string> warnings;
 
-            sub_mesh m;
-            m.name = mesh.name;
-            m.indexOffset = meshData.indices.size();
-
-            if (mesh.primitives.size())
-                m.materialIndex = mesh.primitives[0].material;
-
             size_type primitiveIndex = 0;
             for (auto primitive : mesh.primitives)
             {
+                sub_mesh m;
+                m.name = mesh.name;
+                m.indexOffset = meshData.indices.size();
+                m.materialIndex = primitive.material;
+
                 // Loop through all primitives in the mesh
                 // Primitives can be vertex position, normal, texcoord (uv) and vertex colors
 
@@ -577,11 +576,12 @@ namespace legion::core
                         meshData.indices.push_back(i);
                 }
                 primitiveIndex++;
+
+                // Calculate size of submesh
+                m.indexCount = meshData.indices.size() - m.indexOffset;
+                meshData.submeshes.push_back(m);
             }
 
-            // Calculate size of submesh
-            m.indexCount = meshData.indices.size() - m.indexOffset;
-            meshData.submeshes.push_back(m);
 
             return { common::success, warnings };
         }
@@ -589,20 +589,21 @@ namespace legion::core
         static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node, const math::mat4& parentTransf)
         {
             std::vector<std::string> warnings;
-            const auto transf = parentTransf * detail::getGltfNodeTransform(node);
+
+            const math::mat4 rhToLhMat{
+                 -1.f, 0.f, 0.f, 0.f,
+                 0.f, 1.f, 0.f, 0.f,
+                 0.f, 0.f, 1.f, 0.f,
+                 0.f, 0.f, 0.f, 1.f
+            };
+
+            const auto transf = parentTransf * detail::getGltfNodeTransform(node) * rhToLhMat;
 
             const size_type meshIdx = static_cast<size_type>(node.mesh);
 
             if (node.mesh >= 0 && meshIdx < model.meshes.size())
             {
-                const math::mat4 rhToLhMat{
-                     -1.f, 0.f, 0.f, 0.f,
-                     0.f, -1.f, 0.f, 0.f,
-                     0.f, 0.f, 1.f, 0.f,
-                     0.f, 0.f, 0.f, 1.f
-                };
-
-                auto result = handleGltfMesh(meshData, model, model.meshes[meshIdx], transf * rhToLhMat);
+                auto result = handleGltfMesh(meshData, model, model.meshes[meshIdx], transf);
                 warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
             }
 
@@ -722,12 +723,20 @@ namespace legion::core
 
         const float percentagePerMat = 25.f / static_cast<float>(model.materials.size());
 
+        std::unordered_map<std::string, std::pair<bool, size_type>> materialNames;
+
         for (auto& srcMat : model.materials)
         {
             auto& material = meshData.materials.emplace_back();
             auto& pbrData = srcMat.pbrMetallicRoughness;
 
             material.name = srcMat.name;
+
+            if (materialNames.count(material.name))
+                materialNames.at(material.name).first = true;
+            else
+                materialNames.emplace(material.name, std::make_pair<bool, size_type>(false, 0u));
+
             material.opaque = srcMat.alphaMode != "BLEND";
             material.alphaCutoff = static_cast<float>(srcMat.alphaCutoff);
             material.doubleSided = srcMat.doubleSided;
@@ -792,6 +801,19 @@ namespace legion::core
                 progress->advance_progress(percentagePerMat);
         }
 
+        if (!materialNames.empty())
+        {
+            for (auto& mat : meshData.materials)
+            {
+                auto& [duplicate, count] = materialNames.at(mat.name);
+
+                if (duplicate)
+                {
+                    mat.name += std::to_string(count++);
+                }
+            }
+        }
+
         if (!model.scenes.size())
         {
             return { legion_exception_msg("GLTF model contained 0 scenes"), warnings };
@@ -803,7 +825,7 @@ namespace legion::core
 
         const math::mat4 rootMat{
                  -1.f, 0.f, 0.f, 0.f,
-                 0.f, -1.f, 0.f, 0.f,
+                 0.f, 1.f, 0.f, 0.f,
                  0.f, 0.f, 1.f, 0.f,
                  0.f, 0.f, 0.f, 1.f
         };
@@ -818,6 +840,18 @@ namespace legion::core
 
             if (progress)
                 progress->advance_progress(percentagePerNode);
+        }
+
+        for (auto& uv : meshData.uvs)
+            uv.y = 1.f-uv.y;
+
+        // Because we only flip one axis we also need to flip the triangle rotation.
+        for (size_type i = 0; i < meshData.indices.size(); i += 3)
+        {
+            uint i1 = meshData.indices[i + 1];
+            uint i2 = meshData.indices[i + 2];
+            meshData.indices[i + 1] = i2;
+            meshData.indices[i + 2] = i1;
         }
 
         mesh::calculate_tangents(&meshData);

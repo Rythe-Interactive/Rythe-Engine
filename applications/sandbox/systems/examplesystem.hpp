@@ -53,29 +53,22 @@ public:
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
+        model = gfx::ModelCache::create_model("Sponza", fs::view("assets://models/Sponza/Sponza.gltf"));
 
-        model = gfx::ModelCache::create_model("Fire place", fs::view("assets://models/fireplace.glb"));
         material = gfx::MaterialCache::create_material("Test", fs::view("assets://shaders/uv.shs"));
 
-        {
-            auto ent = createEntity();
-            auto [pos, rot, scal] = ent.add_component<transform>();
-            scal = scale(-1, -1, 1);
-            ent.add_component(gfx::mesh_renderer(material, model));
-        }
-        model = gfx::ModelCache::create_model("BB Axes", fs::view("assets://models/BoomBoxWithAxes/BoomBoxWithAxes.gltf"));
+        auto ent = createEntity();
+        ent.add_component<transform>();
+        ent.add_component(gfx::mesh_renderer(material, model));
 
-        material = gfx::MaterialCache::create_material("!Test", fs::view("engine://shaders/default_lit.shs"));
-        material.set_variant(0);
-        material.set_param("albedoColor", math::color(1.f, 1.f, 1.f));
-        material.set_param("roughnessValue", 1.f);
-        {
-            auto ent = createEntity();
-            auto [pos, rot, scal] = ent.add_component<transform>();
-            pos->x = 20.f;
-            scal = scale(100.f);
-            ent.add_component(gfx::mesh_renderer(material, model));
-        }
+        model = gfx::ModelCache::create_model("Fire place", fs::view("assets://models/fireplace.glb"));
+
+        ent = createEntity();
+        auto [pos, rot, scal] = ent.add_component<transform>();
+        pos->x = 30.f;
+        scal = scale(2.f);
+        ent.add_component(gfx::mesh_renderer(material, model));
+
 
         bindToEvent<events::exit, &ExampleSystem::onExit>();
     }
