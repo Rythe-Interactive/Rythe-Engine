@@ -842,6 +842,9 @@ namespace legion::core
                 progress->advance_progress(percentagePerNode);
         }
 
+        for (auto& uv : meshData.uvs)
+            uv.y = 1.f-uv.y;
+
         // Because we only flip one axis we also need to flip the triangle rotation.
         for (size_type i = 0; i < meshData.indices.size(); i += 3)
         {
