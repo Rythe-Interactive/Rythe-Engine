@@ -114,6 +114,8 @@ namespace legion::rendering
                     {
                         if (mesh.materials.empty())
                             mater = material;
+                        else if (submesh.materialIndex == -1)
+                            continue;
                         else
                             mater = mesh.materials[submesh.materialIndex];
 
