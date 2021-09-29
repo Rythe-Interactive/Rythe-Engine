@@ -458,7 +458,7 @@ namespace legion::core
                 // Use matrix attribute
                 return math::mat4(
                     -static_cast<float>(node.matrix[0]), -static_cast<float>(node.matrix[1]), -static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
-                    -static_cast<float>(node.matrix[4]), -static_cast<float>(node.matrix[5]), -static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
+                    static_cast<float>(node.matrix[4]), static_cast<float>(node.matrix[5]), static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
                     static_cast<float>(node.matrix[8]), static_cast<float>(node.matrix[9]), static_cast<float>(node.matrix[10]), static_cast<float>(node.matrix[11]),
                     static_cast<float>(node.matrix[12]), static_cast<float>(node.matrix[13]), static_cast<float>(node.matrix[14]), static_cast<float>(node.matrix[15]));
             }
@@ -480,7 +480,6 @@ namespace legion::core
 
                 auto result = math::compose(scale, rot, pos);
                 result[0] = -result[0];
-                result[1] = -result[1];
                 return result;
             }
         }
@@ -597,7 +596,7 @@ namespace legion::core
             {
                 const math::mat4 rhToLhMat{
                      -1.f, 0.f, 0.f, 0.f,
-                     0.f, -1.f, 0.f, 0.f,
+                     0.f, 1.f, 0.f, 0.f,
                      0.f, 0.f, 1.f, 0.f,
                      0.f, 0.f, 0.f, 1.f
                 };
@@ -803,7 +802,7 @@ namespace legion::core
 
         const math::mat4 rootMat{
                  -1.f, 0.f, 0.f, 0.f,
-                 0.f, -1.f, 0.f, 0.f,
+                 0.f, 1.f, 0.f, 0.f,
                  0.f, 0.f, 1.f, 0.f,
                  0.f, 0.f, 0.f, 1.f
         };
@@ -818,6 +817,15 @@ namespace legion::core
 
             if (progress)
                 progress->advance_progress(percentagePerNode);
+        }
+
+        // Because we only flip one axis we also need to flip the triangle rotation.
+        for (size_type i = 0; i < meshData.indices.size(); i += 3)
+        {
+            uint i1 = meshData.indices[i + 1];
+            uint i2 = meshData.indices[i + 2];
+            meshData.indices[i + 1] = i2;
+            meshData.indices[i + 2] = i1;
         }
 
         mesh::calculate_tangents(&meshData);
