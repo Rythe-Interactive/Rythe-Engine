@@ -393,12 +393,12 @@ namespace legion::core::log
         }
     };
 
-    inline static logger_ptr& logger = impl::get().logger;
-    inline static logger_ptr& consoleLogger = impl::get().consoleLogger;
-    inline static logger_ptr& fileLogger = impl::get().fileLogger;
-    inline static logger_ptr& undecoratedLogger = impl::get().undecoratedLogger;
-    inline static async::rw_spinlock& threadNamesLock = impl::get().threadNamesLock;
-    inline static std::unordered_map<std::thread::id, std::string>& threadNames = impl::get().threadNames;
+    inline static logger_ptr& logger = *(&impl::get().logger);
+    inline static logger_ptr& consoleLogger = *(&impl::get().consoleLogger);
+    inline static logger_ptr& fileLogger = *(&impl::get().fileLogger);
+    inline static logger_ptr& undecoratedLogger = *(&impl::get().undecoratedLogger);
+    inline static async::rw_spinlock& threadNamesLock = *(&impl::get().threadNamesLock);
+    inline static std::unordered_map<std::thread::id, std::string>& threadNames = *(&impl::get().threadNames);
 
     inline void initLogger(std::shared_ptr<spdlog::logger>& logger)
     {
@@ -474,8 +474,8 @@ namespace legion::core::log
      */
     inline void filter(severity level)
     {
-        logger->set_level(args2spdlog(level));
-        undecoratedLogger->set_level(args2spdlog(level));
+        impl::get().logger->set_level(args2spdlog(level));
+        impl::get().undecoratedLogger->set_level(args2spdlog(level));
     }
 
     /** @brief same as println but with severity = trace */
