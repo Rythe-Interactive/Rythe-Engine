@@ -59,7 +59,7 @@ namespace legion::core::compute
         {
             OPTICK_EVENT();
             return Buffer(
-                m_context,
+                instance.m_context,
                 reinterpret_cast<byte*>(container.data()), // data as void-ptr
                 container.size() * sizeof(T),  // size with data as void-ptr
                 type,

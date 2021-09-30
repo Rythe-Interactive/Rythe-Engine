@@ -161,7 +161,7 @@ namespace legion::core::assets
     template<typename AssetType>
     inline L_ALWAYS_INLINE void AssetCache<AssetType>::addLoader(std::unique_ptr<AssetLoader<AssetType>>&& loader)
     {
-        if (!initialized())
+        if (!base::initialized())
             throw legion_exception_msg("Asset was not marked as asset, and cache is thus not yet initialized.");
 
         loader->m_loaderId = instance.m_loaders.size() + 1;
@@ -174,7 +174,7 @@ namespace legion::core::assets
     {
         static_assert(std::is_base_of_v<AssetLoader<AssetType>, LoaderType>, "Loader must be a loader of the same asset type.");
 
-        if (!initialized())
+        if (!base::initialized())
             throw legion_exception_msg("Asset was not marked as asset, and cache is thus not yet initialized.");
 
         auto* ptr = new LoaderType(std::forward<Arguments>(args)...);

@@ -38,6 +38,7 @@ namespace legion::core::assets
         template<typename Asset>
         friend struct asset;
 
+        using base = EngineSubSystem<AssetCache<AssetType>>;
         using asset_ptr = asset<AssetType>;
         using import_cfg = import_settings<AssetType>;
         using loader_type = AssetLoader<AssetType>;
