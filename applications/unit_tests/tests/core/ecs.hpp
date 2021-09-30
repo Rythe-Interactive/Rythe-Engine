@@ -11,7 +11,7 @@ struct test_comp
 static void TestECS()
 {
     using namespace legion;
-    ecs::Registry::clear();
+    ecs::Registry::restart();
     ecs::component_pool<test_comp>::reserve(1000);
     ecs::component_pool<position>::reserve(1000);
     ecs::component_pool<rotation>::reserve(1000);

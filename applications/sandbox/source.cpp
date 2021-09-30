@@ -1,4 +1,6 @@
 #define LEGION_ENTRY
+#define LEGION_LOG_DEBUG
+
 #if defined(NDEBUG)
     #define LEGION_KEEP_CONSOLE
 #endif
@@ -13,7 +15,6 @@
 void LEGION_CCONV reportModules(legion::Engine* engine)
 {
     using namespace legion;
-    log::filter(log::severity_debug);
     engine->reportModule<app::ApplicationModule>();
     engine->reportModule<gfx::RenderingModule>();
     engine->reportModule<audio::AudioModule>();

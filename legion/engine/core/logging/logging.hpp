@@ -475,6 +475,7 @@ namespace legion::core::log
     inline void filter(severity level)
     {
         logger->set_level(args2spdlog(level));
+        undecoratedLogger->set_level(args2spdlog(level));
     }
 
     /** @brief same as println but with severity = trace */
@@ -571,18 +572,35 @@ namespace legion::core::log
             f->set_pattern("%v");
             inst.undecoratedLogger->set_formatter(std::move(f));
 
-            undecoratedInfo("== Initializing Logger");
-
             inst.fileLogger = spdlog::rotating_logger_mt(inst.logFile, inst.logFile, 1'048'576, 5);
             initLogger(inst.consoleLogger);
             initLogger(inst.fileLogger);
-
 
 #if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
             logger = inst.consoleLogger;
 #else
             logger = inst.fileLogger;
 #endif
+
+#if defined(LEGION_LOG_TRACE)
+            filter(severity::trace);
+#elif defined(LEGION_LOG_DEBUG)
+            filter(severity::debug);
+#elif defined(LEGION_LOG_INFO)
+            filter(severity::info);
+#elif defined(LEGION_LOG_WARN)
+            filter(severity::warn);
+#elif defined(LEGION_LOG_ERROR)
+            filter(severity::error);
+#elif defined(LEGION_LOG_FATAL)
+            filter(severity::fatal);
+#elif defined(LEGION_DEBUG)
+            filter(severity::debug);
+#else
+            filter(severity::info);
+#endif
+
+            undecoratedInfo("== Initializing Logger");
             return 0;
         }
     }

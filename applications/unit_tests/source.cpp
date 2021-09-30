@@ -1,5 +1,6 @@
 #define LEGION_ENTRY
 #define LEGION_SHOW_CONSOLE
+#define LEGION_LOG_WARN
 
 #include <core/core.hpp>
 
