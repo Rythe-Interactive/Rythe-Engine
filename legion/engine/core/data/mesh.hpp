@@ -65,6 +65,7 @@ namespace legion::core
         static void calculate_tangents(mesh* data);
     };
 
+    ReportAssetType(mesh);
 
     namespace assets
     {

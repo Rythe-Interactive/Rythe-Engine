@@ -160,6 +160,9 @@ namespace legion::rendering
         static texture_data get_data(id_type id);
         static texture_handle m_invalidTexture;
     public:
+
+        static void destroy_texture(const std::string& name);
+
         /**@brief Create a new texture and load it from a file if a texture with the same name doesn't exist yet.
          * @param name Identifying name for the texture.
          * @param file File to load from.

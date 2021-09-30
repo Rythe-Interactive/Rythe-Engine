@@ -52,6 +52,8 @@ namespace legion::rendering
 
         virtual void init(app::window& context) LEGION_PURE;
 
+        virtual void shutdown();
+
         virtual void render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime) LEGION_PURE;
     };
 

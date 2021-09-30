@@ -119,7 +119,7 @@ public:
             return;
 
         if (action.released())
-            raiseEvent<events::exit>();
+            Engine::restart();// raiseEvent<events::exit>();
     }
 
     void onSpeedUp(player_speedup& action)

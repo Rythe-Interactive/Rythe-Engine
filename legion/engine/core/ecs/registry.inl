@@ -6,14 +6,15 @@ namespace legion::core::ecs
     template<typename component_type, typename... Args>
     inline L_ALWAYS_INLINE component_pool<component_type>* Registry::tryEmplaceFamily(Args&&... args)
     {
-        if (instance.m_componentFamilies.count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
-            return static_cast<component_pool<component_type>*>(instance.m_componentFamilies.at(make_hash<component_type>()).get());
+        auto& families = getFamilies();
+        if (families.count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
+            return static_cast<component_pool<component_type>*>(families.at(make_hash<component_type>()).get());
 
         instance.m_familyNames.emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
 
         // Allocate and emplace if no item was found.
         return static_cast<component_pool<component_type>*>(
-            instance.m_componentFamilies.emplace(
+            families.emplace(
                 make_hash<component_type>(),
                 std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
             ).first->second.get() // std::pair<iterator, bool>.first --> iterator<std::pair<key, value>>->second --> std::unique_ptr.get() --> component_pool_base* 
@@ -23,7 +24,7 @@ namespace legion::core::ecs
     template<typename component_type, typename... Args>
     inline L_ALWAYS_INLINE void ecs::Registry::registerComponentType(Args&&... args)
     {
-        instance.m_componentFamilies.try_emplace(
+        getFamilies().try_emplace(
             make_hash<component_type>(),
             std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
         );
@@ -56,7 +57,7 @@ namespace legion::core::ecs
 
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !instance.m_componentFamilies.count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(make_hash<component_type>()))
             {
                 checked = true;
                 registerComponentType<component_type>();
@@ -106,7 +107,7 @@ namespace legion::core::ecs
 
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !instance.m_componentFamilies.count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(make_hash<component_type>()))
             {
                 checked = true;
                 registerComponentType<component_type>();
@@ -134,7 +135,7 @@ namespace legion::core::ecs
 
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !instance.m_componentFamilies.count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(make_hash<component_type>()))
             {
                 checked = true;
                 registerComponentType<component_type>();
@@ -193,7 +194,7 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
         static bool checked = false; // Prevent unnecessary unordered_map lookups.
-        if (!checked && !instance.m_componentFamilies.count(make_hash<component_type>()))
+        if (!checked && !getFamilies().count(make_hash<component_type>()))
         {
             checked = true;
             registerComponentType<component_type>();
@@ -213,7 +214,7 @@ namespace legion::core::ecs
         OPTICK_EVENT();
         // Check and emplace component family if it doesn't exist yet.
         static bool checked = false; // Prevent unnecessary unordered_map lookups.
-        if (!checked && !instance.m_componentFamilies.count(make_hash<component_type>()))
+        if (!checked && !getFamilies().count(make_hash<component_type>()))
         {
             checked = true;
             registerComponentType<component_type>();
@@ -239,7 +240,7 @@ namespace legion::core::ecs
         {
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !instance.m_componentFamilies.count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(make_hash<component_type>()))
             {
                 checked = true;
                 registerComponentType<component_type>();
@@ -288,7 +289,7 @@ namespace legion::core::ecs
         {
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !instance.m_componentFamilies.count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(make_hash<component_type>()))
             {
                 checked = true;
                 registerComponentType<component_type>();
@@ -317,7 +318,7 @@ namespace legion::core::ecs
         {
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
-            if (!checked && !instance.m_componentFamilies.count(make_hash<component_type>()))
+            if (!checked && !getFamilies().count(make_hash<component_type>()))
             {
                 checked = true;
                 registerComponentType<component_type>();

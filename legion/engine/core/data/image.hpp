@@ -85,6 +85,8 @@ namespace legion::core
         mutable std::optional<std::vector<math::color>> m_colors = std::nullopt;
     };
 
+    ReportAssetType(image);
+
     namespace assets
     {
         template<>

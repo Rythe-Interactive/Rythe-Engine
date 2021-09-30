@@ -13,12 +13,8 @@ namespace legion::core::scheduling
 
     void Clock::onInit()
     {
-        time::main_clock::init();
-    }
-
-    void Clock::onShutdown()
-    {
-        time::main_clock::shutdown();
+        reportDependency<time::main_clock>();
+        create();
     }
 
     Clock::time_type Clock::timeScale() noexcept

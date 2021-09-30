@@ -16,6 +16,11 @@
 
 namespace legion::core
 {
+    namespace scheduling
+    {
+        class Scheduler;
+    }
+
     /**@class Engine
      * @brief Main top level engine abstraction.
      *        This class allows you to setup the engine with all the necessary modules and settings.
@@ -27,13 +32,16 @@ namespace legion::core
      */
     class Engine
     {
+        friend class legion::core::scheduling::Scheduler;
     private:
-        std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
+        static std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
 
         static std::atomic_bool m_shouldRestart;
 
         L_NODISCARD static multicast_delegate<void()>& initializationSequence();
         L_NODISCARD static multicast_delegate<void()>& shutdownSequence();
+
+        static void shutdownModules();
 
     public:
         template<typename Func>
@@ -64,8 +72,8 @@ namespace legion::core
         static void shutdown();
     };
 
-#define OnEngineInit(Func) ANON_VAR(byte, _onInit_) = legion::core::Engine::subscribeToInit(Func);
-#define OnEngineShutdown(Func) ANON_VAR(byte, _onInit_) = legion::core::Engine::subscribeToShutdown(Func);
+#define OnEngineInit(Type, Func) ANON_VAR(byte, CONCAT(_onInit_, Type)) = legion::core::Engine::subscribeToInit(Func);
+#define OnEngineShutdown(Type, Func) ANON_VAR(byte, CONCAT(_onShutdown_, Type)) = legion::core::Engine::subscribeToShutdown(Func);
 }
 
 #include <core/engine/engine.inl>

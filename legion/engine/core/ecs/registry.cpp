@@ -19,23 +19,8 @@ namespace legion::core::ecs
         // Making this function threadsafe using atomics and locks could be very benificial.
     }
 
-    void Registry::onInit()
-    {
-        create();
-        FilterRegistry::init();
-    }
-
-    void Registry::onShutdown()
-    {
-        FilterRegistry::shutdown();
-
-        for (auto& [_, family] : instance.m_componentFamilies)
-            family->clear();
-    }
-
     entity Registry::getWorld()
     {
-        OPTICK_EVENT();
         init();
 
         // Create entity data.
@@ -54,9 +39,22 @@ namespace legion::core::ecs
     // Assign world entity.
     entity world = Registry::getWorld();
 
+    void Registry::onInit()
+    {
+        create();
+        world = getWorld();
+        reportDependency<FilterRegistry>();
+    }
+
+    void Registry::onShutdown()
+    {
+        for (auto& [_, family] : getFamilies())
+            family->clear();
+    }
+
     component_pool_base* Registry::getFamily(id_type typeId)
     {
-        return instance.m_componentFamilies.at(typeId).get();
+        return getFamilies().at(typeId).get();
     }
 
     std::string Registry::getFamilyName(id_type id)
@@ -71,7 +69,8 @@ namespace legion::core::ecs
 
     std::unordered_map<id_type, std::unique_ptr<component_pool_base>>& Registry::getFamilies()
     {
-        return instance.m_componentFamilies;
+        static std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
+        return m_componentFamilies;
     }
 
     entity Registry::createEntity()

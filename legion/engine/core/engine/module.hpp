@@ -24,13 +24,19 @@ namespace legion::core
         friend class Engine;
     private:
         multicast_delegate<void()> m_setupFuncs;
+        multicast_delegate<void()> m_shutdownFuncs;
 
         std::unordered_map<id_type, std::unique_ptr<SystemBase>> m_systems;
 
         void init()
         {
             m_setupFuncs.invoke();
-        };
+        }
+
+        void shutdown()
+        {
+            m_shutdownFuncs.invoke();
+        }
 
     protected:
         template<size_type charc>

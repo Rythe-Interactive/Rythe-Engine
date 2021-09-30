@@ -1,6 +1,9 @@
 #pragma once
 #include <core/platform/platform.hpp>
+#include <core/containers/delegate.hpp>
 #include <core/types/meta.hpp>
+#include <core/common/exception.hpp>
+#include <core/logging/logging.hpp>
 
 namespace legion::core
 {
@@ -10,9 +13,14 @@ namespace legion::core
     template<class SubSystem>
     class EngineSubSystem
     {
+        template<class T>
+        friend class EngineSubSystem;
     private:
         static bool m_isInitialized;
         static bool m_isShutdown;
+        static bool m_constructed;
+
+        static multicast_delegate<void()>& shutdownSequence();
 
         struct data
         {
@@ -34,6 +42,9 @@ namespace legion::core
 
         template<typename... Args>
         static SubSystem& create(Args&&... args);
+
+        template<typename T>
+        static void reportDependency();
 
     public:
         L_NODISCARD static SubSystem& getInstance();

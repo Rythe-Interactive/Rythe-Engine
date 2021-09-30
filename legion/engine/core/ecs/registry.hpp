@@ -44,10 +44,6 @@ namespace legion::core::ecs
         // Keep track of what the next new entity ID should be.
         id_type m_nextEntityId = world_entity_id + 1; // First entity should have ID 2; 0 is invalid and 1 is world.
 
-        /**@brief The container with all the component storage families.
-         */
-        std::unordered_map<id_type, std::unique_ptr<component_pool_base>> m_componentFamilies;
-
         /**@brief The component compositions of all entities.
          */
         std::unordered_map<id_type, std::unordered_set<id_type>> m_entityCompositions;
@@ -276,6 +272,9 @@ namespace legion::core::ecs
          */
         L_NODISCARD static void* getComponent(id_type typeId, entity target);
     };
+
+    OnEngineInit(Registry, &Registry::init);
+    OnEngineShutdown(Registry, &Registry::shutdown);
 
     /**@brief World entity. All entities and scenes are eventually parented to this entity.
      */

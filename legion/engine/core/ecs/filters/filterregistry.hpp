@@ -4,6 +4,7 @@
 #include <core/platform/platform.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 #include <core/types/primitives.hpp>
+#include <core/engine/engine.hpp>
 #include <core/engine/enginesubsystem.hpp>
 
 #include <core/ecs/handles/entity.hpp>
@@ -77,9 +78,8 @@ namespace legion::core::ecs
         static void onInit();
         static void onShutdown();
 
-        std::unordered_map<id_type, entity_set> m_entityLists;
-
-        std::vector<std::unique_ptr<filter_info_base>> m_filters;
+        static std::unordered_map<id_type, entity_set>& entityLists();
+        static std::vector<std::unique_ptr<filter_info_base>>& filters();
 
         template<typename component_type>
         constexpr static id_type generateId() noexcept;
@@ -93,6 +93,9 @@ namespace legion::core::ecs
         template<typename... component_types>
         static id_type generateFilter();
     };
+
+    OnEngineInit(FilterRegistry, &FilterRegistry::init);
+    OnEngineShutdown(FilterRegistry, &FilterRegistry::shutdown);
 }
 
 #include <core/ecs/filters/filter_info.inl>

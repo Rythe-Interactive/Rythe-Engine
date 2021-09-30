@@ -8,18 +8,21 @@ namespace legion::core::ecs
     {
         // Get the entities current component composition.
         auto& composition = Registry::entityComposition(target);
+        auto& lists = entityLists();
 
-        for (auto& filter : instance.m_filters) // Walk all filters and check if they care about the current component type.
+        for (auto& filter : filters()) // Walk all filters and check if they care about the current component type.
             if (filter->contains(make_hash<component_type>()) && filter->contains(composition)) // If they do, then check if the current entity falls into that filter.
-                instance.m_entityLists.at(filter->id()).insert(target); // Insert entity in the entity list of the filter if the entity fits the requirements.
+                lists.at(filter->id()).insert(target); // Insert entity in the entity list of the filter if the entity fits the requirements.
     }
 
     template<typename component_type>
     inline void FilterRegistry::markComponentErase(entity target)
     {
-        for (auto& filter : instance.m_filters) // Walk all filters and check if they care about the current component type.
+        auto& lists = entityLists();
+
+        for (auto& filter : filters()) // Walk all filters and check if they care about the current component type.
             if (filter->contains(make_hash<component_type>())) // If they do, then erase the entity from their list if it is in their list.
-                instance.m_entityLists.at(filter->id()).erase(target); // Will not do anything if the target wasn't in the set.
+                lists.at(filter->id()).erase(target); // Will not do anything if the target wasn't in the set.
     }
 
     template<typename component_type>
@@ -44,13 +47,15 @@ namespace legion::core::ecs
         Registry::registerComponentType<component_types...>();
 
         // Emplace filter info.
-        instance.m_filters.emplace_back(std::make_unique<filter_info<component_types...>>());
-        instance.m_entityLists.emplace(id, hashed_sparse_set<entity>{});
+        filters().emplace_back(std::make_unique<filter_info<component_types...>>());
+
+        auto& lists = entityLists();
+        lists.emplace(id, hashed_sparse_set<entity>{});
 
         // Check for any already existing entities that should be in this filter.
         for (auto& [entId, composition] : Registry::entityCompositions())
             if (filter_info<component_types...>{}.contains(composition))
-                instance.m_entityLists.at(id).insert(entity{ &Registry::entityData(entId) });
+                lists.at(id).insert(entity{ &Registry::entityData(entId) });
 
         return id;
     }

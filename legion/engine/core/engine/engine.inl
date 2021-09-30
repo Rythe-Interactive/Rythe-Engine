@@ -6,14 +6,30 @@ namespace legion::core
     template<typename Func>
     inline byte Engine::subscribeToInit(Func&& func)
     {
-        initializationSequence().emplace_back(func);
+        static_assert(sizeof(func) == sizeof(ptr_type), "Parameter passed to subscribeToInit is not a function.");
+        static std::unordered_set<ptr_type> items;
+
+        ptr_type item = force_value_cast<ptr_type>(std::forward<Func>(func));
+        if (!items.count(item))
+        {
+            items.insert(item);
+            initializationSequence().emplace_back(std::forward<Func>(func));
+        }
         return 0;
     }
 
     template<typename Func>
     inline byte Engine::subscribeToShutdown(Func&& func)
     {
-        shutdownSequence().emplace(shutdownSequence().begin(), func);
+        static_assert(sizeof(func) == sizeof(ptr_type), "Parameter passed to subscribeToShutdown is not a function.");
+        static std::unordered_set<ptr_type> items;
+
+        ptr_type item = force_value_cast<ptr_type>(std::forward<Func>(func));
+        if (!items.count(item))
+        {
+            items.insert(item);
+            shutdownSequence().emplace(shutdownSequence().begin(), func);
+        }
         return 0;
     }
 

@@ -174,8 +174,8 @@ namespace legion::core::scheduling
         static bool unhookProcess(id_type chainId, pointer<Process> process);
     };
 
-    OnEngineInit(&Scheduler::init);
-    OnEngineShutdown(&Scheduler::shutdown);
+    OnEngineInit(Scheduler, &Scheduler::init);
+    OnEngineShutdown(Scheduler, &Scheduler::shutdown);
 }
 
 #include <core/scheduling/scheduler.inl>

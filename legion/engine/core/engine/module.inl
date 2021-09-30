@@ -19,10 +19,17 @@ namespace legion::core
         static_assert(std::is_base_of_v<System<SystemType>, SystemType>, "All systems must inherit from System<SystemType>");
 
         SystemType* system = static_cast<SystemType*>(m_systems.emplace(make_hash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...)).first->second.get());
+
         if constexpr (has_setup_v<SystemType, void()>)
         {
             m_setupFuncs.insert_back<SystemType, &SystemType::setup>(system);
         }
+
+        if constexpr (has_shutdown_v<SystemType, void()>)
+        {
+            m_shutdownFuncs.insert_back<SystemType, &SystemType::shutdown>(system);
+        }
+
         if constexpr (has_update_v<SystemType, void(time::span)>)
         {
             system->template createProcess<&SystemType::update>("Update");

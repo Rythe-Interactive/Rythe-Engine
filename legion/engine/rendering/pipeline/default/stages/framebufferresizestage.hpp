@@ -20,6 +20,7 @@ namespace legion::rendering
         static float getRenderScale();
 
         virtual void setup(app::window& context) override;
+        void shutdown();
         virtual void render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime) override;
         virtual priority_type priority() override;
 

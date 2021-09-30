@@ -1,7 +1,7 @@
 #define LEGION_ENTRY
-//#if defined(NDEBUG)
-#define LEGION_KEEP_CONSOLE
-//#endif
+#if defined(NDEBUG)
+    #define LEGION_KEEP_CONSOLE
+#endif
 
 #include <core/core.hpp>
 #include <application/application.hpp>

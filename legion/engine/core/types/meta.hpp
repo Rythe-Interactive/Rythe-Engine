@@ -37,7 +37,7 @@ namespace legion::core
     };                                                                                                                  \
                                                                                                                         \
     template<typename C, typename F>                                                                                    \
-    constexpr bool CONCAT_DEFINE(has_, CONCAT(x, _v)) = CONCAT(has_, x)<C, F>::value;                                   \
+    constexpr bool CONCAT(has_, CONCAT(x, _v)) = CONCAT(has_, x)<C, F>::value;                                   \
                                                                                                                         \
     template<typename, typename T>                                                                                      \
     struct CONCAT(has_static_, x) {                                                                                     \
@@ -61,7 +61,7 @@ namespace legion::core
     };                                                                                                                  \
                                                                                                                         \
     template<typename C, typename F>                                                                                    \
-    constexpr bool CONCAT_DEFINE(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value;
+    constexpr bool CONCAT(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value;
 #else
 #define HAS_FUNC(x)                                                                                                     \
     template<typename, typename T>                                                                                      \
@@ -70,7 +70,7 @@ namespace legion::core
     };                                                                                                                  \
                                                                                                                         \
     template<typename C, typename F>                                                                                    \
-    constexpr bool CONCAT_DEFINE(has_, CONCAT(x, _v)) = CONCAT(has_, x)<C, F>::value;                                   \
+    constexpr bool CONCAT(has_, CONCAT(x, _v)) = CONCAT(has_, x)<C, F>::value;                                   \
                                                                                                                         \
     template<typename, typename T>                                                                                      \
     struct CONCAT(has_static_, x) {                                                                                     \
@@ -78,7 +78,7 @@ namespace legion::core
     };                                                                                                                  \
                                                                                                                         \
     template<typename C, typename F>                                                                                    \
-    constexpr bool CONCAT_DEFINE(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value;
+    constexpr bool CONCAT(has_static_, CONCAT(x, _v)) = CONCAT(has_static_, x)<C, F>::value;
 #endif
 
 #define  typename_1(x)                                                                    typename x
@@ -100,8 +100,8 @@ namespace legion::core
 
     // turn: a, b, ...c
     // into: typename a, typename b, typename ...c
-#define typenames_count(count, ...) EXPAND(CONCAT_DEFINE(typename_, count)(__VA_ARGS__))
-#define typenames(...) EXPAND(CONCAT_DEFINE(typename_, NARGS(__VA_ARGS__))(__VA_ARGS__))
+#define typenames_count(count, ...) EXPAND(CONCAT(typename_, count)(__VA_ARGS__))
+#define typenames(...) EXPAND(CONCAT(typename_, NARGS(__VA_ARGS__))(__VA_ARGS__))
 
 #define COMBINE_SFINAE(name, predicate, templateArgs...)                                                                \
     template<typenames(CAT_PREFIX(_, templateArgs))>                                                                    \
@@ -134,6 +134,7 @@ namespace legion::core
     COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)>&& has_end_v<T L_COMMA typename T::iterator(void)>&& has_resize_v<T L_COMMA void(size_type)>, T);
 
     HAS_FUNC(setup);
+    HAS_FUNC(shutdown);
     HAS_FUNC(update);
 
     template<typename derived_type, typename base_type>

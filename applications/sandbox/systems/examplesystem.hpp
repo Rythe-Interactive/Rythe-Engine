@@ -73,6 +73,11 @@ public:
         bindToEvent<events::exit, &ExampleSystem::onExit>();
     }
 
+    void shutdown()
+    {
+        lgn::log::debug("ExampleSystem shutdown");
+    }
+
     void onExit(L_MAYBEUNUSED lgn::events::exit& event)
     {
         using namespace legion;

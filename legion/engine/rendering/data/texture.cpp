@@ -102,6 +102,13 @@ namespace legion::rendering
         return data;
     }
 
+    void TextureCache::destroy_texture(const std::string& name)
+    {
+        id_type id = nameHash(name);
+        async::readonly_guard guard(m_textureLock);
+        m_textures.erase(id);
+    }
+
     texture_handle TextureCache::create_texture(const std::string& name, const fs::view& file, texture_import_settings settings)
     {
         OPTICK_EVENT();

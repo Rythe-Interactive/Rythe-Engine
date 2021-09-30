@@ -1,6 +1,7 @@
 #pragma once
 #include <atomic>
 
+#include <core/engine/engine.hpp>
 #include <core/engine/enginesubsystem.hpp>
 #include <core/containers/delegate.hpp>
 #include <core/time/time.hpp>
@@ -15,7 +16,6 @@ namespace legion::core::scheduling
     class Clock : public EngineSubSystem<Clock>
     {
         ALLOW_PRIVATE_ONINIT;
-        ALLOW_PRIVATE_ONSHUTDOWN;
     public:
         using span_type = time::main_clock::span_type;
         using time_type = span_type::time_type;
@@ -35,7 +35,6 @@ namespace legion::core::scheduling
         static void advance(span_type start, span_type elapsed);
 
         static void onInit();
-        static void onShutdown();
 
     public:
         static time_type timeScale() noexcept;
@@ -61,4 +60,7 @@ namespace legion::core::scheduling
 
         static void tick();
     };
+
+    OnEngineInit(Clock, &Clock::init);
+    OnEngineShutdown(Clock, &Clock::shutdown);
 }

@@ -6,6 +6,7 @@
 
 namespace legion::core
 {
+    std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> Engine::m_modules;
     int Engine::exitCode = 0;
     argh::parser Engine::cliargs;
 
@@ -23,12 +24,15 @@ namespace legion::core
         return m_shutdownSequence;
     }
 
+    void Engine::shutdownModules()
+    {
+        for (const auto& [priority, moduleList] : m_modules)
+            for (auto& module : moduleList)
+                module->shutdown();
+    }
+
     Engine::Engine()
     {
-        ecs::Registry::init();
-        compute::Context::init();
-        scheduling::Scheduler::init();
-
         initializationSequence()();
 
         reportModule<CoreModule>();
@@ -44,14 +48,11 @@ namespace legion::core
                                  "| Initializing engine... |\n"
                                  "==========================");
 
-            ecs::Registry::init();
-            compute::Context::init();
-            scheduling::Scheduler::init();
             initializationSequence()();
 
             {
-                async::readwrite_guard guard(log::impl::threadNamesLock);
-                log::impl::threadNames[std::this_thread::get_id()] = "Initialization";
+                async::readwrite_guard guard(log::threadNamesLock);
+                log::threadNames[std::this_thread::get_id()] = "Initialization";
             }
 
             for (const auto& [priority, moduleList] : m_modules)
@@ -69,9 +70,6 @@ namespace legion::core
             exitCode = scheduling::Scheduler::run(low_power, minThreads);
 
             shutdownSequence()();
-            scheduling::Scheduler::shutdown();
-            compute::Context::shutdown();
-            ecs::Registry::shutdown();
 
         } while (m_shouldRestart.load(std::memory_order_relaxed));
     }

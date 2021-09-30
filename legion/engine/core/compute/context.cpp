@@ -85,7 +85,7 @@ namespace legion::core::compute {
             default: break;
             }
 
-            log::error("clCreateContext failed: {}", error);
+            log::error("clReleaseContext failed: {}", error);
         }
 
         ret = clReleaseDevice(instance.m_device_id);

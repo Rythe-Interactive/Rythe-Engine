@@ -1,23 +1,28 @@
 #include <core/scheduling/scheduler.hpp>
 #include <core/events/events.hpp>
+#include <core/engine/engine.hpp>
 
 namespace legion::core::scheduling
 {
     void Scheduler::onInit()
     {
+        reportDependency<events::EventBus>();
+        reportDependency<Clock>();
+
         events::EventBus::bindToEvent<events::exit>([](events::exit& evnt)
             {
                 instance.m_exitFromEvent.store(true, std::memory_order_release);
                 Scheduler::exit(evnt.exitcode);
             });
 
-        Clock::init();
+        create();
     }
 
-	void Scheduler::onShutdown()
-	{
-        exit(0);
-	}
+    void Scheduler::onShutdown()
+    {
+        if (!isExiting())
+            exit(0);
+    }
 
     void Scheduler::threadMain(bool lowPower, std::string name)
     {
@@ -28,6 +33,8 @@ namespace legion::core::scheduling
 
         while (!instance.m_start.load(std::memory_order_relaxed))
             std::this_thread::yield();
+
+        log::info("Starting thread.");
 
         time::timer clock;
         time::span timeBuffer;
@@ -106,6 +113,8 @@ namespace legion::core::scheduling
                 clock.start();
             }
         }
+
+        log::info("Shutting down thread.");
     }
 
     void Scheduler::tryCompleteJobPool()
@@ -152,11 +161,11 @@ namespace legion::core::scheduling
         std::string name = "Worker ";
 
         {
-            async::readwrite_guard guard(log::impl::threadNamesLock);
+            async::readwrite_guard guard(log::threadNamesLock);
             while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(instance.m_jobPoolSize))) != nullptr)
-                log::impl::threadNames[ptr->get_id()] = name + std::to_string(instance.m_jobPoolSize++);
+                log::threadNames[ptr->get_id()] = name + std::to_string(instance.m_jobPoolSize++);
 
-            log::impl::threadNames[std::this_thread::get_id()] = "Main thread";
+            log::threadNames[std::this_thread::get_id()] = "Main thread";
         }
 
         instance.m_start.store(true, std::memory_order_release);
@@ -214,11 +223,11 @@ namespace legion::core::scheduling
                 L_PAUSE_INSTRUCTION();
         }
 
+        Engine::shutdownModules();
+
         for (auto& [_, thread] : instance.m_threads)
             if (thread.joinable())
                 thread.join();
-
-        Clock::shutdown();
 
         return instance.m_exitCode;
     }
@@ -238,8 +247,8 @@ namespace legion::core::scheduling
         }
 
         log::undecoratedInfo("=========================\n"
-            "| Shutting down engine. |\n"
-            "=========================");
+                             "| Shutting down engine. |\n"
+                             "=========================");
 
         instance.m_exitCode = exitCode;
         instance.m_exit.store(true, std::memory_order_release);
