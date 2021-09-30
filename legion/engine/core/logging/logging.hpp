@@ -577,9 +577,9 @@ namespace legion::core::log
             initLogger(inst.fileLogger);
 
 #if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
-            logger = inst.consoleLogger;
+            inst.logger = inst.consoleLogger;
 #else
-            logger = inst.fileLogger;
+            inst.logger = inst.fileLogger;
 #endif
 
 #if defined(LEGION_LOG_TRACE)
