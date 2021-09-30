@@ -21,7 +21,9 @@ namespace legion::core::events
      */
     class EventBus : public EngineSubSystem<EventBus>
     {
+        SubSystemInstance(EventBus);
     private:
+
         std::unordered_map<id_type, multicast_delegate<void(event_base&)>> m_eventCallbacks;
 
     public:

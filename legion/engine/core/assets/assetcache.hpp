@@ -29,7 +29,8 @@ namespace legion::core::assets
     template<typename AssetType>
     class AssetCache : public EngineSubSystem<AssetCache<AssetType>>
     {
-        ALLOW_PRIVATE_ONSHUTDOWN;
+        AllowPrivateOnShutdown;
+        SubSystemInstance(AssetCache);
 
         template<typename Asset>
         friend class AssetLoader;

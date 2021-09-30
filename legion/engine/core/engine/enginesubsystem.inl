@@ -16,15 +16,12 @@ namespace legion::core
     typename EngineSubSystem<SubSystem>::data EngineSubSystem<SubSystem>::m_data;
 
     template<class SubSystem>
-    SubSystem& EngineSubSystem<SubSystem>::instance = EngineSubSystem<SubSystem>::m_data.inst;
-
-    template<class SubSystem>
     template<typename... Args>
     inline L_ALWAYS_INLINE SubSystem& EngineSubSystem<SubSystem>::create(Args&&... args)
     {
         new(&m_data.inst) SubSystem(std::forward<Args>(args)...);
         m_constructed = true;
-        return instance;
+        return m_data.inst;
     }
 
     template<class SubSystem>
@@ -48,8 +45,7 @@ namespace legion::core
     template<class SubSystem>
     inline L_ALWAYS_INLINE SubSystem& EngineSubSystem<SubSystem>::getInstance()
     {
-        init();
-        return instance;
+        return m_data.inst;
     }
 
     template<class SubSystem>
@@ -110,7 +106,7 @@ namespace legion::core
             if constexpr (has_static_onShutdown_v<SubSystem, void()>)
                 SubSystem::onShutdown();
 
-            instance.~SubSystem();
+            m_data.inst.~SubSystem();
         }
     }
 

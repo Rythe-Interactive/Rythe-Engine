@@ -21,8 +21,9 @@ namespace legion::core::scheduling
 
     class Scheduler : public EngineSubSystem<Scheduler>
     {
-        ALLOW_PRIVATE_ONINIT;
-        ALLOW_PRIVATE_ONSHUTDOWN;
+        AllowPrivateOnInit;
+        AllowPrivateOnShutdown;
+        SubSystemInstance(Scheduler);
     public:
         using chain_callback_type = typename ProcessChain::chain_callback_type;
         using chain_callback_delegate = typename ProcessChain::chain_callback_delegate;

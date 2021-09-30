@@ -24,8 +24,9 @@ namespace legion::core::ecs
      */
     class FilterRegistry : public EngineSubSystem<FilterRegistry>
     {
-        ALLOW_PRIVATE_ONINIT;
-        ALLOW_PRIVATE_ONSHUTDOWN;
+        AllowPrivateOnInit;
+        AllowPrivateOnShutdown;
+        SubSystemInstance(FilterRegistry);
     public:
         template<typename... component_types>
         friend struct filter_info;

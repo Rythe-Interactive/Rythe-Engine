@@ -20,8 +20,9 @@ namespace legion::core::compute
      */
     class Context : public EngineSubSystem<Context>
     {
-        ALLOW_PRIVATE_ONINIT;
-        ALLOW_PRIVATE_ONSHUTDOWN;
+        AllowPrivateOnInit;
+        AllowPrivateOnShutdown;
+        SubSystemInstance(Context);
     private:
         /**
          * @brief Initializes the OpenCL context.

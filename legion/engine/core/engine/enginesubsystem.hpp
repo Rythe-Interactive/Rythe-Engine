@@ -44,8 +44,6 @@ namespace legion::core
         static void reportDependency();
 
     public:
-        static SubSystem& instance;
-
         L_NODISCARD static SubSystem& getInstance();
 
         L_NODISCARD static bool initialized();
@@ -58,13 +56,15 @@ namespace legion::core
     };
 }
 
-#define ALLOW_PRIVATE_ONINIT                        \
+#define SubSystemInstance(Type) inline static Type& instance = legion::core::EngineSubSystem< Type >::getInstance();
+
+#define AllowPrivateOnInit                        \
 template<typename, typename>                        \
 friend struct legion::core::has_static_onInit;      \
 template<typename>                                  \
 friend class legion::core::EngineSubSystem;
 
-#define ALLOW_PRIVATE_ONSHUTDOWN                    \
+#define AllowPrivateOnShutdown                    \
 template<typename, typename>                        \
 friend struct legion::core::has_static_onShutdown;  \
 template<typename>                                  \

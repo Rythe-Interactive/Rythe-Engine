@@ -30,8 +30,9 @@ namespace legion::core::ecs
      */
     class Registry : public EngineSubSystem<Registry>
     {
-        ALLOW_PRIVATE_ONINIT;
-        ALLOW_PRIVATE_ONSHUTDOWN;
+        AllowPrivateOnInit;
+        AllowPrivateOnShutdown;
+        SubSystemInstance(Registry);
     private:
         // All miscellaneous data on entities, eg: hierarchy, active, alive.
         std::unordered_map<id_type, entity_data> m_entities;

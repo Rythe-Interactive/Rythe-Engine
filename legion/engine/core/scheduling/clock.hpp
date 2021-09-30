@@ -15,7 +15,8 @@ namespace legion::core::scheduling
 
     class Clock : public EngineSubSystem<Clock>
     {
-        ALLOW_PRIVATE_ONINIT;
+        AllowPrivateOnInit;
+        SubSystemInstance(Clock);
     public:
         using span_type = time::main_clock::span_type;
         using time_type = span_type::time_type;

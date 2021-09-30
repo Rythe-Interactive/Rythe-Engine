@@ -1,6 +1,5 @@
 #include <core/assets/assets.hpp>
 #include <core/scheduling/scheduling.hpp>
-#include "assetcache.hpp"
 #pragma once
 
 namespace legion::core::assets
