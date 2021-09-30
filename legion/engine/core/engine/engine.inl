@@ -3,6 +3,20 @@
 
 namespace legion::core
 {
+    template<typename Func>
+    inline byte Engine::subscribeToInit(Func&& func)
+    {
+        initializationSequence().emplace_back(func);
+        return 0;
+    }
+
+    template<typename Func>
+    inline byte Engine::subscribeToShutdown(Func&& func)
+    {
+        shutdownSequence().emplace(shutdownSequence().begin(), func);
+        return 0;
+    }
+
     template <typename ModuleType, typename... Args CNDOXY(inherits_from<ModuleType, Module>)>
     inline void Engine::reportModule(Args && ...args)
     {

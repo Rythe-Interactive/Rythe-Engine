@@ -4,6 +4,8 @@
 
 #include <Optick/optick.h>
 
+#include <core/engine/enginesubsystem.hpp>
+#include <core/engine/engine.hpp>
 #include <core/async/async.hpp>
 #include <core/containers/pointer.hpp>
 #include <core/containers/sparse_map.hpp>
@@ -17,8 +19,10 @@ namespace legion::core::scheduling
 {
     const inline static std::thread::id invalid_thread_id = std::thread::id();
 
-    class Scheduler
+    class Scheduler : public EngineSubSystem<Scheduler>
     {
+        ALLOW_PRIVATE_ONINIT;
+        ALLOW_PRIVATE_ONSHUTDOWN;
     public:
         using chain_callback_type = typename ProcessChain::chain_callback_type;
         using chain_callback_delegate = typename ProcessChain::chain_callback_delegate;
@@ -26,27 +30,33 @@ namespace legion::core::scheduling
         using frame_callback_delegate = chain_callback_delegate;
 
     private:
+        static constexpr size_type reserved_threads = 1; // this, OS
+
         template<typename resource>
         using per_thread_map = std::unordered_map<std::thread::id, resource>;
 
-        static sparse_map<id_type, ProcessChain> m_processChains;
+        sparse_map<id_type, ProcessChain> m_processChains;
 
-        static multicast_delegate<frame_callback_type> m_onFrameStart;
-        static multicast_delegate<frame_callback_type> m_onFrameEnd;
+        multicast_delegate<frame_callback_type> m_onFrameStart;
+        multicast_delegate<frame_callback_type> m_onFrameEnd;
 
-        static const size_type m_maxThreadCount;
-        static size_type m_availableThreads;
+        const size_type m_maxThreadCount = reserved_threads >= std::thread::hardware_concurrency() ? 0 : std::thread::hardware_concurrency() - reserved_threads;
+        size_type m_availableThreads = m_maxThreadCount;
 
-        static per_thread_map<std::thread> m_threads;
+        per_thread_map<std::thread> m_threads;
 
-        static async::rw_lock_pair<async::job_queue> m_jobs;
-        static size_type m_jobPoolSize;
+        async::rw_lock_pair<async::job_queue> m_jobs;
+        size_type m_jobPoolSize = 0;
 
-        static std::atomic<bool> m_exit;
-        static std::atomic<bool> m_exitFromEvent;
-        static std::atomic<bool> m_start;
-        static int m_exitCode;
+        std::atomic<bool> m_exit = { false };
+        std::atomic<bool> m_exitFromEvent = { false };
+        std::atomic<bool> m_start = { false };
+        int m_exitCode = 0;
 
+        std::atomic<float> m_pollTime = { 0.1f };
+
+        static void onInit();
+        static void onShutdown();
 
         static void threadMain(bool lowPower, std::string name);
 
@@ -58,8 +68,6 @@ namespace legion::core::scheduling
         static void doTick(Clock::span_type deltaTime);
 
     public:
-        static std::atomic<float> m_pollTime;
-
         template<typename functor, typename... argument_types>
         L_NODISCARD static pointer<std::thread> reserveThread(functor&& function, argument_types&&... args);
 
@@ -69,8 +77,6 @@ namespace legion::core::scheduling
 
         template<typename Func>
         static auto queueJobs(size_type count, Func&& func);
-
-        static void init();
 
         static int run(bool lowPower = false, size_type minThreads = 0);
 
@@ -167,6 +173,9 @@ namespace legion::core::scheduling
          */
         static bool unhookProcess(id_type chainId, pointer<Process> process);
     };
+
+    OnEngineInit(&Scheduler::init);
+    OnEngineShutdown(&Scheduler::shutdown);
 }
 
 #include <core/scheduling/scheduler.inl>

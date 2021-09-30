@@ -255,8 +255,16 @@ type& operator=(type&&) noexcept = default;
 #define LEGION_IMPURE_RETURN(x) { return (x); }
 
 #if !defined(LEGION_MIN_THREADS)
-#   define LEGION_MIN_THREADS 5
+#   define LEGION_MIN_THREADS 2
 #endif
+
+#ifdef __COUNTER__
+#define ANONYMOUS_NAME(x) CONCAT_DEFINE(x, __COUNTER__)
+#else
+#define ANONYMOUS_NAME(x) CONCAT_DEFINE(x, CONCAT_DEFINE(__FILE__ , __LINE__))
+#endif
+
+#define ANON_VAR(Type, Category) static Type ANONYMOUS_NAME(Category)
 
 #pragma endregion
 

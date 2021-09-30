@@ -1,6 +1,7 @@
 #pragma once
 #include <atomic>
 
+#include <core/engine/enginesubsystem.hpp>
 #include <core/containers/delegate.hpp>
 #include <core/time/time.hpp>
 
@@ -11,25 +12,30 @@ namespace legion::core::scheduling
         Free, Interval, Manual
     };
 
-    class Clock
+    class Clock : public EngineSubSystem<Clock>
     {
+        ALLOW_PRIVATE_ONINIT;
+        ALLOW_PRIVATE_ONSHUTDOWN;
     public:
-        using span_type = decltype(time::mainClock)::span_type;
+        using span_type = time::main_clock::span_type;
         using time_type = span_type::time_type;
         using tick_callback_type = void(span_type);
         using tick_callback_delegate = delegate<tick_callback_type>;
 
     private:
-        static span_type m_lastTickStart;
-        static advancement_protocol m_protocol;
-        static span_type m_interval;
-        static span_type m_lastTickDuration;
-        static span_type m_waitBuffer;
-        static std::atomic<bool> m_doTick;
-        static multicast_delegate<tick_callback_type> m_onTick;
-        static time_type m_timeScale;
+        span_type m_lastTickStart = 0;
+        advancement_protocol m_protocol = advancement_protocol::Free;
+        span_type m_interval = static_cast<Clock::time_type>(1.0 / 60.0);
+        span_type m_lastTickDuration = 0;
+        span_type m_waitBuffer = 0;
+        std::atomic<bool> m_doTick = { false };
+        multicast_delegate<tick_callback_type> m_onTick;
+        time_type m_timeScale = static_cast<Clock::time_type>(1);
 
         static void advance(span_type start, span_type elapsed);
+
+        static void onInit();
+        static void onShutdown();
 
     public:
         static time_type timeScale() noexcept;

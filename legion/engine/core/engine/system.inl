@@ -1,5 +1,8 @@
 #include <core/engine/system.hpp>
 #pragma once
+#include <core/ecs/registry.hpp>
+#include <core/scheduling/scheduling.hpp>
+#include <core/events/eventbus.hpp>
 
 namespace legion::core
 {

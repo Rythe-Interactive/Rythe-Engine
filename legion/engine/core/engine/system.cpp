@@ -1,4 +1,7 @@
 #include <core/engine/system.hpp>
+#include <core/ecs/registry.hpp>
+#include <core/scheduling/scheduling.hpp>
+#include <core/events/eventbus.hpp>
 
 namespace legion::core
 {

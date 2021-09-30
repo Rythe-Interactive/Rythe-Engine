@@ -101,14 +101,6 @@ int main(int argc, char** argv)
 
     reportModules(&engine);
 
-    log::undecoratedInfo("==========================\n"
-                         "| Initializing engine... |\n"
-                         "==========================");
-    engine.init();
-
-    log::undecoratedInfo("==============================\n"
-                         "| Entering main engine loop. |\n"
-                         "==============================");
     engine.run();
 
 #if defined(LEGION_KEEP_CONSOLE)

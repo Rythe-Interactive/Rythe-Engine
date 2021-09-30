@@ -3,9 +3,6 @@
 #include <core/engine/module.hpp>
 #include <core/types/primitives.hpp>
 #include <core/types/meta.hpp>
-#include <core/ecs/registry.hpp>
-#include <core/scheduling/scheduler.hpp>
-#include <core/events/eventbus.hpp>
 #include <core/logging/logging.hpp>
 #include <argh.h>
 
@@ -33,7 +30,17 @@ namespace legion::core
     private:
         std::map<priority_type, std::vector<std::unique_ptr<Module>>, std::greater<>> m_modules;
 
+        static std::atomic_bool m_shouldRestart;
+
+        L_NODISCARD static multicast_delegate<void()>& initializationSequence();
+        L_NODISCARD static multicast_delegate<void()>& shutdownSequence();
+
     public:
+        template<typename Func>
+        static byte subscribeToInit(Func&& func);
+        template<typename Func>
+        static byte subscribeToShutdown(Func&& func);
+
         static int exitCode;
 
         static argh::parser cliargs;
@@ -48,16 +55,17 @@ namespace legion::core
         template <typename ModuleType, typename... Args CNDOXY(inherits_from<ModuleType, Module> = 0)>
         void reportModule(Args&&...args);
 
-        /**@brief Calls init on all reported modules and thus engine internals.
-         * @note Needs to be called manually if LEGION_ENTRY was not used.
-         * @ref legion::core::Module
-         */
-        void init();
-
         /**@brief Runs engine loop.
          */
         void run(bool low_power = false, uint minThreads = 0);
+
+        static void restart();
+
+        static void shutdown();
     };
+
+#define OnEngineInit(Func) ANON_VAR(byte, _onInit_) = legion::core::Engine::subscribeToInit(Func);
+#define OnEngineShutdown(Func) ANON_VAR(byte, _onInit_) = legion::core::Engine::subscribeToShutdown(Func);
 }
 
 #include <core/engine/engine.inl>

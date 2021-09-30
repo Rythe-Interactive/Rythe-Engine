@@ -26,6 +26,9 @@
 
 #include <core/defaults/defaultcomponents.hpp>
 
+#include <core/engine/system.inl>
+#include <core/engine/module.inl>
+
 namespace legion
 {
     using namespace core;
