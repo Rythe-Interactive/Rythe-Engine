@@ -37,9 +37,6 @@ namespace legion::core
         static data m_data;
 
     protected:
-
-        static SubSystem& m_instance;
-
         template<typename... Args>
         static SubSystem& create(Args&&... args);
 
@@ -47,6 +44,8 @@ namespace legion::core
         static void reportDependency();
 
     public:
+        static SubSystem& instance;
+
         L_NODISCARD static SubSystem& getInstance();
 
         L_NODISCARD static bool initialized();

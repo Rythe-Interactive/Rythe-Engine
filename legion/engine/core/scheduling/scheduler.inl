@@ -6,14 +6,14 @@ namespace legion::core::scheduling
     template<typename Function, typename ...Args>
     inline pointer<std::thread> scheduling::Scheduler::createThread(Function&& function, Args && ...args)
     {
-        if (m_instance.m_availableThreads) // Check if there are available threads.
+        if (instance.m_availableThreads) // Check if there are available threads.
         {
-            m_instance.m_availableThreads--;
+            instance.m_availableThreads--;
 
             std::thread newThread{ std::forward<Function>(function), std::forward<Args>(args)... }; // Create a new thread and run it.
             std::thread::id id = newThread.get_id();
 
-            auto [it, _] = m_instance.m_threads.emplace(id, std::move(newThread));
+            auto [it, _] = instance.m_threads.emplace(id, std::move(newThread));
             return { &it->second };
         }
 
@@ -37,7 +37,7 @@ namespace legion::core::scheduling
         OPTICK_EVENT("legion::core::scheduling::Scheduler::queueJobs<T>");
         std::shared_ptr<async::job_pool> jobPool = std::make_shared<async::job_pool>(count, func);
 
-        auto& [lock, jobQueue] = m_instance.m_jobs;
+        auto& [lock, jobQueue] = instance.m_jobs;
         {
             async::readwrite_guard guard(lock);
             jobQueue.push_back(jobPool);
@@ -49,15 +49,15 @@ namespace legion::core::scheduling
     inline pointer<ProcessChain> Scheduler::createProcessChain(const char(&name)[charc])
     {
         id_type id = nameHash<charc>(name);
-        return { &m_instance.m_processChains.emplace(id, name, id).first.value() };
+        return { &instance.m_processChains.emplace(id, name, id).first.value() };
     }
 
     template<size_type charc>
     inline pointer<ProcessChain> Scheduler::getChain(const char(&name)[charc])
     {
         id_type id = nameHash<charc>(name);
-        if (m_instance.m_processChains.contains(id))
-            return { &m_instance.m_processChains.at(id) };
+        if (instance.m_processChains.contains(id))
+            return { &instance.m_processChains.at(id) };
         return { nullptr };
     }
 
@@ -66,9 +66,9 @@ namespace legion::core::scheduling
     {
         id_type chainId = nameHash<charc>(processChainName);
 
-        if (m_instance.m_processChains.contains(chainId))
+        if (instance.m_processChains.contains(chainId))
         {
-            m_instance.m_processChains[chainId].addProcess(process);
+            instance.m_processChains[chainId].addProcess(process);
             return true;
         }
 
@@ -80,9 +80,9 @@ namespace legion::core::scheduling
     {
         id_type chainId = nameHash<charc>(processChainName);
 
-        if (m_instance.m_processChains.contains(chainId))
+        if (instance.m_processChains.contains(chainId))
         {
-            m_instance.m_processChains[chainId].addProcess(process);
+            instance.m_processChains[chainId].addProcess(process);
             return true;
         }
 
@@ -94,8 +94,8 @@ namespace legion::core::scheduling
     {
         id_type chainId = nameHash<charc>(chainName);
 
-        if (m_instance.m_processChains.contains(chainId))
-            return m_instance.m_processChains[chainId].removeProcess(process);
+        if (instance.m_processChains.contains(chainId))
+            return instance.m_processChains[chainId].removeProcess(process);
 
         return false;
     }
@@ -105,8 +105,8 @@ namespace legion::core::scheduling
     {
         id_type chainId = nameHash<charc>(chainName);
 
-        if (m_instance.m_processChains.contains(chainId))
-            return m_instance.m_processChains[chainId].removeProcess(process);
+        if (instance.m_processChains.contains(chainId))
+            return instance.m_processChains[chainId].removeProcess(process);
 
         return false;
     }

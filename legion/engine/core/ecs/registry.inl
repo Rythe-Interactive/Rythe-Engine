@@ -10,7 +10,7 @@ namespace legion::core::ecs
         if (families.count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
             return static_cast<component_pool<component_type>*>(families.at(make_hash<component_type>()).get());
 
-        m_instance.m_familyNames.emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
+        instance.m_familyNames.emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
 
         // Allocate and emplace if no item was found.
         return static_cast<component_pool<component_type>*>(
@@ -28,7 +28,7 @@ namespace legion::core::ecs
             make_hash<component_type>(),
             std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
         );
-        m_instance.m_familyNames.emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
+        instance.m_familyNames.emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
     }
 
     template<typename component_type0, typename component_type1, typename... component_types, typename... Args>
@@ -64,7 +64,7 @@ namespace legion::core::ecs
             }
 
             // Update entity composition.
-            m_instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
             // Update filters.
             FilterRegistry::markComponentAdd<component_type>(target);
             // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
@@ -114,7 +114,7 @@ namespace legion::core::ecs
             }
 
             // Update entity composition.
-            m_instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
             // Update filters.
             FilterRegistry::markComponentAdd<component_type>(target);
             // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
@@ -142,7 +142,7 @@ namespace legion::core::ecs
             }
 
             // Update entity composition.
-            m_instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
             // Update filters.
             FilterRegistry::markComponentAdd<component_type>(target);
             // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
@@ -201,7 +201,7 @@ namespace legion::core::ecs
         }
 
         // Update entity composition.
-        m_instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+        instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
         // Update filters.
         FilterRegistry::markComponentAdd<component_type>(target);
         // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
@@ -221,7 +221,7 @@ namespace legion::core::ecs
         }
 
         // Update entity composition.
-        m_instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+        instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
         // Update filters.
         FilterRegistry::markComponentAdd<component_type>(target);
         // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
@@ -247,7 +247,7 @@ namespace legion::core::ecs
             }
 
             // Update entity composition.
-            m_instance.m_entityCompositions.at(target).erase(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).erase(make_hash<component_type>());
             // Update filters.
             FilterRegistry::markComponentErase<component_type>(entity{ &Registry::entityData(target) });
             // Actually destroy the component. (this uses the direct function which avoids use of virtual indirection)

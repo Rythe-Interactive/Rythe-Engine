@@ -69,7 +69,7 @@ namespace legion::core::compute
         static Buffer createBuffer(byte* data, size_type size, buffer_type type, std::string name = "")
         {
             OPTICK_EVENT();
-            return Buffer(m_instance.m_context, data, size, type, std::forward<std::string>(name));
+            return Buffer(instance.m_context, data, size, type, std::forward<std::string>(name));
         }
 
         static Buffer createImage(image& img, buffer_type type, std::string name = "")
@@ -109,24 +109,24 @@ namespace legion::core::compute
             }
             }
 
-            return Buffer(m_instance.m_context, img.data(), width, height, depth, CL_MEM_OBJECT_IMAGE2D, &fmt, type, name);
+            return Buffer(instance.m_context, img.data(), width, height, depth, CL_MEM_OBJECT_IMAGE2D, &fmt, type, name);
         }
 
         static Buffer createImageFromOpenGLImage(uint target, uint texture, buffer_type type, std::string name = "", uint mip_level = 0)
         {
             OPTICK_EVENT();
-            return Buffer(m_instance.m_context, target, texture, mip_level, type, std::move(name));
+            return Buffer(instance.m_context, target, texture, mip_level, type, std::move(name));
         }
 
         static Buffer createImageFromOpenGLBuffer(uint bufferid, buffer_type type, std::string name = "")
         {
             OPTICK_EVENT();
-            return Buffer(m_instance.m_context, bufferid, type, false, std::move(name));
+            return Buffer(instance.m_context, bufferid, type, false, std::move(name));
         }
         static Buffer createImageFromOpenGLRenderBuffer(uint bufferid, buffer_type type, std::string name = "")
         {
             OPTICK_EVENT();
-            return Buffer(m_instance.m_context, bufferid, type, true, std::move(name));
+            return Buffer(instance.m_context, bufferid, type, true, std::move(name));
         }
 
 
@@ -135,7 +135,7 @@ namespace legion::core::compute
          */
         static cl_device_id getDeviceId()
         {
-            return m_instance.m_device_id;
+            return instance.m_device_id;
         }
 
     private:
