@@ -6,12 +6,12 @@ namespace legion::core::ecs
     id_type Registry::getNextEntityId()
     {
         // Get the current entity ID by recycling or generating a new one.
-        return instance.m_recyclableEntities.empty() ? // If there are no recyclable entityIDs
-            instance.m_nextEntityId++ :               // Then we increase the next entityID and use that.
+        return m_instance.m_recyclableEntities.empty() ? // If there are no recyclable entityIDs
+            m_instance.m_nextEntityId++ :               // Then we increase the next entityID and use that.
             []()
         {   // Lanbda to handle recycling case.
-            id_type temp = instance.m_recyclableEntities.front(); // Copy out first item.
-            instance.m_recyclableEntities.pop();                  // Remove first item from queue.
+            id_type temp = m_instance.m_recyclableEntities.front(); // Copy out first item.
+            m_instance.m_recyclableEntities.pop();                  // Remove first item from queue.
             return temp;
         }();
 
@@ -24,7 +24,7 @@ namespace legion::core::ecs
         init();
 
         // Create entity data.
-        auto& [_, data] = *instance.m_entities.try_emplace(world_entity_id).first;
+        auto& [_, data] = *m_instance.m_entities.try_emplace(world_entity_id).first;
         data.alive = true;
         data.active = true;
         data.id = world_entity_id;
@@ -32,7 +32,7 @@ namespace legion::core::ecs
         data.parent = entity{ nullptr };
 
         // Create component composition.
-        instance.m_entityCompositions.try_emplace(world_entity_id);
+        m_instance.m_entityCompositions.try_emplace(world_entity_id);
         return entity{ &data };
     }
 
@@ -59,7 +59,7 @@ namespace legion::core::ecs
 
     std::string Registry::getFamilyName(id_type id)
     {
-        if (const auto itr = instance.m_familyNames.find(id); itr != instance.m_familyNames.end())
+        if (const auto itr = m_instance.m_familyNames.find(id); itr != m_instance.m_familyNames.end())
         {
             return itr->second;
         }
@@ -92,7 +92,7 @@ namespace legion::core::ecs
 
         // We use try_emplace in order to preserve the memory pooling that the children set might have.
         // This way recycled entities might not have to do as much reallocation when new children are added.
-        auto& [_, data] = *instance.m_entities.try_emplace(currentEntityId).first;
+        auto& [_, data] = *m_instance.m_entities.try_emplace(currentEntityId).first;
         data.alive = true;
         data.active = true;
         data.id = currentEntityId;
@@ -103,7 +103,7 @@ namespace legion::core::ecs
             parent->children.insert(entity{ &data });
 
         // We try to insert another set for entity composition, if one already exists then we can recycle it.
-        instance.m_entityCompositions.try_emplace(entity{ &data });
+        m_instance.m_entityCompositions.try_emplace(entity{ &data });
 
         // We create an identical entity handle multiple times in this function but it's fine because it only holds a pointer.
         // By keeping these identical entity handles inline rvalues the compiler is allowed to optimize them away.
@@ -118,7 +118,7 @@ namespace legion::core::ecs
 
         // We use try_emplace in order to preserve the memory pooling that the children set might have.
         // This way recycled entities might not have to do as much reallocation when new children are added.
-        auto& [_, data] = *instance.m_entities.try_emplace(currentEntityId).first;
+        auto& [_, data] = *m_instance.m_entities.try_emplace(currentEntityId).first;
         data.alive = true;
         data.active = true;
         data.id = currentEntityId;
@@ -129,7 +129,7 @@ namespace legion::core::ecs
             parent->children.insert(entity{ &data });
 
         // We try to insert another set for entity composition, if one already exists then we can recycle it.
-        instance.m_entityCompositions.try_emplace(entity{ &data });
+        m_instance.m_entityCompositions.try_emplace(entity{ &data });
 
         // We create an identical entity handle multiple times in this function but it's fine because it only holds a pointer.
         // By keeping these identical entity handles inline rvalues the compiler is allowed to optimize them away.
@@ -197,19 +197,19 @@ namespace legion::core::ecs
         target->children.clear();
 
         // Destroy every component in the composition and clear the composition.
-        auto& composition = instance.m_entityCompositions.at(target->id);
+        auto& composition = m_instance.m_entityCompositions.at(target->id);
         for (auto& componentId : composition)
             getFamily(componentId)->destroy_component(target);
         composition.clear();
 
         // Mark entity as recyclable and invalidate ID.
-        instance.m_recyclableEntities.push(target->id);
+        m_instance.m_recyclableEntities.push(target->id);
         target->id = invalid_id;
     }
 
     void Registry::destroyEntity(id_type target, bool recurse)
     {
-        destroyEntity(entity{ &instance.m_entities.at(target) }, recurse);
+        destroyEntity(entity{ &m_instance.m_entities.at(target) }, recurse);
     }
 
     bool Registry::checkEntity(entity target)
@@ -221,32 +221,32 @@ namespace legion::core::ecs
     bool Registry::checkEntity(id_type target)
     {
         OPTICK_EVENT();
-        return instance.m_entities.count(target) && instance.m_entities.at(target).alive;
+        return m_instance.m_entities.count(target) && m_instance.m_entities.at(target).alive;
     }
 
     std::unordered_map<id_type, std::unordered_set<id_type>>& Registry::entityCompositions()
     {
-        return instance.m_entityCompositions;
+        return m_instance.m_entityCompositions;
     }
 
     std::unordered_map<id_type, entity_data>& Registry::entityData()
     {
-        return instance.m_entities;
+        return m_instance.m_entities;
     }
 
     std::unordered_set<id_type>& Registry::entityComposition(entity target)
     {
-        return instance.m_entityCompositions.at(target);
+        return m_instance.m_entityCompositions.at(target);
     }
 
     std::unordered_set<id_type>& Registry::entityComposition(id_type target)
     {
-        return instance.m_entityCompositions.at(target);
+        return m_instance.m_entityCompositions.at(target);
     }
 
     entity_data& Registry::entityData(id_type target)
     {
-        return instance.m_entities.at(target);
+        return m_instance.m_entities.at(target);
     }
 
     entity Registry::getEntity(id_type target)
@@ -258,7 +258,7 @@ namespace legion::core::ecs
     {
         OPTICK_EVENT();
         // Update entity composition.
-        instance.m_entityCompositions.at(target).insert(typeId);
+        m_instance.m_entityCompositions.at(target).insert(typeId);
         // Update filters.
         FilterRegistry::markComponentAdd(typeId, target);
         // Actually create and return the component.
@@ -269,7 +269,7 @@ namespace legion::core::ecs
     {
         OPTICK_EVENT();
         // Update entity composition.
-        instance.m_entityCompositions.at(target).insert(typeId);
+        m_instance.m_entityCompositions.at(target).insert(typeId);
         // Update filters.
         FilterRegistry::markComponentAdd(typeId, target);
         // Actually create and return the component using the prototype.
@@ -280,7 +280,7 @@ namespace legion::core::ecs
     {
         OPTICK_EVENT();
         // Update entity composition.
-        instance.m_entityCompositions.at(target).insert(typeId);
+        m_instance.m_entityCompositions.at(target).insert(typeId);
         // Update filters.
         FilterRegistry::markComponentAdd(typeId, target);
         // Actually create and return the component using the prototype.
@@ -291,7 +291,7 @@ namespace legion::core::ecs
     {
         OPTICK_EVENT();
         // Update entity composition.
-        instance.m_entityCompositions.at(target).erase(typeId);
+        m_instance.m_entityCompositions.at(target).erase(typeId);
         // Update filters.
         FilterRegistry::markComponentErase(typeId, target);
         // Actually destroy the component.

@@ -26,7 +26,7 @@ namespace legion::core
         {
             union
             {
-                SubSystem instance;
+                SubSystem inst;
                 byte dummy;
             };
 
@@ -38,7 +38,7 @@ namespace legion::core
 
     protected:
 
-        static SubSystem& instance;
+        static SubSystem& m_instance;
 
         template<typename... Args>
         static SubSystem& create(Args&&... args);

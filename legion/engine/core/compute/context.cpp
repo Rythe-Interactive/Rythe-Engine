@@ -15,7 +15,7 @@ namespace legion::core::compute {
         cl_uint ret_num_platforms;
 
         //get a suitable computing platform
-        cl_int ret = clGetPlatformIDs(1, &instance.m_platform_id, &ret_num_platforms);
+        cl_int ret = clGetPlatformIDs(1, &m_instance.m_platform_id, &ret_num_platforms);
 
         //error checking for clGetPlatformIDs
         if (ret != CL_SUCCESS)
@@ -26,7 +26,7 @@ namespace legion::core::compute {
 
 
         //get a suitable computing device (this should find the best device in the average pc)
-        ret = clGetDeviceIDs(instance.m_platform_id, CL_DEVICE_TYPE_DEFAULT, 1, &instance.m_device_id, &ret_num_devices);
+        ret = clGetDeviceIDs(m_instance.m_platform_id, CL_DEVICE_TYPE_DEFAULT, 1, &m_instance.m_device_id, &ret_num_devices);
 
         //error checking for clGetDeviceIDs
         if (ret != CL_SUCCESS)
@@ -49,7 +49,7 @@ namespace legion::core::compute {
 
 
         //create the computing context
-        instance.m_context = clCreateContext(nullptr, 1, &instance.m_device_id, nullptr, nullptr, &ret);
+        m_instance.m_context = clCreateContext(nullptr, 1, &m_instance.m_device_id, nullptr, nullptr, &ret);
 
         //error checking for clCreateContext
         if (ret != CL_SUCCESS)
@@ -74,7 +74,7 @@ namespace legion::core::compute {
 
     void Context::onShutdown()
     {
-        auto ret = clReleaseContext(instance.m_context);
+        auto ret = clReleaseContext(m_instance.m_context);
 
         if (ret != CL_SUCCESS)
         {
@@ -88,7 +88,7 @@ namespace legion::core::compute {
             log::error("clReleaseContext failed: {}", error);
         }
 
-        ret = clReleaseDevice(instance.m_device_id);
+        ret = clReleaseDevice(m_instance.m_device_id);
 
         if (ret != CL_SUCCESS)
         {
@@ -108,6 +108,6 @@ namespace legion::core::compute {
     Program Context::createProgram(const filesystem::basic_resource& data)
     {
         OPTICK_EVENT();
-        return Program(instance.m_context, instance.m_device_id, data);
+        return Program(m_instance.m_context, m_instance.m_device_id, data);
     }
 }

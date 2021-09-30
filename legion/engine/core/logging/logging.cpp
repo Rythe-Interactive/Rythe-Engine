@@ -5,8 +5,8 @@ namespace legion::core::log
 {
     impl& impl::get()
     {
-        static impl instance;
-        return instance;
+        static impl m_instance;
+        return m_instance;
     }
 
 }

@@ -11,7 +11,7 @@ namespace legion::core::scheduling
 
         events::EventBus::bindToEvent<events::exit>([](events::exit& evnt)
             {
-                instance.m_exitFromEvent.store(true, std::memory_order_release);
+                m_instance.m_exitFromEvent.store(true, std::memory_order_release);
                 Scheduler::exit(evnt.exitcode);
             });
 
@@ -31,7 +31,7 @@ namespace legion::core::scheduling
 
         OPTICK_THREAD(name.c_str());
 
-        while (!instance.m_start.load(std::memory_order_relaxed))
+        while (!m_instance.m_start.load(std::memory_order_relaxed))
             std::this_thread::yield();
 
         log::info("Starting thread.");
@@ -40,14 +40,14 @@ namespace legion::core::scheduling
         time::span timeBuffer;
         time::span sleepTime;
 
-        while (!instance.m_exit.load(std::memory_order_relaxed))
+        while (!m_instance.m_exit.load(std::memory_order_relaxed))
         {
             bool noWork = true;
 
             std::shared_ptr<async::job_pool> jobPoolPtr = nullptr;
 
             {
-                auto& [lock, jobQueue] = instance.m_jobs;
+                auto& [lock, jobQueue] = m_instance.m_jobs;
                 async::readonly_guard guard(lock);
                 if (!jobQueue.empty())
                 {
@@ -94,7 +94,7 @@ namespace legion::core::scheduling
                     OPTICK_EVENT("Sleep");
                     std::this_thread::sleep_for(std::chrono::microseconds(1));
                 }
-                else if (timeBuffer >= sleepTime * instance.m_pollTime.load(std::memory_order_relaxed))
+                else if (timeBuffer >= sleepTime * m_instance.m_pollTime.load(std::memory_order_relaxed))
                 {
                     OPTICK_EVENT("Sleep");
                     timeBuffer -= sleepTime;
@@ -119,7 +119,7 @@ namespace legion::core::scheduling
 
     void Scheduler::tryCompleteJobPool()
     {
-        auto& [lock, jobQueue] = instance.m_jobs;
+        auto& [lock, jobQueue] = m_instance.m_jobs;
         async::readwrite_guard wguard(lock);
         if (!jobQueue.empty() && jobQueue.front()->is_done())
         {
@@ -132,17 +132,17 @@ namespace legion::core::scheduling
         OPTICK_FRAME("Main thread");
 
         time::span dt{ deltaTime };
-        instance.m_onFrameStart(dt, time::span(Clock::elapsedSinceTickStart()));
+        m_instance.m_onFrameStart(dt, time::span(Clock::elapsedSinceTickStart()));
 
-        for (auto [_, chain] : instance.m_processChains)
+        for (auto [_, chain] : m_instance.m_processChains)
             chain.runInCurrentThread(dt);
 
-        instance.m_onFrameEnd(dt, time::span(Clock::elapsedSinceTickStart()));
+        m_instance.m_onFrameEnd(dt, time::span(Clock::elapsedSinceTickStart()));
     }
 
     pointer<std::thread> Scheduler::getThread(std::thread::id id)
     {
-        return { &instance.m_threads.at(id) };
+        return { &m_instance.m_threads.at(id) };
     }
 
     int Scheduler::run(bool lowPower, size_type minThreads)
@@ -151,28 +151,28 @@ namespace legion::core::scheduling
 
         size_type m_minThreads = minThreads < 1 ? 1 : minThreads;
 
-        if (instance.m_maxThreadCount < m_minThreads)
+        if (m_instance.m_maxThreadCount < m_minThreads)
             m_lowPower = true;
 
-        if (instance.m_availableThreads < m_minThreads)
-            instance.m_availableThreads = m_minThreads;
+        if (m_instance.m_availableThreads < m_minThreads)
+            m_instance.m_availableThreads = m_minThreads;
 
         pointer<std::thread> ptr;
         std::string name = "Worker ";
 
         {
             async::readwrite_guard guard(log::threadNamesLock);
-            while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(instance.m_jobPoolSize))) != nullptr)
-                log::threadNames[ptr->get_id()] = name + std::to_string(instance.m_jobPoolSize++);
+            while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(m_instance.m_jobPoolSize))) != nullptr)
+                log::threadNames[ptr->get_id()] = name + std::to_string(m_instance.m_jobPoolSize++);
 
             log::threadNames[std::this_thread::get_id()] = "Main thread";
         }
 
-        instance.m_start.store(true, std::memory_order_release);
+        m_instance.m_start.store(true, std::memory_order_release);
 
         Clock::subscribeToTick(doTick);
 
-        while (!instance.m_exit.load(std::memory_order_relaxed))
+        while (!m_instance.m_exit.load(std::memory_order_relaxed))
         {
             Clock::update();
 
@@ -190,7 +190,7 @@ namespace legion::core::scheduling
                 uint avg = math::uround(1.f / (totalTime / static_cast<float>(framecount)));
                 totalTime = 0.f;
                 framecount = 0;
-                float pollTime = instance.m_pollTime.load(std::memory_order_relaxed);
+                float pollTime = m_instance.m_pollTime.load(std::memory_order_relaxed);
 
                 log::debug("avg: {} poll: {:.3f}\tbAvg: {} bPoll: {:.3f}", avg, pollTime, bestAvg, bestPollTime);
 
@@ -214,7 +214,7 @@ namespace legion::core::scheduling
                     pollTime = bestPollTime;
                 }
 
-                instance.m_pollTime.store(pollTime, std::memory_order_relaxed);
+                m_instance.m_pollTime.store(pollTime, std::memory_order_relaxed);
             }
 
             if (m_lowPower)
@@ -225,22 +225,22 @@ namespace legion::core::scheduling
 
         Engine::shutdownModules();
 
-        for (auto& [_, thread] : instance.m_threads)
+        for (auto& [_, thread] : m_instance.m_threads)
             if (thread.joinable())
                 thread.join();
 
-        return instance.m_exitCode;
+        return m_instance.m_exitCode;
     }
 
     void Scheduler::exit(int exitCode)
     {
-        if (!instance.m_exitFromEvent.load(std::memory_order_relaxed))
+        if (!m_instance.m_exitFromEvent.load(std::memory_order_relaxed))
         {
             events::EventBus::raiseEvent<events::exit>(exitCode);
             return;
         }
 
-        if (instance.m_exit.load(std::memory_order_relaxed))
+        if (m_instance.m_exit.load(std::memory_order_relaxed))
         {
             log::warn("Engine was already exiting, triggered additional exit event with code {}", exitCode);
             return;
@@ -250,112 +250,112 @@ namespace legion::core::scheduling
                              "| Shutting down engine. |\n"
                              "=========================");
 
-        instance.m_exitCode = exitCode;
-        instance.m_exit.store(true, std::memory_order_release);
+        m_instance.m_exitCode = exitCode;
+        m_instance.m_exit.store(true, std::memory_order_release);
     }
 
     bool Scheduler::isExiting()
     {
-        return instance.m_exit.load(std::memory_order_relaxed);
+        return m_instance.m_exit.load(std::memory_order_relaxed);
     }
 
     size_type Scheduler::jobPoolSize() noexcept
     {
-        return instance.m_jobPoolSize;
+        return m_instance.m_jobPoolSize;
     }
 
     pointer<ProcessChain> Scheduler::createProcessChain(cstring name)
     {
         id_type id = nameHash(name);
-        return { &instance.m_processChains.emplace(id, name, id).first.value() };
+        return { &m_instance.m_processChains.emplace(id, name, id).first.value() };
     }
 
     pointer<ProcessChain> Scheduler::getChain(id_type id)
     {
-        if (instance.m_processChains.contains(id))
-            return { &instance.m_processChains.at(id) };
+        if (m_instance.m_processChains.contains(id))
+            return { &m_instance.m_processChains.at(id) };
         return { nullptr };
     }
 
     pointer<ProcessChain> Scheduler::getChain(cstring name)
     {
         id_type id = nameHash(name);
-        if (instance.m_processChains.contains(id))
-            return { &instance.m_processChains.at(id) };
+        if (m_instance.m_processChains.contains(id))
+            return { &m_instance.m_processChains.at(id) };
         return { nullptr };
     }
 
     void Scheduler::subscribeToChainStart(id_type chainId, const chain_callback_delegate& callback)
     {
-        instance.m_processChains.at(chainId).subscribeToChainStart(callback);
+        m_instance.m_processChains.at(chainId).subscribeToChainStart(callback);
     }
 
     void Scheduler::subscribeToChainStart(cstring chainName, const chain_callback_delegate& callback)
     {
         id_type chainId = nameHash(chainName);
-        instance.m_processChains.at(chainId).subscribeToChainStart(callback);
+        m_instance.m_processChains.at(chainId).subscribeToChainStart(callback);
     }
 
     void Scheduler::unsubscribeFromChainStart(id_type chainId, const chain_callback_delegate& callback)
     {
-        instance.m_processChains.at(chainId).unsubscribeFromChainStart(callback);
+        m_instance.m_processChains.at(chainId).unsubscribeFromChainStart(callback);
     }
 
     void Scheduler::unsubscribeFromChainStart(cstring chainName, const chain_callback_delegate& callback)
     {
         id_type chainId = nameHash(chainName);
-        instance.m_processChains.at(chainId).unsubscribeFromChainStart(callback);
+        m_instance.m_processChains.at(chainId).unsubscribeFromChainStart(callback);
     }
 
     void Scheduler::subscribeToChainEnd(id_type chainId, const chain_callback_delegate& callback)
     {
-        instance.m_processChains.at(chainId).subscribeToChainEnd(callback);
+        m_instance.m_processChains.at(chainId).subscribeToChainEnd(callback);
     }
 
     void Scheduler::subscribeToChainEnd(cstring chainName, const chain_callback_delegate& callback)
     {
         id_type chainId = nameHash(chainName);
-        instance.m_processChains.at(chainId).subscribeToChainEnd(callback);
+        m_instance.m_processChains.at(chainId).subscribeToChainEnd(callback);
     }
 
     void Scheduler::subscribeToFrameStart(const frame_callback_delegate& callback)
     {
-        instance.m_onFrameStart.push_back(callback);
+        m_instance.m_onFrameStart.push_back(callback);
     }
 
     void Scheduler::unsubscribeFromFrameStart(const frame_callback_delegate& callback)
     {
-        instance.m_onFrameStart.erase(callback);
+        m_instance.m_onFrameStart.erase(callback);
     }
 
     void Scheduler::subscribeToFrameEnd(const frame_callback_delegate& callback)
     {
-        instance.m_onFrameEnd.push_back(callback);
+        m_instance.m_onFrameEnd.push_back(callback);
     }
 
     void Scheduler::unsubscribeFromFrameEnd(const frame_callback_delegate& callback)
     {
-        instance.m_onFrameEnd.erase(callback);
+        m_instance.m_onFrameEnd.erase(callback);
     }
 
     void Scheduler::unsubscribeFromChainEnd(id_type chainId, const chain_callback_delegate& callback)
     {
-        instance.m_processChains.at(chainId).unsubscribeFromChainEnd(callback);
+        m_instance.m_processChains.at(chainId).unsubscribeFromChainEnd(callback);
     }
 
     void Scheduler::unsubscribeFromChainEnd(cstring chainName, const chain_callback_delegate& callback)
     {
         id_type chainId = nameHash(chainName);
-        instance.m_processChains.at(chainId).unsubscribeFromChainEnd(callback);
+        m_instance.m_processChains.at(chainId).unsubscribeFromChainEnd(callback);
     }
 
     bool Scheduler::hookProcess(cstring chainName, Process& process)
     {
         id_type chainId = nameHash(chainName);
 
-        if (instance.m_processChains.contains(chainId))
+        if (m_instance.m_processChains.contains(chainId))
         {
-            instance.m_processChains[chainId].addProcess(process);
+            m_instance.m_processChains[chainId].addProcess(process);
             return true;
         }
 
@@ -366,9 +366,9 @@ namespace legion::core::scheduling
     {
         id_type chainId = nameHash(chainName);
 
-        if (instance.m_processChains.contains(chainId))
+        if (m_instance.m_processChains.contains(chainId))
         {
-            instance.m_processChains[chainId].addProcess(process);
+            m_instance.m_processChains[chainId].addProcess(process);
             return true;
         }
 
@@ -379,8 +379,8 @@ namespace legion::core::scheduling
     {
         id_type chainId = nameHash(chainName);
 
-        if (instance.m_processChains.contains(chainId))
-            return instance.m_processChains[chainId].removeProcess(process);
+        if (m_instance.m_processChains.contains(chainId))
+            return m_instance.m_processChains[chainId].removeProcess(process);
 
         return false;
     }
@@ -389,16 +389,16 @@ namespace legion::core::scheduling
     {
         id_type chainId = nameHash(chainName);
 
-        if (instance.m_processChains.contains(chainId))
-            return instance.m_processChains[chainId].removeProcess(process);
+        if (m_instance.m_processChains.contains(chainId))
+            return m_instance.m_processChains[chainId].removeProcess(process);
 
         return false;
     }
 
     bool Scheduler::unhookProcess(id_type chainId, pointer<Process> process)
     {
-        if (instance.m_processChains.contains(chainId))
-            return instance.m_processChains[chainId].removeProcess(process);
+        if (m_instance.m_processChains.contains(chainId))
+            return m_instance.m_processChains[chainId].removeProcess(process);
 
         return false;
     }

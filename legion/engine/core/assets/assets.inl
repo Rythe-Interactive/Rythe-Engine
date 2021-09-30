@@ -11,7 +11,7 @@ namespace legion::core::assets
     {
         static_assert(std::is_constructible_v<AssetType, Args...>, "Asset type is not constructible with given argument types.");
 
-        AssetType* ptr = &instance.m_cache.try_emplace(nameHash, AssetType(std::forward<Args>(args)...)).first->second;
+        AssetType* ptr = &m_instance.m_cache.try_emplace(nameHash, AssetType(std::forward<Args>(args)...)).first->second;
         return asset<AssetType>{ ptr, nameHash };
     }
 
@@ -19,9 +19,9 @@ namespace legion::core::assets
     inline void AssetCache<AssetType>::onShutdown()
     {
         std::vector<id_type> toDestroy;
-        toDestroy.reserve(instance.m_cache.size());
+        toDestroy.reserve(m_instance.m_cache.size());
 
-        for (auto& [key, value] : instance.m_cache)
+        for (auto& [key, value] : m_instance.m_cache)
             toDestroy.push_back(key);
 
         for (auto& id : toDestroy)
@@ -31,7 +31,7 @@ namespace legion::core::assets
     template<typename AssetType>
     inline L_ALWAYS_INLINE const detail::asset_info& AssetCache<AssetType>::info(id_type nameHash)
     {
-        return instance.m_info.at(nameHash);
+        return m_instance.m_info.at(nameHash);
     }
 
     template<typename AssetType>
@@ -41,9 +41,9 @@ namespace legion::core::assets
         size_type loaderId;
 
         for (size_type i = previousLoader - 2; i != static_cast<size_type>(-1); i--)
-            if (instance.m_loaders[i]->canLoad(file))
+            if (m_instance.m_loaders[i]->canLoad(file))
             {
-                loader = instance.m_loaders[i].get();
+                loader = m_instance.m_loaders[i].get();
                 loaderId = i + 1;
                 break;
             }
@@ -53,7 +53,7 @@ namespace legion::core::assets
             auto result = loader->load(nameHash, file, settings);
             if (result)
             {
-                instance.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                m_instance.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
                 return result;
             }
             result.mark_handled();
@@ -70,9 +70,9 @@ namespace legion::core::assets
         size_type loaderId;
 
         for (size_type i = previousLoader - 2; i != static_cast<size_type>(-1); i--)
-            if (instance.m_loaders[i]->canLoad(file))
+            if (m_instance.m_loaders[i]->canLoad(file))
             {
-                loader = instance.m_loaders[i].get();
+                loader = m_instance.m_loaders[i].get();
                 loaderId = i + 1;
                 break;
             }
@@ -83,7 +83,7 @@ namespace legion::core::assets
             auto result = loader->loadAsync(nameHash, file, settings, progress);
             if (result)
             {
-                instance.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                m_instance.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
                 return result;
             }
             result.mark_handled();
@@ -99,10 +99,10 @@ namespace legion::core::assets
         loader_type* loader = nullptr;
         size_type loaderId;
 
-        for (size_type i = instance.m_loaders.size() - 1; i != static_cast<size_type>(-1); i--)
-            if (instance.m_loaders[i]->canLoad(file))
+        for (size_type i = m_instance.m_loaders.size() - 1; i != static_cast<size_type>(-1); i--)
+            if (m_instance.m_loaders[i]->canLoad(file))
             {
-                loader = instance.m_loaders[i].get();
+                loader = m_instance.m_loaders[i].get();
                 loaderId = i + 1;
                 break;
             }
@@ -112,7 +112,7 @@ namespace legion::core::assets
             auto result = loader->loadAsync(nameHash, file, settings, *progress);
             if (result)
             {
-                instance.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                m_instance.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
                 progress->complete(result);
                 return;
             }
@@ -149,14 +149,14 @@ namespace legion::core::assets
     template<typename AssetType>
     inline L_ALWAYS_INLINE bool AssetCache<AssetType>::hasLoaders() noexcept
     {
-        return !instance.m_loaders.empty();
+        return !m_instance.m_loaders.empty();
     }
 
     template<typename AssetType>
     template<typename LoaderType>
     inline bool AssetCache<AssetType>::hasLoader()
     {
-        return instance.m_loaderIds.find(typeHash<LoaderType>()) != instance.m_loaderIds.end();
+        return m_instance.m_loaderIds.find(typeHash<LoaderType>()) != m_instance.m_loaderIds.end();
     }
 
     template<typename AssetType>
@@ -165,8 +165,8 @@ namespace legion::core::assets
         if (!initialized())
             throw legion_exception_msg("Asset was not marked as asset, and cache is thus not yet initialized.");
 
-        loader->m_loaderId = instance.m_loaders.size() + 1;
-        instance.m_loaders.push_back(std::move(loader));
+        loader->m_loaderId = m_instance.m_loaders.size() + 1;
+        m_instance.m_loaders.push_back(std::move(loader));
     }
 
     template<typename AssetType>
@@ -180,8 +180,8 @@ namespace legion::core::assets
 
         auto* ptr = new LoaderType(std::forward<Arguments>(args)...);
 
-        instance.m_loaderIds.emplace(typeHash<LoaderType>(), instance.m_loaders.size() + 1);
-        instance.m_loaders.emplace_back(ptr);
+        m_instance.m_loaderIds.emplace(typeHash<LoaderType>(), m_instance.m_loaders.size() + 1);
+        m_instance.m_loaders.emplace_back(ptr);
     }
 
     template<typename AssetType>
@@ -190,8 +190,8 @@ namespace legion::core::assets
     {
         static_assert(std::is_constructible_v<AssetType, Arguments...>, "Asset type is not constructible with given argument types.");
 
-        AssetType* ptr = &instance.m_cache.try_emplace(nameHash, AssetType(std::forward<Arguments>(args)...)).first->second;
-        instance.m_info.try_emplace(nameHash, detail::asset_info{ name, path, instance.m_loaderIds.at(typeHash<LoaderType>()) });
+        AssetType* ptr = &m_instance.m_cache.try_emplace(nameHash, AssetType(std::forward<Arguments>(args)...)).first->second;
+        m_instance.m_info.try_emplace(nameHash, detail::asset_info{ name, path, m_instance.m_loaderIds.at(typeHash<LoaderType>()) });
         return asset<AssetType>{ ptr, nameHash };
     }
 
@@ -251,10 +251,10 @@ namespace legion::core::assets
         loader_type* loader = nullptr;
         size_type loaderId;
 
-        for (size_type i = instance.m_loaders.size() - 1; i != static_cast<size_type>(-1); i--)
-            if (instance.m_loaders[i]->canLoad(file))
+        for (size_type i = m_instance.m_loaders.size() - 1; i != static_cast<size_type>(-1); i--)
+            if (m_instance.m_loaders[i]->canLoad(file))
             {
-                loader = instance.m_loaders[i].get();
+                loader = m_instance.m_loaders[i].get();
                 loaderId = i + 1;
                 break;
             }
@@ -264,7 +264,7 @@ namespace legion::core::assets
             auto result = loader->load(nameHash, file, settings);
             if (result)
             {
-                instance.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
+                m_instance.m_info.try_emplace(nameHash, detail::asset_info{ name, file.get_virtual_path(), loaderId });
                 return result;
             }
 
@@ -389,8 +389,8 @@ namespace legion::core::assets
     {
         static_assert(std::is_default_constructible_v<AssetType>, "Asset type is not default constructible.");
 
-        AssetType* ptr = &(instance.m_cache[nameHash]); // Slightly faster than try_emplace in most cases except for when using libstdc++(GNU) with Clang, with GCC or using libc++(LLVM) with Clang is no issue.
-        instance.m_info.try_emplace(nameHash, { name, path, invalid_id });
+        AssetType* ptr = &(m_instance.m_cache[nameHash]); // Slightly faster than try_emplace in most cases except for when using libstdc++(GNU) with Clang, with GCC or using libc++(LLVM) with Clang is no issue.
+        m_instance.m_info.try_emplace(nameHash, { name, path, invalid_id });
         return { ptr, nameHash };
     }
 
@@ -411,8 +411,8 @@ namespace legion::core::assets
     {
         static_assert(std::is_copy_constructible_v<AssetType>, "Asset type is not copy constructible.");
 
-        AssetType* ptr = &instance.m_cache.try_emplace(nameHash, src).first->second;
-        instance.m_info.try_emplace(nameHash, { name, path, invalid_id });
+        AssetType* ptr = &m_instance.m_cache.try_emplace(nameHash, src).first->second;
+        m_instance.m_info.try_emplace(nameHash, { name, path, invalid_id });
         return { ptr, nameHash };
     }
 
@@ -436,8 +436,8 @@ namespace legion::core::assets
     {
         static_assert(std::is_constructible_v<AssetType, Arguments...>, "Asset type is not constructible with given argument types.");
 
-        AssetType* ptr = &instance.m_cache.try_emplace(nameHash, AssetType(std::forward<Arguments>(args)...)).first->second;
-        instance.m_info.try_emplace(nameHash, detail::asset_info{ name, path, invalid_id });
+        AssetType* ptr = &m_instance.m_cache.try_emplace(nameHash, AssetType(std::forward<Arguments>(args)...)).first->second;
+        m_instance.m_info.try_emplace(nameHash, detail::asset_info{ name, path, invalid_id });
         return { ptr, nameHash };
     }
 
@@ -451,13 +451,13 @@ namespace legion::core::assets
     template<typename AssetType>
     inline bool AssetCache<AssetType>::has(const std::string& name)
     {
-        return instance.m_cache.find(nameHash(name)) != instance.m_cache.end();
+        return m_instance.m_cache.find(nameHash(name)) != m_instance.m_cache.end();
     }
 
     template<typename AssetType>
     inline bool AssetCache<AssetType>::has(id_type nameHash)
     {
-        return instance.m_cache.find(nameHash) != instance.m_cache.end();
+        return m_instance.m_cache.find(nameHash) != m_instance.m_cache.end();
     }
 
     template<typename AssetType>
@@ -465,7 +465,7 @@ namespace legion::core::assets
     {
         id_type id = nameHash(name);
         if (has(id))
-            return { &instance.m_cache.at(id), id };
+            return { &m_instance.m_cache.at(id), id };
         return invalid_asset<AssetType>;
     }
 
@@ -473,7 +473,7 @@ namespace legion::core::assets
     inline asset<AssetType> AssetCache<AssetType>::get(id_type nameHash)
     {
         if (has(nameHash))
-            return { &instance.m_cache.at(nameHash), nameHash };
+            return { &m_instance.m_cache.at(nameHash), nameHash };
         return invalid_asset<AssetType>;
     }
 
@@ -482,34 +482,34 @@ namespace legion::core::assets
     {
         id_type id = nameHash(name);
 
-        auto& m_info = instance.m_info.at(id);
+        auto& m_info = m_instance.m_info.at(id);
         if (m_info.assetLoader)
-            instance.m_loaders[m_info.assetLoader - 1]->free(instance.m_cache.at(id));
+            m_instance.m_loaders[m_info.assetLoader - 1]->free(m_instance.m_cache.at(id));
 
-        instance.m_cache.erase(id);
-        instance.m_info.erase(id);
+        m_instance.m_cache.erase(id);
+        m_instance.m_info.erase(id);
     }
 
     template<typename AssetType>
     inline void AssetCache<AssetType>::destroy(id_type nameHash)
     {
-        auto& m_info = instance.m_info.at(nameHash);
+        auto& m_info = m_instance.m_info.at(nameHash);
         if (m_info.assetLoader)
-            instance.m_loaders[m_info.assetLoader - 1]->free(instance.m_cache.at(nameHash));
+            m_instance.m_loaders[m_info.assetLoader - 1]->free(m_instance.m_cache.at(nameHash));
 
-        instance.m_cache.erase(nameHash);
-        instance.m_info.erase(nameHash);
+        m_instance.m_cache.erase(nameHash);
+        m_instance.m_info.erase(nameHash);
     }
 
     template<typename AssetType>
     inline void AssetCache<AssetType>::destroy(asset_ptr asset)
     {
-        auto& m_info = instance.m_info.at(asset.instance.id);
+        auto& m_info = m_instance.m_info.at(asset.m_instance.id);
         if (m_info.assetLoader)
-            instance.m_loaders[m_info.assetLoader - 1]->free(*asset.ptr);
+            m_instance.m_loaders[m_info.assetLoader - 1]->free(*asset.ptr);
 
-        instance.m_cache.erase(asset.instance.id);
-        instance.m_info.erase(asset.instance.id);
+        m_instance.m_cache.erase(asset.m_instance.id);
+        m_instance.m_info.erase(asset.m_instance.id);
     }
 
     template<typename AssetType>
