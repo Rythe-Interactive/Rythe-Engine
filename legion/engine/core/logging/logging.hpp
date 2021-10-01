@@ -393,14 +393,7 @@ namespace legion::core::log
         }
     };
 
-    inline static logger_ptr& logger = *(&impl::get().logger);
-    inline static logger_ptr& consoleLogger = *(&impl::get().consoleLogger);
-    inline static logger_ptr& fileLogger = *(&impl::get().fileLogger);
-    inline static logger_ptr& undecoratedLogger = *(&impl::get().undecoratedLogger);
-    inline static async::rw_spinlock& threadNamesLock = *(&impl::get().threadNamesLock);
-    inline static std::unordered_map<std::thread::id, std::string>& threadNames = *(&impl::get().threadNames);
-
-    inline void initLogger(std::shared_ptr<spdlog::logger>& logger)
+    inline void initLogger(logger_ptr& logger)
     {
         auto f = std::make_unique<spdlog::pattern_formatter>();
 
@@ -414,7 +407,7 @@ namespace legion::core::log
 
     inline void setLogger(const logger_ptr& newLogger)
     {
-        logger = newLogger;
+        impl::get().logger = newLogger;
     }
 
     /** @brief selects the severity you want to filter for or print with */
@@ -459,14 +452,14 @@ namespace legion::core::log
     template <class... Args, class FormatString>
     void println(severity s, const FormatString& format, Args&&... a)
     {
-        logger->log(args2spdlog(s), format, std::forward<Args>(a)...);
+        impl::get().logger->log(args2spdlog(s), format, std::forward<Args>(a)...);
     }
 
     /** @brief same as println but uses the undecorated logger */
     template <class... Args, class FormatString>
     void undecoratedln(severity s, const FormatString& format, Args&&... a)
     {
-        undecoratedLogger->log(args2spdlog(s), format, std::forward<Args>(a)...);
+        impl::get().undecoratedLogger->log(args2spdlog(s), format, std::forward<Args>(a)...);
     }
 
     /** @brief prints a log line, using the specified `severity`
@@ -474,8 +467,9 @@ namespace legion::core::log
      */
     inline void filter(severity level)
     {
-        impl::get().logger->set_level(args2spdlog(level));
-        impl::get().undecoratedLogger->set_level(args2spdlog(level));
+        auto& inst = impl::get();
+        inst.logger->set_level(args2spdlog(level));
+        inst.undecoratedLogger->set_level(args2spdlog(level));
     }
 
     /** @brief same as println but with severity = trace */

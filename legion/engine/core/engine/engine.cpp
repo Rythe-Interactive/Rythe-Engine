@@ -51,8 +51,9 @@ namespace legion::core
             initializationSequence()();
 
             {
-                async::readwrite_guard guard(log::threadNamesLock);
-                log::threadNames[std::this_thread::get_id()] = "Initialization";
+                auto& logData = log::impl::get();
+                async::readwrite_guard guard(logData.threadNamesLock);
+                logData.threadNames[std::this_thread::get_id()] = "Initialization";
             }
 
             for (const auto& [priority, moduleList] : m_modules)

@@ -19,10 +19,11 @@ namespace legion::rendering
 
         if (!checkedNames)
         {
-            async::readonly_guard guard(log::threadNamesLock);
-            if (!log::threadNames.count(std::this_thread::get_id()))
+            auto& logData = log::impl::get();
+            async::readonly_guard guard(logData.threadNamesLock);
+            if (!logData.threadNames.count(std::this_thread::get_id()))
             {
-                log::threadNames[std::this_thread::get_id()] = "OpenGL";
+                logData.threadNames[std::this_thread::get_id()] = "OpenGL";
                 async::set_thread_name("OpenGL");
             }
         }
@@ -113,10 +114,11 @@ namespace legion::rendering
 
         if (!checkedNames)
         {
-            async::readonly_guard guard(log::threadNamesLock);
-            if (!log::threadNames.count(std::this_thread::get_id()))
+            auto& logData = log::impl::get();
+            async::readonly_guard guard(logData.threadNamesLock);
+            if (!logData.threadNames.count(std::this_thread::get_id()))
             {
-                log::threadNames[std::this_thread::get_id()] = "OpenGL";
+                logData.threadNames[std::this_thread::get_id()] = "OpenGL";
                 async::set_thread_name("OpenGL");
             }
         }
@@ -198,10 +200,11 @@ namespace legion::rendering
 
         if (!checkedNames)
         {
-            async::readonly_guard guard(log::threadNamesLock);
-            if (!log::threadNames.count(std::this_thread::get_id()))
+            auto& logData = log::impl::get();
+            async::readonly_guard guard(logData.threadNamesLock);
+            if (!logData.threadNames.count(std::this_thread::get_id()))
             {
-                log::threadNames[std::this_thread::get_id()] = "OpenGL";
+                logData.threadNames[std::this_thread::get_id()] = "OpenGL";
                 async::set_thread_name("OpenGL");
             }
         }

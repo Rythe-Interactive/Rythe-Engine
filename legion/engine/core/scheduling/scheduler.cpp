@@ -161,11 +161,12 @@ namespace legion::core::scheduling
         std::string name = "Worker ";
 
         {
-            async::readwrite_guard guard(log::threadNamesLock);
+            auto& logData = log::impl::get();
+            async::readwrite_guard guard(logData.threadNamesLock);
             while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(instance.m_jobPoolSize))) != nullptr)
-                log::threadNames[ptr->get_id()] = name + std::to_string(instance.m_jobPoolSize++);
+                logData.threadNames[ptr->get_id()] = name + std::to_string(instance.m_jobPoolSize++);
 
-            log::threadNames[std::this_thread::get_id()] = "Main thread";
+            logData.threadNames[std::this_thread::get_id()] = "Main thread";
         }
 
         instance.m_start.store(true, std::memory_order_release);
