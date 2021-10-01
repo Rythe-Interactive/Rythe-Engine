@@ -5,6 +5,8 @@
 #include <Optick/optick.h>
 
 #include <core/platform/platform.hpp>
+#include <core/engine/engine.hpp>
+#include <core/engine/enginesubsystem.hpp>
 #include <core/containers/delegate.hpp>
 #include <core/types/types.hpp>
 #include <core/events/event.hpp>
@@ -17,10 +19,12 @@ namespace legion::core::events
     /**@class EventBus
      * @brief Central communication channel for events and messages.
      */
-    class EventBus
+    class EventBus : public EngineSubSystem<EventBus>
     {
+        SubSystemInstance(EventBus);
     private:
-        static std::unordered_map<id_type, multicast_delegate<void(event_base&)>> m_eventCallbacks;
+
+        std::unordered_map<id_type, multicast_delegate<void(event_base&)>> m_eventCallbacks;
 
     public:
         /**@brief Insert event into bus and notify all subscribers.
@@ -77,6 +81,9 @@ namespace legion::core::events
          */
         static void unbindFromEvent(id_type id, const delegate<void(event_base&)>& callback);
     };
+
+    OnEngineInit(EventBus, &EventBus::init);
+    OnEngineShutdown(EventBus, &EventBus::shutdown);
 }
 
 #include <core/events/eventbus.inl>

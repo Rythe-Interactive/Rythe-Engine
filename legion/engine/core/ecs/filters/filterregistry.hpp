@@ -4,6 +4,8 @@
 #include <core/platform/platform.hpp>
 #include <core/containers/hashed_sparse_set.hpp>
 #include <core/types/primitives.hpp>
+#include <core/engine/engine.hpp>
+#include <core/engine/enginesubsystem.hpp>
 
 #include <core/ecs/handles/entity.hpp>
 #include <core/ecs/filters/filter_info.hpp>
@@ -20,16 +22,17 @@ namespace legion::core::ecs
     /**@class FilterRegistry
      * @brief Manager and owner of all entity filter related data.
      */
-    class FilterRegistry
+    class FilterRegistry : public EngineSubSystem<FilterRegistry>
     {
+        AllowPrivateOnInit;
+        AllowPrivateOnShutdown;
+        SubSystemInstance(FilterRegistry);
     public:
         template<typename... component_types>
         friend struct filter_info;
 
         template<typename... component_types>
         friend struct filter;
-
-        static void clear();
 
         /**@brief Message that a certain component was added to an entity. This will update all filters that might be interested in this entity.
          * @param componentId Id of the component type.
@@ -73,9 +76,11 @@ namespace legion::core::ecs
         static entity_set& getList(id_type filterId);
 
     private:
-        L_NODISCARD static std::unordered_map<id_type, entity_set>& entityLists() noexcept;
+        static void onInit();
+        static void onShutdown();
 
-        L_NODISCARD static std::vector<std::unique_ptr<filter_info_base>>& filters() noexcept;
+        static std::unordered_map<id_type, entity_set>& entityLists();
+        static std::vector<std::unique_ptr<filter_info_base>>& filters();
 
         template<typename component_type>
         constexpr static id_type generateId() noexcept;
@@ -89,6 +94,9 @@ namespace legion::core::ecs
         template<typename... component_types>
         static id_type generateFilter();
     };
+
+    OnEngineInit(FilterRegistry, &FilterRegistry::init);
+    OnEngineShutdown(FilterRegistry, &FilterRegistry::shutdown);
 }
 
 #include <core/ecs/filters/filter_info.inl>

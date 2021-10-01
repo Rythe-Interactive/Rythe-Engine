@@ -2,9 +2,9 @@ name: analyze-action
 
 on:
   push:
-    branches: [main, develop, develop/*, develop*, feature*, feature/* ]
+    branches: [ main, develop, develop/*, develop*, feature*, feature/* ]
   pull_request:
-    branches: [main, develop, develop/*, develop*, feature*, feature/* ]
+    branches: [ main ]
 
 jobs:
   analyze:

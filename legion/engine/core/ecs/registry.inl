@@ -6,15 +6,15 @@ namespace legion::core::ecs
     template<typename component_type, typename... Args>
     inline L_ALWAYS_INLINE component_pool<component_type>* Registry::tryEmplaceFamily(Args&&... args)
     {
-        OPTICK_EVENT();
-        if (getFamilies().count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
-            return static_cast<component_pool<component_type>*>(getFamilies().at(make_hash<component_type>()).get());
+        auto& families = getFamilies();
+        if (families.count(make_hash<component_type>())) // Check and fetch in order to avoid a possibly unnecessary allocation and deletion.
+            return static_cast<component_pool<component_type>*>(families.at(make_hash<component_type>()).get());
 
-        familyNames().emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
+        instance.m_familyNames.emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
 
         // Allocate and emplace if no item was found.
         return static_cast<component_pool<component_type>*>(
-            getFamilies().emplace(
+            families.emplace(
                 make_hash<component_type>(),
                 std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
             ).first->second.get() // std::pair<iterator, bool>.first --> iterator<std::pair<key, value>>->second --> std::unique_ptr.get() --> component_pool_base* 
@@ -24,12 +24,11 @@ namespace legion::core::ecs
     template<typename component_type, typename... Args>
     inline L_ALWAYS_INLINE void ecs::Registry::registerComponentType(Args&&... args)
     {
-        OPTICK_EVENT();
         getFamilies().try_emplace(
             make_hash<component_type>(),
             std::unique_ptr<component_pool_base>(new component_pool<component_type>(std::forward<Args>(args)...))
         );
-        familyNames().emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
+        instance.m_familyNames.emplace(make_hash<component_type>(), std::string(nameOfType<component_type>()));
     }
 
     template<typename component_type0, typename component_type1, typename... component_types, typename... Args>
@@ -48,13 +47,14 @@ namespace legion::core::ecs
     template<typename component_type>
     inline L_ALWAYS_INLINE component_ref_t<component_type> Registry::createComponent(entity target)
     {
-        OPTICK_EVENT();
         if constexpr (is_archetype_v<component_type>)
         {
             return component_type::create(target);
         }
         else
         {
+            OPTICK_EVENT();
+
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
             if (!checked && !getFamilies().count(make_hash<component_type>()))
@@ -64,7 +64,7 @@ namespace legion::core::ecs
             }
 
             // Update entity composition.
-            entityCompositions().at(target).insert(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
             // Update filters.
             FilterRegistry::markComponentAdd<component_type>(target);
             // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
@@ -97,13 +97,14 @@ namespace legion::core::ecs
     template<typename component_type>
     inline L_ALWAYS_INLINE component_ref_t<component_type> Registry::createComponent(entity target, component_type&& value)
     {
-        OPTICK_EVENT();
         if constexpr (is_archetype_v<component_type>)
         {
             return component_type::create(target, std::forward<component_type>(value));
         }
         else
         {
+            OPTICK_EVENT();
+
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
             if (!checked && !getFamilies().count(make_hash<component_type>()))
@@ -113,7 +114,7 @@ namespace legion::core::ecs
             }
 
             // Update entity composition.
-            entityCompositions().at(target).insert(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
             // Update filters.
             FilterRegistry::markComponentAdd<component_type>(target);
             // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
@@ -131,6 +132,7 @@ namespace legion::core::ecs
         else
         {
             OPTICK_EVENT();
+
             // Check and emplace component family if it doesn't exist yet.
             static bool checked = false; // Prevent unnecessary unordered_map lookups.
             if (!checked && !getFamilies().count(make_hash<component_type>()))
@@ -140,7 +142,7 @@ namespace legion::core::ecs
             }
 
             // Update entity composition.
-            entityCompositions().at(target).insert(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
             // Update filters.
             FilterRegistry::markComponentAdd<component_type>(target);
             // Actually create and return the component. (this uses the direct function which avoids use of virtual indirection)
@@ -199,7 +201,7 @@ namespace legion::core::ecs
         }
 
         // Update entity composition.
-        entityCompositions().at(target).insert(make_hash<component_type>());
+        instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
         // Update filters.
         FilterRegistry::markComponentAdd<component_type>(target);
         // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
@@ -219,7 +221,7 @@ namespace legion::core::ecs
         }
 
         // Update entity composition.
-        entityCompositions().at(target).insert(make_hash<component_type>());
+        instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
         // Update filters.
         FilterRegistry::markComponentAdd<component_type>(target);
         // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
@@ -245,7 +247,7 @@ namespace legion::core::ecs
             }
 
             // Update entity composition.
-            entityCompositions().at(target).erase(make_hash<component_type>());
+            instance.m_entityCompositions.at(target).erase(make_hash<component_type>());
             // Update filters.
             FilterRegistry::markComponentErase<component_type>(entity{ &Registry::entityData(target) });
             // Actually destroy the component. (this uses the direct function which avoids use of virtual indirection)

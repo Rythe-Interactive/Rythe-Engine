@@ -17,9 +17,9 @@
 #define NARGS_(_1, _2, _3, _4, _5 , _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, N, ...) N
 #define NARGS(...) EXPAND(NARGS_(__VA_ARGS__, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1))
 
-#define CONCAT(A, B) A ## B
+#define _CONCAT_IMPL_(A, B) A ## B
 
-#define CONCAT_DEFINE(A, B) CONCAT(A, B)
+#define CONCAT(A, B) _CONCAT_IMPL_(A, B)
 
 #define STRINGIFY_IMPL(x) #x
 #define STRINGIFY(x) STRINGIFY_IMPL(x)
@@ -43,7 +43,7 @@
 
  // turn: value0, value1, value2
  // into: "value0", "value1", "value2"
-#define STRINGIFY_SEPERATE(...) EXPAND(CONCAT_DEFINE(L_NAME_, NARGS(__VA_ARGS__))(__VA_ARGS__))
+#define STRINGIFY_SEPERATE(...) EXPAND(CONCAT(L_NAME_, NARGS(__VA_ARGS__))(__VA_ARGS__))
 
 #define  pre_1(prefix, x)                                                                    prefix##x
 #define  pre_2(prefix, x, x2)                                                                prefix##x , prefix##x2
@@ -124,26 +124,26 @@
 
  // turn: value, 0, 1, 2
  // into: value0, value1, value2
-#define CAT_PREFIX(prefix, ...) EXPAND(CONCAT_DEFINE(pre_, NARGS(__VA_ARGS__))(prefix, __VA_ARGS__))
+#define CAT_PREFIX(prefix, ...) EXPAND(CONCAT(pre_, NARGS(__VA_ARGS__))(prefix, __VA_ARGS__))
 
 // turn: value, p, 0, 1, 2
 // into: value0p, value1p, value2p
-#define CAT_PREPOSTFIX(prefix, postfix, ...) EXPAND(CONCAT_DEFINE(prepost_, NARGS(__VA_ARGS__))(prefix, postfix, __VA_ARGS__))
+#define CAT_PREPOSTFIX(prefix, postfix, ...) EXPAND(CONCAT(prepost_, NARGS(__VA_ARGS__))(prefix, postfix, __VA_ARGS__))
 
 // turn: 0, 1, 2
 // into: decltype(0), decltype(1), decltype(2)
-#define decltypes_count(count, ...) EXPAND(CONCAT_DEFINE(decltype_, count)(__VA_ARGS__))
-#define decltypes(...) EXPAND(CONCAT_DEFINE(decltype_, NARGS(__VA_ARGS__))(__VA_ARGS__))
+#define decltypes_count(count, ...) EXPAND(CONCAT(decltype_, count)(__VA_ARGS__))
+#define decltypes(...) EXPAND(CONCAT(decltype_, NARGS(__VA_ARGS__))(__VA_ARGS__))
 
 // turn: Foo, x, y, z
 // into: Foo::x, Foo::y, Foo::z
-#define colon_access_count(count, prefix, ...) EXPAND(CONCAT_DEFINE(colon_, count)(prefix, __VA_ARGS__))
-#define colon_access(prefix, ...) EXPAND(CONCAT_DEFINE(colon_, NARGS(__VA_ARGS__))(prefix, __VA_ARGS__))
+#define colon_access_count(count, prefix, ...) EXPAND(CONCAT(colon_, count)(prefix, __VA_ARGS__))
+#define colon_access(prefix, ...) EXPAND(CONCAT(colon_, NARGS(__VA_ARGS__))(prefix, __VA_ARGS__))
 
 // turn: foo, x, y, z
 // into: foo.x, foo.y, foo.z
-#define dot_access_count(count, prefix, ...) EXPAND(CONCAT_DEFINE(dot_, count)(prefix, __VA_ARGS__))
-#define dot_access(prefix, ...) EXPAND(CONCAT_DEFINE(dot_, NARGS(__VA_ARGS__))(prefix, __VA_ARGS__))
+#define dot_access_count(count, prefix, ...) EXPAND(CONCAT(dot_, count)(prefix, __VA_ARGS__))
+#define dot_access(prefix, ...) EXPAND(CONCAT(dot_, NARGS(__VA_ARGS__))(prefix, __VA_ARGS__))
 
 #define RULE_OF_5(type)\
 type() = default;\
@@ -255,8 +255,12 @@ type& operator=(type&&) noexcept = default;
 #define LEGION_IMPURE_RETURN(x) { return (x); }
 
 #if !defined(LEGION_MIN_THREADS)
-#   define LEGION_MIN_THREADS 5
+#   define LEGION_MIN_THREADS 2
 #endif
+
+#define ANONYMOUS_NAME(x) CONCAT(x, __LINE__)
+
+#define ANON_VAR(Type, Category) inline static Type EXPAND(ANONYMOUS_NAME(Category))
 
 #pragma endregion
 

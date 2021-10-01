@@ -19,18 +19,23 @@ namespace legion::rendering
     class RenderStageBase
     {
         friend class Renderer;
+
+        template<typename>
+        friend class RenderPipeline;
+
     private:
         bool m_isInitialized = false;
 
     protected:
         virtual void setup(app::window& context) LEGION_PURE;
 
+        virtual void _shutdown_impl() LEGION_PURE;
     public:
         static RenderPipelineBase* m_pipeline;
 
-        inline bool isInitialized() { return m_isInitialized; }
+        bool isInitialized() { return m_isInitialized; }
 
-        inline void init(app::window& context)
+        void init(app::window& context)
         {
             OPTICK_EVENT("Setup render stage");
             m_isInitialized = true;
@@ -67,11 +72,20 @@ namespace legion::rendering
         framebuffer* addFramebuffer(id_type nameHash, GLenum target = GL_FRAMEBUFFER);
         L_NODISCARD bool hasFramebuffer(id_type nameHash, GLenum target = GL_FRAMEBUFFER);
         L_NODISCARD framebuffer* getFramebuffer(id_type nameHash);
+
     };
 
     template<typename SelfType>
     class RenderStage : public RenderStageBase, protected System<SelfType>
     {
+        void _shutdown_impl() override
+        {
+            if constexpr (has_shutdown_v<SelfType, void()>)
+            {
+                static_cast<SelfType*>(this)->shutdown();
+            }
+        }
+
     };
 }
 

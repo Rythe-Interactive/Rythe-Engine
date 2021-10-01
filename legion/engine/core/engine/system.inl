@@ -1,5 +1,8 @@
 #include <core/engine/system.hpp>
 #pragma once
+#include <core/ecs/registry.hpp>
+#include <core/scheduling/scheduling.hpp>
+#include <core/events/eventbus.hpp>
 
 namespace legion::core
 {
@@ -7,7 +10,7 @@ namespace legion::core
     template <void(SelfType::* func_type)(time::span), size_type charc>
     inline L_ALWAYS_INLINE id_type System<SelfType>::createProcess(const char(&processChainName)[charc], time::span interval)
     {
-        std::string name = std::string(processChainName) + nameOfType<SelfType>() + std::to_string(interval) + std::to_string(force_cast<intptr_t>(func_type)[0]);
+        std::string name = std::string(processChainName) + nameOfType<SelfType>() + std::to_string(interval) + std::to_string(force_value_cast<ptr_type>(func_type));
         id_type id = nameHash(name);
         std::unique_ptr<schd::Process> process = std::make_unique<schd::Process>(name, id, interval);
         process->setOperation(delegate<void(time::span)>::from<SelfType, func_type>(reinterpret_cast<SelfType*>(this)));
@@ -21,7 +24,7 @@ namespace legion::core
     template<typename event_type, void(SelfType::* func_type)(event_type&) CNDOXY(typename)>
     inline L_ALWAYS_INLINE id_type System<SelfType>::bindToEvent()
     {
-        id_type id = combine_hash(event_type::id, *force_cast<id_type>(func_type));
+        id_type id = combine_hash(event_type::id, force_value_cast<ptr_type>(func_type));
 
         auto temp = delegate<void(event_type&)>::template from<SelfType, func_type>(reinterpret_cast<SelfType*>(this));
         auto& del = m_bindings.try_emplace(id, reinterpret_cast<delegate<void(events::event_base&)>&&>(std::move(temp))).first->second;

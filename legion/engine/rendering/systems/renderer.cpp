@@ -4,7 +4,8 @@
 
 namespace legion::rendering
 {
-    delegate<RenderPipelineBase* (app::window&)> Renderer::m_pipelineProvider;
+    std::unique_ptr<pipeline_provider_base> Renderer::m_pipelineProvider;
+
     RenderPipelineBase* Renderer::m_currentPipeline;
 
     void Renderer::debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED const void* userParam)
@@ -18,10 +19,11 @@ namespace legion::rendering
 
         if (!checkedNames)
         {
-            async::readonly_guard guard(log::impl::threadNamesLock);
-            if (!log::impl::threadNames.count(std::this_thread::get_id()))
+            auto& logData = log::impl::get();
+            async::readonly_guard guard(logData.threadNamesLock);
+            if (!logData.threadNames.count(std::this_thread::get_id()))
             {
-                log::impl::threadNames[std::this_thread::get_id()] = "OpenGL";
+                logData.threadNames[std::this_thread::get_id()] = "OpenGL";
                 async::set_thread_name("OpenGL");
             }
         }
@@ -112,10 +114,11 @@ namespace legion::rendering
 
         if (!checkedNames)
         {
-            async::readonly_guard guard(log::impl::threadNamesLock);
-            if (!log::impl::threadNames.count(std::this_thread::get_id()))
+            auto& logData = log::impl::get();
+            async::readonly_guard guard(logData.threadNamesLock);
+            if (!logData.threadNames.count(std::this_thread::get_id()))
             {
-                log::impl::threadNames[std::this_thread::get_id()] = "OpenGL";
+                logData.threadNames[std::this_thread::get_id()] = "OpenGL";
                 async::set_thread_name("OpenGL");
             }
         }
@@ -197,10 +200,11 @@ namespace legion::rendering
 
         if (!checkedNames)
         {
-            async::readonly_guard guard(log::impl::threadNamesLock);
-            if (!log::impl::threadNames.count(std::this_thread::get_id()))
+            auto& logData = log::impl::get();
+            async::readonly_guard guard(logData.threadNamesLock);
+            if (!logData.threadNames.count(std::this_thread::get_id()))
             {
-                log::impl::threadNames[std::this_thread::get_id()] = "OpenGL";
+                logData.threadNames[std::this_thread::get_id()] = "OpenGL";
                 async::set_thread_name("OpenGL");
             }
         }
@@ -325,6 +329,8 @@ namespace legion::rendering
     {
         OPTICK_EVENT();
 
+        m_exiting.store(false, std::memory_order_relaxed);
+
         bindToEvent<events::exit, &Renderer::onExit>();
 
         createProcess<&Renderer::render>("Rendering");
@@ -357,6 +363,11 @@ namespace legion::rendering
             else
                 setThreadPriority();
         }
+    }
+
+    void Renderer::shutdown()
+    {
+        m_pipelineProvider->shutdown();
     }
 
     void Renderer::onExit(events::exit& event)
@@ -414,7 +425,7 @@ namespace legion::rendering
 
             if (!m_exiting.load(std::memory_order_relaxed))
             {
-                m_currentPipeline = m_pipelineProvider(win);
+                m_currentPipeline = m_pipelineProvider->get(win);
                 m_currentPipeline->render(win, cam, cam_input_data, deltatime);
             }
         }
@@ -429,7 +440,7 @@ namespace legion::rendering
         if (context == app::invalid_window)
             return nullptr;
 
-        return m_pipelineProvider(context);
+        return m_pipelineProvider->get(context);
     }
 
     L_NODISCARD RenderPipelineBase* Renderer::getCurrentPipeline()
@@ -447,7 +458,7 @@ namespace legion::rendering
         if (context == app::invalid_window)
             return nullptr;
 
-        return m_pipelineProvider(context);
+        return m_pipelineProvider->get(context);
     }
 
 }

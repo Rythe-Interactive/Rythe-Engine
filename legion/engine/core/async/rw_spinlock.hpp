@@ -41,13 +41,13 @@ namespace legion::core::async
         static bool m_forceRelease;
         static std::atomic_uint m_lastId;
 
-        static thread_local std::unordered_map<uint, int> m_localWriters;
-        static thread_local std::unordered_map<uint, int> m_localReaders;
-        static thread_local std::unordered_map<uint, lock_state> m_localState;
+        static std::unordered_map<uint, int>& localWriters();
+        static std::unordered_map<uint, int>& localReaders();
+        static std::unordered_map<uint, lock_state>& localState();
 
         uint m_id = m_lastId.fetch_add(1, std::memory_order_relaxed);
         // State of the lock. -1 means that a thread has write permission. 0 means that the lock is unlocked. 1+ means that there are N amount of readers.
-        mutable  std::atomic_int m_lockState = { 0 };
+        mutable std::atomic_int m_lockState = { 0 };
         mutable std::thread::id m_writer;
 
         void read_lock(wait_priority priority = wait_priority::real_time) const;

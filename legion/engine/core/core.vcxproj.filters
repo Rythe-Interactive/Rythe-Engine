@@ -21,7 +21,6 @@
     <ClCompile Include="compute\high_level\function.cpp" />
     <ClCompile Include="data\image.cpp" />
     <ClCompile Include="engine\system.cpp" />
-    <ClCompile Include="engine\module.cpp" />
     <ClCompile Include="events\defaultevents.cpp" />
     <ClCompile Include="scenemanagement\scenemanager.cpp" />
     <ClCompile Include="async\rw_spinlock.cpp" />
@@ -33,7 +32,6 @@
     <ClCompile Include="common\hash.cpp" />
     <ClCompile Include="ecs\filters\filterregistry.cpp" />
     <ClCompile Include="engine\engine.cpp" />
-    <ClCompile Include="time\defaults.cpp" />
     <ClCompile Include="scheduling\clock.cpp" />
     <ClCompile Include="scheduling\process.cpp" />
     <ClCompile Include="scheduling\processchain.cpp" />
@@ -42,6 +40,7 @@
     <ClCompile Include="data\loaders\stbimageloader.cpp" />
     <ClCompile Include="data\loaders\objmeshloader.cpp" />
     <ClCompile Include="data\loaders\gltfmeshloader.cpp" />
+    <ClCompile Include="time\main_clock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="async\async.hpp" />
@@ -406,7 +405,6 @@
     <ClInclude Include="async\job_pool.hpp" />
     <ClInclude Include="async\wait_priority.hpp" />
     <ClInclude Include="async\async_runnable.hpp" />
-    <ClInclude Include="time\defaults.hpp" />
     <ClInclude Include="async\thread_util.hpp" />
     <ClInclude Include="platform\shellinvoke.hpp" />
     <ClInclude Include="scenemanagement\components\scene.hpp" />
@@ -449,6 +447,8 @@
     <ClInclude Include="containers\shared_data_view.hpp" />
     <ClInclude Include="data\loaders\objmeshloader.hpp" />
     <ClInclude Include="data\loaders\gltfmeshloader.hpp" />
+    <ClInclude Include="engine\enginesubsystem.hpp" />
+    <ClInclude Include="time\main_clock.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />
@@ -612,5 +612,7 @@
     <None Include="containers\data_view.inl" />
     <None Include="containers\shared_data_view.inl" />
     <None Include="data\image.inl" />
+    <None Include="engine\enginesubsystem.inl" />
+    <None Include="engine\module.inl" />
   </ItemGroup>
 </Project>

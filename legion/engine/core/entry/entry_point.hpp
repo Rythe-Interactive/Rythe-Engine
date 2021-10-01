@@ -37,12 +37,6 @@ int main(int argc, char** argv)
 
     log::setup();
 
-#if defined(LEGION_DEBUG)
-    log::filter(log::severity::debug);
-#else
-    log::filter(log::severity::info);
-#endif
-
     Engine::cliargs.parse(argc, argv);
 
 #if defined(LEGION_HIGH_PERFORMANCE)
@@ -101,14 +95,6 @@ int main(int argc, char** argv)
 
     reportModules(&engine);
 
-    log::undecoratedInfo("==========================\n"
-                         "| Initializing engine... |\n"
-                         "==========================");
-    engine.init();
-
-    log::undecoratedInfo("==============================\n"
-                         "| Entering main engine loop. |\n"
-                         "==============================");
     engine.run();
 
 #if defined(LEGION_KEEP_CONSOLE)

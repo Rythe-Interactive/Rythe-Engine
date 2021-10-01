@@ -6,7 +6,7 @@ namespace legion::debug
 {
 #if !defined drawLine
 
-#define debug_line_event CONCAT_DEFINE(PROJECT_NAME, debug_line)
+#define debug_line_event CONCAT(PROJECT_NAME, debug_line)
 
     struct debug_line_event final : public events::event_base
     {
@@ -38,7 +38,7 @@ namespace legion::debug
         }
     };
 
-#define drawLine CONCAT_DEFINE(PROJECT_NAME, DrawLine)
+#define drawLine CONCAT(PROJECT_NAME, DrawLine)
 
     inline void drawLine(math::vec3 start, math::vec3 end, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
     {
@@ -46,7 +46,7 @@ namespace legion::debug
         events::EventBus::raiseEvent(val);
     }
 
-#define drawCube CONCAT_DEFINE(PROJECT_NAME, DrawCube)
+#define drawCube CONCAT(PROJECT_NAME, DrawCube)
 
     inline void drawCube(math::vec3 min, math::vec3 max, math::color color = math::colors::white, float width = 1.f, float time = 0, bool ignoreDepth = false)
     {

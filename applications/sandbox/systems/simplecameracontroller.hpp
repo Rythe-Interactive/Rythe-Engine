@@ -16,6 +16,7 @@ struct player_look_y : public app::input_axis<player_look_y> {};
 struct player_speedup : public app::input_axis<player_speedup> {};
 
 struct exit_action : public app::input_action<exit_action> {};
+struct restart_action : public app::input_action<restart_action> {};
 
 struct fullscreen_action : public app::input_action<fullscreen_action> {};
 struct escape_cursor_action : public app::input_action<escape_cursor_action> {};
@@ -46,6 +47,7 @@ public:
         app::InputSystem::createBinding<player_speedup>(app::inputmap::method::LEFT_ALT, -3.f);
 
         app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
+        app::InputSystem::createBinding<restart_action>(app::inputmap::method::F10);
         app::InputSystem::createBinding<fullscreen_action>(app::inputmap::method::F11);
         app::InputSystem::createBinding<escape_cursor_action>(app::inputmap::method::MOUSE_RIGHT);
         app::InputSystem::createBinding<vsync_action>(app::inputmap::method::F1);
@@ -113,6 +115,15 @@ public:
     }
 
 #pragma region input stuff
+    void onRestart(restart_action& action)
+    {
+        if (GuiTestSystem::isEditingText)
+            return;
+
+        if (action.released())
+            Engine::restart();
+    }
+
     void onExit(exit_action& action)
     {
         if (GuiTestSystem::isEditingText)

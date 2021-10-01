@@ -63,8 +63,8 @@ namespace legion::application
         static sparse_map<GLFWwindow*, ecs::component<window>> m_windowComponents;
         static async::spinlock m_creationLock;
 
-        bool m_exit = false; // Keep track of whether the exit event has been raised.
-                             // If any window requests happen after this boolean has been set then they will be denied.
+        bool m_exit; // Keep track of whether the exit event has been raised.
+                     // If any window requests happen after this boolean has been set then they will be denied.
 
         static async::spinlock m_creationRequestLock; // Lock to keep the creation request list thread-safe.
         static std::vector<window_request> m_creationRequests; // List of requests since the last creation loop.

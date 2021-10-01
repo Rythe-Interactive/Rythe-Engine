@@ -26,6 +26,7 @@ namespace legion::core
     using size_type = std::size_t;
     using index_type = std::size_t;
     using diff_type = std::ptrdiff_t;
+    using ptr_type = std::uintptr_t;
 
     using float32 = float;
     using float64 = double;

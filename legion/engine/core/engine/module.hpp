@@ -6,11 +6,7 @@
 #include <core/types/meta.hpp>
 #include <core/types/type_util.hpp>
 #include <core/platform/platform.hpp>
-#include <core/containers/sparse_map.hpp>
-#include <core/ecs/registry.hpp>
-#include <core/events/eventbus.hpp>
-#include <core/scheduling/scheduling.hpp>
-
+#include <core/containers/delegate.hpp>
 #include <core/engine/system.hpp>
 
 /**
@@ -28,42 +24,29 @@ namespace legion::core
         friend class Engine;
     private:
         multicast_delegate<void()> m_setupFuncs;
+        multicast_delegate<void()> m_shutdownFuncs;
 
         std::unordered_map<id_type, std::unique_ptr<SystemBase>> m_systems;
 
         void init()
         {
             m_setupFuncs.invoke();
-        };
+        }
+
+        void shutdown()
+        {
+            m_shutdownFuncs.invoke();
+        }
 
     protected:
         template<size_type charc>
-        void createProcessChain(const char(&name)[charc])
-        {
-            schd::Scheduler::createProcessChain<charc>(name);
-        }
+        void createProcessChain(const char(&name)[charc]) const;
 
         template<typename SystemType, typename... Args>
-        void reportSystem(Args&&... args)
-        {
-            static_assert(std::is_base_of_v<System<SystemType>, SystemType>, "All systems must inherit from System<SystemType>");
-
-            SystemType* system = static_cast<SystemType*>(m_systems.emplace(make_hash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...)).first->second.get());
-            if constexpr (has_setup_v<SystemType, void()>)
-            {
-                m_setupFuncs.insert_back<SystemType, &SystemType::setup>(system);
-            }
-            if constexpr (has_update_v<SystemType, void(time::span)>)
-            {
-                system->template createProcess<&SystemType::update>("Update");
-            }
-        }
+        void reportSystem(Args&&... args);
 
         template<typename component_type, typename... Args>
-        void registerComponentType(Args&&... args)
-        {
-            ecs::Registry::registerComponentType<component_type>(std::forward<Args>(args)...);
-        }
+        void registerComponentType(Args&&... args);
 
     public:
         virtual void setup() LEGION_PURE;

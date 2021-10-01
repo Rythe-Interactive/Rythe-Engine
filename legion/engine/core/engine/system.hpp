@@ -2,12 +2,12 @@
 #include <memory>
 
 #include <core/platform/platform.hpp>
-#include <core/events/eventbus.hpp>
+#include <core/events/event.hpp>
 #include <core/time/time.hpp>
-#include <core/ecs/registry.hpp>
 #include <core/common/hash.hpp>
-#include <core/scheduling/scheduling.hpp>
-#include <core/common/hash.hpp>
+#include <core/scheduling/process.hpp>
+#include <core/ecs/handles/entity.hpp>
+#include <core/ecs/prototypes/entity_prototype.hpp>
 
 namespace legion::core
 {
@@ -22,7 +22,7 @@ namespace legion::core
         virtual ~SystemBase() = default;
 
     protected:
-        std::unordered_map<id_type, std::unique_ptr<schd::Process>> m_processes;
+        std::unordered_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
         std::unordered_map<id_type, delegate<void(events::event_base&)>> m_bindings;
 
         SystemBase(type_reference&& id) : id(id) {}
@@ -111,5 +111,3 @@ namespace legion::core
 
     };
 }
-
-#include <core/engine/system.inl>

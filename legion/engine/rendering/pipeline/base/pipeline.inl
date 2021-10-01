@@ -1,3 +1,4 @@
+#include "pipeline.hpp"
 #pragma once
 
 namespace legion::rendering
@@ -40,7 +41,7 @@ namespace legion::rendering
 
         if (m_metadata.count(id) && (m_metadata[id].type() == typeid(T)))
             return std::any_cast<T>(&m_metadata[id]);
-            return nullptr;
+        return nullptr;
     }
 
     template<typename T>
@@ -98,6 +99,16 @@ namespace legion::rendering
         setup(context);
         for (auto& [_, stage] : m_stages)
             stage->init(context);
+    }
+
+    template<typename Self>
+    inline void RenderPipeline<Self>::shutdown()
+    {
+        for (auto& [_, stage] : m_stages)
+            stage->_shutdown_impl();
+
+        RenderPipelineBase::shutdown();
+        m_stages.clear();
     }
 
     template<typename Self>

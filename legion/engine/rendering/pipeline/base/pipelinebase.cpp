@@ -78,4 +78,12 @@ namespace legion::rendering
         return nullptr;
     }
 
+    void RenderPipelineBase::shutdown()
+    {
+        m_framebuffers.clear();
+        m_metadata.clear();
+        m_abort = false;
+        m_exiting.store(false, std::memory_order_relaxed);
+    }
+
 }

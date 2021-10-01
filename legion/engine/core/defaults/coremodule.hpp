@@ -1,5 +1,6 @@
 #pragma once
 #include <core/engine/module.hpp>
+#include <core/engine/module.inl>
 #include <core/data/loaders/objmeshloader.hpp>
 #include <core/data/loaders/gltfmeshloader.hpp>
 #include <core/data/loaders/stbimageloader.hpp>
@@ -28,8 +29,6 @@ namespace legion::core
 
             assets::AssetCache<image>::addLoader<GltfFauxImageLoader>();
             assets::AssetCache<image>::addLoader<StbImageLoader>();
-
-            compute::Context::init();
 
             createProcessChain("Update");
         }

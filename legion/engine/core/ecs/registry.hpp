@@ -10,6 +10,7 @@
 #include <core/types/types.hpp>
 #include <core/platform/platform.hpp>
 #include <core/common/hash.hpp>
+#include <core/engine/enginesubsystem.hpp>
 
 #include <core/ecs/containers/component_pool.hpp>
 #include <core/ecs/handles/entity.hpp>
@@ -27,16 +28,26 @@ namespace legion::core::ecs
     /**@class Registry
      * @brief Manager and owner of all component families and entities.
      */
-    class Registry
+    class Registry : public EngineSubSystem<Registry>
     {
+        AllowPrivateOnInit;
+        AllowPrivateOnShutdown;
+        SubSystemInstance(Registry);
     private:
         // All miscellaneous data on entities, eg: hierarchy, active, alive.
-        static std::unordered_map<id_type, entity_data> m_entities;
+        std::unordered_map<id_type, entity_data> m_entities;
 
         // All recyclable entities that are dead.
-        static std::queue<id_type> m_recyclableEntities;
+        std::queue<id_type> m_recyclableEntities;
 
-        static std::unordered_map<id_type, std::string>& familyNames();
+        std::unordered_map<id_type, std::string> m_familyNames;
+
+        // Keep track of what the next new entity ID should be.
+        id_type m_nextEntityId = world_entity_id + 1; // First entity should have ID 2; 0 is invalid and 1 is world.
+
+        /**@brief The component compositions of all entities.
+         */
+        std::unordered_map<id_type, std::unordered_set<id_type>> m_entityCompositions;
 
         /**@brief Inserts in-place if the component family does not exist, returns existing item if the family exists.
          * @param args Arguments to forward to the constructor of the component family.
@@ -47,8 +58,10 @@ namespace legion::core::ecs
 
         L_NODISCARD static id_type getNextEntityId();
 
+        static void onInit();
+        static void onShutdown();
+
     public:
-        static void clear();
 
         /**@brief Creates world entity if it doesn't exist yet and returns it.
          * @note The world entity can also be retrieved using `ecs::world` and
@@ -135,7 +148,7 @@ namespace legion::core::ecs
 
         /**@brief Gets the component compositions of all entities.
          */
-        L_NODISCARD static std::unordered_map<id_type, std::unordered_set<id_type>>& entityCompositions() noexcept;
+        L_NODISCARD static std::unordered_map<id_type, std::unordered_set<id_type>>& entityCompositions();
 
         /**@brief Gets the entity specific data of all entities.
          */
@@ -260,6 +273,9 @@ namespace legion::core::ecs
          */
         L_NODISCARD static void* getComponent(id_type typeId, entity target);
     };
+
+    OnEngineInit(Registry, &Registry::init);
+    OnEngineShutdown(Registry, &Registry::shutdown);
 
     /**@brief World entity. All entities and scenes are eventually parented to this entity.
      */

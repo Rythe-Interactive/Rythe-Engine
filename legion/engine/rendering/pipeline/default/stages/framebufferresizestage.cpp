@@ -103,6 +103,20 @@ namespace legion::rendering
         create_meta<texture_handle>("scene depth history", m_depthStencilTexture[1]);
     }
 
+    void FramebufferResizeStage::shutdown()
+    {
+       TextureCache::destroy_texture("color_image0");
+        TextureCache::destroy_texture("color_image1");
+        TextureCache::destroy_texture("normal_image0");
+        TextureCache::destroy_texture("normal_image1");
+        TextureCache::destroy_texture("position_image0");
+        TextureCache::destroy_texture("position_image1");
+        TextureCache::destroy_texture("overdraw_image0");
+        TextureCache::destroy_texture("overdraw_image1");
+        TextureCache::destroy_texture("depth_stencil_image0");
+        TextureCache::destroy_texture("depth_stencil_image1");
+    }
+
     void FramebufferResizeStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
         OPTICK_EVENT();
