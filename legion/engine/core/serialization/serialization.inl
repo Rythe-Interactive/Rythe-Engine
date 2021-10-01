@@ -11,7 +11,7 @@ namespace legion::core::serialization
         return result;
     }
 
-    template<typename ViewType = serializer_view&, typename Type>
+    template<typename ViewType, typename Type>
     inline common::result<void, fs_error> write(fs::view file, Type data)
     {
         auto s_view = ViewType();
@@ -22,7 +22,7 @@ namespace legion::core::serialization
         return s_view.write(file);
     }
 
-    template<typename ViewType = serializer_view&, typename Type>
+    template<typename ViewType, typename Type>
     inline common::result<void, fs_error> write(Type data, fs::view file)
     {
         return write<ViewType>(file, data);
@@ -32,23 +32,27 @@ namespace legion::core::serialization
     template<typename Type, typename ViewType>
     common::result<void, fs_error> deserialize(ViewType& s_view)
     {
-        return common::result<void, fs_error>();
+        s_view.start_read();
+        auto serializer = serializer_registry::get_serializer<Type>();
+        auto output = serializer->deserialize(s_view,"Test");
+        s_view.end_read();
+        return common::success;
     }
 
     template<typename ViewType, typename Type>
     inline common::result<void, fs_error> load(fs::view file)
     {
-        return common::result<void, fs_error>();
+        return common::success;
     }
 
     template<typename ViewType = serializer_view&, typename Type>
     inline common::result<void, fs_error> load(std::vector<byte> data)
     {
-        return common::result<void, fs_error>();
+        return common::success;
     }
     template<typename ViewType = serializer_view&, typename Iterator, typename Type>
     common::result<void, fs_error> load(Iterator begin, Iterator end)
     {
-        return common::result<void, fs_error>();
+        return common::success;
     }
 }

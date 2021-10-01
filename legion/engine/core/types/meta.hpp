@@ -128,6 +128,9 @@ namespace legion::core
 
     HAS_FUNC(resize);
 
+    HAS_FUNC(push_back);
+    HAS_FUNC(emplace);
+
     COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)> && has_end_v<T L_COMMA typename T::iterator(void)> && has_resize_v<T L_COMMA void(size_type)>, T);
     COMBINE_SFINAE(is_any_castable, std::is_constructible<T L_COMMA const T&>::value,T);
 

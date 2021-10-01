@@ -20,14 +20,15 @@ namespace legion::core::serialization
     template<typename Type, typename ViewType>
     common::result<void, fs_error> deserialize(ViewType& s_view);
 
-    template<typename ViewType = serializer_view&, typename Type>
+    template<typename ViewType, typename Type>
     common::result<void, fs_error> load(fs::view file);
 
-    template<typename ViewType = serializer_view&, typename Type>
+    template<typename ViewType, typename Type>
     common::result<void, fs_error> load(std::vector<byte> data);
 
-    template<typename ViewType = serializer_view&, typename Type, typename Iterator>
+    template<typename ViewType, typename Type, typename Iterator>
     common::result<void, fs_error> load(Iterator begin, Iterator end);
 }
 
+#include <core/serialization/serialization.inl>
 #include <core/serialization/serializer.inl>

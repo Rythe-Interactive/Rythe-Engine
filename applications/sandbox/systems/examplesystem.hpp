@@ -22,7 +22,6 @@ namespace legion::core
     };
 }
 
-
 ManualReflector(example_comp, value);
 ManualReflector(scene_comp, id, entities);
 
@@ -65,44 +64,45 @@ public:
         //Serialization Test
         srl::serializer_registry::register_serializer<example_comp>();
         srl::serializer_registry::register_serializer<position>();
-        srl::serializer_registry::register_serializer<rotation>();
+        //srl::serializer_registry::register_serializer<rotation>();
         srl::serializer_registry::register_serializer<velocity>();
-        srl::serializer_registry::register_serializer<scale>();
+        //srl::serializer_registry::register_serializer<scale>();
 
-        for (int i = 0; i < 10; i++)
-        {
+        //for (int i = 0; i < 10; i++)
+        //{
             auto ent = createEntity();
             ent.add_component<example_comp>();
             ent.add_component<position>();
             ent.add_component<velocity>();
 
-            auto child = createEntity();
-            child.add_component<rotation>();
-            child.add_component<example_comp>();
+        //    auto child = createEntity();
+        //    child.add_component<rotation>();
+        //    child.add_component<example_comp>();
 
-            ent.add_child(child);
-        }
+        //    ent.add_child(child);
+        //}
 
         std::string_view filePath = "assets://scenes/scene1.json";
-        srl::write<srl::json>(filePath, ecs::Registry::getWorld());
+        srl::write<srl::json>(filePath, ent);
 
-
+        ecs::Registry::destroyEntity(ent);
         /////////////////////////////////////////////////////////
         //                                  EXAMPLE API
         ////////////////////////////////////////////////////////
 
-         auto result1 = srl::load<srl::json, scene_comp>("assets:://scenes/scene1.json"_view);
-         std::vector<byte> byteVec;
-         auto result2 = srl::load<srl::yaml, scene_comp>(byteVec);
-         auto result3 = srl::load<srl::bson, scene_comp>(byteVec.begin(),byteVec.end());
+         //auto result1 = srl::load<srl::json, scene_comp>("assets:://scenes/scene1.json"_view);
+         //std::vector<byte> byteVec;
+         //auto result2 = srl::load<srl::yaml, scene_comp>(byteVec);
+         //auto result3 = srl::load<srl::bson, scene_comp>(byteVec.begin(),byteVec.end());
 
          srl::json j_view;
-         
-         j_view.read("assets:://scenes/scene1.json"_view);
-         j_view.read(byteVec);
-         j_view.read(byteVec.begin(), byteVec.end());
 
-        auto result4 = srl::deserialize<scene_comp>(j_view);
+         fs::view file("assets://scenes/scene1.json");
+         j_view.read(file);
+         //j_view.read(byteVec);
+         //j_view.read(byteVec.begin(), byteVec.end());
+
+        auto result4 = srl::deserialize<ecs::entity>(j_view);
 
         /////////////////////////////////////////////////////////
     }

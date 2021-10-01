@@ -23,14 +23,14 @@ namespace legion::core::serialization
         virtual void serialize_id_type(std::string& name, id_type serializable) LEGION_PURE;
 
         template<typename Type>
-        common::result<Type> deserialize(std::string_view& name);
+        Type deserialize(std::string name);
 
-        virtual common::result<int, fs_error> deserialize_int(std::string_view& name) LEGION_PURE;
-        virtual common::result<float, fs_error> deserialize_float(std::string_view& name) LEGION_PURE;
-        virtual common::result<double, fs_error> deserialize_double(std::string_view& name) LEGION_PURE;
-        virtual common::result<void, fs_error>  deserialize_bool(std::string_view& name) LEGION_PURE;
-        virtual common::result<std::string, fs_error> deserialize_string(std::string_view& name) LEGION_PURE;
-        virtual common::result<id_type, fs_error> deserialize_id_type(std::string_view& name) LEGION_PURE;
+        virtual common::result<int, fs_error> deserialize_int(std::string& name) LEGION_PURE;
+        virtual common::result<float, fs_error> deserialize_float(std::string& name) LEGION_PURE;
+        virtual common::result<double, fs_error> deserialize_double(std::string& name) LEGION_PURE;
+        virtual bool deserialize_bool(std::string& name) LEGION_PURE;
+        virtual common::result<std::string, fs_error> deserialize_string(std::string& name) LEGION_PURE;
+        virtual common::result<id_type, fs_error> deserialize_id_type(std::string& name) LEGION_PURE;
 
         virtual void start_object() LEGION_PURE;
         virtual void start_object(std::string name) LEGION_PURE;
@@ -38,6 +38,12 @@ namespace legion::core::serialization
 
         virtual void start_container(std::string name) LEGION_PURE;
         virtual void end_container() LEGION_PURE;
+
+        virtual void start_read() LEGION_PURE;
+        virtual void end_read() LEGION_PURE;
+
+        virtual int start_read_array() LEGION_PURE;
+        virtual void end_read_array() LEGION_PURE;
 
         virtual common::result<void, fs_error> write(fs::view& file) LEGION_PURE;
 

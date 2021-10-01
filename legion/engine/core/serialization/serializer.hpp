@@ -17,7 +17,7 @@ namespace legion::core::serialization
         ~serializer_base() = default;
 
         virtual common::result<void, fs_error>  serialize(const void* serializable, serializer_view& view, std::string name) = 0;
-        virtual common::result<void*, fs_error> deserialize(serializer_view& view) = 0;
+        virtual common::result<void*, fs_error> deserialize(serializer_view& view, std::string name) = 0;
     };
 
     template<typename serializable_type>
@@ -27,7 +27,7 @@ namespace legion::core::serialization
         ~serializer() = default;
 
         virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& s_view, std::string name) override;
-        virtual common::result<void*,fs_error> deserialize(serializer_view& s_view) override;
+        virtual common::result<void*,fs_error> deserialize(serializer_view& s_view,std::string name) override;
     };
 
     template<>
@@ -37,7 +37,7 @@ namespace legion::core::serialization
         ~serializer() = default;
 
         virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string name) override;
-        virtual common::result<void*, fs_error> deserialize(serializer_view& s_view) override;
+        virtual common::result<void*, fs_error> deserialize(serializer_view& s_view, std::string name) override;
     };
 
     template<>
@@ -47,7 +47,7 @@ namespace legion::core::serialization
         ~serializer() = default;
 
         virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& view, std::string name) override;
-        virtual common::result<void*, fs_error> deserialize(serializer_view& s_view) override;
+        virtual common::result<void*, fs_error> deserialize(serializer_view& s_view,std::string name) override;
     };
 
 }
