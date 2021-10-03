@@ -43,6 +43,8 @@ namespace legion::core::serialization
         virtual int start_read_array() override;
         virtual void end_read_array() override;
 
+        virtual std::string get_key() override;
+
         virtual common::result<void, fs_error> write(fs::view& file) override;
         virtual common::result<void, fs_error> read(fs::view& file) override;
         virtual common::result<void, fs_error> read(byte_vec data) override;

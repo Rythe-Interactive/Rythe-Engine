@@ -45,6 +45,8 @@ namespace legion::core::serialization
     {
         auto output = active_stack.top()[name].get<int>();
         active_stack.top().erase(name);
+        if (active_stack.top().size() < 1)
+            active_stack.pop();
         return output;
     }
 
@@ -52,6 +54,8 @@ namespace legion::core::serialization
     {
         auto output = active_stack.top()[name].get<float>();
         active_stack.top().erase(name);
+        if (active_stack.top().size() < 1)
+            active_stack.pop();
         return output;
     }
 
@@ -59,6 +63,8 @@ namespace legion::core::serialization
     {
         auto output = active_stack.top()[name].get<double>();
         active_stack.top().erase(name);
+        if (active_stack.top().size() < 1)
+            active_stack.pop();
         return output;
     }
 
@@ -66,6 +72,8 @@ namespace legion::core::serialization
     {
         auto output = active_stack.top()[name].get<bool>();
         active_stack.top().erase(name);
+        if (active_stack.top().size() < 1)
+            active_stack.pop();
         return output;
     }
 
@@ -73,6 +81,8 @@ namespace legion::core::serialization
     {
         auto output = active_stack.top()[name].get<std::string>();
         active_stack.top().erase(name);
+        if (active_stack.top().size() < 1)
+            active_stack.pop();
         return output;
     }
 
@@ -80,6 +90,8 @@ namespace legion::core::serialization
     {
         auto output = active_stack.top()[name].get<int>();
         active_stack.top().erase(name);
+        if (active_stack.top().size() < 1)
+            active_stack.pop();
         return output;
     }
 
@@ -184,14 +196,23 @@ namespace legion::core::serialization
 
     inline void json::end_read_array()
     {
-        log::debug("What is left on the stack: "+ active_stack.top().dump());
         if (active_stack.top().size() < 1)
-        {
             active_stack.pop();
-        }
+
         active_stack.top().erase(active_stack.top().begin().key());
-        log::debug("What is left on the stack again: " + active_stack.top().dump());
-        //end_read();
+    }
+
+    inline std::string json::get_key()
+    {
+        auto key = active_stack.top()[0].begin().key();
+        auto val = active_stack.top()[0][key];
+        active_stack.top().erase(0);
+        active_stack.push(val);
+
+        if (active_stack.top().size() < 1)
+            active_stack.pop();
+
+        return key;
     }
 
     inline common::result<void, fs_error> json::write(fs::view& file)

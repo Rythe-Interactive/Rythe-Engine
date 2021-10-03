@@ -28,6 +28,7 @@ namespace legion::core::serialization
 
         virtual common::result<void, fs_error> serialize(const void* serializable, serializer_view& s_view, std::string name) override;
         virtual common::result<void*,fs_error> deserialize(serializer_view& s_view,std::string name) override;
+
     };
 
     template<>

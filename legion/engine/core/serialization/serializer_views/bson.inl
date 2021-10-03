@@ -105,6 +105,11 @@ namespace legion::core::serialization
     {
     }
 
+    inline std::string bson::get_key()
+    {
+        return "";
+    }
+
 
     inline common::result<void, fs_error> bson::write(fs::view& file)
     {

@@ -97,6 +97,11 @@ namespace legion::core::serialization
     {
     }
 
+    inline std::string yaml::get_key()
+    {
+        return "";
+    }
+
     inline common::result<void, fs_error> yaml::write(fs::view& file)
     {
         return legion_fs_error("not yet implemented");

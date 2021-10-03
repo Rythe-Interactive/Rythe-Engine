@@ -5,6 +5,7 @@ namespace legion::core::serialization
 {
     namespace detail
     {
+
         template<typename type>
         inline common::result<void, fs_error> serialize_container(const void* container, serializer_view& s_view, std::string& name)
         {
@@ -38,29 +39,13 @@ namespace legion::core::serialization
             auto container = container_type();
 
             int size = s_view.start_read_array();
-            log::debug("Array Size: "+std::to_string(size));
 
-            if constexpr (has_emplace<container_type,value_type>::value)
+            for (int i = 0; i < size; i++)
             {
-                for (int i = 0; i < size; i++)
-                {
-                    log::debug("Deserializing Container Element");
-                    pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
+                pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
 
-                    auto result = _serializer->deserialize(s_view, type_hash<value_type>().global_name().data());
-                    container.emplace(*static_cast<value_type*>(result.value()));
-                }
-            }
-            else if constexpr (has_push_back<container_type, value_type>::value)
-            {
-                for (int i = 0; i < size; i++)
-                {
-                    log::debug("Deserializing Container Element");
-                    pointer<serializer<value_type>> _serializer = serializer_registry::get_serializer<value_type>();
-
-                    auto result = _serializer->deserialize(s_view, type_hash<value_type>().global_name().data());
-                    container.push_back(*static_cast<value_type*>(result.value()));
-                }
+                auto result = _serializer->deserialize(s_view, type_hash<value_type>().global_name().data());
+                //container.insert(container.end(),*static_cast<value_type*>(result.value()));
             }
 
             s_view.end_read_array();
@@ -89,7 +74,7 @@ namespace legion::core::serialization
 
             for (id_type typeId : ent_composition)
             {
-                auto ent = ecs::Registry::getEntity(ent_data.id);;
+                auto ent = ecs::Registry::getEntity(ent_data.id);
                 auto _serializer = serializer_registry::get_serializer(typeId);
                 std::string compName = ecs::Registry::getFamilyName(typeId);
                 if (!_serializer)
@@ -112,33 +97,41 @@ namespace legion::core::serialization
             //Entity
 
             auto ent = ecs::Registry::createEntity();
-            log::debug("Begin entity deserialize");
-            log::debug("deserialize name");
             ent->name = s_view.deserialize<std::string>("name");
-            log::debug("deserialize active");
             ent->active = s_view.deserialize<bool>("active");
-            log::debug("deserialize alive");
             ent->alive = s_view.deserialize<bool>("alive");
 
             //Children
-            log::debug("deserialize children");
-            auto children = detail::deserialize_container<ecs::entity_set>(s_view);
-            for (const auto& e : children.value())
+            int size = s_view.start_read_array();
+
+            for (int i = 0; i < size; i++)
             {
-                ent.add_child(e);
+                log::debug("Deserializing Container Element");
+                auto _serializer = serializer_registry::get_serializer<ecs::entity>();
+
+                auto result = _serializer->deserialize(s_view, type_hash<ecs::entity>().global_name().data());
+                ent.add_child(*static_cast<ecs::entity*>(result.value()));
             }
 
+            s_view.end_read_array();
 
             //Components
             log::debug("deserialize components");
-            auto components = detail::deserialize_container<std::vector<ecs::component_base>>(s_view);
-            for (const auto& c : components.value())
+            size = s_view.start_read_array();
+
+            for (int i = 0;i<size;i++)
             {
-                log::debug("Adding");
-                ent.add_component(c);
+                auto key = s_view.get_key();
+                id_type typeId;
+                std::stringstream sstream(key);
+                sstream >> typeId;
+                log::debug("deserializing: "+key);
+
+                auto _serializer = serializer_registry::get_serializer(typeId);
+                _serializer->deserialize(s_view, key);
             }
 
-
+            s_view.end_read_array();
 
             return ent;
         }
@@ -154,7 +147,6 @@ namespace legion::core::serialization
         return &detail::deserialize_ent_data(view).value();
     }
 
-
     inline common::result<void, fs_error> serializer<ecs::entity>::serialize(const void* ent, serializer_view& s_view, std::string name)
     {
         return detail::serialize_ent_data(
@@ -166,7 +158,6 @@ namespace legion::core::serialization
     {
         return &detail::deserialize_ent_data(view).value();
     }
-
 
     template<typename type>
     inline common::result<void, fs_error> serializer<type>::serialize(const void* serializable, serializer_view& s_view, std::string name)

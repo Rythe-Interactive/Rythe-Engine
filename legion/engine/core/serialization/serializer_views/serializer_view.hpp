@@ -45,6 +45,8 @@ namespace legion::core::serialization
         virtual int start_read_array() LEGION_PURE;
         virtual void end_read_array() LEGION_PURE;
 
+        virtual std::string get_key() LEGION_PURE;
+
         virtual common::result<void, fs_error> write(fs::view& file) LEGION_PURE;
 
         virtual common::result<void, fs_error> read(fs::view& file) LEGION_PURE;
