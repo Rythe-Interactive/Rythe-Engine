@@ -287,6 +287,17 @@ namespace legion::core::ecs
     //    return getFamily(typeId)->create_component(target, std::move(prototype));
     //}
 
+    void* Registry::createComponent(id_type typeId, entity target, const void* component)
+    {
+        OPTICK_EVENT();
+        instance.m_entityCompositions.at(target).insert(typeId);
+
+        FilterRegistry::markComponentAdd(typeId, target);
+
+        return getFamily(typeId)->create_component(target,std::move(component));
+    }
+
+
     void Registry::destroyComponent(id_type typeId, entity target)
     {
         OPTICK_EVENT();

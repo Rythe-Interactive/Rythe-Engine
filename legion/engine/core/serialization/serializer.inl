@@ -106,9 +106,7 @@ namespace legion::core::serialization
 
             for (int i = 0; i < size; i++)
             {
-                log::debug("Deserializing Container Element");
                 auto _serializer = serializer_registry::get_serializer<ecs::entity>();
-
                 auto result = _serializer->deserialize(s_view, type_hash<ecs::entity>().global_name().data());
                 ent.add_child(*static_cast<ecs::entity*>(result.value()));
             }
@@ -116,19 +114,17 @@ namespace legion::core::serialization
             s_view.end_read_array();
 
             //Components
-            log::debug("deserialize components");
             size = s_view.start_read_array();
-
             for (int i = 0;i<size;i++)
             {
                 auto key = s_view.get_key();
                 id_type typeId;
                 std::stringstream sstream(key);
                 sstream >> typeId;
-                log::debug("deserializing: "+key);
 
                 auto _serializer = serializer_registry::get_serializer(typeId);
-                _serializer->deserialize(s_view, key);
+                auto result = _serializer->deserialize(s_view, key);
+                ecs::Registry::createComponent(typeId,ent,result.value());
             }
 
             s_view.end_read_array();
@@ -234,7 +230,11 @@ namespace legion::core::serialization
                     {
                         auto _serializer = serializer_registry::get_serializer<value_type>();
                         if (_serializer)
-                            value = *static_cast<value_type>(_serializer->deserialize(s_view,name));
+                        {
+                            s_view.start_read();
+                            value = *static_cast<value_type>(_serializer->deserialize(s_view, name));
+                            s_view.end_read();
+                        }
                         else
                             log::error("Serializer can't be created");
                     }

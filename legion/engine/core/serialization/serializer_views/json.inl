@@ -79,6 +79,7 @@ namespace legion::core::serialization
 
     inline common::result<std::string, fs_error> json::deserialize_string(std::string& name)
     {
+        log::debug("Top: "+active_stack.top().dump());
         auto output = active_stack.top()[name].get<std::string>();
         active_stack.top().erase(name);
         if (active_stack.top().size() < 1)
@@ -172,8 +173,14 @@ namespace legion::core::serialization
             active_stack.push(root);
         }
 
-        active_stack.push(active_stack.top().begin().value());
-        log::debug("Beginning read: " + active_stack.top().dump());
+        if (active_stack.top().is_array())
+            active_stack.push(active_stack.top()[0]);
+        else if (active_stack.top().is_object())
+            active_stack.push(active_stack.top().begin().value());
+        else if (active_stack.top().is_null())
+            active_stack.pop();
+
+        log::debug("[Start Read] Top: "+active_stack.top().dump());
     }
 
     inline void json::end_read()
@@ -223,10 +230,11 @@ namespace legion::core::serialization
     inline common::result<void, fs_error> json::read(fs::view& file)
     {
         auto result = file.get();
-        if (result.valid())
-            log::debug(result.value().to_string());
-        else
-            log::debug(result.error().what());
+        if (!result.valid())
+        {
+            log::error(result.error().what());
+            return result.error();
+        }
         root = nlohmann::ordered_json::parse(file.get().value().to_string());
         return common::success;
     }

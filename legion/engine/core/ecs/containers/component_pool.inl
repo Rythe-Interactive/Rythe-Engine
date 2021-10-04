@@ -84,6 +84,25 @@ namespace legion::core::ecs
     //}
 
     template<typename component_type>
+    inline void* component_pool<component_type>::create_component(entity target, const void* component)
+    {
+        auto& ret = m_components.try_emplace(target,*static_cast<const component_type*>(component)).first.value();
+
+        if constexpr (has_static_init_v<component_type, void(component_type&, entity)>)
+        {
+            component_type::init(ret, target);
+        }
+        else if constexpr (has_static_init_v<component_type, void(component_type&)>)
+        {
+            component_type::init(ret);
+        }
+
+        events::EventBus::raiseEvent<events::component_creation<component_type>>(target);
+
+        return &ret;
+    }
+
+    template<typename component_type>
     inline L_ALWAYS_INLINE bool component_pool<component_type>::contains(entity target) const
     {
         return m_components.contains(target);

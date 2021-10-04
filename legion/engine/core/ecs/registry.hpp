@@ -205,6 +205,8 @@ namespace legion::core::ecs
         //template<typename component_type>
         //static component_type& createComponent(entity target, serialization::component_prototype<component_type>&& prototype);
 
+        static void* createComponent(id_type typeId, entity target, const void* component);
+
         /**@brief Creates a new component of a certain type for a specific entity.
          * @param typeId Type hash of component type to create.
          * @param target Entity to create the component for.
