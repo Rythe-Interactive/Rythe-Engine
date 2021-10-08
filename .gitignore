@@ -123,6 +123,6 @@ applications/sandbox/imgui.ini
 
 # Reference files (not for upload)
 **/**_ref/*
-docs/venv
+docs/venv 
 **/__pycache__/**
 *.ninja*
