@@ -85,6 +85,11 @@ namespace legion::core::common {
         return true;
     }
 
+    LEGION_CLANG_SUPPRESS_WARNING_PUSH
+    LEGION_CLANG_SUPPRESS_WARNING("-Wunused-variable")
+    LEGION_GCC_SUPPRESS_WARNING_PUSH
+    LEGION_GCC_SUPPRESS_WARNING("-Wunused-variable")
+
     //dilems helper classlo
     template <char token, char... tokens>
     struct str_tokens : std::ctype<char>
@@ -107,6 +112,9 @@ namespace legion::core::common {
             return rc;
         }
     };
+
+    LEGION_CLANG_SUPPRESS_WARNING_POP
+    LEGION_GCC_SUPPRESS_WARNING_POP
 
     //split string at any given char via variadic template and insert into vector
     template <char token_1, char... token>

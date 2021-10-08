@@ -368,13 +368,11 @@ static void TestECS()
         for (auto& ent : fltr.reverse_range())
         {
             count += ent.get_component<test_comp>()->value;
+
             ent.destroy();
         }
 
         L_CHECK(count == 100);
-
-        if (!test_info::isBenchMarking)
-            log::info("filter size: {}", fltr.size());
 
         L_CHECK(fltr.size() == 0);
         L_CHECK(ecs::component_pool<test_comp>::m_components.empty());

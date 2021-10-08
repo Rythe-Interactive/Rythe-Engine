@@ -449,6 +449,9 @@
     <ClInclude Include="data\loaders\gltfmeshloader.hpp" />
     <ClInclude Include="engine\enginesubsystem.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
+    <ClInclude Include="containers\vector.hpp" />
+    <ClInclude Include="containers\contiguous_iterator.hpp" />
+    <ClInclude Include="common\alloconly_allocator.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

@@ -17,43 +17,50 @@ namespace legion::core
     {
         T* ptr;
 
-        L_NODISCARD constexpr T* operator->() noexcept { return ptr; }
-        L_NODISCARD constexpr const T* operator->() const noexcept { return ptr; }
+        RULE_OF_5_CONSTEXPR_NOEXCEPT(pointer);
 
-        L_NODISCARD constexpr T& operator*() noexcept { return *ptr; }
-        L_NODISCARD constexpr const T& operator*() const noexcept { return *ptr; }
+        constexpr L_ALWAYS_INLINE pointer(T* other) noexcept : ptr(other) {}
+        constexpr L_ALWAYS_INLINE pointer& operator=(T* other) noexcept { ptr = other; return *this; }
 
-        L_NODISCARD constexpr operator bool() const noexcept { return ptr; }
-        L_NODISCARD constexpr operator const T*() const noexcept { return ptr; }
-        L_NODISCARD constexpr operator T*() noexcept { return ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE operator bool() const noexcept { return ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE operator T* () const noexcept { return ptr; }
 
-        constexpr pointer& operator=(T* src) noexcept { ptr = src; return *this; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator==(const pointer& other) const noexcept { return ptr == other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator==(T* other) const noexcept { return ptr == other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator==(std::nullptr_t) const noexcept { return ptr == nullptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator!=(const pointer& other) const noexcept { return ptr != other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator!=(T* other) const noexcept { return ptr != other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator!=(std::nullptr_t) const noexcept { return ptr != nullptr; }
 
-        L_NODISCARD constexpr bool operator==(const pointer& other) const noexcept { return ptr == other.ptr; }
-        L_NODISCARD constexpr bool operator!=(const pointer& other) const noexcept { return ptr != other.ptr; }
-        L_NODISCARD constexpr bool operator< (const pointer& other) const noexcept { return ptr < other.ptr; }
-        L_NODISCARD constexpr bool operator<=(const pointer& other) const noexcept { return ptr <= other.ptr; }
-        L_NODISCARD constexpr bool operator> (const pointer& other) const noexcept { return ptr > other.ptr; }
-        L_NODISCARD constexpr bool operator>=(const pointer& other) const noexcept { return ptr >= other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator< (const pointer& other) const noexcept { return ptr < other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator< (T* other) const noexcept { return ptr < other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator> (const pointer& other) const noexcept { return ptr > other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator> (T* other) const noexcept { return ptr > other; }
 
-        L_NODISCARD constexpr bool operator==(T* other) const noexcept { return ptr == other; }
-        L_NODISCARD constexpr bool operator!=(T* other) const noexcept { return ptr != other; }
-        L_NODISCARD constexpr bool operator< (T* other) const noexcept { return ptr < other; }
-        L_NODISCARD constexpr bool operator<=(T* other) const noexcept { return ptr <= other; }
-        L_NODISCARD constexpr bool operator> (T* other) const noexcept { return ptr > other; }
-        L_NODISCARD constexpr bool operator>=(T* other) const noexcept { return ptr >= other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator<=(const pointer& other) const noexcept { return ptr <= other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator<=(T* other) const noexcept { return ptr <= other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator>=(const pointer& other) const noexcept { return ptr >= other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator>=(T* other) const noexcept { return ptr >= other; }
 
-        L_NODISCARD constexpr bool operator==(std::nullptr_t) const noexcept { return ptr == nullptr; }
-        L_NODISCARD constexpr bool operator!=(std::nullptr_t) const noexcept { return ptr != nullptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE T* operator->() const noexcept { return ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE T& operator*() const noexcept { return *ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE T& operator[](diff_type diff) const noexcept { return *(ptr + diff); }
 
-        constexpr pointer& operator++() noexcept { ptr++; return *this; }
-        constexpr pointer& operator--() noexcept { ptr--; return *this; }
-        constexpr pointer operator++(int) noexcept { return { ++ptr }; }
-        constexpr pointer operator--(int) noexcept { return { --ptr }; }
-        L_NODISCARD constexpr pointer operator+(size_type n) const noexcept { return { ptr + n }; }
-        L_NODISCARD constexpr pointer operator-(size_type n) const noexcept { return { ptr - n }; }
-        constexpr pointer& operator+=(size_type n) noexcept { ptr += n; return *this; }
-        constexpr pointer& operator-=(size_type n) noexcept { ptr -= n; return *this; }
+        constexpr L_ALWAYS_INLINE pointer& operator++() noexcept { ptr++; return *this; }
+        constexpr L_ALWAYS_INLINE pointer operator++(int) noexcept { return { ++ptr }; }
+
+        constexpr L_ALWAYS_INLINE pointer& operator--() noexcept { ptr--; return *this; }
+        constexpr L_ALWAYS_INLINE pointer operator--(int) noexcept { return { --ptr }; }
+
+        constexpr L_ALWAYS_INLINE pointer& operator+=(pointer other) noexcept { ptr += other.ptr; return *this; }
+        constexpr L_ALWAYS_INLINE pointer& operator+=(diff_type n) noexcept { ptr += n; return *this; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE pointer operator+(pointer other) const noexcept { return { ptr + other.ptr }; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE pointer operator+(diff_type n) const noexcept { return { ptr + n }; }
+
+        constexpr L_ALWAYS_INLINE pointer& operator-=(pointer other) noexcept { ptr -= other.ptr; return *this; }
+        constexpr L_ALWAYS_INLINE pointer& operator-=(diff_type n) noexcept { ptr -= n; return *this; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE pointer operator-(pointer other) const noexcept { return { ptr - other.ptr }; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE pointer operator-(diff_type n) const noexcept { return { ptr - n }; }
     };
 
     template<>
@@ -61,28 +68,30 @@ namespace legion::core
     {
         void* ptr;
 
-        L_NODISCARD constexpr operator bool() const noexcept { return ptr; }
-        L_NODISCARD constexpr operator const void* () const noexcept { return ptr; }
-        L_NODISCARD constexpr operator void* () noexcept { return ptr; }
+        RULE_OF_5_NOEXCEPT(pointer);
 
-        constexpr pointer& operator=(void* src) noexcept { ptr = src; return *this; }
+        constexpr L_ALWAYS_INLINE pointer(void* other) noexcept : ptr(other) {}
+        constexpr L_ALWAYS_INLINE pointer& operator=(void* other) noexcept { ptr = other; return *this; }
 
-        L_NODISCARD constexpr bool operator==(const pointer& other) const noexcept { return ptr == other.ptr; }
-        L_NODISCARD constexpr bool operator!=(const pointer& other) const noexcept { return ptr != other.ptr; }
-        L_NODISCARD constexpr bool operator< (const pointer& other) const noexcept { return ptr < other.ptr; }
-        L_NODISCARD constexpr bool operator<=(const pointer& other) const noexcept { return ptr <= other.ptr; }
-        L_NODISCARD constexpr bool operator> (const pointer& other) const noexcept { return ptr > other.ptr; }
-        L_NODISCARD constexpr bool operator>=(const pointer& other) const noexcept { return ptr >= other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE operator bool() const noexcept { return ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE operator void* () const noexcept { return ptr; }
 
-        L_NODISCARD constexpr bool operator==(void* other) const noexcept { return ptr == other; }
-        L_NODISCARD constexpr bool operator!=(void* other) const noexcept { return ptr != other; }
-        L_NODISCARD constexpr bool operator< (void* other) const noexcept { return ptr < other; }
-        L_NODISCARD constexpr bool operator<=(void* other) const noexcept { return ptr <= other; }
-        L_NODISCARD constexpr bool operator> (void* other) const noexcept { return ptr > other; }
-        L_NODISCARD constexpr bool operator>=(void* other) const noexcept { return ptr >= other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator==(const pointer& other) const noexcept { return ptr == other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator==(void* other) const noexcept { return ptr == other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator==(std::nullptr_t) const noexcept { return ptr == nullptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator!=(const pointer& other) const noexcept { return ptr != other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator!=(void* other) const noexcept { return ptr != other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator!=(std::nullptr_t) const noexcept { return ptr != nullptr; }
 
-        L_NODISCARD constexpr bool operator==(std::nullptr_t) const noexcept { return ptr == nullptr; }
-        L_NODISCARD constexpr bool operator!=(std::nullptr_t) const noexcept { return ptr != nullptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator< (const pointer& other) const noexcept { return ptr < other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator< (void* other) const noexcept { return ptr < other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator> (const pointer& other) const noexcept { return ptr > other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator> (void* other) const noexcept { return ptr > other; }
+
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator<=(const pointer& other) const noexcept { return ptr <= other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator<=(void* other) const noexcept { return ptr <= other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator>=(const pointer& other) const noexcept { return ptr >= other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator>=(void* other) const noexcept { return ptr >= other; }
     };
 
     template<>
@@ -90,26 +99,29 @@ namespace legion::core
     {
         const void* ptr;
 
-        L_NODISCARD constexpr operator bool() const noexcept { return ptr; }
-        L_NODISCARD constexpr operator const void* () const noexcept { return ptr; }
+        RULE_OF_5_NOEXCEPT(pointer);
 
-        constexpr pointer& operator=(const void* src) noexcept { ptr = src; return *this; }
+        constexpr L_ALWAYS_INLINE pointer(const void* other) noexcept : ptr(other) {}
+        constexpr L_ALWAYS_INLINE pointer& operator=(const void* other) noexcept { ptr = other; return *this; }
 
-        L_NODISCARD constexpr bool operator==(const pointer& other) const noexcept { return ptr == other.ptr; }
-        L_NODISCARD constexpr bool operator!=(const pointer& other) const noexcept { return ptr != other.ptr; }
-        L_NODISCARD constexpr bool operator< (const pointer& other) const noexcept { return ptr < other.ptr; }
-        L_NODISCARD constexpr bool operator<=(const pointer& other) const noexcept { return ptr <= other.ptr; }
-        L_NODISCARD constexpr bool operator> (const pointer& other) const noexcept { return ptr > other.ptr; }
-        L_NODISCARD constexpr bool operator>=(const pointer& other) const noexcept { return ptr >= other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE operator bool() const noexcept { return ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE operator const void* () const noexcept { return ptr; }
 
-        L_NODISCARD constexpr bool operator==(void* other) const noexcept { return ptr == other; }
-        L_NODISCARD constexpr bool operator!=(void* other) const noexcept { return ptr != other; }
-        L_NODISCARD constexpr bool operator< (void* other) const noexcept { return ptr < other; }
-        L_NODISCARD constexpr bool operator<=(void* other) const noexcept { return ptr <= other; }
-        L_NODISCARD constexpr bool operator> (void* other) const noexcept { return ptr > other; }
-        L_NODISCARD constexpr bool operator>=(void* other) const noexcept { return ptr >= other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator==(const pointer& other) const noexcept { return ptr == other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator==(const void* other) const noexcept { return ptr == other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator==(std::nullptr_t) const noexcept { return ptr == nullptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator!=(const pointer& other) const noexcept { return ptr != other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator!=(const void* other) const noexcept { return ptr != other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator!=(std::nullptr_t) const noexcept { return ptr != nullptr; }
 
-        L_NODISCARD constexpr bool operator==(std::nullptr_t) const noexcept { return ptr == nullptr; }
-        L_NODISCARD constexpr bool operator!=(std::nullptr_t) const noexcept { return ptr != nullptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator< (const pointer& other) const noexcept { return ptr < other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator< (const void* other) const noexcept { return ptr < other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator> (const pointer& other) const noexcept { return ptr > other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator> (const void* other) const noexcept { return ptr > other; }
+
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator<=(const pointer& other) const noexcept { return ptr <= other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator<=(const void* other) const noexcept { return ptr <= other; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator>=(const pointer& other) const noexcept { return ptr >= other.ptr; }
+        L_NODISCARD constexpr L_ALWAYS_INLINE bool operator>=(const void* other) const noexcept { return ptr >= other; }
     };
 }

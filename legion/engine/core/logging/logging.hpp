@@ -602,7 +602,7 @@ namespace legion::core::log
     /** @brief sets up logging (do not call, invoked by engine) */
     inline void setup()
     {
-        static auto v = detail::_setup_impl();
+        L_MAYBEUNUSED static auto v = detail::_setup_impl();
     }
 }
 #undef logger

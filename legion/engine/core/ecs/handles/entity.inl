@@ -7,7 +7,7 @@ namespace std
 {
     inline L_ALWAYS_INLINE size_t hash<legion::core::ecs::entity>::operator()(legion::core::ecs::entity const& handle) const noexcept
     {
-        return handle->id;
+        return std::hash<void*>()(handle.data);
     }
 }
 #endif
@@ -56,19 +56,19 @@ namespace legion::core::ecs
     template<>
     inline L_ALWAYS_INLINE bool entity::operator==<id_type>(id_type id) const
     {
-        return data && data->alive ? data->id == id : id == invalid_id;
+        return data ? data->id == id : id == invalid_id;
     }
 
     template<>
     inline L_ALWAYS_INLINE bool entity::operator!=<id_type>(id_type id) const
     {
-        return data && data->alive && (data->id != id || id == invalid_id);
+        return data && (data->id != id || id == invalid_id);
     }
 
     template<>
     inline L_ALWAYS_INLINE bool entity::operator==<entity>(entity other) const
     {
-        return data && data->alive && other.data && data->id == other->id;
+        return data && other.data && data->id == other->id;
     }
 
     template<>
@@ -80,13 +80,13 @@ namespace legion::core::ecs
     template<typename T>
     inline L_ALWAYS_INLINE bool entity::operator==(T val) const
     {
-        return data && data->alive ? data->id == val : val == invalid_id;
+        return data ? data->id == val : val == invalid_id;
     }
 
     template<typename T>
     inline L_ALWAYS_INLINE bool entity::operator!=(T val) const
     {
-        return data && data->alive && (data->id != val || val == invalid_id);
+        return data && (data->id != val || val == invalid_id);
     }
 
     template<typename component_type>

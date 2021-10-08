@@ -217,7 +217,7 @@ namespace legion::core
         if (name[size - 1] == '\0')
             size--;
 
-        for (int i = 0; i < size; i++)
+        for (size_type i = 0; i < size; i++)
         {
             hash = hash ^ static_cast<const byte>(name[i]);
             hash *= prime;
@@ -242,7 +242,7 @@ namespace legion::core
         if (name[size - 1] == '\0')
             size--;
 
-        for (int i = 0; i < size; i++)
+        for (size_type i = 0; i < size; i++)
         {
             hash = hash ^ static_cast<const byte>(name[i]);
             hash *= prime;

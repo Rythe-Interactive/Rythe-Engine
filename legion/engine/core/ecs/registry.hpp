@@ -62,7 +62,6 @@ namespace legion::core::ecs
         static void onShutdown();
 
     public:
-
         /**@brief Creates world entity if it doesn't exist yet and returns it.
          * @note The world entity can also be retrieved using `ecs::world` and
          *       doesn't require a check for whether the world already exists or not.

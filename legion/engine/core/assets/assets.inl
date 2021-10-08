@@ -344,17 +344,17 @@ namespace legion::core::assets
         if (!traits.is_valid_path)
         {
             progress->complete(legion_exception_msg("invalid file traits: not a valid path"));
-            return;
+            return async::async_operation{ progress };
         }
         else if (!traits.exists)
         {
             progress->complete(legion_exception_msg("invalid file traits: file does not exist"));
-            return;
+            return async::async_operation{ progress };
         }
         else if (!traits.can_be_read)
         {
             progress->complete(legion_exception_msg("invalid file traits: file cannot be read"));
-            return;
+            return async::async_operation{ progress };
         }
 
         schd::Scheduler::queueJobs(1, [
@@ -368,7 +368,7 @@ namespace legion::core::assets
                 asyncLoadJob(nameHash, name, file, settings, progress);
             });
 
-        return async::async_operation{ progress }; // Requires ability to schedule a single task. or job system not to halt until all jobs are done.
+        return async::async_operation{ progress };
     }
 
     template<typename AssetType>
@@ -389,7 +389,7 @@ namespace legion::core::assets
         static_assert(std::is_default_constructible_v<AssetType>, "Asset type is not default constructible.");
 
         AssetType* ptr = &(instance.m_cache[nameHash]); // Slightly faster than try_emplace in most cases except for when using libstdc++(GNU) with Clang, with GCC or using libc++(LLVM) with Clang is no issue.
-        instance.m_info.try_emplace(nameHash, { name, path, invalid_id });
+        instance.m_info.try_emplace(nameHash, detail::asset_info{ name, path, invalid_id });
         return { ptr, nameHash };
     }
 
@@ -411,7 +411,7 @@ namespace legion::core::assets
         static_assert(std::is_copy_constructible_v<AssetType>, "Asset type is not copy constructible.");
 
         AssetType* ptr = &instance.m_cache.try_emplace(nameHash, src).first->second;
-        instance.m_info.try_emplace(nameHash, { name, path, invalid_id });
+        instance.m_info.try_emplace(nameHash, detail::asset_info{ name, path, invalid_id });
         return { ptr, nameHash };
     }
 

@@ -3,6 +3,130 @@
  * @file platform.hpp
  */
 
+//////////////////////////////////// Detect compiler /////////////////////////////////////
+
+#if defined(__clang__)
+ // clang
+#   define LEGION_CLANG
+#   if defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
+#       define LEGION_CLANG_GCC
+#   elif defined(_MSC_VER)
+#       define LEGION_CLANG_MSVC
+#   endif
+#elif defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
+ // gcc
+#   define LEGION_GCC
+#elif defined(_MSC_VER)
+ // msvc
+#   define LEGION_MSVC
+#endif
+
+#if defined(LEGION_CLANG)
+#   define LEGION_PRAGMA_TO_STR(x) _Pragma(#x)
+#   define LEGION_CLANG_SUPPRESS_WARNING_PUSH _Pragma("clang diagnostic push")
+#   define LEGION_CLANG_SUPPRESS_WARNING(w) LEGION_PRAGMA_TO_STR(clang diagnostic ignored w)
+#   define LEGION_CLANG_SUPPRESS_WARNING_POP _Pragma("clang diagnostic pop")
+#   define LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH(w) LEGION_CLANG_SUPPRESS_WARNING_PUSH LEGION_CLANG_SUPPRESS_WARNING(w)
+#else
+#   define LEGION_CLANG_SUPPRESS_WARNING_PUSH
+#   define LEGION_CLANG_SUPPRESS_WARNING(w)
+#   define LEGION_CLANG_SUPPRESS_WARNING_POP
+#   define LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)
+#endif
+
+#if defined(LEGION_GCC)
+#   define LEGION_PRAGMA_TO_STR(x) _Pragma(#x)
+#   define LEGION_GCC_SUPPRESS_WARNING_PUSH _Pragma("GCC diagnostic push")
+#   define LEGION_GCC_SUPPRESS_WARNING(w) LEGION_PRAGMA_TO_STR(GCC diagnostic ignored w)
+#   define LEGION_GCC_SUPPRESS_WARNING_POP _Pragma("GCC diagnostic pop")
+#   define LEGION_GCC_SUPPRESS_WARNING_WITH_PUSH(w) LEGION_GCC_SUPPRESS_WARNING_PUSH LEGION_GCC_SUPPRESS_WARNING(w)
+#else
+#   define LEGION_GCC_SUPPRESS_WARNING_PUSH
+#   define LEGION_GCC_SUPPRESS_WARNING(w)
+#   define LEGION_GCC_SUPPRESS_WARNING_POP
+#   define LEGION_GCC_SUPPRESS_WARNING_WITH_PUSH(w)
+#endif
+
+#if defined(LEGION_MSVC)
+#   define LEGION_MSVC_SUPPRESS_WARNING_PUSH __pragma(warning(push))
+#   define LEGION_MSVC_SUPPRESS_WARNING(w) __pragma(warning(disable : w))
+#   define LEGION_MSVC_SUPPRESS_WARNING_POP __pragma(warning(pop))
+#   define LEGION_MSVC_SUPPRESS_WARNING_WITH_PUSH(w) LEGION_MSVC_SUPPRESS_WARNING_PUSH LEGION_MSVC_SUPPRESS_WARNING(w)
+#else
+#   define LEGION_MSVC_SUPPRESS_WARNING_PUSH
+#   define LEGION_MSVC_SUPPRESS_WARNING(w)
+#   define LEGION_MSVC_SUPPRESS_WARNING_POP
+#   define LEGION_MSVC_SUPPRESS_WARNING_WITH_PUSH(w)
+#endif
+
+LEGION_GCC_SUPPRESS_WARNING_PUSH
+LEGION_GCC_SUPPRESS_WARNING("-Wunknown-pragmas")
+
+#pragma region ////////////////////////////////// Compiler specifics ////////////////////////////////////
+
+#if defined(LEGION_CLANG) || defined(LEGION_GCC)
+#   define L_NULLOP() asm volatile("nop");
+#elif defined(LEGION_MSVC)
+#   include <intrin.h>
+#   define L_NULLOP() __nop();
+#else
+#   define L_NULLOP() ;
+#endif
+
+#if defined(LEGION_CLANG) || defined(LEGION_GCC)
+#   define L_PAUSE_INSTRUCTION __builtin_ia32_pause
+#elif defined(LEGION_MSVC)
+#   define L_PAUSE_INSTRUCTION _mm_pause
+#else
+#   define L_PAUSE_INSTRUCTION L_NULLOP
+#endif
+
+#if !defined(__FULL_FUNC__)
+#   if defined(LEGION_CLANG) || defined(LEGION_GCC)
+#       define __FULL_FUNC__ __PRETTY_FUNCTION__
+#   elif defined(LEGION_MSVC)
+#       define __FULL_FUNC__ __FUNCSIG__
+#   else
+#       define __FULL_FUNC__ __func__
+#   endif
+#endif
+
+#if defined (LEGION_MSVC)
+#   define L_WARNING(desc) __pragma(message(__FILE__ "(" STRINGIFY(__LINE__) ") : warning: " #desc))
+#   define L_ERROR(desc) __pragma(message(__FILE__ "(" STRINGIFY(__LINE__) ") : error: " #desc))
+#elif defined(LEGION_GCC) || defined(LEGION_CLANG)
+#   define L_WARNING(desc) _Pragma(STRINGIFY(GCC warning desc))
+#   define L_ERROR(desc) _Pragma(STRINGIFY(GCC error desc))
+#endif
+
+
+LEGION_CLANG_SUPPRESS_WARNING("-Wdocumentation-unknown-command")
+LEGION_CLANG_SUPPRESS_WARNING("-Wdocumentation")
+LEGION_CLANG_SUPPRESS_WARNING("-Wextra-semi-stmt")
+LEGION_CLANG_SUPPRESS_WARNING("-Wextra-semi")
+LEGION_CLANG_SUPPRESS_WARNING("-Wunused-function")
+LEGION_CLANG_SUPPRESS_WARNING("-Wcovered-switch-default")
+LEGION_CLANG_SUPPRESS_WARNING("-Wexit-time-destructors")
+LEGION_CLANG_SUPPRESS_WARNING("-Wglobal-constructors")
+LEGION_CLANG_SUPPRESS_WARNING("-Wgnu-anonymous-struct")
+LEGION_CLANG_SUPPRESS_WARNING("-Wnested-anon-types")
+LEGION_CLANG_SUPPRESS_WARNING("-Wunused-macros")
+LEGION_CLANG_SUPPRESS_WARNING("-Wunused-member-function")
+LEGION_CLANG_SUPPRESS_WARNING("-Wc++98-c++11-c++14-compat")
+LEGION_CLANG_SUPPRESS_WARNING("-Wc++98-c++11-compat")
+LEGION_CLANG_SUPPRESS_WARNING("-Wc++98-compat-pedantic")
+LEGION_CLANG_SUPPRESS_WARNING("-Wc++98-compat")
+LEGION_CLANG_SUPPRESS_WARNING("-Wc++11-compat")
+LEGION_CLANG_SUPPRESS_WARNING("-Wc++14-compat")
+
+LEGION_GCC_SUPPRESS_WARNING_POP
+LEGION_GCC_SUPPRESS_WARNING("-Wc++11-compat")
+LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
+LEGION_GCC_SUPPRESS_WARNING_PUSH
+LEGION_GCC_SUPPRESS_WARNING("-Wunknown-pragmas")
+
+#pragma endregion
+
 #pragma region //////////////////////////////////////// Utils ///////////////////////////////////////////
 
 #if !defined(PROJECT_NAME)
@@ -161,6 +285,14 @@ type& operator=(const type&) noexcept = default;\
 type& operator=(type&&) noexcept = default;\
 ~type() = default;
 
+#define RULE_OF_5_CONSTEXPR_NOEXCEPT(type)\
+constexpr type() noexcept = default;\
+constexpr type(const type&) noexcept = default;\
+constexpr type(type&&) noexcept = default;\
+constexpr type& operator=(const type&) noexcept = default;\
+constexpr type& operator=(type&&) noexcept = default;\
+~type() = default;
+
 #define NO_DEF_CTOR_RULE5(type)\
 type(const type&) = default;\
 type(type&&) = default;\
@@ -297,124 +429,7 @@ type& operator=(type&&) noexcept = default;
 
 #pragma endregion
 
-#pragma region //////////////////////////////////// Detect compiler /////////////////////////////////////
-
-#if defined(__clang__)
-    // clang
-#   define LEGION_CLANG
-#   if defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
-#       define LEGION_CLANG_GCC
-#   elif defined(_MSC_VER)
-#       define LEGION_CLANG_MSVC
-#   endif
-#elif defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
-    // gcc
-#   define LEGION_GCC
-#elif defined(_MSC_VER)
-    // msvc
-#   define LEGION_MSVC
-#endif
-
-#pragma endregion
-
-#pragma region ////////////////////////////////// Compiler specifics ////////////////////////////////////
-
-#if defined(LEGION_CLANG) || defined(LEGION_GCC)
-#   define L_NULLOP() asm volatile("nop");
-#elif defined(LEGION_MSVC)
-#   include <intrin.h>
-#   define L_NULLOP() __nop();
-#else
-#   define L_NULLOP() ;
-#endif
-
-#if defined(LEGION_CLANG) || defined(LEGION_GCC)
-#   define L_PAUSE_INSTRUCTION __builtin_ia32_pause
-#elif defined(LEGION_MSVC)
-#   define L_PAUSE_INSTRUCTION _mm_pause
-#else
-#   define L_PAUSE_INSTRUCTION L_NULLOP
-#endif
-
-#if !defined(__FULL_FUNC__)
-#   if defined(LEGION_CLANG) || defined(LEGION_GCC)
-#       define __FULL_FUNC__ __PRETTY_FUNCTION__
-#   elif defined(LEGION_MSVC)
-#       define __FULL_FUNC__ __FUNCSIG__
-#   else
-#       define __FULL_FUNC__ __func__
-#   endif
-#endif
-
-#if defined(LEGION_CLANG)
-#   define LEGION_PRAGMA_TO_STR(x) _Pragma(#x)
-#   define LEGION_CLANG_SUPPRESS_WARNING_PUSH _Pragma("clang diagnostic push")
-#   define LEGION_CLANG_SUPPRESS_WARNING(w) LEGION_PRAGMA_TO_STR(clang diagnostic ignored w)
-#   define LEGION_CLANG_SUPPRESS_WARNING_POP _Pragma("clang diagnostic pop")
-#   define LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH(w) LEGION_CLANG_SUPPRESS_WARNING_PUSH LEGION_CLANG_SUPPRESS_WARNING(w)
-#else
-#   define LEGION_CLANG_SUPPRESS_WARNING_PUSH
-#   define LEGION_CLANG_SUPPRESS_WARNING(w)
-#   define LEGION_CLANG_SUPPRESS_WARNING_POP
-#   define LEGION_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)
-#endif
-
-#if defined(LEGION_GCC)
-#   define LEGION_PRAGMA_TO_STR(x) _Pragma(#x)
-#   define LEGION_GCC_SUPPRESS_WARNING_PUSH _Pragma("GCC diagnostic push")
-#   define LEGION_GCC_SUPPRESS_WARNING(w) LEGION_PRAGMA_TO_STR(GCC diagnostic ignored w)
-#   define LEGION_GCC_SUPPRESS_WARNING_POP _Pragma("GCC diagnostic pop")
-#   define LEGION_GCC_SUPPRESS_WARNING_WITH_PUSH(w) LEGION_GCC_SUPPRESS_WARNING_PUSH LEGION_GCC_SUPPRESS_WARNING(w)
-#else
-#   define LEGION_GCC_SUPPRESS_WARNING_PUSH
-#   define LEGION_GCC_SUPPRESS_WARNING(w)
-#   define LEGION_GCC_SUPPRESS_WARNING_POP
-#   define LEGION_GCC_SUPPRESS_WARNING_WITH_PUSH(w)
-#endif
-
-#if defined(LEGION_MSVC)
-#   define LEGION_MSVC_SUPPRESS_WARNING_PUSH __pragma(warning(push))
-#   define LEGION_MSVC_SUPPRESS_WARNING(w) __pragma(warning(disable : w))
-#   define LEGION_MSVC_SUPPRESS_WARNING_POP __pragma(warning(pop))
-#   define LEGION_MSVC_SUPPRESS_WARNING_WITH_PUSH(w) LEGION_MSVC_SUPPRESS_WARNING_PUSH LEGION_MSVC_SUPPRESS_WARNING(w)
-#else
-#   define LEGION_MSVC_SUPPRESS_WARNING_PUSH
-#   define LEGION_MSVC_SUPPRESS_WARNING(w)
-#   define LEGION_MSVC_SUPPRESS_WARNING_POP
-#   define LEGION_MSVC_SUPPRESS_WARNING_WITH_PUSH(w)
-#endif
-
-#if defined (LEGION_MSVC)
-#   define L_WARNING(desc) __pragma(message(__FILE__ "(" STRINGIFY(__LINE__) ") : warning: " #desc))
-#   define L_ERROR(desc) __pragma(message(__FILE__ "(" STRINGIFY(__LINE__) ") : error: " #desc))
-#elif defined(LEGION_GCC) || defined(LEGION_CLANG)
-#   define L_WARNING(desc) _Pragma(STRINGIFY(GCC warning desc))
-#   define L_ERROR(desc) _Pragma(STRINGIFY(GCC error desc))
-#endif
-
-
-LEGION_CLANG_SUPPRESS_WARNING("-Wdocumentation-unknown-command")
-LEGION_CLANG_SUPPRESS_WARNING("-Wdocumentation")
-LEGION_CLANG_SUPPRESS_WARNING("-Wextra-semi-stmt")
-LEGION_CLANG_SUPPRESS_WARNING("-Wextra-semi")
-LEGION_CLANG_SUPPRESS_WARNING("-Wunused-function")
-LEGION_CLANG_SUPPRESS_WARNING("-Wcovered-switch-default")
-LEGION_CLANG_SUPPRESS_WARNING("-Wexit-time-destructors")
-LEGION_CLANG_SUPPRESS_WARNING("-Wglobal-constructors")
-LEGION_CLANG_SUPPRESS_WARNING("-Wgnu-anonymous-struct")
-LEGION_CLANG_SUPPRESS_WARNING("-Wnested-anon-types")
-LEGION_CLANG_SUPPRESS_WARNING("-Wunused-macros")
-LEGION_CLANG_SUPPRESS_WARNING("-Wunused-member-function")
-LEGION_CLANG_SUPPRESS_WARNING("-Wc++98-c++11-c++14-compat")
-LEGION_CLANG_SUPPRESS_WARNING("-Wc++98-c++11-compat")
-LEGION_CLANG_SUPPRESS_WARNING("-Wc++98-compat-pedantic")
-LEGION_CLANG_SUPPRESS_WARNING("-Wc++98-compat")
-LEGION_CLANG_SUPPRESS_WARNING("-Wc++11-compat")
-LEGION_CLANG_SUPPRESS_WARNING("-Wc++14-compat")
-
-LEGION_GCC_SUPPRESS_WARNING("-Wc++11-compat")
-LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
-
+#pragma region ////////////////////////////////// Language convention ///////////////////////////////////
 
 #if defined(LEGION_GCC) || defined(LEGION_CLANG)
 #   define L_ALWAYS_INLINE __attribute__((always_inline))
@@ -425,19 +440,15 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 #endif
 
 #if (defined(LEGION_WINDOWS) && !defined(LEGION_WINDOWS_USE_CDECL)) || defined(DOXY_INCLUDE)
-    /**@def LEGION_CCONV
-     * @brief the calling convention exported functions will use in the args engine
-     */
+/**@def LEGION_CCONV
+ * @brief the calling convention exported functions will use in the args engine
+ */
 #   define LEGION_CCONV __fastcall
 #elif defined(LEGION_MSVC)
 #   define LEGION_CCONV __cdecl
 #else
 #   define LEGION_CCONV
 #endif
-
-#pragma endregion
-
-#pragma region ////////////////////////////////// Language convention ///////////////////////////////////
 
 /**@def LEGION_CPP17V
  * @brief the version number of c++17 as long
@@ -512,3 +523,5 @@ LEGION_GCC_SUPPRESS_WARNING("-Wc++14-compat")
 #endif
 
 #pragma endregion
+
+LEGION_GCC_SUPPRESS_WARNING_POP

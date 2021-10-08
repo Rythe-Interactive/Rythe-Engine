@@ -267,7 +267,7 @@ namespace legion::core
             (std::is_same_v<return_type, void> ||
                 std::is_default_constructible_v<return_type> ||
                 std::is_constructible_v<return_type, std::nullptr_t>) &&
-            noexcept(stub_ptr_(std::declval<decltype(object_ptr_)>(), std::declval<Args>()...)))
+            noexcept(std::declval<stub_ptr_type>()(std::declval<void*>(), std::declval<Args>()...)))
         {
             if constexpr (std::is_same_v<return_type, void>)
             {
@@ -296,7 +296,7 @@ namespace legion::core
             (std::is_same_v<return_type, void> ||
                 std::is_default_constructible_v<return_type> ||
                 std::is_constructible_v<return_type, std::nullptr_t>) &&
-            noexcept(stub_ptr_(std::declval<decltype(object_ptr_)>(), std::declval<Args>()...)))
+            noexcept(std::declval<stub_ptr_type>()(std::declval<void*>(), std::declval<Args>()...)))
         {
             if constexpr (std::is_same_v<return_type, void>)
             {

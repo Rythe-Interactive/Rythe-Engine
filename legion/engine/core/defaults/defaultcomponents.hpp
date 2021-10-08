@@ -241,7 +241,7 @@ namespace fmt
     using namespace legion::core;
 
     template <>
-    struct fmt::formatter<position> {
+    struct formatter<position> {
         char presentation = 'f';
 
         constexpr auto parse(format_parse_context& ctx) {
@@ -266,7 +266,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<velocity> {
+    struct formatter<velocity> {
         char presentation = 'f';
 
         constexpr auto parse(format_parse_context& ctx) {
@@ -291,7 +291,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<rotation> {
+    struct formatter<rotation> {
         char presentation = 'f';
 
         constexpr auto parse(format_parse_context& ctx) {
@@ -316,7 +316,7 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<scale> {
+    struct formatter<scale> {
         char presentation = 'f';
 
         constexpr auto parse(format_parse_context& ctx) {

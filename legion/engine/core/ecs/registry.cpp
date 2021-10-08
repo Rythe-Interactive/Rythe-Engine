@@ -21,8 +21,6 @@ namespace legion::core::ecs
 
     entity Registry::getWorld()
     {
-        init();
-
         // Create entity data.
         auto& [_, data] = *instance.m_entities.try_emplace(world_entity_id).first;
         data.alive = true;
@@ -36,8 +34,8 @@ namespace legion::core::ecs
         return entity{ &data };
     }
 
-    // Assign world entity.
-    entity world = Registry::getWorld();
+    // World entity.
+    entity world;
 
     void Registry::onInit()
     {

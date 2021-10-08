@@ -6,6 +6,7 @@
 #include <array>
 #include <queue>
 #include <type_traits>
+#include <functional>
 
 #include <core/platform/platform.hpp>
 #include <core/types/primitives.hpp>
@@ -148,6 +149,30 @@ namespace legion::core
 
     template<typename T>
     using remove_cvr_t = typename remove_cvr<T>::type;
+
+    template<typename T>
+    struct reference_traits
+    {
+        using value_type = T;
+        using reference = T&;
+        using const_reference = const T&;
+    };
+
+    template<typename T>
+    struct reference_traits<T&>
+    {
+        using value_type = std::reference_wrapper<T>;
+        using reference = T&;
+        using const_reference = const T&;
+    };
+
+    template<typename T>
+    struct reference_traits<const T&>
+    {
+        using value_type = std::reference_wrapper<const T>;
+        using reference = const T&;
+        using const_reference = const T&;
+    };
 
     template <class T>
     struct is_vector

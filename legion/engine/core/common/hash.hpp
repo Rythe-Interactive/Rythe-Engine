@@ -128,9 +128,7 @@ namespace legion::core
     };
 
     LEGION_CLANG_SUPPRESS_WARNING_PUSH
-    LEGION_GCC_SUPPRESS_WARNING_PUSH
     LEGION_CLANG_SUPPRESS_WARNING("-Wdelete-abstract-non-virtual-dtor")
-    LEGION_GCC_SUPPRESS_WARNING("-Wdelete-abstract-non-virtual-dtor")
 
     struct type_reference
     {
@@ -156,7 +154,6 @@ namespace legion::core
         operator id_type() const;
     };
 
-    LEGION_GCC_SUPPRESS_WARNING_POP
     LEGION_CLANG_SUPPRESS_WARNING_POP
 
     namespace detail
