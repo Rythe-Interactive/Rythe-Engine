@@ -56,14 +56,15 @@ project "*"
     targetdir "bin/%{cfg.buildcfg}"
     libdirs { "deps/lib/", "bin/%{cfg.buildcfg}/" }
     defines { "USE_OPTICK=0" }
-        
+
     filter "configurations:Debug*"
-        buildoptions { "-fsanitize=address,undefined" }
+        buildoptions { "-fsanitize=address,undefined", "-fsized-deallocation" }
         linkoptions { "-fsanitize=address,undefined" }
         defines {"DEBUG"}
         symbols "On"
 
     filter "configurations:Release*"
+        buildoptions { "-fsized-deallocation" }
         defines {"NDEBUG"}
         optimize "On"
 
