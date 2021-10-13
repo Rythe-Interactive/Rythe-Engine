@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -17,11 +17,11 @@
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
-    <ClCompile Include="data\particle_system_cache.cpp" />
     <ClCompile Include="data\postprocessingeffect.cpp" />
     <ClCompile Include="data\renderbuffer.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
+    <ClCompile Include="pipeline\default\postfx\depthoffield.cpp" />
     <ClCompile Include="imgui_impl\ImCurveEdit.cpp" />
     <ClCompile Include="imgui_impl\ImGradient.cpp" />
     <ClCompile Include="imgui_impl\imgui.cpp" />
@@ -38,6 +38,7 @@
     <ClCompile Include="pipeline\base\pipelinebase.cpp" />
     <ClCompile Include="pipeline\base\renderstage.cpp" />
     <ClCompile Include="pipeline\default\defaultpipeline.cpp" />
+    <ClCompile Include="pipeline\default\postfx\bloom.cpp" />
     <ClCompile Include="pipeline\default\postfx\fxaa.cpp" />
     <ClCompile Include="pipeline\default\postfx\tonemapping.cpp" />
     <ClCompile Include="pipeline\default\stages\clearstage.cpp" />
@@ -50,31 +51,31 @@
     <ClCompile Include="pipeline\gui\stages\imguirenderstage.cpp" />
     <ClCompile Include="pipeline\default\stages\postprocessingstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
-    <ClCompile Include="data\particle_system_base.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
     <ClCompile Include="util\ini.c" />
+    <ClCompile Include="util\matini.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\light.hpp" />
-    <ClInclude Include="components\particle.hpp" />
-    <ClInclude Include="components\particle_emitter.hpp" />
-    <ClInclude Include="components\point_cloud.hpp" />
+    <ClInclude Include="components\point.hpp" />
+    <ClInclude Include="components\pointcloud_renderable.hpp" />
+    <ClInclude Include="data\Octree.hpp" />
     <ClInclude Include="data\postprocessingeffect.hpp" />
     <ClInclude Include="data\screen_quad.hpp" />
+    <ClInclude Include="pipeline\default\postfx\depthoffield.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
     <ClInclude Include="pipeline\default\postfx\fxaa.hpp" />
+    <ClInclude Include="pipeline\default\postfx\bloom.hpp" />
     <ClInclude Include="pipeline\default\postfx\tonemapping.hpp" />
     <ClInclude Include="pipeline\default\stages\debugrenderstage.hpp" />
     <ClInclude Include="pipeline\default\stages\postprocessingstage.hpp" />
     <ClInclude Include="pipeline\gui\stages\imguirenderstage.hpp" />
-    <ClInclude Include="systems\pointcloudgeneration.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\buffer.hpp" />
     <ClInclude Include="data\framebuffer.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
-    <ClInclude Include="data\particle_system_cache.hpp" />
     <ClInclude Include="data\renderbuffer.hpp" />
     <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="data\vertexarray.hpp" />
@@ -91,14 +92,11 @@
     <ClInclude Include="pipeline\default\stages\meshrenderstage.hpp" />
     <ClInclude Include="pipeline\default\stages\submitstage.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
-    <ClInclude Include="systems\particle_system_manager.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
     <ClInclude Include="pipeline\base\pipelinebase.hpp" />
     <ClInclude Include="pipeline\base\renderstage.hpp" />
     <ClInclude Include="rendering.hpp" />
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
-    <ClInclude Include="data\particle_system_base.hpp" />
-    <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="util\bindings.hpp" />
     <ClInclude Include="util\gui.hpp" />
     <ClInclude Include="util\matini.hpp" />
@@ -144,10 +142,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediates\$(Platform)\$(Configuration)\engine\$(ProjectName)\</IntDir>
-    <TargetName>legion-$(ProjectName)</TargetName>
+    <TargetName>legion-$(ProjectName)-d</TargetName>
     <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
   </PropertyGroup>
@@ -167,6 +165,10 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -185,9 +187,12 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
       </AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
-del ".\xcopyexclude"</Command>
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
+
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
+
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -200,7 +205,10 @@ del ".\xcopyexclude"</Command>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-flto=thin -Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -221,9 +229,12 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
       </AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
-del ".\xcopyexclude"</Command>
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
+
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
+
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

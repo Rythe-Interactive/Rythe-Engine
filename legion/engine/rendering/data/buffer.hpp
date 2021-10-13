@@ -21,6 +21,8 @@ namespace legion::rendering
                                      // This can be changed by OpenGL if the driver thinks you made the wrong choice,
                                      // in that case a warning will show in the console and this value will not be accurate anymore.
 
+        static void idDeleter(app::gl_id& value);
+
     public:
         /**@brief Faux constructor. To prevent unnecessary GPU allocations the default constructor doesn't actually create a buffer.
          *        This means that default initialized buffers are invalid temporary objects until they get properly initialized.

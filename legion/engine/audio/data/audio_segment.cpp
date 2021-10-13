@@ -145,7 +145,7 @@ namespace legion::audio
         if (result != common::valid)
         {
             //log::error("Audio file wrong!");
-            log::error("Error while loading file: {}, {}", static_cast<std::string>(file.get_filename()), result.get_error());
+            log::error("Error while loading file: {}, {}", static_cast<std::string>(file.get_filename()), result.error());
             return invalid_audio_segment_handle;
         }
 
@@ -210,7 +210,7 @@ namespace legion::audio
         m_segments.clear();
     }
 
-    std::pair<async::rw_spinlock&, audio_segment&> audio_segment_handle::get()
+    std::pair<async::rw_spinlock&, audio_segment&> audio_segment_handle::get() const
     {
         async::readonly_guard guard(AudioSegmentCache::m_segmentsLock);
 

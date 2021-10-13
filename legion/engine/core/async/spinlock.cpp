@@ -18,6 +18,7 @@ namespace legion::core::async
             return;
 
         assert_msg("Attempted to move a spinlock that was locked.", !source.m_lock.load(std::memory_order_relaxed));
+        m_id = source.m_id;
     }
 
     spinlock& spinlock::operator=(spinlock&& source) noexcept
@@ -26,11 +27,11 @@ namespace legion::core::async
             return *this;
 
         assert_msg("Attempted to move a spinlock that was locked.", !source.m_lock.load(std::memory_order_relaxed));
-
+        m_id = source.m_id;
         return *this;
     }
 
-    void spinlock::lock() noexcept
+    void spinlock::lock() const noexcept
     {
         OPTICK_EVENT();
         if (m_forceRelease)
@@ -45,6 +46,7 @@ namespace legion::core::async
 
         while (true)
         {
+            OPTICK_CATEGORY("Acquire spinlock", Optick::Category::Wait);
             if (!m_lock.exchange(true, std::memory_order_acquire))
                 break;
             while (m_lock.load(std::memory_order_relaxed))
@@ -54,7 +56,7 @@ namespace legion::core::async
         locks++;
     }
 
-    L_NODISCARD bool spinlock::try_lock() noexcept
+    L_NODISCARD bool spinlock::try_lock() const noexcept
     {
         OPTICK_EVENT();
         if (m_forceRelease)
@@ -67,7 +69,7 @@ namespace legion::core::async
             return true;
         }
 
-        bool ret = !m_lock.load(std::memory_order_release) && !m_lock.exchange(true, std::memory_order_acquire);
+        bool ret = !m_lock.load(std::memory_order_relaxed) && !m_lock.exchange(true, std::memory_order_acquire);
 
         if (ret)
             locks++;
@@ -75,7 +77,7 @@ namespace legion::core::async
         return ret;
     }
 
-    void spinlock::unlock() noexcept
+    void spinlock::unlock() const noexcept
     {
         OPTICK_EVENT();
         if (m_forceRelease)

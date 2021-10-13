@@ -1,10 +1,10 @@
 #include <core/events/defaultevents.hpp>
-#include <iostream>
+#include <core/scheduling/scheduler.hpp>
+#include <core/logging/logging.hpp>
 
 namespace legion::core::events
 {
-    exit::exit(int exitcode) :exitcode(exitcode)
+    exit::exit(int exitCode) : exitcode(exitCode)
     {
-        std::cout << "=========================\n| Shutting down engine. |\n=========================\n";
     }
 }

@@ -4,189 +4,190 @@
 #include <rendering/rendering.hpp>
 #include <audio/audio.hpp>
 
-using namespace legion;
-
-struct exit_action : public app::input_action<exit_action> {};
-
-struct fullscreen_action : public app::input_action<fullscreen_action> {};
-struct escape_cursor_action : public app::input_action<escape_cursor_action> {};
-struct vsync_action : public app::input_action<vsync_action> {};
-
-
-class ExampleSystem final : public System<ExampleSystem>
+struct example_comp
 {
+
+};
+
+class ExampleSystem final : public legion::System<ExampleSystem>
+{
+    lgn::size_type frames = 0;
+    lgn::time64 totalTime = 0;
+    lgn::time::stopwatch<lgn::time64> timer;
+    std::array<lgn::time64, 18000> times;
+
 public:
-    ExampleSystem()
+    void setup()
     {
-        app::WindowSystem::requestWindow(world_entity_id, math::ivec2(1360, 768), "LEGION Engine", "Legion Icon", nullptr, nullptr, 1); // Create the request for the main window.
+        using namespace legion;
+        log::filter(log::severity_debug);
+        log::debug("ExampleSystem setup");
+
+        app::window& win = ecs::world.get_component<app::window>();
+        app::context_guard guard(win);
+
+        auto model = gfx::ModelCache::create_model("Sphere", fs::view("assets://models/sphere.obj"));
+
+        auto material = gfx::MaterialCache::create_material("Texture", fs::view("assets://shaders/texture.shs"));
+        material.set_param("_texture", gfx::TextureCache::create_texture(fs::view("engine://resources/default/albedo")));
+        {
+            auto ent = createEntity("Sun");
+            ent.add_component(gfx::light::directional(math::color(1, 1, 0.8f), 10.f));
+            auto [pos, rot, scal] = ent.add_component<transform>();
+            rot = rotation::lookat(math::vec3::zero, math::vec3(-1, -1, -1));
+        }
+
+#if defined(LEGION_DEBUG)
+        for (int i = 0; i < 2000; i++)
+#else
+        for (int i = 0; i < 20000; i++)
+#endif
+        {
+            auto ent = createEntity();
+
+            auto [pos, rot, scal] = ent.add_component<transform>();
+            pos = math::sphericalRand(5.f);
+            scal = scale(0.1f, 0.1f, 0.1f);
+
+            ent.add_component<example_comp, velocity>();
+            ent.add_component(gfx::mesh_renderer(material, model));
+        }
+
+        model = gfx::ModelCache::create_model("Sponza", fs::view("assets://models/Sponza/Sponza.gltf"));
+
+        material = gfx::MaterialCache::create_material("Test", fs::view("assets://shaders/uv.shs"));
+
+        auto ent = createEntity();
+        ent.add_component<transform>();
+        ent.add_component(gfx::mesh_renderer(material, model));
+
+        model = gfx::ModelCache::create_model("Fire place", fs::view("assets://models/fireplace.glb"));
+
+        ent = createEntity();
+        auto [pos, rot, scal] = ent.add_component<transform>();
+        pos->x = 30.f;
+        scal = scale(2.f);
+        ent.add_component(gfx::mesh_renderer(material, model));
+
+
+        bindToEvent<events::exit, &ExampleSystem::onExit>();
     }
 
-    virtual void setup()
+    void shutdown()
     {
-#pragma region Input binding
-        app::InputSystem::createBinding<exit_action>(app::inputmap::method::ESCAPE);
-        app::InputSystem::createBinding<fullscreen_action>(app::inputmap::method::F11);
-        app::InputSystem::createBinding<escape_cursor_action>(app::inputmap::method::TAB);
-        app::InputSystem::createBinding<vsync_action>(app::inputmap::method::F1);
+        lgn::log::debug("ExampleSystem shutdown");
+    }
 
-        bindToEvent<exit_action, &ExampleSystem::onExit>();
-        bindToEvent<fullscreen_action, &ExampleSystem::onFullscreen>();
-        bindToEvent<escape_cursor_action, &ExampleSystem::onEscapeCursor>();
-        bindToEvent<vsync_action, &ExampleSystem::onVSYNCSwap>();
-#pragma endregion
+    void onExit(L_MAYBEUNUSED lgn::events::exit& event)
+    {
+        using namespace legion;
 
-        app::window window = m_ecs->world.get_component_handle<app::window>().read();
-        window.enableCursor(false);
-        window.show();
+        time64 avg0 = totalTime / frames;
+        time64 avg1 = timer.elapsed_time() / frames;
 
-#pragma region Model and material loading
-        rendering::model_handle cubeH;
-        rendering::model_handle suzanneH;
-        rendering::model_handle axesH;
-        rendering::model_handle floorH;
+        std::set<time64, std::greater<time64>> orderedTimes;
 
-        rendering::material_handle wireframeH;
-        rendering::material_handle uvH;
-        rendering::material_handle skyboxH;
-        rendering::material_handle floorMH;
+        for (auto& time : times)
+            orderedTimes.insert(time);
 
+        time64 onePcLow = 0;
+        time64 pointOnePcLow = 0;
+
+        size_type i = 0;
+        for (auto& time : orderedTimes)
         {
-            async::readwrite_guard guard(*window.lock);
-            app::ContextHelper::makeContextCurrent(window);
+            i++;
+            onePcLow += time;
 
-            cubeH = rendering::ModelCache::create_model("cube", "assets://models/cube.obj"_view);
-            suzanneH = rendering::ModelCache::create_model("suzanne", "assets://models/suzanne.obj"_view);
-            axesH = rendering::ModelCache::create_model("axes", "assets://models/xyz.obj"_view, { true, false, "assets://models/xyz.mtl"_view });
-            floorH = rendering::ModelCache::create_model("floor", "assets://models/groundplane.obj"_view);
-
-            wireframeH = rendering::MaterialCache::create_material("wireframe", "assets://shaders/wireframe.glsl"_view);
-            uvH = rendering::MaterialCache::create_material("uv", "assets://shaders/uv.glsl"_view);
-            skyboxH = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.glsl"_view);
-            floorMH = rendering::MaterialCache::create_material("floor", "assets://shaders/groundplane.glsl"_view);
-
-            app::ContextHelper::makeContextCurrent(nullptr);
-        }
-#pragma endregion
-
-#pragma region Entities
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ cubeH, skyboxH });
-            ent.add_components<transform>(position(), rotation(), scale(500.f));
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ floorH, floorMH });
-            ent.add_components<transform>();
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ suzanneH, wireframeH });
-            ent.add_components<transform>(position(0, 3, 8.1f), rotation(), scale());
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ axesH, uvH });
-            ent.add_components<transform>();
-        }
-
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ cubeH, uvH });
-            ent.add_components<transform>(position(5.1f, 3, 0), rotation(), scale(0.75f));
-        }
-
-        // Sphere setup (with audio source)
-        {
-            auto ent = createEntity();
-            ent.add_component<rendering::renderable>({ cubeH, wireframeH });
-            ent.add_components<transform>(position(-5.1f, 3, 0), rotation(), scale(2.5f));
-
-            auto segment = audio::AudioSegmentCache::createAudioSegment("kilogram", "assets://audio/kilogram-of-scotland.mp3"_view);
-            if (segment)
+            if (i <= math::max<size_type>(math::uround(frames / 1000.0), 1))
             {
-                audio::audio_source source;
-                source.setAudioHandle(segment);
-                source.play();
-                ent.add_component<audio::audio_source>(source);
+                pointOnePcLow += time;
+            }
+
+            if (i >= math::max<size_type>(math::uround(frames / 100.0), 1))
+            {
+                break;
             }
         }
-#pragma endregion
 
-        setupCameraEntity();
+        pointOnePcLow /= math::max<size_type>(math::uround(frames / 1000.0), 1);
+        onePcLow /= math::max<size_type>(math::uround(frames / 100.0), 1);
 
-        createProcess<&ExampleSystem::update>("Update");
+        log::info("1%Low {:.3f} 0.1%Low {:.3f} Avg {:.3f} Measured Avg {:.3f}", onePcLow, pointOnePcLow, avg0, avg1);
+        log::info("1%Low {:.3f} 0.1%Low {:.3f} Avg {:.3f} Measured Avg {:.3f}", 1.0 / onePcLow, 1.0 / pointOnePcLow, 1.0 / avg0, 1.0 / avg1);
     }
 
-    void setupCameraEntity()
+    void update(legion::time::span deltaTime)
     {
-        auto ent = createEntity();
-        rotation rot = math::conjugate(math::normalize(math::toQuat(math::lookAt(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::vec3(0, 1, 0)))));
-        ent.add_components<transform>(position(0.f, 3.f, 0.f), rot, scale());
-        ent.add_component<audio::audio_listener>();
+        using namespace legion;
+        static bool firstFrame = true;
+        if (firstFrame)
+        {
+            timer.start();
+            firstFrame = false;
+        }
 
-        rendering::camera cam;
-        cam.set_projection(90.f, 0.1f, 1000.f);
-        ent.add_component<rendering::camera>(cam);
-    }
+        ecs::filter<position, velocity, example_comp> filter;
 
-    void onExit(exit_action* action)
-    {
-        if (action->released())
+        float dt = deltaTime;
+        if (dt > 0.07f)
+            return;
+
+        if (filter.size())
+        {
+            auto poolSize = (schd::Scheduler::jobPoolSize() + 1);
+            size_type jobSize = math::iround(math::ceil(filter.size() / static_cast<float>(poolSize)));
+
+            queueJobs(poolSize, [&](id_type jobId)
+                {
+                    auto start = jobId * jobSize;
+                    auto end = start + jobSize;
+                    if (end > filter.size())
+                        end = filter.size();
+
+                    for (size_type i = start; i < end; i++)
+                    {
+                        auto& pos = filter[i].get_component<position>().get();
+                        auto& vel = filter[i].get_component<velocity>().get();
+
+                        if (vel == math::vec3::zero)
+                            vel = math::normalize(pos);
+
+                        math::vec3 perp;
+
+                        perp = math::normalize(math::cross(vel, math::vec3::up));
+
+                        math::vec3 rotated = (math::axisAngleMatrix(vel, math::perlin(pos) * math::pi<float>()) * math::vec4(perp.x, perp.y, perp.z, 0)).xyz();
+                        rotated.y -= 0.5f;
+                        rotated = math::normalize(rotated);
+
+                        vel = math::normalize(vel + rotated * dt);
+
+                        if (math::abs(vel.y) >= 0.9f)
+                        {
+                            auto rand = math::circularRand(1.f);
+                            vel.y = 0.9f;
+                            vel = math::normalize(vel + math::vec3(rand.x, 0.f, rand.y));
+                        }
+
+                        pos += vel * 0.3f * dt;
+                    }
+                }
+            ).wait();
+        }
+
+        time64 delta = schd::Clock::lastTickDuration();
+
+        if (frames < times.size())
+        {
+            times[frames] = delta;
+            frames++;
+            totalTime += delta;
+        }
+        else
+        {
+
             raiseEvent<events::exit>();
-    }
-
-    void onFullscreen(fullscreen_action* action)
-    {
-        if (action->released())
-        {
-            app::WindowSystem::requestFullscreenToggle(world_entity_id, math::ivec2(100, 100), math::ivec2(1360, 768));
-        }
-    }
-
-    void onEscapeCursor(escape_cursor_action* action)
-    {
-        if (action->released())
-        {
-            static bool enabled = false;
-            app::window window = m_ecs->world.get_component_handle<app::window>().read();
-            enabled = !enabled;
-            window.enableCursor(enabled);
-            window.show();
-        }
-    }
-
-    void onVSYNCSwap(vsync_action* action)
-    {
-        if (action->released())
-        {
-            auto handle = m_ecs->world.get_component_handle<app::window>();
-            app::window window = handle.read();
-            window.setSwapInterval(window.swapInterval() ? 0 : 1);
-            log::debug("set swap interval to {}", window.swapInterval());
-            handle.write(window);
-        }
-    }
-
-    void update(time::span deltaTime)
-    {
-        debug::drawLine(math::vec3(0, 0, 0), math::vec3(1, 0, 0), math::colors::red, 10);
-        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 1, 0), math::colors::green, 10);
-        debug::drawLine(math::vec3(0, 0, 0), math::vec3(0, 0, 1), math::colors::blue, 10);
-
-        static auto query = createQuery<position, rotation>();
-
-        for (auto entity : query)
-        {
-            auto rot = entity.read_component<rotation>();
-            rot *= math::angleAxis(math::deg2rad(45.f * deltaTime), math::vec3(0, 1, 0));
-            entity.write_component(rot);
-
-            auto pos = entity.read_component<position>();
-            debug::drawLine(pos, pos + rot.forward(), math::colors::magenta, 10);
         }
     }
 };

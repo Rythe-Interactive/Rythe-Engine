@@ -13,7 +13,7 @@ namespace legion::rendering
         template <class T,void(T::*Func)(app::window&, camera&, const camera::camera_input&, time::span)>
         static void addGuiRender(T* ptr)
         {
-            m_onGuiRender += delegate<void(app::window&, camera&, const camera::camera_input&, time::span)>::create<T,Func>(ptr);
+            m_onGuiRender.emplace_back<T>(ptr, Func);
         }
 
 

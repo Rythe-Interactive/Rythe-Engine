@@ -1,72 +1,75 @@
 #pragma once
+#include <unordered_map>
+#include <memory>
+#include <type_traits>
+
+#include <core/common/assert.hpp>
 #include <core/containers/delegate.hpp>
 #include <core/async/rw_spinlock.hpp>
-#include <unordered_map>
-
-#include <Optick/optick.h>
 
 namespace legion::core::common
 {
+    namespace detail
+    {
+        template<typename T>
+        struct _managed_resource_del
+        {
+        private:
+            T* m_store;
+
+        public:
+            _managed_resource_del(_managed_resource_del&&) noexcept = default;
+
+            constexpr _managed_resource_del(T* src) noexcept : m_store(src) {}
+
+            void operator()(delegate<void(T&)>* const _ptr) const
+            {
+                _ptr->invoke(*m_store);
+                delete _ptr;
+            }
+        };
+    }
+
     template<typename T>
     struct managed_resource
     {
-    private:
-        static async::rw_spinlock m_referenceLock;
-        static std::unordered_map<id_type, size_type> m_references;
-        static std::atomic<id_type> m_lastId;
-        id_type m_id = invalid_id;
-
-        delegate<void(T&)> m_destroyFunc;
-
     public:
         T value;
 
-        explicit managed_resource(std::nullptr_t t) : value() {}
+    private:
+        std::shared_ptr<delegate<void(T&)>> m_ref_counter;
+
+    public:
+        explicit managed_resource(std::nullptr_t) : value(), m_ref_counter(nullptr) {}
 
         template<typename... Args>
-        managed_resource(delegate<void(T&)> destroyFunc, Args&&... args)
-            : m_id(m_lastId.fetch_add(1, std::memory_order_acq_rel) + 1), m_destroyFunc(destroyFunc), value(std::forward<Args>(args)...)
+        managed_resource(delegate<void(T&)> destroyFunc, Args&&... args) noexcept(std::is_nothrow_constructible_v<T, Args...>)
+            : value(std::forward<Args>(args)...),
+            m_ref_counter(new delegate<void(T&)>(destroyFunc), detail::_managed_resource_del<T>{ &value })
         {
-            OPTICK_EVENT();
-            async::readwrite_guard guard(m_referenceLock);
-            m_references[m_id]++;
         }
 
-        managed_resource(const managed_resource<T>& src)
-            : m_id(src.m_id), m_destroyFunc(src.m_destroyFunc), value(src.value)
+        managed_resource(const managed_resource<T>& src) noexcept(std::is_nothrow_copy_constructible_v<T>)
+            : value(src.value), m_ref_counter(src.m_ref_counter)
         {
-            OPTICK_EVENT();
-            async::readwrite_guard guard(m_referenceLock);
-            m_references[m_id]++;
         }
 
-        managed_resource(managed_resource<T>&& src)
-            : m_id(src.m_id), m_destroyFunc(std::move(src.m_destroyFunc)), value(std::move(src.value))
+        managed_resource(managed_resource<T>&& src) noexcept(std::is_nothrow_move_constructible_v<T>)
+            : value(std::move(src.value)), m_ref_counter(std::move(src.m_ref_counter))
         {
-            OPTICK_EVENT();
-            async::readwrite_guard guard(m_referenceLock);
-            m_references[m_id]++;
         }
 
-        managed_resource<T>& operator=(const managed_resource<T>& src)
+        managed_resource<T>& operator=(const managed_resource<T>& src) noexcept(std::is_nothrow_copy_assignable_v<T>)
         {
-            OPTICK_EVENT();
-            m_id = src.m_id;
-            m_destroyFunc = src.m_destroyFunc;
             value = src.value;
-            async::readwrite_guard guard(m_referenceLock);
-            m_references[m_id]++;
+            m_ref_counter = src.m_ref_counter;
             return *this;
         }
 
-        managed_resource<T>& operator=(managed_resource<T>&& src)
+        managed_resource<T>& operator=(managed_resource<T>&& src) noexcept(std::is_nothrow_move_assignable_v<T>)
         {
-            OPTICK_EVENT();
-            m_id = src.m_id;
-            m_destroyFunc = std::move(src.m_destroyFunc);
             value = std::move(src.value);
-            async::readwrite_guard guard(m_referenceLock);
-            m_references[m_id]++;
+            m_ref_counter = std::move(src.m_ref_counter);
             return *this;
         }
 
@@ -75,38 +78,14 @@ namespace legion::core::common
             return &value;
         }
 
-        operator T&()
+        operator T& ()
         {
             return value;
         }
 
-        operator const T&() const
+        operator const T& () const
         {
             return value;
-        }
-
-        ~managed_resource()
-        {
-            OPTICK_EVENT();
-            if (!m_id)
-                return;
-
-            async::readwrite_guard guard(m_referenceLock);
-            m_references[m_id]--;
-            if (m_references[m_id] == 0)
-            {
-                m_references.erase(m_id);
-                m_destroyFunc(value);
-            }
         }
     };
-
-    template<typename T>
-    async::rw_spinlock managed_resource<T>::m_referenceLock;
-
-    template<typename T>
-    std::unordered_map<id_type, size_type> managed_resource<T>::m_references;
-
-    template<typename T>
-    std::atomic<id_type> managed_resource<T>::m_lastId;
 }

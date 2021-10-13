@@ -29,6 +29,7 @@ namespace legion::rendering
         stencil = GL_STENCIL_INDEX,
         depth_stencil = GL_DEPTH24_STENCIL8,
         rgba_hdr = GL_RGBA32F,
+        rgb_hdr = GL_RGB32F,
         red = GL_RED,
         rg = GL_RG,
         rgb = GL_RGB,
@@ -38,9 +39,9 @@ namespace legion::rendering
         red_int = GL_RED_INTEGER,
         rg_int = GL_RG_INTEGER,
         rgb_int = GL_RGB_INTEGER,
-        rgba_int = GL_RGBL_INTEGER,
+        rgba_int = GL_RGBA_INTEGER,
         bgr_int = GL_BGR_INTEGER,
-        bgra_int = GL_BGRL_INTEGER,
+        bgra_int = GL_BGRA_INTEGER,
     };
 
     /**@brief Internal channel layout of the colors.
@@ -87,8 +88,10 @@ namespace legion::rendering
      */
     struct texture
     {
+        std::string name;
         app::gl_id textureId = invalid_id;
 
+        std::string path;
         texture_components channels;
         texture_type type;
         texture_format format;
@@ -157,6 +160,9 @@ namespace legion::rendering
         static texture_data get_data(id_type id);
         static texture_handle m_invalidTexture;
     public:
+
+        static void destroy_texture(const std::string& name);
+
         /**@brief Create a new texture and load it from a file if a texture with the same name doesn't exist yet.
          * @param name Identifying name for the texture.
          * @param file File to load from.
@@ -175,11 +181,11 @@ namespace legion::rendering
         static texture_handle create_texture_from_image(const std::string& name, texture_import_settings settings = default_texture_settings);
 
         /**@brief Create a new texture from an image if a texture with the same name doesn't exist yet.
-         * @param image_handle Image to load from. The identifying name for the texture will be the same as the name of the image.
+         * @param assets::asset<image> Image to load from. The identifying name for the texture will be the same as the name of the image.
          * @param settings Settings to pass on to the import pipeline.
          * @return texture_handle A valid handle to the newly created texture if it succeeds, invalid_texture_handle if it fails.
          */
-        static texture_handle create_texture_from_image(image_handle image, texture_import_settings settings = default_texture_settings);
+        static texture_handle create_texture_from_image(assets::asset<image> image, texture_import_settings settings = default_texture_settings);
 
         /**@brief Returns a handle to a texture with a certain name. Will return invalid_texture_handle if the requested texture doesn't exist.
          */

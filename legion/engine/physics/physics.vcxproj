@@ -11,12 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="broadphasecollisionalgorithms\broadphaseuniformgrid.cpp" />
     <ClCompile Include="colliders\convexcollider.cpp" />
+    <ClCompile Include="components\fracturer.cpp" />
     <ClCompile Include="data\convexconvexpenetrationquery.cpp" />
     <ClCompile Include="data\edgepenetrationquery.cpp" />
     <ClCompile Include="halfedgeface.cpp" />
     <ClCompile Include="components\physics_component.cpp" />
+    <ClCompile Include="mesh_splitter_utils\mesh_splitter.cpp" />
+    <ClCompile Include="mesh_splitter_utils\primitive_mesh.cpp" />
+    <ClCompile Include="mesh_splitter_utils\splittable_polygon.cpp" />
+    <ClCompile Include="physics_statics.cpp" />
     <ClCompile Include="systems\physicssystem.cpp" />
+    <ClCompile Include="systems\physics_fracture_test_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core\core.vcxproj">
@@ -24,32 +31,59 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="broadphasecollisionalgorithms\broadphasebruteforce.hpp" />
+    <ClInclude Include="broadphasecollisionalgorithms\broadphasecollisionalgorithm.hpp" />
+    <ClInclude Include="broadphasecollisionalgorithms\broadphaseuniformgrid.hpp" />
     <ClInclude Include="colliders\convexcollider.hpp" />
+    <ClInclude Include="components\fracturer.h" />
+    <ClInclude Include="components\fracturer.hpp" />
     <ClInclude Include="data\contact_vertex.hpp" />
     <ClInclude Include="data\convergance_identifier.hpp" />
     <ClInclude Include="data\convexconvexpenetrationquery.hpp" />
     <ClInclude Include="cube_collider_params.hpp" />
     <ClInclude Include="data\convex_convergance_identifier.hpp" />
+    <ClInclude Include="data\convex_convex_collision_info.h" />
+    <ClInclude Include="data\convex_convex_collision_info.hpp" />
     <ClInclude Include="data\edgepenetrationquery.hpp" />
     <ClInclude Include="data\edge_label.hpp" />
     <ClInclude Include="data\identifier.hpp" />
+    <ClInclude Include="data\penetrationquery.hpp" />
     <ClInclude Include="data\physics_manifold_precursor.h" />
     <ClInclude Include="data\edgepenetrationquery.h" />
+    <ClInclude Include="data\physics_manifold_precursor.hpp" />
     <ClInclude Include="data\pointer_encapsulator.hpp" />
+    <ClInclude Include="data\VoronoiAABB.hpp" />
     <ClInclude Include="events\events.hpp" />
     <ClInclude Include="halfedgeedge.hpp" />
     <ClInclude Include="halfedgeface.hpp" />
     <ClInclude Include="colliders\physicscollider.hpp" />
     <ClInclude Include="data\penetrationquery.h" />
+    <ClInclude Include="mesh_splitter_utils\half_edge_finder.h" />
+    <ClInclude Include="mesh_splitter_utils\half_edge_finder.hpp" />
+    <ClInclude Include="mesh_splitter_utils\intersecting_polygon_organizer.hpp" />
+    <ClInclude Include="mesh_splitter_utils\intersection_edge_info.h" />
+    <ClInclude Include="mesh_splitter_utils\intersection_edge_info.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_split_params.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_half_edge.hpp" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter_debug_helpers.h" />
+    <ClInclude Include="mesh_splitter_utils\mesh_splitter_typedefs.hpp" />
+    <ClInclude Include="mesh_splitter_utils\primitive_mesh.h" />
+    <ClInclude Include="mesh_splitter_utils\primitive_mesh.hpp" />
+    <ClInclude Include="mesh_splitter_utils\splittable_polygon.h" />
+    <ClInclude Include="mesh_splitter_utils\splittable_polygon.hpp" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="physicsconstants.hpp" />
     <ClInclude Include="physics_contact.hpp" />
+    <ClInclude Include="systems\physics_fracture_test_system.h" />
     <ClInclude Include="systems\physicssystem.hpp" />
     <ClInclude Include="physics_statics.hpp" />
     <ClInclude Include="data\physics_manifold.hpp" />
     <ClInclude Include="components\physics_component.hpp" />
     <ClInclude Include="physicsmodule.hpp" />
     <ClInclude Include="components\rigidbody.hpp" />
+    <ClInclude Include="systems\physics_fracture_test_system.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -88,7 +122,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediates\$(Platform)\$(Configuration)\engine\$(ProjectName)\</IntDir>
-    <TargetName>legion-$(ProjectName)</TargetName>
+    <TargetName>legion-$(ProjectName)-d</TargetName>
     <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
   </PropertyGroup>
@@ -104,10 +138,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LEGION_INTERNAL;PROJECT_NAME=$(ProjectName);_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LEGION_INTERNAL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,9 +164,12 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
       </AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
-del ".\xcopyexclude"</Command>
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
+
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
+
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,11 +178,14 @@ del ".\xcopyexclude"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>LEGION_INTERNAL;PROJECT_NAME=$(ProjectName);NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LEGION_INTERNAL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-flto=thin -Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,9 +206,12 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
       </AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
-del ".\xcopyexclude"</Command>
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
+
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
+
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

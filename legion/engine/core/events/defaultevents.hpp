@@ -1,6 +1,6 @@
 #pragma once
 #include <core/events/event.hpp>
-#include <core/ecs/entity_handle.hpp>
+#include <core/ecs/handles/entity.hpp>
 
 namespace legion::core::events
 {
@@ -9,46 +9,23 @@ namespace legion::core::events
         const int exitcode;
 
         exit(int exitcode = 0);
-
-        virtual bool persistent() override { return true; }
-
     };
 
     template<typename component_type>
     struct component_creation : public event<component_creation<component_type>>
     {
-        ecs::entity_handle entity;
+        ecs::entity entity;
 
         component_creation() = default;
-        component_creation(ecs::entity_handle entity) : entity(entity) {}
-
-        virtual bool persistent() override { return false; }
-        virtual bool unique() override { return false; }
-
-    };
-
-    template<typename component_type>
-    struct component_modification : public event<component_modification<component_type>>
-    {
-        ecs::entity_handle entity;
-
-        component_modification() = default;
-        component_modification(ecs::entity_handle entity) : entity(entity) {}
-
-        virtual bool persistent() override { return false; }
-        virtual bool unique() override { return false; }
-
+        component_creation(ecs::entity entity) : entity(entity) {}
     };
 
     template<typename component_type>
     struct component_destruction : public event<component_destruction<component_type>>
     {
-        ecs::entity_handle entity;
+        ecs::entity entity;
 
         component_destruction() = default;
-        component_destruction(ecs::entity_handle entity) : entity(entity) {}
-
-        virtual bool persistent() override { return false; }
-        virtual bool unique() override { return false; }
+        component_destruction(ecs::entity entity) : entity(entity) {}
     };
 }

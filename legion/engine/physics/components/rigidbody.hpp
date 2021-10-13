@@ -28,8 +28,8 @@ namespace legion::physics
         math::vec3 torqueAccumulator = math::vec3(0.0);
         math::vec3 globalCentreOfMass = math::vec3(0.0);
 
-        float restitution = 0.5f;
-        float friction = 0.15f;
+        float restitution = 0.3f;
+        float friction = 0.3f;
 
         bool isAsleep;
 
@@ -69,8 +69,8 @@ namespace legion::physics
         void addForceAt(math::vec3 worldForcePosition, math::vec3 force)
         {
             forceAccumulator += force;
-            math::vec3 a = worldForcePosition - globalCentreOfMass;
-            torqueAccumulator += math::cross(worldForcePosition - globalCentreOfMass, force);
+            math::vec3 axis = worldForcePosition - globalCentreOfMass;
+            torqueAccumulator += math::cross(axis, force);
         }
 
         void setMass(float mass)

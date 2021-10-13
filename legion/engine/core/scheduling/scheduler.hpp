@@ -1,319 +1,182 @@
 #pragma once
-#include <core/platform/platform.hpp>
-#include <core/logging/logging.hpp>
-#include <core/types/types.hpp>
-#include <core/containers/containers.hpp>
-#include <core/scheduling/processchain.hpp>
-#include <core/async/async.hpp>
-#include <core/common/exception.hpp>
-#include <core/events/events.hpp>
+#include <thread>
+#include <unordered_map>
 
 #include <Optick/optick.h>
 
-#include <memory>
-#include <thread>
-#include <atomic>
-#include <sstream>
-#include <limits>
-#include <queue>
+#include <core/engine/enginesubsystem.hpp>
+#include <core/engine/engine.hpp>
+#include <core/async/async.hpp>
+#include <core/containers/pointer.hpp>
+#include <core/containers/sparse_map.hpp>
+#include <core/types/types.hpp>
 
-/**@file scheduler.hpp
- */
+#include <core/scheduling/process.hpp>
+#include <core/scheduling/processchain.hpp>
+#include <core/scheduling/clock.hpp>
 
 namespace legion::core::scheduling
 {
-    /**@brief Invalid thread id.
-     */
-    const std::thread::id invalid_thread_id = std::thread::id();
+    const inline static std::thread::id invalid_thread_id = std::thread::id();
 
-    /**@class Scheduler
-     * @brief Major engine part that handles the creation and destruction of threads and process chains. Also takes charge of the main program loop.
-     * @note Also handle synchronization.
-     */
-    class Scheduler
+    class Scheduler : public EngineSubSystem<Scheduler>
     {
+        AllowPrivateOnInit;
+        AllowPrivateOnShutdown;
+        SubSystemInstance(Scheduler);
     public:
-        /**@class runnable
-         * @brief A data structure encapsulating commands and jobs sent to any thread and it's parameters.
-         */
-        struct runnable
-        {
-            runnable() = default;
-            runnable(const delegate<void(void*)>& func, void* param) : func(func), param(param) {}
-
-            delegate<void(void*)> func;
-            void* param;
-
-            void operator()(void)
-            {
-                if (func != nullptr)
-                    func(param);
-            }
-        };
+        using chain_callback_type = typename ProcessChain::chain_callback_type;
+        using chain_callback_delegate = typename ProcessChain::chain_callback_delegate;
+        using frame_callback_type = chain_callback_type;
+        using frame_callback_delegate = chain_callback_delegate;
 
     private:
-        struct thread_error
-        {
-            std::string message;
-            std::thread::id threadId;
-        };
+        static constexpr size_type reserved_threads = 1; // this, OS
 
-#if USE_OPTICK
-        async::spinlock m_threadScopesLock;
-        std::vector<std::unique_ptr<Optick::ThreadScope>> m_threadScopes;
-#endif
+        template<typename resource>
+        using per_thread_map = std::unordered_map<std::thread::id, resource>;
 
-        ProcessChain m_localChain;
-        async::rw_spinlock m_processChainsLock;
         sparse_map<id_type, ProcessChain> m_processChains;
-        sparse_map<id_type, std::thread::id> m_chainThreads;
-        async::rw_spinlock m_errorsLock;
-        std::vector<thread_error> m_errors;
 
-        async::rw_spinlock m_exitsLock;
-        std::vector<std::thread::id> m_exits;
+        multicast_delegate<frame_callback_type> m_onFrameStart;
+        multicast_delegate<frame_callback_type> m_onFrameEnd;
 
-        std::atomic_bool m_requestSync;
-        async::ring_sync_lock m_syncLock;
+        const size_type m_maxThreadCount = reserved_threads >= std::thread::hardware_concurrency() ? 0 : std::thread::hardware_concurrency() - reserved_threads;
+        size_type m_availableThreads = m_maxThreadCount;
 
-        std::atomic<float> m_timeScale = 1.f;
+        per_thread_map<std::thread> m_threads;
 
-        events::EventBus* m_eventBus;
+        async::rw_lock_pair<async::job_queue> m_jobs;
+        size_type m_jobPoolSize = 0;
 
-        bool m_threadsShouldTerminate = false;
-        bool m_threadsShouldStart = false;
-        bool m_lowPower;
+        std::atomic<bool> m_exit = { false };
+        std::atomic<bool> m_exitFromEvent = { false };
+        std::atomic<bool> m_start = { false };
+        int m_exitCode = 0;
 
-        static async::rw_spinlock m_threadsLock;
-        static sparse_map<std::thread::id, std::unique_ptr<std::thread>> m_threads;
-        static std::queue<std::thread::id> m_unreservedThreads;
-        static const uint m_maxThreadCount;
-        static async::rw_spinlock m_availabilityLock;
-        static uint m_availableThreads;
+        std::atomic<float> m_pollTime = { 0.1f };
 
-        static async::rw_spinlock m_jobQueueLock;
-        static std::queue<runnable> m_jobs;
-        static sparse_map<std::thread::id, async::rw_spinlock> m_commandLocks;
-        static sparse_map<std::thread::id, std::queue<Scheduler::runnable>> m_commands;
+        static void onInit();
+        static void onShutdown();
 
-        static void threadMain(bool* exit, bool* start, bool lowPower);
+        static void threadMain(bool lowPower, std::string name);
+
+        template<typename Function, typename... Args >
+        L_NODISCARD static pointer<std::thread> createThread(Function&& function, Args&&... args);
+
+        static void tryCompleteJobPool();
+
+        static void doTick(Clock::span_type deltaTime);
 
     public:
-        Scheduler(events::EventBus* eventBus, bool lowPower, uint minThreads);
+        template<typename functor, typename... argument_types>
+        L_NODISCARD static pointer<std::thread> reserveThread(functor&& function, argument_types&&... args);
 
-        ~Scheduler();
+        L_NODISCARD static pointer<std::thread> getThread(std::thread::id id);
 
-        /**@brief Set global time scale.
-         */
-        void setTimeScale(float scale)
-        {
-            m_timeScale.store(scale, std::memory_order_relaxed);
-        }
+        static size_type jobPoolSize() noexcept;
 
-        /**@brief Get the global time scale.
-         */
-        float getTimeScale()
-        {
-            return m_timeScale.load(std::memory_order_relaxed);
-        }
+        template<typename Func>
+        static auto queueJobs(size_type count, Func&& func);
 
-        /**@brief Run main program loop, also starts all process-chains in their own threads.
-         */
-        void run();
+        static int run(bool lowPower = false, size_type minThreads = 0);
 
-        /**@brief Create a new thread.
-         * @param function Function to run on the thread.
-         * @param ...args Arguments to pass to the function.
-         * @return std::thread::id Id of new thread if thread was created, 0 id if there are no available threads.
-         */
-        template<typename Function, typename... Args >
-        std::thread::id createThread(Function&& function, Args&&... args)
-        {
-            async::readwrite_multiguard guard(m_availabilityLock, m_threadsLock);
+        static void exit(int exitCode);
 
-            if (m_availableThreads) // Check if there are available threads.
-            {
-                m_availableThreads--;
-                std::unique_ptr<std::thread> newThread = std::make_unique<std::thread>(function, args...); // Create a new thread and run it.
-                std::thread::id id = newThread->get_id();
-                m_unreservedThreads.push(id);
-                m_threads.insert(id, std::move(newThread));
-                return id;
-            }
-
-            return std::thread::id();
-        }
-
-        template<size_type charc>
-        std::thread::id getChainThreadId(const char(&name)[charc])
-        {
-            id_type chainId = nameHash<charc>(name);
-            return m_chainThreads[chainId];
-        }
-
-        std::thread::id getChainThreadId(id_type chainId)
-        {
-            return m_chainThreads[chainId];
-        }
-
-        void sendCommand(std::thread::id id, delegate<void(void*)> command, void* parameter = nullptr);
-
-        void queueJob(delegate<void(void*)> job, void* parameter);
-
-        /**@brief Destroy a thread.
-         * @warning DON'T USE UNLESS YOU KNOW WHAT YOU ARE DOING.
-         */
-        void destroyThread(std::thread::id id);
-
-        /**@brief Report an intentional exit from a thread.
-         */
-        void reportExit(const std::thread::id& id);
-
-        /**@brief Report an unintentional exit from a thread.
-         */
-        void reportExitWithError(const std::string& name, const std::thread::id& id, const legion::core::exception& exc);
-
-        /**@brief Report an unintentional exit from a thread.
-         */
-        void reportExitWithError(const std::thread::id& id, const legion::core::exception& exc);
-
-        /**@brief Report an unintentional exit from a thread.
-         */
-        void reportExitWithError(const std::string& name, const std::thread::id& id, const std::exception& exc);
-
-        /**@brief Report an unintentional exit from a thread.
-         */
-        void reportExitWithError(const std::thread::id& id, const std::exception& exc);
-
-        void subscribeToSync()
-        {
-            m_syncLock.subscribe();
-        }
-        
-        void unsubscribeFromSync()
-        {
-            m_syncLock.unsubscribe();
-        }
-
-        /**@brief Request thread synchronization and wait for that synchronization moment.
-         */
-        void waitForProcessSync();
-
-        /**@brief Check if a synchronization has been requested.
-         */
-        bool syncRequested() { return m_requestSync.load(std::memory_order_acquire); }
-
-        /**@brief Get pointer to a certain process-chain.
-         */
-        template<size_type charc>
-        ProcessChain* getChain(const char(&name)[charc])
-        {
-            id_type id = nameHash<charc>(name);
-            async::readonly_guard guard(m_processChainsLock);
-            if (m_processChains.contains(id))
-                return &m_processChains.get(id);
-            return nullptr;
-        }
+        static bool isExiting();
 
         /**@brief Create a new process-chain.
          */
         template<size_type charc>
-        ProcessChain* addProcessChain(const char(&name)[charc])
-        {
-            if (!m_localChain.id())
-            {
-                m_localChain = ProcessChain(name, this);
-                return &m_localChain;
-            }
+        static pointer<ProcessChain> createProcessChain(const char(&name)[charc]);
 
-            id_type id = nameHash<charc>(name);
+        /**@brief Create a new process-chain.
+         */
+        static pointer<ProcessChain> createProcessChain(cstring name);
 
-            std::thread::id chainThreadId;
-            if (!m_unreservedThreads.empty())
-            {
-                chainThreadId = m_unreservedThreads.front();
-                m_unreservedThreads.pop();
-            }
+        /**@brief Get pointer to a certain process-chain.
+         */
+        template<size_type charc>
+        L_NODISCARD static pointer<ProcessChain> getChain(const char(&name)[charc]);
 
-            m_chainThreads[id] = chainThreadId;
+        /**@brief Get pointer to a certain process-chain.
+         */
+        L_NODISCARD static pointer<ProcessChain> getChain(id_type id);
 
-            log::impl::thread_names[chainThreadId] = std::string(name);
-#if USE_OPTICK
-            sendCommand(chainThreadId, [&](void* param)
-                {
-                    (void)param;
-                    log::info("Thread {} assigned.", std::this_thread::get_id());
+        /**@brief Get pointer to a certain process-chain.
+         */
+        L_NODISCARD static pointer<ProcessChain> getChain(cstring name);
 
-                    std::lock_guard guard(m_threadScopesLock);
-                    m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-                    OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
-                });
-#else
-            sendCommand(chainThreadId, [](void* param)
-                {
-                    (void)param;
-                    log::info("Thread {} assigned.", std::this_thread::get_id());
-                });
-#endif
-            async::readwrite_guard guard(m_processChainsLock);
-            return &m_processChains.emplace(id, name, this).first.value();
-        }
+        static void subscribeToFrameStart(const frame_callback_delegate& callback);
+        static void unsubscribeFromFrameStart(const frame_callback_delegate& callback);
 
+        static void subscribeToFrameEnd(const frame_callback_delegate& callback);
+        static void unsubscribeFromFrameEnd(const frame_callback_delegate& callback);
+
+        static void subscribeToChainStart(id_type chainId, const chain_callback_delegate& callback);
+        static void subscribeToChainStart(cstring chainName, const chain_callback_delegate& callback);
+
+        static void unsubscribeFromChainStart(id_type chainId, const chain_callback_delegate& callback);
+        static void unsubscribeFromChainStart(cstring chainName, const chain_callback_delegate& callback);
+
+        static void subscribeToChainEnd(id_type chainId, const chain_callback_delegate& callback);
+        static void subscribeToChainEnd(cstring chainName, const chain_callback_delegate& callback);
+
+        static void unsubscribeFromChainEnd(id_type chainId, const chain_callback_delegate& callback);
+        static void unsubscribeFromChainEnd(cstring chainName, const chain_callback_delegate& callback);
 
         /**@brief Hook a process to a certain chain.
          * @return bool True if succeeded, false if the chain doesn't exist.
          */
         template<size_type charc>
-        bool hookProcess(const char(&processChainName)[charc], Process* process)
-        {
-            id_type chainId = nameHash<charc>(processChainName);
-            async::readonly_guard guard(m_processChainsLock);
-            if (m_processChains.contains(chainId))
-            {
-                m_processChains[chainId].addProcess(process);
-                return true;
-            }
-            else if (m_localChain.id() == chainId)
-            {
-                m_localChain.addProcess(process);
-                return true;
-            }
-
-            return false;
-        }
+        static bool hookProcess(const char(&processChainName)[charc], Process& process);
 
         /**@brief Hook a process to a certain chain.
          * @return bool True if succeeded, false if the chain doesn't exist.
          */
-        bool hookProcess(cstring chainName, Process* process);
+        template<size_type charc>
+        static bool hookProcess(const char(&processChainName)[charc], pointer<Process> process);
 
+        /**@brief Hook a process to a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
+        static bool hookProcess(cstring chainName, Process& process);
+
+        /**@brief Hook a process to a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
+        static bool hookProcess(cstring chainName, pointer<Process> process);
 
         /**@brief Unhook a process from a certain chain.
          * @return bool True if succeeded, false if the chain doesn't exist.
          */
         template<size_type charc>
-        bool unhookProcess(const char(&chainName)[charc], Process* process)
-        {
-            id_type chainId = nameHash<charc>(chainName);
-            async::readonly_guard guard(m_processChainsLock);
-            if (m_processChains.contains(chainId))
-            {
-                m_processChains[chainId].removeProcess(process);
-                return true;
-            }
-            else if (m_localChain.id() == chainId)
-            {
-                m_localChain.removeProcess(process);
-                return true;
-            }
-
-            return false;
-        }
+        static bool unhookProcess(const char(&chainName)[charc], Process& process);
 
         /**@brief Unhook a process from a certain chain.
          * @return bool True if succeeded, false if the chain doesn't exist.
          */
-        bool unhookProcess(cstring chainName, Process* process);
+        template<size_type charc>
+        static bool unhookProcess(const char(&chainName)[charc], pointer<Process> process);
 
+        /**@brief Unhook a process from a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
+        static bool unhookProcess(cstring chainName, Process& process);
+
+        /**@brief Unhook a process from a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
+        static bool unhookProcess(cstring chainName, pointer<Process> process);
+
+        /**@brief Unhook a process from a certain chain.
+         * @return bool True if succeeded, false if the chain doesn't exist.
+         */
+        static bool unhookProcess(id_type chainId, pointer<Process> process);
     };
+
+    OnEngineInit(Scheduler, &Scheduler::init);
+    OnEngineShutdown(Scheduler, &Scheduler::shutdown);
 }
+
+#include <core/scheduling/scheduler.inl>

@@ -4,7 +4,7 @@
 #include <core/containers/iterator_tricks.hpp>
 
 namespace legion::core::filesystem {
-    std::shared_ptr<byte_vec> artifact_cache::get_cache(std::string_view identifier, std::size_t size_hint)
+    std::shared_ptr<byte_vec> artifact_cache::get_cache(const std::string& identifier, std::size_t size_hint)
     {
         std::shared_ptr<byte_vec> result;
 
@@ -13,7 +13,7 @@ namespace legion::core::filesystem {
             async::readonly_guard guard(driver.m_big_gc_lock);
 
             //query provider
-            auto& [ptr,score] =  driver.get_caches()[identifier];
+            auto& [ptr, score] =  driver.get_caches()[identifier];
             if(!ptr)
             {
                 //prepare new provider
@@ -56,7 +56,7 @@ namespace legion::core::filesystem {
         auto composer = [this](auto&& action)
         {
             //iterate over all elements in the cache
-            for(auto&[ptr,score] : iterator::values_only(m_caches))
+            for(auto&[ptr, score] : values_only(m_caches))
             {
                 //check if element should be skipped because it is to new or still used somewhere
                 if(ptr.use_count() > 1 || ptr->empty()) continue;
@@ -70,7 +70,7 @@ namespace legion::core::filesystem {
         //elements while gc is running, such that we do not insert and remove simultaneously
         async::readwrite_guard guard(m_big_gc_lock);
 
-        composer([&score_heap](auto& p,auto score)
+        composer([&score_heap](L_MAYBEUNUSED auto& p,auto score)
         {
             //push all scores into a heap for sorting
             score_heap.emplace_back(score);

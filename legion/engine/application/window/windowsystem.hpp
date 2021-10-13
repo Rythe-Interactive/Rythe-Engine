@@ -2,7 +2,7 @@
 #include <application/window/window.hpp>
 #include <application/context/contexthelper.hpp>
 #include <application/events/windowevents.hpp>
-#include "application/events/windowinputevents.hpp"
+#include <application/events/windowinputevents.hpp>
 
 /**@file windowsystem.hpp
 */
@@ -21,24 +21,24 @@ namespace legion::application
             id_type entityId;
             math::ivec2 size;
             std::string name;
-            image_handle icon;
+            assets::asset<image> icon;
             GLFWmonitor* monitor;
             GLFWwindow* share;
             int swapInterval;
             std::vector<std::pair<int, int>> hints;
 
-            window_request(id_type entityId, math::ivec2 size, const std::string& name, image_handle icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
+            window_request(id_type entityId, math::ivec2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
                 : entityId(entityId), size(size), name(name), icon(icon), monitor(monitor), share(share), swapInterval(swapInterval), hints(hints)
             {}
-            window_request(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "LEGION Engine", image_handle icon = invalid_image_handle, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
+            window_request(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "LEGION Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
                 : entityId(entityId), size(size), name(name), icon(icon), monitor(monitor), share(share), swapInterval(swapInterval)
             {}
 
             window_request(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints)
-                : entityId(entityId), size(size), name(name), icon(ImageCache::get_handle(iconName)), monitor(monitor), share(share), swapInterval(swapInterval), hints(hints)
+                : entityId(entityId), size(size), name(name), icon(assets::get<image>(iconName)), monitor(monitor), share(share), swapInterval(swapInterval), hints(hints)
             {}
             window_request(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0)
-                : entityId(entityId), size(size), name(name), icon(ImageCache::get_handle(iconName)), monitor(monitor), share(share), swapInterval(swapInterval)
+                : entityId(entityId), size(size), name(name), icon(assets::get<image>(iconName)), monitor(monitor), share(share), swapInterval(swapInterval)
             {}
         };
 
@@ -54,18 +54,17 @@ namespace legion::application
         struct icon_request
         {
             id_type entityId;
-            image_handle icon;
+            assets::asset<image> icon;
 
-            icon_request(id_type entityId, image_handle icon) : entityId(entityId), icon(icon) {}
-            icon_request(id_type entityId, const std::string& iconName) : entityId(entityId), icon(ImageCache::get_handle(iconName)) {}
+            icon_request(id_type entityId, assets::asset<image> icon) : entityId(entityId), icon(icon) {}
+            icon_request(id_type entityId, const std::string& iconName) : entityId(entityId), icon(assets::get<image>(iconName)) {}
         };
 
-        static sparse_map<GLFWwindow*, ecs::component_handle<window>> m_windowComponents;
+        static sparse_map<GLFWwindow*, ecs::component<window>> m_windowComponents;
         static async::spinlock m_creationLock;
 
-        ecs::EntityQuery m_windowQuery{}; // Query with all the windows to update.
-        bool m_exit = false; // Keep track of whether the exit event has been raised.
-                             // If any window requests happen after this boolean has been set then they will be denied.
+        bool m_exit; // Keep track of whether the exit event has been raised.
+                     // If any window requests happen after this boolean has been set then they will be denied.
 
         static async::spinlock m_creationRequestLock; // Lock to keep the creation request list thread-safe.
         static std::vector<window_request> m_creationRequests; // List of requests since the last creation loop.
@@ -79,7 +78,7 @@ namespace legion::application
         // Internal function for closing a window safely.
         static void closeWindow(GLFWwindow* window);
 
-        image_handle m_defaultIcon;
+        assets::asset<image> m_defaultIcon;
 
 #pragma region Callbacks
         static void onWindowMoved(GLFWwindow* window, int x, int y);
@@ -112,25 +111,25 @@ namespace legion::application
 
         static void onMouseScroll(GLFWwindow* window, double xoffset, double yoffset);
 
-        void onExit(events::exit* event);
+        void onExit(events::exit& event);
 #pragma endregion
 
     public:
         static bool windowStillExists(GLFWwindow* win);
 
-        static void requestIconChange(id_type entityId, image_handle icon);
+        static void requestIconChange(id_type entityId, assets::asset<image> icon);
         static void requestIconChange(id_type entityId, const std::string& iconName);
 
         static void requestFullscreenToggle(id_type entityId, math::ivec2 position = { 100 ,100 }, math::ivec2 size = { 400, 400 });
 
-        static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, image_handle icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints);
-        static void requestWindow(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "LEGION Engine", image_handle icon = invalid_image_handle, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
+        static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, assets::asset<image> icon, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints);
+        static void requestWindow(id_type entityId, math::ivec2 size = { 400, 400 }, const std::string& name = "LEGION Engine", assets::asset<image> icon = assets::invalid_asset<image>, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
         static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor, GLFWwindow* share, int swapInterval, const std::vector<std::pair<int, int>>& hints);
         static void requestWindow(id_type entityId, math::ivec2 size, const std::string& name, const std::string& iconName, GLFWmonitor* monitor = nullptr, GLFWwindow* share = nullptr, int swapInterval = 0);
 
         void showMainWindow()
         {
-            ContextHelper::showWindow(m_ecs->world.read_component<window>());
+            ContextHelper::showWindow(ecs::world.get_component<window>()->handle);
         }
 
         void exit()

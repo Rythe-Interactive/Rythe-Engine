@@ -116,3 +116,12 @@ lib/*
 
 # Legion Includes
 include/**
+
+# Misc
+*/**/Thumbs.db
+applications/sandbox/imgui.ini
+
+# Reference files (not for upload)
+**/**_ref/*
+docs/venv
+**/__pycache__/**

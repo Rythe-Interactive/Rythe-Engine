@@ -30,7 +30,7 @@
 #include "../ext/matrix_transform.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_GTC_matrix_transform extension included")
+#   pragma message("GLM: GLM_GTC_matrix_transform extension included")
 #endif
 
 #include "matrix_transform.inl"

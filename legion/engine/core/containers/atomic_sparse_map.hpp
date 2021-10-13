@@ -17,7 +17,7 @@ namespace legion::core
 {
     /**@class atomic_sparse_map
      * @brief Atomic quick lookup contiguous map.
-     *		  A specialized version of sparse_map that uses legion::core::async::transferable_atomic and legion::core::async::rw_spinlock.
+     *        A specialized version of sparse_map that uses legion::core::async::transferable_atomic and legion::core::async::rw_spinlock.
      * @tparam key_type The type to be used as the key.
      * @tparam value_type The type to be used as the value.
      * @tparam dense_type Container to be used to store the values.
@@ -45,8 +45,8 @@ namespace legion::core
         using dense_value_container = dense_type<value_type>;
         using dense_key_container = dense_type<key_type>;
 
-        using iterator = core::iterator::key_value_pair_iterator<typename dense_key_container::iterator, typename dense_value_container::iterator>;
-        using const_iterator = core::iterator::key_value_pair_iterator<typename dense_key_container::const_iterator, typename dense_value_container::const_iterator>;
+        using iterator = core::key_value_pair_iterator<typename dense_key_container::iterator, typename dense_value_container::iterator>;
+        using const_iterator = core::key_value_pair_iterator<typename dense_key_container::const_iterator, typename dense_value_container::const_iterator>;
 
     private:
         mutable async::rw_spinlock m_container_lock;
@@ -111,7 +111,7 @@ namespace legion::core
 
         /**@brief Returns the maximum number of items the atomic_sparse_map could at most store without crashing.
          * @note This value typically reflects the theoretical limit on the size of the container, at most std::numeric_limits<difference_type>::max().
-         *		 At runtime, the size of the container may be limited to a value smaller than max_size() by the amount of RAM available.
+         *       At runtime, the size of the container may be limited to a value smaller than max_size() by the amount of RAM available.
          * @returns size_type
          */
         L_NODISCARD size_type max_size() const noexcept { async::readonly_guard lock(m_container_lock); return m_dense_value.max_size(); }

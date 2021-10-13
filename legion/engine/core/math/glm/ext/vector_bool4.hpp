@@ -6,13 +6,13 @@
 
 namespace legion::core::math
 {
-	/// @addtogroup core_vector
-	/// @{
+    /// @addtogroup core_vector
+    /// @{
 
-	/// 4 components vector of boolean.
-	///
-	/// @see <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.pdf">GLSL 4.20.8 specification, section 4.1.5 Vectors</a>
-	typedef vec<4, bool, defaultp>		bvec4;
+    /// 4 components vector of boolean.
+    ///
+    /// @see <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.pdf">GLSL 4.20.8 specification, section 4.1.5 Vectors</a>
+    typedef vec<4, bool, defaultp>      bvec4;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

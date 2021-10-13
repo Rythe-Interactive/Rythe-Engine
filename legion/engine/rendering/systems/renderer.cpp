@@ -4,13 +4,29 @@
 
 namespace legion::rendering
 {
-    delegate<RenderPipelineBase* (app::window&)> Renderer::m_pipelineProvider;
+    std::unique_ptr<pipeline_provider_base> Renderer::m_pipelineProvider;
 
-    void Renderer::debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+    RenderPipelineBase* Renderer::m_currentPipeline;
+
+    void Renderer::debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED const void* userParam)
     {
+        if (id == 131185) // Filter out annoying Nvidia message of: Buffer you made will use VRAM because you told us that you want it to allocate VRAM.
+            return;
+
         OPTICK_EVENT();
-        if (!log::impl::thread_names.count(std::this_thread::get_id()))
-            log::impl::thread_names[std::this_thread::get_id()] = "OpenGL";
+
+        static bool checkedNames = false;
+
+        if (!checkedNames)
+        {
+            auto& logData = log::impl::get();
+            async::readonly_guard guard(logData.threadNamesLock);
+            if (!logData.threadNames.count(std::this_thread::get_id()))
+            {
+                logData.threadNames[std::this_thread::get_id()] = "OpenGL";
+                async::set_thread_name("OpenGL");
+            }
+        }
 
         cstring s;
         switch (source)
@@ -74,19 +90,170 @@ namespace legion::rendering
         switch (severity)
         {
         case GL_DEBUG_SEVERITY_HIGH:
-            log::error("[{}-{}] {}", s, t, message);
+            log::error("[{}-{}] {}: {}", s, t, id, message);
             break;
         case GL_DEBUG_SEVERITY_MEDIUM:
-            log::warn("[{}-{}] {}", s, t, message);
+            log::warn("[{}-{}] {}: {}", s, t, id, message);
             break;
         case GL_DEBUG_SEVERITY_LOW:
-            log::debug("[{}-{}] {}", s, t, message);
+            log::debug("[{}-{}] {}: {}", s, t, id, message);
             break;
         case GL_DEBUG_SEVERITY_NOTIFICATION:
-            log::trace("[{}-{}] {}", s, t, message);
+            log::debug("[{}-{}] {}: {}", s, t, id, message);
             break;
         default:
-            log::debug("[{}-{}] {}", s, t, message);
+            log::debug("[{}-{}] {}: {}", s, t, id, message);
+            break;
+        }
+    }
+
+    void Renderer::debugCallbackARB(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED const void* userParam)
+    {
+        OPTICK_EVENT();
+        static bool checkedNames = false;
+
+        if (!checkedNames)
+        {
+            auto& logData = log::impl::get();
+            async::readonly_guard guard(logData.threadNamesLock);
+            if (!logData.threadNames.count(std::this_thread::get_id()))
+            {
+                logData.threadNames[std::this_thread::get_id()] = "OpenGL";
+                async::set_thread_name("OpenGL");
+            }
+        }
+
+        cstring s;
+        switch (source)
+        {
+        case GL_DEBUG_SOURCE_API_ARB:
+            s = "OpenGL";
+            break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM_ARB:
+            s = "Window system";
+            break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER_ARB:
+            s = "Shader compiler";
+            break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY_ARB:
+            s = "Third party";
+            break;
+        case GL_DEBUG_SOURCE_APPLICATION_ARB:
+            s = "Application";
+            break;
+        case GL_DEBUG_SOURCE_OTHER_ARB:
+            s = "Other";
+            break;
+        default:
+            s = "Unknown";
+            break;
+        }
+
+        cstring t;
+
+        switch (type)
+        {
+        case GL_DEBUG_TYPE_ERROR_ARB:
+            t = "Error";
+            break;
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB:
+            t = "Deprecation";
+            break;
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB:
+            t = "Undefined behavior";
+            break;
+        case GL_DEBUG_TYPE_PERFORMANCE_ARB:
+            t = "Performance";
+            break;
+        case GL_DEBUG_TYPE_PORTABILITY_ARB:
+            t = "Portability";
+            break;
+        case GL_DEBUG_TYPE_OTHER_ARB:
+            t = "Misc";
+            break;
+        default:
+            t = "Unknown";
+            break;
+        }
+
+        switch (severity)
+        {
+        case GL_DEBUG_SEVERITY_HIGH_ARB:
+            log::error("[{}-{}] {}: {}", s, t, id, message);
+            break;
+        case GL_DEBUG_SEVERITY_MEDIUM_ARB:
+            log::warn("[{}-{}] {}: {}", s, t, id, message);
+            break;
+        case GL_DEBUG_SEVERITY_LOW_ARB:
+            log::debug("[{}-{}] {}: {}", s, t, id, message);
+            break;
+        default:
+            log::debug("[{}-{}] {}: {}", s, t, id, message);
+            break;
+        }
+    }
+
+    void Renderer::debugCallbackAMD(GLuint id, GLenum category, GLenum severity, GLsizei length, const GLchar* message, L_MAYBEUNUSED void* userParam)
+    {
+        OPTICK_EVENT();
+        static bool checkedNames = false;
+
+        if (!checkedNames)
+        {
+            auto& logData = log::impl::get();
+            async::readonly_guard guard(logData.threadNamesLock);
+            if (!logData.threadNames.count(std::this_thread::get_id()))
+            {
+                logData.threadNames[std::this_thread::get_id()] = "OpenGL";
+                async::set_thread_name("OpenGL");
+            }
+        }
+
+        cstring c;
+        switch (category)
+        {
+        case GL_DEBUG_CATEGORY_API_ERROR_AMD:
+            c = "OpenGL";
+            break;
+        case GL_DEBUG_CATEGORY_WINDOW_SYSTEM_AMD:
+            c = "Window system";
+            break;
+        case GL_DEBUG_CATEGORY_DEPRECATION_AMD:
+            c = "Deprecation";
+            break;
+        case GL_DEBUG_CATEGORY_UNDEFINED_BEHAVIOR_AMD:
+            c = "Undefined behavior";
+            break;
+        case GL_DEBUG_CATEGORY_PERFORMANCE_AMD:
+            c = "Performance";
+            break;
+        case GL_DEBUG_CATEGORY_SHADER_COMPILER_AMD:
+            c = "Shader compiler";
+            break;
+        case GL_DEBUG_CATEGORY_APPLICATION_AMD:
+            c = "Application";
+            break;
+        case GL_DEBUG_CATEGORY_OTHER_AMD:
+            c = "Other";
+            break;
+        default:
+            c = "Unknown";
+            break;
+        }
+
+        switch (severity)
+        {
+        case GL_DEBUG_SEVERITY_HIGH_AMD:
+            log::error("[{}] {}: {}", c, id, message);
+            break;
+        case GL_DEBUG_SEVERITY_MEDIUM_AMD:
+            log::warn("[{}] {}: {}", c, id, message);
+            break;
+        case GL_DEBUG_SEVERITY_LOW_AMD:
+            log::debug("[{}] {}: {}", c, id, message);
+            break;
+        default:
+            log::debug("[{}] {}: {}", c, id, message);
             break;
         }
     }
@@ -99,13 +266,23 @@ namespace legion::rendering
             log::error("Failed to load OpenGL");
             return false;
         }
-        else
-        {
-            glEnable(GL_DEBUG_OUTPUT);
 
-            glDebugMessageCallback(&Renderer::debugCallback, nullptr);
-            log::info("loaded OpenGL version: {}.{}", GLVersion.major, GLVersion.minor);
+        glEnable(GL_DEBUG_OUTPUT);
+
+        if (GLAD_GL_AMD_debug_output)
+        {
+            glDebugMessageCallbackAMD(&Renderer::debugCallbackAMD, nullptr);
         }
+        else if (GLAD_GL_KHR_debug)
+        {
+            glDebugMessageCallback(&Renderer::debugCallback, nullptr);
+        }
+        else if (GLAD_GL_ARB_debug_output)
+        {
+            glDebugMessageCallbackARB(&Renderer::debugCallbackARB, nullptr);
+        }
+
+        log::info("loaded OpenGL version: {}.{}", GLVersion.major, GLVersion.minor);
 
         glClipControl(GL_LOWER_LEFT, GL_ZERO_TO_ONE);
         glEnable(GL_BLEND);
@@ -130,58 +307,70 @@ namespace legion::rendering
         return true;
     }
 
+    void Renderer::setThreadPriority()
+    {
+#ifdef LEGION_WINDOWS
+        if (SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST))
+        {
+            log::info("Acquired realtime priority for rendering thread.");
+        }
+        else
+        {
+            DWORD dwError = GetLastError();
+            /*if (dwError == ERROR_THREAD_)
+                log::info("Rendering thread is already in realtime priority mode.");
+            else*/
+            log::warn("Rendering thread failed to enter realtime priority mode: {}", dwError);
+        }
+#endif // LEGION_WINDOWS
+    }
+
     void Renderer::setup()
     {
         OPTICK_EVENT();
-        RenderPipelineBase::m_ecs = m_ecs;
-        RenderPipelineBase::m_scheduler = m_scheduler;
-        RenderPipelineBase::m_eventBus = m_eventBus;
 
-        RenderStageBase::m_ecs = m_ecs;
-        RenderStageBase::m_scheduler = m_scheduler;
-        RenderStageBase::m_eventBus = m_eventBus;
+        m_exiting.store(false, std::memory_order_relaxed);
 
         bindToEvent<events::exit, &Renderer::onExit>();
 
         createProcess<&Renderer::render>("Rendering");
 
-        m_scheduler->sendCommand(m_scheduler->getChainThreadId("Rendering"), [&](void* param)
+        {
+            OPTICK_EVENT("Initialization");
+            log::trace("Waiting on main window.");
+
+            while (!ecs::world.has_component<app::window>())
+                std::this_thread::yield();
+
+            app::window& window = ecs::world.get_component<app::window>();
+
+            log::trace("Initializing context.");
+
+            bool result = false;
+
             {
-                OPTICK_EVENT("Initialization");
-                (void)param;
-                log::trace("Waiting on main window.");
-
-                while (!world.has_component<app::window>())
-                    std::this_thread::yield();
-
-                app::window window = world.get_component_handle<app::window>().read();
-
-                log::trace("Initializing context.");
-
-                bool result = false;
-
+                app::context_guard guard(window);
+                if (!guard.contextIsValid())
                 {
-                    app::context_guard guard(window);
-                    if (!guard.contextIsValid())
-                    {
-                        log::error("Failed to initialize context.");
-                        m_initialized.store(false, std::memory_order_release);
-                        return;
-                    }
-                    result = initContext(window);
-                }
-
-                if (!result)
                     log::error("Failed to initialize context.");
+                    return;
+                }
+                result = initContext(window);
+            }
 
-                m_initialized.store(result, std::memory_order_release);
-            }, this);
-
-        while (!m_initialized.load(std::memory_order_relaxed))
-            std::this_thread::sleep_for(std::chrono::microseconds(1));
+            if (!result)
+                log::error("Failed to initialize context.");
+            else
+                setThreadPriority();
+        }
     }
 
-    void Renderer::onExit(events::exit* event)
+    void Renderer::shutdown()
+    {
+        m_pipelineProvider->shutdown();
+    }
+
+    void Renderer::onExit(events::exit& event)
     {
         OPTICK_EVENT();
         m_exiting.store(true, std::memory_order_release);
@@ -189,21 +378,24 @@ namespace legion::rendering
 
     void Renderer::render(time::span deltatime)
     {
-        OPTICK_FRAME("Rendering");
         OPTICK_EVENT();
-        if (m_pipelineProvider.isNull())
+
+        if (!m_pipelineProvider)
             return;
 
-        static auto cameraQuery = createQuery<camera>();
-        cameraQuery.queryEntities();
+        static ecs::filter<camera> cameraQuery{};
+
         for (auto ent : cameraQuery)
         {
-            auto cam = ent.get_component_handle<camera>().read();
-            app::window win = cam.targetWindow.read();
-            if (!win)
-                win = m_ecs->world.get_component_handle<app::window>().read();
-            if (!win)
+            camera& cam = ent.get_component<camera>();
+
+            auto targetWin = cam.targetWindow;
+            if (!targetWin)
+                targetWin = ecs::world.get_component<app::window>();
+            if (!targetWin)
                 continue;
+
+            app::window& win = targetWin.get();
 
             math::ivec2 viewportSize;
             {
@@ -219,9 +411,9 @@ namespace legion::rendering
             if (viewportSize.x == 0 || viewportSize.y == 0)
                 continue;
 
-            position camPos = ent.get_component_handle<position>().read();
-            rotation camRot = ent.get_component_handle<rotation>().read();
-            scale camScale = ent.get_component_handle<scale>().read();
+            position& camPos = ent.get_component<position>();
+            rotation& camRot = ent.get_component<rotation>();
+            scale& camScale = ent.get_component<scale>();
 
             math::mat4 view(1.f);
             math::compose(view, camScale, camRot, camPos);
@@ -232,33 +424,41 @@ namespace legion::rendering
             camera::camera_input cam_input_data(view, projection, camPos, camRot.forward(), cam.nearz, cam.farz, viewportSize);
 
             if (!m_exiting.load(std::memory_order_relaxed))
-                m_pipelineProvider(win)->render(win, cam, cam_input_data, deltatime);
+            {
+                m_currentPipeline = m_pipelineProvider->get(win);
+                m_currentPipeline->render(win, cam, cam_input_data, deltatime);
+            }
         }
     }
 
     L_NODISCARD RenderPipelineBase* Renderer::getPipeline(app::window& context)
     {
         OPTICK_EVENT();
-        if (m_pipelineProvider.isNull())
+        if (!m_pipelineProvider)
             return nullptr;
 
         if (context == app::invalid_window)
             return nullptr;
 
-        return m_pipelineProvider(context);
+        return m_pipelineProvider->get(context);
+    }
+
+    L_NODISCARD RenderPipelineBase* Renderer::getCurrentPipeline()
+    {
+        return m_currentPipeline;
     }
 
     L_NODISCARD RenderPipelineBase* Renderer::getMainPipeline()
     {
         OPTICK_EVENT();
-        if (m_pipelineProvider.isNull())
+        if (!m_pipelineProvider)
             return nullptr;
 
-        auto context = world.get_component_handle<app::window>().read();
+        app::window& context = ecs::world.get_component<app::window>();
         if (context == app::invalid_window)
             return nullptr;
 
-        return m_pipelineProvider(context);
+        return m_pipelineProvider->get(context);
     }
 
 }

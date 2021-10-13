@@ -1,12 +1,13 @@
 #pragma once
-#include <core/types/primitives.hpp>
-#include <core/platform/platform.hpp>
-#include <core/engine/system.hpp>
-#include <core/containers/sparse_map.hpp>
-#include <core/ecs/ecsregistry.hpp>
-#include <core/scheduling/scheduler.hpp>
-#include <core/events/eventbus.hpp>
 #include <memory>
+#include <type_traits>
+
+#include <core/types/primitives.hpp>
+#include <core/types/meta.hpp>
+#include <core/types/type_util.hpp>
+#include <core/platform/platform.hpp>
+#include <core/containers/delegate.hpp>
+#include <core/engine/system.hpp>
 
 /**
  * @file module.hpp
@@ -22,43 +23,30 @@ namespace legion::core
     {
         friend class Engine;
     private:
-        sparse_map<id_type, std::unique_ptr<SystemBase>> m_systems;
+        multicast_delegate<void()> m_setupFuncs;
+        multicast_delegate<void()> m_shutdownFuncs;
+
+        std::unordered_map<id_type, std::unique_ptr<SystemBase>> m_systems;
 
         void init()
         {
-            for (auto [_, system] : m_systems)
-                system->setup();
-        };
+            m_setupFuncs.invoke();
+        }
+
+        void shutdown()
+        {
+            m_shutdownFuncs.invoke();
+        }
 
     protected:
-        static ecs::EcsRegistry* m_ecs;
-        static scheduling::Scheduler* m_scheduler;
-        static events::EventBus* m_eventBus;
-
         template<size_type charc>
-        void addProcessChain(const char(&name)[charc])
-        {
-            m_scheduler->addProcessChain<charc>(name);
-        }
+        void createProcessChain(const char(&name)[charc]) const;
 
-        template<typename SystemType, typename... Args, inherits_from<SystemType, System<SystemType>> = 0>
-        void reportSystem(Args&&... args)
-        {
-            OPTICK_EVENT();
-            m_systems.insert(typeHash<SystemType>(), std::make_unique<SystemType>(std::forward<Args>(args)...));
-        }
+        template<typename SystemType, typename... Args>
+        void reportSystem(Args&&... args);
 
-        void reportSystem(std::unique_ptr<SystemBase>&& system)
-        {
-            OPTICK_EVENT();
-            m_systems.insert(system->id, std::forward<std::unique_ptr<SystemBase>&&>(system));
-        }
-
-        template<typename component_type>
-        void reportComponentType()
-        {
-            m_ecs->reportComponentType<component_type>();
-        }
+        template<typename component_type, typename... Args>
+        void registerComponentType(Args&&... args);
 
     public:
         virtual void setup() LEGION_PURE;

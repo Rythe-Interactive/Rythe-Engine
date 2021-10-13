@@ -16,17 +16,17 @@
 #include "../detail/type_vec1.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_vector_int1 extension included")
+#   pragma message("GLM: GLM_EXT_vector_int1 extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_vector_int1
-	/// @{
+    /// @addtogroup ext_vector_int1
+    /// @{
 
-	/// 1 component vector of signed integer numbers.
-	typedef vec<1, int, defaultp>			ivec1;
+    /// 1 component vector of signed integer numbers.
+    typedef vec<1, int, defaultp>           ivec1;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math
 

@@ -21,6 +21,11 @@ namespace legion::core::compute
     common::result<void, void> function_base::invoke2(dvar global, std::vector<Buffer> buffers, std::vector<karg> kargs) const
     {
         OPTICK_EVENT();
+        if(!m_kernel)
+        {
+            log::error("something went wrong your openCL kernel is null");
+            return common::error;
+        }
         if (std::holds_alternative<std::tuple<size_type, size_type, size_type>>(global))
         {
             auto& [s0, s1, s2] = std::get<2>(global);
@@ -83,6 +88,6 @@ namespace legion::core::compute
         }
         m_kernel->finish();
 
-        return common::Ok();
+        return common::success;
     }
 }

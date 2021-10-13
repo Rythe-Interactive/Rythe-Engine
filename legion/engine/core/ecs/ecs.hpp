@@ -1,13 +1,10 @@
 #pragma once
 
-/**
- * @file ecs.hpp
- * @brief Single include header for all ECS related headers.
- */
-
-#include <core/ecs/component_container.hpp>
-#include <core/ecs/entity_handle.hpp>
-#include <core/ecs/component_handle.hpp>
-#include <core/ecs/entityquery.hpp>
-#include <core/ecs/queryregistry.hpp>
-#include <core/ecs/ecsregistry.hpp>
+#include <core/ecs/registry.hpp>
+#include <core/ecs/filters/filterregistry.hpp>
+#include <core/ecs/data/entity_data.hpp>
+#include <core/ecs/handles/component.hpp>
+#include <core/ecs/handles/entity.hpp>
+#include <core/ecs/handles/filter.hpp>
+#include <core/ecs/prototypes/component_prototype.hpp>
+#include <core/ecs/prototypes/entity_prototype.hpp>

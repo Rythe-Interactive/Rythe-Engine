@@ -1,182 +1,113 @@
 #pragma once
-#include <core/platform/platform.hpp>
-#include <core/types/primitives.hpp>
-#include <core/types/type_util.hpp>
-#include <core/ecs/ecsregistry.hpp>
-#include <core/scheduling/scheduler.hpp>
-#include <core/scheduling/process.hpp>
-#include <core/events/eventbus.hpp>
-#include <core/time/time.hpp>
 #include <memory>
+
+#include <core/platform/platform.hpp>
+#include <core/events/event.hpp>
+#include <core/time/time.hpp>
+#include <core/common/hash.hpp>
+#include <core/scheduling/process.hpp>
+#include <core/ecs/handles/entity.hpp>
+#include <core/ecs/prototypes/entity_prototype.hpp>
 
 namespace legion::core
 {
+    class Module;
+
     class SystemBase
     {
         friend class Engine;
-    protected:
-        static ecs::EcsRegistry* m_ecs;
-        static scheduling::Scheduler* m_scheduler;
-        static events::EventBus* m_eventBus;
-
-        sparse_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
-
-        static ecs::entity_handle world;
-
     public:
-        const id_type id;
-        const std::string name;
-
-        SystemBase(id_type id, const std::string& name) : id(id), name(name) {}
-
-        virtual void setup() LEGION_PURE;
+        const type_reference id;
 
         virtual ~SystemBase() = default;
+
+    protected:
+        std::unordered_map<id_type, std::unique_ptr<scheduling::Process>> m_processes;
+        std::unordered_map<id_type, delegate<void(events::event_base&)>> m_bindings;
+
+        SystemBase(type_reference&& id) : id(id) {}
+
+        // TODO: Inline all the things
+
+        void destroyProcess(id_type procId);
+
+        template <typename event_type CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
+        void unbindFromEvent(id_type bindingId);
+
+        /**@brief Creates empty entity with the world as its parent.
+         */
+        L_NODISCARD static ecs::entity createEntity();
+
+        L_NODISCARD static ecs::entity createEntity(const std::string& name);
+
+        /**@brief Creates empty entity with a specific entity as its parent.
+         * @param parent Entity to assign as the parent of the new entity.
+         */
+        L_NODISCARD static ecs::entity createEntity(ecs::entity parent);
+
+        L_NODISCARD static ecs::entity createEntity(ecs::entity parent, const std::string& name);
+        L_NODISCARD static ecs::entity createEntity(const std::string& name, ecs::entity parent);
+
+        /**@brief Creates empty entity with a specific entity as its parent. Entity is serialized from a prototype.
+         *        This function will also create any components or child entities in the prototype structure.
+         * @param parent Entity to assign as the parent of the new entity.
+         * @param prototype Prototype to serialize entity from.
+         */
+        L_NODISCARD static ecs::entity createEntity(ecs::entity parent, const serialization::entity_prototype& prototype);
+
+        /**@brief Creates empty entity with the world as its parent. Entity is serialized from a prototype.
+         *        This function will also create any components or child entities in the prototype structure.
+         * @param prototype Prototype to serialize entity from.
+         */
+        L_NODISCARD static ecs::entity createEntity(const serialization::entity_prototype& prototype);
+
+        /**@brief Insert event into bus and notify all subscribers.
+         * @tparam event_type Event type to raise.
+         * @param arguments Arguments to pass to the constructor of the event.
+         */
+        template<typename event_type, typename... Args CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
+        static void raiseEvent(Args&&... arguments);
+
+        /**@brief Non-templated raise event function. Inserts event into bus and notifies all subscribers.
+         * @param value Reference to the event to insert into the bus.
+         */
+        static void raiseEvent(events::event_base& value);
+
+        /**@brief Unsafe, non-templated raise event function. This version is unsafe because it is allowed to trigger undefined behavior if the id is incompatible with the passed value.
+         * @param value Reference to the event to insert into the bus.
+         * @param id Type id of the event to invoke for. Overrides the polymorphic id of the reference passed as value.
+         */
+        static void raiseEventUnsafe(events::event_base& value, id_type id);
     };
 
     template<typename SelfType>
     class System : public SystemBase
     {
+        friend class legion::core::Module;
     protected:
-        template <void(SelfType::* func_type)(time::time_span<fast_time>), size_type charc>
-        void createProcess(const char(&processChainName)[charc], time::time_span<fast_time> interval = 0)
-        {
-            OPTICK_EVENT();
-            std::string name = std::string(processChainName) + undecoratedTypeName<SelfType>() + std::to_string(interval) + std::to_string(force_cast<intptr_t>(func_type)[0]);
-            id_type id = nameHash(name);
-            std::unique_ptr<scheduling::Process> process = std::make_unique<scheduling::Process>(name, id, interval);
-            process->setOperation(delegate<void(time::time_span<fast_time>)>::create<SelfType, func_type>((SelfType*)this));
-            m_processes.insert(id, std::move(process));
+        template <void(SelfType::* func_type)(time::span), size_type charc>
+        id_type createProcess(const char(&processChainName)[charc], time::span interval = 0);
 
-            m_scheduler->hookProcess<charc>(processChainName, m_processes[id].get());
-        }
-
-        void createProcess(cstring processChainName, delegate<void(time::time_span<fast_time>)>&& operation, time::time_span<fast_time> interval = 0)
-        {
-            OPTICK_EVENT();
-            std::string name = std::string(processChainName) + undecoratedTypeName<SelfType>() + std::to_string(interval);
-            id_type id = nameHash(name);
-
-            std::unique_ptr<scheduling::Process> process = std::make_unique<scheduling::Process>(name, id, interval);
-            process->setOperation(std::forward<delegate<void(time::time_span<fast_time>)>>(operation));
-            m_processes.insert(id, std::move(process));
-
-            m_scheduler->hookProcess(processChainName, m_processes[id].get());
-        }
-
-        void destroyProcess(cstring processChainName, time::time_span<fast_time> interval = 0)
-        {
-            OPTICK_EVENT();
-            std::string name = std::string(processChainName) + undecoratedTypeName<SelfType>() + std::to_string(interval);
-            id_type id = nameHash(name);
-            m_scheduler->unhookProcess(processChainName, m_processes[id].get());
-            if (!m_processes[id]->inUse())
-                m_processes.erase(id);
-        }
-
-        void waitForSync()
-        {
-            OPTICK_EVENT();
-            m_scheduler->waitForProcessSync();
-        }
-
-        /**@brief Create a new entity and return the handle.
+        /**@brief Link a function to an event type in order to get notified whenever one gets raised.
+         * @tparam event_type Event type to subscribe to.
+         * @tparam func_type Function to bind to the event.
          */
-        L_NODISCARD ecs::entity_handle createEntity()
-        {
-            OPTICK_EVENT();
-            return m_ecs->createEntity();
-        }
+        template <typename event_type, void(SelfType::* func_type)(event_type&) CNDOXY(typename = inherits_from<event_type, events::event<event_type>>)>
+        id_type bindToEvent();
 
-        template<typename... component_types>
-        L_NODISCARD ecs::EntityQuery createQuery()
-        {
-            OPTICK_EVENT();
-            return m_ecs->createQuery<component_types...>();
-        }
+        template<void(SelfType::* func_type)()>
+        auto queueJobs(size_type count);
 
-        L_NODISCARD ecs::EntityQuery createQuery(const hashed_sparse_set<id_type>& componentTypes)
-        {
-            OPTICK_EVENT();
-            return m_ecs->createQuery(componentTypes);
-        }
+        template<void(SelfType::* func_type)(id_type)>
+        auto queueJobs(size_type count);
 
-        template<typename event_type, typename... Args, inherits_from<event_type, events::event<event_type>> = 0>
-        void raiseEvent(Args... arguments)
-        {
-            OPTICK_EVENT();
-            m_eventBus->raiseEvent<event_type>(arguments...);
-        }
-
-        void raiseEvent(std::unique_ptr<events::event_base>&& value)
-        {
-            OPTICK_EVENT();
-            m_eventBus->raiseEvent(std::move(value));
-        }
-
-        void raiseEventUnsafe(std::unique_ptr<events::event_base>&& value, id_type id)
-        {
-            OPTICK_EVENT();
-            m_eventBus->raiseEventUnsafe(std::move(value), id);
-        }
-
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-        L_NODISCARD bool checkEvent() const
-        {
-            OPTICK_EVENT();
-            return m_eventBus->checkEvent<event_type>();
-        }
-
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-        L_NODISCARD size_type getEventCount() const
-        {
-            OPTICK_EVENT();
-            return m_eventBus->getEventCount<event_type>();
-        }
-
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-        L_NODISCARD const event_type& getEvent(index_type index = 0) const
-        {
-            OPTICK_EVENT();
-            return m_eventBus->getEvent<event_type>(index);
-        }
-
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-        L_NODISCARD const event_type& getLastEvent() const
-        {
-            OPTICK_EVENT();
-            return m_eventBus->getLastEvent<event_type>();
-        }
-
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-        void clearEvent(index_type index = 0)
-        {
-            OPTICK_EVENT();
-            m_eventBus->clearEvent<event_type>(index);
-        }
-
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-        void clearLastEvent()
-        {
-            OPTICK_EVENT();
-            m_eventBus->clearLastEvent<event_type>();
-        }
-
-        template <typename event_type, void(SelfType::* func_type)(event_type*), inherits_from<event_type, events::event<event_type>> = 0>
-        void bindToEvent()
-        {
-            OPTICK_EVENT();
-            m_eventBus->bindToEvent<event_type>(delegate<void(event_type*)>::template create<SelfType, func_type>(static_cast<SelfType*>(this)));
-        }
-
-        template<typename event_type, inherits_from<event_type, events::event<event_type>> = 0>
-        void bindToEvent(delegate<void(event_type*)> callback)
-        {
-            OPTICK_EVENT();
-            m_eventBus->bindToEvent<event_type>(callback);
-        }
+        template<typename Func>
+        static auto queueJobs(size_type count, Func&& func);
 
     public:
-        System() : SystemBase(typeHash<SelfType>(), undecoratedTypeName<SelfType>()) {}
+        System() : SystemBase(make_hash<SelfType>()) {}
+
+        virtual ~System() = default;
+
     };
 }

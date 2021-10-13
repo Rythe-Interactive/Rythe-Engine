@@ -28,12 +28,13 @@ namespace legion::rendering
 
     struct light
     {
+        Reflectable;
     private:
         static uint m_lastidx;
     public:
         light();
 
-        const detail::light_data& get_light_data(const ecs::component_handle<position>& pos, const ecs::component_handle<rotation>& rot);
+        const detail::light_data& get_light_data(const ecs::component<position>& pos, const ecs::component<rotation>& rot);
 
         void set_type(light_type type);
         void set_attenuation(float attenuation);
@@ -66,3 +67,5 @@ namespace legion::rendering
         };
     };
 }
+
+ManualReflector(legion::rendering::light, m_type, m_attenuation, m_intensity, m_index, m_direction, m_falloff, m_position, m_angle, m_color);

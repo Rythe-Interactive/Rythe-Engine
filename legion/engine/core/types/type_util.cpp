@@ -3,37 +3,21 @@
 
 namespace legion::core
 {
-    id_type LEGION_FUNC nameHash(cstring name)
+    id_type nameHash(const std::string& name)
     {
         OPTICK_EVENT();
-        const size_type length = std::strlen(name);
-        id_type hash = 0xcbf29ce484222325;
-        uint64 prime = 0x00000100000001b3;        
-        
-        for (size_type i = 0; i < length; i++)
-        {
-            byte value = name[i];
-            hash = hash ^ value;
-            hash *= prime;
-        }
 
-        return hash;
-    }
-
-    id_type LEGION_FUNC nameHash(const std::string& name)
-    {
-        OPTICK_EVENT();
+#if defined(LEGION_MSVC) || defined(LEGION_CLANG_MSVC)
         static std::hash<std::string> hasher{};
         if (!name.empty() && name[name.size() - 1] == '\0')
-        {
-            std::string temp = name;
-            temp.resize(name.size() - 1);
-            return hasher(temp);
-        }
+            return nameHash(std::string_view(name));
+
         return hasher(name);
+#else
+        // std::hash returns a different hash on GCC and Clang on Linux for certain CPU architectures.
+        // These certain different hashes are faster to compute but can create issues if they aren't the same.
+        return nameHash(std::string_view(name));
+#endif
     }
-    id_type LEGION_FUNC nameHash(const std::string_view& name)
-    {
-        return nameHash(std::string(name));
-    }
+
 }

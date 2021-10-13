@@ -22,35 +22,35 @@
 #include <limits>
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_GTC_color_space extension included")
+#   pragma message("GLM: GLM_GTC_color_space extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup gtc_color_space
-	/// @{
+    /// @addtogroup gtc_color_space
+    /// @{
 
-	/// Convert a linear color to sRGB color using a standard gamma correction.
-	/// IEC 61966-2-1:1999 / Rec. 709 specification https://www.w3.org/Graphics/Color/srgb
-	template<length_t L, typename T, qualifier Q>
-	GLM_FUNC_DECL vec<L, T, Q> convertLinearToSRGB(vec<L, T, Q> const& ColorLinear);
+    /// Convert a linear color to sRGB color using a standard gamma correction.
+    /// IEC 61966-2-1:1999 / Rec. 709 specification https://www.w3.org/Graphics/Color/srgb
+    template<length_t L, typename T, qualifier Q>
+    GLM_FUNC_DECL vec<L, T, Q> convertLinearToSRGB(vec<L, T, Q> const& ColorLinear);
 
-	/// Convert a linear color to sRGB color using a custom gamma correction.
-	/// IEC 61966-2-1:1999 / Rec. 709 specification https://www.w3.org/Graphics/Color/srgb
-	template<length_t L, typename T, qualifier Q>
-	GLM_FUNC_DECL vec<L, T, Q> convertLinearToSRGB(vec<L, T, Q> const& ColorLinear, T Gamma);
+    /// Convert a linear color to sRGB color using a custom gamma correction.
+    /// IEC 61966-2-1:1999 / Rec. 709 specification https://www.w3.org/Graphics/Color/srgb
+    template<length_t L, typename T, qualifier Q>
+    GLM_FUNC_DECL vec<L, T, Q> convertLinearToSRGB(vec<L, T, Q> const& ColorLinear, T Gamma);
 
-	/// Convert a sRGB color to linear color using a standard gamma correction.
-	/// IEC 61966-2-1:1999 / Rec. 709 specification https://www.w3.org/Graphics/Color/srgb
-	template<length_t L, typename T, qualifier Q>
-	GLM_FUNC_DECL vec<L, T, Q> convertSRGBToLinear(vec<L, T, Q> const& ColorSRGB);
+    /// Convert a sRGB color to linear color using a standard gamma correction.
+    /// IEC 61966-2-1:1999 / Rec. 709 specification https://www.w3.org/Graphics/Color/srgb
+    template<length_t L, typename T, qualifier Q>
+    GLM_FUNC_DECL vec<L, T, Q> convertSRGBToLinear(vec<L, T, Q> const& ColorSRGB);
 
-	/// Convert a sRGB color to linear color using a custom gamma correction.
-	// IEC 61966-2-1:1999 / Rec. 709 specification https://www.w3.org/Graphics/Color/srgb
-	template<length_t L, typename T, qualifier Q>
-	GLM_FUNC_DECL vec<L, T, Q> convertSRGBToLinear(vec<L, T, Q> const& ColorSRGB, T Gamma);
+    /// Convert a sRGB color to linear color using a custom gamma correction.
+    // IEC 61966-2-1:1999 / Rec. 709 specification https://www.w3.org/Graphics/Color/srgb
+    template<length_t L, typename T, qualifier Q>
+    GLM_FUNC_DECL vec<L, T, Q> convertSRGBToLinear(vec<L, T, Q> const& ColorSRGB, T Gamma);
 
-	/// @}
+    /// @}
 } //namespace legion::core::math
 
 #include "color_space.inl"

@@ -16,18 +16,18 @@
 #include "../mat3x4.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_matrix_int3x4 extension included")
+#   pragma message("GLM: GLM_EXT_matrix_int3x4 extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_matrix_int3x4
-	/// @{
+    /// @addtogroup ext_matrix_int3x4
+    /// @{
 
-	/// Signed integer 3x4 matrix.
-	///
-	/// @see ext_matrix_int3x4
-	typedef mat<3, 4, int, defaultp>	imat3x4;
+    /// Signed integer 3x4 matrix.
+    ///
+    /// @see ext_matrix_int3x4
+    typedef mat<3, 4, int, defaultp>    imat3x4;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

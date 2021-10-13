@@ -409,7 +409,7 @@ namespace filebrowser
     {
         std::string label = (dialog_mode == DialogMode::SAVE) ? "Save As:" : "Open:";
         ImGuiStyle& style = ImGui::GetStyle();
-        ImGuiIO& io = ImGui::GetIO();
+        //ImGuiIO& io = ImGui::GetIO();
 
         ImVec2 pw_pos = ImGui::GetWindowPos();
         ImVec2 pw_content_sz = ImGui::GetWindowSize() - style.WindowPadding * 2.0;
@@ -853,7 +853,7 @@ namespace filebrowser
     void ImGuiFileBrowser::filterFiles(int filter_mode)
     {
         filter_dirty = false;
-        if(filter_mode | FilterMode_Dirs)
+        if(filter_mode & FilterMode_Dirs)
         {
             filtered_dirs.clear();
             for (size_t i = 0; i < subdirs.size(); ++i)
@@ -862,7 +862,7 @@ namespace filebrowser
                     filtered_dirs.push_back(&subdirs[i]);
             }
         }
-        if(filter_mode | FilterMode_Files)
+        if(filter_mode & FilterMode_Files)
         {
             filtered_files.clear();
             for (size_t i = 0; i < subfiles.size(); ++i)
@@ -918,7 +918,7 @@ namespace filebrowser
         bool ret_val = false;
         if (ImGui::BeginPopupModal(repfile_modal_id.c_str(), nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize))
         {
-            float frame_height = ImGui::GetFrameHeightWithSpacing();
+            //float frame_height = ImGui::GetFrameHeightWithSpacing();
 
             std::string text = "A file with the following filename already exists. Are you sure you want to replace the existing file?";
             ImGui::TextWrapped("%s", text.c_str());
@@ -950,9 +950,9 @@ namespace filebrowser
 
     void ImGuiFileBrowser::showInvalidFileModal()
     {
-        ImGuiStyle& style = ImGui::GetStyle();
+        //ImGuiStyle& style = ImGui::GetStyle();
         std::string text = "Selected file either doesn't exist or is not supported. Please select a file with the following extensions...";
-        ImVec2 text_size = ImGui::CalcTextSize(text.c_str(), nullptr, true, 350 - style.WindowPadding.x * 2.0f);
+        //ImVec2 text_size = ImGui::CalcTextSize(text.c_str(), nullptr, true, 350 - style.WindowPadding.x * 2.0f);
         ImVec2 button_size = getButtonSize("OK");
 
         float frame_height = ImGui::GetFrameHeightWithSpacing();

@@ -18,51 +18,51 @@
 #include <cstdlib>
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	ifndef GLM_ENABLE_EXPERIMENTAL
-#		pragma message("GLM: GLM_GTX_std_based_type is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it.")
-#	else
-#		pragma message("GLM: GLM_GTX_std_based_type extension included")
-#	endif
+#   ifndef GLM_ENABLE_EXPERIMENTAL
+#       pragma message("GLM: GLM_GTX_std_based_type is an experimental extension and may change in the future. Use #define GLM_ENABLE_EXPERIMENTAL before including it, if you really want to use it.")
+#   else
+#       pragma message("GLM: GLM_GTX_std_based_type extension included")
+#   endif
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup gtx_std_based_type
-	/// @{
+    /// @addtogroup gtx_std_based_type
+    /// @{
 
-	/// Vector type based of one std::size_t component.
-	/// @see GLM_GTX_std_based_type
-	typedef vec<1, std::size_t, defaultp>		size1;
+    /// Vector type based of one std::size_t component.
+    /// @see GLM_GTX_std_based_type
+    typedef vec<1, std::size_t, defaultp>       size1;
 
-	/// Vector type based of two std::size_t components.
-	/// @see GLM_GTX_std_based_type
-	typedef vec<2, std::size_t, defaultp>		size2;
+    /// Vector type based of two std::size_t components.
+    /// @see GLM_GTX_std_based_type
+    typedef vec<2, std::size_t, defaultp>       size2;
 
-	/// Vector type based of three std::size_t components.
-	/// @see GLM_GTX_std_based_type
-	typedef vec<3, std::size_t, defaultp>		size3;
+    /// Vector type based of three std::size_t components.
+    /// @see GLM_GTX_std_based_type
+    typedef vec<3, std::size_t, defaultp>       size3;
 
-	/// Vector type based of four std::size_t components.
-	/// @see GLM_GTX_std_based_type
-	typedef vec<4, std::size_t, defaultp>		size4;
+    /// Vector type based of four std::size_t components.
+    /// @see GLM_GTX_std_based_type
+    typedef vec<4, std::size_t, defaultp>       size4;
 
-	/// Vector type based of one std::size_t component.
-	/// @see GLM_GTX_std_based_type
-	typedef vec<1, std::size_t, defaultp>		size1_t;
+    /// Vector type based of one std::size_t component.
+    /// @see GLM_GTX_std_based_type
+    typedef vec<1, std::size_t, defaultp>       size1_t;
 
-	/// Vector type based of two std::size_t components.
-	/// @see GLM_GTX_std_based_type
-	typedef vec<2, std::size_t, defaultp>		size2_t;
+    /// Vector type based of two std::size_t components.
+    /// @see GLM_GTX_std_based_type
+    typedef vec<2, std::size_t, defaultp>       size2_t;
 
-	/// Vector type based of three std::size_t components.
-	/// @see GLM_GTX_std_based_type
-	typedef vec<3, std::size_t, defaultp>		size3_t;
+    /// Vector type based of three std::size_t components.
+    /// @see GLM_GTX_std_based_type
+    typedef vec<3, std::size_t, defaultp>       size3_t;
 
-	/// Vector type based of four std::size_t components.
-	/// @see GLM_GTX_std_based_type
-	typedef vec<4, std::size_t, defaultp>		size4_t;
+    /// Vector type based of four std::size_t components.
+    /// @see GLM_GTX_std_based_type
+    typedef vec<4, std::size_t, defaultp>       size4_t;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math
 
 #include "std_based_type.inl"

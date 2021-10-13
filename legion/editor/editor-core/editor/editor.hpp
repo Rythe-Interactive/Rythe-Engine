@@ -58,7 +58,7 @@ namespace legion::editor
  */
 extern void reportEditorModules(legion::editor::Editor* editor);
 
-#if defined(LEGION_ENTRY) && !defined(DISABLE_EDITOR_ENTRY)
+#if defined(LEGION_ENTRY) && !defined(DISABLE_EDITOR_ENTRY) && !defined(DOXY_EXCLUDE)
 namespace legion::editor::detail
 {
     Editor editor;

@@ -24,6 +24,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>ClangCL</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -31,6 +32,7 @@
     <PlatformToolset>ClangCL</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -45,7 +47,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\intermediates\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
@@ -60,18 +62,21 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;PROJECT_NAME=$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-physics.lib;legion-rendering.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;OptickCore.lib;Voro++D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legion-core-d.lib;legion-application-d.lib;legion-rendering-d.lib;legion-audio-d.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++D.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <!--
       <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-networking.lib;legion-physics.lib;legion-rendering.lib;legion-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies);mono-2.0-sgen.lib;OptickCore.lib</AdditionalDependencies>
       -->
@@ -79,7 +84,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -87,14 +92,17 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <AdditionalOptions>-flto=thin -Werror=return-type %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;$(SolutionDir)deps\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-physics.lib;legion-rendering.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;OptickCore.lib;Voro++.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>legion-core.lib;legion-application.lib;legion-rendering.lib;legion-audio.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;Voro++.lib;OptickCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ProgramDatabaseFile />
       <!--
       <AdditionalDependencies>legion-application.lib;legion-audio.lib;legion-core.lib;legion-networking.lib;legion-physics.lib;legion-rendering.lib;legion-scripting.lib;OpenCL.lib;OpenAL32.lib;glfw3.lib;%(AdditionalDependencies);mono-2.0-sgen.lib;OptickCore.lib</AdditionalDependencies>
       -->
@@ -102,21 +110,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp" />
+    <ClCompile Include="systems\gui_test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="data\pp_bloom.hpp" />
     <ClInclude Include="data\pp_edgedetect.hpp" />
+    <ClInclude Include="module\examplemodule.hpp" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="systems\CustomSystem.hpp">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="systems\examplesystem.hpp" />
     <ClInclude Include="systems\gui_test.hpp" />
-    <ClInclude Include="systems\pointcloudtestsystem2.hpp" />
-    <ClInclude Include="systems\explosion_particlesystem.hpp" />
+    <ClInclude Include="systems\mysystem.hpp" />
     <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="data\pp_blur.hpp" />
     <ClInclude Include="systems\simplecameracontroller.hpp" />
-    <ClInclude Include="systems\testsystem2.hpp" />
-    <ClInclude Include="systems\testsystemconvexhull.hpp" />
-    <ClInclude Include="test_filesystem.hpp" />
-    <ClInclude Include="module\testmodule.hpp" />
-    <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\kernels\vadd_kernel.cl" />

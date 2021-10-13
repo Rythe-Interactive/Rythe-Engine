@@ -26,13 +26,13 @@ namespace legion::rendering
         shader_handle m_screenShader;
 
     public:
-        template<typename effect_type, typename ...Args, inherits_from<effect_type, PostProcessingEffect<effect_type>> = 0>
+        template<typename effect_type, typename ...Args CNDOXY(inherits_from<effect_type, PostProcessingEffect<effect_type>> = 0)>
         static void addEffect(priority_type priority = default_priority, Args&&...args)
         {
             m_effects.emplace(priority, std::unique_ptr<PostProcessingEffectBase>(new effect_type(std::forward<Args>(args)...)));
         }
 
-        template<typename effect_type, inherits_from<effect_type, PostProcessingEffect<effect_type>> = 0>
+        template<typename effect_type CNDOXY(inherits_from<effect_type, PostProcessingEffect<effect_type>> = 0)>
         static void removeEffect()
         {
             for (auto iter = m_effects.begin(); iter != m_effects.end();)
@@ -43,6 +43,11 @@ namespace legion::rendering
                     m_effects.erase(eraseIter);
                 }
             }
+        }
+
+        void shutdown()
+        {
+            m_effects.clear();
         }
 
         virtual void setup(app::window& context) override;

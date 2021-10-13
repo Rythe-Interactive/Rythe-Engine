@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <rendering/data/model.hpp>
 #include <rendering/data/texture.hpp>
 #include <rendering/util/bindings.hpp>
 #include <rendering/util/settings.hpp>
@@ -12,18 +11,17 @@
 
 namespace legion::rendering
 {
-    struct model;
     struct camera;
     struct shader;
     struct ShaderCache;
     struct shader_handle;
 
-    using shader_ilo = std::vector<std::pair<GLuint, std::string>>; // Shader intermediate language object.
+    using shader_ilo = std::unordered_map<std::string, std::vector<std::pair<GLuint, std::string>>>; // Shader intermediate language object.
     using shader_state = std::unordered_map<GLenum, GLenum>;
 
 #pragma region shader parameters
     /**@class shader_parameter_base
-     * @brief Common base of all shader parameter types. 
+     * @brief Common base of all shader parameter types.
      */
     struct shader_parameter_base
     {
@@ -33,7 +31,7 @@ namespace legion::rendering
         GLenum m_type;
         GLint m_location;
 
-        shader_parameter_base(std::nullptr_t t): m_shaderId(invalid_id), m_name(""), m_type(0), m_location(-1){};
+        shader_parameter_base(std::nullptr_t t) : m_shaderId(invalid_id), m_name(""), m_type(0), m_location(-1) {};
 
         shader_parameter_base(id_type shaderId, std::string_view name, GLenum type, GLint location) : m_shaderId(shaderId), m_name(name), m_type(type), m_location(location) {};
 
@@ -74,7 +72,7 @@ namespace legion::rendering
     {
     public:
         uniform(id_type shaderId, std::string_view name, GLenum type, GLint location) : shader_parameter_base(shaderId, name, type, location) {}
-        uniform(std::nullptr_t t) : shader_parameter_base(t){};
+        uniform(std::nullptr_t t) : shader_parameter_base(t) {};
         /**@brief Set the value of the uniform.
          */
         void set_value(const T& value);
@@ -86,18 +84,28 @@ namespace legion::rendering
     }
 
     template<>
-    inline void uniform<texture_handle>::set_value(const texture_handle& value)
+    struct uniform<texture_handle> : public shader_parameter_base
     {
-        texture tex;
-        if (is_valid())
-            tex = value.get_texture();
-        else
-            tex = invalid_texture_handle.get_texture();
+        uint m_textureUnit;
+    public:
+        uniform(id_type shaderId, std::string_view name, GLenum type, GLint location, uint textureUnit) : shader_parameter_base(shaderId, name, type, location), m_textureUnit(textureUnit) {}
+        uniform(std::nullptr_t t) : shader_parameter_base(t) {};
+        /**@brief Set the value of the uniform.
+         */
+        void set_value(const texture_handle& value)
+        {
+            texture tex;
+            if (is_valid())
+                tex = value.get_texture();
+            else
+                tex = invalid_texture_handle.get_texture();
 
-        glActiveTexture(GL_TEXTURE0 + m_location);
-        glBindTexture(GL_TEXTURE_2D, tex.textureId);
-        glUniform1i(m_location, m_location);
-    }
+            glActiveTexture(GL_TEXTURE0 + m_textureUnit);
+            glBindTexture(GL_TEXTURE_2D, tex.textureId);
+            glUniform1i(m_location, m_textureUnit);
+            glActiveTexture(GL_TEXTURE0);
+        }
+    };
 
     template<>
     inline void uniform<uint>::set_value(const uint& value)
@@ -224,7 +232,7 @@ namespace legion::rendering
          * @param type Data type of the components in the tensor.
          * @param normalized Normalize the tensors before sending to VRAM.
          * @param stride Amount of bytes in-between valid data chunks.
-         * @param pointer Amount of bytes until the first valid data chunk. 
+         * @param pointer Amount of bytes until the first valid data chunk.
          */
         void set_attribute_pointer(GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLsizei pointer)
         {
@@ -255,19 +263,36 @@ namespace legion::rendering
 
 #pragma endregion
 
-    /**@class shader
-     * @brief Abstraction class of a shader program.
-     */
-    struct shader
+    struct shader_variant
     {
-        /**@brief Data-structure to hold mapping of context functions and parameters.
-         */
         GLint programId;
         std::unordered_map<id_type, std::unique_ptr<shader_parameter_base>> uniforms;
         std::unordered_map<id_type, std::unique_ptr<attribute>> attributes;
         std::unordered_map<GLint, id_type> idOfLocation;
         std::string name;
+        std::string path;
+        id_type nameHash;
+
+        /**@brief Data-structure to hold mapping of context functions and parameters.
+         */
         shader_state state;
+
+        std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info();
+    };
+
+    /**@class shader
+     * @brief Abstraction class of a shader program.
+     */
+    struct shader
+    {
+        friend class ShaderCache;
+        friend struct shader_handle;
+    private:
+        mutable shader_variant* m_currentShaderVariant;
+        mutable std::unordered_map<id_type, shader_variant> m_variants;
+    public:
+        std::string name;
+        std::string path;
 
         // Since copying would mean that the in-vram version of the actual shader would also need to be copied, we don't allow copying.
         shader(const shader&) = delete;
@@ -277,6 +302,16 @@ namespace legion::rendering
 
         shader& operator=(shader&&) = default;
         shader& operator=(const shader&) = delete;
+
+        bool has_variant(id_type variantId) const;
+        bool has_variant(const std::string& variant) const;
+        void configure_variant(id_type variantId) const;
+        void configure_variant(const std::string& variant) const;
+
+        shader_variant& get_variant(id_type variantId);
+        shader_variant& get_variant(const std::string& variant);
+        const shader_variant& get_variant(id_type variantId) const;
+        const shader_variant& get_variant(const std::string& variant) const;
 
         void bind();
         static void release();
@@ -288,10 +323,16 @@ namespace legion::rendering
         uniform<T> get_uniform(const std::string& name)
         {
             OPTICK_EVENT();
-            auto* ptr = dynamic_cast<uniform<T>*>(uniforms[nameHash(name)].get());
+            if (!m_currentShaderVariant)
+            {
+                log::error("No current shader variant configured for shader {}", name);
+                return uniform<T>(nullptr);
+            }
+
+            auto* ptr = dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[nameHash(name)].get());
             if (ptr)
                 return *ptr;
-            log::error("Uniform of type {} does not exist with name {}.", typeName<T>(), name);
+            log::error("Uniform of type {} does not exist with name {}.", nameOfType<T>(), name);
             return uniform<T>(nullptr);
         }
 
@@ -299,18 +340,30 @@ namespace legion::rendering
         bool has_uniform(const std::string& name)
         {
             OPTICK_EVENT();
+            if (!m_currentShaderVariant)
+            {
+                log::error("No current shader variant configured for shader {}", name);
+                return false;
+            }
+
             auto id = nameHash(name);
-            return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
+            return m_currentShaderVariant->uniforms.count(id) && dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[id].get()) != nullptr;
         }
 
         template<typename T>
         uniform<T> get_uniform(id_type id)
         {
             OPTICK_EVENT();
-            auto* ptr = dynamic_cast<uniform<T>*>(uniforms[id].get());
+            if (!m_currentShaderVariant)
+            {
+                log::error("No current shader variant configured for shader {}", name);
+                return uniform<T>(nullptr);
+            }
+
+            auto* ptr = dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[id].get());
             if (ptr)
                 return *ptr;
-            log::error("Uniform of type {} does not exist with id {}.", typeName<T>(), id);
+            log::error("Uniform of type {} does not exist with id {}.", nameOfType<T>(), id);
             return uniform<T>(nullptr);
         }
 
@@ -318,17 +371,29 @@ namespace legion::rendering
         bool has_uniform(id_type id)
         {
             OPTICK_EVENT();
-            return uniforms.count(id) && dynamic_cast<uniform<T>*>(uniforms[id].get()) != nullptr;
+            if (!m_currentShaderVariant)
+            {
+                log::error("No current shader variant configured for shader {}", name);
+                return false;
+            }
+
+            return m_currentShaderVariant->uniforms.count(id) && dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[id].get()) != nullptr;
         }
 
         template<typename T>
         uniform<T> get_uniform_with_location(GLint location)
         {
             OPTICK_EVENT();
-            auto* ptr = dynamic_cast<uniform<T>*>(uniforms[idOfLocation[location]].get());
+            if (!m_currentShaderVariant)
+            {
+                log::error("No current shader variant configured for shader {}", name);
+                return uniform<T>(nullptr);
+            }
+
+            auto* ptr = dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[m_currentShaderVariant->idOfLocation[location]].get());
             if (ptr)
                 return *ptr;
-            log::error("Uniform of type {} does not exist with location {}.", typeName<T>(), location);
+            log::error("Uniform of type {} does not exist with location {}.", nameOfType<T>(), location);
             return uniform<T>(nullptr);
         }
 
@@ -336,49 +401,45 @@ namespace legion::rendering
         bool has_uniform_with_location(GLint location)
         {
             OPTICK_EVENT();
-            return uniforms.count(idOfLocation[location]) && dynamic_cast<uniform<T>*>(uniforms[idOfLocation[location]].get()) != nullptr;
+            if (!m_currentShaderVariant)
+            {
+                log::error("No current shader variant configured for shader {}", name);
+                return false;
+            }
+
+            return m_currentShaderVariant->uniforms.count(m_currentShaderVariant->idOfLocation[location]) && dynamic_cast<uniform<T>*>(m_currentShaderVariant->uniforms[m_currentShaderVariant->idOfLocation[location]].get()) != nullptr;
         }
 
-        attribute get_attribute(const std::string& name)
-        {
-            OPTICK_EVENT();
-            id_type id = nameHash(name);
-            if (attributes.count(id))
-                return *(attributes[id].get());
+        attribute get_attribute(const std::string& name);
 
-            log::error("Shader {} does not contain attribute {}", this->name, name);
-            return invalid_attribute;
-        }
+        attribute get_attribute(id_type id);
 
-        attribute get_attribute(id_type id)
-        {
-            OPTICK_EVENT();
-            if (attributes.count(id))
-                return *(attributes[id].get());
-            log::error("Shader {} does not contain attribute with id {}", this->name, id);
-            return invalid_attribute;
-        }
-
-        std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info()
-        {
-            OPTICK_EVENT();
-            std::vector<std::tuple<std::string, GLint, GLenum>> info;
-            for (auto& [_, uniform] : uniforms)
-                info.push_back(std::make_tuple(uniform->get_name(), uniform->get_location(), uniform->get_type()));
-            return std::move(info);
-        }
     };
 
     struct shader_handle
     {
         using cache = ShaderCache;
         id_type id;
+
+        bool has_variant(id_type variantId) const;
+        bool has_variant(const std::string& variant) const;
+        void configure_variant(id_type variantId);
+        void configure_variant(const std::string& variant);
+
+        shader_variant& get_variant(id_type variantId);
+        shader_variant& get_variant(const std::string& variant);
+        const shader_variant& get_variant(id_type variantId) const;
+        const shader_variant& get_variant(const std::string& variant) const;
+
         GLuint get_uniform_block_index(const std::string& name) const;
         void bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const;
 
         std::string get_name() const;
+        std::string get_path() const;
 
-        std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info() const;
+        std::unordered_map<id_type, std::vector<std::tuple<std::string, GLint, GLenum>>> get_uniform_info() const;
+        std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info(id_type variantId) const;
+        std::vector<std::tuple<std::string, GLint, GLenum>> get_uniform_info(const std::string& variant) const;
 
         template<typename T>
         uniform<T> get_uniform(const std::string& name);
@@ -407,8 +468,16 @@ namespace legion::rendering
 
         bool operator==(const shader_handle& other) const { return id == other.id; }
         bool operator!=(const shader_handle& other) const { return id != other.id; }
-        operator bool() { return id != invalid_id; }
+        operator bool() const noexcept { return id != invalid_id; }
+
+        template<typename Archive>
+        void serialize(Archive& archive);
     };
+    template<class Archive>
+    void shader_handle::serialize(Archive& archive)
+    {
+        archive(id);
+    }
 
     constexpr shader_handle invalid_shader_handle{ invalid_id };
 
@@ -426,8 +495,8 @@ namespace legion::rendering
         static void process_io(shader& shader, id_type id);
         static app::gl_id compile_shader(GLuint shaderType, cstring source, GLint sourceLength);
 
-        static bool load_precompiled(const fs::view& file, shader_ilo& ilo, shader_state& state);
-        static void store_precompiled(const fs::view& file, const shader_ilo& ilo, const shader_state& state);
+        static bool load_precompiled(const fs::view& file, shader_ilo& ilo, std::unordered_map<std::string, shader_state>& state);
+        static void store_precompiled(const fs::view& file, const shader_ilo& ilo, const std::unordered_map<std::string, shader_state>& state);
 
         static shader_handle create_invalid_shader(const fs::view& file, shader_import_settings settings = default_shader_settings);
 

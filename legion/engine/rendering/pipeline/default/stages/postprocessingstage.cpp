@@ -53,7 +53,7 @@ namespace legion::rendering
             return;
         }
 
-        auto colorAttachment = fbo->getAttachment(GL_COLOR_ATTACHMENT0);
+        auto colorAttachment = fbo->getAttachment(FRAGMENT_ATTACHMENT);
         if (std::holds_alternative<std::monostate>(colorAttachment))
         {
             log::error("Color attachment was not found.");
@@ -65,14 +65,7 @@ namespace legion::rendering
             return;
         }
 
-        texture_handle textures[] = { std::get<texture_handle>(colorAttachment), m_swapTexture };
-
-        math::ivec2 attachmentSize = textures[0].get_texture().size();
-        auto tex = m_swapTexture.get_texture();
-        if (attachmentSize != tex.size())
-            tex.resize(attachmentSize);
-
-        int index = 0;
+        //texture_handle texture = std::get<texture_handle>(colorAttachment);
 
         bool stencil = false;
         auto depthAttachment = fbo->getAttachment(GL_DEPTH);
@@ -87,6 +80,10 @@ namespace legion::rendering
             depthTexture = std::get<texture_handle>(depthAttachment);
         glDisable(GL_DEPTH_TEST);
 
+        fbo->bind();
+        uint attachment = FRAGMENT_ATTACHMENT;
+        glDrawBuffers(1, &attachment);
+        fbo->release();
 
         for (auto& [_, effect] : m_effects)
         {
@@ -97,22 +94,8 @@ namespace legion::rendering
             for (auto& pass : effect->renderPasses)
             {
                 OPTICK_EVENT("Effect pass");
-                fbo->attach(textures[!index], GL_COLOR_ATTACHMENT0);
-                
-                pass.invoke(*fbo, textures[index], depthTexture, deltaTime);
-                                
-                index = !index;
+                pass.invoke(*fbo, m_pipeline, cam, camInput, deltaTime);
             }
-        }
-
-        if (index)
-        {
-            fbo->attach(textures[0], GL_COLOR_ATTACHMENT0);
-            fbo->bind();
-            m_screenShader.bind();
-            m_screenShader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(textures[1]);
-            m_screenQuad.render();
-            fbo->release();
         }
 
         rendering::shader::release();

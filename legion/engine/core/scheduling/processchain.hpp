@@ -1,119 +1,68 @@
 #pragma once
-#include <core/platform/platform.hpp>
-#include <core/types/primitives.hpp>
-#include <core/types/type_util.hpp>
-#include <core/containers/containers.hpp>
-#include <core/async/transferable_atomic.hpp>
 
-#include <thread>
+#include <core/containers/pointer.hpp>
+#include <core/containers/delegate.hpp>
+#include <core/containers/sparse_map.hpp>
+#include <core/time/time.hpp>
 
-/**@file processchain.hpp
- */
+#include <core/scheduling/process.hpp>
 
 namespace legion::core::scheduling
 {
-	class Scheduler;
-	class Process;
+    class ProcessChain
+    {
+    public:
+        using chain_callback_type = void(time::span, time::span);
+        using chain_callback_delegate = delegate<chain_callback_type>;
+    private:
+        std::string m_name;
+        id_type m_nameHash = invalid_id;
+        sparse_map<id_type, pointer<Process>> m_processes;
 
-	/**@class ProcessChain
-	 * @brief Chain of processes that either run in a separate thread or on the main thread.
-	 * @note If chain is to run on a separate thread, then the chain has it's own program loop. ProcessChain::exit() needs to be called in order to end the thread.
-	 */
-	class ProcessChain
-	{
-	private:
-		std::string m_name;
-		id_type m_nameHash = invalid_id;
-		std::thread::id m_threadId;
-		Scheduler* m_scheduler;
-		async::rw_spinlock m_processesLock;
-		sparse_map<id_type, Process*> m_processes;
-		async::transferable_atomic<bool> m_exit;
-        bool m_low_power;
+        multicast_delegate<chain_callback_type> m_onChainStart;
+        multicast_delegate<chain_callback_type> m_onChainEnd;
 
-        static async::rw_spinlock m_callbackLock;
-        static multicast_delegate<void()> m_onFrameStart;
-        static multicast_delegate<void()> m_onFrameEnd;
+    public:
+        ProcessChain() = default;
+        ProcessChain(ProcessChain&&) = default;
+        ProcessChain& operator=(ProcessChain&&) = default;
 
-	public:
-        static void threadedRun(ProcessChain* chain);
+        template<size_type charc>
+        ProcessChain(const char(&name)[charc]);
+        ProcessChain(cstring name);
+        ProcessChain(cstring name, id_type id);
 
-        template<void(*func)()>
-        static void subscribeToChainStart()
-        {
-            async::readwrite_guard guard(m_callbackLock);
+        /**@brief Returns the hash of the name of the process-chain.
+         */
+        id_type id();
 
-            m_onFrameStart += delegate<void()>::template create<func>();
-        }
-        
-        template<void(*func)()>
-        static void subscribeToChainEnd()
-        {
-            async::readwrite_guard guard(m_callbackLock);
+        void subscribeToChainStart(const chain_callback_delegate& callback);
+        void unsubscribeFromChainStart(const chain_callback_delegate& callback);
 
-            m_onFrameEnd += delegate<void()>::template create<func>();
-        }
+        void subscribeToChainEnd(const chain_callback_delegate& callback);
+        void unsubscribeFromChainEnd(const chain_callback_delegate& callback);
 
-        template<void(*func)()>
-        static void unsubscribeFromChainStart()
-        {
-            async::readwrite_guard guard(m_callbackLock);
+        /**@brief Hook a process for execution with this chain.
+         */
+        void addProcess(Process& process);
 
-            m_onFrameStart -= delegate<void()>::template create<func>();
-        }
-        
-        template<void(*func)()>
-        static void unsubscribeFromChainEnd()
-        {
-            async::readwrite_guard guard(m_callbackLock);
+        /**@brief Hook a process for execution with this chain.
+         */
+        void addProcess(pointer<Process> process);
 
-            m_onFrameEnd -= delegate<void()>::template create<func>();
-        }
+        /**@brief Unhook a process from execution with this chain.
+         */
+        bool removeProcess(Process& process);
 
-		ProcessChain() = default;
-		ProcessChain(ProcessChain&&) = default;
-		ProcessChain& operator=(ProcessChain&&) = default;
+        /**@brief Unhook a process from execution with this chain.
+         */
+        bool removeProcess(pointer<Process> process);
 
-		template<size_type charc>
-		ProcessChain(const char(&name)[charc], Scheduler* scheduler) : m_name(name), m_nameHash(nameHash<charc>(name)), m_scheduler(scheduler) { }
-
-
-
-		/**@brief Creates a new thread and runs it's own program loop in it.
-		 * @return bool Scheduler::createThread()
-		 * @ref Scheduler::createThread()
-		 */
-		bool run(bool low_power);
-
-		/**@brief Returns the hash of the name of the process-chain.
-		 */
-		id_type id() { return m_nameHash; }
-
-
-		/**@brief Get id of the thread the chain runs on.
-		 */
-		std::thread::id threadId() 
-		{
-			if (m_threadId == std::thread::id())
-				return std::this_thread::get_id();
-			return m_threadId; 
-		}
-
-		/**@brief Raises exit flag for this process-chain and will request the process thread to exit.
-		 */
-		void exit();
-
-		/**@brief Runs one iteration of the process-chains program loop without creating a new thread.
-		 * @note Loops through all hooked processes and executes them until they are all finished.
-		 */
-		void runInCurrentThread();
-
-		/**@brief Hook a process for execution with this chain.
-		 */
-		void addProcess(Process* process);
-
-		/**@brief Unhook a process from execution with this chain.
-		 */
-		void removeProcess(Process* process);
-	};
+        /**@brief Runs one iteration of the process-chains program loop without creating a new thread.
+         * @note Loops through all hooked processes and executes them until they are all finished.
+         */
+        void runInCurrentThread(time::span deltaTime);
+    };
 }
+
+#include <core/scheduling/processchain.inl>

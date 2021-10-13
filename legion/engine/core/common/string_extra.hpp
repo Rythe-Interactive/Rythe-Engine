@@ -5,7 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <iterator>
-#include <string>
+#include <core/types/primitives.hpp>
 #include <cstring>
 
 #include <Optick/optick.h>
@@ -14,6 +14,23 @@
  * @file string_extra.hpp
  */
 namespace legion::core::common {
+
+    constexpr inline size_type constexpr_strlen(cstring str)
+    {
+        return ((0 == str) ? 0 : (*str == '\0') ? 0 : 1 + constexpr_strlen((const char*)(str + 1)));
+    }
+
+    inline bool starts_with(const std::string& src, cstring value)
+    {
+        return src.rfind(value, 0) == 0;
+    }
+
+    inline bool ends_with(const std::string& src, cstring value)
+    {
+        std::string end(value);
+        if (end.size() > src.size()) return false;
+        return std::equal(end.rbegin(), end.rend(), src.rbegin());
+    }
 
     /**@brief Replace each occurrence of [item] in [source] with [value].
      * @return Amount of items replaced.
@@ -24,8 +41,10 @@ namespace legion::core::common {
         OPTICK_EVENT();
         size_t count = 0;
         auto it = source.begin();
-
-        while ((it = std::search(it, source.end(), item.begin(), item.end())) != source.end()) // While there's items to be found, keep replacing them with value.
+        auto end = source.end();
+        auto itemBegin = item.begin();
+        auto itemEnd = item.end();
+        while ((it = std::search(it, end, itemBegin, itemEnd)) != end) // While there's items to be found, keep replacing them with value.
         {
             count++;
             source.erase(it, it + item.size());

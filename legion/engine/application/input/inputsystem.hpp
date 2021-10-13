@@ -45,7 +45,7 @@ namespace legion::application
         };
 
     public:
-        void setup() override
+        void setup()
         {
             //subscribe to the raw events emitted from the window system
             bindToEvent<key_input, &InputSystem::onKey>();
@@ -54,10 +54,10 @@ namespace legion::application
             bindToEvent<mouse_scrolled, &InputSystem::onMouseScrolled>();
 
             //create Update Process
-            createProcess<&InputSystem::onUpdate>("Input", 1.f/300.f);
+            createProcess<&InputSystem::onUpdate>("Input");
 
             //make sure we get the joystick-callback on initialization of GLFW
-            ContextHelper::addOnInitCallback(delegate<void()>::create([]
+            ContextHelper::addOnInitCallback(delegate<void()>::from([]
                 {
                     ContextHelper::setJoystickCallback(&InputSystem::onCheckGamepadPresence);
 
@@ -240,9 +240,10 @@ namespace legion::application
             //creates a tuple with default value 0
             auto& data = m_actions[m][typeHash<Event>()];
 
-            data.callback = action_callback::create(
+            data.callback = action_callback::from(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
                 {
+                    OPTICK_EVENT("Key to action callback");
                     (void)def;
                     Event e;
                     e.input_delta = delta;
@@ -260,7 +261,7 @@ namespace legion::application
         {
             auto& data = m_actions[m][typeHash<Event>()];
 
-            data.callback = action_callback::create(
+            data.callback = action_callback::from(
                 [](InputSystem* self, bool state, inputmap::modifier_keys mods, inputmap::method method, float def, float delta)
                 {
                     self->pushCommand<Event>(state ? def : 0.0f,mods,method);
@@ -279,9 +280,10 @@ namespace legion::application
 
             auto& data = m_axes[m][typeHash<Event>()];
 
-            data.callback = axis_callback::create(
+            data.callback = axis_callback::from(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
                 {
+                    OPTICK_EVENT("Axis to action callback");
                     Event e;
                     e.input_delta = delta;
                     e.set(value > 0.05f || value < -0.05f, mods, method); //convert float range 0-1 to key state false:true
@@ -300,7 +302,7 @@ namespace legion::application
 
             auto& data = m_axes[m][typeHash<Event>()];
 
-            data.callback = axis_callback::create(
+            data.callback = axis_callback::from(
                 [](InputSystem* self, float value, inputmap::modifier_keys mods, inputmap::method method, float delta)
                 {
                     self->pushCommand<Event>(value,mods,method);
@@ -323,23 +325,30 @@ namespace legion::application
 
         void onUpdate(time::time_span<fast_time> deltaTime)
         {
+            OPTICK_EVENT();
             onJoystick(deltaTime);
 
-            //update all axis with their current values
-            for (auto [_, inner_map] : m_axes)
             {
-                for (auto [_, axis] : inner_map)
+                OPTICK_EVENT("Update axes");
+                //update all axis with their current values
+                for (auto [_, inner_map] : m_axes)
                 {
-                    axis.callback(this, axis.last_value, axis.last_mods, axis.last_method, deltaTime);
+                    for (auto [_, axis] : inner_map)
+                    {
+                        axis.callback(this, axis.last_value, axis.last_mods, axis.last_method, deltaTime);
+                    }
                 }
             }
 
-            for (auto [_, inner_map] : m_actions)
             {
-                for (auto [_, action] : inner_map)
+                OPTICK_EVENT("Action repeating callbacks");
+                for (auto [_, inner_map] : m_actions)
                 {
-                    if (action.repeat)
-                        action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, deltaTime);
+                    for (auto [_, action] : inner_map)
+                    {
+                        if (action.repeat)
+                            action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, deltaTime);
+                    }
                 }
             }
 
@@ -351,6 +360,7 @@ namespace legion::application
         void matchGLFWAxisWithSignalAxis(const GLFWgamepadstate& state, inputmap::modifier_keys joystick,
             const size_type glfw, inputmap::method m)
         {
+            OPTICK_EVENT();
             const float value = state.axes[glfw];
             for (auto [_, axis] : m_axes[m])
             {
@@ -379,6 +389,7 @@ namespace legion::application
 
         void onJoystick(float dt)
         {
+            OPTICK_EVENT();
             for (int glfw_joystick_id : m_presentGamepads)
             {
                 using mods = inputmap::modifier_keys;
@@ -444,13 +455,13 @@ namespace legion::application
             return result;
         }
 
-        void onKey(key_input* window_key_event)
+        void onKey(key_input& window_key_event)
         {
-            const auto m = static_cast<inputmap::method>(window_key_event->key);
+            const auto m = static_cast<inputmap::method>(window_key_event.key);
             for (auto [_, action] : m_actions[m])
             {
-                action.last_state = window_key_event->action != GLFW_RELEASE;
-                action.last_mods = translateModifierKeys(window_key_event->mods);
+                action.last_state = window_key_event.action != GLFW_RELEASE;
+                action.last_mods = translateModifierKeys(window_key_event.mods);
                 action.last_method = m;
                 if (!action.repeat)
                     action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
@@ -458,10 +469,10 @@ namespace legion::application
             }
         }
 
-        void onMouseMove(mouse_moved* window_mouse_event)
+        void onMouseMove(mouse_moved& window_mouse_event)
         {
-            m_mouseDelta = window_mouse_event->position - m_mousePos;
-            m_mousePos = window_mouse_event->position;
+            m_mouseDelta = window_mouse_event.position - m_mousePos;
+            m_mousePos = window_mouse_event.position;
             if (math::abs(m_mouseDelta.x) < 0.0001)
                 m_mouseDelta.x = 0.0;
 
@@ -482,15 +493,15 @@ namespace legion::application
             }
         }
 
-        void onMouseButton(mouse_button* window_mouse_event)
+        void onMouseButton(mouse_button& window_mouse_event)
         {
-            switch (window_mouse_event->button)
+            switch (window_mouse_event.button)
             {
             case GLFW_MOUSE_BUTTON_LEFT: {
                 for (auto [_, action] : m_actions[inputmap::method::MOUSE_LEFT])
                 {
-                    action.last_state = window_mouse_event->action != GLFW_RELEASE;
-                    action.last_mods = translateModifierKeys(window_mouse_event->mods);
+                    action.last_state = window_mouse_event.action != GLFW_RELEASE;
+                    action.last_mods = translateModifierKeys(window_mouse_event.mods);
                     action.last_method = inputmap::method::MOUSE_LEFT;
                     if (!action.repeat)
                         action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
@@ -500,8 +511,8 @@ namespace legion::application
             case GLFW_MOUSE_BUTTON_MIDDLE: {
                 for (auto [_, action] : m_actions[inputmap::method::MOUSE_MIDDLE])
                 {
-                    action.last_state = window_mouse_event->action != GLFW_RELEASE;
-                    action.last_mods = translateModifierKeys(window_mouse_event->mods);
+                    action.last_state = window_mouse_event.action != GLFW_RELEASE;
+                    action.last_mods = translateModifierKeys(window_mouse_event.mods);
                     action.last_method = inputmap::method::MOUSE_MIDDLE;
                     if (!action.repeat)
                         action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
@@ -511,8 +522,8 @@ namespace legion::application
             case GLFW_MOUSE_BUTTON_RIGHT: {
                 for (auto [_, action] : m_actions[inputmap::method::MOUSE_RIGHT])
                 {
-                    action.last_state = window_mouse_event->action != GLFW_RELEASE;
-                    action.last_mods = translateModifierKeys(window_mouse_event->mods);
+                    action.last_state = window_mouse_event.action != GLFW_RELEASE;
+                    action.last_mods = translateModifierKeys(window_mouse_event.mods);
                     action.last_method = inputmap::method::MOUSE_RIGHT;
                     if (!action.repeat)
                         action.callback(this, action.last_state, action.last_mods, action.last_method, action.trigger_value, 0.0f);
@@ -522,9 +533,9 @@ namespace legion::application
             }
         }
 
-        void onMouseScrolled(mouse_scrolled* window_mouse_event)
+        void onMouseScrolled(mouse_scrolled& window_mouse_event)
         {
-            const auto pos = window_mouse_event->offset;
+            const auto pos = window_mouse_event.offset;
             for (auto [_, axis] : m_axes[inputmap::method::HSCROLL])
             {
                 axis.last_value += static_cast<float>(pos.x);
@@ -551,17 +562,22 @@ namespace legion::application
 
         void raiseCommandQueues(float delta)
         {
+            OPTICK_EVENT();
+            input_axis<std::nullptr_t> axis;
+            axis.input_delta = delta;
 
-            for(auto  [key,value] : m_axes_command_queues){
-                auto axis = std::make_unique<input_axis<std::nullptr_t>>();
-                axis->value_parts = value.values;
-                axis->mods_parts = value.mods;
-                axis->identifier_parts = value.methods;
+            for(auto  [key,value] : m_axes_command_queues)
+            {
+                // Can we move or assign here?
+                // value doesn't need the vectors anymore, and axis does. no need to copy right?
+                // value even needs to be cleared either way.
+                axis.value_parts = value.values;
+                axis.mods_parts = value.mods;
+                axis.identifier_parts = value.methods;
 
-                axis->input_delta = delta;
-                axis->value = std::accumulate(value.values.begin(),value.values.end(),0.0f);
+                axis.value = std::accumulate(value.values.begin(),value.values.end(),0.0f);
 
-                raiseEventUnsafe(std::move(axis),key);
+                raiseEventUnsafe(axis, key);
                 value.mods.clear();
                 value.values.clear();
                 value.methods.clear();

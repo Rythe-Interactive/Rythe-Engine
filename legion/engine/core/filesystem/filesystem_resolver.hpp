@@ -76,7 +76,7 @@ namespace legion::core::filesystem {
         /** @brief Checks if target points to a directory.*/
         L_NODISCARD virtual bool is_directory() const noexcept LEGION_PURE;
         /** @brief Checks if target points to a valid location.*/
-        L_NODISCARD virtual bool is_valid()     const noexcept LEGION_PURE;
+        L_NODISCARD virtual bool is_valid_path()     const noexcept LEGION_PURE;
         /** @brief Checks if the target location can be written to.*/
         L_NODISCARD virtual bool writeable()    const noexcept LEGION_PURE;
         /** @brief Checks if the target location can be read from.*/

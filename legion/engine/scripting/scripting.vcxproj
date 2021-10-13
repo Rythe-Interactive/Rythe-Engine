@@ -55,7 +55,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)intermediates\$(Platform)\$(Configuration)\engine\$(ProjectName)\</IntDir>
-    <TargetName>legion-$(ProjectName)</TargetName>
+    <TargetName>legion-$(ProjectName)-d</TargetName>
     <IncludePath>$(SolutionDir)legion\engine;$(SolutionDir)deps\include;$(IncludePath)</IncludePath>
     <ClangTidyChecks>-c++17-extensions-*</ClangTidyChecks>
   </PropertyGroup>
@@ -75,6 +75,10 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <AdditionalOptions>-Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,9 +97,12 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
       </AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
-del ".\xcopyexclude"</Command>
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
+
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
+
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -108,7 +115,10 @@ del ".\xcopyexclude"</Command>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalOptions>-flto=thin %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-flto=thin -Werror=return-type %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,9 +139,12 @@ copy /Y "$(SolutionDir)deps\dll\" "$(OutDir)"</Command>
       </AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
-      <Command>copy /Y "$(SolutionDir)xcopyexclude" ".\"
-xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y
-del ".\xcopyexclude"</Command>
+      <Command>del /q "$(SolutionDir)include\$(ProjectName)"
+copy /Y "$(SolutionDir)xcopyexclude" ".\"
+
+xcopy "$(ProjectDir)..\$(ProjectName)" "$(SolutionDir)include\$(ProjectName)\" /i /s /r /exclude:xcopyexclude /y &gt; nul
+
+del /q ".\xcopyexclude"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

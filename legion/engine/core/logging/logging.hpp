@@ -3,6 +3,8 @@
 #define SPDLOG_HEADER_ONLY
 #include <sstream>
 
+#include <Optick/optick.h>
+
 #if !defined(DOXY_EXCLUDE)
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -11,10 +13,11 @@
 #endif
 
 #include <core/platform/platform.hpp>
-#include <core/types/type_util.hpp>
+#include <core/types/types.hpp>
 #include <thread>
 #include <core/math/math.hpp>
 #include <core/common/exception.hpp>
+#include <core/async/rw_spinlock.hpp>
 
 /** @file logging.hpp */
 #if !defined(DOXY_EXCLUDE)
@@ -24,9 +27,12 @@ namespace fmt
     struct formatter<std::thread::id>
     {
 
-        constexpr auto parse(format_parse_context& ctx)
+        constexpr const char* parse(format_parse_context& ctx)
         {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
 
             if (it != end && *it != '}')
                 throw format_error("invalid format");
@@ -46,9 +52,12 @@ namespace fmt
     struct formatter<legion::core::exception>
     {
 
-        constexpr auto parse(format_parse_context& ctx)
+        constexpr const char* parse(format_parse_context& ctx)
         {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
 
             if (it != end && *it != '}')
                 throw format_error("invalid format");
@@ -66,9 +75,12 @@ namespace fmt
     struct formatter<legion::core::fs_error>
     {
 
-        constexpr auto parse(format_parse_context& ctx)
+        constexpr const char* parse(format_parse_context& ctx)
         {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
 
             if (it != end && *it != '}')
                 throw format_error("invalid format");
@@ -83,12 +95,12 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::vec2> {
+    struct formatter<legion::core::math::vec2> {
         // Presentation format: 'f' - fixed, 'e' - exponential.
         char presentation = 'f';
 
         // Parses format specifications of the form ['f' | 'e'].
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             // auto parse(format_parse_context &ctx) -> decltype(ctx.begin()) // c++11
               // [ctx.begin(), ctx.end()) is a character range that contains a part of
               // the format string starting from the format specifications to be parsed,
@@ -103,6 +115,10 @@ namespace fmt
 
               // Parse the presentation format and store it in the formatter:
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
+
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
             // Check if reached the end of the range:
@@ -127,10 +143,13 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::ivec2> {
+    struct formatter<legion::core::math::ivec2> {
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
 
             if (it != end && *it != '}')
                 throw format_error("invalid format");
@@ -147,11 +166,15 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::vec3> {
+    struct formatter<legion::core::math::vec3> {
         char presentation = 'f';
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
+
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
             if (it != end && *it != '}')
@@ -170,11 +193,38 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::vec4> {
+    struct formatter<legion::core::math::ivec3> {
+
+        constexpr const char* parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+            return it++;
+        }
+
+        template <typename FormatContext>
+        auto format(const legion::core::math::ivec3& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                "({}, {}, {})",
+                p.x, p.y, p.z);
+        }
+    };
+
+    template <>
+    struct formatter<legion::core::math::vec4> {
         char presentation = 'f';
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
+
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
             if (it != end && *it != '}')
@@ -193,11 +243,42 @@ namespace fmt
     };
 
     template <>
-    struct fmt::formatter<legion::core::math::quat> {
+    struct formatter<legion::core::math::color> {
         char presentation = 'f';
 
-        constexpr auto parse(format_parse_context& ctx) {
+        constexpr const char* parse(format_parse_context& ctx) {
             auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
+
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const legion::core::math::color& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e}, {:.1e})",
+                p.r, p.g, p.b, p.a);
+        }
+    };
+
+    template <>
+    struct formatter<legion::core::math::quat> {
+        char presentation = 'f';
+
+        constexpr const char* parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
+
+            if (!it)
+                return nullptr;
+
             if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
             if (it != end && *it != '}')
@@ -221,13 +302,20 @@ namespace fmt
 
 namespace legion::core::log
 {
+    using logger_ptr = std::shared_ptr<spdlog::logger>;
+
     /** @brief Holds the non const static data of logging. */
-    struct impl {
-        static cstring log_file;
-        static std::shared_ptr<spdlog::logger> logger;
-        static std::shared_ptr<spdlog::logger> file_logger;
-        static std::shared_ptr<spdlog::logger> console_logger;
-        static std::unordered_map<std::thread::id, std::string> thread_names;
+    struct impl
+    {
+        cstring logFile = "logs/legion-engine.log";
+        logger_ptr logger;
+        logger_ptr fileLogger;
+        logger_ptr consoleLogger = spdlog::stdout_color_mt("console-logger");
+        logger_ptr undecoratedLogger = spdlog::stdout_color_mt("undecorated-logger");
+        async::rw_spinlock threadNamesLock;
+        std::unordered_map<std::thread::id, std::string> threadNames;
+
+        static impl& get();
     };
 
 
@@ -269,23 +357,34 @@ namespace legion::core::log
     {
         void format(const spdlog::details::log_msg& msg, const std::tm& tm_time, spdlog::memory_buf_t& dest) override
         {
-            std::string thread_ident;
+            //std::string thread_ident;
+            thread_local static std::string* thread_ident;
 
-            if (const auto it = impl::thread_names.find(std::this_thread::get_id()); it != impl::thread_names.end())
+            if (!thread_ident)
             {
-                thread_ident = it->second;
-            }
-            else
-            {
-                std::ostringstream oss;
-                oss << std::this_thread::get_id();
-                thread_ident = oss.str();
+                auto& inst = impl::get();
+                async::readonly_guard guard(inst.threadNamesLock);
 
-                //NOTE(algo-ryth-mix): this conversion is not portable 
-                //thread_ident = std::to_string(legion::core::force_value_cast<uint>(std::this_thread::get_id()));
+                if (inst.threadNames.count(std::this_thread::get_id()))
+                {
+                    thread_ident = &inst.threadNames.at(std::this_thread::get_id());
+                }
+                else
+                {
+                    std::ostringstream oss;
+                    oss << std::this_thread::get_id();
+                    {
+                        async::readwrite_guard wguard(inst.threadNamesLock);
+                        thread_ident = &inst.threadNames[std::this_thread::get_id()];
+                    }
+                    *thread_ident = oss.str();
+
+                    //NOTE(algo-ryth-mix): this conversion is not portable 
+                    //thread_ident = std::to_string(legion::core::force_value_cast<uint>(std::this_thread::get_id()));
+                }
             }
 
-            dest.append(thread_ident.data(), thread_ident.data() + thread_ident.size());
+            dest.append(thread_ident->data(), thread_ident->data() + thread_ident->size());
         }
         std::unique_ptr<custom_flag_formatter> clone() const override
         {
@@ -294,19 +393,8 @@ namespace legion::core::log
         }
     };
 
-
-#define logger impl::logger
-
-
-    /** @brief sets up logging (do not call, invoked by engine) */
-    inline void setup()
+    inline void initLogger(logger_ptr& logger)
     {
-#if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
-        logger = impl::console_logger;
-#else
-        impl::file_logger = spdlog::rotating_logger_mt(impl::log_file, impl::log_file, 1'048'576, 5);
-        logger = impl::file_logger;
-#endif
         auto f = std::make_unique<spdlog::pattern_formatter>();
 
         f->add_flag<thread_name_formatter_flag>('f');
@@ -314,6 +402,12 @@ namespace legion::core::log
         f->set_pattern("T+ %* [%^%=7l%$] [%=13!f] : %v");
 
         logger->set_formatter(std::move(f));
+    }
+
+
+    inline void setLogger(const logger_ptr& newLogger)
+    {
+        impl::get().logger = newLogger;
     }
 
     /** @brief selects the severity you want to filter for or print with */
@@ -327,17 +421,25 @@ namespace legion::core::log
         fatal // highest severity
     };
 
-    inline spdlog::level::level_enum args2spdlog(severity s)
+    constexpr severity severity_trace = severity::trace;
+    constexpr severity severity_debug = severity::debug;
+    constexpr severity severity_info = severity::info;
+    constexpr severity severity_warn = severity::warn;
+    constexpr severity severity_error = severity::error;
+    constexpr severity severity_fatal = severity::fatal;
+
+    constexpr spdlog::level::level_enum args2spdlog(severity s)
     {
         switch (s)
         {
-        case severity::trace:return spdlog::level::trace;
-        case severity::debug:return spdlog::level::debug;
-        case severity::info: return spdlog::level::info;
-        case severity::warn: return spdlog::level::warn;
-        case severity::error:return spdlog::level::err;
-        case severity::fatal:return spdlog::level::critical;
+        case severity_trace:return spdlog::level::trace;
+        case severity_debug:return spdlog::level::debug;
+        case severity_info: return spdlog::level::info;
+        case severity_warn: return spdlog::level::warn;
+        case severity_error:return spdlog::level::err;
+        case severity_fatal:return spdlog::level::critical;
         }
+        return spdlog::level::err;
     }
 
     /** @brief prints a log line, using the specified `severity`
@@ -350,19 +452,69 @@ namespace legion::core::log
     template <class... Args, class FormatString>
     void println(severity s, const FormatString& format, Args&&... a)
     {
-        logger->log(args2spdlog(s),format,std::forward<Args>(a)...);
+        impl::get().logger->log(args2spdlog(s), format, std::forward<Args>(a)...);
     }
 
+    /** @brief same as println but uses the undecorated logger */
+    template <class... Args, class FormatString>
+    void undecoratedln(severity s, const FormatString& format, Args&&... a)
+    {
+        impl::get().undecoratedLogger->log(args2spdlog(s), format, std::forward<Args>(a)...);
+    }
 
     /** @brief prints a log line, using the specified `severity`
      *  @param level selects the severity level you are interested in
      */
     inline void filter(severity level)
     {
-        logger->set_level(args2spdlog(level));
+        auto& inst = impl::get();
+        inst.logger->set_level(args2spdlog(level));
+        inst.undecoratedLogger->set_level(args2spdlog(level));
     }
 
-     /** @brief same as println but with severity = trace */
+    /** @brief same as println but with severity = trace */
+    template<class... Args, class FormatString>
+    void undecoratedTrace(const FormatString& format, Args&&... a)
+    {
+        undecoratedln(severity::trace, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as println but with severity = debug */
+    template<class... Args, class FormatString>
+    void undecoratedDebug(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::debug, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as undecoratedln but with severity = info */
+    template<class... Args, class FormatString>
+    void undecoratedInfo(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::info, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as undecoratedln but with severity = warn */
+    template<class... Args, class FormatString>
+    void undecoratedWarn(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::warn, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as undecoratedln but with severity = error */
+    template<class... Args, class FormatString>
+    void undecoratedError(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::error, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as undecoratedln but with severity = fatal */
+    template<class... Args, class FormatString>
+    void undecoratedFatal(const FormatString& format, Args&&...a)
+    {
+        undecoratedln(severity::fatal, format, std::forward<Args>(a)...);
+    }
+
+    /** @brief same as println but with severity = trace */
     template<class... Args, class FormatString>
     void trace(const FormatString& format, Args&&... a)
     {
@@ -404,5 +556,53 @@ namespace legion::core::log
         println(severity::fatal, format, std::forward<Args>(a)...);
     }
 
+    namespace detail
+    {
+        inline byte _setup_impl()
+        {
+            auto& inst = impl::get();
+
+            auto f = std::make_unique<spdlog::pattern_formatter>();
+            f->set_pattern("%v");
+            inst.undecoratedLogger->set_formatter(std::move(f));
+
+            inst.fileLogger = spdlog::rotating_logger_mt(inst.logFile, inst.logFile, 1'048'576, 5);
+            initLogger(inst.consoleLogger);
+            initLogger(inst.fileLogger);
+
+#if defined(LEGION_KEEP_CONSOLE) || defined(LEGION_DEBUG)
+            inst.logger = inst.consoleLogger;
+#else
+            inst.logger = inst.fileLogger;
+#endif
+
+#if defined(LEGION_LOG_TRACE)
+            filter(severity::trace);
+#elif defined(LEGION_LOG_DEBUG)
+            filter(severity::debug);
+#elif defined(LEGION_LOG_INFO)
+            filter(severity::info);
+#elif defined(LEGION_LOG_WARN)
+            filter(severity::warn);
+#elif defined(LEGION_LOG_ERROR)
+            filter(severity::error);
+#elif defined(LEGION_LOG_FATAL)
+            filter(severity::fatal);
+#elif defined(LEGION_DEBUG)
+            filter(severity::debug);
+#else
+            filter(severity::info);
+#endif
+
+            undecoratedInfo("== Initializing Logger");
+            return 0;
+        }
+    }
+
+    /** @brief sets up logging (do not call, invoked by engine) */
+    inline void setup()
+    {
+        static auto v = detail::_setup_impl();
+    }
 }
 #undef logger

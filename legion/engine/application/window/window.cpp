@@ -46,17 +46,18 @@ namespace legion::application
         return m_title;
     }
 
-    context_guard::context_guard(window win) : m_win(win)
-	{
-		win.lock->lock();
+    context_guard::context_guard(const window& win) : m_win(win)
+    {
+        OPTICK_EVENT();
+        win.lock->lock();
 
         if (!WindowSystem::windowStillExists(win.handle))
             return;
 
-		m_contextIsValid = ContextHelper::makeContextCurrent(win);
-		if (!m_contextIsValid)
-			log::warn("Context is no longer valid.");
-	}
+        m_contextIsValid = ContextHelper::makeContextCurrent(win);
+        if (!m_contextIsValid)
+            log::warn("Context is no longer valid.");
+    }
 
     context_guard::~context_guard()
     {

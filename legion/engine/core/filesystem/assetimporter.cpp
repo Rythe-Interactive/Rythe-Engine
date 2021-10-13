@@ -2,5 +2,5 @@
 
 namespace legion::core::filesystem
 {
-    sparse_map<id_type, std::vector<detail::resource_converter_base*>> AssetImporter::m_converters;
+    sparse_map<id_type, std::vector<std::unique_ptr<detail::resource_converter_base>>> AssetImporter::m_converters;
 }

@@ -2,14 +2,20 @@
 #include <utility>
 #include <functional>
 #include <core/platform/platform.hpp>
+#include <core/types/primitives.hpp>
 
-namespace legion::core::iterator
+namespace legion::core
 {
     template <class T>
     struct pair_range
     {
         using iterator = T;
-        pair_range(const std::pair<T, T> r) : range(r)
+        pair_range(const std::pair<T, T> r) noexcept : range(r)
+        {
+        }
+
+        template<typename ItType>
+        pair_range(ItType begin, ItType end) noexcept : range(std::move(begin), std::move(end))
         {
         }
 
@@ -29,6 +35,9 @@ namespace legion::core::iterator
     #if !defined(DOXY_EXCLUDE)
     template <class T>
     pair_range(std::pair<T, T>)->pair_range<T>;
+
+    template <class T>
+    pair_range(T begin, T end)->pair_range<std::remove_reference_t<T>>;
     #endif
 
     template <class It>
@@ -42,7 +51,7 @@ namespace legion::core::iterator
         return true;
     }
 
-    template <class KeysIterator, class ValuesIterator>
+    template <class KeysIterator, class ValuesIterator, class Category = std::bidirectional_iterator_tag, class Diff = diff_type>
     class key_value_pair_iterator
     {
     public:
@@ -52,6 +61,9 @@ namespace legion::core::iterator
         using value_type = typename values_proxy_type::value_type;
         using pair_type = std::pair<key_type&, value_type&>;
         using const_pair_type = std::pair<const key_type&, const value_type&>;
+
+        using iterator_category = Category;
+        using difference_type = Diff;
 
         explicit key_value_pair_iterator(keys_proxy_type keys, values_proxy_type values) : m_key(keys), m_value(values) {}
 
@@ -99,13 +111,28 @@ namespace legion::core::iterator
             return rhs.m_key != lhs.m_key || rhs.m_value != lhs.m_value;
         }
 
-        auto operator++()
+        auto& operator++() noexcept
         {
-            return key_value_pair_iterator(m_key++, m_value++);
+            m_key++;
+            m_value++;
+            return *this;
         }
-        auto operator++() const
+
+        auto operator++(int) noexcept
         {
-            return key_value_pair_iterator(m_key++, m_value++);
+            return key_value_pair_iterator(++m_key, ++m_value);
+        }
+
+        auto& operator--() noexcept
+        {
+            m_key--;
+            m_value--;
+            return *this;
+        }
+
+        auto operator--(int) noexcept
+        {
+            return key_value_pair_iterator(--m_key, --m_value);
         }
 
     private:
@@ -237,6 +264,11 @@ namespace legion::core::iterator
         PairIteratorContainer& m_container;
     };
 
+#if !defined(DOXY_EXCLUDE)
+    template <class PairIteratorContainer>
+    keys_only(PairIteratorContainer&) -> keys_only<PairIteratorContainer>;
+#endif
+
     template <class PairIteratorContainer>
     class values_only
     {
@@ -256,5 +288,9 @@ namespace legion::core::iterator
         PairIteratorContainer& m_container;
     };
 
+#if !defined(DOXY_EXCLUDE)
+    template <class PairIteratorContainer>
+    values_only(PairIteratorContainer&) -> values_only<PairIteratorContainer>;
+#endif
 
 }

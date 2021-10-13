@@ -3,9 +3,9 @@
 [![analyze](https://github.com/Legion-Engine/Legion-Engine/workflows/analyze-action/badge.svg)](https://github.com/Legion-Engine/Legion-Engine/actions?query=workflow%3Aanalyze-action)
 [![docs](https://github.com/Legion-Engine/Legion-Engine/workflows/docs-action/badge.svg)](https://docs.legion-engine.com)
 [![License-MIT](https://img.shields.io/github/license/Legion-Engine/Legion-Engine)](https://github.com/Legion-Engine/Legion-Engine/blob/main/LICENSE)
-[![Discord](https://img.shields.io/static/v1?label=Discord&message=Join%20Our%20Discord%20Server!&color=white&logo=discord)](https://discord.gg/unVNRbd)
+[![Discord](https://img.shields.io/discord/682321168610623707.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/unVNRbd)
 # Legion-Engine
-Legion-Engine is a data oriented C++17 OpenGL game engine built to make optimal use of modern hardware.<br><br>
+Legion-Engine is a data oriented C++17 game engine built to make optimal use of modern hardware.<br><br>
 The Legion-Core is built on an async compute minded design to take care of the logic and an ECS to take care of the data. This allows the engine and editor to utilize all the power they can find and to be extremely modular.
 
 ## Features
@@ -23,6 +23,9 @@ The Legion-Core is built on an async compute minded design to take care of the l
 ### Physics
 - Convex quick hull generation
 - Diviner physics engine
+#### Preview Feature
+- Dynamic Destruction
+![Demo](https://cdn.discordapp.com/attachments/682321169541890070/802090059788582912/fracturebasics.gif)
 
 ### ECS
 - Data oriented
@@ -143,7 +146,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Authors
 
-* **Glyn Leine** - *Core architecture, ECS, scheduling, import pipeline, and renderer* - [[Website](https://glynleine.com)] [[Github](https://github.com/GlynLeine)] [[LinkedIn](https://www.linkedin.com/in/glyn-leine-7140a8167/)]
+* **Glyn Leine** - *Technical director, core architecture, ECS, scheduling, import pipeline, and renderer* - [[Website](https://glynleine.com)] [[Github](https://github.com/GlynLeine)] [[LinkedIn](https://www.linkedin.com/in/glyn-leine-7140a8167/)]
 * **Raphael Baier** - *Filesystem, build pipeline, GPGPU compute, input system, meta nonsense* - [[Website](https://rbaier.me)] [[Github](https://github.com/Algo-ryth-mix)] [[LinkedIn](https://www.linkedin.com/in/raphael-baier-26800a188/)]
 * **Raphael Priatama** - *Physics* - [[Website](https://developer-the-great.github.io)] [[Github](https://github.com/Developer-The-Great)] [[LinkedIn](https://www.linkedin.com/in/raphael-priatama-78a0a7189/?originalSubdomain=nl)]
 * **Jelle Vrieze** - *Audio/3D audio* - [[Website](http://jellevrieze.nl)] [[Github](https://github.com/Jelled1st)] [[LinkedIn](https://www.linkedin.com/in/jelle-vrieze-2467661a7/)]

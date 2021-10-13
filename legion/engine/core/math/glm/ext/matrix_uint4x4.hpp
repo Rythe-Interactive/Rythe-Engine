@@ -16,23 +16,23 @@
 #include "../mat4x4.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_matrix_uint4x4 extension included")
+#   pragma message("GLM: GLM_EXT_matrix_uint4x4 extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_matrix_uint4x4
-	/// @{
+    /// @addtogroup ext_matrix_uint4x4
+    /// @{
 
-	/// Unsigned integer 4x4 matrix.
-	///
-	/// @see ext_matrix_uint4x4
-	typedef mat<4, 4, uint, defaultp>	umat4x4;
+    /// Unsigned integer 4x4 matrix.
+    ///
+    /// @see ext_matrix_uint4x4
+    typedef mat<4, 4, uint, defaultp>   umat4x4;
 
-	/// Unsigned integer 4x4 matrix.
-	///
-	/// @see ext_matrix_uint4x4
-	typedef mat<4, 4, uint, defaultp>	umat4;
+    /// Unsigned integer 4x4 matrix.
+    ///
+    /// @see ext_matrix_uint4x4
+    typedef mat<4, 4, uint, defaultp>   umat4;
 
-	/// @}
+    /// @}
 }//namespace legion::core::math

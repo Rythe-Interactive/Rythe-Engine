@@ -20,43 +20,43 @@
 #include "../vector_relational.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
-#	pragma message("GLM: GLM_EXT_quaternion_relational extension included")
+#   pragma message("GLM: GLM_EXT_quaternion_relational extension included")
 #endif
 
 namespace legion::core::math
 {
-	/// @addtogroup ext_quaternion_relational
-	/// @{
+    /// @addtogroup ext_quaternion_relational
+    /// @{
 
-	/// Returns the component-wise comparison of result x == y.
-	///
-	/// @tparam T Floating-point scalar types
-	/// @tparam Q Value from qualifier enum
-	template<typename T, qualifier Q>
-	GLM_FUNC_DECL vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y);
+    /// Returns the component-wise comparison of result x == y.
+    ///
+    /// @tparam T Floating-point scalar types
+    /// @tparam Q Value from qualifier enum
+    template<typename T, qualifier Q>
+    GLM_FUNC_DECL vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y);
 
-	/// Returns the component-wise comparison of |x - y| < epsilon.
-	///
-	/// @tparam T Floating-point scalar types
-	/// @tparam Q Value from qualifier enum
-	template<typename T, qualifier Q>
-	GLM_FUNC_DECL vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon);
+    /// Returns the component-wise comparison of |x - y| < epsilon.
+    ///
+    /// @tparam T Floating-point scalar types
+    /// @tparam Q Value from qualifier enum
+    template<typename T, qualifier Q>
+    GLM_FUNC_DECL vec<4, bool, Q> equal(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon);
 
-	/// Returns the component-wise comparison of result x != y.
-	///
-	/// @tparam T Floating-point scalar types
-	/// @tparam Q Value from qualifier enum
-	template<typename T, qualifier Q>
-	GLM_FUNC_DECL vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y);
+    /// Returns the component-wise comparison of result x != y.
+    ///
+    /// @tparam T Floating-point scalar types
+    /// @tparam Q Value from qualifier enum
+    template<typename T, qualifier Q>
+    GLM_FUNC_DECL vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y);
 
-	/// Returns the component-wise comparison of |x - y| >= epsilon.
-	///
-	/// @tparam T Floating-point scalar types
-	/// @tparam Q Value from qualifier enum
-	template<typename T, qualifier Q>
-	GLM_FUNC_DECL vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon);
+    /// Returns the component-wise comparison of |x - y| >= epsilon.
+    ///
+    /// @tparam T Floating-point scalar types
+    /// @tparam Q Value from qualifier enum
+    template<typename T, qualifier Q>
+    GLM_FUNC_DECL vec<4, bool, Q> notEqual(qua<T, Q> const& x, qua<T, Q> const& y, T epsilon);
 
-	/// @}
+    /// @}
 } //namespace legion::core::math
 
 #include "quaternion_relational.inl"

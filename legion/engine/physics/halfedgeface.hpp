@@ -3,10 +3,10 @@
 
 namespace legion::physics
 {
-	struct HalfEdgeEdge;
+    struct HalfEdgeEdge;
 
-	struct HalfEdgeFace
-	{
+    struct HalfEdgeFace
+    {
         /**@class face_angle_relation
          * @brief Enum Struct to indicate the angle relation between two faces
          * Coplaner:    The faces could be merged, the angle between them is 180 degrees
@@ -20,11 +20,12 @@ namespace legion::physics
             concave
         };
 
-		HalfEdgeEdge* startEdge;
-		math::vec3 normal;
-		math::vec3 centroid;
+        HalfEdgeEdge* startEdge;
+        math::vec3 normal;
+        math::vec3 centroid;
+        math::color DEBUG_color;
         
-		HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
+        HalfEdgeFace(HalfEdgeEdge* newStartEdge, math::vec3 newNormal);
 
         /**@brief Deletes all the edges of this face
          * Warning: pairing edges are not deleted because their face may still exist
@@ -35,10 +36,10 @@ namespace legion::physics
          */
         void setFaceForAllEdges();
 
-		/** @brief given a function that takes in a HalfEdgeEdge*, 
-		* executes the function on each edge connected to 'startEdge'
-		*/
-		void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
+        /** @brief given a function that takes in a HalfEdgeEdge*, 
+        * executes the function on each edge connected to 'startEdge'
+        */
+        void forEachEdge(legion::core::delegate< void(HalfEdgeEdge*)> functionToExecute);
 
         /**@brief Inverses the face
          * The edges will be stored in reverse and therefore the normal will point in the other direction
@@ -57,6 +58,8 @@ namespace legion::physics
          */
         bool makeNormalsConvexWithFace(HalfEdgeFace& other);
 
+        bool makeNormalsConvexWithNeighbors(HalfEdgeFace& other);
+
         /**@brief Calculates the angle relation from this to another face
          */
         face_angle_relation getAngleRelation(const HalfEdgeFace& other);
@@ -70,6 +73,8 @@ namespace legion::physics
          * @return Returns true when one of the faces or both have been made convex, false when they were already convex
          */
         static bool makeNormalsConvexWithFace(HalfEdgeFace& first, HalfEdgeFace& second);
+
+        void mergeCoplanarNeighbors(std::vector<HalfEdgeFace*>& removed);
 
         /**@brief Finds the edge that splits the two faces
          * @return A pointer to the edge, nullptr if the two faces are not connected
@@ -96,7 +101,9 @@ namespace legion::physics
             if (relation == face_angle_relation::convex) return "convex";
             if (relation == face_angle_relation::concave) return "concave";
         }
-		
-		~HalfEdgeFace();
-	};
+
+        void DEBUG_DrawFace(const math::mat4& transform, const math::color& debugColor,  float time = 20.0f);
+
+        ~HalfEdgeFace();
+    };
 }

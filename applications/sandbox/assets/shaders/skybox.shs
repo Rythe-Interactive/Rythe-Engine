@@ -10,8 +10,13 @@ shader(vertex)
 {
     void main(void)
     {
-        gl_Position = ModelToScreenSpacePosition(position);
-        PropagateStdIO();
+        vec3 worldPos = vec3(
+            position.x*1000.0 + lgn_cmr_in.posnearz.x,
+            position.y*1000.0 + lgn_cmr_in.posnearz.y,
+            position.z*1000.0 + lgn_cmr_in.posnearz.z
+            );
+        gl_Position = WorldToScreenSpacePosition(vec4(worldPos, 1.0));
+        stdout(position) = stdin(position);
     }
 }
 
@@ -23,6 +28,10 @@ shader(fragment)
     {
         vec3 unitDir = normalize(stdin(position));
 
-        fragment_color = vec4(mix(vec3(length(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), 1.f);
+        fragment_color = vec4(mix(vec3(average(skycolor.rgb)), skycolor.rgb, clamp01(dot(unitDir, vec3(0.f, 1.f, 0.f)) + 0.9)), 1.f);
+        fragment_depth = 0.0000001;
+        fragment_normal = vec4(0.0);
+        fragment_position = vec4(unitDir*FarZ,1.0);
+        fragment_overdraw = vec4(0.0);
     }
 }

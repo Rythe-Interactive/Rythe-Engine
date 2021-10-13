@@ -9,6 +9,7 @@ shader(vertex)
     void main(void)
     {
         gl_Position = ModelToScreenSpacePosition(position);
+        PropagateStdIO();
     }
 }
 
@@ -17,6 +18,6 @@ shader(fragment)
     uniform vec4 color;
     void main(void)
     {
-        fragment_color = color;
+        SubmitOutput(color);
     }
 }

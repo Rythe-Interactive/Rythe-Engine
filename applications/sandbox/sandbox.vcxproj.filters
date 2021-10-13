@@ -18,33 +18,15 @@
     <ClCompile Include="source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="systems\gui_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="systems\testsystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="module\testmodule.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\simplecameracontroller.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\testsystem2.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\pointcloudtestsystem2.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\explosion_particlesystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="systems\pointcloud_particlesystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="systems\gui_test.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="data\pp_blur.hpp">
@@ -53,10 +35,25 @@
     <ClInclude Include="data\pp_edgedetect.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="systems\testsystemconvexhull.hpp">
+    <ClInclude Include="data\pp_bloom.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="test_filesystem.hpp">
+    <ClInclude Include="module\examplemodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\examplesystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\simplecameracontroller.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\gui_test.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\CustomSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\mysystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

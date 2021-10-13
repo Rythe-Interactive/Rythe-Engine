@@ -1,4 +1,4 @@
-﻿#include <rendering/data/shader.hpp>
+#include <rendering/data/shader.hpp>
 #include <rendering/util/bindings.hpp>
 #include <algorithm>
 #include <rendering/shadercompiler/shadercompiler.hpp>
@@ -14,132 +14,137 @@ namespace legion::rendering
         return &m_shaders[id];
     }
 
-
     void ShaderCache::process_io(shader& shader, id_type id)
     {
-        // Clear all values.
-        shader.uniforms.clear();
-        shader.attributes.clear();
+        for (auto& [_, variant] : shader.m_variants)
+        {
+            // Clear all values.
+            variant.uniforms.clear();
+            variant.attributes.clear();
 
 #pragma region uniforms
-        // Find the number of active uniforms.
-        GLint numActiveUniforms = 0;
-        glGetProgramiv(shader.programId, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
+            // Find the number of active uniforms.
+            GLint numActiveUniforms = 0;
+            glGetProgramiv(variant.programId, GL_ACTIVE_UNIFORMS, &numActiveUniforms);
 
-        GLint maxUniformNameLength = 0; // Get name buffer length.
-        glGetProgramiv(shader.programId, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniformNameLength);
+            GLint maxUniformNameLength = 0; // Get name buffer length.
+            glGetProgramiv(variant.programId, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniformNameLength);
 
-        GLchar* uniformNameBuffer = new GLchar[maxUniformNameLength]; // Create buffer with the right length.
+            GLchar* uniformNameBuffer = new GLchar[maxUniformNameLength]; // Create buffer with the right length.
 
-        for (int uniformId = 0; uniformId < numActiveUniforms; uniformId++)
-        {
-            GLint arraySize = 0; // Use this later for uniform arrays.
-            GLenum type = 0;
-            GLsizei nameLength = 0;
-            glGetActiveUniform(shader.programId, uniformId, (GLsizei)maxUniformNameLength, &nameLength, &arraySize, &type, uniformNameBuffer);
+            uint textureUnit = 1;
 
-            std::string_view name(uniformNameBuffer, nameLength + 1); // Get string_view of the actual name within the buffer.
-
-            if (name.find('[') != std::string_view::npos) // We don't support uniform arrays yet.
-                continue;
-
-            // Get location and create uniform object.
-            app::gl_location location = glGetUniformLocation(shader.programId, uniformNameBuffer);
-            shader_parameter_base* uniform = nullptr;
-            switch (type)
+            for (int uniformId = 0; uniformId < numActiveUniforms; uniformId++)
             {
-            case GL_SAMPLER_2D:
-                uniform = new rendering::uniform<texture_handle>(id, name, type, location);
-                break;
-            case GL_UNSIGNED_INT:
-                uniform = new rendering::uniform<uint>(id, name, type, location);
-                break;
-            case GL_FLOAT:
-                uniform = new rendering::uniform<float>(id, name, type, location);
-                break;
-            case GL_FLOAT_VEC2:
-                uniform = new rendering::uniform<math::vec2>(id, name, type, location);
-                break;
-            case GL_FLOAT_VEC3:
-                uniform = new rendering::uniform<math::vec3>(id, name, type, location);
-                break;
-            case GL_FLOAT_VEC4:
-                uniform = new rendering::uniform<math::vec4>(id, name, type, location);
-                break;
-            case GL_INT:
-                uniform = new rendering::uniform<int>(id, name, type, location);
-                break;
-            case GL_INT_VEC2:
-                uniform = new rendering::uniform<math::ivec2>(id, name, type, location);
-                break;
-            case GL_INT_VEC3:
-                uniform = new rendering::uniform<math::ivec3>(id, name, type, location);
-                break;
-            case GL_INT_VEC4:
-                uniform = new rendering::uniform<math::ivec4>(id, name, type, location);
-                break;
-            case GL_BOOL:
-                uniform = new rendering::uniform<bool>(id, name, type, location);
-                break;
-            case GL_BOOL_VEC2:
-                uniform = new rendering::uniform<math::bvec2>(id, name, type, location);
-                break;
-            case GL_BOOL_VEC3:
-                uniform = new rendering::uniform<math::bvec3>(id, name, type, location);
-                break;
-            case GL_BOOL_VEC4:
-                uniform = new rendering::uniform<math::bvec4>(id, name, type, location);
-                break;
-            case GL_FLOAT_MAT2:
-                uniform = new rendering::uniform<math::mat2>(id, name, type, location);
-                break;
-            case GL_FLOAT_MAT3:
-                uniform = new rendering::uniform<math::mat3>(id, name, type, location);
-                break;
-            case GL_FLOAT_MAT4:
-                uniform = new rendering::uniform<math::mat4>(id, name, type, location);
-                break;
-            default:
-                continue;
+                GLint arraySize = 0; // Use this later for uniform arrays.
+                GLenum type = 0;
+                GLsizei nameLength = 0;
+                glGetActiveUniform(variant.programId, uniformId, (GLsizei)maxUniformNameLength, &nameLength, &arraySize, &type, uniformNameBuffer);
+
+                std::string_view name(uniformNameBuffer, nameLength + 1); // Get string_view of the actual name within the buffer.
+
+                if (name.find('[') != std::string_view::npos) // We don't support uniform arrays yet.
+                    continue;
+
+                // Get location and create uniform object.
+                app::gl_location location = glGetUniformLocation(variant.programId, uniformNameBuffer);
+                shader_parameter_base* uniform = nullptr;
+                switch (type)
+                {
+                case GL_SAMPLER_2D:
+                    uniform = new rendering::uniform<texture_handle>(id, name, type, location, textureUnit);
+                    textureUnit++;
+                    break;
+                case GL_UNSIGNED_INT:
+                    uniform = new rendering::uniform<uint>(id, name, type, location);
+                    break;
+                case GL_FLOAT:
+                    uniform = new rendering::uniform<float>(id, name, type, location);
+                    break;
+                case GL_FLOAT_VEC2:
+                    uniform = new rendering::uniform<math::vec2>(id, name, type, location);
+                    break;
+                case GL_FLOAT_VEC3:
+                    uniform = new rendering::uniform<math::vec3>(id, name, type, location);
+                    break;
+                case GL_FLOAT_VEC4:
+                    uniform = new rendering::uniform<math::vec4>(id, name, type, location);
+                    break;
+                case GL_INT:
+                    uniform = new rendering::uniform<int>(id, name, type, location);
+                    break;
+                case GL_INT_VEC2:
+                    uniform = new rendering::uniform<math::ivec2>(id, name, type, location);
+                    break;
+                case GL_INT_VEC3:
+                    uniform = new rendering::uniform<math::ivec3>(id, name, type, location);
+                    break;
+                case GL_INT_VEC4:
+                    uniform = new rendering::uniform<math::ivec4>(id, name, type, location);
+                    break;
+                case GL_BOOL:
+                    uniform = new rendering::uniform<bool>(id, name, type, location);
+                    break;
+                case GL_BOOL_VEC2:
+                    uniform = new rendering::uniform<math::bvec2>(id, name, type, location);
+                    break;
+                case GL_BOOL_VEC3:
+                    uniform = new rendering::uniform<math::bvec3>(id, name, type, location);
+                    break;
+                case GL_BOOL_VEC4:
+                    uniform = new rendering::uniform<math::bvec4>(id, name, type, location);
+                    break;
+                case GL_FLOAT_MAT2:
+                    uniform = new rendering::uniform<math::mat2>(id, name, type, location);
+                    break;
+                case GL_FLOAT_MAT3:
+                    uniform = new rendering::uniform<math::mat3>(id, name, type, location);
+                    break;
+                case GL_FLOAT_MAT4:
+                    uniform = new rendering::uniform<math::mat4>(id, name, type, location);
+                    break;
+                default:
+                    continue;
+                }
+
+                // Insert uniform into the uniform list.
+                auto hashid = nameHash(name);
+                variant.uniforms[hashid] = std::unique_ptr<shader_parameter_base>(uniform);
+                variant.idOfLocation[location] = hashid;
             }
 
-            // Insert uniform into the uniform list.
-            auto hashid = nameHash(std::string(name));
-            shader.uniforms[hashid] = std::unique_ptr<shader_parameter_base>(uniform);
-            shader.idOfLocation[location] = hashid;
-        }
-
-        delete[] uniformNameBuffer; // Delete name buffer
+            delete[] uniformNameBuffer; // Delete name buffer
 #pragma endregion
 #pragma region attributes
         // Find the number of active attributes.
-        GLint numActiveAttribs = 0;
-        glGetProgramiv(shader.programId, GL_ACTIVE_ATTRIBUTES, &numActiveAttribs);
+            GLint numActiveAttribs = 0;
+            glGetProgramiv(variant.programId, GL_ACTIVE_ATTRIBUTES, &numActiveAttribs);
 
-        GLint maxAttribNameLength = 0; // Get name buffer length.
-        glGetProgramiv(shader.programId, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxAttribNameLength);
+            GLint maxAttribNameLength = 0; // Get name buffer length.
+            glGetProgramiv(variant.programId, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxAttribNameLength);
 
-        GLchar* attribNameBuffer = new GLchar[maxAttribNameLength]; // Create buffer with the right length.
+            GLchar* attribNameBuffer = new GLchar[maxAttribNameLength]; // Create buffer with the right length.
 
-        for (int attrib = 0; attrib < numActiveAttribs; ++attrib)
-        {
-            GLint arraySize = 0; // Use this later for attribute arrays.
-            GLenum type = 0;
-            GLsizei nameLength = 0;
-            glGetActiveAttrib(shader.programId, attrib, (GLsizei)maxAttribNameLength, &nameLength, &arraySize, &type, attribNameBuffer);
+            for (int attrib = 0; attrib < numActiveAttribs; ++attrib)
+            {
+                GLint arraySize = 0; // Use this later for attribute arrays.
+                GLenum type = 0;
+                GLsizei nameLength = 0;
+                glGetActiveAttrib(variant.programId, attrib, (GLsizei)maxAttribNameLength, &nameLength, &arraySize, &type, attribNameBuffer);
 
-            std::string_view name(attribNameBuffer, nameLength + 1); // Get string_view of the actual name within the buffer.
+                std::string_view name(attribNameBuffer, nameLength + 1); // Get string_view of the actual name within the buffer.
 
-            if (name.find('[') != std::string_view::npos) // We don't support attribute arrays yet.
-                continue;
+                if (name.find('[') != std::string_view::npos) // We don't support attribute arrays yet.
+                    continue;
 
-            // Get location and create attribute object
-            GLint location = glGetAttribLocation(shader.programId, attribNameBuffer);
-            shader.attributes[nameHash(std::string(name).c_str())] = std::unique_ptr<attribute>(new attribute(id, name, type, location));
-        }
+                // Get location and create attribute object
+                GLint location = glGetAttribLocation(variant.programId, attribNameBuffer);
+                variant.attributes[nameHash(name)] = std::unique_ptr<attribute>(new attribute(id, name, type, location));
+            }
 
-        delete[] attribNameBuffer;
+            delete[] attribNameBuffer;
 #pragma endregion
+        }
     }
 
     app::gl_id ShaderCache::compile_shader(GLuint shaderType, cstring source, GLint sourceLength)
@@ -159,16 +164,17 @@ namespace legion::rendering
             // Create message buffer and fetch message.
             GLint infoLogLength;
             glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
-            char* errorMessage;
+            const char* errorMessage;
             if (infoLogLength > 0)
             {
-                errorMessage = new char[infoLogLength + 1];
-                glGetShaderInfoLog(shaderId, infoLogLength, nullptr, errorMessage);
-                errorMessage[infoLogLength] = '\0';
+                char* temp = new char[infoLogLength + 1];
+                glGetShaderInfoLog(shaderId, infoLogLength, nullptr, temp);
+                temp[infoLogLength] = '\0';
+                errorMessage = temp;
             }
             else
             {
-                errorMessage = "Unknown error OpenGL context might not have been made current?";
+                errorMessage = "Unknown error, OpenGL context might not have been made current?";
             }
             cstring shaderTypename;
             switch (shaderType)
@@ -206,14 +212,14 @@ namespace legion::rendering
         return shaderId;
     }
 
-    bool ShaderCache::load_precompiled(const fs::view& file, shader_ilo& ilo, shader_state& state)
+    bool ShaderCache::load_precompiled(const fs::view& file, shader_ilo& ilo, std::unordered_map<std::string, shader_state>& state)
     {
         log::info("Loading precompiled shader: {}", file.get_virtual_path());
         auto result = file.get();
         if (result != common::valid)
             return false;
 
-        auto resource = result.decay();
+        auto resource = result.value();
 
         if (resource.size() <= 22)
             return false;
@@ -232,6 +238,9 @@ namespace legion::rendering
             GLenum shaderType;
             retrieveBinaryData(shaderType, start);
 
+            std::string shaderVariant;
+            retrieveBinaryData(shaderVariant, start);
+
             switch (shaderType)
             {
             case 0:
@@ -241,9 +250,10 @@ namespace legion::rendering
                 if (rawState.size() % 2 != 0)
                     return false;
 
+                shader_state& variantState = state[shaderVariant];
                 for (int i = 0; i < rawState.size(); i += 2)
                 {
-                    state[rawState[i]] = rawState[i + 1];
+                    variantState[rawState[i]] = rawState[i + 1];
                 }
             }
             break;
@@ -253,7 +263,7 @@ namespace legion::rendering
             {
                 std::string source;
                 retrieveBinaryData(source, start);
-                ilo.push_back(std::make_pair(shaderType, source));
+                ilo[shaderVariant].emplace_back(shaderType, source);
             }
             break;
             default:
@@ -263,17 +273,17 @@ namespace legion::rendering
         return true;
     }
 
-    void ShaderCache::store_precompiled(const fs::view& file, const shader_ilo& ilo, const shader_state& state)
+    void ShaderCache::store_precompiled(const fs::view& file, const shader_ilo& ilo, const std::unordered_map<std::string, shader_state>& state)
     {
         auto result = file.get_extension();
         if (result != common::valid)
             return;
 
         fs::view precompiled("");
-        if (result.decay() == ".shil" || result.decay().empty())
+        if (result.value() == ".shil" || result.value().empty())
             precompiled = file;
         else
-            precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
+            precompiled = file / ".." / (file.get_filestem().value() + ".shil");
 
         if (precompiled.is_valid(true) && precompiled.file_info().can_be_written)
         {
@@ -284,25 +294,33 @@ namespace legion::rendering
             for (auto item : magic)
                 data.push_back(item);
 
-            GLenum stateType = 0;
-            appendBinaryData(&stateType, data);
-
             std::vector<GLenum> rawState;
-            for (auto& [key, value] : state)
+            for (auto& [variant, variantState] : state)
             {
-                rawState.push_back(key);
-                rawState.push_back(value);
+                GLenum stateType = 0;
+                appendBinaryData(&stateType, data);
+                appendBinaryData(&variant, data);
+                rawState.clear();
+                for (auto& [key, value] : variantState)
+                {
+                    rawState.push_back(key);
+                    rawState.push_back(value);
+                }
+                appendBinaryData(&rawState, data);
             }
 
-            appendBinaryData(&rawState, data);
+            for (auto& [shaderVariant, variantSource] : ilo)
+                for (auto& [shaderType, source] : variantSource)
+                {
+                    appendBinaryData(&shaderType, data);
+                    appendBinaryData(&shaderVariant, data);
+                    appendBinaryData(&source, data);
+                }
 
-            for (auto& [shaderType, source] : ilo)
-            {
-                appendBinaryData(&shaderType, data);
-                appendBinaryData(&source, data);
-            }
-
-            auto garbage = precompiled.set(resource);
+            precompiled.set(resource).except([](fs_error err)
+                {
+                    log::error("error occurred in {} at {} line {}: {}", err.file(), err.func(), err.file(), err.what());
+                });
         }
 
     }
@@ -311,14 +329,21 @@ namespace legion::rendering
     {
         { // Check if the shader already exists.
             async::readonly_guard guard(m_shaderLock);
-            if (m_shaders.contains(invalid_id) && m_shaders[invalid_id].programId != 0)
+            if (m_shaders.contains(invalid_id) && m_shaders[invalid_id].has_variant(0))
             {
                 log::debug("Shader invalid already exists, existing shader will be returned instead.");
                 return { invalid_id };
             }
         }
 
-        shader_state state;
+        ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
+            {
+                log::println(severity, errormsg);
+            });
+
+        ShaderCompiler::cleanCache();
+
+        std::unordered_map<std::string, shader_state> state;
         shader_ilo shaders;
 
         auto result = file.get_extension();
@@ -327,36 +352,29 @@ namespace legion::rendering
 
         bool compiledFromScratch = false;
 
-        if (result.decay().empty() || result.decay() == ".shil")
+        if (result.value().empty() || result.value() == ".shil")
         {
             if (!load_precompiled(file, shaders, state))
                 return invalid_shader_handle;
         }
         else
         {
-            switch (settings.usePrecompiledIfAvailable)
+            do
             {
-            case true:
-            {
-                auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
-
-                if (precompiled.is_valid(true))
+                if (settings.usePrecompiledIfAvailable) // Clean up this monster function...
                 {
-                    auto traits = precompiled.file_info();
-                    if (traits.is_file && traits.can_be_read)
+                    auto precompiled = file / ".." / (file.get_filestem().value() + ".shil");
+
+                    if (precompiled.is_valid(true))
                     {
-                        if (load_precompiled(precompiled, shaders, state))
-                            break;
+                        auto traits = precompiled.file_info();
+                        if (traits.is_file && traits.can_be_read)
+                        {
+                            if (load_precompiled(precompiled, shaders, state))
+                                break;
+                        }
                     }
                 }
-            }
-            L_FALLTHROUGH;
-            default:
-            {
-                ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
-                    {
-                        log::println(severity, errormsg);
-                    });
 
                 byte compilerSettings = 0;
                 compilerSettings |= settings.api;
@@ -369,9 +387,8 @@ namespace legion::rendering
                     return invalid_shader_handle;
 
                 compiledFromScratch = true;
-            }
-            break;
-            }
+
+            } while (false);
         }
 
         if (shaders.empty())
@@ -379,200 +396,213 @@ namespace legion::rendering
 
         shader shader;
         shader.name = "invalid";
-        shader.state = state;
-
-        GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
-
-        for (auto& [func, param] : state)
+        for (auto& [variant, variantState] : state)
         {
-            switch (func)
-            {
-            case GL_DEPTH_TEST:
-            {
-                if (param == GL_FALSE)
-                {
-                    glDisable(func);
-                    continue;
-                }
+            shader.m_variants[nameHash(variant)].state = variantState;
+        }
 
-                glEnable(func);
-                glDepthFunc(param);
-            }
-            break;
-            case GL_CULL_FACE:
-            {
-                if (param == GL_FALSE)
-                {
-                    glDisable(func);
-                    continue;
-                }
+        for (auto& [shaderVariant, variantSource] : shaders)
+        {
+            shader_variant& variant = shader.m_variants[nameHash(shaderVariant)];
+            variant.name = shaderVariant;
+            GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
 
-                glEnable(func);
-                glCullFace(param);
-            }
-            break;
-            case GL_BLEND:
+            for (auto& [func, param] : variant.state)
             {
-                blendSrc = param;
-                blendDst = param;
-            }
-            case GL_BLEND_SRC:
-            {
-                blendSrc = param;
-            }
-            case GL_BLEND_DST:
-            {
-                blendDst = param;
-            }
-            break;
-            case GL_DITHER:
-            {
-                if (param == GL_TRUE)
-                    glEnable(GL_DITHER);
-                else
-                    glDisable(GL_DITHER);
-            }
-            break;
-            default:
+                switch (func)
+                {
+                case GL_DEPTH_TEST:
+                {
+                    if (param == GL_FALSE)
+                    {
+                        glDisable(func);
+                        continue;
+                    }
+
+                    glEnable(func);
+                    glDepthFunc(param);
+                }
                 break;
-            }
-        }
-
-        if (blendSrc == GL_FALSE || blendDst == GL_FALSE)
-        {
-            glDisable(GL_BLEND);
-        }
-        else
-        {
-            glEnable(GL_BLEND);
-            glBlendFunc(blendSrc, blendDst);
-        }
-
-        shader.programId = glCreateProgram();
-
-        std::vector<app::gl_id> shaderIds;
-
-        for (auto& [shaderType, shaderIL] : shaders)
-        {
-            auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
-
-            if (shaderId == (app::gl_id)-1)
-            {
-                auto v = common::split_string_at<'\n'>(shaderIL);
-
-                std::string output;
-                for (int i = 0; i < v.size(); i++)
+                case GL_CULL_FACE:
                 {
-                    output += std::to_string(i + 1) + "\t| " + v[i] + "\n";
+                    if (param == GL_FALSE)
+                    {
+                        glDisable(func);
+                        continue;
+                    }
+
+                    glEnable(func);
+                    glCullFace(param);
+                }
+                break;
+                case GL_BLEND:
+                {
+                    blendSrc = param;
+                    blendDst = param;
+                }
+                case GL_BLEND_SRC:
+                {
+                    blendSrc = param;
+                }
+                case GL_BLEND_DST:
+                {
+                    blendDst = param;
+                }
+                break;
+                case GL_DITHER:
+                {
+                    if (param == GL_TRUE)
+                        glEnable(GL_DITHER);
+                    else
+                        glDisable(GL_DITHER);
+                }
+                break;
+                default:
+                    break;
+                }
+            }
+
+            if (blendSrc == GL_FALSE || blendDst == GL_FALSE)
+            {
+                glDisable(GL_BLEND);
+            }
+            else
+            {
+                glEnable(GL_BLEND);
+                glBlendFunc(blendSrc, blendDst);
+            }
+
+            variant.programId = glCreateProgram();
+
+            std::vector<app::gl_id> shaderIds;
+
+            for (auto& [shaderType, shaderIL] : variantSource)
+            {
+                auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
+
+                if (shaderId == (app::gl_id)-1)
+                {
+                    auto v = common::split_string_at<'\n'>(shaderIL);
+
+                    std::string output;
+                    for (int i = 0; i < v.size(); i++)
+                    {
+                        output += std::to_string(i + 1) + "\t| " + v[i] + "\n";
+                    }
+
+                    log::error("Error occurred in shader: invalid\n{}", output);
+
+                    for (auto id : shaderIds)
+                    {
+                        glDetachShader(variant.programId, id);
+                        glDeleteShader(id);
+                    }
+
+                    glDeleteProgram(variant.programId);
+                    shader.m_variants.erase(nameHash(shaderVariant));
+                    continue;
                 }
 
-                log::error("Error occurred in shader: invalid\n{}", output);
+                glAttachShader(variant.programId, shaderId);
+                shaderIds.push_back(shaderId);
+            }
 
-                for (auto id : shaderIds)
+            glLinkProgram(variant.programId);
+
+            GLint linkStatus;
+            glGetProgramiv(variant.programId, GL_LINK_STATUS, &linkStatus);
+
+            if (!linkStatus)
+            {
+                GLint infoLogLength;
+                glGetProgramiv(variant.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+                char* errorMessage = new char[infoLogLength + 1];
+                glGetProgramInfoLog(variant.programId, infoLogLength, nullptr, errorMessage);
+
+                log::error("Error linking invalid shader:\n\t{}", errorMessage);
+                delete[] errorMessage;
+
+                for (auto& [shaderType, shaderIL] : variantSource)
                 {
-                    glDetachShader(shader.programId, id);
+                    cstring shaderTypename;
+                    switch (shaderType)
+                    {
+                    case GL_FRAGMENT_SHADER:
+                        shaderTypename = "fragment";
+                        break;
+                    case GL_VERTEX_SHADER:
+                        shaderTypename = "vertex";
+                        break;
+                    case GL_GEOMETRY_SHADER:
+                        shaderTypename = "geometry";
+                        break;
+                    case GL_TESS_CONTROL_SHADER:
+                        shaderTypename = "tessellation control";
+                        break;
+                    case GL_TESS_EVALUATION_SHADER:
+                        shaderTypename = "tessellation evaluation";
+                        break;
+                    case GL_COMPUTE_SHADER:
+                        shaderTypename = "compute";
+                        break;
+                    default:
+                        shaderTypename = "unknown type";
+                        break;
+                    }
+
+                    log::error("{}:\n\n{}\n\n", shaderTypename, shaderIL);
+
+                }
+
+                for (auto& id : shaderIds)
+                {
+                    glDetachShader(variant.programId, id);
                     glDeleteShader(id);
                 }
 
-                glDeleteProgram(shader.programId);
-                return invalid_shader_handle;
+                glDeleteProgram(variant.programId);
+                shader.m_variants.erase(nameHash(shaderVariant));
+                continue;
             }
 
-            glAttachShader(shader.programId, shaderId);
-            shaderIds.push_back(shaderId);
-        }
+            glValidateProgram(variant.programId);
 
-        glLinkProgram(shader.programId);
+            GLint validationStatus;
+            glGetProgramiv(variant.programId, GL_VALIDATE_STATUS, &validationStatus);
 
-        GLint linkStatus;
-        glGetProgramiv(shader.programId, GL_LINK_STATUS, &linkStatus);
-
-        if (!linkStatus)
-        {
-            GLint infoLogLength;
-            glGetProgramiv(shader.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-            char* errorMessage = new char[infoLogLength + 1];
-            glGetProgramInfoLog(shader.programId, infoLogLength, nullptr, errorMessage);
-
-            log::error("Error linking invalid shader:\n\t{}", errorMessage);
-            delete[] errorMessage;
-
-            for (auto& [shaderType, shaderIL] : shaders)
+            if (!validationStatus)
             {
-                cstring shaderTypename;
-                switch (shaderType)
+                GLint infoLogLength;
+                glGetProgramiv(variant.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+                char* errorMessage = new char[infoLogLength + 1];
+                glGetProgramInfoLog(variant.programId, infoLogLength, nullptr, errorMessage);
+
+                log::error("Error validating invalid shader:\n\t{}", errorMessage);
+                delete[] errorMessage;
+
+                for (auto& shaderId : shaderIds)
                 {
-                case GL_FRAGMENT_SHADER:
-                    shaderTypename = "fragment";
-                    break;
-                case GL_VERTEX_SHADER:
-                    shaderTypename = "vertex";
-                    break;
-                case GL_GEOMETRY_SHADER:
-                    shaderTypename = "geometry";
-                    break;
-                case GL_TESS_CONTROL_SHADER:
-                    shaderTypename = "tessellation control";
-                    break;
-                case GL_TESS_EVALUATION_SHADER:
-                    shaderTypename = "tessellation evaluation";
-                    break;
-                case GL_COMPUTE_SHADER:
-                    shaderTypename = "compute";
-                    break;
-                default:
-                    shaderTypename = "unknown type";
-                    break;
+                    glDetachShader(variant.programId, shaderId);
+                    glDeleteShader(shaderId);
                 }
 
-                log::error("{}:\n\n{}\n\n", shaderTypename, shaderIL);
+                glDeleteProgram(variant.programId);
 
+                shader.m_variants.erase(nameHash(shaderVariant));
             }
-
-            for (auto& id : shaderIds)
-            {
-                glDetachShader(shader.programId, id);
-                glDeleteShader(id);
-            }
-
-            glDeleteProgram(shader.programId);
-
-            return invalid_shader_handle;
         }
 
-        glValidateProgram(shader.programId);
-
-        GLint validationStatus;
-        glGetProgramiv(shader.programId, GL_VALIDATE_STATUS, &validationStatus);
-
-        if (!validationStatus)
-        {
-            GLint infoLogLength;
-            glGetProgramiv(shader.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-            char* errorMessage = new char[infoLogLength + 1];
-            glGetProgramInfoLog(shader.programId, infoLogLength, nullptr, errorMessage);
-
-            log::error("Error validating invalid shader:\n\t{}", errorMessage);
-            delete[] errorMessage;
-
-            for (auto& shaderId : shaderIds)
-            {
-                glDetachShader(shader.programId, shaderId);
-                glDeleteShader(shaderId);
-            }
-
-            glDeleteProgram(shader.programId);
-
+        if (shader.m_variants.size() == 0)
             return invalid_shader_handle;
-        }
 
         process_io(shader, invalid_id);
 
         {
             async::readwrite_guard guard(m_shaderLock);
             m_shaders[invalid_id] = std::move(shader);
+            m_shaders[invalid_id].configure_variant(0);
         }
 
         if (compiledFromScratch && settings.storePrecompiled)
@@ -589,7 +619,7 @@ namespace legion::rendering
         { // Check if the shader already exists.
             async::readonly_guard guard(m_shaderLock);
 
-            if (!m_shaders.contains(invalid_id) || m_shaders[invalid_id].programId == 0)
+            if (!m_shaders.contains(invalid_id) || (!m_shaders[invalid_id].has_variant(0)))
             {
                 create_invalid_shader(fs::view("engine://shaders/invalid.shs"));
             }
@@ -601,7 +631,7 @@ namespace legion::rendering
             }
         }
 
-        shader_state state;
+        std::unordered_map<std::string, shader_state> state;
         shader_ilo shaders;
 
         auto result = file.get_extension();
@@ -610,36 +640,29 @@ namespace legion::rendering
 
         bool compiledFromScratch = false;
 
-        if (result.decay().empty() || result.decay() == ".shil")
+        if (result.value().empty() || result.value() == ".shil")
         {
             if (!load_precompiled(file, shaders, state))
                 return invalid_shader_handle;
         }
         else
         {
-            switch (settings.usePrecompiledIfAvailable)
+            do
             {
-            case true:
-            {
-                auto precompiled = file / ".." / (file.get_filestem().decay() + ".shil");
-
-                if (precompiled.is_valid(true))
+                if (settings.usePrecompiledIfAvailable)
                 {
-                    auto traits = precompiled.file_info();
-                    if (traits.is_file && traits.can_be_read)
+                    auto precompiled = file / ".." / (file.get_filestem().value() + ".shil");
+
+                    if (precompiled.is_valid(true))
                     {
-                        if (load_precompiled(precompiled, shaders, state))
-                            break;
+                        auto traits = precompiled.file_info();
+                        if (traits.is_file && traits.can_be_read)
+                        {
+                            if (load_precompiled(precompiled, shaders, state))
+                                break;
+                        }
                     }
                 }
-            }
-            L_FALLTHROUGH;
-            default:
-            {
-                ShaderCompiler::setErrorCallback([](const std::string& errormsg, log::severity severity)
-                    {
-                        log::println(severity, errormsg);
-                    });
 
                 byte compilerSettings = 0;
                 compilerSettings |= settings.api;
@@ -652,9 +675,8 @@ namespace legion::rendering
                     return invalid_shader_handle;
 
                 compiledFromScratch = true;
-            }
-            break;
-            }
+
+            } while (false);
         }
 
         if (shaders.empty())
@@ -662,200 +684,215 @@ namespace legion::rendering
 
         shader shader;
         shader.name = name;
-        shader.state = state;
+        shader.path = file.get_virtual_path();
 
-        GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
-
-        for (auto& [func, param] : state)
+        for (auto& [variant, variantState] : state)
         {
-            switch (func)
-            {
-            case GL_DEPTH_TEST:
-            {
-                if (param == GL_FALSE)
-                {
-                    glDisable(func);
-                    continue;
-                }
+            shader.m_variants[nameHash(variant)].state = variantState;
+        }
 
-                glEnable(func);
-                glDepthFunc(param);
-            }
-            break;
-            case GL_CULL_FACE:
-            {
-                if (param == GL_FALSE)
-                {
-                    glDisable(func);
-                    continue;
-                }
+        for (auto& [shaderVariant, variantSource] : shaders)
+        {
+            shader_variant& variant = shader.m_variants[nameHash(shaderVariant)];
+            variant.name = shaderVariant;
 
-                glEnable(func);
-                glCullFace(param);
-            }
-            break;
-            case GL_BLEND:
+            GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
+
+            for (auto& [func, param] : variant.state)
             {
-                blendSrc = param;
-                blendDst = param;
-            }
-            case GL_BLEND_SRC:
-            {
-                blendSrc = param;
-            }
-            case GL_BLEND_DST:
-            {
-                blendDst = param;
-            }
-            break;
-            case GL_DITHER:
-            {
-                if (param == GL_TRUE)
-                    glEnable(GL_DITHER);
-                else
-                    glDisable(GL_DITHER);
-            }
-            break;
-            default:
+                switch (func)
+                {
+                case GL_DEPTH_TEST:
+                {
+                    if (param == GL_FALSE)
+                    {
+                        glDisable(func);
+                        continue;
+                    }
+
+                    glEnable(func);
+                    glDepthFunc(param);
+                }
                 break;
-            }
-        }
-
-        if (blendSrc == GL_FALSE || blendDst == GL_FALSE)
-        {
-            glDisable(GL_BLEND);
-        }
-        else
-        {
-            glEnable(GL_BLEND);
-            glBlendFunc(blendSrc, blendDst);
-        }
-
-        shader.programId = glCreateProgram();
-
-        std::vector<app::gl_id> shaderIds;
-
-        for (auto& [shaderType, shaderIL] : shaders)
-        {
-            auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
-
-            if (shaderId == (app::gl_id)-1)
-            {
-                auto v = common::split_string_at<'\n'>(shaderIL);
-
-                std::string output;
-                for (int i = 0; i < v.size(); i++)
+                case GL_CULL_FACE:
                 {
-                    output += std::to_string(i + 1) + "\t| " + v[i] + "\n";
+                    if (param == GL_FALSE)
+                    {
+                        glDisable(func);
+                        continue;
+                    }
+
+                    glEnable(func);
+                    glCullFace(param);
+                }
+                break;
+                case GL_BLEND:
+                {
+                    blendSrc = param;
+                    blendDst = param;
+                }
+                case GL_BLEND_SRC:
+                {
+                    blendSrc = param;
+                }
+                case GL_BLEND_DST:
+                {
+                    blendDst = param;
+                }
+                break;
+                case GL_DITHER:
+                {
+                    if (param == GL_TRUE)
+                        glEnable(GL_DITHER);
+                    else
+                        glDisable(GL_DITHER);
+                }
+                break;
+                default:
+                    break;
+                }
+            }
+
+            if (blendSrc == GL_FALSE || blendDst == GL_FALSE)
+            {
+                glDisable(GL_BLEND);
+            }
+            else
+            {
+                glEnable(GL_BLEND);
+                glBlendFunc(blendSrc, blendDst);
+            }
+
+            variant.programId = glCreateProgram();
+
+            std::vector<app::gl_id> shaderIds;
+            for (auto& [shaderType, shaderIL] : variantSource)
+            {
+                auto shaderId = compile_shader(shaderType, shaderIL.c_str(), shaderIL.size());
+
+                if (shaderId == (app::gl_id)-1)
+                {
+                    auto v = common::split_string_at<'\n'>(shaderIL);
+
+                    std::string output;
+                    for (int i = 0; i < v.size(); i++)
+                    {
+                        output += std::to_string(i + 1) + "\t| " + v[i] + "\n";
+                    }
+
+                    log::error("Error occurred in shader: {}\n{}", name, output);
+
+                    for (auto id : shaderIds)
+                    {
+                        glDetachShader(variant.programId, id);
+                        glDeleteShader(id);
+                    }
+
+                    glDeleteProgram(variant.programId);
+                    shader.m_variants.erase(nameHash(shaderVariant));
+                    continue;
                 }
 
-                log::error("Error occurred in shader: {}\n{}", name, output);
+                glAttachShader(variant.programId, shaderId);
+                shaderIds.push_back(shaderId);
+            }
 
-                for (auto id : shaderIds)
+            glLinkProgram(variant.programId);
+
+            GLint linkStatus;
+            glGetProgramiv(variant.programId, GL_LINK_STATUS, &linkStatus);
+
+            if (!linkStatus)
+            {
+                GLint infoLogLength;
+                glGetProgramiv(variant.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+                char* errorMessage = new char[infoLogLength + 1];
+                glGetProgramInfoLog(variant.programId, infoLogLength, nullptr, errorMessage);
+
+                log::error("Error linking {} shader:\n\t{}", name, errorMessage);
+                delete[] errorMessage;
+
+                for (auto& [shaderType, shaderIL] : variantSource)
                 {
-                    glDetachShader(shader.programId, id);
+                    cstring shaderTypename;
+                    switch (shaderType)
+                    {
+                    case GL_FRAGMENT_SHADER:
+                        shaderTypename = "fragment";
+                        break;
+                    case GL_VERTEX_SHADER:
+                        shaderTypename = "vertex";
+                        break;
+                    case GL_GEOMETRY_SHADER:
+                        shaderTypename = "geometry";
+                        break;
+                    case GL_TESS_CONTROL_SHADER:
+                        shaderTypename = "tessellation control";
+                        break;
+                    case GL_TESS_EVALUATION_SHADER:
+                        shaderTypename = "tessellation evaluation";
+                        break;
+                    case GL_COMPUTE_SHADER:
+                        shaderTypename = "compute";
+                        break;
+                    default:
+                        shaderTypename = "unknown type";
+                        break;
+                    }
+
+                    log::error("{}:\n\n{}\n\n", shaderTypename, shaderIL);
+
+                }
+
+                for (auto& id : shaderIds)
+                {
+                    glDetachShader(variant.programId, id);
                     glDeleteShader(id);
                 }
 
-                glDeleteProgram(shader.programId);
-                return invalid_shader_handle;
+                glDeleteProgram(variant.programId);
+                shader.m_variants.erase(nameHash(shaderVariant));
+                continue;
             }
 
-            glAttachShader(shader.programId, shaderId);
-            shaderIds.push_back(shaderId);
-        }
+            glValidateProgram(variant.programId);
 
-        glLinkProgram(shader.programId);
+            GLint validationStatus;
+            glGetProgramiv(variant.programId, GL_VALIDATE_STATUS, &validationStatus);
 
-        GLint linkStatus;
-        glGetProgramiv(shader.programId, GL_LINK_STATUS, &linkStatus);
-
-        if (!linkStatus)
-        {
-            GLint infoLogLength;
-            glGetProgramiv(shader.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-            char* errorMessage = new char[infoLogLength + 1];
-            glGetProgramInfoLog(shader.programId, infoLogLength, nullptr, errorMessage);
-
-            log::error("Error linking {} shader:\n\t{}", name, errorMessage);
-            delete[] errorMessage;
-
-            for (auto& [shaderType, shaderIL] : shaders)
+            if (!validationStatus)
             {
-                cstring shaderTypename;
-                switch (shaderType)
+                GLint infoLogLength;
+                glGetProgramiv(variant.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+                char* errorMessage = new char[infoLogLength + 1];
+                glGetProgramInfoLog(variant.programId, infoLogLength, nullptr, errorMessage);
+
+                log::error("Error validating {} shader:\n\t{}", name, errorMessage);
+                delete[] errorMessage;
+
+                for (auto& shaderId : shaderIds)
                 {
-                case GL_FRAGMENT_SHADER:
-                    shaderTypename = "fragment";
-                    break;
-                case GL_VERTEX_SHADER:
-                    shaderTypename = "vertex";
-                    break;
-                case GL_GEOMETRY_SHADER:
-                    shaderTypename = "geometry";
-                    break;
-                case GL_TESS_CONTROL_SHADER:
-                    shaderTypename = "tessellation control";
-                    break;
-                case GL_TESS_EVALUATION_SHADER:
-                    shaderTypename = "tessellation evaluation";
-                    break;
-                case GL_COMPUTE_SHADER:
-                    shaderTypename = "compute";
-                    break;
-                default:
-                    shaderTypename = "unknown type";
-                    break;
+                    glDetachShader(variant.programId, shaderId);
+                    glDeleteShader(shaderId);
                 }
 
-                log::error("{}:\n\n{}\n\n", shaderTypename, shaderIL);
+                glDeleteProgram(variant.programId);
 
+                shader.m_variants.erase(nameHash(shaderVariant));
             }
-
-            for (auto& id : shaderIds)
-            {
-                glDetachShader(shader.programId, id);
-                glDeleteShader(id);
-            }
-
-            glDeleteProgram(shader.programId);
-
-            return invalid_shader_handle;
-        }
-
-        glValidateProgram(shader.programId);
-
-        GLint validationStatus;
-        glGetProgramiv(shader.programId, GL_VALIDATE_STATUS, &validationStatus);
-
-        if (!validationStatus)
-        {
-            GLint infoLogLength;
-            glGetProgramiv(shader.programId, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-            char* errorMessage = new char[infoLogLength + 1];
-            glGetProgramInfoLog(shader.programId, infoLogLength, nullptr, errorMessage);
-
-            log::error("Error validating {} shader:\n\t{}", name, errorMessage);
-            delete[] errorMessage;
-
-            for (auto& shaderId : shaderIds)
-            {
-                glDetachShader(shader.programId, shaderId);
-                glDeleteShader(shaderId);
-            }
-
-            glDeleteProgram(shader.programId);
-
-            return invalid_shader_handle;
         }
 
         process_io(shader, id);
 
+        if (!shader.m_variants.size())
+            return { invalid_id };
+
         {
             async::readwrite_guard guard(m_shaderLock);
             m_shaders.insert(id, std::move(shader));
+            m_shaders[id].configure_variant(0);
         }
 
         if (compiledFromScratch && settings.storePrecompiled)
@@ -875,7 +912,7 @@ namespace legion::rendering
 
         async::readonly_guard guard(m_shaderLock);
 
-        if (!m_shaders.contains(invalid_id) || m_shaders[invalid_id].programId == 0)
+        if (!m_shaders.contains(invalid_id) || (!m_shaders[invalid_id].has_variant(0)))
         {
             create_invalid_shader(fs::view("engine://shaders/invalid.shs"));
         }
@@ -890,7 +927,7 @@ namespace legion::rendering
     {
         async::readonly_guard guard(m_shaderLock);
 
-        if (!m_shaders.contains(invalid_id) || m_shaders[invalid_id].programId == 0)
+        if (!m_shaders.contains(invalid_id) || (!m_shaders[invalid_id].has_variant(0)))
         {
             create_invalid_shader(fs::view("engine://shaders/invalid.shs"));
         }
@@ -899,6 +936,26 @@ namespace legion::rendering
             return invalid_shader_handle;
         else
             return { id };
+    }
+
+    shader_variant& shader_handle::get_variant(id_type variantId)
+    {
+        return ShaderCache::get_shader(id)->get_variant(variantId);
+    }
+
+    shader_variant& shader_handle::get_variant(const std::string& variant)
+    {
+        return ShaderCache::get_shader(id)->get_variant(variant);
+    }
+
+    const shader_variant& shader_handle::get_variant(id_type variantId) const
+    {
+        return ShaderCache::get_shader(id)->get_variant(variantId);
+    }
+
+    const shader_variant& shader_handle::get_variant(const std::string& variant) const
+    {
+        return ShaderCache::get_shader(id)->get_variant(variant);
     }
 
     GLuint shader_handle::get_uniform_block_index(const std::string& name) const
@@ -916,10 +973,33 @@ namespace legion::rendering
         return ShaderCache::get_shader(id)->name;
     }
 
-    std::vector<std::tuple<std::string, GLint, GLenum>> shader_handle::get_uniform_info() const
+    std::string shader_handle::get_path() const
+    {
+        return ShaderCache::get_shader(id)->path;
+    }
+
+    std::unordered_map<id_type, std::vector<std::tuple<std::string, GLint, GLenum>>> shader_handle::get_uniform_info() const
+    {
+        auto* shader = ShaderCache::get_shader(id);
+        std::unordered_map<id_type, std::vector<std::tuple<std::string, GLint, GLenum>>> info;
+
+        for (auto& [variantId, variant] : shader->m_variants)
+        {
+            info[variantId] = variant.get_uniform_info();
+        }
+
+        return info;
+    }
+
+    std::vector<std::tuple<std::string, GLint, GLenum>> shader_handle::get_uniform_info(id_type variantId) const
     {
         OPTICK_EVENT();
-        return ShaderCache::get_shader(id)->get_uniform_info();
+        return ShaderCache::get_shader(id)->get_variant(variantId).get_uniform_info();
+    }
+
+    std::vector<std::tuple<std::string, GLint, GLenum>> shader_handle::get_uniform_info(const std::string& variant) const
+    {
+        return ShaderCache::get_shader(id)->get_variant(nameHash(variant)).get_uniform_info();
     }
 
     attribute shader_handle::get_attribute(const std::string& name)
@@ -942,11 +1022,72 @@ namespace legion::rendering
         glUseProgram(0);
     }
 
+    bool shader::has_variant(id_type variantId) const
+    {
+        if (variantId == 0)
+            return m_variants.count(nameHash("default"));
+        return m_variants.count(variantId);
+    }
+
+    bool shader::has_variant(const std::string& variant) const
+    {
+        std::string variantName = variant;
+        std::replace(variantName.begin(), variantName.end(), ' ', '_');
+        return m_variants.count(nameHash(variantName));
+    }
+
+    void shader::configure_variant(id_type variantId) const
+    {
+        if (variantId == 0)
+            m_currentShaderVariant = &m_variants.at(nameHash("default"));
+        else if (m_variants.count(variantId))
+            m_currentShaderVariant = &m_variants.at(variantId);
+    }
+
+    void shader::configure_variant(const std::string& variant) const
+    {
+        std::string variantName = variant;
+        std::replace(variantName.begin(), variantName.end(), ' ', '_');
+        id_type variantId = nameHash(variantName);
+        if (m_variants.count(variantId))
+            m_currentShaderVariant = &m_variants.at(variantId);
+    }
+
+    shader_variant& shader::get_variant(id_type variantId)
+    {
+        if (variantId == 0)
+            return m_variants.at(nameHash("default"));
+        return m_variants.at(variantId);
+    }
+
+    shader_variant& shader::get_variant(const std::string& variant)
+    {
+        return m_variants.at(nameHash(variant));
+    }
+
+    const shader_variant& shader::get_variant(id_type variantId) const
+    {
+        if (variantId == 0)
+            return m_variants.at(nameHash("default"));
+        return m_variants.at(variantId);
+    }
+
+    const shader_variant& shader::get_variant(const std::string& variant) const
+    {
+        return m_variants.at(nameHash(variant));
+    }
+
     void shader::bind()
     {
+        if (!m_currentShaderVariant)
+        {
+            log::warn("No current shader variant configured for shader {}", name);
+            configure_variant(0);
+        }
+
         GLenum blendSrc = GL_SRC_ALPHA, blendDst = GL_ONE_MINUS_SRC_ALPHA;
 
-        for (auto& [func, param] : state)
+        for (auto& [func, param] : m_currentShaderVariant->state)
         {
             switch (func)
             {
@@ -1011,7 +1152,7 @@ namespace legion::rendering
             glBlendFunc(blendSrc, blendDst);
         }
 
-        glUseProgram(programId);
+        glUseProgram(m_currentShaderVariant->programId);
     }
 
     void shader::release()
@@ -1021,12 +1162,85 @@ namespace legion::rendering
 
     GLuint shader::get_uniform_block_index(const std::string& name) const
     {
-        return glGetUniformBlockIndex(programId, name.c_str());
+        if (!m_currentShaderVariant)
+        {
+            log::warn("No current shader variant configured for shader {}", name);
+            configure_variant(0);
+        }
+
+        return glGetUniformBlockIndex(m_currentShaderVariant->programId, name.c_str());
     }
 
     void shader::bind_uniform_block(GLuint uniformBlockIndex, GLuint uniformBlockBinding) const
     {
-        glUniformBlockBinding(programId, uniformBlockIndex, uniformBlockBinding);
+        if (!m_currentShaderVariant)
+        {
+            log::warn("No current shader variant configured for shader {}", name);
+            configure_variant(0);
+        }
+
+        glUniformBlockBinding(m_currentShaderVariant->programId, uniformBlockIndex, uniformBlockBinding);
+    }
+
+    attribute shader::get_attribute(const std::string& name)
+    {
+        OPTICK_EVENT();
+        if (!m_currentShaderVariant)
+        {
+            log::error("No current shader variant configured for shader {}", name);
+            return invalid_attribute;
+        }
+
+        id_type id = nameHash(name);
+        if (m_currentShaderVariant->attributes.count(id))
+            return *(m_currentShaderVariant->attributes[id].get());
+
+        log::error("Shader {} does not contain attribute {}", this->name, name);
+        return invalid_attribute;
+    }
+
+    attribute shader::get_attribute(id_type id)
+    {
+        OPTICK_EVENT();
+        if (!m_currentShaderVariant)
+        {
+            log::error("No current shader variant configured for shader {}", name);
+            return invalid_attribute;
+        }
+
+        if (m_currentShaderVariant->attributes.count(id))
+            return *(m_currentShaderVariant->attributes[id].get());
+        log::error("Shader {} does not contain attribute with id {}", this->name, id);
+        return invalid_attribute;
+    }
+
+    std::vector<std::tuple<std::string, GLint, GLenum>> shader_variant::get_uniform_info()
+    {
+        OPTICK_EVENT();
+        std::vector<std::tuple<std::string, GLint, GLenum>> info;
+        for (auto& [_, uniform] : uniforms)
+            info.push_back(std::make_tuple(uniform->get_name(), uniform->get_location(), uniform->get_type()));
+        return info;
+    }
+
+    bool shader_handle::has_variant(id_type variantId) const
+    {
+        return ShaderCache::get_shader(id)->has_variant(variantId);
+    }
+
+    bool shader_handle::has_variant(const std::string& variant) const
+    {
+        return ShaderCache::get_shader(id)->has_variant(variant);
+    }
+
+    void shader_handle::configure_variant(id_type variantId)
+    {
+        ShaderCache::get_shader(id)->configure_variant(variantId);
+    }
+
+    void shader_handle::configure_variant(const std::string& variant)
+    {
+        ShaderCache::get_shader(id)->configure_variant(variant);
     }
 
 }

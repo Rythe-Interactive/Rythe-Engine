@@ -61,23 +61,23 @@ namespace legion::core::filesystem
         /**@brief Gets file extension if applicable.
          *  @note You can use legion::common::valid to check for validity.
          */
-        L_NODISCARD common::result_decay_more<std::string, fs_error> get_extension() const;
+        L_NODISCARD common::result<std::string, fs_error> get_extension() const;
 
         /**@brief Gets file name if applicable.
          *  @note You can use legion::common::valid to check for validity.
          */
-        L_NODISCARD common::result_decay_more<std::string, fs_error> get_filename() const;
+        L_NODISCARD common::result<std::string, fs_error> get_filename() const;
 
         /**@brief Gets file name if applicable.
          *  @note You can use legion::common::valid to check for validity.
          */
-        L_NODISCARD common::result_decay_more<std::string, fs_error> get_filestem() const;
+        L_NODISCARD common::result<std::string, fs_error> get_filestem() const;
 
         /** @brief Gets the contents of the resource pointed to.
          *  @note You can use legion::common::valid to check for validity.
          */
-        L_NODISCARD common::result_decay_more<basic_resource,fs_error> get();
-        L_NODISCARD common::result_decay_more<const basic_resource,fs_error> get() const;
+        L_NODISCARD common::result<basic_resource,fs_error> get();
+        L_NODISCARD common::result<const basic_resource,fs_error> get() const;
 
 
         /** @brief Sets the contents of the resource pointed to.
@@ -98,15 +98,16 @@ namespace legion::core::filesystem
          */
         L_NODISCARD view operator[](std::string_view identifier) const;
 
-        /** @brief same as get().decay().to<T>()
+        /** @brief same as get().value().to<T>()
          */
-        template <class T,class... Args>
+        template <class T, class... Args>
         auto load_as(Args&&...args) -> decltype(auto)
         {
             OPTICK_EVENT();
-            return get().decay().to<T>(std::forward<Args>(args)...);
+            return get().value().template to<T>(std::forward<Args>(args)...);
         }
 
+        L_NODISCARD common::result<std::vector<view>,fs_error> ls() const;
 
 #if  !defined( LEGION_DISABLE_POTENTIALLY_WEIRD_SYNTAX )
 
@@ -172,8 +173,10 @@ namespace legion::core::filesystem
         std::array<view&,S> m_views;
     };
 
+#if !defined(DOXY_EXCLUDE)
     template<class... Views>
     combined_view(Views...) -> combined_view<sizeof...(Views)>;
+#endif
 
     template <std::size_t S>
     view combined_view<S>::find(std::string_view identifier)

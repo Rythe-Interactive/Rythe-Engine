@@ -11,6 +11,7 @@
 | Vrieze       | Jelle             | @Jelled1st[Audio Developer]            | jelle.vrieze@gmail.com            |
 | de Aldrey    | Arjen             | @tuhri444[General Developer]           | adealdrey1@gmail.com              |
 | Hausmann     | Lukas             | @kukash[Developer]                     | lukashausmann@gmx.de              |
+| Brands       | Leon              | @LeonBrands[Lead Graphics]             | lajbrands@outlook.com             |
 
 If you contributed any code no matter how little you can add yourself here.
 

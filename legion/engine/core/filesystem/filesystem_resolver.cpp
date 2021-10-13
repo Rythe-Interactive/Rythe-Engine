@@ -19,7 +19,7 @@ namespace legion::core::filesystem {
 
         traits.is_file = is_file();
         traits.is_directory = is_directory();
-        traits.is_valid = is_valid();
+        traits.is_valid_path = is_valid_path();
         traits.can_be_written = writeable();
         traits.can_be_read = readable();
         traits.can_be_created = creatable();

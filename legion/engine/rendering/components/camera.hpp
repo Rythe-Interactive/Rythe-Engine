@@ -19,7 +19,7 @@ namespace legion::rendering
         friend class OldRenderer;
         friend class Renderer;
 
-        ecs::component_handle<app::window> targetWindow = ecs::component_handle<app::window>(world_entity_id);
+        ecs::component<app::window> targetWindow = ecs::component<app::window>{ {}, ecs::world };
         framebuffer renderTarget = framebuffer();
         math::color clearColor = math::colors::cornflower;
         struct camera_input
@@ -39,6 +39,8 @@ namespace legion::rendering
                     materialHandle.set_param(SV_CAMPOS, posnearz);
                 if (materialHandle.has_param<math::vec4>(SV_VIEWDIR))
                     materialHandle.set_param(SV_VIEWDIR, vdirfarz);
+                if (materialHandle.has_param<math::ivec2>(SV_VIEWPORT))
+                    materialHandle.set_param(SV_VIEWPORT, viewportSize);
             }
 
             union
@@ -92,5 +94,6 @@ namespace legion::rendering
         {
             return math::perspective(math::deg2rad(fov * ratio), ratio, farz, nearz);
         }
+
     };
 }

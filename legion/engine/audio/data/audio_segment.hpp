@@ -7,9 +7,9 @@
 #endif
 namespace legion::audio
 {
-	struct audio_segment
-	{
-	public:
+    struct audio_segment
+    {
+    public:
         ALuint audioBufferId;
 
         /* Channels included, byte size = samples*sizeof(int16) */
@@ -67,7 +67,7 @@ namespace legion::audio
         byte* m_data;
 
         audio_segment* m_next = nullptr;
-	};
+    };
 
     /**
     * @brief Import settings for audio files
@@ -90,7 +90,7 @@ namespace legion::audio
     struct audio_segment_handle
     {
         id_type id;
-        std::pair<async::rw_spinlock&, audio_segment&> get();
+        std::pair<async::rw_spinlock&, audio_segment&> get() const;
 
         operator id_type () { return id; }
     };

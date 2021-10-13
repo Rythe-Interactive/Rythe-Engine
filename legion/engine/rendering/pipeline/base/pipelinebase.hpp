@@ -1,5 +1,6 @@
 #pragma once
 #include <rendering/data/framebuffer.hpp>
+#include <rendering/data/buffer.hpp>
 #include <rendering/components/camera.hpp>
 #include <application/application.hpp>
 
@@ -16,10 +17,6 @@ namespace legion::rendering
     protected:
         sparse_map<id_type, framebuffer> m_framebuffers;
         sparse_map<id_type, std::any> m_metadata;
-
-        static ecs::EcsRegistry* m_ecs;
-        static schd::Scheduler* m_scheduler;
-        static events::EventBus* m_eventBus;
 
         bool m_abort;
 
@@ -62,6 +59,8 @@ namespace legion::rendering
         L_NODISCARD framebuffer* getFramebuffer(id_type nameHash);
 
         virtual void init(app::window& context) LEGION_PURE;
+
+        virtual void shutdown();
 
         virtual void render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime) LEGION_PURE;
     };

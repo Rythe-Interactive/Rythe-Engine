@@ -49,10 +49,45 @@ namespace legion::rendering
         exposure = 0.5f;
     }
 
-    void Tonemapping::renderPass(framebuffer& fbo, texture_handle colortexture, texture_handle depthtexture, time::span deltaTime)
+    void Tonemapping::renderPass(framebuffer& fbo, RenderPipelineBase* pipeline, camera& cam, const camera::camera_input& camInput, time::span deltaTime)
     {
+        //Try to get color attachment.
+        auto color_attachment = fbo.getAttachment(FRAGMENT_ATTACHMENT);
+        if (!std::holds_alternative<texture_handle>(color_attachment)) return;
+
+        //Get color texture.
+        auto color_texture = std::get<texture_handle>(color_attachment);
+
         OPTICK_EVENT();
         static id_type exposureId = nameHash("exposure");
+        //static bool firstFrame = true;
+
+        /*auto tex = std::get<texture_handle>(fbo.getAttachment(GL_COLOR_ATTACHMENT0)).get_texture();
+
+        auto size = tex.size();
+
+        size_type maxMip = math::floor(math::log2(math::max(size.x, size.y)));
+
+        static std::vector<math::color> colors = { math::color() };
+
+        if (!firstFrame)
+        {
+            OPTICK_EVENT("Read mip pixel data");
+            glBindTexture(static_cast<GLenum>(tex.type), tex.textureId);
+            glGetTexImage(static_cast<GLenum>(tex.type), maxMip, components_to_format[static_cast<int>(tex.channels)], GL_FLOAT, colors.data());
+            glBindTexture(static_cast<GLenum>(tex.type), 0);
+        }
+        else
+            firstFrame = false;*/
+
+        /*float luminance = math::dot(math::vec3(colors[0].r, colors[0].g, colors[0].b), math::vec3(0.2126f, 0.7152f, 0.0722f));
+
+        float newExposure = math::clamp(math::pow(math::max((1.0f - luminance), 0.f), 2.2f) * 10.f, 0.f, 10.f);
+
+        if (newExposure < exposure)
+            exposure = math::lerp(exposure, newExposure, deltaTime.seconds());
+        else
+            exposure = math::lerp(exposure, newExposure, deltaTime.seconds() * 0.5f);*/
 
         auto shader = ShaderCache::get_handle(m_currentShader.load(std::memory_order_relaxed));
 
@@ -61,40 +96,14 @@ namespace legion::rendering
 
         shader.get_uniform<float>(exposureId).set_value(exposure);
 
-        shader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(colortexture);
+        shader.get_uniform_with_location<texture_handle>(SV_SCENECOLOR).set_value(color_texture);
         renderQuad();
         shader.release();
         fbo.release();
 
-        auto tex = std::get<texture_handle>(fbo.getAttachment(GL_COLOR_ATTACHMENT0)).get_texture();
-
-        {
-            OPTICK_EVENT("Generate scene color mipmaps");
-            glGenerateTextureMipmap(tex.textureId);
-        }
-
-        auto size = tex.size();
-
-        size_type maxMip = math::floor(math::log2(math::max(size.x, size.y)));
-
-        std::vector<math::color> colors;
-        colors.resize(1);
-
-        {
-            OPTICK_EVENT("Read mip pixel data");
-            glBindTexture(static_cast<GLenum>(tex.type), tex.textureId);
-            glGetTexImage(static_cast<GLenum>(tex.type), maxMip, components_to_format[static_cast<int>(tex.channels)], GL_FLOAT, colors.data());
-            glBindTexture(static_cast<GLenum>(tex.type), 0);
-        }
-
-        float luminance = math::dot(math::vec3(colors[0].r, colors[0].g, colors[0].b), math::vec3(0.2126f, 0.7152f, 0.0722f));
-
-        float newExposure = math::clamp(math::pow(math::max((1.0f - luminance), 0.f), 2.2f) * 10.f, 0.f, 10.f);
-
-        if (newExposure < exposure)
-            exposure = math::lerp(exposure, newExposure, deltaTime.seconds());
-        else
-            exposure = math::lerp(exposure, newExposure, deltaTime.seconds() * 0.5f);
+        //{
+        //    OPTICK_EVENT("Generate scene color mipmaps");
+        //    glGenerateTextureMipmap(tex.textureId);
+        //}
     }
-
 }

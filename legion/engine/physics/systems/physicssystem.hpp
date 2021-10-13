@@ -1,18 +1,28 @@
 #pragma once
 #include <core/core.hpp>
+#include <physics/broadphasecollisionalgorithms/broadphasecollisionalgorithm.hpp>
+#include <physics/broadphasecollisionalgorithms/broadphaseuniformgrid.hpp>
+#include <physics/broadphasecollisionalgorithms/broadphasebruteforce.hpp>
 #include <physics/components/rigidbody.hpp>
-#include <physics/data/physics_manifold_precursor.h>
+#include <physics/data/physics_manifold_precursor.hpp>
 #include <physics/data/physics_manifold.hpp>
 #include <physics/physics_contact.hpp>
 #include <physics/components/physics_component.hpp>
 #include <physics/data/identifier.hpp>
 #include <physics/events/events.hpp>
 #include <memory>
-
+#include <rendering/debugrendering.hpp>
+#include <physics/components/fracturer.hpp>
+#include <physics/components/fracturecountdown.hpp>
 
 namespace legion::physics
 {
-    typedef std::shared_ptr<PhysicsCollider> PhysicsColliderPtr;
+    struct MeshLine
+    {
+        math::vec3 start;
+        math::vec3 end;
+        math::color Color;
+    };
 
     class PhysicsSystem final : public System<PhysicsSystem>
     {
@@ -20,425 +30,325 @@ namespace legion::physics
         static bool IsPaused;
         static bool oneTimeRunActive;
 
-        static std::vector<std::shared_ptr<physics::PenetrationQuery>> penetrationQueries;
-        static std::vector<physics_contact> contactPoints;
-        static std::vector<math::vec3 > aPoint;
-        static std::vector<math::vec3> bPoint;
+        ecs::EntityQuery manifoldPrecursorQuery;
 
-        ecs::EntityQuery  rigidbodyIntegrationQuery;
+        //TODO move implementation to a seperate cpp file
 
-        virtual void setup()
-        {
-            createProcess<&PhysicsSystem::fixedUpdate>("Physics", m_timeStep);
-
-            rigidbodyIntegrationQuery = createQuery<rigidbody, position, rotation>();
-
-            auto broadPhaseLambda = [this]
-            (std::vector<physics_manifold_precursor>& manifoldPrecursors
-                , std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping)
-            {
-                bruteForceBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
-            };
-
-            m_optimizeBroadPhase = broadPhaseLambda;
-
-        }
-
-
+        virtual void setup();
+     
 
         void fixedUpdate(time::time_span<fast_time> deltaTime)
         {
-            rigidbodyIntegrationQuery.queryEntities();
+            static time::timer physicsTimer;
+            //log::debug("{}ms", physicsTimer.restart().milliseconds());
+            OPTICK_EVENT();
+
+            //static time::timer pt;
+            //log::debug("frametime: {}ms", pt.restart().milliseconds());
+
+            ecs::component_container<rigidbody> rigidbodies;
+            std::vector<byte> hasRigidBodies;
+
+            {
+                OPTICK_EVENT("Fetching data");
+                manifoldPrecursorQuery.queryEntities();
+
+                rigidbodies.resize(manifoldPrecursorQuery.size());
+                hasRigidBodies.resize(manifoldPrecursorQuery.size());
+
+                m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+                    id_type index = async::this_job::get_id();
+                    auto entity = manifoldPrecursorQuery[index];
+                    if (entity.has_component<rigidbody>())
+                    {
+                        hasRigidBodies[index] = true;
+                        rigidbodies[index] = entity.read_component<rigidbody>();
+                    }
+                    else
+                        hasRigidBodies[index] = false;
+                    }).wait();
+            }
+
+            auto& physComps = manifoldPrecursorQuery.get<physicsComponent>();
+            auto& positions = manifoldPrecursorQuery.get<position>();
+            auto& rotations = manifoldPrecursorQuery.get<rotation>();
+            auto& scales = manifoldPrecursorQuery.get<scale>();
+
             if (!IsPaused)
             {
-                integrateRigidbodies(deltaTime);
-                runPhysicsPipeline(deltaTime);
-                integrateRigidbodyQueryPositionAndRotation(deltaTime);
-                
+                integrateRigidbodies(hasRigidBodies, rigidbodies, deltaTime);
+                runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, deltaTime);
+                integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, deltaTime);
             }
 
             if (oneTimeRunActive)
             {
                 oneTimeRunActive = false;
 
-                integrateRigidbodies(deltaTime);
-                runPhysicsPipeline(deltaTime);
-                integrateRigidbodyQueryPositionAndRotation(deltaTime);
-              
+                integrateRigidbodies(hasRigidBodies, rigidbodies, deltaTime);
+                runPhysicsPipeline(hasRigidBodies, rigidbodies, physComps, positions, rotations, scales, deltaTime);
+                integrateRigidbodyQueryPositionAndRotation(hasRigidBodies, positions, rotations, rigidbodies, deltaTime);
             }
-        }
 
-        //The following function is public static so that it can be called by testSystem
-
-        /**@brief recursively goes through the world to retrieve the physicsComponent of entities that have one
-        * @param [out] manifoldPrecursors A std::vector that will store the created physics_manifold_precursor from the scene graph iteration
-        * @param initialEntity The entity where you would like to start the retrieval. If you would like to iterate through the entire scene
-        * put the world as a parameter
-        * @param parentTransform The world transform of the initialEntity. If 'initialEntity' is the world, parentTransform would be the identity matrix
-        * @param id An integer that is used to identiy a physics_manifold_precursor from one another
-        */
-        inline static void recursiveRetrievePreManifoldData(std::vector<physics_manifold_precursor>& manifoldPrecursors,
-            const ecs::entity_handle& initialEntity, math::mat4 parentTransform = math::mat4(1.0f), int id = 0)
-        {
-            math::mat4 rootTransform = parentTransform;
-
-            auto rotationHandle = initialEntity.get_component_handle<rotation>();
-            auto positionHandle = initialEntity.get_component_handle<position>();
-            auto scaleHandle = initialEntity.get_component_handle<scale>();
-            auto physicsComponentHandle = initialEntity.get_component_handle<physicsComponent>();
-
-            bool hasTransform = rotationHandle && positionHandle && scaleHandle;
-            bool hasNecessaryComponentsForPhysicsManifold = hasTransform && physicsComponentHandle;
-
-            int colliderID = id;
-        
-             //if the entity has a physicsComponent and a transform
-            if (hasNecessaryComponentsForPhysicsManifold)
             {
-                rotation rot = rotationHandle.read();
-                position pos = positionHandle.read();
-                scale scale = scaleHandle.read();
+                OPTICK_EVENT("Writing data");
+                m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+                    id_type index = async::this_job::get_id();
+                    if (hasRigidBodies[index])
+                    {
+                        auto entity = manifoldPrecursorQuery[index];
+                        entity.write_component(rigidbodies[index]);
+                    }
+                    }).wait();
 
-                //assemble the local transform matrix of the entity
-                math::mat4 localTransform;
-                math::compose(localTransform, scale, rot, pos);
+                    manifoldPrecursorQuery.submit<physicsComponent>();
+                    manifoldPrecursorQuery.submit<position>();
+                    manifoldPrecursorQuery.submit<rotation>();
+            }
 
-                //multiply it with the parent to get the world transform
-                rootTransform = parentTransform * localTransform;
+           /* auto splitterDrawQuery = createQuery<MeshSplitter>();
+            splitterDrawQuery.queryEntities();
 
-                //create its physics_manifold_precursor
-                physics_manifold_precursor manifoldPrecursor(rootTransform, physicsComponentHandle, colliderID);
-
-                auto physicsComponent = physicsComponentHandle.read();
-
-                for (auto physCollider : *physicsComponent.colliders)
+            for (auto ent : splitterDrawQuery)
+            {
+                auto splitterHandle = ent.get_component_handle<MeshSplitter>();
+   
+                if (splitterHandle )
                 {
-                    physCollider->DrawColliderRepresentation(rootTransform);
+                    auto [posH,rotH,scaleH] = ent.get_component_handles<transform>();
+                    debug::drawLine
+                    (posH.read(), posH.read() + math::vec3(0, 5, 0), math::colors::red, 20.0f, 0.0f, true);
+
+                    auto splitter = splitterHandle.read();
+                    math::mat4 transform = math::compose(scaleH.read(), rotH.read(), posH.read());
+
+                    splitter.DEBUG_DrawPolygonData(transform);
                 }
-
-                manifoldPrecursors.push_back(manifoldPrecursor);
-            }
-
-            //call recursiveRetrievePreManifoldData on its children
-            for (int i = 0; i < initialEntity.child_count(); i++)
-            {
-                colliderID++;
-                auto child = initialEntity.get_child(i);
-                recursiveRetrievePreManifoldData(manifoldPrecursors, child, rootTransform, colliderID);
-            }
+            }*/
 
 
         }
 
+        void bulkRetrievePreManifoldData(
+            ecs::component_container<physicsComponent>& physComps,
+            ecs::component_container<position>& positions,
+            ecs::component_container<rotation>& rotations,
+            ecs::component_container<scale>& scales,
+            std::vector<physics_manifold_precursor>& manifoldPrecursors)
+        {
+            OPTICK_EVENT();
+            manifoldPrecursors.resize(physComps.size());
+
+            m_scheduler->queueJobs(physComps.size(), [&]() {
+                id_type index = async::this_job::get_id();
+                math::mat4 transf;
+                math::compose(transf, scales[index], rotations[index], positions[index]);
+
+                for (auto& collider : physComps[index].colliders)
+                    collider->UpdateTransformedTightBoundingVolume(transf);
+
+                manifoldPrecursors[index] = { transf, &physComps[index], index, manifoldPrecursorQuery[index] };
+                }).wait();
+        }
+
+        /**@brief Sets the broad phase collision detection method
+         * Use BroadPhaseBruteForce to not use any broad phase collision detection
+         */
+        template <typename BroadPhaseType, typename ...Args>
+        static void setBroadPhaseCollisionDetection(Args&& ...args)
+        {
+            static_assert(std::is_base_of_v<BroadPhaseCollisionAlgorithm, BroadPhaseType>, "Broadphase type did not inherit from BroadPhaseCollisionAlgorithm");
+            m_broadPhase = std::make_unique<BroadPhaseType>(std::forward<Args>(args)...);
+        }
+
+        static void drawBroadPhase()
+        {
+            m_broadPhase->debugDraw();
+        }
 
     private:
 
-        legion::delegate<void(std::vector<physics_manifold_precursor>&, std::vector<std::vector<physics_manifold_precursor>>&)> m_optimizeBroadPhase;
+        static std::unique_ptr<BroadPhaseCollisionAlgorithm> m_broadPhase;
         const float m_timeStep = 0.02f;
+
+
+        math::ivec3 uniformGridCellSize = math::ivec3(1, 1, 1);
 
         /** @brief Performs the entire physics pipeline (
          * Broadphase Collision Detection, Narrowphase Collision Detection, and the Collision Resolution)
         */
-        void runPhysicsPipeline(float dt)
-        {
-            //-------------------------------------------------Broadphase Optimization-----------------------------------------------//
-            int initialColliderID = 0;
-
-            //recursively get all physics components from the world
-            std::vector<physics_manifold_precursor> manifoldPrecursors;
-            recursiveRetrievePreManifoldData(manifoldPrecursors, ecs::entity_handle(world_entity_id), math::mat4(1.0f), initialColliderID);
-
-            //log::debug(" manifold precursor {}", manifoldPrecursors.size());
-
-            std::vector<std::vector<physics_manifold_precursor>> manifoldPrecursorGrouping;
-            m_optimizeBroadPhase(manifoldPrecursors, manifoldPrecursorGrouping);
-
-            //------------------------------------------------------ Narrowphase -----------------------------------------------------//
-            std::vector<physics_manifold> manifoldsToSolve;
-
-            for (auto& manifoldPrecursor : manifoldPrecursorGrouping)
-            {
-                if (manifoldPrecursor.size() == 0) { continue; }
-
-                for (int i = 0; i < manifoldPrecursor.size()-1; i++)
-                {
-                    for (int j = i+1; j < manifoldPrecursor.size(); j++)
-                    {
-                        assert(j != manifoldPrecursor.size());
-
-                        physics_manifold_precursor& precursorA = manifoldPrecursor.at(i);
-                        physics_manifold_precursor& precursorB = manifoldPrecursor.at(j);
-
-                        auto phyCompHandleA = precursorA.physicsComponentHandle;
-                        auto phyCompHandleB = precursorB.physicsComponentHandle;
-
-                        physicsComponent precursorPhyCompA = phyCompHandleA.read();
-                        physicsComponent precursorPhyCompB = phyCompHandleB.read();
-
-                        auto precursorRigidbodyA = phyCompHandleA.entity.get_component_handle<rigidbody>();
-                        auto precursorRigidbodyB = phyCompHandleB.entity.get_component_handle<rigidbody>();
-
-                        //only construct a manifold if at least one of these requirement are fulfilled
-                        //1. One of the physicsComponents is a trigger and the other one is not
-                        //2. One of the physicsComponent's entity has a rigidbody and the other one is not a trigger
-                        //3. Both have a rigidbody
-
-                        bool isBetweenTriggerAndNonTrigger =
-                            (precursorPhyCompA.isTrigger && !precursorPhyCompB.isTrigger) || (!precursorPhyCompA.isTrigger && precursorPhyCompB.isTrigger);
-
-                        bool isBetweenRigidbodyAndNonTrigger =
-                            (precursorRigidbodyA && !precursorPhyCompB.isTrigger) || (precursorRigidbodyB && !precursorPhyCompA.isTrigger);
-
-                        bool isBetween2Rigidbodies = (precursorRigidbodyA && precursorRigidbodyB);
-
-
-                        if (isBetweenTriggerAndNonTrigger || isBetweenRigidbodyAndNonTrigger || isBetween2Rigidbodies)
-                        {
-                            constructManifoldsWithPrecursors(manifoldPrecursor.at(i), manifoldPrecursor.at(j),
-                                manifoldsToSolve,
-                                precursorRigidbodyA || precursorRigidbodyB
-                                , precursorPhyCompA.isTrigger || precursorPhyCompB.isTrigger);
-                        }
-                    }
-                }
-            }
-
-            //-------------------------------------------------- Collision Solver ---------------------------------------------------//
-            //for both contact and friction resolution, an iterative algorithm is used.
-            //Everytime physics_contact::resolveContactConstraint is called, the rigidbodies in question get closer to the actual
-            //"correct" linear and angular velocity (Projected Gauss Seidel). For the sake of simplicity, an arbitrary number is set for the
-            //iteration count.
-
-            //the effective mass remains the same for every iteration of the solver. This means that we can precalculate it before
-            //we start the solver
-
-            for (auto& manifold : manifoldsToSolve)
-            {
-                //log::debug("----------Logging contacts for manifold ");
-
-                for (auto& contact : manifold.contacts)
-                {
-                    contact.preCalculateEffectiveMass();
-
-                    contact.ApplyWarmStarting();
-                }
-            }
-
-            //resolve contact constraint
-            for (size_t i = 0; i < constants::contactSolverIterationCount; i++)
-            {
-                for (auto& manifold : manifoldsToSolve)
-                {
-                    for (auto& contact : manifold.contacts)
-                    {
-                        contact.resolveContactConstraint(dt,i);
-                    }
-                }
-            }
-
-            
-            //resolve friction constraint
-            for (size_t i = 0; i < constants::frictionSolverIterationCount; i++)
-            {
-                for (auto& manifold : manifoldsToSolve)
-                {
-                    for (auto& contact : manifold.contacts)
-                    {
-                        contact.resolveFrictionConstraint();
-                    }
-                }
-            }
-
-            //reset convergance identifiers for all colliders
-            for (auto& manifold : manifoldsToSolve)
-            {
-                for (auto& contact : manifold.contacts)
-                {
-                    contact.refCollider->converganceIdentifiers.clear();
-                }
-            }
-
-            //using the known lambdas of this time step, add it as a convergance identifier
-            for (auto& manifold : manifoldsToSolve)
-            {
-                for (auto& contact : manifold.contacts)
-                {
-                    contact.refCollider->AddConverganceIdentifier(contact);
-                }
-            }
-
-
-
-
-        }
-
-
-
-        /**@brief moves all physics_manifold_precursor into a singular std::vector. This esentially means that no optimization was done.
-        * @note This should only be used for testing/debugging purposes
-        */
-        void bruteForceBroadPhase(std::vector<physics_manifold_precursor>& manifoldPrecursors,
-            std::vector<std::vector<physics_manifold_precursor>>& manifoldPrecursorGrouping);
-
-
+        void runPhysicsPipeline(
+            std::vector<byte>& hasRigidBodies,
+            ecs::component_container<rigidbody>& rigidbodies,
+            ecs::component_container<physicsComponent>& physComps,
+            ecs::component_container<position>& positions,
+            ecs::component_container<rotation>& rotations,
+            ecs::component_container<scale>& scales,
+            float deltaTime);
+       
         /**@brief given 2 physics_manifold_precursors precursorA and precursorB, create a manifold for each collider in precursorA
         * with every other collider in precursorB. The manifolds that involve rigidbodies are then pushed into the given manifold list
         * @param manifoldsToSolve [out] a std::vector of physics_manifold that will store the manifolds created
         * @param isRigidbodyInvolved A bool that indicates whether a rigidbody is involved in this manifold
         * @param isTriggerInvolved A bool that indicates whether a physicsComponent with a physicsComponent::isTrigger set to true is involved in this manifold
         */
-        void constructManifoldsWithPrecursors(physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
-            std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved)
-        {
-            auto physicsComponentA = precursorA.physicsComponentHandle.read();
-            auto physicsComponentB = precursorB.physicsComponentHandle.read();
-
-            for (auto colliderA : *physicsComponentA.colliders)
-            {
-                for (auto colliderB : *physicsComponentB.colliders)
-                {
-                    physics::physics_manifold m;
-                    constructManifoldWithCollider(colliderA, colliderB, precursorA, precursorB, m);
-
-                    if (!m.isColliding)
-                    {
-                        continue;
-                    }
-
-                    colliderA->PopulateContactPoints(colliderB, m);
-
-                    if (isRigidbodyInvolved && !isTriggerInvolved)
-                    {
-                        manifoldsToSolve.push_back(m);
-                        raiseEvent<collision_event>(m,m_timeStep);
-                    }
-
-                    if (isTriggerInvolved)
-                    {
-                        //notify the event-bus
-                        raiseEvent<trigger_event>(m,m_timeStep);
-                        //notify both the trigger and triggerer
-                        //TODO:(Developer-The-Great): the triggerer and trigger should probably received this event
-                        //TODO:(cont.) through the event bus, we should probably create a filterable system here to
-                        //TODO:(cont.) uniquely identify involved objects and then redirect only required messages
-                    }
-
-                }
-            }
-        }
+        void constructManifoldsWithPrecursors(ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies, physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB,
+            std::vector<physics_manifold>& manifoldsToSolve, bool isRigidbodyInvolved, bool isTriggerInvolved);
+       
 
         void constructManifoldWithCollider(
-            PhysicsColliderPtr colliderA, PhysicsColliderPtr colliderB
+            ecs::component_container<rigidbody>& rigidbodies, std::vector<byte>& hasRigidBodies,
+            PhysicsCollider* colliderA, PhysicsCollider* colliderB
             , physics_manifold_precursor& precursorA, physics_manifold_precursor& precursorB, physics_manifold& manifold)
         {
+            OPTICK_EVENT();
             manifold.colliderA = colliderA;
             manifold.colliderB = colliderB;
 
-            manifold.physicsCompA = precursorA.physicsComponentHandle;
-            manifold.physicsCompB = precursorB.physicsComponentHandle;
+            manifold.entityA = precursorA.entity;
+            manifold.entityB = precursorB.entity;
+
+            if (hasRigidBodies[precursorA.id])
+                manifold.rigidbodyA = &rigidbodies[precursorA.id];
+            else
+                manifold.rigidbodyA = nullptr;
+
+            if (hasRigidBodies[precursorB.id])
+                manifold.rigidbodyB = &rigidbodies[precursorB.id];
+            else
+                manifold.rigidbodyB = nullptr;
+
+            manifold.physicsCompA = precursorA.physicsComp;
+            manifold.physicsCompB = precursorB.physicsComp;
 
             manifold.transformA = precursorA.worldTransform;
             manifold.transformB = precursorB.worldTransform;
 
+            //manifold.DEBUG_checkID("floor", "problem");
+
             // log::debug("colliderA->CheckCollision(colliderB, manifold)");
             colliderA->CheckCollision(colliderB, manifold);
-
         }
 
         /** @brief gets all the entities with a rigidbody component and calls the integrate function on them
         */
-        void integrateRigidbodies(float deltaTime)
+        void integrateRigidbodies(std::vector<byte>& hasRigidBodies, ecs::component_container<rigidbody>& rigidbodies, float deltaTime)
         {
-            for (auto ent : rigidbodyIntegrationQuery)
+            OPTICK_EVENT();
+            m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+                if (!hasRigidBodies[async::this_job::get_id()])
+                    return;
+
+                auto& rb = rigidbodies[async::this_job::get_id()];
+
+                ////-------------------- update velocity ------------------//
+                math::vec3 acc = rb.forceAccumulator * rb.inverseMass;
+                rb.velocity += (acc + constants::gravity) * deltaTime;
+
+                ////-------------------- update angular velocity ------------------//
+                math::vec3 angularAcc = rb.torqueAccumulator * rb.globalInverseInertiaTensor;
+                rb.angularVelocity += (angularAcc)*deltaTime;
+
+                rb.resetAccumulators();
+                }).wait();
+        }
+
+        void integrateRigidbodyQueryPositionAndRotation(
+            std::vector<byte>& hasRigidBodies,
+            ecs::component_container<position>& positions,
+            ecs::component_container<rotation>& rotations,
+            ecs::component_container<rigidbody>& rigidbodies,
+            float deltaTime)
+        {
+            OPTICK_EVENT();
+            m_scheduler->queueJobs(manifoldPrecursorQuery.size(), [&]() {
+                id_type index = async::this_job::get_id();
+                if (!hasRigidBodies[index])
+                    return;
+
+                auto& rb = rigidbodies[index];
+                auto& pos = positions[index];
+                auto& rot = rotations[index];
+
+                ////-------------------- update position ------------------//
+                pos += rb.velocity * deltaTime;
+
+                ////-------------------- update rotation ------------------//
+                float angle = math::clamp(math::length(rb.angularVelocity), 0.0f, 32.0f);
+                float dtAngle = angle * deltaTime;
+
+                if (!math::epsilonEqual(dtAngle, 0.0f, math::epsilon<float>()))
+                {
+                    math::vec3 axis = math::normalize(rb.angularVelocity);
+
+                    math::quat glmQuat = math::angleAxis(dtAngle, axis);
+                    rot = glmQuat * rot;
+                    rot = math::normalize(rot);
+                }
+
+                //for now assume that there is no offset from bodyP
+                rb.globalCentreOfMass = pos;
+
+                rb.UpdateInertiaTensor(rot);
+                }).wait();
+        }
+
+        void initializeManifolds(std::vector<physics_manifold>& manifoldsToSolve, std::vector<byte>& manifoldValidity)
+        {
+            OPTICK_EVENT();
+            for (int i = 0; i < manifoldsToSolve.size(); i++)
             {
-                auto rbPosHandle = ent.get_component_handle<position>();
-                auto rbRotHandle = ent.get_component_handle<rotation>();
-                auto rbRigidbodyHandle = ent.get_component_handle<rigidbody>();
+                if (manifoldValidity.at(i))
+                {
+                    auto& manifold = manifoldsToSolve.at(i);
 
-                integrateRigidbody(rbPosHandle, rbRotHandle, rbRigidbodyHandle, deltaTime);
+                    for (auto& contact : manifold.contacts)
+                    {
+                        contact.preCalculateEffectiveMass();
+                        contact.ApplyWarmStarting();
+                    }
+                }
+
             }
         }
 
-        /** @brief given a set of component handles, updates the position and orientation of an entity with a rigidbody component.
-        */
-        void integrateRigidbody(ecs::component_handle<position>& posHandle
-            , ecs::component_handle<rotation>& rotHandle, ecs::component_handle<rigidbody>& rbHandle, float dt)
+        void resolveContactConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<byte>& manifoldValidity, float dt, int contactIter)
         {
-            auto rb = rbHandle.read();
-            auto rbPos = posHandle.read();
-            auto rbRot = rotHandle.read();
+            OPTICK_EVENT();
 
-            ////-------------------- update position ------------------//
-            math::vec3 acc = rb.forceAccumulator * rb.inverseMass;
-            rb.velocity += (acc + constants::gravity) * dt;
-
-            ////-------------------- update rotation ------------------//
-            math::vec3 angularAcc = rb.torqueAccumulator * rb.globalInverseInertiaTensor;
-            rb.angularVelocity += (angularAcc)* dt;
-
-            rb.resetAccumulators();
-
-            rbHandle.write(rb);
-            posHandle.write(rbPos);
-            rotHandle.write(rbRot);
-
-        }
-
-        void integrateRigidbodyQueryPositionAndRotation(float deltaTime)
-        {
-            for (auto ent : rigidbodyIntegrationQuery)
+            for (int manifoldIter = 0;
+                manifoldIter < manifoldsToSolve.size(); manifoldIter++)
             {
-                auto rbPosHandle = ent.get_component_handle<position>();
-                auto rbRotHandle = ent.get_component_handle<rotation>();
-                auto rbRigidbodyHandle = ent.get_component_handle<rigidbody>();
+                if (manifoldValidity.at(manifoldIter))
+                {
+                    auto& manifold = manifoldsToSolve.at(manifoldIter);
 
-                integrateRigidbodyPositionAndRotations(rbPosHandle, rbRotHandle, rbRigidbodyHandle, deltaTime);
-
+                    for (auto& contact : manifold.contacts)
+                    {
+                        contact.resolveContactConstraint(dt, contactIter);
+                    }
+                }
             }
         }
 
-        void integrateRigidbodyPositionAndRotations(ecs::component_handle<position>& posHandle
-            , ecs::component_handle<rotation>& rotHandle, ecs::component_handle<rigidbody>& rbHandle, float dt)
+        void resolveFrictionConstraint(std::vector<physics_manifold>& manifoldsToSolve, std::vector<byte>& manifoldValidity)
         {
-            auto rb = rbHandle.read();
-            auto rbPos = posHandle.read();
-            auto rbRot = rotHandle.read();
+            OPTICK_EVENT();
 
-            ////-------------------- update position ------------------//
-            rbPos += rb.velocity * dt;
+            for (int manifoldIter = 0;
+                manifoldIter < manifoldsToSolve.size(); manifoldIter++)
+            {
+                if (manifoldValidity.at(manifoldIter))
+                {
+                    auto& manifold = manifoldsToSolve.at(manifoldIter);
 
-            ////-------------------- update rotation ------------------//
-            float angle = math::clamp(math::length(rb.angularVelocity), 0.0f, 32.0f);
-            float dtAngle = angle * dt;
-
-            math::quat bfr = rbRot;
-
-
-          
-            if (!math::epsilonEqual(dtAngle, 0.0f, math::epsilon<float>()))
-            { 
-                math::vec3 axis = math::normalize(rb.angularVelocity);
-
-                math::quat glmQuat = math::angleAxis(dtAngle, axis);
-                rbRot = glmQuat * rbRot;
-                rbRot = math::normalize(rbRot);
-
+                    for (auto& contact : manifold.contacts)
+                    {
+                        contact.resolveFrictionConstraint();
+                    }
+                }
             }
-
-            math::quat afr = rbRot;
-
-            //for now assume that there is no offset from bodyP
-            rb.globalCentreOfMass = rbPos;
-
-            rb.UpdateInertiaTensor(rbRot);
-
-            rbHandle.write(rb);
-            posHandle.write(rbPos);
-            rotHandle.write(rbRot);
-
         }
-
-
 
     };
 }

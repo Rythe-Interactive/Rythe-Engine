@@ -49,8 +49,11 @@ layout(std140, binding = SV_LIGHTS) readonly buffer LightsBuffer
 	Light lights[];
 };
 
-uniform uint _L_light_count : SV_LIGHTCOUNT;
+uniform uint lgn_light_count : SV_LIGHTCOUNT;
 
+#include <texturemaps.shinc>
+
+#if !defined(NO_MATERIAL_INPUT)
 struct MaterialInput
 {
     sampler2D albedo;
@@ -61,14 +64,12 @@ struct MaterialInput
 };
 uniform MaterialInput material_input : SV_MATERIAL;
 
-#include <texturemaps.shinc>
-
 Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTangent)
 {
     Material material;
     material.tbn = GetTBNMatrix(worldNormal, worldTangent);
     material.texcoords = ParallaxMap(material_input.normalHeight, material_input.heightScale, uv, camera, material.tbn, material.height);
-    material.albedo = AlbedoMap(material_input.albedo, material.texcoords);
+    material.albedo = AlbedoMap(material_input.albedo, stdio(vertexcolor), material.texcoords);
     material.normal = NormalMap(material_input.normalHeight, material.texcoords, material.tbn);
     vec4 MRDAo = LightingData(material_input.MRDAo, material.texcoords);
     material.metallic = min(MRDAo.r, 1.0 - epsilon);
@@ -80,16 +81,16 @@ Material ExtractMaterial(vec2 uv, Camera camera, vec3 worldNormal, vec3 worldTan
 
     return material;
 }
-
+#endif
 
 #if defined(LIGHTING_INCL)
 vec3 GetAllLighting(Material material, Camera camera, vec3 worldPosition)
 {
     vec3 lighting = vec3(0.0);
 
-    for(int i = 0; i < _L_light_count; i++)
+    for(int i = 0; i < lgn_light_count; i++)
         lighting += CalculateLight(lights[i], camera, material, worldPosition);
 
-    return lighting + GetAmbientLight(material.ambientOcclusion, material.albedo.rgb) + material.emissive;
+    return lighting + GetAmbientLight(material.ambientOcclusion, material.albedo.rgb);
 }
 #endif

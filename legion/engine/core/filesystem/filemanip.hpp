@@ -3,7 +3,7 @@
 
 #include <core/platform/platform.hpp> // L_NODISCARD
 #include <core/types/types.hpp>       // byte, byte_vec
-#include <core/detail/internals.hpp>  // assert_msg
+#include <core/common/assert.hpp>     // assert_msg
 
 #include <string_view>                // std::string_view
 #include <memory>                     // std::unique_ptr

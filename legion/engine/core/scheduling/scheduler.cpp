@@ -1,419 +1,405 @@
 #include <core/scheduling/scheduler.hpp>
-#include <core/logging/logging.hpp>
+#include <core/events/events.hpp>
+#include <core/engine/engine.hpp>
 
 namespace legion::core::scheduling
 {
-    constexpr size_type reserved_threads = 4; // OS, this, OpenAL, Drivers
-
-    async::rw_spinlock Scheduler::m_threadsLock;
-    sparse_map<std::thread::id, std::unique_ptr<std::thread>> Scheduler::m_threads;
-    std::queue<std::thread::id> Scheduler::m_unreservedThreads;
-    const uint Scheduler::m_maxThreadCount = (static_cast<int>(std::thread::hardware_concurrency()) - reserved_threads) <= 0 ? reserved_threads : std::thread::hardware_concurrency();
-    async::rw_spinlock Scheduler::m_availabilityLock;
-    uint Scheduler::m_availableThreads = static_cast<uint>(math::ceil((m_maxThreadCount - reserved_threads) * 0.8f) + math::epsilon<float>()); // subtract OS and this_thread, and then leave some extra for miscellaneous processes.
-
-    async::rw_spinlock Scheduler::m_jobQueueLock;
-    std::queue<Scheduler::runnable> Scheduler::m_jobs;
-    sparse_map<std::thread::id, async::rw_spinlock> Scheduler::m_commandLocks;
-    sparse_map<std::thread::id, std::queue<Scheduler::runnable>> Scheduler::m_commands;
-
-    void Scheduler::threadMain(bool* exit, bool* start, bool lowPower)
+    void Scheduler::onInit()
     {
-        std::thread::id id = std::this_thread::get_id();
+        reportDependency<events::EventBus>();
+        reportDependency<Clock>();
 
-        while (!(*start))
+        events::EventBus::bindToEvent<events::exit>([](events::exit& evnt)
+            {
+                instance.m_exitFromEvent.store(true, std::memory_order_release);
+                Scheduler::exit(evnt.exitcode);
+            });
+
+        create();
+    }
+
+    void Scheduler::onShutdown()
+    {
+        if (!isExiting())
+            exit(0);
+    }
+
+    void Scheduler::threadMain(bool lowPower, std::string name)
+    {
+        log::info("Thread {} assigned.", std::this_thread::get_id());
+        async::set_thread_name(name.c_str());
+
+        OPTICK_THREAD(name.c_str());
+
+        while (!instance.m_start.load(std::memory_order_relaxed))
+            std::this_thread::yield();
+
+        log::info("Starting thread.");
+
+        time::timer clock;
+        time::span timeBuffer;
+        time::span sleepTime;
+
+        while (!instance.m_exit.load(std::memory_order_relaxed))
         {
-            if (lowPower)
-                std::this_thread::sleep_for(std::chrono::milliseconds(2));
-            else
-                std::this_thread::yield();
-        }
+            bool noWork = true;
 
-        while (!(*exit))
-        {
-            OPTICK_EVENT();
-            Scheduler::runnable instruction{};
+            std::shared_ptr<async::job_pool> jobPoolPtr = nullptr;
 
             {
-                async::readwrite_guard guard(m_commandLocks[id]);
-                if (!m_commands[id].empty())
+                auto& [lock, jobQueue] = instance.m_jobs;
+                async::readonly_guard guard(lock);
+                if (!jobQueue.empty())
                 {
-                    instruction = m_commands[id].front();
-                    m_commands[id].pop();
-                }
-            }
+                    noWork = false;
 
-            instruction();
-            instruction = {};
-
-            {
-                async::readwrite_guard guard(m_jobQueueLock);
-                if (!m_jobs.empty())
-                {
-                    log::debug("Starting work on a job.");
-                    instruction = m_jobs.front();
-                    m_jobs.pop();
-                }
-            }
-
-            instruction();
-
-            L_PAUSE_INSTRUCTION();
-            {
-                async::readonly_guard guard(m_jobQueueLock);
-
-                if (m_jobs.empty())
-                {
-                    if (lowPower)
+                    jobPoolPtr = jobQueue.front();
+                    if (!jobPoolPtr->is_done())
                     {
-                        std::this_thread::sleep_for(std::chrono::milliseconds(2));
+                        if (jobPoolPtr->prime_job()) // Returns true when this is the last job.
+                        {
+                            async::readwrite_guard wguard(lock);
+                            if (!jobQueue.empty())
+                            {
+                                if (jobQueue.front() == jobPoolPtr)
+                                    jobQueue.pop_front();
+                                else
+                                    jobQueue.remove(jobPoolPtr);
+                            }
+                        }
                     }
                     else
                     {
-                        std::this_thread::sleep_for(std::chrono::microseconds(1));
+                        async::readwrite_guard wguard(lock);
+                        if (!jobQueue.empty())
+                        {
+                            if (jobQueue.front() == jobPoolPtr)
+                                jobQueue.pop_front();
+                            else
+                                jobQueue.remove(jobPoolPtr);
+                        }
+                        jobPoolPtr = nullptr;
                     }
                 }
             }
-        }
-    }
+            if (jobPoolPtr)
+                jobPoolPtr->complete_job();
 
-    Scheduler::Scheduler(events::EventBus* eventBus, bool lowPower, uint minThreads) : m_eventBus(eventBus), m_lowPower(lowPower)
-    {
-        legion::core::log::impl::thread_names[std::this_thread::get_id()] = "Initialization";
-
-        if (m_availableThreads < minThreads)
-        {
-            m_lowPower = true;
-            m_availableThreads = minThreads;
-        }
-
-        async::rw_spinlock::force_release(false);
-        async::spinlock::force_release(false);
-
-        std::thread::id id;
-        while ((id = createThread(threadMain, &m_threadsShouldTerminate, &m_threadsShouldStart, m_lowPower)) != invalid_thread_id)
-        {
-            m_commands[id];
-            m_commandLocks[id];
-        }
-
-        m_threadsShouldStart = true;
-
-        addProcessChain("Update");
-    }
-
-    Scheduler::~Scheduler()
-    {
-        for (auto [_, processChain] : m_processChains)
-            processChain.exit();
-
-        m_threadsShouldTerminate = true;
-
-        for (auto [_, thread] : m_threads)
-            thread->join();
-    }
-
-    void Scheduler::run()
-    {
-        {
-            auto unreserved = m_unreservedThreads;
-            uint i = 0;
-            while (!unreserved.empty())
+            if (noWork)
             {
-                auto id = unreserved.front();
-                unreserved.pop();
-                legion::core::log::impl::thread_names[id] = std::string("Worker ") + std::to_string(i++);
-#if USE_OPTICK
-                sendCommand(id, [&](void* param)
-                    {
-                        (void)param;
-                        log::info("Thread {} assigned.", std::this_thread::get_id());
-                        std::lock_guard guard(m_threadScopesLock);
-                        m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-                        OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
-                    });
-#else
-                sendCommand(id, [](void* param)
-                    {
-                        (void)param;
-                        log::info("Thread {} assigned.", std::this_thread::get_id());
-                    });
-#endif
-            }
-        }
+                timeBuffer += clock.restart();
 
-        { // Start threads of all the other chains.
-            async::readonly_guard guard(m_processChainsLock);
-            for (auto [_, chain] : m_processChains)
-                chain.run(m_lowPower);
-        }
-
-        legion::core::log::impl::thread_names[std::this_thread::get_id()] = "Update";
-#if USE_OPTICK
-        {
-            std::lock_guard guard(m_threadScopesLock);
-            m_threadScopes.push_back(std::make_unique<Optick::ThreadScope>(legion::core::log::impl::thread_names[std::this_thread::get_id()].c_str()));
-            OPTICK_UNUSED(*m_threadScopes[m_threadScopes.size() - 1]);
-        }
-#endif
-
-        while (!m_eventBus->checkEvent<events::exit>()) // Check for engine exit flag.
-        {
-            OPTICK_EVENT("Mainthread frame");
-            {
-                OPTICK_EVENT("Destroy exited threads");
-
-                async::readwrite_guard guard(m_exitsLock); // Check for any intentionally exited threads and clean them up.
-
-                if (m_exits.size())
+                if (lowPower || LEGION_CONFIGURATION == LEGION_DEBUG_VALUE)
                 {
-                    for (auto& id : m_exits)
-                    {
-                        destroyThread(id);
-                    }
-
-                    m_exits.clear();
+                    OPTICK_EVENT("Sleep");
+                    std::this_thread::sleep_for(std::chrono::microseconds(1));
                 }
-            }
-
-            {
-                OPTICK_EVENT("Destroy crashed threads");
-                async::readwrite_guard guard(m_errorsLock); // Check for any unintentionally exited threads and clean them up.
-
-                if (m_errors.size())
+                else if (timeBuffer >= sleepTime * instance.m_pollTime.load(std::memory_order_relaxed))
                 {
-                    for (thread_error& error : m_errors)
-                    {
-                        log::error("{}", error.message);
-                        destroyThread(error.threadId);
-                    }
+                    OPTICK_EVENT("Sleep");
+                    timeBuffer -= sleepTime;
 
-                    throw std::logic_error(m_errors[0].message); // Re-throw an empty error so that the normal error handling system can take care of the rest.
-                    m_errors.clear();
+                    time::timer sleepTimer;
+                    sleepTimer.start();
+                    std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+                    sleepTime = sleepTimer.elapsed_time();
                 }
-            }
-
-            {
-                OPTICK_EVENT("Erase destroyed process chains");
-                std::vector<id_type> toRemove; // Check for all the chains that have exited their threads and remove them from the chain list.
-
-                {
-                    async::readonly_multiguard rmguard(m_processChainsLock, m_threadsLock);
-                    for (auto [id, chain] : m_processChains)
-                        if (chain.threadId() != std::thread::id() && !m_threads.contains(chain.threadId()))
-                            toRemove.push_back(id);
-                }
-
-                async::readwrite_guard wguard(m_processChainsLock);
-                for (id_type& id : toRemove)
-                    m_processChains.erase(id);
-            }
-
-            if (m_localChain.id()) // If the local chain is valid run an iteration.
-                m_localChain.runInCurrentThread();
-
-            if (syncRequested()) // If a major engine sync was requested halt thread until all threads have reached a sync point and let them all continue.
-                waitForProcessSync();
-        }
-
-        for (auto [_, processChain] : m_processChains)
-            processChain.exit();
-
-        m_threadsShouldTerminate = true;
-        m_syncLock.force_release();
-
-        size_type exits;
-        size_type chains;
-
-        {
-            async::readonly_multiguard rmguard(m_exitsLock, m_processChainsLock);
-            exits = m_exits.size();
-            chains = m_processChains.size();
-        }
-
-        size_type prevExits = 0;
-        size_type prevChains = 0;
-
-        {
-            OPTICK_EVENT("Waiting for exits");
-            while (exits < chains)
-            {
-                std::this_thread::yield();
-                async::readonly_multiguard rmguard(m_exitsLock, m_processChainsLock);
-
-                if (prevExits != exits || prevChains != chains)
-                {
-                    prevExits = exits;
-                    prevChains = chains;
-                    log::info("waiting for threads to end. {} threads left", chains - exits);
-                }
-
-                exits = m_exits.size();
-                chains = m_processChains.size();
-            }
-        }
-
-        for (auto& id : m_exits)
-        {
-            destroyThread(id);
-        }
-
-        m_threadScopes.clear();
-        OPTICK_SHUTDOWN();
-
-        async::rw_spinlock::force_release(true);
-        async::spinlock::force_release(true);
-
-        m_exits.clear();
-    }
-
-    void Scheduler::sendCommand(std::thread::id id, delegate<void(void*)> command, void* parameter)
-    {
-        OPTICK_EVENT();
-        async::readwrite_guard guard(m_commandLocks[id]);
-        m_commands[id].push({ command, parameter });
-    }
-
-    void Scheduler::queueJob(delegate<void(void*)> job, void* parameter)
-    {
-        OPTICK_EVENT();
-        async::readwrite_guard guard(m_jobQueueLock);
-        m_jobs.push({ job, parameter });
-    }
-
-    void Scheduler::destroyThread(std::thread::id id)
-    {
-        OPTICK_EVENT();
-        async::readwrite_multiguard guard(m_availabilityLock, m_threadsLock);
-
-        if (m_threads.contains(id)) // Check if thread exists.
-        {
-            m_availableThreads++;
-            if (m_threads[id]->joinable()) // If the thread is still running then we need to wait for it to finish.
-                m_threads[id]->join();
-            m_threads.erase(id); // Remove the thread.
-        }
-
-    }
-
-    void Scheduler::reportExit(const std::thread::id& id)
-    {
-        async::readwrite_guard guard(m_exitsLock);
-        m_exits.push_back(id);
-    }
-
-    void Scheduler::reportExitWithError(const std::string& name, const std::thread::id& id, const legion::core::exception& exc)
-    {
-        async::readwrite_guard guard(m_errorsLock);
-        std::stringstream ss;
-
-        ss << "Encountered cross thread exception:"
-            << "\n  thread id:\t" << id
-            << "\n  thread name:\t" << name
-            << "\n  message: \t" << exc.what()
-            << "\n  file:    \t" << exc.file()
-            << "\n  line:    \t" << exc.line()
-            << "\n  function:\t" << exc.func() << '\n';
-
-        m_errors.push_back({ ss.str(), id });
-    }
-
-    void Scheduler::reportExitWithError(const std::thread::id& id, const legion::core::exception& exc)
-    {
-        async::readwrite_guard guard(m_errorsLock);
-        std::stringstream ss;
-
-        ss << "Encountered cross thread exception:"
-            << "\n  thread id:\t" << id
-            << "\n  message: \t" << exc.what()
-            << "\n  file:    \t" << exc.file()
-            << "\n  line:    \t" << exc.line()
-            << "\n  function:\t" << exc.func() << '\n';
-
-        m_errors.push_back({ ss.str(), id });
-    }
-
-    void Scheduler::reportExitWithError(const std::string& name, const std::thread::id& id, const std::exception& exc)
-    {
-        async::readwrite_guard guard(m_errorsLock);
-        std::stringstream ss;
-
-        ss << "Encountered cross thread exception:"
-            << "\n  thread id:\t" << id
-            << "\n  thread name:\t" << name
-            << "\n  message: \t" << exc.what() << '\n';
-
-        m_errors.push_back({ ss.str(), id });
-    }
-
-    void Scheduler::reportExitWithError(const std::thread::id& id, const std::exception& exc)
-    {
-        async::readwrite_guard guard(m_errorsLock);
-        std::stringstream ss;
-
-        ss << "Encountered cross thread exception:"
-            << "\n  thread id:\t" << id
-            << "\n  message: \t" << exc.what() << '\n';
-
-        m_errors.push_back({ ss.str(), id });
-    }
-
-    void Scheduler::waitForProcessSync()
-    {
-        OPTICK_EVENT();
-        //log::debug("synchronizing thread: {}", log::impl::thread_names[std::this_thread::get_id()]);
-        if (std::this_thread::get_id() != m_syncLock.ownerThread()) // Check if this is the main thread or not.
-        {
-            m_requestSync.store(true, std::memory_order_relaxed); // Request a synchronization.
-            m_syncLock.sync(); // Wait for synchronization moment.
-        }
-        else
-        {
-            {
-                async::readonly_guard guard(m_processChainsLock);
-                while (m_syncLock.waiterCount() != m_processChains.size()) // Wait until all other threads have reached the synchronization moment.
+                else
                     std::this_thread::yield();
             }
+            else
+            {
+                timeBuffer = 0.f;
+                clock.start();
+            }
+        }
 
-            m_requestSync.store(false, std::memory_order_release);
-            m_syncLock.sync(); // Release sync lock.
+        log::info("Shutting down thread.");
+    }
+
+    void Scheduler::tryCompleteJobPool()
+    {
+        auto& [lock, jobQueue] = instance.m_jobs;
+        async::readwrite_guard wguard(lock);
+        if (!jobQueue.empty() && jobQueue.front()->is_done())
+        {
+            jobQueue.pop_front();
         }
     }
 
-    bool Scheduler::hookProcess(cstring chainName, Process* process)
+    void Scheduler::doTick(Clock::span_type deltaTime)
     {
-        OPTICK_EVENT();
-        id_type chainId = nameHash(chainName);
-        async::readonly_guard guard(m_processChainsLock);
-        if (m_processChains.contains(chainId))
+        OPTICK_FRAME("Main thread");
+
+        time::span dt{ deltaTime };
+        instance.m_onFrameStart(dt, time::span(Clock::elapsedSinceTickStart()));
+
+        for (auto [_, chain] : instance.m_processChains)
+            chain.runInCurrentThread(dt);
+
+        instance.m_onFrameEnd(dt, time::span(Clock::elapsedSinceTickStart()));
+    }
+
+    pointer<std::thread> Scheduler::getThread(std::thread::id id)
+    {
+        return { &instance.m_threads.at(id) };
+    }
+
+    int Scheduler::run(bool lowPower, size_type minThreads)
+    {
+        bool m_lowPower = lowPower;
+
+        size_type m_minThreads = minThreads < 1 ? 1 : minThreads;
+
+        if (instance.m_maxThreadCount < m_minThreads)
+            m_lowPower = true;
+
+        if (instance.m_availableThreads < m_minThreads)
+            instance.m_availableThreads = m_minThreads;
+
+        pointer<std::thread> ptr;
+        std::string name = "Worker ";
+
         {
-            m_processChains[chainId].addProcess(process);
-            return true;
+            auto& logData = log::impl::get();
+            async::readwrite_guard guard(logData.threadNamesLock);
+            while ((ptr = createThread(Scheduler::threadMain, m_lowPower, name + std::to_string(instance.m_jobPoolSize))) != nullptr)
+                logData.threadNames[ptr->get_id()] = name + std::to_string(instance.m_jobPoolSize++);
+
+            logData.threadNames[std::this_thread::get_id()] = "Main thread";
         }
-        else if (m_localChain.id() == chainId)
+
+        instance.m_start.store(true, std::memory_order_release);
+
+        Clock::subscribeToTick(doTick);
+
+        while (!instance.m_exit.load(std::memory_order_relaxed))
         {
-            m_localChain.addProcess(process);
+            Clock::update();
+
+            float deltaTime = static_cast<float>(Clock::lastTickDuration());
+            static size_type framecount = 0;
+            static float totalTime = 0;
+            static uint bestAvg = 0;
+            static float bestPollTime = 0.1f;
+
+            totalTime += deltaTime;
+            framecount++;
+
+            if (totalTime > 5.f)
+            {
+                uint avg = math::uround(1.f / (totalTime / static_cast<float>(framecount)));
+                totalTime = 0.f;
+                framecount = 0;
+                float pollTime = instance.m_pollTime.load(std::memory_order_relaxed);
+
+                log::debug("avg: {} poll: {:.3f}\tbAvg: {} bPoll: {:.3f}", avg, pollTime, bestAvg, bestPollTime);
+
+                if (avg > bestAvg)
+                {
+                    bestPollTime = pollTime;
+                    bestAvg = avg;
+                    pollTime += (math::linearRand<int8>(0, 1) ? 0.05f : -0.05f);
+                    pollTime = math::mod(pollTime + 1.f, 1.f);
+                }
+                else if (math::close_enough(bestPollTime, pollTime))
+                {
+                    if (avg < static_cast<uint>(static_cast<float>(bestAvg) * 0.9f))
+                        bestAvg = 0;
+
+                    pollTime += (math::linearRand<int8>(0, 1) ? 0.05f : -0.05f);
+                    pollTime = math::mod(pollTime + 1.f, 1.f);
+                }
+                else
+                {
+                    pollTime = bestPollTime;
+                }
+
+                instance.m_pollTime.store(pollTime, std::memory_order_relaxed);
+            }
+
+            if (m_lowPower)
+                std::this_thread::yield();
+            else
+                L_PAUSE_INSTRUCTION();
+        }
+
+        Engine::shutdownModules();
+
+        for (auto& [_, thread] : instance.m_threads)
+            if (thread.joinable())
+                thread.join();
+
+        return instance.m_exitCode;
+    }
+
+    void Scheduler::exit(int exitCode)
+    {
+        if (!instance.m_exitFromEvent.load(std::memory_order_relaxed))
+        {
+            events::EventBus::raiseEvent<events::exit>(exitCode);
+            return;
+        }
+
+        if (instance.m_exit.load(std::memory_order_relaxed))
+        {
+            log::warn("Engine was already exiting, triggered additional exit event with code {}", exitCode);
+            return;
+        }
+
+        log::undecoratedInfo("=========================\n"
+                             "| Shutting down engine. |\n"
+                             "=========================");
+
+        instance.m_exitCode = exitCode;
+        instance.m_exit.store(true, std::memory_order_release);
+    }
+
+    bool Scheduler::isExiting()
+    {
+        return instance.m_exit.load(std::memory_order_relaxed);
+    }
+
+    size_type Scheduler::jobPoolSize() noexcept
+    {
+        return instance.m_jobPoolSize;
+    }
+
+    pointer<ProcessChain> Scheduler::createProcessChain(cstring name)
+    {
+        id_type id = nameHash(name);
+        return { &instance.m_processChains.emplace(id, name, id).first.value() };
+    }
+
+    pointer<ProcessChain> Scheduler::getChain(id_type id)
+    {
+        if (instance.m_processChains.contains(id))
+            return { &instance.m_processChains.at(id) };
+        return { nullptr };
+    }
+
+    pointer<ProcessChain> Scheduler::getChain(cstring name)
+    {
+        id_type id = nameHash(name);
+        if (instance.m_processChains.contains(id))
+            return { &instance.m_processChains.at(id) };
+        return { nullptr };
+    }
+
+    void Scheduler::subscribeToChainStart(id_type chainId, const chain_callback_delegate& callback)
+    {
+        instance.m_processChains.at(chainId).subscribeToChainStart(callback);
+    }
+
+    void Scheduler::subscribeToChainStart(cstring chainName, const chain_callback_delegate& callback)
+    {
+        id_type chainId = nameHash(chainName);
+        instance.m_processChains.at(chainId).subscribeToChainStart(callback);
+    }
+
+    void Scheduler::unsubscribeFromChainStart(id_type chainId, const chain_callback_delegate& callback)
+    {
+        instance.m_processChains.at(chainId).unsubscribeFromChainStart(callback);
+    }
+
+    void Scheduler::unsubscribeFromChainStart(cstring chainName, const chain_callback_delegate& callback)
+    {
+        id_type chainId = nameHash(chainName);
+        instance.m_processChains.at(chainId).unsubscribeFromChainStart(callback);
+    }
+
+    void Scheduler::subscribeToChainEnd(id_type chainId, const chain_callback_delegate& callback)
+    {
+        instance.m_processChains.at(chainId).subscribeToChainEnd(callback);
+    }
+
+    void Scheduler::subscribeToChainEnd(cstring chainName, const chain_callback_delegate& callback)
+    {
+        id_type chainId = nameHash(chainName);
+        instance.m_processChains.at(chainId).subscribeToChainEnd(callback);
+    }
+
+    void Scheduler::subscribeToFrameStart(const frame_callback_delegate& callback)
+    {
+        instance.m_onFrameStart.push_back(callback);
+    }
+
+    void Scheduler::unsubscribeFromFrameStart(const frame_callback_delegate& callback)
+    {
+        instance.m_onFrameStart.erase(callback);
+    }
+
+    void Scheduler::subscribeToFrameEnd(const frame_callback_delegate& callback)
+    {
+        instance.m_onFrameEnd.push_back(callback);
+    }
+
+    void Scheduler::unsubscribeFromFrameEnd(const frame_callback_delegate& callback)
+    {
+        instance.m_onFrameEnd.erase(callback);
+    }
+
+    void Scheduler::unsubscribeFromChainEnd(id_type chainId, const chain_callback_delegate& callback)
+    {
+        instance.m_processChains.at(chainId).unsubscribeFromChainEnd(callback);
+    }
+
+    void Scheduler::unsubscribeFromChainEnd(cstring chainName, const chain_callback_delegate& callback)
+    {
+        id_type chainId = nameHash(chainName);
+        instance.m_processChains.at(chainId).unsubscribeFromChainEnd(callback);
+    }
+
+    bool Scheduler::hookProcess(cstring chainName, Process& process)
+    {
+        id_type chainId = nameHash(chainName);
+
+        if (instance.m_processChains.contains(chainId))
+        {
+            instance.m_processChains[chainId].addProcess(process);
             return true;
         }
 
         return false;
     }
 
-    bool Scheduler::unhookProcess(cstring chainName, Process* process)
+    bool Scheduler::hookProcess(cstring chainName, pointer<Process> process)
     {
-        OPTICK_EVENT();
         id_type chainId = nameHash(chainName);
-        async::readonly_guard guard(m_processChainsLock);
-        if (m_processChains.contains(chainId))
+
+        if (instance.m_processChains.contains(chainId))
         {
-            m_processChains[chainId].removeProcess(process);
+            instance.m_processChains[chainId].addProcess(process);
             return true;
         }
-        else if (m_localChain.id() == chainId)
-        {
-            m_localChain.removeProcess(process);
-            return true;
-        }
+
+        return false;
+    }
+
+    bool Scheduler::unhookProcess(cstring chainName, Process& process)
+    {
+        id_type chainId = nameHash(chainName);
+
+        if (instance.m_processChains.contains(chainId))
+            return instance.m_processChains[chainId].removeProcess(process);
+
+        return false;
+    }
+
+    bool Scheduler::unhookProcess(cstring chainName, pointer<Process> process)
+    {
+        id_type chainId = nameHash(chainName);
+
+        if (instance.m_processChains.contains(chainId))
+            return instance.m_processChains[chainId].removeProcess(process);
+
+        return false;
+    }
+
+    bool Scheduler::unhookProcess(id_type chainId, pointer<Process> process)
+    {
+        if (instance.m_processChains.contains(chainId))
+            return instance.m_processChains[chainId].removeProcess(process);
 
         return false;
     }

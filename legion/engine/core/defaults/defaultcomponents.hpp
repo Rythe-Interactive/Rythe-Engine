@@ -1,13 +1,8 @@
 #pragma once
 #include <core/math/math.hpp>
-#include <core/ecs/archetype.hpp>
+#include <core/ecs/ecs.hpp>
 #include <core/data/mesh.hpp>
 #include <core/logging/logging.hpp>
-
-#include <cereal/types/unordered_map.hpp>
-#include <cereal/types/memory.hpp>
-#include <cereal/archives/json.hpp>
-#include <cereal/archives/portable_binary.hpp>
 
 
 namespace legion::core
@@ -64,25 +59,25 @@ namespace legion::core
             return *this;
         }
 
-        L_NODISCARD math::vec3 right()
+        L_NODISCARD math::vec3 right() const
         {
             OPTICK_EVENT();
             return math::toMat3(*this) * math::vec3::right;
         }
 
-        L_NODISCARD math::vec3 up()
+        L_NODISCARD math::vec3 up() const
         {
             OPTICK_EVENT();
             return math::toMat3(*this) * math::vec3::up;
         }
 
-        L_NODISCARD math::vec3 forward()
+        L_NODISCARD math::vec3 forward() const
         {
             OPTICK_EVENT();
             return math::toMat3(*this) * math::vec3::forward;
         }
 
-        L_NODISCARD math::mat3 matrix()
+        L_NODISCARD math::mat3 matrix() const
         {
             OPTICK_EVENT();
             return math::toMat3(*this);
@@ -96,7 +91,6 @@ namespace legion::core
         OPTICK_EVENT();
         return math::conjugate(math::normalize(math::toQuat(math::lookAt(position, center, up))));
     }
-
 
     struct scale : public math::vec3
     {
@@ -125,53 +119,40 @@ namespace legion::core
 
     };
 
-
     struct transform : public ecs::archetype<position, rotation, scale>
     {
         using base = ecs::archetype<position, rotation, scale>;
+        using base::archetype;
 
-        transform() = default;
-        transform(const base::handleGroup& handles) : base(handles) {}
-
-        L_NODISCARD std::tuple<position, rotation, scale> get_world_components()
+        L_NODISCARD math::mat4 from_world_matrix()
         {
-            OPTICK_EVENT();
-            math::mat4 worldMatrix = get_world_to_local_matrix();
-            math::vec3 p;
-            math::quat r;
-            math::vec3 s;
-
-            math::decompose(worldMatrix, s, r, p);
-
-            return std::make_tuple<position, rotation, scale>(p, r, s);
+            return math::inverse(to_world_matrix());
         }
 
-        L_NODISCARD math::mat4 get_world_to_local_matrix()
+        L_NODISCARD math::mat4 to_world_matrix()
         {
             OPTICK_EVENT();
-            return math::inverse(get_local_to_world_matrix());
+            if (owner->parent)
+            {
+                transform parentTrans = owner->parent.get_component<transform>();
+                if (parentTrans)
+                    return parentTrans.to_world_matrix() * to_parent_matrix();
+            }
+            return to_parent_matrix();
         }
 
-        L_NODISCARD math::mat4 get_local_to_world_matrix()
+        L_NODISCARD math::mat4 from_parent_matrix()
+        {
+            return math::inverse(to_parent_matrix());
+        }
+
+        L_NODISCARD math::mat4 to_parent_matrix()
         {
             OPTICK_EVENT();
-            auto& [positionH, rotationH, scaleH] = handles;
-            auto parent = positionH.entity.get_parent();
-
-
-            transform transf = parent.get_component_handles<transform>();
-            if (transf)
-                return transf.get_local_to_world_matrix() * math::compose(scaleH.read(), rotationH.read(), positionH.read());
-
-            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
+            auto [position, rotation, scale] = values();
+            return math::compose(scale, rotation, position);
         }
 
-        L_NODISCARD math::mat4 get_local_to_parent_matrix()
-        {
-            OPTICK_EVENT();
-            auto& [positionH, rotationH, scaleH] = handles;
-            return math::compose(scaleH.read(), rotationH.read(), positionH.read());
-        }
     };
 
     struct velocity : public math::vec3
@@ -200,14 +181,59 @@ namespace legion::core
         }
     };
 
-    struct mesh_filter : public mesh_handle
+    struct mesh_filter
     {
-        mesh_filter() = default;
-        explicit mesh_filter(const mesh_handle& src) { id = src.id; };
+        assets::asset<mesh> shared_mesh;
 
-        bool operator==(const mesh_filter& other) const { return id == other.id; }
+        explicit mesh_filter(const assets::asset<mesh>& src) : shared_mesh(src) {}
+
+        RULE_OF_5_NOEXCEPT(mesh_filter);
+
+        bool operator==(const mesh_filter& other) const { return shared_mesh == other.shared_mesh; }
     };
 }
+
+ManualReflector(legion::core::position, x, y, z);
+ManualReflector(legion::core::rotation, x, y, z, w);
+ManualReflector(legion::core::scale, x, y, z);
+ManualReflector(legion::core::velocity, x, y, z);
+ManualReflector(legion::core::mesh_filter, shared_mesh);
+
+#if !defined(DOXY_EXCLUDE)
+namespace std // NOLINT(cert-dcl58-cpp)
+{
+    template <::std::size_t I>
+    struct tuple_element<I, legion::core::transform>
+    {
+        using type = typename legion::core::element_at_t<I, legion::core::position, legion::core::rotation, legion::core::scale>;
+    };
+
+    template<>
+    struct tuple_size<legion::core::transform>
+        : public std::integral_constant<std::size_t, 3>
+    {
+    };
+
+    template<>
+    struct tuple_size<const legion::core::transform>
+        : public std::integral_constant<std::size_t, 3>
+    {
+    };
+
+    template<>
+    struct tuple_size<volatile legion::core::transform>
+        : public std::integral_constant<std::size_t, 3>
+    {
+    };
+
+    template<>
+    struct tuple_size<const volatile legion::core::transform>
+        : public std::integral_constant<std::size_t, 3>
+    {
+    };
+
+}
+#endif
 
 #if !defined(DOXY_EXCLUDE)
 namespace fmt
@@ -231,6 +257,31 @@ namespace fmt
 
         template <typename FormatContext>
         auto format(const position& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+
+                presentation == 'f' ? "{:f}" : "{:e}",
+                static_cast<math::vec3>(p));
+        }
+    };
+
+    template <>
+    struct fmt::formatter<velocity> {
+        char presentation = 'f';
+
+        constexpr auto parse(format_parse_context& ctx) {
+
+            auto it = ctx.begin(), end = ctx.end();
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
+
+            return it;
+        }
+
+        template <typename FormatContext>
+        auto format(const velocity& p, FormatContext& ctx) {
             return format_to(
                 ctx.out(),
 

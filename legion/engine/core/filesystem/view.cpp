@@ -5,6 +5,7 @@
 #include "navigator.hpp"
 #include "provider_registry.hpp"
 #include "detail/strpath_manip.hpp"
+#include <core/logging/logging.hpp>
 
 
 namespace legion::core::filesystem
@@ -26,7 +27,7 @@ namespace legion::core::filesystem
         if (deep_check)
         {
             const navigator n(m_path);
-            if (n.find_solution().has_err()) return false;
+            if (n.find_solution().has_error()) return false;
         }
 
         return true;
@@ -38,7 +39,7 @@ namespace legion::core::filesystem
         //get solution
         auto result = make_solution();
 
-        if (result.has_err()) return invalid_file_t;
+        if (result.has_error()) return invalid_file_t;
         else
         {
             //get resolver
@@ -57,7 +58,7 @@ namespace legion::core::filesystem
         //get solution
         auto result = make_solution();
 
-        if (result.has_err()) return invalid_filesystem_t;
+        if (result.has_error()) return invalid_filesystem_t;
         else
         {
             //get resolver
@@ -83,124 +84,123 @@ namespace legion::core::filesystem
         return m_path;
     }
 
-    L_NODISCARD common::result_decay_more<std::string, fs_error> view::get_extension() const
+    L_NODISCARD common::result<std::string, fs_error> view::get_extension() const
     {
         OPTICK_EVENT();
-        using common::Err, common::Ok;
-        // decay overloads the operator of ok_type and operator== for valid_t.
-        using decay = common::result_decay_more<std::string, fs_error>;
 
         if (!file_info().is_file) // check if the view is a file.
-            return decay(Err(legion_fs_error("requested file extension on view that isn't a file.")));
+            return legion_fs_error("requested file extension on view that isn't a file.");
 
         std::filesystem::path path(m_path);
 
-        return decay(Ok(path.extension().string())); // wrap extension in decay.
+        return path.extension().string();
     }
 
-    L_NODISCARD common::result_decay_more<std::string, fs_error> view::get_filename() const
+    L_NODISCARD common::result<std::string, fs_error> view::get_filename() const
     {
         OPTICK_EVENT();
-        using common::Err, common::Ok;
-        // decay overloads the operator of ok_type and operator== for valid_t.
-        using decay = common::result_decay_more<std::string, fs_error>;
 
         if (!file_info().is_file) // check if the view is a file.
-            return decay(Err(legion_fs_error("requested file name on view that isn't a file.")));
+            return legion_fs_error("requested file name on view that isn't a file.");
 
         std::filesystem::path path(m_path);
 
-        return decay(Ok(path.filename().string())); // wrap extension in decay.
+        return path.filename().string();
     }
 
-    L_NODISCARD common::result_decay_more<std::string, fs_error> view::get_filestem() const
+    L_NODISCARD common::result<std::string, fs_error> view::get_filestem() const
     {
         OPTICK_EVENT();
-        using common::Err, common::Ok;
-        // decay overloads the operator of ok_type and operator== for valid_t.
-        using decay = common::result_decay_more<std::string, fs_error>;
 
         if (!file_info().is_file) // check if the view is a file.
-            return decay(Err(legion_fs_error("requested file name on view that isn't a file.")));
+            return legion_fs_error("requested file name on view that isn't a file.");
 
         std::filesystem::path path(m_path);
 
-        return decay(Ok(path.stem().string())); // wrap extension in decay.
+        return path.stem().string();
     }
 
-    common::result_decay_more<basic_resource, fs_error> view::get()
+    common::result<basic_resource, fs_error> view::get()
     {
         OPTICK_EVENT();
-        using common::Err, common::Ok;
-
-        //decay overloads the operator of ok_type and operator== for valid_t
-        using decay = common::result_decay_more<basic_resource, fs_error>;
 
         //get solution
         auto result = make_solution();
-        if (result.has_err()) Err(result.get_error());
+        if (result.has_error()) return result.error();
 
         //get resolver of solution
         auto resolver = build();
-        if (resolver == nullptr) return decay(Err(legion_fs_error("unable to get required filesystem to get resource!")));
+        if (resolver == nullptr) return legion_fs_error("unable to get required filesystem to get resource!");
 
         //get & check traits
         const auto traits = resolver->get_traits();
-        if (traits.is_valid && traits.exists && traits.can_be_read)
+        if (!traits.is_valid_path)
         {
-            //wrap get in decay
-            return decay(resolver->get());
+            return legion_fs_error("invalid file traits: not a valid path");
         }
-        return decay(Err(legion_fs_error("invalid file traits: (not valid) or (does not exist) or (cannot be read)")));
+        else if (!traits.exists)
+        {
+            return legion_fs_error("invalid file traits: file does not exist");
+        }
+        else if (!traits.can_be_read)
+        {
+            return legion_fs_error("invalid file traits: file cannot be read");
+        }
+
+        return resolver->get();
     }
 
-    L_NODISCARD common::result_decay_more<const basic_resource, fs_error> view::get() const
+    L_NODISCARD common::result<const basic_resource, fs_error> view::get() const
     {
         OPTICK_EVENT();
-        using common::Err, common::Ok;
-
-        //decay overloads the operator of ok_type and operator== for valid_t
-        using decay = common::result_decay_more<const basic_resource, fs_error>;
 
         //get solution
         auto result = make_solution();
-        if (result.has_err()) Err(result.get_error());
+        if (result.has_error()) return result.error();
 
         //get resolver of solution
         auto resolver = build();
-        if (resolver == nullptr) return decay(Err(legion_fs_error("unable to get required filesystem to get resource!")));
+        if (resolver == nullptr) return legion_fs_error("unable to get required filesystem to get resource!");
 
         //get & check traits
         const auto traits = resolver->get_traits();
-        if (traits.is_valid && traits.exists && traits.can_be_read)
+
+        if (!traits.is_valid_path)
         {
-            //wrap get in decay
-            return decay(std::const_pointer_cast<const filesystem_resolver>(resolver)->get());
+            return legion_fs_error("invalid file traits: not a valid path");
         }
-        return decay(Err(legion_fs_error("invalid file traits: (not valid) or (does not exist) or (cannot be read)")));
+        else if (!traits.exists)
+        {
+            return legion_fs_error("invalid file traits: file does not exist");
+        }
+        else if (!traits.can_be_read)
+        {
+            return legion_fs_error("invalid file traits: file cannot be read");
+        }
+
+        return std::const_pointer_cast<const filesystem_resolver>(resolver)->get();
     }
 
     common::result<void, fs_error> view::set(const basic_resource& resource)
     {
         OPTICK_EVENT();
-        using common::Ok, common::Err;
 
         //get solution
         auto result = make_solution();
-        if (result.has_err()) return Err_of(result);
+        if (result.has_error()) return result.error();
 
         //get resolver of solution
         auto resolver = build();
-        if (resolver == nullptr) return Err(legion_fs_error("unable to get required filesystem to set resource!"));
+        if (resolver == nullptr) return legion_fs_error("unable to get required filesystem to set resource!");
 
         //get & check traits
         const auto traits = resolver->get_traits();
-        if (traits.is_valid && ((traits.can_be_written && !traits.is_directory) || traits.can_be_created))
+        if (traits.is_valid_path && ((traits.can_be_written && !traits.is_directory) || traits.can_be_created))
         {
             //set
             return resolver->set(resource);
         }
-        return Err(legion_fs_error("invalid file traits: (not valid) or (not writeable or directory) or (not creatable)"));
+        return legion_fs_error("invalid file traits: (not valid) or (not writeable or directory) or (not creatable)");
     }
 
     view view::parent() const
@@ -231,6 +231,31 @@ namespace legion::core::filesystem
     view view::operator[](std::string_view identifier) const
     {
         return find(identifier);
+    }
+
+    common::result<std::vector<view>, fs_error> view::ls() const
+    {
+        //get solution
+        auto result = make_solution();
+        if (result.has_error())
+            return result.error();
+
+        //get resolver of solution
+        auto resolver = build();
+        if (resolver == nullptr) return legion_fs_error("unable to get required filesystem to get resource!");
+
+        //get & check traits
+        const auto traits = resolver->get_traits();
+        if (traits.is_valid_path && traits.exists)
+        {
+            std::vector<view> results;
+            for (auto entry : resolver->ls())
+            {
+                results.emplace_back(entry);
+            }
+            return std::move(results);
+        }
+        return legion_fs_error("invalid file traits: (not valid) or (does not exist) or (cannot be read)");
     }
 
     std::string view::create_identifier(const navigator::solution::iterator& e) const
@@ -278,22 +303,22 @@ namespace legion::core::filesystem
         {
 
             auto data = chain->provider->get();
-            if (data.has_err()) return nullptr;
+            if (data.has_error()) return nullptr;
 
             //convert result -> resource -> data
             //and set as disk dat for subject
-            chain->subject->set_disk_data(data.get().get());
+            chain->subject->set_disk_data(data.value().get());
 
         }
 
         //do it one last time for the last subject
 
         auto data = chain->provider->get();
-        if (data.has_err()) return nullptr;
+        if (data.has_error()) return nullptr;
 
         //convert result -> resource -> data
         //and set as disk dat for subject
-        chain->subject->set_disk_data(data.get().get());
+        chain->subject->set_disk_data(data.value().get());
 
         return chain->subject;
 
@@ -380,7 +405,6 @@ namespace legion::core::filesystem
     common::result<void, fs_error> view::make_solution() const
     {
         OPTICK_EVENT();
-        using common::Ok;
 
         //check if a solution already exists
         if (m_foundSolution.empty())
@@ -390,12 +414,12 @@ namespace legion::core::filesystem
             const navigator n(m_path);
             auto solution = n.find_solution();
 
-            if (solution.has_err())
-                return Err_of(solution);
+            if (solution.has_error())
+                return solution.error();
 
-            m_foundSolution = solution.get();
+            m_foundSolution = solution.value();
         }
         //return empty ok
-        return Ok();
+        return common::success;
     }
 }

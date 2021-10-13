@@ -2,7 +2,7 @@
 #include <application/application.hpp>
 #include <rendering/data/texture.hpp>
 #include <rendering/data/renderbuffer.hpp>
-#include <any>
+#include <variant>
 #include <unordered_map>
 
 /**
@@ -74,6 +74,8 @@ namespace legion::rendering
          * @param attachment Attachment-point to attach the texture to.
          */
         void attach(texture_handle texture, GLenum attachment);
+
+        void detach(GLenum attachment);
 
         /**@brief Get the attachment of a certain attachment-point.
          * @param attachment Attachment-point to fetch the attachment for.

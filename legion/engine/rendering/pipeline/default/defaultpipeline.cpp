@@ -9,6 +9,8 @@
 #include <rendering/pipeline/default/stages/submitstage.hpp>
 #include <rendering/pipeline/default/postfx/tonemapping.hpp>
 #include <rendering/pipeline/default/postfx/fxaa.hpp>
+#include <rendering/pipeline/default/postfx/bloom.hpp>
+#include <rendering/pipeline/default/postfx/depthoffield.hpp>
 #include <rendering/data/buffer.hpp>
 
 
@@ -26,8 +28,11 @@ namespace legion::rendering
         attachStage<PostProcessingStage>();
         attachStage<SubmitStage>();
 
-        PostProcessingStage::addEffect<Tonemapping>(-64);
-        PostProcessingStage::addEffect<FXAA>(-100);
+        PostProcessingStage::addEffect<Tonemapping>();
+        PostProcessingStage::addEffect<Bloom>(-64);
+        //PostProcessingStage::addEffect<DepthOfField>(-80);
+        PostProcessingStage::addEffect<FXAA>(-90);
+
 
         buffer modelMatrixBuffer;
 

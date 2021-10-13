@@ -39,17 +39,19 @@ namespace legion::core::filesystem
 
         L_NODISCARD bool is_file() const noexcept override
         {
-            return !is_directory() && is_valid();
+            return !is_directory() && is_valid_path();
         }
+
         L_NODISCARD bool is_directory() const noexcept override
         {
             const auto back = get_target().back();
 
             return (get_target().back() == '\\' || get_target().back() == '/')
-                    && is_valid()
+                    && is_valid_path()
                     && !std::filesystem::is_regular_file(strpath_manip::subdir(m_root_path,get_target()));
         }
-        L_NODISCARD bool is_valid() const noexcept override
+
+        L_NODISCARD bool is_valid_path() const noexcept override
         {
             auto full = strpath_manip::subdir(m_root_path,get_target());
 
@@ -70,9 +72,10 @@ namespace legion::core::filesystem
 
             return true;
         }
+
         L_NODISCARD bool writeable() const noexcept override
         {
-            if(!is_valid()) return false;
+            if(!is_valid_path()) return false;
 
             const auto full = strpath_manip::subdir(m_root_path,get_target());
 
@@ -110,6 +113,7 @@ namespace legion::core::filesystem
             }
             return true;
         }
+
         L_NODISCARD bool readable() const noexcept override
         {
             if(!exists()) return false;
@@ -133,10 +137,12 @@ namespace legion::core::filesystem
             #endif
             
         }
+
         L_NODISCARD bool creatable() const noexcept override
         {
             return !exists() && writeable();
         }
+
         L_NODISCARD bool exists() const noexcept override
         {
             return std::filesystem::exists(strpath_manip::subdir(m_root_path,get_target()));
@@ -147,57 +153,62 @@ namespace legion::core::filesystem
             return strpath_manip::subdir(m_root_path, get_target());
         }
 
-        L_NODISCARD std::set<std::string> ls() const noexcept override{ return {}; }
+        L_NODISCARD std::set<std::string> ls() const noexcept override
+        {
+            std::set<std::string> entries;
+            for (const auto & entry : std::filesystem::directory_iterator(strpath_manip::subdir(m_root_path,get_target())))
+            {
+                entries.insert(get_identifier()+entry.path().string());
+                //.relative_path()
+            }
+            return entries;
+        }
+
         common::result<basic_resource, fs_error> get(interfaces::implement_signal_t) noexcept override
         {
-            using common::Err, common::Ok;
-
-            if(!exists()) return Err(legion_fs_error("file does not exist cannot read"));
-            if(!is_file()) return Err(legion_fs_error("not a file"));
-            if(!readable()) return Err(legion_fs_error("file not readable"));
-            return Ok(basic_resource(read_file(strpath_manip::subdir(m_root_path,get_target()))));
+            if(!exists()) return legion_fs_error("file does not exist, cannot read");
+            if(!is_file()) return legion_fs_error("not a file");
+            if(!readable()) return legion_fs_error("file not readable");
+            return basic_resource(read_file(strpath_manip::subdir(m_root_path,get_target())));
         }
 
         common::result<const basic_resource, fs_error> get(interfaces::implement_signal_t) const noexcept override
         {
-            using common::Err, common::Ok;
-
-            if (!exists()) return Err(legion_fs_error("file does not exist cannot read"));
-            if (!is_file()) return Err(legion_fs_error("not a file"));
-            if (!readable()) return Err(legion_fs_error("file not readable"));
-            return Ok<const basic_resource>(basic_resource(read_file(strpath_manip::subdir(m_root_path, get_target()))));
+            if (!exists()) return legion_fs_error("file does not exist cannot read");
+            if (!is_file()) return legion_fs_error("not a file");
+            if (!readable()) return legion_fs_error("file not readable");
+            return basic_resource(read_file(strpath_manip::subdir(m_root_path, get_target())));
         }
 
         common::result<void,fs_error> set(interfaces::implement_signal_t, const basic_resource& res) override
         {
-            using common::Err, common::Ok;
-
             const auto full = strpath_manip::subdir(m_root_path,get_target());
 
-            if(!writeable()) return Err(legion_fs_error("file not writeable"));
+            if(!writeable()) return legion_fs_error("file not writeable");
             if(is_directory())
             {
-                if(!res.empty()) return Err(legion_fs_error("attempted to create directory with data!"));
+                if(!res.empty()) return legion_fs_error("attempted to create directory with data!");
                 std::error_code code;
                 std::filesystem::create_directories(full,code);
                 if(code.value() != 0)
                 {
-                    return Err(legion_fs_error(("std::filesystem bailed! " + code.message()).c_str()));
+                    return legion_fs_error(("std::filesystem bailed! " + code.message()).c_str());
                 }
-                return Ok();
+                return common::success;
             }
 
             std::error_code code;
             std::filesystem::create_directories(strpath_manip::parent(full),code);
             if(code.value() != 0)
             {
-                return Err(legion_fs_error(("std::filesystem bailed! " + code.message()).c_str()));
+                return legion_fs_error(("std::filesystem bailed! " + code.message()).c_str());
             }
 
             write_file(full,res.get());
 
-            return Ok();
+            return common::success;
         }
+
         void erase(interfaces::implement_signal_t) const noexcept override
         {
             //we really don't care if an error occured, but since this is noexcept we need to make sure that

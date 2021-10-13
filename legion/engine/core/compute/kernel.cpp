@@ -194,7 +194,7 @@ namespace legion::core::compute
         cl_int ret = clEnqueueNDRangeKernel(
             m_queue,
             m_func,
-            size,
+            static_cast<cl_uint>(size),
             nullptr,
             globals.data(),
             locals.data(),
@@ -226,7 +226,7 @@ namespace legion::core::compute
         OPTICK_EVENT();
         size_t value;
 
-        cl_int ret = clGetKernelWorkGroupInfo(m_func, Context::getDeviceId(), CL_KERNEL_WORK_GROUP_SIZE, sizeof(size_t), &value, NULL);
+        cl_int ret = clGetKernelWorkGroupInfo(m_func, Context::getDeviceId(), CL_KERNEL_WORK_GROUP_SIZE, sizeof(size_t), &value, nullptr);
         if (ret != CL_SUCCESS) {
             return 0;
         }

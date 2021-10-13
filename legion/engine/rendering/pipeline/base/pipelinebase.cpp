@@ -2,9 +2,6 @@
 
 namespace legion::rendering
 {
-    ecs::EcsRegistry* RenderPipelineBase::m_ecs;
-    schd::Scheduler* RenderPipelineBase::m_scheduler;
-    events::EventBus* RenderPipelineBase::m_eventBus;
     std::atomic_bool RenderPipelineBase::m_exiting = { false };
 
     void RenderPipelineBase::exit()
@@ -79,6 +76,14 @@ namespace legion::rendering
         if (m_framebuffers.contains(nameHash))
             return &m_framebuffers[nameHash];
         return nullptr;
+    }
+
+    void RenderPipelineBase::shutdown()
+    {
+        m_framebuffers.clear();
+        m_metadata.clear();
+        m_abort = false;
+        m_exiting.store(false, std::memory_order_relaxed);
     }
 
 }

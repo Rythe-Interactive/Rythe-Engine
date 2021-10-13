@@ -3,21 +3,21 @@
 namespace legion::rendering
 {
    async::spinlock LightBufferStage::m_lightEntitiesLock;
-   std::unordered_set<ecs::entity_handle> LightBufferStage::m_lightEntities;
+   std::unordered_set<ecs::entity> LightBufferStage::m_lightEntities;
    std::vector<detail::light_data> LightBufferStage::m_lights;
 
-    void LightBufferStage::onLightCreate(events::component_creation<light>* event)
+    void LightBufferStage::onLightCreate(events::component_creation<light>& event)
     {
         OPTICK_EVENT();
         std::lock_guard guard(m_lightEntitiesLock);
-        m_lightEntities.insert(event->entity);
+        m_lightEntities.insert(event.entity);
     }
 
-    void LightBufferStage::onLightDestroy(events::component_destruction<light>* event)
+    void LightBufferStage::onLightDestroy(events::component_destruction<light>& event)
     {
         OPTICK_EVENT();
         std::lock_guard guard(m_lightEntitiesLock);
-        m_lightEntities.erase(event->entity);
+        m_lightEntities.erase(event.entity);
     }
 
     void LightBufferStage::setup(app::window& context)
@@ -37,9 +37,7 @@ namespace legion::rendering
         bindToEvent<events::component_creation<light>, &LightBufferStage::onLightCreate>();
         bindToEvent<events::component_destruction<light>, &LightBufferStage::onLightDestroy>();
 
-
-        static auto lightsQuery = createQuery<light>();
-        lightsQuery.queryEntities();
+        static ecs::filter<light> lightsQuery{};
 
         std::lock_guard guard(m_lightEntitiesLock);
         for (auto ent : lightsQuery)
@@ -65,8 +63,8 @@ namespace legion::rendering
             int i = 0;
             for (auto ent : m_lightEntities)
             {
-                light lght = ent.read_component<light>();
-                m_lights[i] = lght.get_light_data(ent.get_component_handle<position>(), ent.get_component_handle<rotation>());
+                light lght = ent.get_component<light>();
+                m_lights[i] = lght.get_light_data(ent.get_component<position>(), ent.get_component<rotation>());
                 i++;
             }
         }

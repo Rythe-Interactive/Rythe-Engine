@@ -1,11 +1,14 @@
 name: analyze-action
+
 on:
+  push:
+    branches: [ main, develop, develop/*, develop*, feature*, feature/* ]
   pull_request:
-    branches: [main, develop, develop/* ]
+    branches: [ main ]
 
 jobs:
   analyze:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 
@@ -16,10 +19,10 @@ jobs:
        xargs -I"{}" sudo mv {} /usr/bin
 
     - name: get cppcheck
-      run: sudo apt-get update -yqq && sudo apt-get install -yqq cppcheck
+      run: DEBIAN_FRONTEND=noninteractive sudo apt-get update -yqq --allow-releaseinfo-change -o::Dpkg::Use-Pty=0 && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 cppcheck
 
     - name: get dependencies
-      run: sudo apt-get install -yqq libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev
+      run: DEBIAN_FRONTEND=noninteractive sudo apt-get install -yqq -o::Dpkg::Use-Pty=0 libopenal-dev build-essential libgl1-mesa-dev libglm-dev libglfw3-dev ocl-icd-opencl-dev libc++abi-dev
 
     - name: get intercept-build
       run: pip install scan-build
@@ -29,9 +32,12 @@ jobs:
        premake5 --file=premake5.lua gmake && \
        premake5 --file=premake5.lua vs2019
 
+    - name: build legion dependencies
+      run: make CXX=clang++-12 config=debug64 legion-core
+
     - name: intercept-build & analyze-build
       run: |
-       /home/runner/.local/bin/intercept-build make --dry-run CXX=clang++-9 config=debug64 all && \
+       /home/runner/.local/bin/intercept-build make --dry-run CXX=clang++-12 config=debug64 all && \
        /home/runner/.local/bin/analyze-build --status-bugs
 
     - name: cppcheck

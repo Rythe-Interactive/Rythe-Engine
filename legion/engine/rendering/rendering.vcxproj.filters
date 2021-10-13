@@ -7,7 +7,6 @@
     <ClCompile Include="data\importers\texture_importers.cpp" />
     <ClCompile Include="data\material.cpp" />
     <ClCompile Include="data\model.cpp" />
-    <ClCompile Include="data\particle_system_cache.cpp" />
     <ClCompile Include="data\renderbuffer.cpp" />
     <ClCompile Include="data\shader.cpp" />
     <ClCompile Include="data\texture.cpp" />
@@ -34,7 +33,6 @@
     <ClCompile Include="pipeline\default\stages\meshrenderstage.cpp" />
     <ClCompile Include="pipeline\default\stages\submitstage.cpp" />
     <ClCompile Include="shadercompiler\shadercompiler.cpp" />
-    <ClCompile Include="data\particle_system_base.cpp" />
     <ClCompile Include="systems\renderer.cpp" />
     <ClCompile Include="util\ini.c" />
     <ClCompile Include="pipeline\gui\stages\imguirenderstage.cpp" />
@@ -43,21 +41,19 @@
     <ClCompile Include="pipeline\default\postfx\tonemapping.cpp" />
     <ClCompile Include="pipeline\default\postfx\fxaa.cpp" />
     <ClCompile Include="pipeline\default\stages\debugrenderstage.cpp" />
+    <ClCompile Include="pipeline\default\postfx\bloom.cpp" />
+    <ClCompile Include="pipeline\default\postfx\depthoffield.cpp" />
+    <ClCompile Include="util\matini.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="components\camera.hpp" />
     <ClInclude Include="components\light.hpp" />
-    <ClInclude Include="components\particle.hpp" />
-    <ClInclude Include="components\particle_emitter.hpp" />
-    <ClInclude Include="components\point_cloud.hpp" />
     <ClInclude Include="pipeline\base\pipeline.hpp" />
-    <ClInclude Include="systems\pointcloudgeneration.hpp" />
     <ClInclude Include="components\renderable.hpp" />
     <ClInclude Include="data\buffer.hpp" />
     <ClInclude Include="data\framebuffer.hpp" />
     <ClInclude Include="data\importers\texture_importers.hpp" />
     <ClInclude Include="data\material.hpp" />
-    <ClInclude Include="data\particle_system_cache.hpp" />
     <ClInclude Include="data\renderbuffer.hpp" />
     <ClInclude Include="data\shader.hpp" />
     <ClInclude Include="data\vertexarray.hpp" />
@@ -74,14 +70,11 @@
     <ClInclude Include="pipeline\default\stages\meshrenderstage.hpp" />
     <ClInclude Include="pipeline\default\stages\submitstage.hpp" />
     <ClInclude Include="systems\renderer.hpp" />
-    <ClInclude Include="systems\particle_system_manager.hpp" />
     <ClInclude Include="module\renderingmodule.hpp" />
     <ClInclude Include="pipeline\base\pipelinebase.hpp" />
     <ClInclude Include="pipeline\base\renderstage.hpp" />
     <ClInclude Include="rendering.hpp" />
     <ClInclude Include="shadercompiler\shadercompiler.hpp" />
-    <ClInclude Include="data\particle_system_base.hpp" />
-    <ClInclude Include="systems\pointcloud_particlesystem.hpp" />
     <ClInclude Include="util\bindings.hpp" />
     <ClInclude Include="util\matini.hpp" />
     <ClInclude Include="util\settings.hpp" />
@@ -93,6 +86,11 @@
     <ClInclude Include="pipeline\default\postfx\tonemapping.hpp" />
     <ClInclude Include="pipeline\default\postfx\fxaa.hpp" />
     <ClInclude Include="pipeline\default\stages\debugrenderstage.hpp" />
+    <ClInclude Include="data\Octree.hpp" />
+    <ClInclude Include="components\pointcloud_renderable.hpp" />
+    <ClInclude Include="components\point.hpp" />
+    <ClInclude Include="pipeline\default\postfx\bloom.hpp" />
+    <ClInclude Include="pipeline\default\postfx\depthoffield.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\buffer.inl" />

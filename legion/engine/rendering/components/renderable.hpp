@@ -6,14 +6,14 @@ namespace legion::rendering
 {
     struct mesh_renderer
     {
+        Reflectable;
     private:
         model_handle m_tempHandle = invalid_model_handle;
     public:
         mesh_renderer() = default;
         explicit mesh_renderer(const material_handle& src) { material = src; }
         mesh_renderer(const material_handle& src, const model_handle& model) { material = src; m_tempHandle = model; }
-
-        static void init(mesh_renderer& src, ecs::entity_handle owner)
+        static void init(mesh_renderer& src, ecs::entity owner)
         {
             OPTICK_EVENT();
             if (!owner.has_component<mesh_filter>())
@@ -23,19 +23,29 @@ namespace legion::rendering
         }
 
         material_handle material = invalid_material_handle;
-    };
 
+        template <class Archive>
+        void save(Archive& oa)
+        {
+            oa(CEREAL_NVP(material));
+        }
+        template <class Archive>
+        void load(Archive& ia)
+        {
+            ia(CEREAL_NVP(material));
+        }
+    };
 
     struct mesh_renderable : public ecs::archetype<mesh_filter, mesh_renderer>
     {
         using base = ecs::archetype<mesh_filter, mesh_renderer>;
 
         mesh_renderable() = default;
-        mesh_renderable(const base::handleGroup& handles) : base(handles) {}
+        mesh_renderable(const base::handle_group& handles) : base(handles) {}
 
         model_handle get_model()
         {
-            id_type id = get<mesh_filter>().read().id;
+            id_type id = get<mesh_filter>().shared_mesh.id();
             if (id == invalid_id)
                 return { invalid_id };
             return ModelCache::create_model(id);
@@ -43,17 +53,9 @@ namespace legion::rendering
 
         material_handle get_material()
         {
-            return get<mesh_renderer>().read().material;
+            return get<mesh_renderer>().material;
         }
-
-        template<typename Archive>
-        void serialize(Archive& archive);
     };
-
-    template<typename Archive>
-    void mesh_renderable::serialize(Archive& archive)
-    {
-        OPTICK_EVENT();
-        archive(get_model(), get_material());
-    }
 }
+
+ManualReflector(legion::rendering::mesh_renderer, material);
