@@ -134,7 +134,8 @@ namespace legion::core::ecs
 
     void entity::destroy_children(bool recurse)
     {
-        for (auto& child : data->children.reverse_range())
+        auto rrange = data->children.reverse_range();
+        for (auto& child : rrange)
             Registry::destroyEntity(child, recurse);
     }
 

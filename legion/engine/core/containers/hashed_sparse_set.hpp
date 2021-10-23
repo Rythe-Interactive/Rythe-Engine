@@ -10,8 +10,6 @@
 #include <core/containers/iterator_tricks.hpp>
 #include <core/common/alloconly_allocator.hpp>
 
-#include <Optick/optick.h>
-
 /**
  * @file hashed_sparse_set.hpp
  */
@@ -60,9 +58,10 @@ namespace legion::core
         size_type m_capacity = 0;
 
     public:
-
-        hashed_sparse_set() noexcept { reserve(static_cast<size_type>(1ull)); }
         NO_DEF_CTOR_RULE5_NOEXCEPT(hashed_sparse_set);
+
+        hashed_sparse_set() { reserve(static_cast<size_type>(1ull)); }
+        hashed_sparse_set(size_type capacity) { reserve(capacity); }
 
         L_NODISCARD inline L_ALWAYS_INLINE dense_container& dense() noexcept { return m_dense; }
         L_NODISCARD inline L_ALWAYS_INLINE const dense_container& dense() const noexcept { return m_dense; }
@@ -85,6 +84,7 @@ namespace legion::core
 
         L_NODISCARD inline L_ALWAYS_INLINE reverse_itr_range reverse_range() noexcept { return pair_range{ rbegin(), rend() }; }
         L_NODISCARD inline L_ALWAYS_INLINE const_reverse_itr_range reverse_range() const noexcept { return pair_range{ crbegin(), crend() }; }
+        L_NODISCARD inline L_ALWAYS_INLINE const_reverse_itr_range creverse_range() const noexcept { return pair_range{ crbegin(), crend() }; }
 
         /**@brief Returns the amount of items in the sparse_map.
          * @returns size_type Current amount of items contained in sparse_map.
@@ -111,7 +111,12 @@ namespace legion::core
         /**@brief Clears sparse_map.
          * @note Will not update capacity.
          */
-        inline L_ALWAYS_INLINE void clear() noexcept { m_size = 0; }
+        inline L_ALWAYS_INLINE void clear() noexcept
+        {
+            m_size = 0;
+            m_dense.clear();
+            m_sparse.clear();
+        }
 
         /**@brief Reserves space in dense container for more items.
          * @param size Amount of items to reserve space for (would be the new capacity).
@@ -121,7 +126,7 @@ namespace legion::core
         {
             if (size > m_capacity)
             {
-                m_dense.resize(size);
+                m_dense.reserve(size);
                 m_sparse.reserve(size);
                 m_capacity = size;
             }
@@ -149,14 +154,15 @@ namespace legion::core
                 return false;
 
             const size_type& sparseVal = m_sparse.at(val);
-            return sparseVal >= 0 && sparseVal < m_size&& sparseVal < m_dense.size() && m_dense.at(sparseVal) == val;
+            return (sparseVal < m_size) && m_dense.at(sparseVal) == val;
         }
 
         /**@brief Checks if all items in hashed_sparse_set are inside this set as well.
          * @param other Other hashed_sparse_set to check against.
          * @returns bool True if all items in other are also in this hashed_sparse_set, otherwise false.
          */
-        L_NODISCARD bool contains(const hashed_sparse_set<value_type>& other) const
+        template<typename T>
+        L_NODISCARD bool contains(const hashed_sparse_set<T>& other) const
         {
             if (other.m_size == 0)
                 return true;
@@ -165,7 +171,7 @@ namespace legion::core
                 return false;
 
             for (int i = 0; i < other.m_size; i++)
-                if (!contains(other.m_dense[i]))
+                if (!contains(other.m_dense.at(i)))
                     return false;
 
             return true;
@@ -182,7 +188,7 @@ namespace legion::core
             if (m_size == other.m_size)
             {
                 for (int i = 0; i < m_size; i++)
-                    if (!other.contains(m_dense[i]))
+                    if (!other.contains(m_dense.at(i)))
                         return false;
 
                 return true;
@@ -261,11 +267,11 @@ namespace legion::core
                 if (m_size >= m_capacity)
                     reserve(m_capacity * static_cast<size_type>(2ull));
 
+                m_dense.resize(m_size + static_cast<size_type>(1ull));
                 auto itr = m_dense.begin() + m_size;
-                auto* dstPtr = &(*itr);
-                memcpy(dstPtr, tempPtr, sizeof(value_type));
+                memcpy(&(*itr), tempPtr, sizeof(value_type));
 
-                m_sparse.insert_or_assign(*dstPtr, m_size);
+                m_sparse.insert_or_assign(*itr, m_size);
                 ++m_size;
 
                 return std::make_pair(itr, true);
@@ -302,7 +308,7 @@ namespace legion::core
             if (index < 0 || index > m_size)
                 throw std::out_of_range("hashed_sparse_set subscript out of range");
 #endif
-            return m_dense[index];
+            return m_dense.at(index);
         }
 
         /**@brief Returns item from dense container.
@@ -314,7 +320,7 @@ namespace legion::core
             if (index < 0 || index > m_size)
                 throw std::out_of_range("hashed_sparse_set subscript out of range");
 #endif
-            return m_dense[index];
+            return m_dense.at(index);
         }
 #pragma endregion
 
@@ -329,18 +335,18 @@ namespace legion::core
 
                 if (m_size - 1 != sparseVal)
                 {
-                    auto* densePtr = &m_dense[m_size - 1];
-                    size_type lastKey = m_sparse[*densePtr];
+                    auto* densePtr = &m_dense.at(m_size - 1);
+                    size_type* sparsePtr = &m_sparse.at(*densePtr);
+                    size_type lastSparse = *sparsePtr;
 
-                    m_sparse[*densePtr] = sparseVal;
+                    memcpy(&m_dense.at(sparseVal), densePtr, sizeof(value_type));
 
-                    memcpy(&m_dense[sparseVal], densePtr, sizeof(value_type));
-                    memset(densePtr, 0, sizeof(value_type));
-
-                    sparseVal = lastKey;
+                    *sparsePtr = sparseVal;
+                    sparseVal = lastSparse;
                 }
 
                 --m_size;
+                m_dense.resize(m_size);
                 return true;
             }
             return false;

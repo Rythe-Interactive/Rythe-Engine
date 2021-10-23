@@ -234,6 +234,7 @@
   <ItemGroup>
     <ClInclude Include="doctest.h" />
     <ClInclude Include="tests\core\containers\delegate.hpp" />
+    <ClInclude Include="tests\core\containers\sparse_containers.hpp" />
     <ClInclude Include="tests\core\ecs.hpp" />
     <ClInclude Include="tests\core\filesystem.hpp" />
     <ClInclude Include="tests\core\logicscheduling.hpp" />

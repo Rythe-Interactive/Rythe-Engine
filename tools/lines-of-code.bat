@@ -5,7 +5,7 @@ Setlocal EnableDelayedExpansion
 set /a lines = 0
 
 Call :countLines "../legion/"
-Call :countLines "../applications/"
+:: Call :countLines "../applications/"
 
 echo total lines is %lines%
 

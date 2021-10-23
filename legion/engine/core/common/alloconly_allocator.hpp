@@ -37,6 +37,13 @@ namespace legion::core
             deallocate_bytes(ptr, sizeof(value_type) * count);
         }
 
+
+        template<typename T, typename... Args>
+        inline L_ALWAYS_INLINE void construct(T*, Args&&...) {}
+
+        template<typename T>
+        inline L_ALWAYS_INLINE void destroy(T*) {}
+
     private:
         constexpr static size_type m_stdCppDefaultNewAlignment = static_cast<size_type>(16ull);
         constexpr static size_type m_alignment = std::max(alignof(value_type), m_stdCppDefaultNewAlignment);
@@ -59,11 +66,5 @@ namespace legion::core
                 return;
             ::operator delete (ptr, count, std::align_val_t{ alloc_alignment(count) });
         }
-
-        template<typename T, typename... Args>
-        inline L_ALWAYS_INLINE void construct(T*, Args&&...) {}
-
-        template<typename T>
-        inline L_ALWAYS_INLINE void destroy(T*) {}
     };
 }
