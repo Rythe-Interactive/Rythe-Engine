@@ -9,8 +9,8 @@ namespace legion::rendering
     {
     private:
         static async::spinlock debugLinesLock;
-        static thread_local std::unordered_set<debug::debug_line>* localLines;
-        static std::unordered_map<std::thread::id, std::unordered_set<debug::debug_line>*> debugLines;
+        static thread_local std::unordered_set<debug::debug_line_event>* localLines;
+        static std::unordered_map<std::thread::id, std::unordered_set<debug::debug_line_event>*> debugLines;
 
     public:
         static void startDebugDomain();
