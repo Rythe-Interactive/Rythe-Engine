@@ -68,8 +68,8 @@ void LEGION_CCONV reportModules(legion::Engine* engine)
 {
     using namespace legion::editor;
     detail::editor = Editor(engine);
-    engine->reportModule<app::ApplicationModule>();
-    engine->reportModule<rendering::RenderingModule>();
+    engine->reportModule<lgn::app::ApplicationModule>();
+    engine->reportModule<lgn::gfx::RenderingModule>();
     reportEditorModules(&detail::editor);
 }
 #endif

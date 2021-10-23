@@ -3,8 +3,10 @@
 #include <rendering/systems/renderer.hpp>
 #include <rendering/module/renderingmodule.hpp>
 #include <rendering/debugrendering.hpp>
+#include <rendering/util/gui.hpp>
 #include <rendering/pipeline/default/stages/postprocessingstage.hpp>
 #include <rendering/pipeline/default/postfx/tonemapping.hpp>
+#include <rendering/pipeline/gui/stages/imguirenderstage.hpp>
 #include <rendering/data/buffer.hpp>
 #include <rendering/data/framebuffer.hpp>
 #include <rendering/data/renderbuffer.hpp>

@@ -32,7 +32,7 @@ namespace legion::editor
         inline static size_type m_surfaceCount = 0;
     public:
         inline static const id_type surfaceType = typeHash<SelfType>();
-        EditorSurface() : EditorSurfaceBase(std::string(typeName<SelfType>()) + (m_surfaceCount ? " " + std::to_string(m_surfaceCount + 1) : "")) { m_surfaceCount++; }
+        EditorSurface() : EditorSurfaceBase(std::string(nameOfType<SelfType>()) + (m_surfaceCount ? " " + std::to_string(m_surfaceCount + 1) : "")) { m_surfaceCount++; }
         explicit EditorSurface(const std::string& name) : EditorSurfaceBase(name) { m_surfaceCount++; }
 
         virtual id_type getTypeId()

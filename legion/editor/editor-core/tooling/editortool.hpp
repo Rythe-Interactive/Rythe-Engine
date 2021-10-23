@@ -40,7 +40,7 @@ namespace legion::editor
         template<void(SelfType::* func_type)()>
         void addMenuOption(const std::string& name, const std::string& tooltip = "")
         {
-            MenuRenderer::addMenuOption(name, delegate<void()>::create<SelfType, func_type>((SelfType*)this), tooltip);
+            MenuRenderer::addMenuOption(name, delegate<void()>(static_cast<SelfType*>(this), func_type), tooltip);
         }
     };
 }

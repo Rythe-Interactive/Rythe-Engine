@@ -15,7 +15,7 @@ namespace legion::editor
         static void renderFolder(menu_folder* folder);
 
     public:
-        virtual void setup() override;
+        void setup();
 
         template<typename FuncType>
         static void addMenuOption(const std::string& name, FuncType func, const std::string& tooltip = "");

@@ -24,6 +24,7 @@
 #include <core/assets/assets.hpp>
 #include <core/data/data.hpp>
 
+#include <core/defaults/coremodule.hpp>
 #include <core/defaults/defaultcomponents.hpp>
 
 #include <core/engine/system.inl>

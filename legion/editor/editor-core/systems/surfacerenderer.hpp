@@ -12,7 +12,7 @@ namespace legion::editor
         static sparse_map<id_type, std::unique_ptr<EditorSurfaceBase>> m_surfaces;
 
     public:
-        virtual void setup() override;
+        void setup();
 
         static std::pair<id_type, const std::string&> openSurface(std::unique_ptr<EditorSurfaceBase>&& surface);
 

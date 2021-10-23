@@ -5,7 +5,7 @@ namespace legion::editor
 {
     class ViewportTool : public EditorTool<ViewportTool>
     {
-        virtual void setup() override;
+        void setup();
 
         void openNewViewport();
     };
