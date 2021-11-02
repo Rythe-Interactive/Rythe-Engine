@@ -70,21 +70,23 @@ public:
 
         auto rootEnt = createEntity();
         rootEnt->name = "Root";
+        rootEnt.add_component<example_comp>();
+        rootEnt.add_component<position>();
 
-        for (int i = 0; i < 10; i++)
-        {
-            auto ent = createEntity();
-            ent.add_component<example_comp>();
-            ent.add_component<position>();
-            ent.add_component<velocity>();
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    auto ent = createEntity();
+        //    ent.add_component<example_comp>();
+        //    ent.add_component<position>();
+        //    ent.add_component<velocity>();
 
-            auto child = createEntity();
-            child.add_component<rotation>();
-            child.add_component<example_comp>();
-            ent.add_child(child);
+        //    auto child = createEntity();
+        //    child.add_component<rotation>();
+        //    child.add_component<example_comp>();
+        //    ent.add_child(child);
 
-            rootEnt.add_child(ent);
-        }
+        //    rootEnt.add_child(ent);
+        //}
 
         std::string_view filePath = "assets://scenes/scene1.json";
         srl::write<srl::json>(filePath, rootEnt);
@@ -108,6 +110,9 @@ public:
          //j_view.read(byteVec.begin(), byteVec.end());
 
         auto result4 = srl::deserialize<ecs::entity>(j_view);
+
+        std::string_view filePath2 = "assets://scenes/scene2.json";
+        srl::write<srl::json>(filePath2, ecs::Registry::getEntity(6));
 
         /////////////////////////////////////////////////////////
     }
