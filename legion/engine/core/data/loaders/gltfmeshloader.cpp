@@ -102,7 +102,7 @@ namespace legion::core
                     const float* x = reinterpret_cast<const float*>(&buffer.data[i]);
                     const float* y = reinterpret_cast<const float*>(&buffer.data[i + sizeof(float)]);
                     const float* z = reinterpret_cast<const float*>(&buffer.data[i + 2 * sizeof(float)]);
-                    data.push_back(math::normalize((transform * math::vec4(*x, *y, *z, 0)).xyz()));
+                    data.push_back(math::normalize((transform * math::vec4(*x, *y, *z, 0.f)).xyz()));
                 }
             }
             else
@@ -112,7 +112,7 @@ namespace legion::core
                     const float* x = reinterpret_cast<const float*>(&buffer.data[i]);
                     const float* y = reinterpret_cast<const float*>(&buffer.data[i + sizeof(float)]);
                     const float* z = reinterpret_cast<const float*>(&buffer.data[i + 2 * sizeof(float)]);
-                    data.push_back((transform * math::vec4(*x, *y, *z, 1)).xyz());
+                    data.push_back((transform * math::vec4(*x, *y, *z, 1.f)).xyz());
                 }
             }
 
@@ -142,7 +142,7 @@ namespace legion::core
                         const float* x = reinterpret_cast<const float*>(&valueBuffer.data[valuePos]);
                         const float* y = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + sizeof(float)]);
                         const float* z = reinterpret_cast<const float*>(&valueBuffer.data[valuePos + 2 * sizeof(float)]);
-                        data.at(dataStart + *idx) = math::normalize((transform * math::vec4(*x, *y, *z, 0)).xyz());
+                        data.at(dataStart + *idx) = math::normalize((transform * math::vec4(*x, *y, *z, 0.f)).xyz());
 
                         indexPos += indexStride;
                         valuePos += valueStride;
@@ -586,18 +586,23 @@ namespace legion::core
             return { common::success, warnings };
         }
 
-        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node, const math::mat4& parentTransf)
+        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node, const math::mat4& parentTransf, bool keepNativeCoords)
         {
             std::vector<std::string> warnings;
 
-            const math::mat4 rhToLhMat{
-                 -1.f, 0.f, 0.f, 0.f,
-                 0.f, 1.f, 0.f, 0.f,
-                 0.f, 0.f, 1.f, 0.f,
-                 0.f, 0.f, 0.f, 1.f
-            };
+            auto transf = parentTransf * detail::getGltfNodeTransform(node);
 
-            const auto transf = parentTransf * detail::getGltfNodeTransform(node) * rhToLhMat;
+            if (!keepNativeCoords)
+            {
+                const math::mat4 rhToLhMat{
+                     -1.f, 0.f, 0.f, 0.f,
+                     0.f, 1.f, 0.f, 0.f,
+                     0.f, 0.f, 1.f, 0.f,
+                     0.f, 0.f, 0.f, 1.f
+                };
+
+                transf *= rhToLhMat;
+            }
 
             const size_type meshIdx = static_cast<size_type>(node.mesh);
 
@@ -617,7 +622,7 @@ namespace legion::core
                     continue;
                 }
 
-                auto result = handleGltfNode(meshData, model, model.nodes[idx], transf);
+                auto result = handleGltfNode(meshData, model, model.nodes[idx], transf, keepNativeCoords);
                 warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
             }
 
@@ -630,7 +635,7 @@ namespace legion::core
     using import_cfg = base::import_cfg;
     using progress_type = base::progress_type;
 
-    common::result<asset_ptr> GltfMeshLoader::loadImpl(id_type nameHash, const fs::view& file, progress_type* progress)
+    common::result<asset_ptr> GltfMeshLoader::loadImpl(id_type nameHash, const fs::view& file, const import_cfg& settings, progress_type* progress)
     {
         namespace tg = tinygltf;
 
@@ -823,12 +828,17 @@ namespace legion::core
 
         const float percentagePerNode = 10.f / static_cast<float>(model.scenes[sceneToLoad].nodes.size());
 
-        const math::mat4 rootMat{
-                 -1.f, 0.f, 0.f, 0.f,
-                 0.f, 1.f, 0.f, 0.f,
-                 0.f, 0.f, 1.f, 0.f,
-                 0.f, 0.f, 0.f, 1.f
-        };
+        math::mat4 rootMat = settings.transform;
+
+        if (!settings.keepNativeCoords)
+        {
+            rootMat *= math::mat4{
+                     -1.f, 0.f, 0.f, 0.f,
+                     0.f, 1.f, 0.f, 0.f,
+                     0.f, 0.f, 1.f, 0.f,
+                     0.f, 0.f, 0.f, 1.f
+            };
+        }
 
         for (auto& nodeIdx : model.scenes[sceneToLoad].nodes)
         {
@@ -836,23 +846,37 @@ namespace legion::core
                 continue;
 
             const size_type idx = static_cast<size_type>(nodeIdx);
-            detail::handleGltfNode(meshData, model, model.nodes[idx], rootMat);
+            detail::handleGltfNode(meshData, model, model.nodes[idx], rootMat, settings.keepNativeCoords);
 
             if (progress)
                 progress->advance_progress(percentagePerNode);
         }
 
-        for (auto& uv : meshData.uvs)
-            uv.y = 1.f-uv.y;
+        if (settings.flipVerticalTexcoords)
+            for (auto& uv : meshData.uvs)
+                uv.y = 1.f - uv.y;
 
         // Because we only flip one axis we also need to flip the triangle rotation.
-        for (size_type i = 0; i < meshData.indices.size(); i += 3)
-        {
-            uint i1 = meshData.indices[i + 1];
-            uint i2 = meshData.indices[i + 2];
-            meshData.indices[i + 1] = i2;
-            meshData.indices[i + 2] = i1;
-        }
+        bool convertWinding;
+
+        if (settings.keepNativeCoords)
+            convertWinding = settings.windingOrder == winding_order::counter_clockwise;
+        else
+            convertWinding = settings.windingOrder == winding_order::clockwise;
+
+        if (math::determinant(settings.transform) < 0.f)
+            convertWinding = !convertWinding;
+
+        if (convertWinding)
+            for (size_type i = 0; i < meshData.indices.size(); i += 3)
+            {
+                uint i1 = meshData.indices[i + 1];
+                uint i2 = meshData.indices[i + 2];
+                meshData.indices[i + 1] = i2;
+                meshData.indices[i + 2] = i1;
+            }
+
+        meshData.windingOrder = settings.windingOrder;
 
         mesh::calculate_tangents(&meshData);
 
@@ -868,15 +892,15 @@ namespace legion::core
         return result.value() == ".gltf" || result.value() == ".glb";
     }
 
-    common::result<asset_ptr> GltfMeshLoader::load(id_type nameHash, const fs::view& file, L_MAYBEUNUSED const import_cfg& settings)
+    common::result<asset_ptr> GltfMeshLoader::load(id_type nameHash, const fs::view& file, const import_cfg& settings)
     {
         OPTICK_EVENT();
-        return loadImpl(nameHash, file, nullptr);
+        return loadImpl(nameHash, file, settings, nullptr);
     }
 
-    common::result<asset_ptr> GltfMeshLoader::loadAsync(id_type nameHash, const fs::view& file, L_MAYBEUNUSED const import_cfg& settings, progress_type& progress)
+    common::result<asset_ptr> GltfMeshLoader::loadAsync(id_type nameHash, const fs::view& file, const import_cfg& settings, progress_type& progress)
     {
         OPTICK_EVENT();
-        return loadImpl(nameHash, file, &progress);
+        return loadImpl(nameHash, file, settings, &progress);
     }
 }

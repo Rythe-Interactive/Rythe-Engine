@@ -34,6 +34,12 @@ namespace legion::core
 
     using material_list = std::vector<material_data>;
 
+    enum struct winding_order : byte
+    {
+        clockwise,
+        counter_clockwise
+    };
+
     /**@class sub_mesh
      * @brief Encapsulation of a sub-mesh with the offsets and sizes of the sub-mesh within the main mesh data.
      */
@@ -58,6 +64,8 @@ namespace legion::core
         std::vector<uint> indices;
         material_list materials;
 
+        winding_order windingOrder;
+
         std::vector<sub_mesh> submeshes;
 
         /**@brief Calculate the tangents from the triangles, vertices and normals of a certain mesh.
@@ -67,12 +75,13 @@ namespace legion::core
 
     ReportAssetType(mesh);
 
-    namespace assets
+    template<>
+    struct assets::import_settings<mesh>
     {
-        template<>
-        struct import_settings<mesh>
-        {
-            bool triangulate = true;
-        };
-    }
+        bool triangulate = true;
+        bool keepNativeCoords = false;
+        bool flipVerticalTexcoords = true;
+        winding_order windingOrder = winding_order::clockwise;
+        math::mat4 transform = math::mat4(1.f);
+    };
 }
