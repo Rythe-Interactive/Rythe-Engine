@@ -586,23 +586,11 @@ namespace legion::core
             return { common::success, warnings };
         }
 
-        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node, const math::mat4& parentTransf, bool keepNativeCoords)
+        static common::result<void, void> handleGltfNode(mesh& meshData, const tinygltf::Model& model, const tinygltf::Node& node, const math::mat4& parentTransf)
         {
             std::vector<std::string> warnings;
 
             auto transf = parentTransf * detail::getGltfNodeTransform(node);
-
-            if (!keepNativeCoords)
-            {
-                const math::mat4 rhToLhMat{
-                     -1.f, 0.f, 0.f, 0.f,
-                     0.f, 1.f, 0.f, 0.f,
-                     0.f, 0.f, 1.f, 0.f,
-                     0.f, 0.f, 0.f, 1.f
-                };
-
-                transf *= rhToLhMat;
-            }
 
             const size_type meshIdx = static_cast<size_type>(node.mesh);
 
@@ -622,7 +610,7 @@ namespace legion::core
                     continue;
                 }
 
-                auto result = handleGltfNode(meshData, model, model.nodes[idx], transf, keepNativeCoords);
+                auto result = handleGltfNode(meshData, model, model.nodes[idx], transf);
                 warnings.insert(warnings.end(), result.warnings().begin(), result.warnings().end());
             }
 
