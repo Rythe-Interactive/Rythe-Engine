@@ -259,6 +259,18 @@ namespace legion::core
 
         const float percentagePerShape = 10.f / static_cast<float>(shapes.size());
 
+        math::mat4 transform = settings.transform;
+
+        const math::mat4 rhToLhMat{
+                     -1.f, 0.f, 0.f, 0.f,
+                     0.f, 1.f, 0.f, 0.f,
+                     0.f, 0.f, 1.f, 0.f,
+                     0.f, 0.f, 0.f, 1.f
+        };
+
+        if (!settings.keepNativeCoords)
+            transform *= rhToLhMat;
+
         // Iterate submeshes.
         for (auto& shape : shapes)
         {
@@ -288,7 +300,7 @@ namespace legion::core
                 const uint uvIndex = static_cast<uint>((uvCount + (indexData.texcoord_index * 2)) % uvCount);
 
                 // Extract the actual vertex data. (We flip the X axis to convert it to our left handed coordinate system.)
-                math::vec3 vertex(-attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
+                math::vec3 vertex(attributes.vertices[vertexIndex + 0], attributes.vertices[vertexIndex + 1], attributes.vertices[vertexIndex + 2]);
 
                 math::color color = math::colors::white;
                 if (vertexIndex + 2 < attributes.colors.size())
@@ -296,7 +308,7 @@ namespace legion::core
 
                 math::vec3 normal = math::vec3::up;
                 if (normalIndex + 2 < attributes.normals.size())
-                    normal = math::vec3(-attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
+                    normal = math::vec3(attributes.normals[normalIndex + 0], attributes.normals[normalIndex + 1], attributes.normals[normalIndex + 2]);
 
                 math::vec2 uv{};
                 if (uvIndex + 1 < attributes.texcoords.size())
@@ -313,9 +325,13 @@ namespace legion::core
                     vertices.push_back(hash);
 
                     // Append vertex data.
-                    data.vertices.push_back(vertex);
+                    data.vertices.push_back((transform * math::vec4(vertex.x, vertex.y, vertex.z, 1.f)).xyz());
                     data.colors.push_back(color);
-                    data.normals.push_back(normal);
+                    data.normals.push_back((transform * math::vec4(normal.x, normal.y, normal.z, 0.f)).xyz());
+
+                    if (!settings.flipVerticalTexcoords)
+                        uv.y = 1.f - uv.y;
+
                     data.uvs.push_back(uv);
                 }
 
@@ -331,13 +347,24 @@ namespace legion::core
         }
 
         // Because we only flip one axis we also need to flip the triangle rotation.
-        for (size_type i = 0; i < data.indices.size(); i += 3)
-        {
-            uint i1 = data.indices[i + 1];
-            uint i2 = data.indices[i + 2];
-            data.indices[i + 1] = i2;
-            data.indices[i + 2] = i1;
-        }
+        bool convertWinding;
+
+        if (settings.keepNativeCoords)
+            convertWinding = settings.windingOrder == winding_order::counter_clockwise;
+        else
+            convertWinding = settings.windingOrder == winding_order::clockwise;
+
+        if (math::determinant(settings.transform) < 0.f)
+            convertWinding = !convertWinding;
+
+        if (convertWinding)
+            for (size_type i = 0; i < data.indices.size(); i += 3)
+            {
+                uint i1 = data.indices[i + 1];
+                uint i2 = data.indices[i + 2];
+                data.indices[i + 1] = i2;
+                data.indices[i + 2] = i1;
+            }
 
         // Calculate the tangents.
         mesh::calculate_tangents(&data);
