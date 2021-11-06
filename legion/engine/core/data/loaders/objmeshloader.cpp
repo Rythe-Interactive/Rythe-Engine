@@ -261,16 +261,6 @@ namespace legion::core
 
         math::mat4 transform = settings.transform;
 
-        const math::mat4 rhToLhMat{
-                     -1.f, 0.f, 0.f, 0.f,
-                     0.f, 1.f, 0.f, 0.f,
-                     0.f, 0.f, 1.f, 0.f,
-                     0.f, 0.f, 0.f, 1.f
-        };
-
-        if (!settings.keepNativeCoords)
-            transform *= rhToLhMat;
-
         // Iterate submeshes.
         for (auto& shape : shapes)
         {
@@ -349,13 +339,10 @@ namespace legion::core
         // Because we only flip one axis we also need to flip the triangle rotation.
         bool convertWinding;
 
-        if (settings.keepNativeCoords)
-            convertWinding = settings.windingOrder == winding_order::counter_clockwise;
-        else
-            convertWinding = settings.windingOrder == winding_order::clockwise;
-
         if (math::determinant(settings.transform) < 0.f)
-            convertWinding = !convertWinding;
+            convertWinding = settings.windingOrder == winding_order::clockwise;
+        else
+            convertWinding = settings.windingOrder == winding_order::counter_clockwise;
 
         if (convertWinding)
             for (size_type i = 0; i < data.indices.size(); i += 3)

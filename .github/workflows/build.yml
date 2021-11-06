@@ -2,7 +2,7 @@ name: build-action
 
 on:
   push:
-    branches: [ main, develop, develop/*, develop*, feature*, feature/* ]
+    branches: [ main, develop, develop/*, develop*, feature*, feature/*, task*, task/*, hotfix*, hotfix/*]
   pull_request:
     branches: [ main ]
 

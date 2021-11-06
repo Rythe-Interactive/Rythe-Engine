@@ -834,7 +834,7 @@ namespace legion::core
                 continue;
 
             const size_type idx = static_cast<size_type>(nodeIdx);
-            detail::handleGltfNode(meshData, model, model.nodes[idx], rootMat, settings.keepNativeCoords);
+            detail::handleGltfNode(meshData, model, model.nodes[idx], rootMat);
 
             if (progress)
                 progress->advance_progress(percentagePerNode);
@@ -848,9 +848,9 @@ namespace legion::core
         bool convertWinding;
 
         if (settings.keepNativeCoords)
-            convertWinding = settings.windingOrder == winding_order::counter_clockwise;
-        else
             convertWinding = settings.windingOrder == winding_order::clockwise;
+        else
+            convertWinding = settings.windingOrder == winding_order::counter_clockwise;
 
         if (math::determinant(settings.transform) < 0.f)
             convertWinding = !convertWinding;

@@ -6,7 +6,7 @@ namespace legion::rendering
     {
         OPTICK_EVENT();
         app::context_guard guard(context);
-        glClearDepth(0.0f);
+        glClearDepth(1.0f);
     }
 
     void ClearStage::render(app::window& context, camera& cam, const camera::camera_input& camInput, time::span deltaTime)

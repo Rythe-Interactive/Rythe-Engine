@@ -53,6 +53,15 @@ public:
             ent.add_component(gfx::mesh_renderer(material, model));
         }
 
+        {
+            model = gfx::ModelCache::create_model("Cube", fs::view("assets://models/Cube.obj"));
+            auto ent = createEntity();
+            auto [pos, rot, scal] = ent.add_component<transform>();
+            pos->z = 30.f;
+            scal = scale(2.f);
+            ent.add_component(gfx::mesh_renderer(material, model));
+        }
+
         model = gfx::ModelCache::create_model("Sponza", fs::view("assets://models/Sponza/Sponza.gltf"));
 
         material = gfx::MaterialCache::create_material("Test", fs::view("assets://shaders/uv.shs"));
