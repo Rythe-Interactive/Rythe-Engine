@@ -92,7 +92,15 @@ namespace legion::rendering
          */
         math::mat4 get_projection(float ratio)
         {
-            return math::perspective(math::deg2rad(fov * ratio), ratio, farz, nearz);
+            const auto fovx = math::deg2rad(fov);
+            const auto invTanHalfFovx = 1.f / math::tan(fovx * 0.5f);
+            const auto depthScale = farz / (farz - nearz);
+            return math::mat4{
+                invTanHalfFovx, 0.f, 0.f, 0.f,
+                0.f, invTanHalfFovx * ratio, 0.f, 0.f,
+                0.f, 0.f, depthScale, 1.f,
+                0.f, 0.f, -nearz * depthScale, 0.f
+            };
         }
 
     };

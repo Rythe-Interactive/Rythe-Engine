@@ -439,7 +439,7 @@ namespace legion::rendering
             {
                 // Default shader state in case nothing was specified by the shader.
                 shader_state& currentVariantState = state[variant];
-                currentVariantState[GL_DEPTH_TEST] = GL_GREATER;
+                currentVariantState[GL_DEPTH_TEST] = GL_LEQUAL;
                 currentVariantState[GL_CULL_FACE] = GL_BACK;
                 currentVariantState[GL_BLEND_SRC] = GL_SRC_ALPHA;
                 currentVariantState[GL_BLEND_DST] = GL_ONE_MINUS_SRC_ALPHA;

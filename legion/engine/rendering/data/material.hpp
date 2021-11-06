@@ -90,13 +90,16 @@ namespace legion::rendering
         {
             m_shader = shader;
             for (auto& [variantId, variantInfo] : m_shader.get_uniform_info())
+            {
+                auto& variant = m_variants[variantId];
+                variant.name = m_shader.get_variant(variantId).name;
                 for (auto& [name, location, type] : variantInfo)
                 {
                     id_type hash = nameHash(name);
-                    m_variants[variantId].name = m_shader.get_variant(variantId).name;
-                    m_variants[variantId].parameters.emplace(hash, material_parameter_base::create_param(name, location, type));
-                    m_variants[variantId].idOfLocation[location] = hash;
+                    variant.parameters.emplace(hash, material_parameter_base::create_param(name, location, type));
+                    variant.idOfLocation[location] = hash;
                 }
+            }
         }
 
         std::string m_name;
