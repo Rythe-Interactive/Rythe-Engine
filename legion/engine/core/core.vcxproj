@@ -194,6 +194,14 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="ecs\prototypes\component_prototype.hpp" />
     <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
     <ClInclude Include="engine\enginesubsystem.hpp" />
+    <ClInclude Include="math\exponential\exponential.hpp" />
+    <ClInclude Include="math\exponential\pow.hpp" />
+    <ClInclude Include="math\exponential\sqrt.hpp" />
+    <ClInclude Include="math\vector\vector.hpp" />
+    <ClInclude Include="math\vector\vector1.hpp" />
+    <ClInclude Include="math\vector\vector2.hpp" />
+    <ClInclude Include="math\vector\vector3.hpp" />
+    <ClInclude Include="math\vector\vector4.hpp" />
     <ClInclude Include="scheduling\clock.hpp" />
     <ClInclude Include="scheduling\process.hpp" />
     <ClInclude Include="scheduling\processchain.hpp" />

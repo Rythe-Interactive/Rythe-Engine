@@ -222,12 +222,22 @@ type& operator=(type&&) noexcept = default;
      */
 #   define LEGION_DEBUG
 #   define LEGION_CONFIGURATION LEGION_DEBUG_VALUE
+
+#   if !defined(LEGION_VALIDATE)
+#       define LEGION_VALIDATE
+#   endif
 #else
     /**@def LEGION_RELEASE
      * @brief Defined in release mode.
      */
 #   define LEGION_RELEASE 
 #   define LEGION_CONFIGURATION LEGION_RELEASE_VALUE
+#endif
+
+#if defined(LEGION_VALIDATE)
+#   define LEGION_VALIDATION_LEVEL 1
+#else
+#   define LEGION_VALIDATION_LEVEL 0
 #endif
 
 #if (!defined(LEGION_LOW_POWER) && !defined(LEGION_HIGH_PERFORMANCE))

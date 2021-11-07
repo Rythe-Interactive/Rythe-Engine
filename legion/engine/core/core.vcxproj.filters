@@ -451,6 +451,14 @@
     <ClInclude Include="types\prototype.hpp" />
     <ClInclude Include="ecs\data\component_type.hpp" />
     <ClInclude Include="async\lock_guard.hpp" />
+    <ClInclude Include="math\vector\vector.hpp" />
+    <ClInclude Include="math\vector\vector1.hpp" />
+    <ClInclude Include="math\vector\vector2.hpp" />
+    <ClInclude Include="math\vector\vector3.hpp" />
+    <ClInclude Include="math\vector\vector4.hpp" />
+    <ClInclude Include="math\exponential\exponential.hpp" />
+    <ClInclude Include="math\exponential\pow.hpp" />
+    <ClInclude Include="math\exponential\sqrt.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

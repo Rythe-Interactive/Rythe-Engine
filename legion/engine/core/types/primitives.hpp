@@ -11,36 +11,44 @@
 
 namespace legion::core
 {
-    using uint8 = std::uint8_t;
-    using uint16 = std::uint16_t;
-    using uint32 = std::uint32_t;
-    using uint64 = std::uint64_t;
-    using uint_max = unsigned long long;
+    using uint8 = ::std::uint8_t;
+    using uint16 = ::std::uint16_t;
+    using uint32 = ::std::uint32_t;
+    using uint64 = ::std::uint64_t;
+    using uint_max = ::std::uintmax_t;
 
-    using int8 = std::int8_t;
-    using int16 = std::int16_t;
-    using int32 = std::int32_t;
-    using int64 = std::int64_t;
-    using int_max = long long;
+    using int8 = ::std::int8_t;
+    using int16 = ::std::int16_t;
+    using int32 = ::std::int32_t;
+    using int64 = ::std::int64_t;
+    using int_max = ::std::intmax_t;
 
-    using size_type = std::size_t;
-    using index_type = std::size_t;
-    using diff_type = std::ptrdiff_t;
+    using size_type = ::std::size_t;
+    using index_type = ::std::size_t;
+    using diff_type = ::std::ptrdiff_t;
     using ptr_type = std::uintptr_t;
 
     using float32 = float;
     using float64 = double;
     using float_max = long double;
     
-    using time32 = float;
-    using time64 = double;
+    using time32 = float32;
+    using time64 = float64;
+    using time_max = float_max;
 
     using cstring = const char*;
 
     using uint = uint32;
 
     using byte = uint8;
-    using byte_vec = std::vector<byte>;
+    using word = uint16;
+    using dword = uint32;
+    using qword = uint64;
+
+    using byte_vec = ::std::vector<byte>;
+    using word_vec = ::std::vector<word>;
+    using dword_vec = ::std::vector<dword>;
+    using qword_vec = ::std::vector<qword>;
 
     using bitfield8 = byte;
     using bitfield16 = uint16;
