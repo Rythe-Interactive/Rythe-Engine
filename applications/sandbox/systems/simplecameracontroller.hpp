@@ -96,7 +96,7 @@ public:
         auto skybox = createEntity("Skybox");
         auto skyboxMat = rendering::MaterialCache::create_material("skybox", "assets://shaders/skybox.shs"_view);
         skyboxMat.set_param("skycolor", math::color(0.1f, 0.3f, 1.0f));
-        skybox.add_component(gfx::mesh_renderer{ skyboxMat, rendering::ModelCache::create_model("uvsphere", "assets://models/uvsphere.obj"_view) });
+        skybox.add_component(gfx::mesh_renderer{ skyboxMat, rendering::ModelCache::create_model("Cube", "assets://models/cube.glb"_view) });
         skybox.add_component<transform>();
 
         auto groundplane = createEntity("Ground Plane");

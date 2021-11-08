@@ -751,7 +751,7 @@ namespace legion
         void setProjectionAndView(float aspect, const camera& cam, const camera::camera_input& camInput)
         {
             view = camInput.view;
-            projection = math::perspective(math::deg2rad(cam.fov * aspect), aspect, cam.nearz, cam.farz);
+            projection = cam.get_projection(aspect);
         }
     };
 
