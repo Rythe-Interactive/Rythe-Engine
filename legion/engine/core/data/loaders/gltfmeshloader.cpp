@@ -459,7 +459,7 @@ namespace legion::core
 
                 // Use matrix attribute
                 return math::mat4(
-                    -static_cast<float>(node.matrix[0]), -static_cast<float>(node.matrix[1]), -static_cast<float>(node.matrix[2]), -static_cast<float>(node.matrix[3]),
+                    static_cast<float>(node.matrix[0]), static_cast<float>(node.matrix[1]), static_cast<float>(node.matrix[2]), static_cast<float>(node.matrix[3]),
                     static_cast<float>(node.matrix[4]), static_cast<float>(node.matrix[5]), static_cast<float>(node.matrix[6]), static_cast<float>(node.matrix[7]),
                     static_cast<float>(node.matrix[8]), static_cast<float>(node.matrix[9]), static_cast<float>(node.matrix[10]), static_cast<float>(node.matrix[11]),
                     static_cast<float>(node.matrix[12]), static_cast<float>(node.matrix[13]), static_cast<float>(node.matrix[14]), static_cast<float>(node.matrix[15]));
@@ -480,9 +480,7 @@ namespace legion::core
                 if (node.translation.size() == 3)
                     pos = math::vec3(static_cast<float>(node.translation[0]), static_cast<float>(node.translation[1]), static_cast<float>(node.translation[2]));
 
-                auto result = math::compose(scale, rot, pos);
-                result[0] = -result[0];
-                return result;
+                return math::compose(scale, rot, pos);
             }
         }
 
@@ -848,9 +846,9 @@ namespace legion::core
         bool convertWinding;
 
         if (settings.keepNativeCoords)
-            convertWinding = settings.windingOrder == winding_order::clockwise;
-        else
             convertWinding = settings.windingOrder == winding_order::counter_clockwise;
+        else
+            convertWinding = settings.windingOrder == winding_order::clockwise;
 
         if (math::determinant(settings.transform) < 0.f)
             convertWinding = !convertWinding;

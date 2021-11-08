@@ -90,7 +90,7 @@ namespace legion::rendering
         /**@brief Get the projection matrix for a certain aspect ratio
          * @param ratio Aspect ratio (width / height)
          */
-        math::mat4 get_projection(float ratio)
+        math::mat4 get_projection(float ratio) const
         {
             const auto fovx = math::deg2rad(fov);
             const auto invTanHalfFovx = 1.f / math::tan(fovx * 0.5f);
