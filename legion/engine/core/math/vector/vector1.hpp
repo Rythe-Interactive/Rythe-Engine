@@ -22,8 +22,8 @@ namespace legion::core::math
         constexpr vector(const vector&) noexcept = default;
         constexpr vector(scalar s) noexcept : x(static_cast<scalar>(s)) {}
 
-        static constexpr vector one = vector(static_cast<scalar>(1));
-        static constexpr vector zero = vector(static_cast<scalar>(0));
+        static const vector one;
+        static const vector zero;
 
         constexpr vector& operator=(const vector&) noexcept = default;
         constexpr operator scalar() noexcept { return x; }
@@ -40,12 +40,17 @@ namespace legion::core::math
         template<typename _Scal>
         constexpr explicit vector(const vector<_Scal, size>& other) noexcept : x(static_cast<scalar>(other.x)) {}
 
-        L_ALWAYS_INLINE scalar length() const noexcept { return sqrt(dot(*this, *this)); }
-        constexpr scalar length2() const noexcept { return dot(*this, *this); }
+        L_ALWAYS_INLINE scalar length() const noexcept { return ::legion::core::math::length(*this); }
+        constexpr scalar length2() const noexcept { return ::legion::core::math::length2(*this); }
     };
 
-    using vec1 = vector<float, 1>;
-    using dvec1 = vector<double, 1>;
-    using ivec1 = vector<int, 1>;
-    using bvec1 = vector<bool, 1>;
+    template<typename _Scalar>
+    const vector<_Scalar, 1> vector<_Scalar, 1>::one(static_cast<_Scalar>(1));
+    template<typename _Scalar>
+    const vector<_Scalar, 1> vector<_Scalar, 1>::zero(static_cast<_Scalar>(0));
+
+    using float1 = vector<float, 1>;
+    using double1 = vector<double, 1>;
+    using int1 = vector<int, 1>;
+    using bool1 = vector<bool, 1>;
 }

@@ -26,14 +26,14 @@ namespace legion::core::math
         explicit constexpr vector(scalar s) noexcept : x(static_cast<scalar>(s)), y(static_cast<scalar>(s)), z(static_cast<scalar>(s)) {}
         constexpr vector(scalar _x, scalar _y, scalar _z) noexcept : x(_x), y(_y), z(_z) {}
 
-        static constexpr vector up = vector(static_cast<scalar>(0), static_cast<scalar>(1), static_cast<scalar>(0));
-        static constexpr vector down = vector(static_cast<scalar>(0), static_cast<scalar>(-1), static_cast<scalar>(0));
-        static constexpr vector right = vector(static_cast<scalar>(1), static_cast<scalar>(0), static_cast<scalar>(0));
-        static constexpr vector left = vector(static_cast<scalar>(-1), static_cast<scalar>(0), static_cast<scalar>(0));
-        static constexpr vector forward = vector(static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(1));
-        static constexpr vector backward = vector(static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(-1));
-        static constexpr vector one = vector(static_cast<scalar>(1));
-        static constexpr vector zero = vector(static_cast<scalar>(0));
+        static const vector up;
+        static const vector down;
+        static const vector right;
+        static const vector left;
+        static const vector forward;
+        static const vector backward;
+        static const vector one;
+        static const vector zero;
 
         constexpr vector& operator=(const vector&) noexcept = default;
 
@@ -50,9 +50,26 @@ namespace legion::core::math
         constexpr explicit vector(const vector<_Scal, size>& other) noexcept
             : x(static_cast<scalar>(other.x)), y(static_cast<scalar>(other.y)), z(static_cast<scalar>(other.z)) {}
 
-        L_ALWAYS_INLINE scalar length() const noexcept { return sqrt(dot(*this, *this)); }
-        constexpr scalar length2() const noexcept { return dot(*this, *this); }
+        L_ALWAYS_INLINE scalar length() const noexcept { return ::legion::core::math::length(*this); }
+        constexpr scalar length2() const noexcept { return ::legion::core::math::length2(*this); }
     };
+
+    template<typename _Scalar>
+    const vector<_Scalar, 3> vector<_Scalar, 3>::up(static_cast<_Scalar>(0), static_cast<_Scalar>(1), static_cast<_Scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 3> vector<_Scalar, 3>::down(static_cast<_Scalar>(0), static_cast<_Scalar>(-1), static_cast<_Scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 3> vector<_Scalar, 3>::right(static_cast<_Scalar>(1), static_cast<_Scalar>(0), static_cast<_Scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 3> vector<_Scalar, 3>::left(static_cast<_Scalar>(-1), static_cast<_Scalar>(0), static_cast<_Scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 3> vector<_Scalar, 3>::forward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(1));
+    template<typename _Scalar>
+    const vector<_Scalar, 3> vector<_Scalar, 3>::backward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(-1));
+    template<typename _Scalar>
+    const vector<_Scalar, 3> vector<_Scalar, 3>::one(static_cast<_Scalar>(1));
+    template<typename _Scalar>
+    const vector<_Scalar, 3> vector<_Scalar, 3>::zero(static_cast<_Scalar>(0));
 
     template<typename _Scalar>
     struct alignas(sizeof(_Scalar) * 4) aligned_vector3 : public vector<float, 3>
@@ -63,26 +80,45 @@ namespace legion::core::math
         static constexpr size_type size = 3;
         using type = aligned_vector3<_Scalar>;
 
+        byte padding[sizeof(_Scalar)];
+
         using vector<float, 3>::vector;
         using vector<float, 3>::operator=;
         using vector<float, 3>::operator[];
 
-        static constexpr aligned_vector3 up = aligned_vector3(static_cast<scalar>(0), static_cast<scalar>(1), static_cast<scalar>(0));
-        static constexpr aligned_vector3 down = aligned_vector3(static_cast<scalar>(0), static_cast<scalar>(-1), static_cast<scalar>(0));
-        static constexpr aligned_vector3 right = aligned_vector3(static_cast<scalar>(1), static_cast<scalar>(0), static_cast<scalar>(0));
-        static constexpr aligned_vector3 left = aligned_vector3(static_cast<scalar>(-1), static_cast<scalar>(0), static_cast<scalar>(0));
-        static constexpr aligned_vector3 forward = aligned_vector3(static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(1));
-        static constexpr aligned_vector3 backward = aligned_vector3(static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(-1));
-        static constexpr aligned_vector3 one = aligned_vector3(static_cast<scalar>(1));
-        static constexpr aligned_vector3 zero = aligned_vector3(static_cast<scalar>(0));
+        static const aligned_vector3 up;
+        static const aligned_vector3 down;
+        static const aligned_vector3 right;
+        static const aligned_vector3 left;
+        static const aligned_vector3 forward;
+        static const aligned_vector3 backward;
+        static const aligned_vector3 one;
+        static const aligned_vector3 zero;
     };
 
-    using vec3 = vector<float, 3>;
-    using dvec3 = vector<double, 3>;
-    using ivec3 = vector<int, 3>;
-    using bvec3 = vector<bool, 3>;
-    using aligned_vec3 = aligned_vector3<float>;
-    using aligned_dvec3 = aligned_vector3<double>;
-    using aligned_ivec3 = aligned_vector3<int>;
-    using aligned_bvec3 = aligned_vector3<bool>;
+    template<typename _Scalar>
+    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::up(static_cast<_Scalar>(0), static_cast<_Scalar>(1), static_cast<_Scalar>(0));
+    template<typename _Scalar>
+    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::down(static_cast<_Scalar>(0), static_cast<_Scalar>(-1), static_cast<_Scalar>(0));
+    template<typename _Scalar>
+    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::right(static_cast<_Scalar>(1), static_cast<_Scalar>(0), static_cast<_Scalar>(0));
+    template<typename _Scalar>
+    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::left(static_cast<_Scalar>(-1), static_cast<_Scalar>(0), static_cast<_Scalar>(0));
+    template<typename _Scalar>
+    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::forward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(1));
+    template<typename _Scalar>
+    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::backward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(-1));
+    template<typename _Scalar>
+    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::one(static_cast<_Scalar>(1));
+    template<typename _Scalar>
+    const aligned_vector3<_Scalar> aligned_vector3<_Scalar>::zero(static_cast<_Scalar>(0));
+
+    using float3 = vector<float, 3>;
+    using double3 = vector<double, 3>;
+    using int3 = vector<int, 3>;
+    using bool3 = vector<bool, 3>;
+    using aligned_float3 = aligned_vector3<float>;
+    using aligned_double3 = aligned_vector3<double>;
+    using aligned_int3 = aligned_vector3<int>;
+    using aligned_bool3 = aligned_vector3<bool>;
 }

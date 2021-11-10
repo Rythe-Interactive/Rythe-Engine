@@ -28,16 +28,16 @@ namespace legion::core::math
             : x(static_cast<scalar>(s)), y(static_cast<scalar>(s)), z(static_cast<scalar>(s)), w(static_cast<scalar>(s)) {}
         constexpr vector(scalar _x, scalar _y, scalar _z, scalar _w) noexcept : x(_x), y(_y), z(_z), w(_w) {}
 
-        static constexpr vector up = vector(static_cast<scalar>(0), static_cast<scalar>(1), static_cast<scalar>(0), static_cast<scalar>(0));
-        static constexpr vector down = vector(static_cast<scalar>(0), static_cast<scalar>(-1), static_cast<scalar>(0), static_cast<scalar>(0));
-        static constexpr vector right = vector(static_cast<scalar>(1), static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(0));
-        static constexpr vector left = vector(static_cast<scalar>(-1), static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(0));
-        static constexpr vector forward = vector(static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(1), static_cast<scalar>(0));
-        static constexpr vector backward = vector(static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(-1), static_cast<scalar>(0));
-        static constexpr vector positiveW = vector(static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(1));
-        static constexpr vector negativeW = vector(static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(0), static_cast<scalar>(-1));
-        static constexpr vector one = vector(static_cast<scalar>(1));
-        static constexpr vector zero = vector(static_cast<scalar>(0));
+        static const vector up;
+        static const vector down;
+        static const vector right;
+        static const vector left;
+        static const vector forward;
+        static const vector backward;
+        static const vector positiveW;
+        static const vector negativeW;
+        static const vector one;
+        static const vector zero;
 
         constexpr vector& operator=(const vector&) noexcept = default;
 
@@ -55,12 +55,33 @@ namespace legion::core::math
             : x(static_cast<scalar>(other.x)), y(static_cast<scalar>(other.y)),
             z(static_cast<scalar>(other.z)), w(static_cast<scalar>(other.w)) {}
 
-        L_ALWAYS_INLINE scalar length() const noexcept { return sqrt(dot(*this, *this)); }
-        constexpr scalar length2() const noexcept { return dot(*this, *this); }
+        L_ALWAYS_INLINE scalar length() const noexcept { return ::legion::core::math::length(*this); }
+        constexpr scalar length2() const noexcept { return ::legion::core::math::length2(*this); }
     };
 
-    using vec4 = vector<float, 4>;
-    using dvec4 = vector<double, 4>;
-    using ivec4 = vector<int, 4>;
-    using bvec4 = vector<bool, 4>;
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::up(static_cast<_Scalar>(0), static_cast<_Scalar>(1), static_cast<_Scalar>(0), static_cast<scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::down(static_cast<_Scalar>(0), static_cast<_Scalar>(-1), static_cast<_Scalar>(0), static_cast<scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::right(static_cast<_Scalar>(1), static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::left(static_cast<_Scalar>(-1), static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::forward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(1), static_cast<scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::backward(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<_Scalar>(-1), static_cast<scalar>(0));
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::positiveW(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<scalar>(0), static_cast<_Scalar>(1));
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::negativeW(static_cast<_Scalar>(0), static_cast<_Scalar>(0), static_cast<scalar>(0), static_cast<_Scalar>(-1));
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::one(static_cast<_Scalar>(1));
+    template<typename _Scalar>
+    const vector<_Scalar, 4> vector<_Scalar, 4>::zero(static_cast<_Scalar>(0));
+
+    using float4 = vector<float, 4>;
+    using double4 = vector<double, 4>;
+    using int4 = vector<int, 4>;
+    using bool4 = vector<bool, 4>;
 }
