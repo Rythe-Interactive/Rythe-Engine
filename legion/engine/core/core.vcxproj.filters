@@ -465,7 +465,6 @@
     <ClInclude Include="math\geometric\distance.hpp" />
     <ClInclude Include="math\geometric\length.hpp" />
     <ClInclude Include="math\geometric\normalize.hpp" />
-    <ClInclude Include="math\geometric\length2.hpp" />
     <ClInclude Include="math\arithmetic\arithmetic.hpp" />
     <ClInclude Include="math\arithmetic\addition.hpp" />
     <ClInclude Include="math\arithmetic\subtraction.hpp" />

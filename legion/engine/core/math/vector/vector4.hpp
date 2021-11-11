@@ -1,4 +1,6 @@
 #pragma once
+#include <immintrin.h>
+
 #include <core/math/vector/vector.hpp>
 
 namespace legion::core::math
@@ -19,6 +21,7 @@ namespace legion::core::math
                 scalar x, y, z, w;
             };
             scalar data[4];
+            __m128 intrin[(sizeof(_Scalar) * 4 * 8) / 128];
         };
 
         constexpr vector() noexcept

@@ -208,7 +208,6 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="math\geometric\dot.hpp" />
     <ClInclude Include="math\geometric\geometric.hpp" />
     <ClInclude Include="math\geometric\length.hpp" />
-    <ClInclude Include="math\geometric\length2.hpp" />
     <ClInclude Include="math\geometric\normalize.hpp" />
     <ClInclude Include="math\vector\vector.hpp" />
     <ClInclude Include="math\vector\vector1.hpp" />

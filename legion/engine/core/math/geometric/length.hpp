@@ -19,6 +19,11 @@ namespace legion::core::math
             {
                 return ::std::sqrt(dot(v, v));
             }
+
+            constexpr static _Scalar compute2(const value_type& v) noexcept
+            {
+                return dot(v, v);
+            }
         };
     }
 
@@ -26,5 +31,11 @@ namespace legion::core::math
     _Scalar length(const vector<_Scalar, _Size>& v) noexcept
     {
         return detail::compute_length<_Scalar, _Size>::compute(v);
+    }
+
+    template<typename _Scalar, size_type _Size>
+    constexpr _Scalar length2(const vector<_Scalar, _Size>& v) noexcept
+    {
+        return detail::compute_length<_Scalar, _Size>::compute2(v);
     }
 }

@@ -3,6 +3,7 @@
 
 #include <core/types/primitives.hpp>
 #include <core/math/vector/vector.hpp>
+#include <core/math/arithmetic/division.hpp>
 #include <core/math/geometric/length.hpp>
 
 namespace legion::core::math

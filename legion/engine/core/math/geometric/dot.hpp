@@ -1,6 +1,4 @@
 #pragma once
-#include <cmath>
-
 #include <core/types/primitives.hpp>
 #include <core/math/vector/vector.hpp>
 
