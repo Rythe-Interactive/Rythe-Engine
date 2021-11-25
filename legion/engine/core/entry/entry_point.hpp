@@ -95,7 +95,7 @@ int main(int argc, char** argv)
 
     reportModules(&engine);
 
-    engine.run();
+    engine.run(defined(LEGION_LOW_POWER), LEGION_MIN_THREADS);
 
 #if defined(LEGION_KEEP_CONSOLE)
     log::undecoratedInfo("Press enter to exit.");
