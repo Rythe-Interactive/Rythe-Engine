@@ -9,6 +9,7 @@
 #include <memory>                     // std::unique_ptr
 #include <cstdio>                     // fopen, fclose, fseek, ftell, fread, fwrite
 
+#include <fstream>
 
 namespace legion::core::filesystem {
 
@@ -33,26 +34,21 @@ namespace legion::core::filesystem {
      * @param [in] path The path of the file to open.
      * @return A vector of bytes with the contents of the file at path.
      */
-    L_NODISCARD inline  byte_vec read_file(std::string_view path)
+    L_NODISCARD inline byte_vec read_file(std::string_view path)
     {
+        std::ifstream file(path.data(), std::ios::ate | std::ios::binary);
 
-        //create managed FILE ptr
-        const std::unique_ptr<FILE,decltype(&fclose)> file(
-            fopen(std::string(path).c_str(),"r+b"),
-            fclose // deleter is fclose
-        );
+        assert_msg("could not open file", file.is_open());
 
-        assert_msg("could not open file",file);
+        size_t fileSize = (size_t)file.tellg();
+        byte_vec buffer(fileSize);
 
-        //get size and create container of that size
-        fseek(file.get(),0L,SEEK_END);
-        byte_vec container(ftell(file.get()));
-        fseek(file.get(),0L,SEEK_SET);
-        
-        //read file 
-        fread(container.data(),sizeof(byte),container.size(),file.get());
+        file.seekg(0);
+        file.read(reinterpret_cast<char*>(buffer.data()), fileSize);
 
-        return container;
+        file.close();
+
+        return buffer;
     }
 
     /**@brief Open file in binary mode to write the buffer to it.
