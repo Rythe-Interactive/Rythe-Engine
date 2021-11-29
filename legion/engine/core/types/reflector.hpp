@@ -102,7 +102,7 @@ namespace legion::core{                                                         
         if constexpr (is_brace_constructible_v<reflector<type>, T>)
         {
             // Return specialized reflector.
-            return reflector<type>{ object };
+            return reflector<type>{ std::forward<T>(object) };
         }
         // Check for construction with 16 items.
         else if constexpr (make_sequence_t<is_brace_constructible, detail::any_type, 16, type>::value) {
