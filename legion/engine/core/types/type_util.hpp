@@ -196,7 +196,7 @@ namespace legion::core
      * @param expr Variable of which you wish to auto deduct type.
      */
     template<typename T>
-    cstring nameOfType(T expr)
+    cstring nameOfType(T&& expr)
     {
         return nameOfType<std::decay_t<T>>();
     }
