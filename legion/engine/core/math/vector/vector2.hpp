@@ -1,5 +1,5 @@
 #pragma once
-#include <core/math/vector/vector.hpp>
+#include <core/math/vector/vector_base.hpp>
 
 namespace legion::core::math
 {

@@ -84,7 +84,7 @@ namespace legion::core
             }
         }
 
-        static void handleGltfBuffer(const tinygltf::Model& model, const tinygltf::Accessor& accessor, std::vector<math::vec3>& data, const math::mat4 transform, bool normal = false)
+        static void handleGltfBuffer(const tinygltf::Model& model, const tinygltf::Accessor& accessor, std::vector<math::float3>& data, const math::mat4 transform, bool normal = false)
         {
             const tinygltf::BufferView& bufferView = model.bufferViews.at(static_cast<size_type>(accessor.bufferView));
             const tinygltf::Buffer& buffer = model.buffers.at(static_cast<size_type>(bufferView.buffer));
@@ -102,7 +102,7 @@ namespace legion::core
                     const float* x = reinterpret_cast<const float*>(&buffer.data[i]);
                     const float* y = reinterpret_cast<const float*>(&buffer.data[i + sizeof(float)]);
                     const float* z = reinterpret_cast<const float*>(&buffer.data[i + 2 * sizeof(float)]);
-                    data.push_back(math::normalize((transform * math::vec4(*x, *y, *z, 0.f)).xyz()));
+                    data.push_back(math::normalize((transform * math::float4(*x, *y, *z, 0.f)).xyz()));
                 }
             }
             else
@@ -112,7 +112,7 @@ namespace legion::core
                     const float* x = reinterpret_cast<const float*>(&buffer.data[i]);
                     const float* y = reinterpret_cast<const float*>(&buffer.data[i + sizeof(float)]);
                     const float* z = reinterpret_cast<const float*>(&buffer.data[i + 2 * sizeof(float)]);
-                    data.push_back((transform * math::vec4(*x, *y, *z, 1.f)).xyz());
+                    data.push_back((transform * math::float4(*x, *y, *z, 1.f)).xyz());
                 }
             }
 

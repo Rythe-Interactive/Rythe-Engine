@@ -1,5 +1,5 @@
 #pragma once
-#include <core/math/glm/glm_include.hpp>
+#include <core/math/vector/vector.hpp>
 
 /**
  * @file color.hpp
@@ -8,14 +8,14 @@
 namespace legion::core::math
 {
     /**@class color
-     * @brief Color oriented wrapper around vec4.
-     * @ref legion::core::math::vec4
+     * @brief Color oriented wrapper around float4.
+     * @ref legion::core::math::float4
      */
-    struct color : public vec4
+    struct color : public float4
     {
-        color(const vec4& s) : vec4(s) {}
-        color(vec4&& s) :vec4(s) {}
-        color(float r, float g, float b, float a = 1.f) : vec4(r, g, b, a) {}
+        color(const float4& s) : float4(s) {}
+        color(float4&& s) :float4(s) {}
+        color(float r, float g, float b, float a = 1.f) : float4(r, g, b, a) {}
         color() = default;
 
         bool operator==(const color& other) const
@@ -23,7 +23,7 @@ namespace legion::core::math
             return r == other.x && g == other.g && b == other.b && a == other.a;
         }
 
-        bool operator==(const vec4& other) const
+        bool operator==(const float4& other) const
         {
             return r == other.x && g == other.g && b == other.b && a == other.a;
         }

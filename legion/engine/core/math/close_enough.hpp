@@ -15,13 +15,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #pragma once
-#include <cstdlib>
 #include <numeric>
-#include <limits>
-#include <cmath>
 #include <type_traits>
-
-#include <core/math/glm/glm_include.hpp>
+#include <core/math/basic/basic_funcs.hpp>
 
 namespace legion::core::math {
 
@@ -72,7 +68,7 @@ namespace legion::core::math {
         template <>
         struct compute_equal<float, true>
         {
-            GLM_FUNC_QUALIFIER GLM_CONSTEXPR static bool call(float a, float b)
+            constexpr static bool call(float a, float b)
             {
                 return close_enough(a, b);
             }
@@ -81,7 +77,7 @@ namespace legion::core::math {
         template <typename T>
         struct compute_equal<T, true>
         {
-            GLM_FUNC_QUALIFIER GLM_CONSTEXPR static bool call(T a, T b)
+            constexpr static bool call(T a, T b)
             {
                 return close_enough(a, b);
             }

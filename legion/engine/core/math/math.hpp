@@ -1,6 +1,11 @@
 #pragma once
 
-#include <core/math/glm/glm_include.hpp>
+#include <core/math/vector/vector.hpp>
+
+#include <core/math/geometric/geometric.hpp>
+#include <core/math/arithmetic/arithmetic.hpp>
+#include <core/math/exponential/exponential.hpp>
+
 #include <core/math/constants.hpp>
 #include <core/math/trigonometry.hpp>
 #include <core/math/color.hpp>
