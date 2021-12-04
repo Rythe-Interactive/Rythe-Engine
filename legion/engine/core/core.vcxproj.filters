@@ -192,6 +192,7 @@
     <ClInclude Include="math\vector\vector.hpp" />
     <ClInclude Include="math\basic\abs.hpp" />
     <ClInclude Include="math\util\hash.hpp" />
+    <ClInclude Include="types\hash.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

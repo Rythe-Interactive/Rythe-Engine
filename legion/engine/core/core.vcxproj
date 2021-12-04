@@ -266,6 +266,7 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="serialization\serializationutil.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
     <ClInclude Include="time\utils.hpp" />
+    <ClInclude Include="types\hash.hpp" />
     <ClInclude Include="types\prototype.hpp" />
     <ClInclude Include="types\reflector.hpp" />
     <ClInclude Include="serialization\serializationmeta.hpp" />
