@@ -1,5 +1,6 @@
 #pragma once
 #include <core/math/vector/vector_base.hpp>
+#include <core/math/vector/swizzle/swizzle2.hpp>
 
 namespace legion::core::math
 {
@@ -14,17 +15,28 @@ namespace legion::core::math
 
         union
         {
-            struct
-            {
-                scalar x, y;
-            };
+            struct { scalar x, y; };
+            struct { scalar r, g; };
+            struct { scalar u, v; };
+            struct { scalar s, t; };
             scalar data[2];
+
+            _MATH_SWIZZLE_2_2_(scalar);
+            _MATH_SWIZZLE_2_3_(scalar);
+            _MATH_SWIZZLE_2_4_(scalar);
         };
 
         constexpr vector() noexcept : x(static_cast<scalar>(0)), y(static_cast<scalar>(0)) {}
+
         constexpr vector(const vector&) noexcept = default;
+
         explicit constexpr vector(scalar s) noexcept : x(static_cast<scalar>(s)), y(static_cast<scalar>(s)) {}
+
         constexpr vector(scalar _x, scalar _y) noexcept : x(_x), y(_y) {}
+
+        template<typename _Scal, ::std::enable_if_t<!::std::is_same_v<scalar, _Scal>, bool> = true>
+        constexpr vector(const vector<_Scal, size>& other) noexcept
+            : x(static_cast<scalar>(other.x)), y(static_cast<scalar>(other.y)) {}
 
         static const vector up;
         static const vector down;
@@ -43,9 +55,6 @@ namespace legion::core::math
         {
             assert_msg("vector subscript out of range", (i >= 0) && (i < size)); return data[i];
         }
-
-        template<typename _Scal>
-        constexpr explicit vector(const vector<_Scal, size>& other) noexcept : x(static_cast<scalar>(other.x)), y(static_cast<scalar>(other.y)) {}
 
         L_ALWAYS_INLINE scalar length() const noexcept { return ::legion::core::math::length(*this); }
         constexpr scalar length2() const noexcept { return ::legion::core::math::length2(*this); }

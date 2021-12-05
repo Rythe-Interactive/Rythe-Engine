@@ -1,5 +1,7 @@
 #pragma once
 #include <core/math/vector/vector_base.hpp>
+#include <core/math/vector/swizzle/swizzle3.hpp>
+#include <core/math/meta.hpp>
 
 namespace legion::core::math
 {
@@ -14,17 +16,45 @@ namespace legion::core::math
 
         union
         {
-            struct
-            {
-                scalar x, y, z;
-            };
+            struct { scalar x, y, z; };
+            struct { scalar r, g, b; };
+            struct { scalar s, t, p; };
             scalar data[3];
+
+            _MATH_SWIZZLE_3_2_(scalar);
+            _MATH_SWIZZLE_3_3_(scalar);
+            _MATH_SWIZZLE_3_4_(scalar);
         };
 
         constexpr vector() noexcept : x(static_cast<scalar>(0)), y(static_cast<scalar>(0)), z(static_cast<scalar>(0)) {}
+
         constexpr vector(const vector&) noexcept = default;
+
         explicit constexpr vector(scalar s) noexcept : x(static_cast<scalar>(s)), y(static_cast<scalar>(s)), z(static_cast<scalar>(s)) {}
+
         constexpr vector(scalar _x, scalar _y, scalar _z) noexcept : x(_x), y(_y), z(_z) {}
+
+        template<typename _Scal, ::std::enable_if_t<!::std::is_same_v<scalar, _Scal>, bool> = true>
+        constexpr vector(const vector<_Scal, size>& other) noexcept
+            : x(static_cast<scalar>(other.x)), y(static_cast<scalar>(other.y)), z(static_cast<scalar>(other.z)) {}
+
+        template<typename vec_type, ::std::enable_if_t<is_vector_v<vec_type> && (size != vec_type::size), bool> = true>
+        constexpr vector(const vec_type& other) noexcept
+        {
+            if constexpr (size > vec_type::size)
+            {
+                for (size_type i = 0; i < vec_type::size; i++)
+                    data[i] = static_cast<scalar>(other.data[i]);
+
+                for (size_type i = vec_type::size; i < size; i++)
+                    data[i] = static_cast<scalar>(0);
+            }
+            else
+            {
+                for (size_type i = 0; i < size; i++)
+                    data[i] = static_cast<scalar>(other.data[i]);
+            }
+        }
 
         static const vector up;
         static const vector down;
@@ -45,10 +75,6 @@ namespace legion::core::math
         {
             assert_msg("vector subscript out of range", (i >= 0) && (i < size)); return data[i];
         }
-
-        template<typename _Scal>
-        constexpr explicit vector(const vector<_Scal, size>& other) noexcept
-            : x(static_cast<scalar>(other.x)), y(static_cast<scalar>(other.y)), z(static_cast<scalar>(other.z)) {}
 
         L_ALWAYS_INLINE scalar length() const noexcept { return ::legion::core::math::length(*this); }
         constexpr scalar length2() const noexcept { return ::legion::core::math::length2(*this); }

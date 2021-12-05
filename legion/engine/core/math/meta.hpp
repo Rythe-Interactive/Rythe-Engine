@@ -1,5 +1,6 @@
 #pragma once
-#include <core/math/vector/vector.hpp>
+#include <core/math/vector/vector_base.hpp>
+#include <core/math/vector/swizzle/swizzle_base.hpp>
 
 namespace legion::core::math
 {
@@ -11,6 +12,12 @@ namespace legion::core::math
 
     template<typename _Scalar, size_type _Size>
     struct is_vector<vector<_Scalar, _Size>>
+    {
+        constexpr static bool value = true;
+    };
+
+    template<typename _Scalar, size_type _Size, size_type... args>
+    struct is_vector<detail::swizzle<_Scalar, _Size, args...>>
     {
         constexpr static bool value = true;
     };

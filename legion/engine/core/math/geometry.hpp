@@ -1,6 +1,4 @@
 #pragma once
-#include <core/math/glm/glm_include.hpp>
-#include <core/math/glm/gtx/string_cast.hpp>
 #include <core/math/close_enough.hpp>
 
 /**

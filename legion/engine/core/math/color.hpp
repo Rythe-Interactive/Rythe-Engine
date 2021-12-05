@@ -11,23 +11,13 @@ namespace legion::core::math
      * @brief Color oriented wrapper around float4.
      * @ref legion::core::math::float4
      */
-    struct color : public float4
-    {
-        color(const float4& s) : float4(s) {}
-        color(float4&& s) :float4(s) {}
-        color(float r, float g, float b, float a = 1.f) : float4(r, g, b, a) {}
-        color() = default;
+    using color = float4;
 
-        bool operator==(const color& other) const
-        {
-            return r == other.x && g == other.g && b == other.b && a == other.a;
-        }
-
-        bool operator==(const float4& other) const
-        {
-            return r == other.x && g == other.g && b == other.b && a == other.a;
-        }
-    };
+    /**@class highp_color
+     * @brief Double precision version of legion::core::math::color.
+     * @ref legion::core::math::double4
+     */
+    using dcolor = double4;
 
     /**
      * @brief Default colors in RGBA.
@@ -46,7 +36,7 @@ namespace legion::core::math
         const color yellow      { 1.f, 1.f, 0.f, 1.f };
         const color cyan        { 0.f, 1.f, 1.f, 1.f };
         const color magenta     { 1.f, 0.f, 1.f, 1.f };
-        const color orange      { 1.0f, 0.584f, 0.f, 1.f }; // (255, 149, 0, 1)
+        const color orange      { 1.0f, 0.584f, 0.f, 1.f };
         const color cornflower  { 0.392f, 0.584f, 0.929f, 1.0f };
     }
 }

@@ -15,6 +15,9 @@ namespace legion::core::math
         union
         {
             scalar x;
+            scalar u;
+            scalar r;
+            scalar s;
             scalar data[size];
         };
 
@@ -36,9 +39,6 @@ namespace legion::core::math
         {
             assert_msg("vector subscript out of range", (i >= 0) && (i < size)); return data[i];
         }
-
-        template<typename _Scal>
-        constexpr explicit vector(const vector<_Scal, size>& other) noexcept : x(static_cast<scalar>(other.x)) {}
 
         L_ALWAYS_INLINE scalar length() const noexcept { return ::legion::core::math::length(*this); }
         constexpr scalar length2() const noexcept { return ::legion::core::math::length2(*this); }

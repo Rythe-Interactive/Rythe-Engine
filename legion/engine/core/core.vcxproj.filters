@@ -193,6 +193,10 @@
     <ClInclude Include="math\basic\abs.hpp" />
     <ClInclude Include="math\util\hash.hpp" />
     <ClInclude Include="types\hash.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle_base.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle4.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle3.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle2.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

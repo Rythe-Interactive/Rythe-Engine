@@ -1,6 +1,7 @@
 #pragma once
 #include <core/types/primitives.hpp>
 #include <core/math/vector/vector.hpp>
+#include <core/math/meta.hpp>
 
 namespace legion::core::math
 {
@@ -12,7 +13,7 @@ namespace legion::core::math
             static constexpr size_type size = _Size;
             using value_type = vector<_Scalar, size>;
 
-            constexpr static value_type compute(const value_type& a, const value_type& b) noexcept
+            L_NODISCARD constexpr static value_type compute(const value_type& a, const value_type& b) noexcept
             {
                 value_type result;
                 for (size_type i = 0; i < size; i++)
@@ -20,76 +21,61 @@ namespace legion::core::math
                 return result;
             }
 
-            constexpr static value_type compute(const value_type& a, _Scalar b) noexcept
+            L_NODISCARD constexpr static value_type compute(const value_type& a, _Scalar b) noexcept
             {
                 value_type result;
                 for (size_type i = 0; i < size; i++)
                     result[i] = a[i] * b;
                 return result;
             }
-
-            constexpr static value_type& compute_assign(value_type& a, const value_type& b) noexcept
-            {
-                for (size_type i = 0; i < size; i++)
-                    a[i] *= b[i];
-                return a;
-            }
-
-            constexpr static value_type& compute_assign(value_type& a, _Scalar b) noexcept
-            {
-                value_type result;
-                for (size_type i = 0; i < size; i++)
-                    a[i] *= b;
-                return a;
-            }
         };
     }
 
-    template<typename _Scalar, size_type _Size>
-    constexpr vector<_Scalar, _Size> mul(const vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b) noexcept
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0> && is_vector_v<vec_type1>, bool> = true>
+    L_NODISCARD constexpr auto mul(const vec_type0& a, const vec_type1& b) noexcept
     {
-        return detail::compute_multiplication<_Scalar, _Size>::compute(a, b);
+        return detail::compute_multiplication<typename vec_type0::scalar, vec_type0::size>::compute(a, b);
     }
 
-    template<typename _Scalar, size_t _Size>
-    constexpr vector<_Scalar, _Size> operator*(const vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b)
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0> && is_vector_v<vec_type1>, bool> = true>
+    L_NODISCARD constexpr auto operator*(const vec_type0& a, const vec_type1& b)
     {
-        return detail::compute_multiplication<_Scalar, _Size>::compute(a, b);
+        return detail::compute_multiplication<typename vec_type0::scalar, vec_type0::size>::compute(a, b);
     }
 
-    template<typename _Scalar, size_type _Size>
-    constexpr vector<_Scalar, _Size> mul(const vector<_Scalar, _Size>& a, _Scalar b) noexcept
+    template<typename vec_type, std::enable_if_t<is_vector_v<vec_type>, bool> = true>
+    L_NODISCARD constexpr auto mul(const vec_type& a, typename vec_type::scalar b) noexcept
     {
-        return detail::compute_multiplication<_Scalar, _Size>::compute(a, b);
+        return detail::compute_multiplication<typename vec_type::scalar, vec_type::size>::compute(a, b);
     }
 
-    template<typename _Scalar, size_t _Size>
-    constexpr vector<_Scalar, _Size> operator*(const vector<_Scalar, _Size>& a, _Scalar b)
+    template<typename vec_type, std::enable_if_t<is_vector_v<vec_type>, bool> = true>
+    L_NODISCARD constexpr auto operator*(const vec_type& a, typename vec_type::scalar b)
     {
-        return detail::compute_multiplication<_Scalar, _Size>::compute(a, b);
+        return detail::compute_multiplication<typename vec_type::scalar, vec_type::size>::compute(a, b);
     }
 
-    template<typename _Scalar, size_type _Size>
-    constexpr vector<_Scalar, _Size>& mul_assign(vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b) noexcept
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0> && is_vector_v<vec_type1>, bool> = true>
+    constexpr vec_type0& mul_assign(vec_type0& a, const vec_type1& b) noexcept
     {
-        return detail::compute_multiplication<_Scalar, _Size>::compute_assign(a, b);
+        return a = detail::compute_multiplication<typename vec_type0::scalar, vec_type0::size>::compute(a, b);
     }
 
-    template<typename _Scalar, size_t _Size>
-    constexpr vector<_Scalar, _Size>& operator*=(vector<_Scalar, _Size>& a, const vector<_Scalar, _Size>& b)
+    template<typename vec_type0, typename vec_type1, std::enable_if_t<is_vector_v<vec_type0> && is_vector_v<vec_type1>, bool> = true>
+    constexpr vec_type0& operator*=(vec_type0& a, const vec_type1& b)
     {
-        return detail::compute_multiplication<_Scalar, _Size>::compute_assign(a, b);
+        return a = detail::compute_multiplication<typename vec_type0::scalar, vec_type0::size>::compute(a, b);
     }
 
-    template<typename _Scalar, size_type _Size>
-    constexpr vector<_Scalar, _Size>& mul_assign(vector<_Scalar, _Size>& a, _Scalar b) noexcept
+    template<typename vec_type, std::enable_if_t<is_vector_v<vec_type>, bool> = true>
+    constexpr vec_type& mul_assign(vec_type& a, typename vec_type::scalar b) noexcept
     {
-        return detail::compute_multiplication<_Scalar, _Size>::compute_assign(a, b);
+        return a = detail::compute_multiplication<typename vec_type::scalar, vec_type::size>::compute(a, b);
     }
 
-    template<typename _Scalar, size_t _Size>
-    constexpr vector<_Scalar, _Size>& operator*=(vector<_Scalar, _Size>& a, _Scalar b)
+    template<typename vec_type, std::enable_if_t<is_vector_v<vec_type>, bool> = true>
+    constexpr vec_type& operator*=(vec_type& a, typename vec_type::scalar b)
     {
-        return detail::compute_multiplication<_Scalar, _Size>::compute_assign(a, b);
+        return a = detail::compute_multiplication<typename vec_type::scalar, vec_type::size>::compute(a, b);
     }
 }

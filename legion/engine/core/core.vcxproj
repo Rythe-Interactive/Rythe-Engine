@@ -213,6 +213,10 @@ del /q ".\xcopyexclude"</Command>
     <ClInclude Include="math\geometric\normalize.hpp" />
     <ClInclude Include="math\meta.hpp" />
     <ClInclude Include="math\util\hash.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle2.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle3.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle4.hpp" />
+    <ClInclude Include="math\vector\swizzle\swizzle_base.hpp" />
     <ClInclude Include="math\vector\vector.hpp" />
     <ClInclude Include="math\vector\vector_base.hpp" />
     <ClInclude Include="math\vector\vector1.hpp" />

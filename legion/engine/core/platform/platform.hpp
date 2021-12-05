@@ -161,6 +161,14 @@ type& operator=(const type&) noexcept = default;\
 type& operator=(type&&) noexcept = default;\
 ~type() = default;
 
+#define RULE_OF_5_CONSTEXPR_NOEXCEPT(type)\
+constexpr type() noexcept = default;\
+constexpr type(const type&) noexcept = default;\
+constexpr type(type&&) noexcept = default;\
+constexpr type& operator=(const type&) noexcept = default;\
+constexpr type& operator=(type&&) noexcept = default;\
+~type() = default;
+
 #define NO_DEF_CTOR_RULE5(type)\
 type(const type&) = default;\
 type(type&&) = default;\
