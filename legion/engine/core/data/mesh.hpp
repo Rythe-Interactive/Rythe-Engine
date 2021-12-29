@@ -9,11 +9,18 @@
 
 namespace legion::core
 {
+    enum struct transparency_mode
+    {
+        Opaque,
+        Mask,
+        Blend
+    };
+
     struct material_data
     {
         std::string name;
 
-        bool opaque;
+        transparency_mode transparencyMode;
         float alphaCutoff;
         bool doubleSided;
 

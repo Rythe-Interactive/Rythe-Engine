@@ -728,7 +728,13 @@ namespace legion::core
             else
                 materialNames.emplace(material.name, std::make_pair<bool, size_type>(false, 0u));
 
-            material.opaque = srcMat.alphaMode != "BLEND";
+            if (srcMat.alphaMode == "OPAQUE")
+                material.transparencyMode = transparency_mode::Opaque;
+            else if (srcMat.alphaMode == "BLEND")
+                material.transparencyMode = transparency_mode::Blend;
+            else if (srcMat.alphaMode == "MASK")
+                material.transparencyMode = transparency_mode::Mask;
+
             material.alphaCutoff = static_cast<float>(srcMat.alphaCutoff);
             material.doubleSided = srcMat.doubleSided;
 

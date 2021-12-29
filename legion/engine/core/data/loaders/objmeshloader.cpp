@@ -143,7 +143,7 @@ namespace legion::core
         {
             auto& material = data.materials.emplace_back();
             material.name = srcMat.name;
-            material.opaque = math::close_enough(srcMat.dissolve, 1);
+            material.transparencyMode = math::close_enough(srcMat.dissolve, 1) ? transparency_mode::Opaque : transparency_mode::Blend;
             material.alphaCutoff = 0.5f;
             material.doubleSided = false;
 
