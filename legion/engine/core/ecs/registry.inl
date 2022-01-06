@@ -188,45 +188,45 @@ namespace legion::core::ecs
             detail::_create_component_ref(target, valueN)...);
     }
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, const serialization::component_prototype<component_type>& prototype)
-    {
-        OPTICK_EVENT();
-        // Check and emplace component family if it doesn't exist yet.
-        static bool checked = false; // Prevent unnecessary unordered_map lookups.
-        if (!checked && !getFamilies().count(make_hash<component_type>()))
-        {
-            checked = true;
-            registerComponentType<component_type>();
-        }
+    //template<typename component_type>
+    //inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, const serialization::component_prototype<component_type>& prototype)
+    //{
+    //    OPTICK_EVENT();
+    //    // Check and emplace component family if it doesn't exist yet.
+    //    static bool checked = false; // Prevent unnecessary unordered_map lookups.
+    //    if (!checked && !getFamilies().count(make_hash<component_type>()))
+    //    {
+    //        checked = true;
+    //        registerComponentType<component_type>();
+    //    }
 
-        // Update entity composition.
-        instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
-        // Update filters.
-        FilterRegistry::markComponentAdd<component_type>(target);
-        // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
-        return component_pool<component_type>::create_component_direct(target, prototype);
-    }
+    //    // Update entity composition.
+    //    instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+    //    // Update filters.
+    //    FilterRegistry::markComponentAdd<component_type>(target);
+    //    // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
+    //    return component_pool<component_type>::create_component_direct(target, prototype);
+    //}
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, serialization::component_prototype<component_type>&& prototype)
-    {
-        OPTICK_EVENT();
-        // Check and emplace component family if it doesn't exist yet.
-        static bool checked = false; // Prevent unnecessary unordered_map lookups.
-        if (!checked && !getFamilies().count(make_hash<component_type>()))
-        {
-            checked = true;
-            registerComponentType<component_type>();
-        }
+    //template<typename component_type>
+    //inline L_ALWAYS_INLINE component_type& Registry::createComponent(entity target, serialization::component_prototype<component_type>&& prototype)
+    //{
+    //    OPTICK_EVENT();
+    //    // Check and emplace component family if it doesn't exist yet.
+    //    static bool checked = false; // Prevent unnecessary unordered_map lookups.
+    //    if (!checked && !getFamilies().count(make_hash<component_type>()))
+    //    {
+    //        checked = true;
+    //        registerComponentType<component_type>();
+    //    }
 
-        // Update entity composition.
-        instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
-        // Update filters.
-        FilterRegistry::markComponentAdd<component_type>(target);
-        // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
-        return component_pool<component_type>::create_component_direct(target, std::move(prototype));
-    }
+    //    // Update entity composition.
+    //    instance.m_entityCompositions.at(target).insert(make_hash<component_type>());
+    //    // Update filters.
+    //    FilterRegistry::markComponentAdd<component_type>(target);
+    //    // Actually create and return the component using the prototype. (this uses the direct function which avoids use of virtual indirection)
+    //    return component_pool<component_type>::create_component_direct(target, std::move(prototype));
+    //}
 
     template<typename component_type>
     inline L_ALWAYS_INLINE void Registry::destroyComponent(entity target)

@@ -41,47 +41,47 @@ namespace legion::core::ecs
         return &ret;
     }
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE void* component_pool<component_type>::create_component(entity target, const serialization::component_prototype_base& prototype)
-    {
-        auto& ret = m_components.try_emplace(target,
-            from_reflector(static_cast<const serialization::component_prototype<component_type>&>(prototype))
-        ).first.value();
+    //template<typename component_type>
+    //inline L_ALWAYS_INLINE void* component_pool<component_type>::create_component(entity target, const serialization::component_prototype_base& prototype)
+    //{
+    //    auto& ret = m_components.try_emplace(target,
+    //        from_reflector(static_cast<const serialization::component_prototype<component_type>&>(prototype))
+    //    ).first.value();
 
-        if constexpr (has_static_init_v<component_type, void(component_type&, entity)>)
-        {
-            component_type::init(ret, target);
-        }
-        else if constexpr (has_static_init_v<component_type, void(component_type&)>)
-        {
-            component_type::init(ret);
-        }
+    //    if constexpr (has_static_init_v<component_type, void(component_type&, entity)>)
+    //    {
+    //        component_type::init(ret, target);
+    //    }
+    //    else if constexpr (has_static_init_v<component_type, void(component_type&)>)
+    //    {
+    //        component_type::init(ret);
+    //    }
 
-        events::EventBus::raiseEvent<events::component_creation<component_type>>(target);
+    //    events::EventBus::raiseEvent<events::component_creation<component_type>>(target);
 
-        return &ret;
-    }
+    //    return &ret;
+    //}
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE void* component_pool<component_type>::create_component(entity target, serialization::component_prototype_base&& prototype)
-    {
-        auto& ret = m_components.try_emplace(target,
-            from_reflector(static_cast<serialization::component_prototype<component_type>&&>(prototype))
-        ).first.value();
+    //template<typename component_type>
+    //inline L_ALWAYS_INLINE void* component_pool<component_type>::create_component(entity target, serialization::component_prototype_base&& prototype)
+    //{
+    //    auto& ret = m_components.try_emplace(target,
+    //        from_reflector(static_cast<serialization::component_prototype<component_type>&&>(prototype))
+    //    ).first.value();
 
-        if constexpr (has_static_init_v<component_type, void(component_type&, entity)>)
-        {
-            component_type::init(ret, target);
-        }
-        else if constexpr (has_static_init_v<component_type, void(component_type&)>)
-        {
-            component_type::init(ret);
-        }
+    //    if constexpr (has_static_init_v<component_type, void(component_type&, entity)>)
+    //    {
+    //        component_type::init(ret, target);
+    //    }
+    //    else if constexpr (has_static_init_v<component_type, void(component_type&)>)
+    //    {
+    //        component_type::init(ret);
+    //    }
 
-        events::EventBus::raiseEvent<events::component_creation<component_type>>(target);
+    //    events::EventBus::raiseEvent<events::component_creation<component_type>>(target);
 
-        return &ret;
-    }
+    //    return &ret;
+    //}
 
     template<typename component_type>
     inline L_ALWAYS_INLINE bool component_pool<component_type>::contains(entity target) const
@@ -106,19 +106,19 @@ namespace legion::core::ecs
         m_components.erase(target->id);
     }
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE std::unique_ptr<serialization::component_prototype_base> component_pool<component_type>::create_prototype(entity target) const
-    {
-        return std::unique_ptr<serialization::component_prototype_base>(
-            new serialization::component_prototype<component_type>(m_components.at(target))
-            );
-    }
+    //template<typename component_type>
+    //inline L_ALWAYS_INLINE std::unique_ptr<serialization::component_prototype_base> component_pool<component_type>::create_prototype(entity target) const
+    //{
+    //    return std::unique_ptr<serialization::component_prototype_base>(
+    //        new serialization::component_prototype<component_type>(m_components.at(target))
+    //        );
+    //}
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE serialization::component_prototype<component_type> component_pool<component_type>::create_prototype_direct(entity target)
-    {
-        return serialization::component_prototype<component_type>(m_components.at(target));
-    }
+    //template<typename component_type>
+    //inline L_ALWAYS_INLINE serialization::component_prototype<component_type> component_pool<component_type>::create_prototype_direct(entity target)
+    //{
+    //    return serialization::component_prototype<component_type>(m_components.at(target));
+    //}
 
     template<typename component_type>
     inline L_ALWAYS_INLINE void* component_pool<component_type>::get_component(entity target) const
@@ -183,47 +183,47 @@ namespace legion::core::ecs
         return ret;
     }
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(entity target, const serialization::component_prototype_base& prototype)
-    {
-        auto& ret = m_components.try_emplace(target,
-            from_reflector(static_cast<const serialization::component_prototype<component_type>&>(prototype))
-        ).first.value();
+    //template<typename component_type>
+    //inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(entity target, const serialization::component_prototype_base& prototype)
+    //{
+    //    auto& ret = m_components.try_emplace(target,
+    //        from_reflector(static_cast<const serialization::component_prototype<component_type>&>(prototype))
+    //    ).first.value();
 
-        if constexpr (has_static_init_v<component_type, void(component_type&, entity)>)
-        {
-            component_type::init(ret, target);
-        }
-        else if constexpr (has_static_init_v<component_type, void(component_type&)>)
-        {
-            component_type::init(ret);
-        }
+    //    if constexpr (has_static_init_v<component_type, void(component_type&, entity)>)
+    //    {
+    //        component_type::init(ret, target);
+    //    }
+    //    else if constexpr (has_static_init_v<component_type, void(component_type&)>)
+    //    {
+    //        component_type::init(ret);
+    //    }
 
-        events::EventBus::raiseEvent<events::component_creation<component_type>>(target);
+    //    events::EventBus::raiseEvent<events::component_creation<component_type>>(target);
 
-        return ret;
-    }
+    //    return ret;
+    //}
 
-    template<typename component_type>
-    inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(entity target, serialization::component_prototype_base&& prototype)
-    {
-        auto& ret = m_components.try_emplace(target,
-            from_reflector(static_cast<serialization::component_prototype<component_type>&&>(prototype))
-        ).first.value();
+    //template<typename component_type>
+    //inline L_ALWAYS_INLINE component_type& component_pool<component_type>::create_component_direct(entity target, serialization::component_prototype_base&& prototype)
+    //{
+    //    auto& ret = m_components.try_emplace(target,
+    //        from_reflector(static_cast<serialization::component_prototype<component_type>&&>(prototype))
+    //    ).first.value();
 
-        if constexpr (has_static_init_v<component_type, void(component_type&, entity)>)
-        {
-            component_type::init(ret, target);
-        }
-        else if constexpr (has_static_init_v<component_type, void(component_type&)>)
-        {
-            component_type::init(ret);
-        }
+    //    if constexpr (has_static_init_v<component_type, void(component_type&, entity)>)
+    //    {
+    //        component_type::init(ret, target);
+    //    }
+    //    else if constexpr (has_static_init_v<component_type, void(component_type&)>)
+    //    {
+    //        component_type::init(ret);
+    //    }
 
-        events::EventBus::raiseEvent<events::component_creation<component_type>>(target);
+    //    events::EventBus::raiseEvent<events::component_creation<component_type>>(target);
 
-        return ret;
-    }
+    //    return ret;
+    //}
 
     template<typename component_type>
     inline L_ALWAYS_INLINE bool component_pool<component_type>::contains_direct(entity target)

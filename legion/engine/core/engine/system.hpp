@@ -53,13 +53,13 @@ namespace legion::core
          * @param parent Entity to assign as the parent of the new entity.
          * @param prototype Prototype to serialize entity from.
          */
-        L_NODISCARD static ecs::entity createEntity(ecs::entity parent, const serialization::entity_prototype& prototype);
+        //L_NODISCARD static ecs::entity createEntity(ecs::entity parent, const serialization::entity_prototype& prototype);
 
         /**@brief Creates empty entity with the world as its parent. Entity is serialized from a prototype.
          *        This function will also create any components or child entities in the prototype structure.
          * @param prototype Prototype to serialize entity from.
          */
-        L_NODISCARD static ecs::entity createEntity(const serialization::entity_prototype& prototype);
+       // L_NODISCARD static ecs::entity createEntity(const serialization::entity_prototype& prototype);
 
         /**@brief Insert event into bus and notify all subscribers.
          * @tparam event_type Event type to raise.

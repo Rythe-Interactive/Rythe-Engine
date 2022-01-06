@@ -409,7 +409,6 @@
     <ClInclude Include="platform\shellinvoke.hpp" />
     <ClInclude Include="scenemanagement\components\scene.hpp" />
     <ClInclude Include="ecs\registry.hpp" />
-    <ClInclude Include="serialization\prototype.hpp" />
     <ClInclude Include="ecs\handles\entity.hpp" />
     <ClInclude Include="ecs\containers\component_pool.hpp" />
     <ClInclude Include="ecs\prototypes\entity_prototype.hpp" />
@@ -449,6 +448,7 @@
     <ClInclude Include="data\loaders\gltfmeshloader.hpp" />
     <ClInclude Include="engine\enginesubsystem.hpp" />
     <ClInclude Include="time\main_clock.hpp" />
+    <ClInclude Include="types\prototype.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="platform\cpp.hint" />

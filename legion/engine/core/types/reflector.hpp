@@ -22,6 +22,8 @@ namespace legion::core
             typeId = rhs.typeId;
             typeName = rhs.typeName;
             members = rhs.members;
+
+            return *this;
         }
     };
     struct primitive_reference
@@ -92,6 +94,8 @@ namespace legion::core
                 new (&object) reflector(other.object);
             else
                 new (&primitive) primitive_reference(other.primitive);
+
+            return *this;
         }
     };
 

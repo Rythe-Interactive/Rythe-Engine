@@ -12,6 +12,7 @@ namespace legion::rendering
 
     namespace detail
     {
+        [reflectable]
         struct light_data
         {
             light_type type;
@@ -26,9 +27,9 @@ namespace legion::rendering
         };
     }
 
+    [reflectable]
     struct light
     {
-        Reflectable;
     private:
         static uint m_lastidx;
     public:
@@ -67,5 +68,3 @@ namespace legion::rendering
         };
     };
 }
-
-ManualReflector(legion::rendering::light, m_type, m_attenuation, m_intensity, m_index, m_direction, m_falloff, m_position, m_angle, m_color);

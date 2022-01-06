@@ -24,6 +24,8 @@ namespace legion::core
             typeId = rhs.typeId;
             typeName = rhs.typeName;
             members = rhs.members;
+
+            return *this;
         }
     };
     struct primitive_value
@@ -86,6 +88,8 @@ namespace legion::core
                 new (&object) prototype(other.object);
             else
                 new (&primitive) primitive_value(other.primitive);
+
+            return *this;
         }
     };
 

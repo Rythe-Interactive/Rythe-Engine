@@ -7,6 +7,7 @@
 
 namespace legion::core
 {
+    [reflectable]
     struct position : public math::vec3
     {
         position() : math::vec3(0, 0, 0) {}
@@ -33,6 +34,7 @@ namespace legion::core
         }
     };
 
+    [reflectable]
     struct rotation : public math::quat
     {
         rotation() : math::quat(1, 0, 0, 0) {}
@@ -92,6 +94,7 @@ namespace legion::core
         return math::conjugate(math::normalize(math::toQuat(math::lookAt(position, center, up))));
     }
 
+    [reflectable]
     struct scale : public math::vec3
     {
         scale() : math::vec3(1, 1, 1) {}
@@ -119,6 +122,7 @@ namespace legion::core
 
     };
 
+    [reflectable]
     struct transform : public ecs::archetype<position, rotation, scale>
     {
         using base = ecs::archetype<position, rotation, scale>;
@@ -155,6 +159,7 @@ namespace legion::core
 
     };
 
+    [reflectable]
     struct velocity : public math::vec3
     {
         velocity() : math::vec3(0, 0, 0) {}
@@ -181,6 +186,7 @@ namespace legion::core
         }
     };
 
+    [reflectable]
     struct mesh_filter
     {
         assets::asset<mesh> shared_mesh;
@@ -193,11 +199,11 @@ namespace legion::core
     };
 }
 
-ManualReflector(legion::core::position, x, y, z);
-ManualReflector(legion::core::rotation, x, y, z, w);
-ManualReflector(legion::core::scale, x, y, z);
-ManualReflector(legion::core::velocity, x, y, z);
-ManualReflector(legion::core::mesh_filter, shared_mesh);
+//ManualReflector(legion::core::position, x, y, z);
+//ManualReflector(legion::core::rotation, x, y, z, w);
+//ManualReflector(legion::core::scale, x, y, z);
+//ManualReflector(legion::core::velocity, x, y, z);
+//ManualReflector(legion::core::mesh_filter, shared_mesh);
 
 #if !defined(DOXY_EXCLUDE)
 namespace std // NOLINT(cert-dcl58-cpp)
